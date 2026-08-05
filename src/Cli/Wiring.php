@@ -14,10 +14,12 @@ use ContextDiscovery\Assembly\BundleAssembler;
 use ContextDiscovery\Assembly\ItemPriority;
 use ContextDiscovery\Assembly\TokenEstimate;
 use ContextDiscovery\Discovery\Extraction\AssertionExtractor;
+use ContextDiscovery\Discovery\Extraction\NamedReferenceAssertionExtractor;
 use ContextDiscovery\Discovery\Extraction\OwnFileAssertionExtractor;
 use ContextDiscovery\Discovery\Flagging\AssumptionWriter;
 use ContextDiscovery\Discovery\Lever\LeverPolicy;
 use ContextDiscovery\Discovery\Parsing\UnifiedDiffParser;
+use ContextDiscovery\Discovery\Resolution\NamedReferenceResolver;
 use ContextDiscovery\Discovery\Resolution\OwnFileResolver;
 use ContextDiscovery\Pipeline\DiscoverContext;
 use ContextDiscovery\Ports\BundleWriter;
@@ -45,18 +47,21 @@ final class Wiring
     {
         $source = new LocalSourceRepository($options->repositoryRoot);
         $slicer = new TokenizerMemberSlicer();
+        $locator = new ComposerPsr4ClassLocator($source);
 
         $context = new DiscoverContext(
             new UnifiedDiffParser(),
             $source,
             new AssertionExtractor([
                 new OwnFileAssertionExtractor($slicer),
+                new NamedReferenceAssertionExtractor($slicer),
                 // The remaining extractors join this list as their milestones land. Each one is
                 // an explicit line here, never a discovered plugin.
             ]),
             new LeverPolicy(),
-            new ComposerPsr4ClassLocator($source),
+            $locator,
             new OwnFileResolver($source, $slicer),
+            new NamedReferenceResolver($locator, $source, $slicer),
             new AssumptionWriter(),
             new BundleAssembler(new TokenEstimate()),
             new BudgetEnforcer(new ItemPriority()),

@@ -18,6 +18,7 @@ use ContextDiscovery\Discovery\Extraction\OwnFileAssertionExtractor;
 use ContextDiscovery\Discovery\Flagging\AssumptionWriter;
 use ContextDiscovery\Discovery\Lever\LeverPolicy;
 use ContextDiscovery\Discovery\Parsing\UnifiedDiffParser;
+use ContextDiscovery\Discovery\Resolution\NamedReferenceResolver;
 use ContextDiscovery\Discovery\Resolution\OwnFileResolver;
 use ContextDiscovery\Pipeline\DiscoverContext;
 use ContextDiscovery\Ports\BundleWriter;
@@ -31,6 +32,8 @@ use PHPUnit\Framework\TestCase;
 final class DiscoverCommandTest extends TestCase
 {
     private const PATH = 'app/Services/Thing.php';
+
+    private ?FakeClassLocator $locator = null;
 
     /** @var resource */
     private $stdout;
@@ -124,13 +127,16 @@ final class DiscoverCommandTest extends TestCase
         $source = new FakeSourceRepository([self::PATH => $this->source()]);
         $slicer = new TokenizerMemberSlicer();
 
+        $locator = $this->locator ?? new FakeClassLocator();
+
         $context = new DiscoverContext(
             new UnifiedDiffParser(),
             $source,
             new AssertionExtractor([new OwnFileAssertionExtractor($slicer)]),
             new LeverPolicy(),
-            new FakeClassLocator(),
+            $locator,
             new OwnFileResolver($source, $slicer),
+            new NamedReferenceResolver($locator, $source, $slicer),
             new AssumptionWriter(),
             new BundleAssembler(new TokenEstimate()),
             new BudgetEnforcer(new ItemPriority()),

@@ -11,6 +11,7 @@ use ContextDiscovery\Discovery\Flagging\AssumptionWriter;
 use ContextDiscovery\Discovery\Lever\LeverPolicy;
 use ContextDiscovery\Discovery\Parsing\UnifiedDiffParser;
 use ContextDiscovery\Discovery\Resolution\AssertionResolver;
+use ContextDiscovery\Discovery\Resolution\NamedReferenceResolver;
 use ContextDiscovery\Discovery\Resolution\OwnFileResolver;
 use ContextDiscovery\Domain\Assertion\AssertionKind;
 use ContextDiscovery\Domain\Assertion\ResolvedAssertion;
@@ -44,6 +45,7 @@ final class DiscoverContext
         private readonly LeverPolicy $leverPolicy,
         private readonly ClassLocator $classLocator,
         private readonly OwnFileResolver $ownFileResolver,
+        private readonly NamedReferenceResolver $namedReferenceResolver,
         private readonly AssumptionWriter $assumptionWriter,
         private readonly BundleAssembler $assembler,
         private readonly BudgetEnforcer $budgetEnforcer,
@@ -78,6 +80,16 @@ final class DiscoverContext
 
             // 5b · Flag the expensive or unknowable.
             if ($lever === Lever::Flagged) {
+                if ($assertion->kind === AssertionKind::NamedReference) {
+                    // The PSR-4 map could not place it: a missing entry, or no composer.json at
+                    // all. One line per unplaceable reference (01-architecture.md §5).
+                    $diagnostic(sprintf(
+                        'missing PSR-4 entry: %s named in %s',
+                        $assertion->subject,
+                        $assertion->originPath,
+                    ));
+                }
+
                 $resolved[] = ResolvedAssertion::flagged(
                     $assertion,
                     $this->assumptionWriter->statementFor($assertion),
@@ -126,12 +138,11 @@ final class DiscoverContext
             AssertionKind::SameFileSymbolAbsence,
             AssertionKind::SameFileReference => $this->ownFileResolver,
 
-            // Unreachable until their extractors are wired: nothing emits these kinds yet, so the
-            // pipeline cannot reach an arm it has no resolver for. Each becomes its resolver when
+            AssertionKind::NamedReference => $this->namedReferenceResolver,
+
+            // Unreachable until its extractor is wired: nothing emits this kind yet, so the
+            // pipeline cannot reach an arm it has no resolver for. It becomes its resolver when
             // its milestone lands, and until then it fails loudly rather than pretending.
-            AssertionKind::NamedReference => throw new LogicException(
-                'NamedReference has no resolver wired yet (NamedReferenceResolver, milestone M6).'
-            ),
             AssertionKind::ChangedSignature => throw new LogicException(
                 'ChangedSignature has no resolver wired yet (CallerResolver, milestone M7).'
             ),

@@ -10,10 +10,12 @@ use ContextDiscovery\Assembly\BundleAssembler;
 use ContextDiscovery\Assembly\ItemPriority;
 use ContextDiscovery\Assembly\TokenEstimate;
 use ContextDiscovery\Discovery\Extraction\AssertionExtractor;
+use ContextDiscovery\Discovery\Extraction\NamedReferenceAssertionExtractor;
 use ContextDiscovery\Discovery\Extraction\OwnFileAssertionExtractor;
 use ContextDiscovery\Discovery\Flagging\AssumptionWriter;
 use ContextDiscovery\Discovery\Lever\LeverPolicy;
 use ContextDiscovery\Discovery\Parsing\UnifiedDiffParser;
+use ContextDiscovery\Discovery\Resolution\NamedReferenceResolver;
 use ContextDiscovery\Discovery\Resolution\OwnFileResolver;
 use ContextDiscovery\Domain\Bundle\Bundle;
 use ContextDiscovery\Domain\Bundle\BundleItem;
@@ -31,6 +33,8 @@ use PHPUnit\Framework\TestCase;
 final class DiscoverContextTest extends TestCase
 {
     private const PATH = 'app/Services/Plaid/PlaidAccountService.php';
+
+    private ?FakeClassLocator $locator = null;
 
     /** @var list<string> */
     private array $diagnostics = [];
@@ -131,18 +135,101 @@ final class DiscoverContextTest extends TestCase
         self::assertSame([], $this->discover($diff, 8000)->items);
     }
 
+    public function testACrossFileReferenceIsResolvedThroughThePsr4Map(): void
+    {
+        $this->locator = new FakeClassLocator(['App\Models\PlaidAccount' => 'app/Models/PlaidAccount.php']);
+
+        $bundle = $this->discover(
+            $this->diffNaming('$account = PlaidAccount::forItem($item);'),
+            8000,
+            new FakeSourceRepository([
+                self::PATH => $this->source(),
+                'app/Models/PlaidAccount.php' => "<?php\n\nclass PlaidAccount\n{\n    public function forItem(\$item)\n    {\n    }\n}\n",
+            ]),
+        );
+
+        $named = array_values(array_filter(
+            $bundle->items,
+            static fn (BundleItem $item): bool => $item->assertionKind->value === 'named_reference'
+        ));
+
+        self::assertCount(1, $named);
+        self::assertSame('fetched', $named[0]->lever->value);
+        self::assertSame('app/Models/PlaidAccount.php', $named[0]->provenance->path);
+        self::assertSame('forItem', $named[0]->provenance->member);
+        self::assertSame([], $this->diagnostics);
+    }
+
+    public function testAReferenceThePsr4MapCannotPlaceIsFlaggedAndDiagnosed(): void
+    {
+        // "Missing map ⇒ every NamedReference becomes a flag, plus one diagnostic."
+        $bundle = $this->discover($this->diffNaming('$account = PlaidAccount::forItem($item);'), 8000);
+
+        $named = array_values(array_filter(
+            $bundle->items,
+            static fn (BundleItem $item): bool => $item->assertionKind->value === 'named_reference'
+        ));
+
+        self::assertCount(1, $named);
+        self::assertSame('flagged', $named[0]->lever->value);
+        self::assertStringContainsString('could not be resolved on disk', $named[0]->payload);
+
+        self::assertCount(1, $this->diagnostics);
+        self::assertStringContainsString('missing PSR-4 entry', $this->diagnostics[0]);
+        self::assertStringContainsString('App\Models\PlaidAccount::forItem', $this->diagnostics[0]);
+    }
+
+    public function testTheCrossFileSliceIsBandedBelowTheOwnFileSlices(): void
+    {
+        // ACP-01's point: under budget pressure the model surface goes before the sibling does.
+        $this->locator = new FakeClassLocator(['App\Models\PlaidAccount' => 'app/Models/PlaidAccount.php']);
+
+        $bundle = $this->discover(
+            $this->diffNaming('$account = PlaidAccount::forItem($item);'),
+            10,
+            new FakeSourceRepository([
+                self::PATH => $this->source(),
+                'app/Models/PlaidAccount.php' => "<?php\n\nclass PlaidAccount\n{\n    public function forItem(\$item)\n    {\n        return 1;\n    }\n}\n",
+            ]),
+        );
+
+        self::assertNotSame([], $bundle->dropped);
+
+        foreach ($bundle->items as $item) {
+            self::assertNotSame('named_reference', $item->assertionKind->value);
+        }
+    }
+
+    private function diffNaming(string $addedLine): string
+    {
+        return implode("\n", [
+            '--- a/' . self::PATH,
+            '+++ b/' . self::PATH,
+            '@@ -12,2 +12,3 @@',
+            '     public function syncFromResponse(PlaidItem $item, array $accounts): void',
+            '     {',
+            '+        ' . $addedLine,
+        ]) . "\n";
+    }
+
     private function discover(string $diffText, int $budget, ?FakeSourceRepository $source = null): Bundle
     {
         $source ??= new FakeSourceRepository([self::PATH => $this->source()]);
         $slicer = new TokenizerMemberSlicer();
 
+        $locator = $this->locator ?? new FakeClassLocator();
+
         $context = new DiscoverContext(
             new UnifiedDiffParser(),
             $source,
-            new AssertionExtractor([new OwnFileAssertionExtractor($slicer)]),
+            new AssertionExtractor([
+                new OwnFileAssertionExtractor($slicer),
+                new NamedReferenceAssertionExtractor($slicer),
+            ]),
             new LeverPolicy(),
-            new FakeClassLocator(),
+            $locator,
             new OwnFileResolver($source, $slicer),
+            new NamedReferenceResolver($locator, $source, $slicer),
             new AssumptionWriter(),
             new BundleAssembler(new TokenEstimate()),
             new BudgetEnforcer(new ItemPriority()),

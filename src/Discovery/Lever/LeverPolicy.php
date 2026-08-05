@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ContextDiscovery\Discovery\Lever;
 
+use ContextDiscovery\Discovery\Resolution\NamedReferenceResolver;
 use ContextDiscovery\Domain\Assertion\Assertion;
 use ContextDiscovery\Domain\Assertion\AssertionKind;
 use ContextDiscovery\Domain\Bundle\Lever;
@@ -34,9 +35,10 @@ final class LeverPolicy
 
             // Depth-one and named, but only if the PSR-4 map can place it. If it cannot, the
             // contract is unverified and that is stated rather than hunted (P10).
-            AssertionKind::NamedReference => $locator->pathFor($assertion->subject) === null
-                ? Lever::Flagged
-                : Lever::Fetched,
+            // The subject is `Fqcn` or `Fqcn::member`; only the class part is a locatable name.
+            AssertionKind::NamedReference => $locator->pathFor(
+                NamedReferenceResolver::split($assertion->subject)[0]
+            ) === null ? Lever::Flagged : Lever::Fetched,
 
             // No file settles a runtime or data-state fact. Flag only.
             AssertionKind::UnverifiablePremise => Lever::Flagged,
