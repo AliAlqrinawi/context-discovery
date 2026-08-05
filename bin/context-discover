@@ -6,41 +6,57 @@ declare(strict_types=1);
 /*
  * context-discover — diff in, context bundle out.
  *
- * Contract: docs/architecture/03-interfaces.md §1 (the CLI is the public surface).
+ * Contract: docs/architecture/03-interfaces.md §1. The bundle goes to stdout, diagnostics to
+ * stderr, and the exit code says which of the three outcomes happened. There is no --out: shell
+ * redirection already covers it.
  *
- * MILESTONE M0 — entrypoint skeleton only.
- * The command body (Cli\Options, Cli\Wiring, Cli\DiscoverCommand) and the pipeline
- * (Pipeline\DiscoverContext) land in milestone M5. Until then this file locates the
- * autoloader, prints the CLI contract, and exits with the usage-error code. It performs
- * no discovery and produces no bundle.
+ * This file does argv, stream plumbing and exit codes, and nothing else. Every decision about
+ * what the tool does lives behind Cli\Wiring.
  */
+
+use ContextDiscovery\Cli\ExitCode;
+use ContextDiscovery\Cli\Options;
+use ContextDiscovery\Cli\Wiring;
 
 $autoload = __DIR__ . '/../vendor/autoload.php';
 
 if (!is_file($autoload)) {
     fwrite(STDERR, "context-discover: dependencies are not installed. Run: composer install\n");
-    exit(1);
+    exit(ExitCode::UsageError->value);
 }
 
 require $autoload;
 
-fwrite(STDERR, <<<'USAGE'
-context-discover --diff <path|-> --repo <path> --budget <int>
-                 [--format json|markdown]
-                 [--caller-scope <prefix>] [--max-call-sites <int>]
+try {
+    $options = Options::fromArgv($argv);
+} catch (InvalidArgumentException $error) {
+    fwrite(STDERR, 'context-discover: ' . $error->getMessage() . "\n");
+    exit(ExitCode::UsageError->value);
+}
 
-  --diff             Unified diff for the commit under review; `-` reads stdin.  Required.
-  --repo             Repository root. All reads are scoped inside it.            Required.
-  --budget           Token budget. No default: the research fixes no number.     Required.
-  --format           json (default) | markdown.
-  --caller-scope     Path prefix for the reverse-caller grep. Default: app/
-  --max-call-sites   Bound on call sites per changed signature. Default: 20
+$diffText = $options->readsStdin()
+    ? (string) stream_get_contents(STDIN)
+    : (is_file($options->diffPath) && is_readable($options->diffPath)
+        ? (string) file_get_contents($options->diffPath)
+        : null);
 
-Exit codes: 0 bundle produced (including an empty bundle) · 1 usage or input error
-            · 2 repository unreadable
+if ($diffText === null) {
+    fwrite(STDERR, sprintf("context-discover: cannot read the diff at %s\n", $options->diffPath));
+    exit(ExitCode::UsageError->value);
+}
 
-not implemented yet: this is the milestone M0 skeleton. The pipeline lands in M5.
+try {
+    $command = (new Wiring())->discoverCommand($options, STDOUT, STDERR);
+} catch (RuntimeException $error) {
+    // The repository root is the one input the tool cannot work around.
+    fwrite(STDERR, 'context-discover: ' . $error->getMessage() . "\n");
+    exit(ExitCode::RepositoryUnreadable->value);
+}
 
-USAGE);
-
-exit(1);
+try {
+    exit($command->run($diffText, $options->budgetTokens)->value);
+} catch (InvalidArgumentException $error) {
+    // A diff this tool cannot read is an input error, never a half-parsed bundle.
+    fwrite(STDERR, 'context-discover: ' . $error->getMessage() . "\n");
+    exit(ExitCode::UsageError->value);
+}
