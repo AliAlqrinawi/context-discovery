@@ -1,0 +1,33 @@
+{
+    "name": "alialqrinawi/context-discovery",
+    "description": "Phase 1 context-assembly tool: diff in, context bundle out. Deterministic, depth-one, budget-bounded. It does not review, judge, score, or call a model.",
+    "type": "project",
+    "require": {
+        "php": ">=8.2"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^11.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "ContextDiscovery\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "ContextDiscovery\\Tests\\": "tests/"
+        }
+    },
+    "bin": [
+        "bin/context-discover"
+    ],
+    "config": {
+        "platform": {
+            "php": "8.2.0"
+        },
+        "sort-packages": true
+    },
+    "scripts": {
+        "test": "phpunit"
+    }
+}

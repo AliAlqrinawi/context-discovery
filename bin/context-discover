@@ -1,0 +1,46 @@
+#!/usr/bin/env php
+<?php
+
+declare(strict_types=1);
+
+/*
+ * context-discover — diff in, context bundle out.
+ *
+ * Contract: docs/architecture/03-interfaces.md §1 (the CLI is the public surface).
+ *
+ * MILESTONE M0 — entrypoint skeleton only.
+ * The command body (Cli\Options, Cli\Wiring, Cli\DiscoverCommand) and the pipeline
+ * (Pipeline\DiscoverContext) land in milestone M5. Until then this file locates the
+ * autoloader, prints the CLI contract, and exits with the usage-error code. It performs
+ * no discovery and produces no bundle.
+ */
+
+$autoload = __DIR__ . '/../vendor/autoload.php';
+
+if (!is_file($autoload)) {
+    fwrite(STDERR, "context-discover: dependencies are not installed. Run: composer install\n");
+    exit(1);
+}
+
+require $autoload;
+
+fwrite(STDERR, <<<'USAGE'
+context-discover --diff <path|-> --repo <path> --budget <int>
+                 [--format json|markdown]
+                 [--caller-scope <prefix>] [--max-call-sites <int>]
+
+  --diff             Unified diff for the commit under review; `-` reads stdin.  Required.
+  --repo             Repository root. All reads are scoped inside it.            Required.
+  --budget           Token budget. No default: the research fixes no number.     Required.
+  --format           json (default) | markdown.
+  --caller-scope     Path prefix for the reverse-caller grep. Default: app/
+  --max-call-sites   Bound on call sites per changed signature. Default: 20
+
+Exit codes: 0 bundle produced (including an empty bundle) · 1 usage or input error
+            · 2 repository unreadable
+
+not implemented yet: this is the milestone M0 skeleton. The pipeline lands in M5.
+
+USAGE);
+
+exit(1);

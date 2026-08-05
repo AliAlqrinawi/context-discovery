@@ -1,0 +1,5 @@
+/vendor/
+.phpunit.result.cache
+.DS_Store
+
+# composer.lock is committed on purpose: the tool must be reproducible (P8).
