@@ -13,6 +13,7 @@ use ContextDiscovery\Discovery\Extraction\AssertionExtractor;
 use ContextDiscovery\Discovery\Extraction\ChangedSignatureAssertionExtractor;
 use ContextDiscovery\Discovery\Extraction\NamedReferenceAssertionExtractor;
 use ContextDiscovery\Discovery\Extraction\OwnFileAssertionExtractor;
+use ContextDiscovery\Discovery\Extraction\UnverifiablePremiseAssertionExtractor;
 use ContextDiscovery\Discovery\Flagging\AssumptionWriter;
 use ContextDiscovery\Discovery\Lever\LeverPolicy;
 use ContextDiscovery\Discovery\Parsing\UnifiedDiffParser;
@@ -353,6 +354,72 @@ final class DiscoverContextTest extends TestCase
         ]);
     }
 
+    public function testAPremiseBecomesAFlaggedItemWithItsFixedStatement(): void
+    {
+        $diff = implode("\n", [
+            '--- a/' . self::PATH,
+            '+++ b/' . self::PATH,
+            '@@ -12,2 +12,4 @@',
+            '     public function syncFromResponse(PlaidItem $item, array $accounts): void',
+            '     {',
+            "+        Cache::lock('plaid:'.\$item->id)->block(5);",
+            '+        $query->lockForUpdate()->first();',
+        ]) . "\n";
+
+        $bundle = $this->discover($diff, 8000);
+
+        $premises = array_values(array_filter(
+            $bundle->items,
+            static fn (BundleItem $item): bool => $item->assertionKind->value === 'unverifiable_premise'
+        ));
+
+        self::assertCount(2, $premises);
+
+        foreach ($premises as $item) {
+            self::assertSame('flagged', $item->lever->value, 'a premise is never fetched');
+            self::assertStringStartsWith('ASSUMPTION: ', $item->payload);
+            self::assertNull($item->provenance->member, 'a premise names no member');
+            self::assertSame(self::PATH, $item->provenance->path);
+        }
+
+        self::assertSame(
+            [
+                'ASSUMPTION: lock correctness depends on the deployed cache store being atomic',
+                'ASSUMPTION: locked/filtered lookup assumes supporting schema indexes; migration not verified',
+            ],
+            array_map(static fn (BundleItem $item): string => $item->payload, $premises)
+        );
+    }
+
+    public function testAPremiseIsNeverDroppedForBudget(): void
+    {
+        // Band 1: a flag costs almost nothing, and a silent omission is indistinguishable from
+        // "nothing needed" (P10).
+        $diff = implode("\n", [
+            '--- a/' . self::PATH,
+            '+++ b/' . self::PATH,
+            '@@ -12,2 +12,3 @@',
+            '     public function syncFromResponse(PlaidItem $item, array $accounts): void',
+            '     {',
+            "+        Cache::lock('x')->block(5);",
+        ]) . "\n";
+
+        $bundle = $this->discover($diff, 1);
+
+        self::assertSame(
+            ['unverifiable_premise'],
+            array_map(static fn (BundleItem $item): string => $item->assertionKind->value, $bundle->items)
+        );
+        self::assertGreaterThan($bundle->budgetTokens, $bundle->usedTokens, 'D4: the flag survives');
+    }
+
+    public function testADiffWithNoTriggerRaisesNoPremise(): void
+    {
+        foreach ($this->discover($this->diff(), 8000)->items as $item) {
+            self::assertNotSame('unverifiable_premise', $item->assertionKind->value);
+        }
+    }
+
     private function diffNaming(string $addedLine): string
     {
         return implode("\n", [
@@ -379,6 +446,7 @@ final class DiscoverContextTest extends TestCase
                 new OwnFileAssertionExtractor($slicer),
                 new NamedReferenceAssertionExtractor($slicer),
                 new ChangedSignatureAssertionExtractor(),
+                new UnverifiablePremiseAssertionExtractor($slicer),
             ]),
             new LeverPolicy(),
             $locator,

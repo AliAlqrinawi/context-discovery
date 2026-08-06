@@ -15,6 +15,7 @@ use ContextDiscovery\Cli\DiscoverCommand;
 use ContextDiscovery\Cli\ExitCode;
 use ContextDiscovery\Discovery\Extraction\AssertionExtractor;
 use ContextDiscovery\Discovery\Extraction\OwnFileAssertionExtractor;
+use ContextDiscovery\Discovery\Extraction\UnverifiablePremiseAssertionExtractor;
 use ContextDiscovery\Discovery\Flagging\AssumptionWriter;
 use ContextDiscovery\Discovery\Lever\LeverPolicy;
 use ContextDiscovery\Discovery\Parsing\UnifiedDiffParser;
@@ -134,7 +135,10 @@ final class DiscoverCommandTest extends TestCase
         $context = new DiscoverContext(
             new UnifiedDiffParser(),
             $source,
-            new AssertionExtractor([new OwnFileAssertionExtractor($slicer)]),
+            new AssertionExtractor([
+                new OwnFileAssertionExtractor($slicer),
+                new UnverifiablePremiseAssertionExtractor($slicer),
+            ]),
             new LeverPolicy(),
             $locator,
             new OwnFileResolver($source, $slicer),

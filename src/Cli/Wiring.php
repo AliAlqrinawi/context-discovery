@@ -18,6 +18,7 @@ use ContextDiscovery\Discovery\Extraction\AssertionExtractor;
 use ContextDiscovery\Discovery\Extraction\ChangedSignatureAssertionExtractor;
 use ContextDiscovery\Discovery\Extraction\NamedReferenceAssertionExtractor;
 use ContextDiscovery\Discovery\Extraction\OwnFileAssertionExtractor;
+use ContextDiscovery\Discovery\Extraction\UnverifiablePremiseAssertionExtractor;
 use ContextDiscovery\Discovery\Flagging\AssumptionWriter;
 use ContextDiscovery\Discovery\Lever\LeverPolicy;
 use ContextDiscovery\Discovery\Parsing\UnifiedDiffParser;
@@ -59,8 +60,10 @@ final class Wiring
                 new OwnFileAssertionExtractor($slicer),
                 new NamedReferenceAssertionExtractor($slicer),
                 new ChangedSignatureAssertionExtractor(),
-                // The remaining extractor joins this list as its milestone lands. Each one is an
-                // explicit line here, never a discovered plugin.
+                new UnverifiablePremiseAssertionExtractor($slicer),
+                // Four extractors, one per assertion kind the diff can raise. The set is closed:
+                // adding one needs an experiment, a requirement entry, an ADR and a line here —
+                // in that order (ADR-A003). There is no registry and no discovery.
             ]),
             new LeverPolicy(),
             $locator,
