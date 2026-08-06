@@ -18,6 +18,8 @@ use ContextDiscovery\Discovery\Extraction\OwnFileAssertionExtractor;
 use ContextDiscovery\Discovery\Flagging\AssumptionWriter;
 use ContextDiscovery\Discovery\Lever\LeverPolicy;
 use ContextDiscovery\Discovery\Parsing\UnifiedDiffParser;
+use ContextDiscovery\Adapters\Search\ScopedGrepCallSiteSearch;
+use ContextDiscovery\Discovery\Resolution\CallerResolver;
 use ContextDiscovery\Discovery\Resolution\NamedReferenceResolver;
 use ContextDiscovery\Discovery\Resolution\OwnFileResolver;
 use ContextDiscovery\Pipeline\DiscoverContext;
@@ -137,6 +139,7 @@ final class DiscoverCommandTest extends TestCase
             $locator,
             new OwnFileResolver($source, $slicer),
             new NamedReferenceResolver($locator, $source, $slicer),
+            new CallerResolver(new ScopedGrepCallSiteSearch($source), $source, 'app/', 20),
             new AssumptionWriter(),
             new BundleAssembler(new TokenEstimate()),
             new BudgetEnforcer(new ItemPriority()),

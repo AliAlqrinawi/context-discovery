@@ -7,6 +7,7 @@ namespace ContextDiscovery\Cli;
 use ContextDiscovery\Adapters\Autoload\ComposerPsr4ClassLocator;
 use ContextDiscovery\Adapters\Filesystem\LocalSourceRepository;
 use ContextDiscovery\Adapters\Php\TokenizerMemberSlicer;
+use ContextDiscovery\Adapters\Search\ScopedGrepCallSiteSearch;
 use ContextDiscovery\Adapters\Serialization\JsonBundleWriter;
 use ContextDiscovery\Adapters\Serialization\MarkdownBundleWriter;
 use ContextDiscovery\Assembly\BudgetEnforcer;
@@ -14,11 +15,13 @@ use ContextDiscovery\Assembly\BundleAssembler;
 use ContextDiscovery\Assembly\ItemPriority;
 use ContextDiscovery\Assembly\TokenEstimate;
 use ContextDiscovery\Discovery\Extraction\AssertionExtractor;
+use ContextDiscovery\Discovery\Extraction\ChangedSignatureAssertionExtractor;
 use ContextDiscovery\Discovery\Extraction\NamedReferenceAssertionExtractor;
 use ContextDiscovery\Discovery\Extraction\OwnFileAssertionExtractor;
 use ContextDiscovery\Discovery\Flagging\AssumptionWriter;
 use ContextDiscovery\Discovery\Lever\LeverPolicy;
 use ContextDiscovery\Discovery\Parsing\UnifiedDiffParser;
+use ContextDiscovery\Discovery\Resolution\CallerResolver;
 use ContextDiscovery\Discovery\Resolution\NamedReferenceResolver;
 use ContextDiscovery\Discovery\Resolution\OwnFileResolver;
 use ContextDiscovery\Pipeline\DiscoverContext;
@@ -55,13 +58,20 @@ final class Wiring
             new AssertionExtractor([
                 new OwnFileAssertionExtractor($slicer),
                 new NamedReferenceAssertionExtractor($slicer),
-                // The remaining extractors join this list as their milestones land. Each one is
-                // an explicit line here, never a discovered plugin.
+                new ChangedSignatureAssertionExtractor(),
+                // The remaining extractor joins this list as its milestone lands. Each one is an
+                // explicit line here, never a discovered plugin.
             ]),
             new LeverPolicy(),
             $locator,
             new OwnFileResolver($source, $slicer),
             new NamedReferenceResolver($locator, $source, $slicer),
+            new CallerResolver(
+                new ScopedGrepCallSiteSearch($source),
+                $source,
+                $options->callerScope,
+                $options->maxCallSites,
+            ),
             new AssumptionWriter(),
             new BundleAssembler(new TokenEstimate()),
             new BudgetEnforcer(new ItemPriority()),

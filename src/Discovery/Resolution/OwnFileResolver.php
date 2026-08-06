@@ -35,6 +35,23 @@ final class OwnFileResolver implements AssertionResolver
     }
 
     /**
+     * Whether the lookup could run at all — the distinction that decides what an empty result
+     * means (freeze review 05).
+     *
+     * The changed file is the one source always in hand: the extractor skips a file whose text
+     * cannot be read, so every own-file assertion that exists already had its source read. Any
+     * empty result is therefore a **successful negative** — a file with no `use` block and no
+     * enclosing member has genuinely nothing to show, which freeze review 05 names as the example.
+     *
+     * This is why the catalogue has no own-file failure premise: only two lookups can fail, the
+     * named-reference locate and the caller-scope scan (freeze review 06).
+     */
+    public function lookupRan(Assertion $assertion): bool
+    {
+        return $this->source->text($assertion->originPath) !== null;
+    }
+
+    /**
      * @return list<SourceSlice>
      */
     public function resolve(Assertion $assertion): array

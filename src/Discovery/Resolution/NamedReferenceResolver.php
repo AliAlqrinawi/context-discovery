@@ -39,6 +39,17 @@ final class NamedReferenceResolver implements AssertionResolver
     }
 
     /**
+     * Never. A named reference appears in the diff, so its source should exist: no PSR-4 entry, an
+     * unreadable path or a missing member are all **lookup failures**, and each is flagged as
+     * `unresolved-reference` (P10, freeze review 05). There is no successful-negative case here —
+     * "the class simply has nothing" is not an answer the diff asked for.
+     */
+    public function lookupRan(Assertion $assertion): bool
+    {
+        return false;
+    }
+
+    /**
      * @return list<SourceSlice>
      */
     public function resolve(Assertion $assertion): array

@@ -10,6 +10,7 @@ use ContextDiscovery\Domain\Assertion\Assertion;
 use ContextDiscovery\Domain\Assertion\AssertionKind;
 use ContextDiscovery\Domain\Diff\ChangedRegion;
 use InvalidArgumentException;
+use LogicException;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
@@ -100,18 +101,63 @@ final class AssumptionWriterTest extends TestCase
         );
     }
 
-    public function testABoundedCallerSearchFallsToTheTruncationPremise(): void
+    public function testEachFailingLookupStatesItsOwnPremiseAndNeverAShardOne(): void
     {
+        // Freeze review 06: one P10 premise per lookup that can fail. "Named reference could not
+        // be resolved" is simply false of an unreadable caller scope.
         self::assertSame(
-            'ASSUMPTION: additional call sites exist beyond the search bound; not all verified',
+            'ASSUMPTION: callers of this signature could not be searched; scope unreadable',
             $this->writer->statementFor($this->assertion(AssertionKind::ChangedSignature, 'reactivate'))
+        );
+
+        self::assertSame(
+            'ASSUMPTION: named reference could not be resolved on disk; contract unverified',
+            $this->writer->statementFor($this->assertion(AssertionKind::NamedReference, 'PlaidAccount'))
         );
     }
 
-    public function testTheCatalogueIsClosedAtSixPremises(): void
+    #[DataProvider('ownFileKinds')]
+    public function testTheOwnFileKindsHaveNoFailurePremiseBecauseTheirLookupCannotFail(
+        AssertionKind $kind,
+    ): void {
+        // The extractor skips a changed file it cannot read, so every own-file assertion already
+        // has its source in hand: an empty result is a settled answer, never a failure.
+        $this->expectException(LogicException::class);
+        $this->expectExceptionMessage('No failure premise exists');
+
+        $this->writer->statementFor($this->assertion($kind, 'Log'));
+    }
+
+    /**
+     * @return iterable<string, array{AssertionKind}>
+     */
+    public static function ownFileKinds(): iterable
     {
-        // Adding one requires an experiment, a catalogue entry and an ADR-A009 edit (ADR-A003).
-        self::assertCount(6, PremiseCatalogue::cases());
+        yield 'a missing import' => [AssertionKind::SameFileSymbolAbsence];
+        yield 'a same-file sibling' => [AssertionKind::SameFileReference];
+    }
+
+    public function testTruncationIsNamedByTheCallerRatherThanInferred(): void
+    {
+        // A search that hit its bound still returns slices, so the assertion alone cannot say it
+        // happened. The pipeline names the premise.
+        self::assertSame(
+            'ASSUMPTION: additional call sites exist beyond the search bound; not all verified',
+            $this->writer->statementForPremise(PremiseCatalogue::CallSitesTruncated)
+        );
+    }
+
+    public function testTheCatalogueIsClosedAtSevenPremises(): void
+    {
+        // Four earned by findings, three P10 failure premises — one per lookup that can fail
+        // (freeze review 06). Adding one requires an experiment, a catalogue entry and an
+        // ADR-A009 edit (ADR-A003).
+        self::assertCount(7, PremiseCatalogue::cases());
+
+        self::assertSame(
+            'ASSUMPTION: callers of this signature could not be searched; scope unreadable',
+            $this->writer->statementForPremise(PremiseCatalogue::CallerSearchFailed)
+        );
     }
 
     private function assertion(AssertionKind $kind, string $subject): Assertion
