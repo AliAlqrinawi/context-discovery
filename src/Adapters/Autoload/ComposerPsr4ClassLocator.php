@@ -54,10 +54,10 @@ final class ComposerPsr4ClassLocator implements ClassLocator
             $relative = str_replace('\\', '/', substr($class, strlen($prefix))) . '.php';
 
             foreach ($directories as $directory) {
-                $candidate = $directory === '' ? $relative : $directory . '/' . $relative;
+                $mapped = $directory === '' ? $relative : $directory . '/' . $relative;
 
-                if ($this->source->exists($candidate)) {
-                    return $candidate;
+                if ($this->source->exists($mapped)) {
+                    return $mapped;
                 }
             }
         }

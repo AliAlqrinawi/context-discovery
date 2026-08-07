@@ -98,6 +98,16 @@ final class DiscoverContextTest extends TestCase
         self::assertEquals($this->discover($this->diff(), 8000), $this->discover($this->diff(), 8000));
     }
 
+    public function testACrlfDiffProducesTheSameBundleAsAnLfOne(): void
+    {
+        // P8: the same repository state must give the same bundle whatever the checkout's line
+        // endings. The parser normalises the diff; LocalSourceRepository normalises file text.
+        $lf = $this->diff();
+        $crlf = str_replace("\n", "\r\n", $lf);
+
+        self::assertEquals($this->discover($lf, 8000), $this->discover($crlf, 8000));
+    }
+
     public function testTheBudgetIsEnforcedAndDropsAreRecorded(): void
     {
         $bundle = $this->discover($this->diff(), 12);

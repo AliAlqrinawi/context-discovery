@@ -72,9 +72,9 @@ final class BudgetEnforcer
      */
     private function nextToDrop(array $items): ?int
     {
-        $candidate = null;
-        $candidateBand = 0;
-        $candidateTokens = -1;
+        $dropIndex = null;
+        $dropBand = 0;
+        $dropTokens = -1;
 
         foreach ($items as $index => $item) {
             $band = $this->priority->of($item);
@@ -83,14 +83,14 @@ final class BudgetEnforcer
                 continue;
             }
 
-            if ($band > $candidateBand || ($band === $candidateBand && $item->tokens >= $candidateTokens)) {
-                $candidate = $index;
-                $candidateBand = $band;
-                $candidateTokens = $item->tokens;
+            if ($band > $dropBand || ($band === $dropBand && $item->tokens >= $dropTokens)) {
+                $dropIndex = $index;
+                $dropBand = $band;
+                $dropTokens = $item->tokens;
             }
         }
 
-        return $candidate;
+        return $dropIndex;
     }
 
     /**
