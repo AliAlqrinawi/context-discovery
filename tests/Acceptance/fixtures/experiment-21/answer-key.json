@@ -1,0 +1,105 @@
+{
+  "experiment": "experiment-21",
+  "written": "2026-09-06, from the corpus repository's own history, BEFORE any reviewer was run",
+  "purpose": "Establish the BASELINE: how often can an isolated reviewer identify a real defect from the diff alone? No bundle is generated or supplied to anyone.",
+  "protocol": "M17's, unchanged",
+
+  "selection_criteria_fixed_before_scoring": {
+    "S1": "a later REAL commit fixes a behaviour present in the target commit",
+    "S2": "<= 2500 changed lines — a review unit, however large. The bound deliberately keeps the two 2300-line commits so that 'the defect was buried' can be separated from 'the defect was invisible'.",
+    "S3": "controls: no later commit fixes the behaviour",
+    "S4": "no selection on whether the defect looks easy to spot; sizes span 8 to 2375 lines on purpose",
+    "excluded_by_S2": "c48963d (12631 lines, 71 files) — it introduces the CheckApiKey middleware that b969836 later fixes, and is a genuine STRONG pair, but 12k lines is not a review unit and a floor there would tell us nothing."
+  },
+
+  "tasks": [
+    { "id": "T01", "commit": "fc573d2", "lines": 48, "defect_present": "YES", "strength": "STRONG", "fixing_commits": ["11c0ced"],
+      "defect": "Making descriptions nullable leaves the UPDATE path unable to express 'clear this field': UpdateDishAction filters through Arr::whereNotNull, so a description sent empty becomes null, is dropped, and the old text survives.",
+      "why": "11c0ced states the mechanism verbatim in its message.",
+      "visible_in_diff": false,
+      "evidence_expected_from_diff": "none — the diff touches CreateDishDTO, StoreDishRequest and a migration, and never names the update path",
+      "observable_boundary_note": "proving it needs UpdateDishAction, which is not in the diff" },
+
+    { "id": "T03", "commit": "c31783d", "lines": 22, "defect_present": "YES", "strength": "MODERATE", "fixing_commits": ["dae67ab"],
+      "defect": "Adds rows to PageContentSeeder, which writes each row with PageContent::create() and therefore cannot be re-run against an already-seeded database without violating the (page, section, key) unique constraint.",
+      "why": "dae67ab makes the seeder idempotent and states the failure. But the create() loop was introduced by ec76dc4, not here — this commit INHERITS the defect and adds to it, so attribution is partial. Keyed MODERATE for that reason and not inflated.",
+      "visible_in_diff": false,
+      "evidence_expected_from_diff": "none — the diff shows only added data rows; the create() loop is outside it",
+      "observable_boundary_note": "the write loop and the unique index are both outside the diff" },
+
+    { "id": "T04", "commit": "ec92403", "lines": 540, "defect_present": "YES", "strength": "STRONG", "fixing_commits": ["04328a5", "2c2a7b4"],
+      "defect": "TWO, either counts. (a) upload() deletes the previous file and writes the new one BEFORE the database write, with no transaction and no cleanup, so a failed write leaves an orphaned file and the old one gone. (b) payload() returns 'permanent_url' => route('menu.pdf'), the API domain, where the user-facing URL must be the frontend.",
+      "why": "Both fixed by later commits that name the mechanism.",
+      "visible_in_diff": true,
+      "evidence_expected_from_diff": "the ordering of Storage::disk()->delete/putFileAs against Setting::updateOrCreate is fully visible; route('menu.pdf') is visible",
+      "observable_boundary_note": "(a) needs the caller to confirm no transaction wraps it; (b) needs to know the API and frontend are different domains" },
+
+    { "id": "T05", "commit": "ec76dc4", "lines": 557, "defect_present": "YES", "strength": "STRONG", "fixing_commits": ["dae67ab"],
+      "defect": "PageContentSeeder::run() writes every row with PageContent::create() in a loop, so re-running against a seeded database fails on the (page, section, key) unique constraint. The seeder is not idempotent.",
+      "why": "dae67ab replaces create() with updateOrCreate() and states the failure directly.",
+      "visible_in_diff": true,
+      "evidence_expected_from_diff": "PageContent::create($content) inside the foreach is in the diff",
+      "observable_boundary_note": "the unique index that makes it fail is in a migration outside the diff" },
+
+    { "id": "T06", "commit": "e5e48ce", "lines": 715, "defect_present": "YES", "strength": "STRONG", "fixing_commits": ["1fa1f66"],
+      "defect": "Public DishController::index passes raw 'featured' and 'signature' query parameters through $request->only([...]). Query parameters arrive as strings, so 'false' and '0' are truthy and ?featured=false returns featured dishes.",
+      "why": "1fa1f66 replaces exactly that line with has()-guarded $request->boolean() calls.",
+      "visible_in_diff": true,
+      "evidence_expected_from_diff": "the $request->only([...]) line is in the diff — but it is one line among 715 across 31 files",
+      "observable_boundary_note": "confirming the consequence needs DishRepository's where clause, outside the diff" },
+
+    { "id": "T07", "commit": "e4e3f24", "lines": 820, "defect_present": "YES", "strength": "MODERATE", "fixing_commits": ["e770086"],
+      "defect": "MediaItem::scopeForPage takes a REQUIRED string $page, so there is no way to ask for every media slot; the admin listing cannot return all pages.",
+      "why": "e770086 makes the parameter optional through controller, action, scope and repository. But a required parameter is a design limit as much as a defect, and the fix describes a capability rather than a failure. MODERATE.",
+      "visible_in_diff": true,
+      "evidence_expected_from_diff": "the scope signature is in the diff",
+      "observable_boundary_note": "whether any caller needs 'all pages' is outside the diff" },
+
+    { "id": "T08", "commit": "44726d0", "lines": 961, "defect_present": "YES", "strength": "MODERATE", "fixing_commits": ["721ea3c"],
+      "defect": "Three different default page sizes ship together — paginate($filters['per_page'] ?? 12), paginate(15), paginate(15) — so the API's page size depends on which endpoint is called.",
+      "why": "721ea3c normalises all three to 10. The fix names no failure, and an inconsistent default is partly a product decision. MODERATE, deliberately not inflated.",
+      "visible_in_diff": true,
+      "evidence_expected_from_diff": "all three defaults are in the diff",
+      "observable_boundary_note": "none — this is decidable from the diff alone" },
+
+    { "id": "T09", "commit": "8054003", "lines": 2339, "defect_present": "YES", "strength": "STRONG", "fixing_commits": ["560b21b"],
+      "defect": "Every read Action caches through Cache::tags([...]), which throws 'This cache store does not support tagging' on the file driver the production environment uses. 44 call sites.",
+      "why": "560b21b removes all 44 and states the production failure.",
+      "visible_in_diff": true,
+      "evidence_expected_from_diff": "Cache::tags(...) appears throughout the diff",
+      "observable_boundary_note": "which driver production runs is a CONFIGURATION fact, entirely outside the diff — the code is correct on redis or memcached" },
+
+    { "id": "T10", "commit": "4c6a83b", "lines": 2375, "defect_present": "YES", "strength": "MODERATE", "fixing_commits": ["fc573d2"],
+      "defect": "StoreDishRequest requires description_ar and description_en, and CreateDishDTO types them as non-nullable string, so a dish cannot be created without a description.",
+      "why": "fc573d2 relaxes the rules and makes the DTO nullable. A required field is a product decision as much as a defect. MODERATE.",
+      "visible_in_diff": true,
+      "evidence_expected_from_diff": "the validation rules and the DTO signature are both in the diff",
+      "observable_boundary_note": "whether descriptions ought to be optional is a product fact no code carries" },
+
+    { "id": "C01", "commit": "f490fb9", "lines": 32, "defect_present": "NO", "strength": "MODERATE", "fixing_commits": [],
+      "defect": null, "why": "Control. No later commit touches these files at all.", "visible_in_diff": true,
+      "evidence_expected_from_diff": "-", "observable_boundary_note": "-" },
+    { "id": "C02", "commit": "e770086", "lines": 22, "defect_present": "NO", "strength": "MODERATE", "fixing_commits": [],
+      "defect": null, "why": "Control, verified in M20. The optional page parameter is threaded coherently through four layers.", "visible_in_diff": true,
+      "evidence_expected_from_diff": "-", "observable_boundary_note": "-" },
+    { "id": "C03", "commit": "2c2a7b4", "lines": 8, "defect_present": "NO", "strength": "MODERATE", "fixing_commits": [],
+      "defect": null, "why": "Control. Itself a fix, and nothing later amends it. The smallest task in the set.", "visible_in_diff": true,
+      "evidence_expected_from_diff": "-", "observable_boundary_note": "whether app.frontend_url is configured is outside the diff — a reviewer may legitimately abstain here" },
+    { "id": "C04", "commit": "4411454", "lines": 257, "defect_present": "NO", "strength": "MODERATE", "fixing_commits": [],
+      "defect": null, "why": "Control, verified in M20: User::$fillable contains all three mass-assigned fields and updatePassword checks the current password.", "visible_in_diff": false,
+      "evidence_expected_from_diff": "-", "observable_boundary_note": "the mass-assignment cannot be confirmed without User::$fillable" },
+    { "id": "C05", "commit": "cb66103", "lines": 116, "defect_present": "NO", "strength": "WEAK", "fixing_commits": [],
+      "defect": null, "why": "Control. No later commit describes a fix to this behaviour, but sweeping later refactors touch the same files, so the absence of a fix is weaker evidence here. WEAK.", "visible_in_diff": true,
+      "evidence_expected_from_diff": "-", "observable_boundary_note": "-" },
+    { "id": "C06", "commit": "fdf15e5", "lines": 188, "defect_present": "NO", "strength": "WEAK", "fixing_commits": [],
+      "defect": null, "why": "Control, same caveat as C05. WEAK.", "visible_in_diff": true,
+      "evidence_expected_from_diff": "-", "observable_boundary_note": "-" }
+  ],
+
+  "census": { "tasks": 15, "defect": 9, "control": 6, "STRONG": 5, "MODERATE": 8, "WEAK": 2,
+    "strong_are_all_defect_tasks": true,
+    "diff_line_range": "8 to 2375",
+    "keyed_not_visible_in_diff": ["T01", "T03", "C04"] },
+
+  "what_this_measures": "The BASELINE only. If DIFF_ONLY detects few or none of these, M20's floor is a property of the task and the reviewer, not of the bundle — and no bundle comparison can be interpreted until it is understood."
+}

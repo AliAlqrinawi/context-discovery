@@ -1,0 +1,26 @@
+diff --git a/app/Http/Controllers/Admin/MenuPdfController.php b/app/Http/Controllers/Admin/MenuPdfController.php
+index d3080a2..c076d36 100644
+--- a/app/Http/Controllers/Admin/MenuPdfController.php
++++ b/app/Http/Controllers/Admin/MenuPdfController.php
+@@ -77,7 +77,7 @@ private function payload(): array
+ 
+         return [
+             'has_pdf' => $path !== null && Storage::disk('public')->exists($path),
+-            'permanent_url' => route('menu.pdf'),
++            'permanent_url' => config('app.frontend_url').'/menu/pdf',
+             'qr_url' => route('menu.qr'),
+             'qr_download' => route('menu.qr.download'),
+         ];
+diff --git a/tests/Feature/MenuPdfTest.php b/tests/Feature/MenuPdfTest.php
+index 48f635c..8d43eb9 100644
+--- a/tests/Feature/MenuPdfTest.php
++++ b/tests/Feature/MenuPdfTest.php
+@@ -52,7 +52,7 @@ public function test_admin_can_upload_and_the_permanent_url_serves_the_pdf(): vo
+         $this->postJson('/api/v1/admin/menu/pdf', ['pdf' => $this->pdf()])
+             ->assertOk()
+             ->assertJsonPath('data.has_pdf', true)
+-            ->assertJsonPath('data.permanent_url', url('/menu/pdf'));
++            ->assertJsonPath('data.permanent_url', config('app.frontend_url').'/menu/pdf');
+ 
+         Storage::disk('public')->assertExists('menu/menu.pdf');
+ 

@@ -1,0 +1,2638 @@
+diff --git a/app/Actions/Auth/LoginAction.php b/app/Actions/Auth/LoginAction.php
+new file mode 100644
+index 0000000..950ee96
+--- /dev/null
++++ b/app/Actions/Auth/LoginAction.php
+@@ -0,0 +1,27 @@
++<?php
++
++namespace App\Actions\Auth;
++
++use App\DTOs\Auth\LoginDTO;
++use App\Models\User;
++use Illuminate\Auth\AuthenticationException;
++use Illuminate\Support\Facades\Auth;
++
++class LoginAction
++{
++    public function execute(LoginDTO $dto): array
++    {
++        if (! Auth::attempt(['email' => $dto->email, 'password' => $dto->password])) {
++            throw new AuthenticationException('Invalid credentials.');
++        }
++
++        /** @var User $user */
++        $user = Auth::user();
++        $token = $user->createToken('api-token')->plainTextToken;
++
++        return [
++            'token' => $token,
++            'user' => $user,
++        ];
++    }
++}
+diff --git a/app/Actions/Auth/LogoutAction.php b/app/Actions/Auth/LogoutAction.php
+new file mode 100644
+index 0000000..39977ae
+--- /dev/null
++++ b/app/Actions/Auth/LogoutAction.php
+@@ -0,0 +1,13 @@
++<?php
++
++namespace App\Actions\Auth;
++
++use App\Models\User;
++
++class LogoutAction
++{
++    public function execute(User $user): void
++    {
++        $user->currentAccessToken()->delete();
++    }
++}
+diff --git a/app/Actions/Branch/CreateBranchAction.php b/app/Actions/Branch/CreateBranchAction.php
+new file mode 100644
+index 0000000..4bde483
+--- /dev/null
++++ b/app/Actions/Branch/CreateBranchAction.php
+@@ -0,0 +1,45 @@
++<?php
++
++namespace App\Actions\Branch;
++
++use App\DTOs\Branch\CreateBranchDTO;
++use App\Models\Branch;
++use App\Repositories\BranchRepository;
++use App\Services\ImageService;
++use Illuminate\Support\Facades\Cache;
++
++class CreateBranchAction
++{
++    public function __construct(
++        private readonly BranchRepository $repository,
++        private readonly ImageService $imageService,
++    ) {}
++
++    public function execute(CreateBranchDTO $dto): Branch
++    {
++        $data = [
++            'name_ar' => $dto->name_ar,
++            'name_en' => $dto->name_en,
++            'city' => $dto->city,
++            'location_ar' => $dto->location_ar,
++            'location_en' => $dto->location_en,
++            'phone' => $dto->phone,
++            'opening_time' => $dto->opening_time,
++            'closing_time' => $dto->closing_time,
++            'google_maps_url' => $dto->google_maps_url,
++            'order' => $dto->order,
++        ];
++
++        if ($dto->image) {
++            $stored = $this->imageService->store($dto->image, 'branches');
++            $data['image_path'] = $stored['path'];
++            $data['image_url'] = $stored['url'];
++        }
++
++        $branch = $this->repository->create($data);
++
++        Cache::tags(['branches'])->flush();
++
++        return $branch;
++    }
++}
+diff --git a/app/Actions/Branch/DeleteBranchAction.php b/app/Actions/Branch/DeleteBranchAction.php
+new file mode 100644
+index 0000000..825f25c
+--- /dev/null
++++ b/app/Actions/Branch/DeleteBranchAction.php
+@@ -0,0 +1,28 @@
++<?php
++
++namespace App\Actions\Branch;
++
++use App\Repositories\BranchRepository;
++use App\Services\ImageService;
++use Illuminate\Support\Facades\Cache;
++
++class DeleteBranchAction
++{
++    public function __construct(
++        private readonly BranchRepository $repository,
++        private readonly ImageService $imageService,
++    ) {}
++
++    public function execute(int $id): void
++    {
++        $branch = $this->repository->getById($id);
++
++        if ($branch->image_path) {
++            $this->imageService->delete($branch->image_path);
++        }
++
++        $this->repository->delete($id);
++
++        Cache::tags(['branches'])->flush();
++    }
++}
+diff --git a/app/Actions/Branch/GetBranchesAction.php b/app/Actions/Branch/GetBranchesAction.php
+new file mode 100644
+index 0000000..b92f9fb
+--- /dev/null
++++ b/app/Actions/Branch/GetBranchesAction.php
+@@ -0,0 +1,26 @@
++<?php
++
++namespace App\Actions\Branch;
++
++use App\Repositories\BranchRepository;
++use Illuminate\Database\Eloquent\Collection;
++use Illuminate\Support\Facades\Cache;
++
++class GetBranchesAction
++{
++    public function __construct(
++        private readonly BranchRepository $repository,
++    ) {}
++
++    public function execute(): Collection
++    {
++        $locale = app()->getLocale();
++        $key = "branches_{$locale}";
++
++        return Cache::tags(['branches'])->remember(
++            $key,
++            now()->addHour(),
++            fn () => $this->repository->getAll()
++        );
++    }
++}
+diff --git a/app/Actions/Branch/UpdateBranchAction.php b/app/Actions/Branch/UpdateBranchAction.php
+new file mode 100644
+index 0000000..bf05905
+--- /dev/null
++++ b/app/Actions/Branch/UpdateBranchAction.php
+@@ -0,0 +1,52 @@
++<?php
++
++namespace App\Actions\Branch;
++
++use App\DTOs\Branch\UpdateBranchDTO;
++use App\Models\Branch;
++use App\Repositories\BranchRepository;
++use App\Services\ImageService;
++use Illuminate\Support\Arr;
++use Illuminate\Support\Facades\Cache;
++
++class UpdateBranchAction
++{
++    public function __construct(
++        private readonly BranchRepository $repository,
++        private readonly ImageService $imageService,
++    ) {}
++
++    public function execute(int $id, UpdateBranchDTO $dto): Branch
++    {
++        $data = Arr::whereNotNull([
++            'name_ar' => $dto->name_ar,
++            'name_en' => $dto->name_en,
++            'city' => $dto->city,
++            'location_ar' => $dto->location_ar,
++            'location_en' => $dto->location_en,
++            'phone' => $dto->phone,
++            'opening_time' => $dto->opening_time,
++            'closing_time' => $dto->closing_time,
++            'google_maps_url' => $dto->google_maps_url,
++            'order' => $dto->order,
++        ]);
++
++        if ($dto->image) {
++            $existing = $this->repository->getById($id);
++
++            if ($existing->image_path) {
++                $this->imageService->delete($existing->image_path);
++            }
++
++            $stored = $this->imageService->store($dto->image, 'branches');
++            $data['image_path'] = $stored['path'];
++            $data['image_url'] = $stored['url'];
++        }
++
++        $branch = $this->repository->update($id, $data);
++
++        Cache::tags(['branches'])->flush();
++
++        return $branch;
++    }
++}
+diff --git a/app/Actions/Catering/CreatePackageAction.php b/app/Actions/Catering/CreatePackageAction.php
+new file mode 100644
+index 0000000..0bdd8d1
+--- /dev/null
++++ b/app/Actions/Catering/CreatePackageAction.php
+@@ -0,0 +1,43 @@
++<?php
++
++namespace App\Actions\Catering;
++
++use App\DTOs\Catering\CreatePackageDTO;
++use App\Models\CateringPackage;
++use App\Repositories\CateringPackageRepository;
++use App\Services\ImageService;
++use Illuminate\Support\Facades\Cache;
++
++class CreatePackageAction
++{
++    public function __construct(
++        private readonly CateringPackageRepository $repository,
++        private readonly ImageService $imageService,
++    ) {}
++
++    public function execute(CreatePackageDTO $dto): CateringPackage
++    {
++        $data = [
++            'name_ar' => $dto->name_ar,
++            'name_en' => $dto->name_en,
++            'description_ar' => $dto->description_ar,
++            'description_en' => $dto->description_en,
++            'tag_en' => $dto->tag_en,
++            'price_starting_from' => $dto->price_starting_from,
++            'is_featured' => $dto->is_featured,
++            'order' => $dto->order,
++        ];
++
++        if ($dto->image) {
++            $stored = $this->imageService->store($dto->image, 'catering/packages');
++            $data['image_path'] = $stored['path'];
++            $data['image_url'] = $stored['url'];
++        }
++
++        $package = $this->repository->create($data, $dto->features);
++
++        Cache::tags(['catering_packages'])->flush();
++
++        return $package;
++    }
++}
+diff --git a/app/Actions/Catering/CreateSampleMenuAction.php b/app/Actions/Catering/CreateSampleMenuAction.php
+new file mode 100644
+index 0000000..ba09ba2
+--- /dev/null
++++ b/app/Actions/Catering/CreateSampleMenuAction.php
+@@ -0,0 +1,40 @@
++<?php
++
++namespace App\Actions\Catering;
++
++use App\DTOs\Catering\CreateSampleMenuDTO;
++use App\Models\SampleMenu;
++use App\Repositories\SampleMenuRepository;
++use App\Services\ImageService;
++use Illuminate\Support\Facades\Cache;
++
++class CreateSampleMenuAction
++{
++    public function __construct(
++        private readonly SampleMenuRepository $repository,
++        private readonly ImageService $imageService,
++    ) {}
++
++    public function execute(CreateSampleMenuDTO $dto): SampleMenu
++    {
++        $data = [
++            'name_ar' => $dto->name_ar,
++            'name_en' => $dto->name_en,
++            'tag_en' => $dto->tag_en,
++            'is_featured' => $dto->is_featured,
++            'order' => $dto->order,
++        ];
++
++        if ($dto->image) {
++            $stored = $this->imageService->store($dto->image, 'catering/sample-menus');
++            $data['image_path'] = $stored['path'];
++            $data['image_url'] = $stored['url'];
++        }
++
++        $menu = $this->repository->create($data, $dto->dishes);
++
++        Cache::tags(['sample_menus'])->flush();
++
++        return $menu;
++    }
++}
+diff --git a/app/Actions/Catering/DeletePackageAction.php b/app/Actions/Catering/DeletePackageAction.php
+new file mode 100644
+index 0000000..0ff4d68
+--- /dev/null
++++ b/app/Actions/Catering/DeletePackageAction.php
+@@ -0,0 +1,28 @@
++<?php
++
++namespace App\Actions\Catering;
++
++use App\Repositories\CateringPackageRepository;
++use App\Services\ImageService;
++use Illuminate\Support\Facades\Cache;
++
++class DeletePackageAction
++{
++    public function __construct(
++        private readonly CateringPackageRepository $repository,
++        private readonly ImageService $imageService,
++    ) {}
++
++    public function execute(int $id): void
++    {
++        $package = $this->repository->getById($id);
++
++        if ($package->image_path) {
++            $this->imageService->delete($package->image_path);
++        }
++
++        $this->repository->delete($id);
++
++        Cache::tags(['catering_packages'])->flush();
++    }
++}
+diff --git a/app/Actions/Catering/DeleteSampleMenuAction.php b/app/Actions/Catering/DeleteSampleMenuAction.php
+new file mode 100644
+index 0000000..fe6d14b
+--- /dev/null
++++ b/app/Actions/Catering/DeleteSampleMenuAction.php
+@@ -0,0 +1,28 @@
++<?php
++
++namespace App\Actions\Catering;
++
++use App\Repositories\SampleMenuRepository;
++use App\Services\ImageService;
++use Illuminate\Support\Facades\Cache;
++
++class DeleteSampleMenuAction
++{
++    public function __construct(
++        private readonly SampleMenuRepository $repository,
++        private readonly ImageService $imageService,
++    ) {}
++
++    public function execute(int $id): void
++    {
++        $menu = $this->repository->getById($id);
++
++        if ($menu->image_path) {
++            $this->imageService->delete($menu->image_path);
++        }
++
++        $this->repository->delete($id);
++
++        Cache::tags(['sample_menus'])->flush();
++    }
++}
+diff --git a/app/Actions/Catering/GetPackagesAction.php b/app/Actions/Catering/GetPackagesAction.php
+new file mode 100644
+index 0000000..3cadd4d
+--- /dev/null
++++ b/app/Actions/Catering/GetPackagesAction.php
+@@ -0,0 +1,26 @@
++<?php
++
++namespace App\Actions\Catering;
++
++use App\Repositories\CateringPackageRepository;
++use Illuminate\Database\Eloquent\Collection;
++use Illuminate\Support\Facades\Cache;
++
++class GetPackagesAction
++{
++    public function __construct(
++        private readonly CateringPackageRepository $repository,
++    ) {}
++
++    public function execute(): Collection
++    {
++        $locale = app()->getLocale();
++        $key = "catering_packages_{$locale}";
++
++        return Cache::tags(['catering_packages'])->remember(
++            $key,
++            now()->addHour(),
++            fn () => $this->repository->getAll()
++        );
++    }
++}
+diff --git a/app/Actions/Catering/GetSampleMenusAction.php b/app/Actions/Catering/GetSampleMenusAction.php
+new file mode 100644
+index 0000000..614f2fb
+--- /dev/null
++++ b/app/Actions/Catering/GetSampleMenusAction.php
+@@ -0,0 +1,26 @@
++<?php
++
++namespace App\Actions\Catering;
++
++use App\Repositories\SampleMenuRepository;
++use Illuminate\Database\Eloquent\Collection;
++use Illuminate\Support\Facades\Cache;
++
++class GetSampleMenusAction
++{
++    public function __construct(
++        private readonly SampleMenuRepository $repository,
++    ) {}
++
++    public function execute(): Collection
++    {
++        $locale = app()->getLocale();
++        $key = "sample_menus_{$locale}";
++
++        return Cache::tags(['sample_menus'])->remember(
++            $key,
++            now()->addHour(),
++            fn () => $this->repository->getAll()
++        );
++    }
++}
+diff --git a/app/Actions/Catering/SubmitQuoteRequestAction.php b/app/Actions/Catering/SubmitQuoteRequestAction.php
+new file mode 100644
+index 0000000..5befb91
+--- /dev/null
++++ b/app/Actions/Catering/SubmitQuoteRequestAction.php
+@@ -0,0 +1,30 @@
++<?php
++
++namespace App\Actions\Catering;
++
++use App\DTOs\Catering\SubmitQuoteRequestDTO;
++use App\Models\QuoteRequest;
++use App\Repositories\QuoteRequestRepository;
++
++class SubmitQuoteRequestAction
++{
++    public function __construct(
++        private readonly QuoteRequestRepository $repository,
++    ) {}
++
++    public function execute(SubmitQuoteRequestDTO $dto): QuoteRequest
++    {
++        return $this->repository->create([
++            'name' => $dto->name,
++            'phone' => $dto->phone,
++            'email' => $dto->email,
++            'event_date' => $dto->event_date,
++            'guests_count' => $dto->guests_count,
++            'branch' => $dto->branch,
++            'event_type' => $dto->event_type,
++            'budget_range' => $dto->budget_range,
++            'notes' => $dto->notes,
++            'status' => 'pending',
++        ]);
++    }
++}
+diff --git a/app/Actions/Catering/UpdatePackageAction.php b/app/Actions/Catering/UpdatePackageAction.php
+new file mode 100644
+index 0000000..b98c420
+--- /dev/null
++++ b/app/Actions/Catering/UpdatePackageAction.php
+@@ -0,0 +1,50 @@
++<?php
++
++namespace App\Actions\Catering;
++
++use App\DTOs\Catering\UpdatePackageDTO;
++use App\Models\CateringPackage;
++use App\Repositories\CateringPackageRepository;
++use App\Services\ImageService;
++use Illuminate\Support\Arr;
++use Illuminate\Support\Facades\Cache;
++
++class UpdatePackageAction
++{
++    public function __construct(
++        private readonly CateringPackageRepository $repository,
++        private readonly ImageService $imageService,
++    ) {}
++
++    public function execute(int $id, UpdatePackageDTO $dto): CateringPackage
++    {
++        $data = Arr::whereNotNull([
++            'name_ar' => $dto->name_ar,
++            'name_en' => $dto->name_en,
++            'description_ar' => $dto->description_ar,
++            'description_en' => $dto->description_en,
++            'tag_en' => $dto->tag_en,
++            'price_starting_from' => $dto->price_starting_from,
++            'is_featured' => $dto->is_featured,
++            'order' => $dto->order,
++        ]);
++
++        if ($dto->image) {
++            $existing = $this->repository->getById($id);
++
++            if ($existing->image_path) {
++                $this->imageService->delete($existing->image_path);
++            }
++
++            $stored = $this->imageService->store($dto->image, 'catering/packages');
++            $data['image_path'] = $stored['path'];
++            $data['image_url'] = $stored['url'];
++        }
++
++        $package = $this->repository->update($id, $data, $dto->features);
++
++        Cache::tags(['catering_packages'])->flush();
++
++        return $package;
++    }
++}
+diff --git a/app/Actions/Catering/UpdateQuoteRequestStatusAction.php b/app/Actions/Catering/UpdateQuoteRequestStatusAction.php
+new file mode 100644
+index 0000000..a8434f9
+--- /dev/null
++++ b/app/Actions/Catering/UpdateQuoteRequestStatusAction.php
+@@ -0,0 +1,19 @@
++<?php
++
++namespace App\Actions\Catering;
++
++use App\DTOs\Catering\UpdateQuoteRequestStatusDTO;
++use App\Models\QuoteRequest;
++use App\Repositories\QuoteRequestRepository;
++
++class UpdateQuoteRequestStatusAction
++{
++    public function __construct(
++        private readonly QuoteRequestRepository $repository,
++    ) {}
++
++    public function execute(int $id, UpdateQuoteRequestStatusDTO $dto): QuoteRequest
++    {
++        return $this->repository->updateStatus($id, $dto->status->value);
++    }
++}
+diff --git a/app/Actions/Catering/UpdateSampleMenuAction.php b/app/Actions/Catering/UpdateSampleMenuAction.php
+new file mode 100644
+index 0000000..c1c647d
+--- /dev/null
++++ b/app/Actions/Catering/UpdateSampleMenuAction.php
+@@ -0,0 +1,46 @@
++<?php
++
++namespace App\Actions\Catering;
++
++use App\DTOs\Catering\CreateSampleMenuDTO;
++use App\Models\SampleMenu;
++use App\Repositories\SampleMenuRepository;
++use App\Services\ImageService;
++use Illuminate\Support\Facades\Cache;
++
++class UpdateSampleMenuAction
++{
++    public function __construct(
++        private readonly SampleMenuRepository $repository,
++        private readonly ImageService $imageService,
++    ) {}
++
++    public function execute(int $id, CreateSampleMenuDTO $dto): SampleMenu
++    {
++        $data = [
++            'name_ar' => $dto->name_ar,
++            'name_en' => $dto->name_en,
++            'tag_en' => $dto->tag_en,
++            'is_featured' => $dto->is_featured,
++            'order' => $dto->order,
++        ];
++
++        if ($dto->image) {
++            $existing = $this->repository->getById($id);
++
++            if ($existing->image_path) {
++                $this->imageService->delete($existing->image_path);
++            }
++
++            $stored = $this->imageService->store($dto->image, 'catering/sample-menus');
++            $data['image_path'] = $stored['path'];
++            $data['image_url'] = $stored['url'];
++        }
++
++        $menu = $this->repository->update($id, $data, $dto->dishes);
++
++        Cache::tags(['sample_menus'])->flush();
++
++        return $menu;
++    }
++}
+diff --git a/app/Actions/DeliveryApp/CreateDeliveryAppAction.php b/app/Actions/DeliveryApp/CreateDeliveryAppAction.php
+new file mode 100644
+index 0000000..53633f7
+--- /dev/null
++++ b/app/Actions/DeliveryApp/CreateDeliveryAppAction.php
+@@ -0,0 +1,40 @@
++<?php
++
++namespace App\Actions\DeliveryApp;
++
++use App\DTOs\DeliveryApp\CreateDeliveryAppDTO;
++use App\Models\DeliveryApp;
++use App\Repositories\DeliveryAppRepository;
++use App\Services\ImageService;
++use Illuminate\Support\Facades\Cache;
++
++class CreateDeliveryAppAction
++{
++    public function __construct(
++        private readonly DeliveryAppRepository $repository,
++        private readonly ImageService $imageService,
++    ) {}
++
++    public function execute(CreateDeliveryAppDTO $dto): DeliveryApp
++    {
++        $data = [
++            'name_ar' => $dto->name_ar,
++            'name_en' => $dto->name_en,
++            'order_url' => $dto->order_url,
++            'is_active' => $dto->is_active,
++            'order' => $dto->order,
++        ];
++
++        if ($dto->logo) {
++            $stored = $this->imageService->store($dto->logo, 'delivery-apps');
++            $data['logo_path'] = $stored['path'];
++            $data['logo_url'] = $stored['url'];
++        }
++
++        $deliveryApp = $this->repository->create($data);
++
++        Cache::tags(['delivery_apps'])->flush();
++
++        return $deliveryApp;
++    }
++}
+diff --git a/app/Actions/DeliveryApp/DeleteDeliveryAppAction.php b/app/Actions/DeliveryApp/DeleteDeliveryAppAction.php
+new file mode 100644
+index 0000000..79f2ad7
+--- /dev/null
++++ b/app/Actions/DeliveryApp/DeleteDeliveryAppAction.php
+@@ -0,0 +1,28 @@
++<?php
++
++namespace App\Actions\DeliveryApp;
++
++use App\Repositories\DeliveryAppRepository;
++use App\Services\ImageService;
++use Illuminate\Support\Facades\Cache;
++
++class DeleteDeliveryAppAction
++{
++    public function __construct(
++        private readonly DeliveryAppRepository $repository,
++        private readonly ImageService $imageService,
++    ) {}
++
++    public function execute(int $id): void
++    {
++        $deliveryApp = $this->repository->getById($id);
++
++        if ($deliveryApp->logo_path) {
++            $this->imageService->delete($deliveryApp->logo_path);
++        }
++
++        $this->repository->delete($id);
++
++        Cache::tags(['delivery_apps'])->flush();
++    }
++}
+diff --git a/app/Actions/DeliveryApp/GetDeliveryAppsAction.php b/app/Actions/DeliveryApp/GetDeliveryAppsAction.php
+new file mode 100644
+index 0000000..0ef79f4
+--- /dev/null
++++ b/app/Actions/DeliveryApp/GetDeliveryAppsAction.php
+@@ -0,0 +1,26 @@
++<?php
++
++namespace App\Actions\DeliveryApp;
++
++use App\Repositories\DeliveryAppRepository;
++use Illuminate\Database\Eloquent\Collection;
++use Illuminate\Support\Facades\Cache;
++
++class GetDeliveryAppsAction
++{
++    public function __construct(
++        private readonly DeliveryAppRepository $repository,
++    ) {}
++
++    public function execute(bool $activeOnly = true): Collection
++    {
++        $locale = app()->getLocale();
++        $key = "delivery_apps_{$locale}_".($activeOnly ? 'active' : 'all');
++
++        return Cache::tags(['delivery_apps'])->remember(
++            $key,
++            now()->addHour(),
++            fn () => $this->repository->getAll($activeOnly)
++        );
++    }
++}
+diff --git a/app/Actions/DeliveryApp/UpdateDeliveryAppAction.php b/app/Actions/DeliveryApp/UpdateDeliveryAppAction.php
+new file mode 100644
+index 0000000..3841ced
+--- /dev/null
++++ b/app/Actions/DeliveryApp/UpdateDeliveryAppAction.php
+@@ -0,0 +1,46 @@
++<?php
++
++namespace App\Actions\DeliveryApp;
++
++use App\DTOs\DeliveryApp\CreateDeliveryAppDTO;
++use App\Models\DeliveryApp;
++use App\Repositories\DeliveryAppRepository;
++use App\Services\ImageService;
++use Illuminate\Support\Facades\Cache;
++
++class UpdateDeliveryAppAction
++{
++    public function __construct(
++        private readonly DeliveryAppRepository $repository,
++        private readonly ImageService $imageService,
++    ) {}
++
++    public function execute(int $id, CreateDeliveryAppDTO $dto): DeliveryApp
++    {
++        $data = [
++            'name_ar' => $dto->name_ar,
++            'name_en' => $dto->name_en,
++            'order_url' => $dto->order_url,
++            'is_active' => $dto->is_active,
++            'order' => $dto->order,
++        ];
++
++        if ($dto->logo) {
++            $existing = $this->repository->getById($id);
++
++            if ($existing->logo_path) {
++                $this->imageService->delete($existing->logo_path);
++            }
++
++            $stored = $this->imageService->store($dto->logo, 'delivery-apps');
++            $data['logo_path'] = $stored['path'];
++            $data['logo_url'] = $stored['url'];
++        }
++
++        $deliveryApp = $this->repository->update($id, $data);
++
++        Cache::tags(['delivery_apps'])->flush();
++
++        return $deliveryApp;
++    }
++}
+diff --git a/app/Actions/Dish/CreateDishAction.php b/app/Actions/Dish/CreateDishAction.php
+new file mode 100644
+index 0000000..20e1f7c
+--- /dev/null
++++ b/app/Actions/Dish/CreateDishAction.php
+@@ -0,0 +1,44 @@
++<?php
++
++namespace App\Actions\Dish;
++
++use App\DTOs\Dish\CreateDishDTO;
++use App\Models\Dish;
++use App\Repositories\DishRepository;
++use App\Services\ImageService;
++use Illuminate\Support\Facades\Cache;
++
++class CreateDishAction
++{
++    public function __construct(
++        private readonly DishRepository $repository,
++        private readonly ImageService $imageService,
++    ) {}
++
++    public function execute(CreateDishDTO $dto): Dish
++    {
++        $data = [
++            'name_ar' => $dto->name_ar,
++            'name_en' => $dto->name_en,
++            'description_ar' => $dto->description_ar,
++            'description_en' => $dto->description_en,
++            'price' => $dto->price,
++            'category_id' => $dto->category_id,
++            'is_featured' => $dto->is_featured,
++            'is_signature' => $dto->is_signature,
++            'order' => $dto->order,
++        ];
++
++        if ($dto->image) {
++            $stored = $this->imageService->store($dto->image, 'dishes');
++            $data['image_path'] = $stored['path'];
++            $data['image_url'] = $stored['url'];
++        }
++
++        $dish = $this->repository->create($data);
++
++        Cache::tags(['dishes'])->flush();
++
++        return $dish;
++    }
++}
+diff --git a/app/Actions/Dish/DeleteDishAction.php b/app/Actions/Dish/DeleteDishAction.php
+new file mode 100644
+index 0000000..3efac03
+--- /dev/null
++++ b/app/Actions/Dish/DeleteDishAction.php
+@@ -0,0 +1,28 @@
++<?php
++
++namespace App\Actions\Dish;
++
++use App\Repositories\DishRepository;
++use App\Services\ImageService;
++use Illuminate\Support\Facades\Cache;
++
++class DeleteDishAction
++{
++    public function __construct(
++        private readonly DishRepository $repository,
++        private readonly ImageService $imageService,
++    ) {}
++
++    public function execute(int $id): void
++    {
++        $dish = $this->repository->getById($id);
++
++        if ($dish->image_path) {
++            $this->imageService->delete($dish->image_path);
++        }
++
++        $this->repository->delete($id);
++
++        Cache::tags(['dishes'])->flush();
++    }
++}
+diff --git a/app/Actions/Dish/GetDishAction.php b/app/Actions/Dish/GetDishAction.php
+new file mode 100644
+index 0000000..6d06378
+--- /dev/null
++++ b/app/Actions/Dish/GetDishAction.php
+@@ -0,0 +1,18 @@
++<?php
++
++namespace App\Actions\Dish;
++
++use App\Models\Dish;
++use App\Repositories\DishRepository;
++
++class GetDishAction
++{
++    public function __construct(
++        private readonly DishRepository $repository,
++    ) {}
++
++    public function execute(int $id): Dish
++    {
++        return $this->repository->getById($id);
++    }
++}
+diff --git a/app/Actions/Dish/GetDishesAction.php b/app/Actions/Dish/GetDishesAction.php
+new file mode 100644
+index 0000000..b0b671f
+--- /dev/null
++++ b/app/Actions/Dish/GetDishesAction.php
+@@ -0,0 +1,30 @@
++<?php
++
++namespace App\Actions\Dish;
++
++use App\Repositories\DishRepository;
++use Illuminate\Pagination\LengthAwarePaginator;
++use Illuminate\Support\Facades\Cache;
++
++class GetDishesAction
++{
++    public function __construct(
++        private readonly DishRepository $repository,
++    ) {}
++
++    public function execute(array $filters = []): LengthAwarePaginator
++    {
++        $locale = app()->getLocale();
++        $categoryId = $filters['category_id'] ?? 'all';
++        $featured = array_key_exists('featured', $filters) ? var_export($filters['featured'], true) : 'all';
++        $page = request()->integer('page', 1);
++
++        $key = "dishes_{$locale}_{$categoryId}_{$featured}_{$page}";
++
++        return Cache::tags(['dishes'])->remember(
++            $key,
++            now()->addHour(),
++            fn () => $this->repository->getAll($filters)
++        );
++    }
++}
+diff --git a/app/Actions/Dish/UpdateDishAction.php b/app/Actions/Dish/UpdateDishAction.php
+new file mode 100644
+index 0000000..74d1dc5
+--- /dev/null
++++ b/app/Actions/Dish/UpdateDishAction.php
+@@ -0,0 +1,51 @@
++<?php
++
++namespace App\Actions\Dish;
++
++use App\DTOs\Dish\UpdateDishDTO;
++use App\Models\Dish;
++use App\Repositories\DishRepository;
++use App\Services\ImageService;
++use Illuminate\Support\Arr;
++use Illuminate\Support\Facades\Cache;
++
++class UpdateDishAction
++{
++    public function __construct(
++        private readonly DishRepository $repository,
++        private readonly ImageService $imageService,
++    ) {}
++
++    public function execute(int $id, UpdateDishDTO $dto): Dish
++    {
++        $data = Arr::whereNotNull([
++            'name_ar' => $dto->name_ar,
++            'name_en' => $dto->name_en,
++            'description_ar' => $dto->description_ar,
++            'description_en' => $dto->description_en,
++            'price' => $dto->price,
++            'category_id' => $dto->category_id,
++            'is_featured' => $dto->is_featured,
++            'is_signature' => $dto->is_signature,
++            'order' => $dto->order,
++        ]);
++
++        if ($dto->image) {
++            $existing = $this->repository->getById($id);
++
++            if ($existing->image_path) {
++                $this->imageService->delete($existing->image_path);
++            }
++
++            $stored = $this->imageService->store($dto->image, 'dishes');
++            $data['image_path'] = $stored['path'];
++            $data['image_url'] = $stored['url'];
++        }
++
++        $dish = $this->repository->update($id, $data);
++
++        Cache::tags(['dishes'])->flush();
++
++        return $dish;
++    }
++}
+diff --git a/app/Actions/MediaItem/DeleteMediaAction.php b/app/Actions/MediaItem/DeleteMediaAction.php
+new file mode 100644
+index 0000000..0d7a6d6
+--- /dev/null
++++ b/app/Actions/MediaItem/DeleteMediaAction.php
+@@ -0,0 +1,28 @@
++<?php
++
++namespace App\Actions\MediaItem;
++
++use App\Repositories\MediaItemRepository;
++use App\Services\ImageService;
++use Illuminate\Support\Facades\Cache;
++
++class DeleteMediaAction
++{
++    public function __construct(
++        private readonly MediaItemRepository $repository,
++        private readonly ImageService $imageService,
++    ) {}
++
++    public function execute(int $id): void
++    {
++        $mediaItem = $this->repository->getById($id);
++
++        if ($mediaItem->path) {
++            $this->imageService->delete($mediaItem->path);
++        }
++
++        $this->repository->delete($id);
++
++        Cache::tags(['media_items'])->flush();
++    }
++}
+diff --git a/app/Actions/MediaItem/GetMediaItemsAction.php b/app/Actions/MediaItem/GetMediaItemsAction.php
+new file mode 100644
+index 0000000..513c779
+--- /dev/null
++++ b/app/Actions/MediaItem/GetMediaItemsAction.php
+@@ -0,0 +1,25 @@
++<?php
++
++namespace App\Actions\MediaItem;
++
++use App\Repositories\MediaItemRepository;
++use Illuminate\Support\Collection;
++use Illuminate\Support\Facades\Cache;
++
++class GetMediaItemsAction
++{
++    public function __construct(
++        private readonly MediaItemRepository $repository,
++    ) {}
++
++    public function execute(string $page, ?string $section = null): Collection
++    {
++        $key = "media_items_{$page}_{$section}";
++
++        return Cache::tags(['media_items'])->remember(
++            $key,
++            now()->addDay(),
++            fn () => $this->repository->getByPage($page, $section)
++        );
++    }
++}
+diff --git a/app/Actions/MediaItem/UploadMediaAction.php b/app/Actions/MediaItem/UploadMediaAction.php
+new file mode 100644
+index 0000000..0342f9b
+--- /dev/null
++++ b/app/Actions/MediaItem/UploadMediaAction.php
+@@ -0,0 +1,45 @@
++<?php
++
++namespace App\Actions\MediaItem;
++
++use App\DTOs\MediaItem\UploadMediaDTO;
++use App\Models\MediaItem;
++use App\Repositories\MediaItemRepository;
++use App\Services\ImageService;
++use Illuminate\Support\Facades\Cache;
++
++class UploadMediaAction
++{
++    public function __construct(
++        private readonly MediaItemRepository $repository,
++        private readonly ImageService $imageService,
++    ) {}
++
++    public function execute(UploadMediaDTO $dto): MediaItem
++    {
++        $existing = $this->repository->findBySlot($dto->page, $dto->section, $dto->key);
++
++        if ($existing && $existing->path) {
++            $this->imageService->delete($existing->path);
++        }
++
++        $stored = $this->imageService->store($dto->image, "media/{$dto->page}");
++
++        $data = [
++            'page' => $dto->page,
++            'section' => $dto->section,
++            'key' => $dto->key,
++            'alt_ar' => $dto->alt_ar,
++            'alt_en' => $dto->alt_en,
++            ...$stored,
++        ];
++
++        $mediaItem = $existing
++            ? $this->repository->update($existing->id, $data)
++            : $this->repository->create($data);
++
++        Cache::tags(['media_items'])->flush();
++
++        return $mediaItem;
++    }
++}
+diff --git a/app/Actions/PageContent/BulkUpdatePageContentAction.php b/app/Actions/PageContent/BulkUpdatePageContentAction.php
+new file mode 100644
+index 0000000..2bb8702
+--- /dev/null
++++ b/app/Actions/PageContent/BulkUpdatePageContentAction.php
+@@ -0,0 +1,21 @@
++<?php
++
++namespace App\Actions\PageContent;
++
++use App\DTOs\PageContent\BulkUpdatePageContentDTO;
++use App\Repositories\PageContentRepository;
++use Illuminate\Support\Facades\Cache;
++
++class BulkUpdatePageContentAction
++{
++    public function __construct(
++        private readonly PageContentRepository $repository,
++    ) {}
++
++    public function execute(BulkUpdatePageContentDTO $dto): void
++    {
++        $this->repository->bulkUpdate($dto->items);
++
++        Cache::tags(['page_contents'])->flush();
++    }
++}
+diff --git a/app/Actions/PageContent/GetPageContentAction.php b/app/Actions/PageContent/GetPageContentAction.php
+new file mode 100644
+index 0000000..6383b53
+--- /dev/null
++++ b/app/Actions/PageContent/GetPageContentAction.php
+@@ -0,0 +1,26 @@
++<?php
++
++namespace App\Actions\PageContent;
++
++use App\Repositories\PageContentRepository;
++use Illuminate\Support\Collection;
++use Illuminate\Support\Facades\Cache;
++
++class GetPageContentAction
++{
++    public function __construct(
++        private readonly PageContentRepository $repository,
++    ) {}
++
++    public function execute(string $page, ?string $section = null): Collection
++    {
++        $locale = app()->getLocale();
++        $key = "page_contents_{$page}_{$section}_{$locale}";
++
++        return Cache::tags(['page_contents'])->remember(
++            $key,
++            now()->addDay(),
++            fn () => $this->repository->getByPage($page, $section)
++        );
++    }
++}
+diff --git a/app/Actions/PageContent/UpdatePageContentAction.php b/app/Actions/PageContent/UpdatePageContentAction.php
+new file mode 100644
+index 0000000..25ed1b6
+--- /dev/null
++++ b/app/Actions/PageContent/UpdatePageContentAction.php
+@@ -0,0 +1,27 @@
++<?php
++
++namespace App\Actions\PageContent;
++
++use App\DTOs\PageContent\UpdatePageContentDTO;
++use App\Models\PageContent;
++use App\Repositories\PageContentRepository;
++use Illuminate\Support\Facades\Cache;
++
++class UpdatePageContentAction
++{
++    public function __construct(
++        private readonly PageContentRepository $repository,
++    ) {}
++
++    public function execute(int $id, UpdatePageContentDTO $dto): PageContent
++    {
++        $pageContent = $this->repository->update($id, [
++            'value_ar' => $dto->value_ar,
++            'value_en' => $dto->value_en,
++        ]);
++
++        Cache::tags(['page_contents'])->flush();
++
++        return $pageContent;
++    }
++}
+diff --git a/app/Actions/Setting/GetSettingsAction.php b/app/Actions/Setting/GetSettingsAction.php
+new file mode 100644
+index 0000000..19d4679
+--- /dev/null
++++ b/app/Actions/Setting/GetSettingsAction.php
+@@ -0,0 +1,25 @@
++<?php
++
++namespace App\Actions\Setting;
++
++use App\Repositories\SettingRepository;
++use Illuminate\Support\Collection;
++use Illuminate\Support\Facades\Cache;
++
++class GetSettingsAction
++{
++    public function __construct(
++        private readonly SettingRepository $repository,
++    ) {}
++
++    public function execute(?string $group = null): Collection
++    {
++        $key = "settings_{$group}";
++
++        return Cache::tags(['settings'])->remember(
++            $key,
++            now()->addDay(),
++            fn () => $this->repository->getAll($group)
++        );
++    }
++}
+diff --git a/app/Actions/Setting/UpdateSettingsAction.php b/app/Actions/Setting/UpdateSettingsAction.php
+new file mode 100644
+index 0000000..021c1b3
+--- /dev/null
++++ b/app/Actions/Setting/UpdateSettingsAction.php
+@@ -0,0 +1,21 @@
++<?php
++
++namespace App\Actions\Setting;
++
++use App\DTOs\Setting\UpdateSettingDTO;
++use App\Repositories\SettingRepository;
++use Illuminate\Support\Facades\Cache;
++
++class UpdateSettingsAction
++{
++    public function __construct(
++        private readonly SettingRepository $repository,
++    ) {}
++
++    public function execute(UpdateSettingDTO $dto): void
++    {
++        $this->repository->bulkUpdate($dto->settings);
++
++        Cache::tags(['settings'])->flush();
++    }
++}
+diff --git a/app/Actions/Testimonial/CreateTestimonialAction.php b/app/Actions/Testimonial/CreateTestimonialAction.php
+new file mode 100644
+index 0000000..073e483
+--- /dev/null
++++ b/app/Actions/Testimonial/CreateTestimonialAction.php
+@@ -0,0 +1,30 @@
++<?php
++
++namespace App\Actions\Testimonial;
++
++use App\DTOs\Testimonial\CreateTestimonialDTO;
++use App\Models\Testimonial;
++use App\Repositories\TestimonialRepository;
++use Illuminate\Support\Facades\Cache;
++
++class CreateTestimonialAction
++{
++    public function __construct(
++        private readonly TestimonialRepository $repository,
++    ) {}
++
++    public function execute(CreateTestimonialDTO $dto): Testimonial
++    {
++        $testimonial = $this->repository->create([
++            'name' => $dto->name,
++            'quote_ar' => $dto->quote_ar,
++            'quote_en' => $dto->quote_en,
++            'is_active' => $dto->is_active,
++            'order' => $dto->order,
++        ]);
++
++        Cache::tags(['testimonials'])->flush();
++
++        return $testimonial;
++    }
++}
+diff --git a/app/Actions/Testimonial/DeleteTestimonialAction.php b/app/Actions/Testimonial/DeleteTestimonialAction.php
+new file mode 100644
+index 0000000..d64a0c1
+--- /dev/null
++++ b/app/Actions/Testimonial/DeleteTestimonialAction.php
+@@ -0,0 +1,20 @@
++<?php
++
++namespace App\Actions\Testimonial;
++
++use App\Repositories\TestimonialRepository;
++use Illuminate\Support\Facades\Cache;
++
++class DeleteTestimonialAction
++{
++    public function __construct(
++        private readonly TestimonialRepository $repository,
++    ) {}
++
++    public function execute(int $id): void
++    {
++        $this->repository->delete($id);
++
++        Cache::tags(['testimonials'])->flush();
++    }
++}
+diff --git a/app/Actions/Testimonial/GetTestimonialsAction.php b/app/Actions/Testimonial/GetTestimonialsAction.php
+new file mode 100644
+index 0000000..c8bc18c
+--- /dev/null
++++ b/app/Actions/Testimonial/GetTestimonialsAction.php
+@@ -0,0 +1,26 @@
++<?php
++
++namespace App\Actions\Testimonial;
++
++use App\Repositories\TestimonialRepository;
++use Illuminate\Database\Eloquent\Collection;
++use Illuminate\Support\Facades\Cache;
++
++class GetTestimonialsAction
++{
++    public function __construct(
++        private readonly TestimonialRepository $repository,
++    ) {}
++
++    public function execute(bool $activeOnly = true): Collection
++    {
++        $locale = app()->getLocale();
++        $key = "testimonials_{$locale}_".($activeOnly ? 'active' : 'all');
++
++        return Cache::tags(['testimonials'])->remember(
++            $key,
++            now()->addHour(),
++            fn () => $this->repository->getAll($activeOnly)
++        );
++    }
++}
+diff --git a/app/Actions/Testimonial/UpdateTestimonialAction.php b/app/Actions/Testimonial/UpdateTestimonialAction.php
+new file mode 100644
+index 0000000..9d53ad2
+--- /dev/null
++++ b/app/Actions/Testimonial/UpdateTestimonialAction.php
+@@ -0,0 +1,30 @@
++<?php
++
++namespace App\Actions\Testimonial;
++
++use App\DTOs\Testimonial\CreateTestimonialDTO;
++use App\Models\Testimonial;
++use App\Repositories\TestimonialRepository;
++use Illuminate\Support\Facades\Cache;
++
++class UpdateTestimonialAction
++{
++    public function __construct(
++        private readonly TestimonialRepository $repository,
++    ) {}
++
++    public function execute(int $id, CreateTestimonialDTO $dto): Testimonial
++    {
++        $testimonial = $this->repository->update($id, [
++            'name' => $dto->name,
++            'quote_ar' => $dto->quote_ar,
++            'quote_en' => $dto->quote_en,
++            'is_active' => $dto->is_active,
++            'order' => $dto->order,
++        ]);
++
++        Cache::tags(['testimonials'])->flush();
++
++        return $testimonial;
++    }
++}
+diff --git a/app/Actions/Timeline/CreateTimelineAction.php b/app/Actions/Timeline/CreateTimelineAction.php
+new file mode 100644
+index 0000000..b6219df
+--- /dev/null
++++ b/app/Actions/Timeline/CreateTimelineAction.php
+@@ -0,0 +1,32 @@
++<?php
++
++namespace App\Actions\Timeline;
++
++use App\DTOs\Timeline\CreateTimelineDTO;
++use App\Models\Timeline;
++use App\Repositories\TimelineRepository;
++use Illuminate\Support\Facades\Cache;
++
++class CreateTimelineAction
++{
++    public function __construct(
++        private readonly TimelineRepository $repository,
++    ) {}
++
++    public function execute(CreateTimelineDTO $dto): Timeline
++    {
++        $timeline = $this->repository->create([
++            'year' => $dto->year,
++            'location_en' => $dto->location_en,
++            'title_ar' => $dto->title_ar,
++            'title_en' => $dto->title_en,
++            'description_ar' => $dto->description_ar,
++            'description_en' => $dto->description_en,
++            'order' => $dto->order,
++        ]);
++
++        Cache::tags(['timeline'])->flush();
++
++        return $timeline;
++    }
++}
+diff --git a/app/Actions/Timeline/DeleteTimelineAction.php b/app/Actions/Timeline/DeleteTimelineAction.php
+new file mode 100644
+index 0000000..ee06f25
+--- /dev/null
++++ b/app/Actions/Timeline/DeleteTimelineAction.php
+@@ -0,0 +1,20 @@
++<?php
++
++namespace App\Actions\Timeline;
++
++use App\Repositories\TimelineRepository;
++use Illuminate\Support\Facades\Cache;
++
++class DeleteTimelineAction
++{
++    public function __construct(
++        private readonly TimelineRepository $repository,
++    ) {}
++
++    public function execute(int $id): void
++    {
++        $this->repository->delete($id);
++
++        Cache::tags(['timeline'])->flush();
++    }
++}
+diff --git a/app/Actions/Timeline/GetTimelineAction.php b/app/Actions/Timeline/GetTimelineAction.php
+new file mode 100644
+index 0000000..0651308
+--- /dev/null
++++ b/app/Actions/Timeline/GetTimelineAction.php
+@@ -0,0 +1,26 @@
++<?php
++
++namespace App\Actions\Timeline;
++
++use App\Repositories\TimelineRepository;
++use Illuminate\Database\Eloquent\Collection;
++use Illuminate\Support\Facades\Cache;
++
++class GetTimelineAction
++{
++    public function __construct(
++        private readonly TimelineRepository $repository,
++    ) {}
++
++    public function execute(): Collection
++    {
++        $locale = app()->getLocale();
++        $key = "timeline_{$locale}";
++
++        return Cache::tags(['timeline'])->remember(
++            $key,
++            now()->addDay(),
++            fn () => $this->repository->getAll()
++        );
++    }
++}
+diff --git a/app/Actions/Timeline/UpdateTimelineAction.php b/app/Actions/Timeline/UpdateTimelineAction.php
+new file mode 100644
+index 0000000..7e1b93d
+--- /dev/null
++++ b/app/Actions/Timeline/UpdateTimelineAction.php
+@@ -0,0 +1,32 @@
++<?php
++
++namespace App\Actions\Timeline;
++
++use App\DTOs\Timeline\CreateTimelineDTO;
++use App\Models\Timeline;
++use App\Repositories\TimelineRepository;
++use Illuminate\Support\Facades\Cache;
++
++class UpdateTimelineAction
++{
++    public function __construct(
++        private readonly TimelineRepository $repository,
++    ) {}
++
++    public function execute(int $id, CreateTimelineDTO $dto): Timeline
++    {
++        $timeline = $this->repository->update($id, [
++            'year' => $dto->year,
++            'location_en' => $dto->location_en,
++            'title_ar' => $dto->title_ar,
++            'title_en' => $dto->title_en,
++            'description_ar' => $dto->description_ar,
++            'description_en' => $dto->description_en,
++            'order' => $dto->order,
++        ]);
++
++        Cache::tags(['timeline'])->flush();
++
++        return $timeline;
++    }
++}
+diff --git a/app/Actions/User/CreateUserAction.php b/app/Actions/User/CreateUserAction.php
+new file mode 100644
+index 0000000..7df7c3c
+--- /dev/null
++++ b/app/Actions/User/CreateUserAction.php
+@@ -0,0 +1,25 @@
++<?php
++
++namespace App\Actions\User;
++
++use App\DTOs\User\CreateUserDTO;
++use App\Models\User;
++use App\Repositories\UserRepository;
++use Illuminate\Support\Facades\Hash;
++
++class CreateUserAction
++{
++    public function __construct(
++        private readonly UserRepository $repository,
++    ) {}
++
++    public function execute(CreateUserDTO $dto): User
++    {
++        return $this->repository->create([
++            'name' => $dto->name,
++            'email' => $dto->email,
++            'password' => Hash::make($dto->password),
++            'role' => $dto->role,
++        ], $dto->role);
++    }
++}
+diff --git a/app/Actions/User/DeleteUserAction.php b/app/Actions/User/DeleteUserAction.php
+new file mode 100644
+index 0000000..5ec610f
+--- /dev/null
++++ b/app/Actions/User/DeleteUserAction.php
+@@ -0,0 +1,17 @@
++<?php
++
++namespace App\Actions\User;
++
++use App\Repositories\UserRepository;
++
++class DeleteUserAction
++{
++    public function __construct(
++        private readonly UserRepository $repository,
++    ) {}
++
++    public function execute(int $id): void
++    {
++        $this->repository->delete($id);
++    }
++}
+diff --git a/app/Actions/User/GetUsersAction.php b/app/Actions/User/GetUsersAction.php
+new file mode 100644
+index 0000000..e183e05
+--- /dev/null
++++ b/app/Actions/User/GetUsersAction.php
+@@ -0,0 +1,18 @@
++<?php
++
++namespace App\Actions\User;
++
++use App\Repositories\UserRepository;
++use Illuminate\Pagination\LengthAwarePaginator;
++
++class GetUsersAction
++{
++    public function __construct(
++        private readonly UserRepository $repository,
++    ) {}
++
++    public function execute(): LengthAwarePaginator
++    {
++        return $this->repository->getAll();
++    }
++}
+diff --git a/app/Actions/User/UpdateUserAction.php b/app/Actions/User/UpdateUserAction.php
+new file mode 100644
+index 0000000..469bbd7
+--- /dev/null
++++ b/app/Actions/User/UpdateUserAction.php
+@@ -0,0 +1,34 @@
++<?php
++
++namespace App\Actions\User;
++
++use App\DTOs\User\UpdateUserDTO;
++use App\Models\User;
++use App\Repositories\UserRepository;
++use Illuminate\Support\Arr;
++use Illuminate\Support\Facades\Hash;
++
++class UpdateUserAction
++{
++    public function __construct(
++        private readonly UserRepository $repository,
++    ) {}
++
++    public function execute(int $id, UpdateUserDTO $dto): User
++    {
++        $data = Arr::whereNotNull([
++            'name' => $dto->name,
++            'email' => $dto->email,
++            'password' => $dto->password ? Hash::make($dto->password) : null,
++            'role' => $dto->role,
++        ]);
++
++        $user = $this->repository->update($id, $data);
++
++        if ($dto->role) {
++            $user->syncRoles([$dto->role]);
++        }
++
++        return $user;
++    }
++}
+diff --git a/app/DTOs/Auth/LoginDTO.php b/app/DTOs/Auth/LoginDTO.php
+new file mode 100644
+index 0000000..2c338fd
+--- /dev/null
++++ b/app/DTOs/Auth/LoginDTO.php
+@@ -0,0 +1,21 @@
++<?php
++
++namespace App\DTOs\Auth;
++
++use Illuminate\Http\Request;
++
++class LoginDTO
++{
++    public function __construct(
++        public readonly string $email,
++        public readonly string $password,
++    ) {}
++
++    public static function fromRequest(Request $request): self
++    {
++        return new self(
++            email: $request->string('email')->toString(),
++            password: $request->string('password')->toString(),
++        );
++    }
++}
+diff --git a/app/DTOs/Branch/CreateBranchDTO.php b/app/DTOs/Branch/CreateBranchDTO.php
+new file mode 100644
+index 0000000..12c04e9
+--- /dev/null
++++ b/app/DTOs/Branch/CreateBranchDTO.php
+@@ -0,0 +1,40 @@
++<?php
++
++namespace App\DTOs\Branch;
++
++use Illuminate\Http\Request;
++use Illuminate\Http\UploadedFile;
++
++class CreateBranchDTO
++{
++    public function __construct(
++        public readonly string $name_ar,
++        public readonly string $name_en,
++        public readonly string $city,
++        public readonly string $location_ar,
++        public readonly string $location_en,
++        public readonly string $phone,
++        public readonly string $opening_time,
++        public readonly string $closing_time,
++        public readonly ?string $google_maps_url,
++        public readonly ?UploadedFile $image,
++        public readonly int $order,
++    ) {}
++
++    public static function fromRequest(Request $request): self
++    {
++        return new self(
++            name_ar: $request->string('name_ar')->toString(),
++            name_en: $request->string('name_en')->toString(),
++            city: $request->string('city')->toString(),
++            location_ar: $request->string('location_ar')->toString(),
++            location_en: $request->string('location_en')->toString(),
++            phone: $request->string('phone')->toString(),
++            opening_time: $request->string('opening_time')->toString(),
++            closing_time: $request->string('closing_time')->toString(),
++            google_maps_url: $request->filled('google_maps_url') ? $request->string('google_maps_url')->toString() : null,
++            image: $request->file('image'),
++            order: (int) $request->input('order', 0),
++        );
++    }
++}
+diff --git a/app/DTOs/Branch/UpdateBranchDTO.php b/app/DTOs/Branch/UpdateBranchDTO.php
+new file mode 100644
+index 0000000..93d475c
+--- /dev/null
++++ b/app/DTOs/Branch/UpdateBranchDTO.php
+@@ -0,0 +1,40 @@
++<?php
++
++namespace App\DTOs\Branch;
++
++use Illuminate\Http\Request;
++use Illuminate\Http\UploadedFile;
++
++class UpdateBranchDTO
++{
++    public function __construct(
++        public readonly ?string $name_ar,
++        public readonly ?string $name_en,
++        public readonly ?string $city,
++        public readonly ?string $location_ar,
++        public readonly ?string $location_en,
++        public readonly ?string $phone,
++        public readonly ?string $opening_time,
++        public readonly ?string $closing_time,
++        public readonly ?string $google_maps_url,
++        public readonly ?UploadedFile $image,
++        public readonly ?int $order,
++    ) {}
++
++    public static function fromRequest(Request $request): self
++    {
++        return new self(
++            name_ar: $request->filled('name_ar') ? $request->string('name_ar')->toString() : null,
++            name_en: $request->filled('name_en') ? $request->string('name_en')->toString() : null,
++            city: $request->filled('city') ? $request->string('city')->toString() : null,
++            location_ar: $request->filled('location_ar') ? $request->string('location_ar')->toString() : null,
++            location_en: $request->filled('location_en') ? $request->string('location_en')->toString() : null,
++            phone: $request->filled('phone') ? $request->string('phone')->toString() : null,
++            opening_time: $request->filled('opening_time') ? $request->string('opening_time')->toString() : null,
++            closing_time: $request->filled('closing_time') ? $request->string('closing_time')->toString() : null,
++            google_maps_url: $request->filled('google_maps_url') ? $request->string('google_maps_url')->toString() : null,
++            image: $request->file('image'),
++            order: $request->filled('order') ? (int) $request->input('order') : null,
++        );
++    }
++}
+diff --git a/app/DTOs/Catering/CreatePackageDTO.php b/app/DTOs/Catering/CreatePackageDTO.php
+new file mode 100644
+index 0000000..83d63af
+--- /dev/null
++++ b/app/DTOs/Catering/CreatePackageDTO.php
+@@ -0,0 +1,38 @@
++<?php
++
++namespace App\DTOs\Catering;
++
++use Illuminate\Http\Request;
++use Illuminate\Http\UploadedFile;
++
++class CreatePackageDTO
++{
++    public function __construct(
++        public readonly string $name_ar,
++        public readonly string $name_en,
++        public readonly string $description_ar,
++        public readonly string $description_en,
++        public readonly ?string $tag_en,
++        public readonly ?float $price_starting_from,
++        public readonly bool $is_featured,
++        public readonly ?UploadedFile $image,
++        public readonly int $order,
++        public readonly array $features,
++    ) {}
++
++    public static function fromRequest(Request $request): self
++    {
++        return new self(
++            name_ar: $request->string('name_ar')->toString(),
++            name_en: $request->string('name_en')->toString(),
++            description_ar: $request->string('description_ar')->toString(),
++            description_en: $request->string('description_en')->toString(),
++            tag_en: $request->filled('tag_en') ? $request->string('tag_en')->toString() : null,
++            price_starting_from: $request->filled('price_starting_from') ? (float) $request->input('price_starting_from') : null,
++            is_featured: $request->boolean('is_featured'),
++            image: $request->file('image'),
++            order: (int) $request->input('order', 0),
++            features: $request->input('features', []),
++        );
++    }
++}
+diff --git a/app/DTOs/Catering/CreateSampleMenuDTO.php b/app/DTOs/Catering/CreateSampleMenuDTO.php
+new file mode 100644
+index 0000000..43e637d
+--- /dev/null
++++ b/app/DTOs/Catering/CreateSampleMenuDTO.php
+@@ -0,0 +1,32 @@
++<?php
++
++namespace App\DTOs\Catering;
++
++use Illuminate\Http\Request;
++use Illuminate\Http\UploadedFile;
++
++class CreateSampleMenuDTO
++{
++    public function __construct(
++        public readonly string $name_ar,
++        public readonly string $name_en,
++        public readonly ?string $tag_en,
++        public readonly bool $is_featured,
++        public readonly ?UploadedFile $image,
++        public readonly int $order,
++        public readonly array $dishes,
++    ) {}
++
++    public static function fromRequest(Request $request): self
++    {
++        return new self(
++            name_ar: $request->string('name_ar')->toString(),
++            name_en: $request->string('name_en')->toString(),
++            tag_en: $request->filled('tag_en') ? $request->string('tag_en')->toString() : null,
++            is_featured: $request->boolean('is_featured'),
++            image: $request->file('image'),
++            order: (int) $request->input('order', 0),
++            dishes: $request->input('dishes', []),
++        );
++    }
++}
+diff --git a/app/DTOs/Catering/SubmitQuoteRequestDTO.php b/app/DTOs/Catering/SubmitQuoteRequestDTO.php
+new file mode 100644
+index 0000000..49af633
+--- /dev/null
++++ b/app/DTOs/Catering/SubmitQuoteRequestDTO.php
+@@ -0,0 +1,35 @@
++<?php
++
++namespace App\DTOs\Catering;
++
++use Illuminate\Http\Request;
++
++class SubmitQuoteRequestDTO
++{
++    public function __construct(
++        public readonly string $name,
++        public readonly string $phone,
++        public readonly ?string $email,
++        public readonly string $event_date,
++        public readonly int $guests_count,
++        public readonly string $branch,
++        public readonly string $event_type,
++        public readonly ?string $budget_range,
++        public readonly ?string $notes,
++    ) {}
++
++    public static function fromRequest(Request $request): self
++    {
++        return new self(
++            name: $request->string('name')->toString(),
++            phone: $request->string('phone')->toString(),
++            email: $request->filled('email') ? $request->string('email')->toString() : null,
++            event_date: $request->string('event_date')->toString(),
++            guests_count: (int) $request->input('guests_count'),
++            branch: $request->string('branch')->toString(),
++            event_type: $request->string('event_type')->toString(),
++            budget_range: $request->filled('budget_range') ? $request->string('budget_range')->toString() : null,
++            notes: $request->filled('notes') ? $request->string('notes')->toString() : null,
++        );
++    }
++}
+diff --git a/app/DTOs/Catering/UpdatePackageDTO.php b/app/DTOs/Catering/UpdatePackageDTO.php
+new file mode 100644
+index 0000000..1807df2
+--- /dev/null
++++ b/app/DTOs/Catering/UpdatePackageDTO.php
+@@ -0,0 +1,38 @@
++<?php
++
++namespace App\DTOs\Catering;
++
++use Illuminate\Http\Request;
++use Illuminate\Http\UploadedFile;
++
++class UpdatePackageDTO
++{
++    public function __construct(
++        public readonly ?string $name_ar,
++        public readonly ?string $name_en,
++        public readonly ?string $description_ar,
++        public readonly ?string $description_en,
++        public readonly ?string $tag_en,
++        public readonly ?float $price_starting_from,
++        public readonly ?bool $is_featured,
++        public readonly ?UploadedFile $image,
++        public readonly ?int $order,
++        public readonly array $features,
++    ) {}
++
++    public static function fromRequest(Request $request): self
++    {
++        return new self(
++            name_ar: $request->filled('name_ar') ? $request->string('name_ar')->toString() : null,
++            name_en: $request->filled('name_en') ? $request->string('name_en')->toString() : null,
++            description_ar: $request->filled('description_ar') ? $request->string('description_ar')->toString() : null,
++            description_en: $request->filled('description_en') ? $request->string('description_en')->toString() : null,
++            tag_en: $request->filled('tag_en') ? $request->string('tag_en')->toString() : null,
++            price_starting_from: $request->filled('price_starting_from') ? (float) $request->input('price_starting_from') : null,
++            is_featured: $request->has('is_featured') ? $request->boolean('is_featured') : null,
++            image: $request->file('image'),
++            order: $request->filled('order') ? (int) $request->input('order') : null,
++            features: $request->input('features', []),
++        );
++    }
++}
+diff --git a/app/DTOs/Catering/UpdateQuoteRequestStatusDTO.php b/app/DTOs/Catering/UpdateQuoteRequestStatusDTO.php
+new file mode 100644
+index 0000000..19d630b
+--- /dev/null
++++ b/app/DTOs/Catering/UpdateQuoteRequestStatusDTO.php
+@@ -0,0 +1,20 @@
++<?php
++
++namespace App\DTOs\Catering;
++
++use App\Enums\QuoteRequestStatusEnum;
++use Illuminate\Http\Request;
++
++class UpdateQuoteRequestStatusDTO
++{
++    public function __construct(
++        public readonly QuoteRequestStatusEnum $status,
++    ) {}
++
++    public static function fromRequest(Request $request): self
++    {
++        return new self(
++            status: QuoteRequestStatusEnum::from($request->string('status')->toString()),
++        );
++    }
++}
+diff --git a/app/DTOs/DeliveryApp/CreateDeliveryAppDTO.php b/app/DTOs/DeliveryApp/CreateDeliveryAppDTO.php
+new file mode 100644
+index 0000000..22f24fc
+--- /dev/null
++++ b/app/DTOs/DeliveryApp/CreateDeliveryAppDTO.php
+@@ -0,0 +1,30 @@
++<?php
++
++namespace App\DTOs\DeliveryApp;
++
++use Illuminate\Http\Request;
++use Illuminate\Http\UploadedFile;
++
++class CreateDeliveryAppDTO
++{
++    public function __construct(
++        public readonly string $name_ar,
++        public readonly string $name_en,
++        public readonly string $order_url,
++        public readonly ?UploadedFile $logo,
++        public readonly bool $is_active,
++        public readonly int $order,
++    ) {}
++
++    public static function fromRequest(Request $request): self
++    {
++        return new self(
++            name_ar: $request->string('name_ar')->toString(),
++            name_en: $request->string('name_en')->toString(),
++            order_url: $request->string('order_url')->toString(),
++            logo: $request->file('logo'),
++            is_active: $request->boolean('is_active', true),
++            order: (int) $request->input('order', 0),
++        );
++    }
++}
+diff --git a/app/DTOs/Dish/CreateDishDTO.php b/app/DTOs/Dish/CreateDishDTO.php
+new file mode 100644
+index 0000000..1ea8cfd
+--- /dev/null
++++ b/app/DTOs/Dish/CreateDishDTO.php
+@@ -0,0 +1,38 @@
++<?php
++
++namespace App\DTOs\Dish;
++
++use Illuminate\Http\Request;
++use Illuminate\Http\UploadedFile;
++
++class CreateDishDTO
++{
++    public function __construct(
++        public readonly string $name_ar,
++        public readonly string $name_en,
++        public readonly string $description_ar,
++        public readonly string $description_en,
++        public readonly float $price,
++        public readonly int $category_id,
++        public readonly bool $is_featured,
++        public readonly bool $is_signature,
++        public readonly ?UploadedFile $image,
++        public readonly int $order,
++    ) {}
++
++    public static function fromRequest(Request $request): self
++    {
++        return new self(
++            name_ar: $request->string('name_ar')->toString(),
++            name_en: $request->string('name_en')->toString(),
++            description_ar: $request->string('description_ar')->toString(),
++            description_en: $request->string('description_en')->toString(),
++            price: (float) $request->input('price'),
++            category_id: (int) $request->input('category_id'),
++            is_featured: $request->boolean('is_featured'),
++            is_signature: $request->boolean('is_signature'),
++            image: $request->file('image'),
++            order: (int) $request->input('order', 0),
++        );
++    }
++}
+diff --git a/app/DTOs/Dish/UpdateDishDTO.php b/app/DTOs/Dish/UpdateDishDTO.php
+new file mode 100644
+index 0000000..a75b717
+--- /dev/null
++++ b/app/DTOs/Dish/UpdateDishDTO.php
+@@ -0,0 +1,38 @@
++<?php
++
++namespace App\DTOs\Dish;
++
++use Illuminate\Http\Request;
++use Illuminate\Http\UploadedFile;
++
++class UpdateDishDTO
++{
++    public function __construct(
++        public readonly ?string $name_ar,
++        public readonly ?string $name_en,
++        public readonly ?string $description_ar,
++        public readonly ?string $description_en,
++        public readonly ?float $price,
++        public readonly ?int $category_id,
++        public readonly ?bool $is_featured,
++        public readonly ?bool $is_signature,
++        public readonly ?UploadedFile $image,
++        public readonly ?int $order,
++    ) {}
++
++    public static function fromRequest(Request $request): self
++    {
++        return new self(
++            name_ar: $request->filled('name_ar') ? $request->string('name_ar')->toString() : null,
++            name_en: $request->filled('name_en') ? $request->string('name_en')->toString() : null,
++            description_ar: $request->filled('description_ar') ? $request->string('description_ar')->toString() : null,
++            description_en: $request->filled('description_en') ? $request->string('description_en')->toString() : null,
++            price: $request->filled('price') ? (float) $request->input('price') : null,
++            category_id: $request->filled('category_id') ? (int) $request->input('category_id') : null,
++            is_featured: $request->has('is_featured') ? $request->boolean('is_featured') : null,
++            is_signature: $request->has('is_signature') ? $request->boolean('is_signature') : null,
++            image: $request->file('image'),
++            order: $request->filled('order') ? (int) $request->input('order') : null,
++        );
++    }
++}
+diff --git a/app/DTOs/MediaItem/UploadMediaDTO.php b/app/DTOs/MediaItem/UploadMediaDTO.php
+new file mode 100644
+index 0000000..5fa73f3
+--- /dev/null
++++ b/app/DTOs/MediaItem/UploadMediaDTO.php
+@@ -0,0 +1,30 @@
++<?php
++
++namespace App\DTOs\MediaItem;
++
++use Illuminate\Http\Request;
++use Illuminate\Http\UploadedFile;
++
++class UploadMediaDTO
++{
++    public function __construct(
++        public readonly string $page,
++        public readonly string $section,
++        public readonly string $key,
++        public readonly UploadedFile $image,
++        public readonly string $alt_ar,
++        public readonly string $alt_en,
++    ) {}
++
++    public static function fromRequest(Request $request): self
++    {
++        return new self(
++            page: $request->string('page')->toString(),
++            section: $request->string('section')->toString(),
++            key: $request->string('key')->toString(),
++            image: $request->file('image'),
++            alt_ar: $request->string('alt_ar')->toString(),
++            alt_en: $request->string('alt_en')->toString(),
++        );
++    }
++}
+diff --git a/app/DTOs/PageContent/BulkUpdatePageContentDTO.php b/app/DTOs/PageContent/BulkUpdatePageContentDTO.php
+new file mode 100644
+index 0000000..d484640
+--- /dev/null
++++ b/app/DTOs/PageContent/BulkUpdatePageContentDTO.php
+@@ -0,0 +1,19 @@
++<?php
++
++namespace App\DTOs\PageContent;
++
++use Illuminate\Http\Request;
++
++class BulkUpdatePageContentDTO
++{
++    public function __construct(
++        public readonly array $items,
++    ) {}
++
++    public static function fromRequest(Request $request): self
++    {
++        return new self(
++            items: $request->input('items', []),
++        );
++    }
++}
+diff --git a/app/DTOs/PageContent/UpdatePageContentDTO.php b/app/DTOs/PageContent/UpdatePageContentDTO.php
+new file mode 100644
+index 0000000..8fcd032
+--- /dev/null
++++ b/app/DTOs/PageContent/UpdatePageContentDTO.php
+@@ -0,0 +1,21 @@
++<?php
++
++namespace App\DTOs\PageContent;
++
++use Illuminate\Http\Request;
++
++class UpdatePageContentDTO
++{
++    public function __construct(
++        public readonly string $value_ar,
++        public readonly string $value_en,
++    ) {}
++
++    public static function fromRequest(Request $request): self
++    {
++        return new self(
++            value_ar: $request->string('value_ar')->toString(),
++            value_en: $request->string('value_en')->toString(),
++        );
++    }
++}
+diff --git a/app/DTOs/Setting/UpdateSettingDTO.php b/app/DTOs/Setting/UpdateSettingDTO.php
+new file mode 100644
+index 0000000..8f43c29
+--- /dev/null
++++ b/app/DTOs/Setting/UpdateSettingDTO.php
+@@ -0,0 +1,19 @@
++<?php
++
++namespace App\DTOs\Setting;
++
++use Illuminate\Http\Request;
++
++class UpdateSettingDTO
++{
++    public function __construct(
++        public readonly array $settings,
++    ) {}
++
++    public static function fromRequest(Request $request): self
++    {
++        return new self(
++            settings: $request->all(),
++        );
++    }
++}
+diff --git a/app/DTOs/Testimonial/CreateTestimonialDTO.php b/app/DTOs/Testimonial/CreateTestimonialDTO.php
+new file mode 100644
+index 0000000..52e2c29
+--- /dev/null
++++ b/app/DTOs/Testimonial/CreateTestimonialDTO.php
+@@ -0,0 +1,27 @@
++<?php
++
++namespace App\DTOs\Testimonial;
++
++use Illuminate\Http\Request;
++
++class CreateTestimonialDTO
++{
++    public function __construct(
++        public readonly string $name,
++        public readonly string $quote_ar,
++        public readonly string $quote_en,
++        public readonly bool $is_active,
++        public readonly int $order,
++    ) {}
++
++    public static function fromRequest(Request $request): self
++    {
++        return new self(
++            name: $request->string('name')->toString(),
++            quote_ar: $request->string('quote_ar')->toString(),
++            quote_en: $request->string('quote_en')->toString(),
++            is_active: $request->boolean('is_active', true),
++            order: (int) $request->input('order', 0),
++        );
++    }
++}
+diff --git a/app/DTOs/Timeline/CreateTimelineDTO.php b/app/DTOs/Timeline/CreateTimelineDTO.php
+new file mode 100644
+index 0000000..71c8ed8
+--- /dev/null
++++ b/app/DTOs/Timeline/CreateTimelineDTO.php
+@@ -0,0 +1,31 @@
++<?php
++
++namespace App\DTOs\Timeline;
++
++use Illuminate\Http\Request;
++
++class CreateTimelineDTO
++{
++    public function __construct(
++        public readonly string $year,
++        public readonly ?string $location_en,
++        public readonly string $title_ar,
++        public readonly string $title_en,
++        public readonly string $description_ar,
++        public readonly string $description_en,
++        public readonly int $order,
++    ) {}
++
++    public static function fromRequest(Request $request): self
++    {
++        return new self(
++            year: $request->string('year')->toString(),
++            location_en: $request->filled('location_en') ? $request->string('location_en')->toString() : null,
++            title_ar: $request->string('title_ar')->toString(),
++            title_en: $request->string('title_en')->toString(),
++            description_ar: $request->string('description_ar')->toString(),
++            description_en: $request->string('description_en')->toString(),
++            order: (int) $request->input('order', 0),
++        );
++    }
++}
+diff --git a/app/DTOs/User/CreateUserDTO.php b/app/DTOs/User/CreateUserDTO.php
+new file mode 100644
+index 0000000..0b30c5a
+--- /dev/null
++++ b/app/DTOs/User/CreateUserDTO.php
+@@ -0,0 +1,25 @@
++<?php
++
++namespace App\DTOs\User;
++
++use Illuminate\Http\Request;
++
++class CreateUserDTO
++{
++    public function __construct(
++        public readonly string $name,
++        public readonly string $email,
++        public readonly string $password,
++        public readonly string $role,
++    ) {}
++
++    public static function fromRequest(Request $request): self
++    {
++        return new self(
++            name: $request->string('name')->toString(),
++            email: $request->string('email')->toString(),
++            password: $request->string('password')->toString(),
++            role: $request->string('role')->toString(),
++        );
++    }
++}
+diff --git a/app/DTOs/User/UpdateUserDTO.php b/app/DTOs/User/UpdateUserDTO.php
+new file mode 100644
+index 0000000..23f0a17
+--- /dev/null
++++ b/app/DTOs/User/UpdateUserDTO.php
+@@ -0,0 +1,25 @@
++<?php
++
++namespace App\DTOs\User;
++
++use Illuminate\Http\Request;
++
++class UpdateUserDTO
++{
++    public function __construct(
++        public readonly ?string $name,
++        public readonly ?string $email,
++        public readonly ?string $password,
++        public readonly ?string $role,
++    ) {}
++
++    public static function fromRequest(Request $request): self
++    {
++        return new self(
++            name: $request->filled('name') ? $request->string('name')->toString() : null,
++            email: $request->filled('email') ? $request->string('email')->toString() : null,
++            password: $request->filled('password') ? $request->string('password')->toString() : null,
++            role: $request->filled('role') ? $request->string('role')->toString() : null,
++        );
++    }
++}
+diff --git a/app/Models/User.php b/app/Models/User.php
+index 4dc536d..85ba0f6 100644
+--- a/app/Models/User.php
++++ b/app/Models/User.php
+@@ -7,12 +7,13 @@
+ use Illuminate\Database\Eloquent\Factories\HasFactory;
+ use Illuminate\Foundation\Auth\User as Authenticatable;
+ use Illuminate\Notifications\Notifiable;
++use Laravel\Sanctum\HasApiTokens;
+ use Spatie\Permission\Traits\HasRoles;
+ 
+ class User extends Authenticatable
+ {
+     /** @use HasFactory<UserFactory> */
+-    use HasFactory, HasRoles, Notifiable;
++    use HasApiTokens, HasFactory, HasRoles, Notifiable;
+ 
+     /**
+      * The attributes that are mass assignable.
+diff --git a/app/Repositories/MediaItemRepository.php b/app/Repositories/MediaItemRepository.php
+index d4d509f..e52abd0 100644
+--- a/app/Repositories/MediaItemRepository.php
++++ b/app/Repositories/MediaItemRepository.php
+@@ -20,6 +20,14 @@ public function getById(int $id): MediaItem
+         return MediaItem::findOrFail($id);
+     }
+ 
++    public function findBySlot(string $page, string $section, string $key): ?MediaItem
++    {
++        return MediaItem::where('page', $page)
++            ->where('section', $section)
++            ->where('key', $key)
++            ->first();
++    }
++
+     public function create(array $data): MediaItem
+     {
+         return MediaItem::create($data);
+diff --git a/app/Services/ImageService.php b/app/Services/ImageService.php
+new file mode 100644
+index 0000000..88a688c
+--- /dev/null
++++ b/app/Services/ImageService.php
+@@ -0,0 +1,59 @@
++<?php
++
++namespace App\Services;
++
++use Illuminate\Http\UploadedFile;
++use Illuminate\Support\Facades\Storage;
++use Illuminate\Support\Str;
++use Intervention\Image\Encoders\WebpEncoder;
++use Intervention\Image\Laravel\Facades\Image;
++use InvalidArgumentException;
++
++class ImageService
++{
++    private const MAX_SIZE_BYTES = 5 * 1024 * 1024;
++
++    private const MAX_WIDTH = 1920;
++
++    private const ALLOWED_MIMES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
++
++    public function store(UploadedFile $file, string $folder): array
++    {
++        if ($file->getSize() > self::MAX_SIZE_BYTES) {
++            throw new InvalidArgumentException('Image exceeds the maximum allowed size of 5MB.');
++        }
++
++        if (! in_array($file->getMimeType(), self::ALLOWED_MIMES, true)) {
++            throw new InvalidArgumentException('Unsupported image type. Allowed: jpg, jpeg, png, webp.');
++        }
++
++        $image = Image::decodeSplFileInfo($file);
++
++        if ($image->width() > self::MAX_WIDTH) {
++            $image->scale(width: self::MAX_WIDTH);
++        }
++
++        $encoded = $image->encode(new WebpEncoder(quality: 85));
++
++        $filename = Str::uuid()->toString().'.webp';
++        $path = trim($folder, '/').'/'.$filename;
++
++        Storage::disk('public')->put($path, (string) $encoded);
++
++        return [
++            'path' => $path,
++            'url' => Storage::disk('public')->url($path),
++            'width' => $image->width(),
++            'height' => $image->height(),
++            'size_bytes' => Storage::disk('public')->size($path),
++            'mime_type' => 'image/webp',
++        ];
++    }
++
++    public function delete(string $path): void
++    {
++        if (Storage::disk('public')->exists($path)) {
++            Storage::disk('public')->delete($path);
++        }
++    }
++}
+diff --git a/tests/Feature/Actions/GetDishesActionTest.php b/tests/Feature/Actions/GetDishesActionTest.php
+new file mode 100644
+index 0000000..58e0827
+--- /dev/null
++++ b/tests/Feature/Actions/GetDishesActionTest.php
+@@ -0,0 +1,42 @@
++<?php
++
++namespace Tests\Feature\Actions;
++
++use App\Actions\Dish\GetDishesAction;
++use App\Models\Category;
++use Database\Seeders\CategorySeeder;
++use Database\Seeders\DishSeeder;
++use Illuminate\Foundation\Testing\RefreshDatabase;
++use Tests\TestCase;
++
++class GetDishesActionTest extends TestCase
++{
++    use RefreshDatabase;
++
++    protected function setUp(): void
++    {
++        parent::setUp();
++
++        $this->seed(CategorySeeder::class);
++        $this->seed(DishSeeder::class);
++    }
++
++    public function test_returns_all_paginated_dishes(): void
++    {
++        $action = app(GetDishesAction::class);
++
++        $result = $action->execute();
++
++        $this->assertSame(5, $result->total());
++    }
++
++    public function test_filters_by_category_id(): void
++    {
++        $action = app(GetDishesAction::class);
++        $mainsId = Category::where('slug', 'mains')->first()->id;
++
++        $result = $action->execute(['category_id' => $mainsId]);
++
++        $this->assertSame(2, $result->total());
++    }
++}
+diff --git a/tests/Feature/Actions/LoginActionTest.php b/tests/Feature/Actions/LoginActionTest.php
+new file mode 100644
+index 0000000..66ac7af
+--- /dev/null
++++ b/tests/Feature/Actions/LoginActionTest.php
+@@ -0,0 +1,49 @@
++<?php
++
++namespace Tests\Feature\Actions;
++
++use App\Actions\Auth\LoginAction;
++use App\DTOs\Auth\LoginDTO;
++use Database\Seeders\UserSeeder;
++use Illuminate\Auth\AuthenticationException;
++use Illuminate\Foundation\Testing\RefreshDatabase;
++use Tests\TestCase;
++
++class LoginActionTest extends TestCase
++{
++    use RefreshDatabase;
++
++    protected function setUp(): void
++    {
++        parent::setUp();
++
++        $this->seed(UserSeeder::class);
++    }
++
++    public function test_correct_credentials_return_token_and_user(): void
++    {
++        $action = new LoginAction;
++
++        $result = $action->execute(new LoginDTO(
++            email: 'admin@abouelsid.com',
++            password: 'password',
++        ));
++
++        $this->assertArrayHasKey('token', $result);
++        $this->assertArrayHasKey('user', $result);
++        $this->assertNotEmpty($result['token']);
++        $this->assertSame('admin@abouelsid.com', $result['user']->email);
++    }
++
++    public function test_wrong_credentials_throw_authentication_exception(): void
++    {
++        $this->expectException(AuthenticationException::class);
++
++        $action = new LoginAction;
++
++        $action->execute(new LoginDTO(
++            email: 'admin@abouelsid.com',
++            password: 'wrong-password',
++        ));
++    }
++}
+diff --git a/tests/Feature/Actions/SubmitQuoteRequestActionTest.php b/tests/Feature/Actions/SubmitQuoteRequestActionTest.php
+new file mode 100644
+index 0000000..4cdaf19
+--- /dev/null
++++ b/tests/Feature/Actions/SubmitQuoteRequestActionTest.php
+@@ -0,0 +1,39 @@
++<?php
++
++namespace Tests\Feature\Actions;
++
++use App\Actions\Catering\SubmitQuoteRequestAction;
++use App\DTOs\Catering\SubmitQuoteRequestDTO;
++use Illuminate\Foundation\Testing\RefreshDatabase;
++use Tests\TestCase;
++
++class SubmitQuoteRequestActionTest extends TestCase
++{
++    use RefreshDatabase;
++
++    public function test_creates_quote_request_in_database(): void
++    {
++        $action = app(SubmitQuoteRequestAction::class);
++
++        $quoteRequest = $action->execute(new SubmitQuoteRequestDTO(
++            name: 'نورة العتيبي',
++            phone: '0551234567',
++            email: 'noura@example.com',
++            event_date: '2026-12-15',
++            guests_count: 150,
++            branch: 'jeddah_delivery',
++            event_type: 'wedding',
++            budget_range: '25k_50k',
++            notes: 'نريد قائمة مخصصة',
++        ));
++
++        $this->assertDatabaseHas('quote_requests', [
++            'id' => $quoteRequest->id,
++            'name' => 'نورة العتيبي',
++            'phone' => '0551234567',
++            'status' => 'pending',
++        ]);
++
++        $this->assertSame('pending', $quoteRequest->status->value);
++    }
++}
+diff --git a/tests/Feature/Services/ImageServiceTest.php b/tests/Feature/Services/ImageServiceTest.php
+new file mode 100644
+index 0000000..a9964b2
+--- /dev/null
++++ b/tests/Feature/Services/ImageServiceTest.php
+@@ -0,0 +1,64 @@
++<?php
++
++namespace Tests\Feature\Services;
++
++use App\Services\ImageService;
++use Illuminate\Http\UploadedFile;
++use Illuminate\Support\Facades\Storage;
++use InvalidArgumentException;
++use Tests\TestCase;
++
++class ImageServiceTest extends TestCase
++{
++    public function test_stores_and_processes_an_image(): void
++    {
++        Storage::fake('public');
++
++        $file = UploadedFile::fake()->image('dish.jpg', 2000, 1000);
++
++        $result = (new ImageService)->store($file, 'dishes');
++
++        $this->assertSame('image/webp', $result['mime_type']);
++        $this->assertLessThanOrEqual(1920, $result['width']);
++        $this->assertStringStartsWith('dishes/', $result['path']);
++        $this->assertNotEmpty($result['url']);
++        $this->assertGreaterThan(0, $result['size_bytes']);
++        Storage::disk('public')->assertExists($result['path']);
++    }
++
++    public function test_delete_removes_file_from_storage(): void
++    {
++        Storage::fake('public');
++
++        $file = UploadedFile::fake()->image('branch.jpg', 800, 600);
++        $result = (new ImageService)->store($file, 'branches');
++
++        Storage::disk('public')->assertExists($result['path']);
++
++        (new ImageService)->delete($result['path']);
++
++        Storage::disk('public')->assertMissing($result['path']);
++    }
++
++    public function test_rejects_oversized_image(): void
++    {
++        Storage::fake('public');
++
++        $this->expectException(InvalidArgumentException::class);
++
++        $file = UploadedFile::fake()->create('big.jpg', 6000, 'image/jpeg');
++
++        (new ImageService)->store($file, 'dishes');
++    }
++
++    public function test_rejects_unsupported_mime_type(): void
++    {
++        Storage::fake('public');
++
++        $this->expectException(InvalidArgumentException::class);
++
++        $file = UploadedFile::fake()->create('doc.pdf', 100, 'application/pdf');
++
++        (new ImageService)->store($file, 'dishes');
++    }
++}

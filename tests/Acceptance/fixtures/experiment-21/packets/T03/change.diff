@@ -1,0 +1,56 @@
+diff --git a/app/Enums/PageEnum.php b/app/Enums/PageEnum.php
+index e9084fc..753be13 100644
+--- a/app/Enums/PageEnum.php
++++ b/app/Enums/PageEnum.php
+@@ -11,6 +11,8 @@ enum PageEnum: string
+     case Catering = 'catering';
+     case Branches = 'branches';
+     case Global = 'global';
++    case Privacy = 'privacy';
++    case Terms = 'terms';
+ 
+     public function label(): string
+     {
+@@ -22,6 +24,8 @@ public function label(): string
+             self::Catering => 'الكاترينج',
+             self::Branches => 'الفروع',
+             self::Global => 'عام',
++            self::Privacy => 'سياسة الخصوصية',
++            self::Terms => 'شروط الاستخدام',
+         };
+     }
+ 
+diff --git a/database/seeders/PageContentSeeder.php b/database/seeders/PageContentSeeder.php
+index aacc6e0..6de1f82 100644
+--- a/database/seeders/PageContentSeeder.php
++++ b/database/seeders/PageContentSeeder.php
+@@ -101,6 +101,16 @@ public function run(): void
+             ['page' => 'branches', 'section' => 'hero', 'key' => 'title', 'value_ar' => 'فروعنا', 'value_en' => 'Our Branches'],
+             ['page' => 'branches', 'section' => 'hero', 'key' => 'subtitle', 'value_ar' => 'في قلب جدة والرياض — نفتح أبوابنا يومياً من الظهيرة حتى الفجر.', 'value_en' => 'In the heart of Jeddah and Riyadh — we open our doors daily from noon until dawn.'],
+             ['page' => 'branches', 'section' => 'hero', 'key' => 'directions_cta', 'value_ar' => 'احصل على الاتجاهات', 'value_en' => 'Get Directions'],
++
++            // ── PRIVACY POLICY PAGE ──────────────────────────────────
++            ['page' => 'privacy', 'section' => 'hero', 'key' => 'title', 'type' => 'text', 'value_ar' => 'سياسة الخصوصية', 'value_en' => 'Privacy Policy'],
++            ['page' => 'privacy', 'section' => 'hero', 'key' => 'subtitle', 'type' => 'text', 'value_ar' => 'كيف نجمع بياناتك ونستخدمها ونحميها', 'value_en' => 'How we collect, use, and protect your data'],
++            ['page' => 'privacy', 'section' => 'body', 'key' => 'content', 'type' => 'richtext', 'value_ar' => "تلتزم مطاعم أبو السيد بحماية خصوصية زوارها وعملائها. توضح هذه السياسة نوعية البيانات التي نجمعها عند استخدامكم لموقعنا الإلكتروني أو خدماتنا، وكيفية استخدامها وحمايتها.\n\nنقوم بجمع المعلومات التي تقدمونها لنا مباشرة، مثل الاسم ورقم الجوال والبريد الإلكتروني عند تقديم طلب أو التواصل معنا، بالإضافة إلى بيانات تقنية محدودة تساعدنا على تحسين تجربتكم على الموقع.\n\nنستخدم هذه البيانات فقط لتقديم خدماتنا والرد على استفساراتكم وتحسين جودة تجربتكم، ولا نقوم ببيع أو مشاركة بياناتكم مع أي جهة خارجية دون موافقتكم، إلا في الحالات التي يستلزمها القانون.\n\nنتخذ الإجراءات الأمنية اللازمة لحماية بياناتكم من أي وصول أو استخدام غير مصرح به. لأي استفسار حول سياسة الخصوصية، يمكنكم التواصل معنا عبر بيانات الاتصال المتوفرة في الموقع.", 'value_en' => "Abou El Sid Restaurants is committed to protecting the privacy of our visitors and customers. This policy explains the type of data we collect when you use our website or services, and how we use and protect it.\n\nWe collect information you provide to us directly, such as your name, phone number, and email address when you place an order or contact us, along with limited technical data that helps us improve your experience on the website.\n\nWe use this data solely to provide our services, respond to your inquiries, and improve the quality of your experience. We do not sell or share your data with any third party without your consent, except where required by law.\n\nWe take the necessary security measures to protect your data from any unauthorized access or use. For any questions about this privacy policy, please contact us using the contact details available on the website."],
++
++            // ── TERMS OF USE PAGE ────────────────────────────────────
++            ['page' => 'terms', 'section' => 'hero', 'key' => 'title', 'type' => 'text', 'value_ar' => 'شروط الاستخدام', 'value_en' => 'Terms of Use'],
++            ['page' => 'terms', 'section' => 'hero', 'key' => 'subtitle', 'type' => 'text', 'value_ar' => 'الشروط والأحكام الخاصة باستخدام موقعنا وخدماتنا', 'value_en' => 'The terms and conditions governing the use of our website and services'],
++            ['page' => 'terms', 'section' => 'body', 'key' => 'content', 'type' => 'richtext', 'value_ar' => "باستخدامكم لموقع أبو السيد الإلكتروني أو خدماتنا، فإنكم توافقون على الالتزام بشروط الاستخدام التالية. يُرجى قراءتها بعناية قبل استخدام الموقع أو تقديم أي طلب.\n\nجميع المحتويات المعروضة على هذا الموقع، بما في ذلك الشعارات والصور والنصوص، مملوكة لمطاعم أبو السيد ولا يجوز نسخها أو إعادة استخدامها دون إذن مسبق.\n\nتُقدَّم الأسعار والعروض الموضحة على الموقع لأغراض إرشادية وقد تتغير دون إشعار مسبق. يخضع كل طلب لتأكيد المطعم، ونحتفظ بالحق في رفض أو إلغاء أي طلب في حال وجود خطأ في السعر أو التوفر.\n\nيلتزم المستخدم بتقديم معلومات صحيحة ودقيقة عند تقديم الطلبات أو التواصل معنا، ويتحمل المسؤولية الكاملة عن أي معلومات غير صحيحة يقدمها.\n\nتحتفظ إدارة المطعم بحق تعديل هذه الشروط في أي وقت، ويُعد استمراركم في استخدام الموقع بعد أي تعديل موافقة ضمنية على الشروط المحدثة.", 'value_en' => "By using the Abou El Sid website or our services, you agree to comply with the following terms of use. Please read them carefully before using the site or placing any order.\n\nAll content displayed on this website, including logos, images, and text, is owned by Abou El Sid Restaurants and may not be copied or reused without prior permission.\n\nPrices and offers shown on the website are provided for guidance and may change without prior notice. Every order is subject to confirmation by the restaurant, and we reserve the right to refuse or cancel any order in the event of a pricing or availability error.\n\nUsers are required to provide accurate and correct information when placing orders or contacting us, and bear full responsibility for any incorrect information provided.\n\nRestaurant management reserves the right to modify these terms at any time. Continued use of the website after any modification constitutes implicit acceptance of the updated terms."],
+         ];
+ 
+         foreach ($contents as $content) {
+diff --git a/tests/Unit/EnumsTest.php b/tests/Unit/EnumsTest.php
+index f304f0d..b122eb5 100644
+--- a/tests/Unit/EnumsTest.php
++++ b/tests/Unit/EnumsTest.php
+@@ -88,7 +88,7 @@ public function test_media_type_enum_has_correct_cases(): void
+     public function test_page_enum_has_correct_cases(): void
+     {
+         $this->assertSame(
+-            ['home', 'story', 'menu', 'order', 'catering', 'branches', 'global'],
++            ['home', 'story', 'menu', 'order', 'catering', 'branches', 'global', 'privacy', 'terms'],
+             PageEnum::values()
+         );
+ 

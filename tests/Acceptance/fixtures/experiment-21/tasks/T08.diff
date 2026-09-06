@@ -1,0 +1,1017 @@
+diff --git a/app/Repositories/BranchRepository.php b/app/Repositories/BranchRepository.php
+new file mode 100644
+index 0000000..d3b70ed
+--- /dev/null
++++ b/app/Repositories/BranchRepository.php
+@@ -0,0 +1,37 @@
++<?php
++
++namespace App\Repositories;
++
++use App\Models\Branch;
++use Illuminate\Database\Eloquent\Collection;
++
++class BranchRepository
++{
++    public function getAll(): Collection
++    {
++        return Branch::orderBy('order')->get();
++    }
++
++    public function getById(int $id): Branch
++    {
++        return Branch::findOrFail($id);
++    }
++
++    public function create(array $data): Branch
++    {
++        return Branch::create($data);
++    }
++
++    public function update(int $id, array $data): Branch
++    {
++        $branch = Branch::findOrFail($id);
++        $branch->update($data);
++
++        return $branch;
++    }
++
++    public function delete(int $id): void
++    {
++        Branch::findOrFail($id)->delete();
++    }
++}
+diff --git a/app/Repositories/CategoryRepository.php b/app/Repositories/CategoryRepository.php
+new file mode 100644
+index 0000000..4c224b9
+--- /dev/null
++++ b/app/Repositories/CategoryRepository.php
+@@ -0,0 +1,37 @@
++<?php
++
++namespace App\Repositories;
++
++use App\Models\Category;
++use Illuminate\Database\Eloquent\Collection;
++
++class CategoryRepository
++{
++    public function getAll(): Collection
++    {
++        return Category::orderBy('order')->get();
++    }
++
++    public function getById(int $id): Category
++    {
++        return Category::findOrFail($id);
++    }
++
++    public function create(array $data): Category
++    {
++        return Category::create($data);
++    }
++
++    public function update(int $id, array $data): Category
++    {
++        $category = Category::findOrFail($id);
++        $category->update($data);
++
++        return $category;
++    }
++
++    public function delete(int $id): void
++    {
++        Category::findOrFail($id)->delete();
++    }
++}
+diff --git a/app/Repositories/CateringPackageRepository.php b/app/Repositories/CateringPackageRepository.php
+new file mode 100644
+index 0000000..76d9a5d
+--- /dev/null
++++ b/app/Repositories/CateringPackageRepository.php
+@@ -0,0 +1,51 @@
++<?php
++
++namespace App\Repositories;
++
++use App\Models\CateringPackage;
++use Illuminate\Database\Eloquent\Collection;
++use Illuminate\Support\Facades\DB;
++
++class CateringPackageRepository
++{
++    public function getAll(): Collection
++    {
++        return CateringPackage::with(['features' => fn ($query) => $query->orderBy('order')])
++            ->orderBy('order')
++            ->get();
++    }
++
++    public function getById(int $id): CateringPackage
++    {
++        return CateringPackage::with(['features' => fn ($query) => $query->orderBy('order')])
++            ->findOrFail($id);
++    }
++
++    public function create(array $data, array $features = []): CateringPackage
++    {
++        return DB::transaction(function () use ($data, $features) {
++            $package = CateringPackage::create($data);
++            $package->features()->createMany($features);
++
++            return $package->fresh('features');
++        });
++    }
++
++    public function update(int $id, array $data, array $features = []): CateringPackage
++    {
++        return DB::transaction(function () use ($id, $data, $features) {
++            $package = CateringPackage::findOrFail($id);
++            $package->update($data);
++
++            $package->features()->delete();
++            $package->features()->createMany($features);
++
++            return $package->fresh('features');
++        });
++    }
++
++    public function delete(int $id): void
++    {
++        CateringPackage::findOrFail($id)->delete();
++    }
++}
+diff --git a/app/Repositories/DeliveryAppRepository.php b/app/Repositories/DeliveryAppRepository.php
+new file mode 100644
+index 0000000..773406d
+--- /dev/null
++++ b/app/Repositories/DeliveryAppRepository.php
+@@ -0,0 +1,43 @@
++<?php
++
++namespace App\Repositories;
++
++use App\Models\DeliveryApp;
++use Illuminate\Database\Eloquent\Collection;
++
++class DeliveryAppRepository
++{
++    public function getAll(bool $activeOnly = true): Collection
++    {
++        $query = DeliveryApp::orderBy('order');
++
++        if ($activeOnly) {
++            $query->where('is_active', true);
++        }
++
++        return $query->get();
++    }
++
++    public function getById(int $id): DeliveryApp
++    {
++        return DeliveryApp::findOrFail($id);
++    }
++
++    public function create(array $data): DeliveryApp
++    {
++        return DeliveryApp::create($data);
++    }
++
++    public function update(int $id, array $data): DeliveryApp
++    {
++        $deliveryApp = DeliveryApp::findOrFail($id);
++        $deliveryApp->update($data);
++
++        return $deliveryApp;
++    }
++
++    public function delete(int $id): void
++    {
++        DeliveryApp::findOrFail($id)->delete();
++    }
++}
+diff --git a/app/Repositories/DishRepository.php b/app/Repositories/DishRepository.php
+new file mode 100644
+index 0000000..10dbc19
+--- /dev/null
++++ b/app/Repositories/DishRepository.php
+@@ -0,0 +1,51 @@
++<?php
++
++namespace App\Repositories;
++
++use App\Models\Dish;
++use Illuminate\Pagination\LengthAwarePaginator;
++
++class DishRepository
++{
++    public function getAll(array $filters = []): LengthAwarePaginator
++    {
++        $query = Dish::with('category')->orderBy('order');
++
++        if (! empty($filters['category_id'])) {
++            $query->where('category_id', $filters['category_id']);
++        }
++
++        if (array_key_exists('featured', $filters) && $filters['featured'] !== null) {
++            $query->where('is_featured', $filters['featured']);
++        }
++
++        if (array_key_exists('signature', $filters) && $filters['signature'] !== null) {
++            $query->where('is_signature', $filters['signature']);
++        }
++
++        return $query->paginate($filters['per_page'] ?? 12);
++    }
++
++    public function getById(int $id): Dish
++    {
++        return Dish::with('category')->findOrFail($id);
++    }
++
++    public function create(array $data): Dish
++    {
++        return Dish::create($data);
++    }
++
++    public function update(int $id, array $data): Dish
++    {
++        $dish = Dish::findOrFail($id);
++        $dish->update($data);
++
++        return $dish;
++    }
++
++    public function delete(int $id): void
++    {
++        Dish::findOrFail($id)->delete();
++    }
++}
+diff --git a/app/Repositories/MediaItemRepository.php b/app/Repositories/MediaItemRepository.php
+new file mode 100644
+index 0000000..d4d509f
+--- /dev/null
++++ b/app/Repositories/MediaItemRepository.php
+@@ -0,0 +1,40 @@
++<?php
++
++namespace App\Repositories;
++
++use App\Models\MediaItem;
++use Illuminate\Support\Collection;
++
++class MediaItemRepository
++{
++    public function getByPage(string $page, ?string $section = null): Collection
++    {
++        return MediaItem::forPage($page, $section)
++            ->get()
++            ->groupBy('section')
++            ->map(fn (Collection $items) => $items->keyBy('key'));
++    }
++
++    public function getById(int $id): MediaItem
++    {
++        return MediaItem::findOrFail($id);
++    }
++
++    public function create(array $data): MediaItem
++    {
++        return MediaItem::create($data);
++    }
++
++    public function update(int $id, array $data): MediaItem
++    {
++        $mediaItem = MediaItem::findOrFail($id);
++        $mediaItem->update($data);
++
++        return $mediaItem;
++    }
++
++    public function delete(int $id): void
++    {
++        MediaItem::findOrFail($id)->delete();
++    }
++}
+diff --git a/app/Repositories/PageContentRepository.php b/app/Repositories/PageContentRepository.php
+new file mode 100644
+index 0000000..a020604
+--- /dev/null
++++ b/app/Repositories/PageContentRepository.php
+@@ -0,0 +1,43 @@
++<?php
++
++namespace App\Repositories;
++
++use App\Models\PageContent;
++use Illuminate\Support\Arr;
++use Illuminate\Support\Collection;
++use Illuminate\Support\Facades\DB;
++
++class PageContentRepository
++{
++    public function getByPage(string $page, ?string $section = null): Collection
++    {
++        return PageContent::forPage($page, $section)
++            ->orderBy('order')
++            ->get()
++            ->groupBy('section')
++            ->map(fn (Collection $items) => $items->keyBy('key'));
++    }
++
++    public function getById(int $id): PageContent
++    {
++        return PageContent::findOrFail($id);
++    }
++
++    public function update(int $id, array $data): PageContent
++    {
++        $pageContent = PageContent::findOrFail($id);
++        $pageContent->update(Arr::only($data, ['value_ar', 'value_en']));
++
++        return $pageContent;
++    }
++
++    public function bulkUpdate(array $items): void
++    {
++        DB::transaction(function () use ($items) {
++            foreach ($items as $item) {
++                PageContent::findOrFail($item['id'])
++                    ->update(Arr::only($item, ['value_ar', 'value_en']));
++            }
++        });
++    }
++}
+diff --git a/app/Repositories/QuoteRequestRepository.php b/app/Repositories/QuoteRequestRepository.php
+new file mode 100644
+index 0000000..5bd54ab
+--- /dev/null
++++ b/app/Repositories/QuoteRequestRepository.php
+@@ -0,0 +1,46 @@
++<?php
++
++namespace App\Repositories;
++
++use App\Models\QuoteRequest;
++use Illuminate\Pagination\LengthAwarePaginator;
++
++class QuoteRequestRepository
++{
++    public function getAll(array $filters = []): LengthAwarePaginator
++    {
++        $query = QuoteRequest::orderByDesc('created_at');
++
++        if (! empty($filters['status'])) {
++            $query->where('status', $filters['status']);
++        }
++
++        if (! empty($filters['event_type'])) {
++            $query->where('event_type', $filters['event_type']);
++        }
++
++        if (! empty($filters['branch'])) {
++            $query->where('branch', $filters['branch']);
++        }
++
++        return $query->paginate(15);
++    }
++
++    public function getById(int $id): QuoteRequest
++    {
++        return QuoteRequest::findOrFail($id);
++    }
++
++    public function create(array $data): QuoteRequest
++    {
++        return QuoteRequest::create($data);
++    }
++
++    public function updateStatus(int $id, string $status): QuoteRequest
++    {
++        $quoteRequest = QuoteRequest::findOrFail($id);
++        $quoteRequest->update(['status' => $status]);
++
++        return $quoteRequest;
++    }
++}
+diff --git a/app/Repositories/SampleMenuRepository.php b/app/Repositories/SampleMenuRepository.php
+new file mode 100644
+index 0000000..9e1e5fb
+--- /dev/null
++++ b/app/Repositories/SampleMenuRepository.php
+@@ -0,0 +1,51 @@
++<?php
++
++namespace App\Repositories;
++
++use App\Models\SampleMenu;
++use Illuminate\Database\Eloquent\Collection;
++use Illuminate\Support\Facades\DB;
++
++class SampleMenuRepository
++{
++    public function getAll(): Collection
++    {
++        return SampleMenu::with(['dishes' => fn ($query) => $query->orderBy('order')])
++            ->orderBy('order')
++            ->get();
++    }
++
++    public function getById(int $id): SampleMenu
++    {
++        return SampleMenu::with(['dishes' => fn ($query) => $query->orderBy('order')])
++            ->findOrFail($id);
++    }
++
++    public function create(array $data, array $dishes = []): SampleMenu
++    {
++        return DB::transaction(function () use ($data, $dishes) {
++            $menu = SampleMenu::create($data);
++            $menu->dishes()->createMany($dishes);
++
++            return $menu->fresh('dishes');
++        });
++    }
++
++    public function update(int $id, array $data, array $dishes = []): SampleMenu
++    {
++        return DB::transaction(function () use ($id, $data, $dishes) {
++            $menu = SampleMenu::findOrFail($id);
++            $menu->update($data);
++
++            $menu->dishes()->delete();
++            $menu->dishes()->createMany($dishes);
++
++            return $menu->fresh('dishes');
++        });
++    }
++
++    public function delete(int $id): void
++    {
++        SampleMenu::findOrFail($id)->delete();
++    }
++}
+diff --git a/app/Repositories/SettingRepository.php b/app/Repositories/SettingRepository.php
+new file mode 100644
+index 0000000..b87a570
+--- /dev/null
++++ b/app/Repositories/SettingRepository.php
+@@ -0,0 +1,24 @@
++<?php
++
++namespace App\Repositories;
++
++use App\Models\Setting;
++use Illuminate\Support\Collection;
++use Illuminate\Support\Facades\DB;
++
++class SettingRepository
++{
++    public function getAll(?string $group = null): Collection
++    {
++        return Setting::forGroup($group)->get()->keyBy('key');
++    }
++
++    public function bulkUpdate(array $data): void
++    {
++        DB::transaction(function () use ($data) {
++            foreach ($data as $key => $value) {
++                Setting::where('key', $key)->update(['value' => $value]);
++            }
++        });
++    }
++}
+diff --git a/app/Repositories/TestimonialRepository.php b/app/Repositories/TestimonialRepository.php
+new file mode 100644
+index 0000000..809aa45
+--- /dev/null
++++ b/app/Repositories/TestimonialRepository.php
+@@ -0,0 +1,43 @@
++<?php
++
++namespace App\Repositories;
++
++use App\Models\Testimonial;
++use Illuminate\Database\Eloquent\Collection;
++
++class TestimonialRepository
++{
++    public function getAll(bool $activeOnly = true): Collection
++    {
++        $query = Testimonial::orderBy('order');
++
++        if ($activeOnly) {
++            $query->where('is_active', true);
++        }
++
++        return $query->get();
++    }
++
++    public function getById(int $id): Testimonial
++    {
++        return Testimonial::findOrFail($id);
++    }
++
++    public function create(array $data): Testimonial
++    {
++        return Testimonial::create($data);
++    }
++
++    public function update(int $id, array $data): Testimonial
++    {
++        $testimonial = Testimonial::findOrFail($id);
++        $testimonial->update($data);
++
++        return $testimonial;
++    }
++
++    public function delete(int $id): void
++    {
++        Testimonial::findOrFail($id)->delete();
++    }
++}
+diff --git a/app/Repositories/TimelineRepository.php b/app/Repositories/TimelineRepository.php
+new file mode 100644
+index 0000000..0511e51
+--- /dev/null
++++ b/app/Repositories/TimelineRepository.php
+@@ -0,0 +1,37 @@
++<?php
++
++namespace App\Repositories;
++
++use App\Models\Timeline;
++use Illuminate\Database\Eloquent\Collection;
++
++class TimelineRepository
++{
++    public function getAll(): Collection
++    {
++        return Timeline::orderBy('order')->get();
++    }
++
++    public function getById(int $id): Timeline
++    {
++        return Timeline::findOrFail($id);
++    }
++
++    public function create(array $data): Timeline
++    {
++        return Timeline::create($data);
++    }
++
++    public function update(int $id, array $data): Timeline
++    {
++        $timeline = Timeline::findOrFail($id);
++        $timeline->update($data);
++
++        return $timeline;
++    }
++
++    public function delete(int $id): void
++    {
++        Timeline::findOrFail($id)->delete();
++    }
++}
+diff --git a/app/Repositories/UserRepository.php b/app/Repositories/UserRepository.php
+new file mode 100644
+index 0000000..cd24d15
+--- /dev/null
++++ b/app/Repositories/UserRepository.php
+@@ -0,0 +1,43 @@
++<?php
++
++namespace App\Repositories;
++
++use App\Models\User;
++use Illuminate\Pagination\LengthAwarePaginator;
++use Illuminate\Support\Facades\DB;
++
++class UserRepository
++{
++    public function getAll(): LengthAwarePaginator
++    {
++        return User::with('roles')->paginate(15);
++    }
++
++    public function getById(int $id): User
++    {
++        return User::with('roles')->findOrFail($id);
++    }
++
++    public function create(array $data, string $role): User
++    {
++        return DB::transaction(function () use ($data, $role) {
++            $user = User::create($data);
++            $user->assignRole($role);
++
++            return $user;
++        });
++    }
++
++    public function update(int $id, array $data): User
++    {
++        $user = User::findOrFail($id);
++        $user->update($data);
++
++        return $user;
++    }
++
++    public function delete(int $id): void
++    {
++        User::findOrFail($id)->delete();
++    }
++}
+diff --git a/tests/Feature/RepositoriesTest.php b/tests/Feature/RepositoriesTest.php
+new file mode 100644
+index 0000000..ab0f9e2
+--- /dev/null
++++ b/tests/Feature/RepositoriesTest.php
+@@ -0,0 +1,387 @@
++<?php
++
++namespace Tests\Feature;
++
++use App\Repositories\BranchRepository;
++use App\Repositories\CategoryRepository;
++use App\Repositories\CateringPackageRepository;
++use App\Repositories\DeliveryAppRepository;
++use App\Repositories\DishRepository;
++use App\Repositories\MediaItemRepository;
++use App\Repositories\PageContentRepository;
++use App\Repositories\QuoteRequestRepository;
++use App\Repositories\SampleMenuRepository;
++use App\Repositories\SettingRepository;
++use App\Repositories\TestimonialRepository;
++use App\Repositories\TimelineRepository;
++use App\Repositories\UserRepository;
++use Illuminate\Foundation\Testing\RefreshDatabase;
++use Tests\TestCase;
++
++class RepositoriesTest extends TestCase
++{
++    use RefreshDatabase;
++
++    protected function setUp(): void
++    {
++        parent::setUp();
++
++        $this->seed();
++    }
++
++    // ── PageContentRepository ──────────────────────────────────
++
++    public function test_page_content_repository_get_by_page_groups_by_section_and_key(): void
++    {
++        $repo = new PageContentRepository;
++
++        $result = $repo->getByPage('home');
++
++        $this->assertTrue($result->has('hero'));
++        $this->assertTrue($result->get('hero')->has('title'));
++        $this->assertSame('أبو السيد', $result->get('hero')->get('title')->value_ar);
++    }
++
++    public function test_page_content_repository_get_by_page_filters_by_section(): void
++    {
++        $repo = new PageContentRepository;
++
++        $result = $repo->getByPage('home', 'hero');
++
++        $this->assertCount(1, $result);
++        $this->assertTrue($result->has('hero'));
++    }
++
++    public function test_page_content_repository_update_only_touches_value_fields(): void
++    {
++        $repo = new PageContentRepository;
++        $id = \App\Models\PageContent::where('page', 'home')->where('section', 'hero')->where('key', 'title')->first()->id;
++
++        $updated = $repo->update($id, ['value_ar' => 'اسم جديد', 'value_en' => 'New Name', 'page' => 'hacked']);
++
++        $this->assertSame('اسم جديد', $updated->value_ar);
++        $this->assertSame('New Name', $updated->value_en);
++        $this->assertSame('home', $updated->page);
++    }
++
++    public function test_page_content_repository_bulk_update_runs_in_transaction(): void
++    {
++        $repo = new PageContentRepository;
++        $ids = \App\Models\PageContent::limit(2)->pluck('id');
++
++        $repo->bulkUpdate([
++            ['id' => $ids[0], 'value_ar' => 'قيمة 1', 'value_en' => 'Value 1'],
++            ['id' => $ids[1], 'value_ar' => 'قيمة 2', 'value_en' => 'Value 2'],
++        ]);
++
++        $this->assertSame('قيمة 1', \App\Models\PageContent::find($ids[0])->value_ar);
++        $this->assertSame('قيمة 2', \App\Models\PageContent::find($ids[1])->value_ar);
++    }
++
++    // ── MediaItemRepository ─────────────────────────────────────
++
++    public function test_media_item_repository_get_by_page_groups_by_section_and_key(): void
++    {
++        $repo = new MediaItemRepository;
++
++        $result = $repo->getByPage('global', 'textures');
++
++        $this->assertTrue($result->has('textures'));
++        $this->assertTrue($result->get('textures')->has('green'));
++    }
++
++    public function test_media_item_repository_crud(): void
++    {
++        $repo = new MediaItemRepository;
++
++        $created = $repo->create([
++            'page' => 'menu', 'section' => 'hero', 'key' => 'background',
++            'alt_ar' => 'خلفية', 'alt_en' => 'Background',
++        ]);
++
++        $updated = $repo->update($created->id, ['alt_en' => 'Updated Background']);
++        $this->assertSame('Updated Background', $updated->alt_en);
++
++        $repo->delete($created->id);
++        $this->assertDatabaseMissing('media_items', ['id' => $created->id]);
++    }
++
++    // ── SettingRepository ────────────────────────────────────────
++
++    public function test_setting_repository_get_all_keyed_by_key(): void
++    {
++        $repo = new SettingRepository;
++
++        $result = $repo->getAll();
++
++        $this->assertCount(17, $result);
++        $this->assertTrue($result->has('whatsapp_number'));
++    }
++
++    public function test_setting_repository_get_all_filters_by_group(): void
++    {
++        $repo = new SettingRepository;
++
++        $result = $repo->getAll('social');
++
++        $this->assertCount(5, $result);
++    }
++
++    public function test_setting_repository_bulk_update_runs_in_transaction(): void
++    {
++        $repo = new SettingRepository;
++
++        $repo->bulkUpdate(['whatsapp_number' => '+966500000000']);
++
++        $this->assertSame('+966500000000', \App\Models\Setting::where('key', 'whatsapp_number')->first()->value);
++    }
++
++    // ── CategoryRepository ───────────────────────────────────────
++
++    public function test_category_repository_get_all_returns_six_ordered(): void
++    {
++        $repo = new CategoryRepository;
++
++        $result = $repo->getAll();
++
++        $this->assertCount(6, $result);
++        $this->assertSame('starters', $result->first()->slug);
++    }
++
++    public function test_category_repository_crud(): void
++    {
++        $repo = new CategoryRepository;
++
++        $created = $repo->create(['name_ar' => 'تجربة', 'name_en' => 'Test', 'slug' => 'test-cat', 'order' => 99]);
++        $this->assertDatabaseHas('categories', ['slug' => 'test-cat']);
++
++        $updated = $repo->update($created->id, ['name_en' => 'Updated']);
++        $this->assertSame('Updated', $updated->name_en);
++
++        $repo->delete($created->id);
++        $this->assertDatabaseMissing('categories', ['id' => $created->id]);
++    }
++
++    // ── DishRepository ───────────────────────────────────────────
++
++    public function test_dish_repository_get_all_paginates_with_category_loaded(): void
++    {
++        $repo = new DishRepository;
++
++        $result = $repo->getAll();
++
++        $this->assertSame(5, $result->total());
++        $this->assertTrue($result->first()->relationLoaded('category'));
++    }
++
++    public function test_dish_repository_filters_by_featured(): void
++    {
++        $repo = new DishRepository;
++
++        $result = $repo->getAll(['featured' => true]);
++
++        $this->assertSame(3, $result->total());
++    }
++
++    public function test_dish_repository_filters_by_signature(): void
++    {
++        $repo = new DishRepository;
++
++        $result = $repo->getAll(['signature' => true]);
++
++        $this->assertSame(2, $result->total());
++    }
++
++    public function test_dish_repository_filters_by_category_id(): void
++    {
++        $repo = new DishRepository;
++        $mainsId = \App\Models\Category::where('slug', 'mains')->first()->id;
++
++        $result = $repo->getAll(['category_id' => $mainsId]);
++
++        $this->assertSame(2, $result->total());
++    }
++
++    // ── BranchRepository ─────────────────────────────────────────
++
++    public function test_branch_repository_get_all_returns_two(): void
++    {
++        $repo = new BranchRepository;
++
++        $this->assertCount(2, $repo->getAll());
++    }
++
++    // ── CateringPackageRepository ────────────────────────────────
++
++    public function test_catering_package_repository_get_all_returns_three_with_features(): void
++    {
++        $repo = new CateringPackageRepository;
++
++        $result = $repo->getAll();
++
++        $this->assertCount(3, $result);
++        $this->assertTrue($result->first()->relationLoaded('features'));
++        $this->assertCount(4, $result->first()->features);
++    }
++
++    public function test_catering_package_repository_create_with_features_in_transaction(): void
++    {
++        $repo = new CateringPackageRepository;
++
++        $package = $repo->create(
++            ['name_ar' => 'باقة', 'name_en' => 'Package', 'description_ar' => 'وصف', 'description_en' => 'Desc', 'order' => 4],
++            [
++                ['feature_ar' => 'ميزة 1', 'feature_en' => 'Feature 1', 'order' => 1],
++                ['feature_ar' => 'ميزة 2', 'feature_en' => 'Feature 2', 'order' => 2],
++            ]
++        );
++
++        $this->assertCount(2, $package->features);
++        $this->assertDatabaseCount('catering_package_features', 15);
++    }
++
++    public function test_catering_package_repository_update_replaces_features(): void
++    {
++        $repo = new CateringPackageRepository;
++        $packageId = \App\Models\CateringPackage::where('name_en', 'Classic Package')->first()->id;
++
++        $updated = $repo->update(
++            $packageId,
++            ['name_en' => 'Classic Package Updated'],
++            [['feature_ar' => 'جديد', 'feature_en' => 'New Feature', 'order' => 1]]
++        );
++
++        $this->assertSame('Classic Package Updated', $updated->name_en);
++        $this->assertCount(1, $updated->features);
++        $this->assertSame('New Feature', $updated->features->first()->feature_en);
++    }
++
++    // ── SampleMenuRepository ─────────────────────────────────────
++
++    public function test_sample_menu_repository_get_all_returns_three_with_dishes(): void
++    {
++        $repo = new SampleMenuRepository;
++
++        $result = $repo->getAll();
++
++        $this->assertCount(3, $result);
++        $this->assertTrue($result->first()->relationLoaded('dishes'));
++        $this->assertCount(6, $result->first()->dishes);
++    }
++
++    public function test_sample_menu_repository_create_with_dishes_in_transaction(): void
++    {
++        $repo = new SampleMenuRepository;
++
++        $menu = $repo->create(
++            ['name_ar' => 'قائمة', 'name_en' => 'Menu', 'order' => 4],
++            [['dish_name_ar' => 'طبق', 'dish_name_en' => 'Dish', 'order' => 1]]
++        );
++
++        $this->assertCount(1, $menu->dishes);
++        $this->assertDatabaseCount('sample_menu_dishes', 20);
++    }
++
++    // ── QuoteRequestRepository ───────────────────────────────────
++
++    public function test_quote_request_repository_create_and_filter_by_status(): void
++    {
++        $repo = new QuoteRequestRepository;
++
++        $repo->create([
++            'name' => 'Test User', 'phone' => '0500000000', 'event_date' => '2026-12-01',
++            'guests_count' => 50, 'branch' => 'jeddah_delivery', 'event_type' => 'wedding',
++            'status' => 'pending',
++        ]);
++
++        $result = $repo->getAll(['status' => 'pending']);
++
++        $this->assertSame(1, $result->total());
++    }
++
++    public function test_quote_request_repository_update_status(): void
++    {
++        $repo = new QuoteRequestRepository;
++
++        $created = $repo->create([
++            'name' => 'Test User', 'phone' => '0500000000', 'event_date' => '2026-12-01',
++            'guests_count' => 50, 'branch' => 'jeddah_delivery', 'event_type' => 'wedding',
++            'status' => 'pending',
++        ]);
++
++        $updated = $repo->updateStatus($created->id, 'reviewed');
++
++        $this->assertSame('reviewed', $updated->status->value);
++    }
++
++    // ── TestimonialRepository ────────────────────────────────────
++
++    public function test_testimonial_repository_get_all_active_only_by_default(): void
++    {
++        $repo = new TestimonialRepository;
++
++        $this->assertCount(10, $repo->getAll());
++    }
++
++    public function test_testimonial_repository_get_all_can_include_inactive(): void
++    {
++        $repo = new TestimonialRepository;
++        \App\Models\Testimonial::first()->update(['is_active' => false]);
++
++        $this->assertCount(9, $repo->getAll(true));
++        $this->assertCount(10, $repo->getAll(false));
++    }
++
++    // ── TimelineRepository ────────────────────────────────────────
++
++    public function test_timeline_repository_get_all_returns_five(): void
++    {
++        $repo = new TimelineRepository;
++
++        $this->assertCount(5, $repo->getAll());
++    }
++
++    // ── DeliveryAppRepository ─────────────────────────────────────
++
++    public function test_delivery_app_repository_get_all_active_only_by_default(): void
++    {
++        $repo = new DeliveryAppRepository;
++
++        $this->assertCount(4, $repo->getAll());
++    }
++
++    // ── UserRepository ────────────────────────────────────────────
++
++    public function test_user_repository_get_all_paginates_with_roles(): void
++    {
++        $repo = new UserRepository;
++
++        $result = $repo->getAll();
++
++        $this->assertSame(1, $result->total());
++        $this->assertTrue($result->first()->relationLoaded('roles'));
++    }
++
++    public function test_user_repository_create_assigns_role(): void
++    {
++        $repo = new UserRepository;
++
++        $user = $repo->create([
++            'name' => 'Manager User', 'email' => 'manager@abouelsid.com', 'password' => 'password',
++        ], 'manager');
++
++        $this->assertTrue($user->hasRole('manager'));
++    }
++
++    public function test_user_repository_update_and_delete(): void
++    {
++        $repo = new UserRepository;
++        $user = $repo->create(['name' => 'Temp', 'email' => 'temp@abouelsid.com', 'password' => 'password'], 'admin');
++
++        $updated = $repo->update($user->id, ['name' => 'Renamed']);
++        $this->assertSame('Renamed', $updated->name);
++
++        $repo->delete($user->id);
++        $this->assertDatabaseMissing('users', ['id' => $user->id]);
++    }
++}

@@ -1,0 +1,2612 @@
+diff --git a/app/Http/Controllers/Auth/AuthController.php b/app/Http/Controllers/Auth/AuthController.php
+new file mode 100644
+index 0000000..e4e6283
+--- /dev/null
++++ b/app/Http/Controllers/Auth/AuthController.php
+@@ -0,0 +1,47 @@
++<?php
++
++namespace App\Http\Controllers\Auth;
++
++use App\Actions\Auth\LoginAction;
++use App\Actions\Auth\LogoutAction;
++use App\DTOs\Auth\LoginDTO;
++use App\Http\Controllers\Controller;
++use App\Http\Requests\Auth\LoginRequest;
++use App\Http\Resources\Auth\AuthResource;
++use App\Http\Resources\User\UserResource;
++use Illuminate\Http\JsonResponse;
++use Illuminate\Http\Request;
++
++class AuthController extends Controller
++{
++    public function login(LoginRequest $request, LoginAction $action): JsonResponse
++    {
++        $result = $action->execute(LoginDTO::fromRequest($request));
++
++        return response()->json([
++            'success' => true,
++            'message' => 'Login successful',
++            'data' => new AuthResource($result),
++        ]);
++    }
++
++    public function logout(Request $request, LogoutAction $action): JsonResponse
++    {
++        $action->execute($request->user());
++
++        return response()->json([
++            'success' => true,
++            'message' => 'Logout successful',
++            'data' => null,
++        ]);
++    }
++
++    public function me(Request $request): JsonResponse
++    {
++        return response()->json([
++            'success' => true,
++            'message' => 'Authenticated user',
++            'data' => new UserResource($request->user()),
++        ]);
++    }
++}
+diff --git a/app/Http/Controllers/BranchController.php b/app/Http/Controllers/BranchController.php
+new file mode 100644
+index 0000000..10aeeb5
+--- /dev/null
++++ b/app/Http/Controllers/BranchController.php
+@@ -0,0 +1,59 @@
++<?php
++
++namespace App\Http\Controllers;
++
++use App\Actions\Branch\CreateBranchAction;
++use App\Actions\Branch\DeleteBranchAction;
++use App\Actions\Branch\GetBranchesAction;
++use App\Actions\Branch\UpdateBranchAction;
++use App\DTOs\Branch\CreateBranchDTO;
++use App\DTOs\Branch\UpdateBranchDTO;
++use App\Http\Requests\Branch\StoreBranchRequest;
++use App\Http\Requests\Branch\UpdateBranchRequest;
++use App\Http\Resources\Branch\BranchResource;
++use Illuminate\Http\JsonResponse;
++
++class BranchController extends Controller
++{
++    public function index(GetBranchesAction $action): JsonResponse
++    {
++        return response()->json([
++            'success' => true,
++            'message' => 'Branches retrieved',
++            'data' => BranchResource::collection($action->execute()),
++        ]);
++    }
++
++    public function store(StoreBranchRequest $request, CreateBranchAction $action): JsonResponse
++    {
++        $branch = $action->execute(CreateBranchDTO::fromRequest($request));
++
++        return response()->json([
++            'success' => true,
++            'message' => 'Branch created',
++            'data' => new BranchResource($branch),
++        ], 201);
++    }
++
++    public function update(UpdateBranchRequest $request, int $id, UpdateBranchAction $action): JsonResponse
++    {
++        $branch = $action->execute($id, UpdateBranchDTO::fromRequest($request));
++
++        return response()->json([
++            'success' => true,
++            'message' => 'Branch updated',
++            'data' => new BranchResource($branch),
++        ]);
++    }
++
++    public function destroy(int $id, DeleteBranchAction $action): JsonResponse
++    {
++        $action->execute($id);
++
++        return response()->json([
++            'success' => true,
++            'message' => 'Branch deleted',
++            'data' => null,
++        ]);
++    }
++}
+diff --git a/app/Http/Controllers/CategoryController.php b/app/Http/Controllers/CategoryController.php
+new file mode 100644
+index 0000000..119e920
+--- /dev/null
++++ b/app/Http/Controllers/CategoryController.php
+@@ -0,0 +1,57 @@
++<?php
++
++namespace App\Http\Controllers;
++
++use App\Http\Resources\Category\CategoryResource;
++use App\Repositories\CategoryRepository;
++use Illuminate\Http\JsonResponse;
++use Illuminate\Http\Request;
++
++class CategoryController extends Controller
++{
++    public function __construct(
++        private readonly CategoryRepository $repository,
++    ) {}
++
++    public function index(): JsonResponse
++    {
++        return response()->json([
++            'success' => true,
++            'message' => 'Categories retrieved',
++            'data' => CategoryResource::collection($this->repository->getAll()),
++        ]);
++    }
++
++    public function store(Request $request): JsonResponse
++    {
++        $category = $this->repository->create($request->only(['name_ar', 'name_en', 'slug', 'order']));
++
++        return response()->json([
++            'success' => true,
++            'message' => 'Category created',
++            'data' => new CategoryResource($category),
++        ], 201);
++    }
++
++    public function update(Request $request, int $id): JsonResponse
++    {
++        $category = $this->repository->update($id, $request->only(['name_ar', 'name_en', 'slug', 'order']));
++
++        return response()->json([
++            'success' => true,
++            'message' => 'Category updated',
++            'data' => new CategoryResource($category),
++        ]);
++    }
++
++    public function destroy(int $id): JsonResponse
++    {
++        $this->repository->delete($id);
++
++        return response()->json([
++            'success' => true,
++            'message' => 'Category deleted',
++            'data' => null,
++        ]);
++    }
++}
+diff --git a/app/Http/Controllers/Catering/CateringPackageController.php b/app/Http/Controllers/Catering/CateringPackageController.php
+new file mode 100644
+index 0000000..413f202
+--- /dev/null
++++ b/app/Http/Controllers/Catering/CateringPackageController.php
+@@ -0,0 +1,60 @@
++<?php
++
++namespace App\Http\Controllers\Catering;
++
++use App\Actions\Catering\CreatePackageAction;
++use App\Actions\Catering\DeletePackageAction;
++use App\Actions\Catering\GetPackagesAction;
++use App\Actions\Catering\UpdatePackageAction;
++use App\DTOs\Catering\CreatePackageDTO;
++use App\DTOs\Catering\UpdatePackageDTO;
++use App\Http\Controllers\Controller;
++use App\Http\Requests\Catering\StorePackageRequest;
++use App\Http\Requests\Catering\UpdatePackageRequest;
++use App\Http\Resources\Catering\PackageResource;
++use Illuminate\Http\JsonResponse;
++
++class CateringPackageController extends Controller
++{
++    public function index(GetPackagesAction $action): JsonResponse
++    {
++        return response()->json([
++            'success' => true,
++            'message' => 'Catering packages retrieved',
++            'data' => PackageResource::collection($action->execute()),
++        ]);
++    }
++
++    public function store(StorePackageRequest $request, CreatePackageAction $action): JsonResponse
++    {
++        $package = $action->execute(CreatePackageDTO::fromRequest($request));
++
++        return response()->json([
++            'success' => true,
++            'message' => 'Catering package created',
++            'data' => new PackageResource($package),
++        ], 201);
++    }
++
++    public function update(UpdatePackageRequest $request, int $id, UpdatePackageAction $action): JsonResponse
++    {
++        $package = $action->execute($id, UpdatePackageDTO::fromRequest($request));
++
++        return response()->json([
++            'success' => true,
++            'message' => 'Catering package updated',
++            'data' => new PackageResource($package),
++        ]);
++    }
++
++    public function destroy(int $id, DeletePackageAction $action): JsonResponse
++    {
++        $action->execute($id);
++
++        return response()->json([
++            'success' => true,
++            'message' => 'Catering package deleted',
++            'data' => null,
++        ]);
++    }
++}
+diff --git a/app/Http/Controllers/Catering/QuoteRequestController.php b/app/Http/Controllers/Catering/QuoteRequestController.php
+new file mode 100644
+index 0000000..21e4fe8
+--- /dev/null
++++ b/app/Http/Controllers/Catering/QuoteRequestController.php
+@@ -0,0 +1,74 @@
++<?php
++
++namespace App\Http\Controllers\Catering;
++
++use App\Actions\Catering\SubmitQuoteRequestAction;
++use App\Actions\Catering\UpdateQuoteRequestStatusAction;
++use App\DTOs\Catering\SubmitQuoteRequestDTO;
++use App\DTOs\Catering\UpdateQuoteRequestStatusDTO;
++use App\Http\Controllers\Controller;
++use App\Http\Requests\Catering\StoreQuoteRequestRequest;
++use App\Http\Requests\Catering\UpdateQuoteRequestStatusRequest;
++use App\Http\Resources\Catering\QuoteRequestResource;
++use App\Repositories\QuoteRequestRepository;
++use Illuminate\Http\JsonResponse;
++use Illuminate\Http\Request;
++
++class QuoteRequestController extends Controller
++{
++    public function store(StoreQuoteRequestRequest $request, SubmitQuoteRequestAction $action): JsonResponse
++    {
++        $quoteRequest = $action->execute(SubmitQuoteRequestDTO::fromRequest($request));
++
++        return response()->json([
++            'success' => true,
++            'message' => 'Quote request submitted',
++            'data' => new QuoteRequestResource($quoteRequest),
++        ], 201);
++    }
++
++    public function index(Request $request, QuoteRequestRepository $repository): JsonResponse
++    {
++        $filters = array_filter([
++            'status' => $request->filled('status') ? $request->string('status')->toString() : null,
++            'event_type' => $request->filled('event_type') ? $request->string('event_type')->toString() : null,
++            'branch' => $request->filled('branch') ? $request->string('branch')->toString() : null,
++        ]);
++
++        $result = $repository->getAll($filters);
++
++        return response()->json([
++            'success' => true,
++            'message' => 'Quote requests retrieved',
++            'data' => [
++                'items' => QuoteRequestResource::collection($result),
++                'meta' => [
++                    'current_page' => $result->currentPage(),
++                    'last_page' => $result->lastPage(),
++                    'per_page' => $result->perPage(),
++                    'total' => $result->total(),
++                ],
++            ],
++        ]);
++    }
++
++    public function show(int $id, QuoteRequestRepository $repository): JsonResponse
++    {
++        return response()->json([
++            'success' => true,
++            'message' => 'Quote request retrieved',
++            'data' => new QuoteRequestResource($repository->getById($id)),
++        ]);
++    }
++
++    public function updateStatus(UpdateQuoteRequestStatusRequest $request, int $id, UpdateQuoteRequestStatusAction $action): JsonResponse
++    {
++        $quoteRequest = $action->execute($id, UpdateQuoteRequestStatusDTO::fromRequest($request));
++
++        return response()->json([
++            'success' => true,
++            'message' => 'Quote request status updated',
++            'data' => new QuoteRequestResource($quoteRequest),
++        ]);
++    }
++}
+diff --git a/app/Http/Controllers/Catering/SampleMenuController.php b/app/Http/Controllers/Catering/SampleMenuController.php
+new file mode 100644
+index 0000000..7aa3186
+--- /dev/null
++++ b/app/Http/Controllers/Catering/SampleMenuController.php
+@@ -0,0 +1,58 @@
++<?php
++
++namespace App\Http\Controllers\Catering;
++
++use App\Actions\Catering\CreateSampleMenuAction;
++use App\Actions\Catering\DeleteSampleMenuAction;
++use App\Actions\Catering\GetSampleMenusAction;
++use App\Actions\Catering\UpdateSampleMenuAction;
++use App\DTOs\Catering\CreateSampleMenuDTO;
++use App\Http\Controllers\Controller;
++use App\Http\Requests\Catering\StoreSampleMenuRequest;
++use App\Http\Resources\Catering\SampleMenuResource;
++use Illuminate\Http\JsonResponse;
++
++class SampleMenuController extends Controller
++{
++    public function index(GetSampleMenusAction $action): JsonResponse
++    {
++        return response()->json([
++            'success' => true,
++            'message' => 'Sample menus retrieved',
++            'data' => SampleMenuResource::collection($action->execute()),
++        ]);
++    }
++
++    public function store(StoreSampleMenuRequest $request, CreateSampleMenuAction $action): JsonResponse
++    {
++        $menu = $action->execute(CreateSampleMenuDTO::fromRequest($request));
++
++        return response()->json([
++            'success' => true,
++            'message' => 'Sample menu created',
++            'data' => new SampleMenuResource($menu),
++        ], 201);
++    }
++
++    public function update(StoreSampleMenuRequest $request, int $id, UpdateSampleMenuAction $action): JsonResponse
++    {
++        $menu = $action->execute($id, CreateSampleMenuDTO::fromRequest($request));
++
++        return response()->json([
++            'success' => true,
++            'message' => 'Sample menu updated',
++            'data' => new SampleMenuResource($menu),
++        ]);
++    }
++
++    public function destroy(int $id, DeleteSampleMenuAction $action): JsonResponse
++    {
++        $action->execute($id);
++
++        return response()->json([
++            'success' => true,
++            'message' => 'Sample menu deleted',
++            'data' => null,
++        ]);
++    }
++}
+diff --git a/app/Http/Controllers/DeliveryAppController.php b/app/Http/Controllers/DeliveryAppController.php
+new file mode 100644
+index 0000000..adb8717
+--- /dev/null
++++ b/app/Http/Controllers/DeliveryAppController.php
+@@ -0,0 +1,59 @@
++<?php
++
++namespace App\Http\Controllers;
++
++use App\Actions\DeliveryApp\CreateDeliveryAppAction;
++use App\Actions\DeliveryApp\DeleteDeliveryAppAction;
++use App\Actions\DeliveryApp\GetDeliveryAppsAction;
++use App\Actions\DeliveryApp\UpdateDeliveryAppAction;
++use App\DTOs\DeliveryApp\CreateDeliveryAppDTO;
++use App\Http\Requests\DeliveryApp\StoreDeliveryAppRequest;
++use App\Http\Resources\DeliveryApp\DeliveryAppResource;
++use Illuminate\Http\JsonResponse;
++
++class DeliveryAppController extends Controller
++{
++    public function index(GetDeliveryAppsAction $action): JsonResponse
++    {
++        $activeOnly = ! auth('sanctum')->check();
++
++        return response()->json([
++            'success' => true,
++            'message' => 'Delivery apps retrieved',
++            'data' => DeliveryAppResource::collection($action->execute($activeOnly)),
++        ]);
++    }
++
++    public function store(StoreDeliveryAppRequest $request, CreateDeliveryAppAction $action): JsonResponse
++    {
++        $deliveryApp = $action->execute(CreateDeliveryAppDTO::fromRequest($request));
++
++        return response()->json([
++            'success' => true,
++            'message' => 'Delivery app created',
++            'data' => new DeliveryAppResource($deliveryApp),
++        ], 201);
++    }
++
++    public function update(StoreDeliveryAppRequest $request, int $id, UpdateDeliveryAppAction $action): JsonResponse
++    {
++        $deliveryApp = $action->execute($id, CreateDeliveryAppDTO::fromRequest($request));
++
++        return response()->json([
++            'success' => true,
++            'message' => 'Delivery app updated',
++            'data' => new DeliveryAppResource($deliveryApp),
++        ]);
++    }
++
++    public function destroy(int $id, DeleteDeliveryAppAction $action): JsonResponse
++    {
++        $action->execute($id);
++
++        return response()->json([
++            'success' => true,
++            'message' => 'Delivery app deleted',
++            'data' => null,
++        ]);
++    }
++}
+diff --git a/app/Http/Controllers/DishController.php b/app/Http/Controllers/DishController.php
+new file mode 100644
+index 0000000..a8d9a22
+--- /dev/null
++++ b/app/Http/Controllers/DishController.php
+@@ -0,0 +1,80 @@
++<?php
++
++namespace App\Http\Controllers;
++
++use App\Actions\Dish\CreateDishAction;
++use App\Actions\Dish\DeleteDishAction;
++use App\Actions\Dish\GetDishAction;
++use App\Actions\Dish\GetDishesAction;
++use App\Actions\Dish\UpdateDishAction;
++use App\DTOs\Dish\CreateDishDTO;
++use App\DTOs\Dish\UpdateDishDTO;
++use App\Http\Requests\Dish\StoreDishRequest;
++use App\Http\Requests\Dish\UpdateDishRequest;
++use App\Http\Resources\Dish\DishCollection;
++use App\Http\Resources\Dish\DishResource;
++use Illuminate\Http\JsonResponse;
++use Illuminate\Http\Request;
++
++class DishController extends Controller
++{
++    public function index(Request $request, GetDishesAction $action): JsonResponse
++    {
++        $filters = array_filter([
++            'category_id' => $request->integer('category_id') ?: null,
++            'featured' => $request->has('featured') ? $request->boolean('featured') : null,
++            'signature' => $request->has('signature') ? $request->boolean('signature') : null,
++            'per_page' => $request->integer('per_page') ?: null,
++        ], fn ($value) => $value !== null);
++
++        $result = $action->execute($filters);
++
++        return response()->json([
++            'success' => true,
++            'message' => 'Dishes retrieved',
++            'data' => new DishCollection($result),
++        ]);
++    }
++
++    public function show(int $id, GetDishAction $action): JsonResponse
++    {
++        return response()->json([
++            'success' => true,
++            'message' => 'Dish retrieved',
++            'data' => new DishResource($action->execute($id)),
++        ]);
++    }
++
++    public function store(StoreDishRequest $request, CreateDishAction $action): JsonResponse
++    {
++        $dish = $action->execute(CreateDishDTO::fromRequest($request));
++
++        return response()->json([
++            'success' => true,
++            'message' => 'Dish created',
++            'data' => new DishResource($dish),
++        ], 201);
++    }
++
++    public function update(UpdateDishRequest $request, int $id, UpdateDishAction $action): JsonResponse
++    {
++        $dish = $action->execute($id, UpdateDishDTO::fromRequest($request));
++
++        return response()->json([
++            'success' => true,
++            'message' => 'Dish updated',
++            'data' => new DishResource($dish),
++        ]);
++    }
++
++    public function destroy(int $id, DeleteDishAction $action): JsonResponse
++    {
++        $action->execute($id);
++
++        return response()->json([
++            'success' => true,
++            'message' => 'Dish deleted',
++            'data' => null,
++        ]);
++    }
++}
+diff --git a/app/Http/Controllers/MediaItemController.php b/app/Http/Controllers/MediaItemController.php
+new file mode 100644
+index 0000000..b0e6901
+--- /dev/null
++++ b/app/Http/Controllers/MediaItemController.php
+@@ -0,0 +1,76 @@
++<?php
++
++namespace App\Http\Controllers;
++
++use App\Actions\MediaItem\DeleteMediaAction;
++use App\Actions\MediaItem\GetMediaItemsAction;
++use App\Actions\MediaItem\UploadMediaAction;
++use App\DTOs\MediaItem\UploadMediaDTO;
++use App\Http\Requests\MediaItem\UploadMediaRequest;
++use App\Http\Resources\MediaItem\MediaItemResource;
++use App\Repositories\MediaItemRepository;
++use Illuminate\Http\JsonResponse;
++use Illuminate\Http\Request;
++
++class MediaItemController extends Controller
++{
++    public function index(Request $request, GetMediaItemsAction $action): JsonResponse
++    {
++        $result = $action->execute(
++            $request->string('page')->toString(),
++            $request->filled('section') ? $request->string('section')->toString() : null,
++        );
++
++        $resourced = $result->map(
++            fn ($section) => $section->map(fn ($item) => new MediaItemResource($item))
++        );
++
++        return response()->json([
++            'success' => true,
++            'message' => 'Media items retrieved',
++            'data' => $resourced,
++        ]);
++    }
++
++    public function store(UploadMediaRequest $request, UploadMediaAction $action): JsonResponse
++    {
++        $mediaItem = $action->execute(UploadMediaDTO::fromRequest($request));
++
++        return response()->json([
++            'success' => true,
++            'message' => 'Media item uploaded',
++            'data' => new MediaItemResource($mediaItem),
++        ], 201);
++    }
++
++    public function show(int $id, MediaItemRepository $repository): JsonResponse
++    {
++        return response()->json([
++            'success' => true,
++            'message' => 'Media item retrieved',
++            'data' => new MediaItemResource($repository->getById($id)),
++        ]);
++    }
++
++    public function update(UploadMediaRequest $request, int $id, UploadMediaAction $action): JsonResponse
++    {
++        $mediaItem = $action->execute(UploadMediaDTO::fromRequest($request));
++
++        return response()->json([
++            'success' => true,
++            'message' => 'Media item updated',
++            'data' => new MediaItemResource($mediaItem),
++        ]);
++    }
++
++    public function destroy(int $id, DeleteMediaAction $action): JsonResponse
++    {
++        $action->execute($id);
++
++        return response()->json([
++            'success' => true,
++            'message' => 'Media item deleted',
++            'data' => null,
++        ]);
++    }
++}
+diff --git a/app/Http/Controllers/PageContentController.php b/app/Http/Controllers/PageContentController.php
+new file mode 100644
+index 0000000..f8a17f5
+--- /dev/null
++++ b/app/Http/Controllers/PageContentController.php
+@@ -0,0 +1,67 @@
++<?php
++
++namespace App\Http\Controllers;
++
++use App\Actions\PageContent\BulkUpdatePageContentAction;
++use App\Actions\PageContent\GetPageContentAction;
++use App\Actions\PageContent\UpdatePageContentAction;
++use App\DTOs\PageContent\BulkUpdatePageContentDTO;
++use App\DTOs\PageContent\UpdatePageContentDTO;
++use App\Http\Requests\PageContent\BulkUpdatePageContentRequest;
++use App\Http\Requests\PageContent\UpdatePageContentRequest;
++use App\Http\Resources\PageContent\PageContentResource;
++use App\Repositories\PageContentRepository;
++use Illuminate\Http\JsonResponse;
++use Illuminate\Http\Request;
++
++class PageContentController extends Controller
++{
++    public function index(Request $request, GetPageContentAction $action): JsonResponse
++    {
++        $result = $action->execute(
++            $request->string('page')->toString(),
++            $request->filled('section') ? $request->string('section')->toString() : null,
++        );
++
++        $resourced = $result->map(
++            fn ($section) => $section->map(fn ($item) => new PageContentResource($item))
++        );
++
++        return response()->json([
++            'success' => true,
++            'message' => 'Page contents retrieved',
++            'data' => $resourced,
++        ]);
++    }
++
++    public function show(int $id, PageContentRepository $repository): JsonResponse
++    {
++        return response()->json([
++            'success' => true,
++            'message' => 'Page content retrieved',
++            'data' => new PageContentResource($repository->getById($id)),
++        ]);
++    }
++
++    public function update(UpdatePageContentRequest $request, int $id, UpdatePageContentAction $action): JsonResponse
++    {
++        $pageContent = $action->execute($id, UpdatePageContentDTO::fromRequest($request));
++
++        return response()->json([
++            'success' => true,
++            'message' => 'Page content updated',
++            'data' => new PageContentResource($pageContent),
++        ]);
++    }
++
++    public function bulkUpdate(BulkUpdatePageContentRequest $request, BulkUpdatePageContentAction $action): JsonResponse
++    {
++        $action->execute(BulkUpdatePageContentDTO::fromRequest($request));
++
++        return response()->json([
++            'success' => true,
++            'message' => 'Page contents updated',
++            'data' => null,
++        ]);
++    }
++}
+diff --git a/app/Http/Controllers/SettingController.php b/app/Http/Controllers/SettingController.php
+new file mode 100644
+index 0000000..5267a36
+--- /dev/null
++++ b/app/Http/Controllers/SettingController.php
+@@ -0,0 +1,38 @@
++<?php
++
++namespace App\Http\Controllers;
++
++use App\Actions\Setting\GetSettingsAction;
++use App\Actions\Setting\UpdateSettingsAction;
++use App\DTOs\Setting\UpdateSettingDTO;
++use App\Http\Requests\Setting\UpdateSettingRequest;
++use App\Http\Resources\Setting\SettingResource;
++use Illuminate\Http\JsonResponse;
++use Illuminate\Http\Request;
++
++class SettingController extends Controller
++{
++    public function index(Request $request, GetSettingsAction $action): JsonResponse
++    {
++        $result = $action->execute(
++            $request->filled('group') ? $request->string('group')->toString() : null,
++        );
++
++        return response()->json([
++            'success' => true,
++            'message' => 'Settings retrieved',
++            'data' => $result->map(fn ($setting) => new SettingResource($setting)),
++        ]);
++    }
++
++    public function bulkUpdate(UpdateSettingRequest $request, UpdateSettingsAction $action): JsonResponse
++    {
++        $action->execute(UpdateSettingDTO::fromRequest($request));
++
++        return response()->json([
++            'success' => true,
++            'message' => 'Settings updated',
++            'data' => null,
++        ]);
++    }
++}
+diff --git a/app/Http/Controllers/TestimonialController.php b/app/Http/Controllers/TestimonialController.php
+new file mode 100644
+index 0000000..1eaddb8
+--- /dev/null
++++ b/app/Http/Controllers/TestimonialController.php
+@@ -0,0 +1,59 @@
++<?php
++
++namespace App\Http\Controllers;
++
++use App\Actions\Testimonial\CreateTestimonialAction;
++use App\Actions\Testimonial\DeleteTestimonialAction;
++use App\Actions\Testimonial\GetTestimonialsAction;
++use App\Actions\Testimonial\UpdateTestimonialAction;
++use App\DTOs\Testimonial\CreateTestimonialDTO;
++use App\Http\Requests\Testimonial\StoreTestimonialRequest;
++use App\Http\Resources\Testimonial\TestimonialResource;
++use Illuminate\Http\JsonResponse;
++
++class TestimonialController extends Controller
++{
++    public function index(GetTestimonialsAction $action): JsonResponse
++    {
++        $activeOnly = ! auth('sanctum')->check();
++
++        return response()->json([
++            'success' => true,
++            'message' => 'Testimonials retrieved',
++            'data' => TestimonialResource::collection($action->execute($activeOnly)),
++        ]);
++    }
++
++    public function store(StoreTestimonialRequest $request, CreateTestimonialAction $action): JsonResponse
++    {
++        $testimonial = $action->execute(CreateTestimonialDTO::fromRequest($request));
++
++        return response()->json([
++            'success' => true,
++            'message' => 'Testimonial created',
++            'data' => new TestimonialResource($testimonial),
++        ], 201);
++    }
++
++    public function update(StoreTestimonialRequest $request, int $id, UpdateTestimonialAction $action): JsonResponse
++    {
++        $testimonial = $action->execute($id, CreateTestimonialDTO::fromRequest($request));
++
++        return response()->json([
++            'success' => true,
++            'message' => 'Testimonial updated',
++            'data' => new TestimonialResource($testimonial),
++        ]);
++    }
++
++    public function destroy(int $id, DeleteTestimonialAction $action): JsonResponse
++    {
++        $action->execute($id);
++
++        return response()->json([
++            'success' => true,
++            'message' => 'Testimonial deleted',
++            'data' => null,
++        ]);
++    }
++}
+diff --git a/app/Http/Controllers/TimelineController.php b/app/Http/Controllers/TimelineController.php
+new file mode 100644
+index 0000000..1d9ad41
+--- /dev/null
++++ b/app/Http/Controllers/TimelineController.php
+@@ -0,0 +1,57 @@
++<?php
++
++namespace App\Http\Controllers;
++
++use App\Actions\Timeline\CreateTimelineAction;
++use App\Actions\Timeline\DeleteTimelineAction;
++use App\Actions\Timeline\GetTimelineAction;
++use App\Actions\Timeline\UpdateTimelineAction;
++use App\DTOs\Timeline\CreateTimelineDTO;
++use App\Http\Requests\Timeline\StoreTimelineRequest;
++use App\Http\Resources\Timeline\TimelineResource;
++use Illuminate\Http\JsonResponse;
++
++class TimelineController extends Controller
++{
++    public function index(GetTimelineAction $action): JsonResponse
++    {
++        return response()->json([
++            'success' => true,
++            'message' => 'Timeline retrieved',
++            'data' => TimelineResource::collection($action->execute()),
++        ]);
++    }
++
++    public function store(StoreTimelineRequest $request, CreateTimelineAction $action): JsonResponse
++    {
++        $timeline = $action->execute(CreateTimelineDTO::fromRequest($request));
++
++        return response()->json([
++            'success' => true,
++            'message' => 'Timeline entry created',
++            'data' => new TimelineResource($timeline),
++        ], 201);
++    }
++
++    public function update(StoreTimelineRequest $request, int $id, UpdateTimelineAction $action): JsonResponse
++    {
++        $timeline = $action->execute($id, CreateTimelineDTO::fromRequest($request));
++
++        return response()->json([
++            'success' => true,
++            'message' => 'Timeline entry updated',
++            'data' => new TimelineResource($timeline),
++        ]);
++    }
++
++    public function destroy(int $id, DeleteTimelineAction $action): JsonResponse
++    {
++        $action->execute($id);
++
++        return response()->json([
++            'success' => true,
++            'message' => 'Timeline entry deleted',
++            'data' => null,
++        ]);
++    }
++}
+diff --git a/app/Http/Controllers/UserController.php b/app/Http/Controllers/UserController.php
+new file mode 100644
+index 0000000..204c70b
+--- /dev/null
++++ b/app/Http/Controllers/UserController.php
+@@ -0,0 +1,79 @@
++<?php
++
++namespace App\Http\Controllers;
++
++use App\Actions\User\CreateUserAction;
++use App\Actions\User\DeleteUserAction;
++use App\Actions\User\GetUsersAction;
++use App\Actions\User\UpdateUserAction;
++use App\DTOs\User\CreateUserDTO;
++use App\DTOs\User\UpdateUserDTO;
++use App\Http\Requests\User\StoreUserRequest;
++use App\Http\Requests\User\UpdateUserRequest;
++use App\Http\Resources\User\UserResource;
++use App\Repositories\UserRepository;
++use Illuminate\Http\JsonResponse;
++
++class UserController extends Controller
++{
++    public function index(GetUsersAction $action): JsonResponse
++    {
++        $result = $action->execute();
++
++        return response()->json([
++            'success' => true,
++            'message' => 'Users retrieved',
++            'data' => [
++                'items' => UserResource::collection($result),
++                'meta' => [
++                    'current_page' => $result->currentPage(),
++                    'last_page' => $result->lastPage(),
++                    'per_page' => $result->perPage(),
++                    'total' => $result->total(),
++                ],
++            ],
++        ]);
++    }
++
++    public function store(StoreUserRequest $request, CreateUserAction $action): JsonResponse
++    {
++        $user = $action->execute(CreateUserDTO::fromRequest($request));
++
++        return response()->json([
++            'success' => true,
++            'message' => 'User created',
++            'data' => new UserResource($user),
++        ], 201);
++    }
++
++    public function show(int $id, UserRepository $repository): JsonResponse
++    {
++        return response()->json([
++            'success' => true,
++            'message' => 'User retrieved',
++            'data' => new UserResource($repository->getById($id)),
++        ]);
++    }
++
++    public function update(UpdateUserRequest $request, int $id, UpdateUserAction $action): JsonResponse
++    {
++        $user = $action->execute($id, UpdateUserDTO::fromRequest($request));
++
++        return response()->json([
++            'success' => true,
++            'message' => 'User updated',
++            'data' => new UserResource($user),
++        ]);
++    }
++
++    public function destroy(int $id, DeleteUserAction $action): JsonResponse
++    {
++        $action->execute($id);
++
++        return response()->json([
++            'success' => true,
++            'message' => 'User deleted',
++            'data' => null,
++        ]);
++    }
++}
+diff --git a/app/Http/Requests/Auth/LoginRequest.php b/app/Http/Requests/Auth/LoginRequest.php
+new file mode 100644
+index 0000000..56e6c8a
+--- /dev/null
++++ b/app/Http/Requests/Auth/LoginRequest.php
+@@ -0,0 +1,21 @@
++<?php
++
++namespace App\Http\Requests\Auth;
++
++use App\Http\Requests\BaseFormRequest;
++
++class LoginRequest extends BaseFormRequest
++{
++    public function authorize(): bool
++    {
++        return true;
++    }
++
++    public function rules(): array
++    {
++        return [
++            'email' => ['required', 'email'],
++            'password' => ['required', 'string', 'min:8'],
++        ];
++    }
++}
+diff --git a/app/Http/Requests/BaseFormRequest.php b/app/Http/Requests/BaseFormRequest.php
+new file mode 100644
+index 0000000..92b71d8
+--- /dev/null
++++ b/app/Http/Requests/BaseFormRequest.php
+@@ -0,0 +1,19 @@
++<?php
++
++namespace App\Http\Requests;
++
++use Illuminate\Contracts\Validation\Validator;
++use Illuminate\Foundation\Http\FormRequest;
++use Illuminate\Http\Exceptions\HttpResponseException;
++
++abstract class BaseFormRequest extends FormRequest
++{
++    protected function failedValidation(Validator $validator): void
++    {
++        throw new HttpResponseException(response()->json([
++            'success' => false,
++            'message' => 'Validation failed',
++            'errors' => $validator->errors(),
++        ], 422));
++    }
++}
+diff --git a/app/Http/Requests/Branch/StoreBranchRequest.php b/app/Http/Requests/Branch/StoreBranchRequest.php
+new file mode 100644
+index 0000000..529fda8
+--- /dev/null
++++ b/app/Http/Requests/Branch/StoreBranchRequest.php
+@@ -0,0 +1,30 @@
++<?php
++
++namespace App\Http\Requests\Branch;
++
++use App\Http\Requests\BaseFormRequest;
++
++class StoreBranchRequest extends BaseFormRequest
++{
++    public function authorize(): bool
++    {
++        return true;
++    }
++
++    public function rules(): array
++    {
++        return [
++            'name_ar' => ['required', 'string', 'max:200'],
++            'name_en' => ['required', 'string', 'max:200'],
++            'city' => ['required', 'string', 'in:jeddah,riyadh'],
++            'location_ar' => ['required', 'string', 'max:500'],
++            'location_en' => ['required', 'string', 'max:500'],
++            'phone' => ['required', 'string', 'max:20'],
++            'opening_time' => ['required', 'string'],
++            'closing_time' => ['required', 'string'],
++            'google_maps_url' => ['nullable', 'url'],
++            'image' => ['nullable', 'file', 'mimes:jpg,jpeg,png,webp', 'max:5120'],
++            'order' => ['integer', 'min:0'],
++        ];
++    }
++}
+diff --git a/app/Http/Requests/Branch/UpdateBranchRequest.php b/app/Http/Requests/Branch/UpdateBranchRequest.php
+new file mode 100644
+index 0000000..123bc13
+--- /dev/null
++++ b/app/Http/Requests/Branch/UpdateBranchRequest.php
+@@ -0,0 +1,30 @@
++<?php
++
++namespace App\Http\Requests\Branch;
++
++use App\Http\Requests\BaseFormRequest;
++
++class UpdateBranchRequest extends BaseFormRequest
++{
++    public function authorize(): bool
++    {
++        return true;
++    }
++
++    public function rules(): array
++    {
++        return [
++            'name_ar' => ['nullable', 'string', 'max:200'],
++            'name_en' => ['nullable', 'string', 'max:200'],
++            'city' => ['nullable', 'string', 'in:jeddah,riyadh'],
++            'location_ar' => ['nullable', 'string', 'max:500'],
++            'location_en' => ['nullable', 'string', 'max:500'],
++            'phone' => ['nullable', 'string', 'max:20'],
++            'opening_time' => ['nullable', 'string'],
++            'closing_time' => ['nullable', 'string'],
++            'google_maps_url' => ['nullable', 'url'],
++            'image' => ['nullable', 'file', 'mimes:jpg,jpeg,png,webp', 'max:5120'],
++            'order' => ['nullable', 'integer', 'min:0'],
++        ];
++    }
++}
+diff --git a/app/Http/Requests/Catering/StorePackageRequest.php b/app/Http/Requests/Catering/StorePackageRequest.php
+new file mode 100644
+index 0000000..fb22b6e
+--- /dev/null
++++ b/app/Http/Requests/Catering/StorePackageRequest.php
+@@ -0,0 +1,32 @@
++<?php
++
++namespace App\Http\Requests\Catering;
++
++use App\Http\Requests\BaseFormRequest;
++
++class StorePackageRequest extends BaseFormRequest
++{
++    public function authorize(): bool
++    {
++        return true;
++    }
++
++    public function rules(): array
++    {
++        return [
++            'name_ar' => ['required', 'string', 'max:200'],
++            'name_en' => ['required', 'string', 'max:200'],
++            'description_ar' => ['required', 'string'],
++            'description_en' => ['required', 'string'],
++            'tag_en' => ['nullable', 'string', 'max:100'],
++            'price_starting_from' => ['nullable', 'numeric', 'min:0'],
++            'is_featured' => ['boolean'],
++            'image' => ['nullable', 'file', 'mimes:jpg,jpeg,png,webp', 'max:5120'],
++            'order' => ['integer', 'min:0'],
++            'features' => ['required', 'array', 'min:1'],
++            'features.*.feature_ar' => ['required', 'string', 'max:255'],
++            'features.*.feature_en' => ['required', 'string', 'max:255'],
++            'features.*.order' => ['integer', 'min:0'],
++        ];
++    }
++}
+diff --git a/app/Http/Requests/Catering/StoreQuoteRequestRequest.php b/app/Http/Requests/Catering/StoreQuoteRequestRequest.php
+new file mode 100644
+index 0000000..441f7c5
+--- /dev/null
++++ b/app/Http/Requests/Catering/StoreQuoteRequestRequest.php
+@@ -0,0 +1,32 @@
++<?php
++
++namespace App\Http\Requests\Catering;
++
++use App\Enums\BranchLocationEnum;
++use App\Enums\BudgetRangeEnum;
++use App\Enums\EventTypeEnum;
++use App\Http\Requests\BaseFormRequest;
++use Illuminate\Validation\Rule;
++
++class StoreQuoteRequestRequest extends BaseFormRequest
++{
++    public function authorize(): bool
++    {
++        return true;
++    }
++
++    public function rules(): array
++    {
++        return [
++            'name' => ['required', 'string', 'max:200'],
++            'phone' => ['required', 'string', 'max:20'],
++            'email' => ['nullable', 'email', 'max:255'],
++            'event_date' => ['required', 'date', 'after:today'],
++            'guests_count' => ['required', 'integer', 'min:1', 'max:10000'],
++            'branch' => ['required', 'string', Rule::in(BranchLocationEnum::values())],
++            'event_type' => ['required', 'string', Rule::in(EventTypeEnum::values())],
++            'budget_range' => ['nullable', 'string', Rule::in(BudgetRangeEnum::values())],
++            'notes' => ['nullable', 'string', 'max:1000'],
++        ];
++    }
++}
+diff --git a/app/Http/Requests/Catering/StoreSampleMenuRequest.php b/app/Http/Requests/Catering/StoreSampleMenuRequest.php
+new file mode 100644
+index 0000000..319b5dc
+--- /dev/null
++++ b/app/Http/Requests/Catering/StoreSampleMenuRequest.php
+@@ -0,0 +1,29 @@
++<?php
++
++namespace App\Http\Requests\Catering;
++
++use App\Http\Requests\BaseFormRequest;
++
++class StoreSampleMenuRequest extends BaseFormRequest
++{
++    public function authorize(): bool
++    {
++        return true;
++    }
++
++    public function rules(): array
++    {
++        return [
++            'name_ar' => ['required', 'string', 'max:200'],
++            'name_en' => ['required', 'string', 'max:200'],
++            'tag_en' => ['nullable', 'string', 'max:100'],
++            'is_featured' => ['boolean'],
++            'image' => ['nullable', 'file', 'mimes:jpg,jpeg,png,webp', 'max:5120'],
++            'order' => ['integer', 'min:0'],
++            'dishes' => ['required', 'array', 'min:1'],
++            'dishes.*.dish_name_ar' => ['required', 'string', 'max:255'],
++            'dishes.*.dish_name_en' => ['required', 'string', 'max:255'],
++            'dishes.*.order' => ['integer', 'min:0'],
++        ];
++    }
++}
+diff --git a/app/Http/Requests/Catering/UpdatePackageRequest.php b/app/Http/Requests/Catering/UpdatePackageRequest.php
+new file mode 100644
+index 0000000..e0d6b33
+--- /dev/null
++++ b/app/Http/Requests/Catering/UpdatePackageRequest.php
+@@ -0,0 +1,32 @@
++<?php
++
++namespace App\Http\Requests\Catering;
++
++use App\Http\Requests\BaseFormRequest;
++
++class UpdatePackageRequest extends BaseFormRequest
++{
++    public function authorize(): bool
++    {
++        return true;
++    }
++
++    public function rules(): array
++    {
++        return [
++            'name_ar' => ['nullable', 'string', 'max:200'],
++            'name_en' => ['nullable', 'string', 'max:200'],
++            'description_ar' => ['nullable', 'string'],
++            'description_en' => ['nullable', 'string'],
++            'tag_en' => ['nullable', 'string', 'max:100'],
++            'price_starting_from' => ['nullable', 'numeric', 'min:0'],
++            'is_featured' => ['nullable', 'boolean'],
++            'image' => ['nullable', 'file', 'mimes:jpg,jpeg,png,webp', 'max:5120'],
++            'order' => ['nullable', 'integer', 'min:0'],
++            'features' => ['nullable', 'array'],
++            'features.*.feature_ar' => ['required_with:features', 'string', 'max:255'],
++            'features.*.feature_en' => ['required_with:features', 'string', 'max:255'],
++            'features.*.order' => ['integer', 'min:0'],
++        ];
++    }
++}
+diff --git a/app/Http/Requests/Catering/UpdateQuoteRequestStatusRequest.php b/app/Http/Requests/Catering/UpdateQuoteRequestStatusRequest.php
+new file mode 100644
+index 0000000..44b1f82
+--- /dev/null
++++ b/app/Http/Requests/Catering/UpdateQuoteRequestStatusRequest.php
+@@ -0,0 +1,22 @@
++<?php
++
++namespace App\Http\Requests\Catering;
++
++use App\Enums\QuoteRequestStatusEnum;
++use App\Http\Requests\BaseFormRequest;
++use Illuminate\Validation\Rule;
++
++class UpdateQuoteRequestStatusRequest extends BaseFormRequest
++{
++    public function authorize(): bool
++    {
++        return true;
++    }
++
++    public function rules(): array
++    {
++        return [
++            'status' => ['required', 'string', Rule::in(QuoteRequestStatusEnum::values())],
++        ];
++    }
++}
+diff --git a/app/Http/Requests/DeliveryApp/StoreDeliveryAppRequest.php b/app/Http/Requests/DeliveryApp/StoreDeliveryAppRequest.php
+new file mode 100644
+index 0000000..7cd7b67
+--- /dev/null
++++ b/app/Http/Requests/DeliveryApp/StoreDeliveryAppRequest.php
+@@ -0,0 +1,25 @@
++<?php
++
++namespace App\Http\Requests\DeliveryApp;
++
++use App\Http\Requests\BaseFormRequest;
++
++class StoreDeliveryAppRequest extends BaseFormRequest
++{
++    public function authorize(): bool
++    {
++        return true;
++    }
++
++    public function rules(): array
++    {
++        return [
++            'name_ar' => ['required', 'string', 'max:100'],
++            'name_en' => ['required', 'string', 'max:100'],
++            'order_url' => ['required', 'url'],
++            'logo' => ['nullable', 'file', 'mimes:jpg,jpeg,png,webp,svg', 'max:2048'],
++            'is_active' => ['boolean'],
++            'order' => ['integer', 'min:0'],
++        ];
++    }
++}
+diff --git a/app/Http/Requests/Dish/StoreDishRequest.php b/app/Http/Requests/Dish/StoreDishRequest.php
+new file mode 100644
+index 0000000..55f3e88
+--- /dev/null
++++ b/app/Http/Requests/Dish/StoreDishRequest.php
+@@ -0,0 +1,29 @@
++<?php
++
++namespace App\Http\Requests\Dish;
++
++use App\Http\Requests\BaseFormRequest;
++
++class StoreDishRequest extends BaseFormRequest
++{
++    public function authorize(): bool
++    {
++        return true;
++    }
++
++    public function rules(): array
++    {
++        return [
++            'name_ar' => ['required', 'string', 'max:200'],
++            'name_en' => ['required', 'string', 'max:200'],
++            'description_ar' => ['required', 'string'],
++            'description_en' => ['required', 'string'],
++            'price' => ['required', 'numeric', 'min:0'],
++            'category_id' => ['required', 'integer', 'exists:categories,id'],
++            'is_featured' => ['boolean'],
++            'is_signature' => ['boolean'],
++            'image' => ['nullable', 'file', 'mimes:jpg,jpeg,png,webp', 'max:5120'],
++            'order' => ['integer', 'min:0'],
++        ];
++    }
++}
+diff --git a/app/Http/Requests/Dish/UpdateDishRequest.php b/app/Http/Requests/Dish/UpdateDishRequest.php
+new file mode 100644
+index 0000000..2be9d41
+--- /dev/null
++++ b/app/Http/Requests/Dish/UpdateDishRequest.php
+@@ -0,0 +1,29 @@
++<?php
++
++namespace App\Http\Requests\Dish;
++
++use App\Http\Requests\BaseFormRequest;
++
++class UpdateDishRequest extends BaseFormRequest
++{
++    public function authorize(): bool
++    {
++        return true;
++    }
++
++    public function rules(): array
++    {
++        return [
++            'name_ar' => ['nullable', 'string', 'max:200'],
++            'name_en' => ['nullable', 'string', 'max:200'],
++            'description_ar' => ['nullable', 'string'],
++            'description_en' => ['nullable', 'string'],
++            'price' => ['nullable', 'numeric', 'min:0'],
++            'category_id' => ['nullable', 'integer', 'exists:categories,id'],
++            'is_featured' => ['nullable', 'boolean'],
++            'is_signature' => ['nullable', 'boolean'],
++            'image' => ['nullable', 'file', 'mimes:jpg,jpeg,png,webp', 'max:5120'],
++            'order' => ['nullable', 'integer', 'min:0'],
++        ];
++    }
++}
+diff --git a/app/Http/Requests/MediaItem/UploadMediaRequest.php b/app/Http/Requests/MediaItem/UploadMediaRequest.php
+new file mode 100644
+index 0000000..e049992
+--- /dev/null
++++ b/app/Http/Requests/MediaItem/UploadMediaRequest.php
+@@ -0,0 +1,25 @@
++<?php
++
++namespace App\Http\Requests\MediaItem;
++
++use App\Http\Requests\BaseFormRequest;
++
++class UploadMediaRequest extends BaseFormRequest
++{
++    public function authorize(): bool
++    {
++        return true;
++    }
++
++    public function rules(): array
++    {
++        return [
++            'page' => ['required', 'string'],
++            'section' => ['required', 'string'],
++            'key' => ['required', 'string'],
++            'image' => ['required', 'file', 'mimes:jpg,jpeg,png,webp', 'max:5120'],
++            'alt_ar' => ['required', 'string', 'max:255'],
++            'alt_en' => ['required', 'string', 'max:255'],
++        ];
++    }
++}
+diff --git a/app/Http/Requests/PageContent/BulkUpdatePageContentRequest.php b/app/Http/Requests/PageContent/BulkUpdatePageContentRequest.php
+new file mode 100644
+index 0000000..b9ddab7
+--- /dev/null
++++ b/app/Http/Requests/PageContent/BulkUpdatePageContentRequest.php
+@@ -0,0 +1,23 @@
++<?php
++
++namespace App\Http\Requests\PageContent;
++
++use App\Http\Requests\BaseFormRequest;
++
++class BulkUpdatePageContentRequest extends BaseFormRequest
++{
++    public function authorize(): bool
++    {
++        return true;
++    }
++
++    public function rules(): array
++    {
++        return [
++            'items' => ['required', 'array', 'min:1'],
++            'items.*.id' => ['required', 'integer', 'exists:page_contents,id'],
++            'items.*.value_ar' => ['required', 'string'],
++            'items.*.value_en' => ['required', 'string'],
++        ];
++    }
++}
+diff --git a/app/Http/Requests/PageContent/UpdatePageContentRequest.php b/app/Http/Requests/PageContent/UpdatePageContentRequest.php
+new file mode 100644
+index 0000000..c10c98f
+--- /dev/null
++++ b/app/Http/Requests/PageContent/UpdatePageContentRequest.php
+@@ -0,0 +1,21 @@
++<?php
++
++namespace App\Http\Requests\PageContent;
++
++use App\Http\Requests\BaseFormRequest;
++
++class UpdatePageContentRequest extends BaseFormRequest
++{
++    public function authorize(): bool
++    {
++        return true;
++    }
++
++    public function rules(): array
++    {
++        return [
++            'value_ar' => ['required', 'string'],
++            'value_en' => ['required', 'string'],
++        ];
++    }
++}
+diff --git a/app/Http/Requests/Setting/UpdateSettingRequest.php b/app/Http/Requests/Setting/UpdateSettingRequest.php
+new file mode 100644
+index 0000000..688e585
+--- /dev/null
++++ b/app/Http/Requests/Setting/UpdateSettingRequest.php
+@@ -0,0 +1,41 @@
++<?php
++
++namespace App\Http\Requests\Setting;
++
++use App\Http\Requests\BaseFormRequest;
++use App\Models\Setting;
++use Illuminate\Contracts\Validation\Validator;
++
++class UpdateSettingRequest extends BaseFormRequest
++{
++    public function authorize(): bool
++    {
++        return true;
++    }
++
++    public function rules(): array
++    {
++        return [];
++    }
++
++    public function withValidator(Validator $validator): void
++    {
++        $validator->after(function (Validator $validator) {
++            $input = $this->all();
++
++            if (empty($input)) {
++                $validator->errors()->add('settings', 'At least one setting must be provided.');
++
++                return;
++            }
++
++            $validKeys = Setting::pluck('key')->all();
++
++            foreach (array_keys($input) as $key) {
++                if (! in_array($key, $validKeys, true)) {
++                    $validator->errors()->add($key, "The setting key '{$key}' does not exist.");
++                }
++            }
++        });
++    }
++}
+diff --git a/app/Http/Requests/Testimonial/StoreTestimonialRequest.php b/app/Http/Requests/Testimonial/StoreTestimonialRequest.php
+new file mode 100644
+index 0000000..3c99972
+--- /dev/null
++++ b/app/Http/Requests/Testimonial/StoreTestimonialRequest.php
+@@ -0,0 +1,24 @@
++<?php
++
++namespace App\Http\Requests\Testimonial;
++
++use App\Http\Requests\BaseFormRequest;
++
++class StoreTestimonialRequest extends BaseFormRequest
++{
++    public function authorize(): bool
++    {
++        return true;
++    }
++
++    public function rules(): array
++    {
++        return [
++            'name' => ['required', 'string', 'max:200'],
++            'quote_ar' => ['required', 'string'],
++            'quote_en' => ['required', 'string'],
++            'is_active' => ['boolean'],
++            'order' => ['integer', 'min:0'],
++        ];
++    }
++}
+diff --git a/app/Http/Requests/Timeline/StoreTimelineRequest.php b/app/Http/Requests/Timeline/StoreTimelineRequest.php
+new file mode 100644
+index 0000000..4d30c32
+--- /dev/null
++++ b/app/Http/Requests/Timeline/StoreTimelineRequest.php
+@@ -0,0 +1,26 @@
++<?php
++
++namespace App\Http\Requests\Timeline;
++
++use App\Http\Requests\BaseFormRequest;
++
++class StoreTimelineRequest extends BaseFormRequest
++{
++    public function authorize(): bool
++    {
++        return true;
++    }
++
++    public function rules(): array
++    {
++        return [
++            'year' => ['required', 'string', 'max:20'],
++            'location_en' => ['nullable', 'string', 'max:200'],
++            'title_ar' => ['required', 'string', 'max:300'],
++            'title_en' => ['required', 'string', 'max:300'],
++            'description_ar' => ['required', 'string'],
++            'description_en' => ['required', 'string'],
++            'order' => ['integer', 'min:0'],
++        ];
++    }
++}
+diff --git a/app/Http/Requests/User/StoreUserRequest.php b/app/Http/Requests/User/StoreUserRequest.php
+new file mode 100644
+index 0000000..ea71b87
+--- /dev/null
++++ b/app/Http/Requests/User/StoreUserRequest.php
+@@ -0,0 +1,23 @@
++<?php
++
++namespace App\Http\Requests\User;
++
++use App\Http\Requests\BaseFormRequest;
++
++class StoreUserRequest extends BaseFormRequest
++{
++    public function authorize(): bool
++    {
++        return true;
++    }
++
++    public function rules(): array
++    {
++        return [
++            'name' => ['required', 'string', 'max:200'],
++            'email' => ['required', 'email', 'unique:users,email'],
++            'password' => ['required', 'string', 'min:8', 'confirmed'],
++            'role' => ['required', 'string', 'in:super_admin,admin,manager'],
++        ];
++    }
++}
+diff --git a/app/Http/Requests/User/UpdateUserRequest.php b/app/Http/Requests/User/UpdateUserRequest.php
+new file mode 100644
+index 0000000..6d24131
+--- /dev/null
++++ b/app/Http/Requests/User/UpdateUserRequest.php
+@@ -0,0 +1,24 @@
++<?php
++
++namespace App\Http\Requests\User;
++
++use App\Http\Requests\BaseFormRequest;
++use Illuminate\Validation\Rule;
++
++class UpdateUserRequest extends BaseFormRequest
++{
++    public function authorize(): bool
++    {
++        return true;
++    }
++
++    public function rules(): array
++    {
++        return [
++            'name' => ['nullable', 'string', 'max:200'],
++            'email' => ['nullable', 'email', Rule::unique('users', 'email')->ignore($this->route('id'))],
++            'password' => ['nullable', 'string', 'min:8', 'confirmed'],
++            'role' => ['nullable', 'string', 'in:super_admin,admin,manager'],
++        ];
++    }
++}
+diff --git a/app/Http/Resources/Auth/AuthResource.php b/app/Http/Resources/Auth/AuthResource.php
+new file mode 100644
+index 0000000..d1245c4
+--- /dev/null
++++ b/app/Http/Resources/Auth/AuthResource.php
+@@ -0,0 +1,22 @@
++<?php
++
++namespace App\Http\Resources\Auth;
++
++use Illuminate\Http\Request;
++use Illuminate\Http\Resources\Json\JsonResource;
++
++class AuthResource extends JsonResource
++{
++    public function toArray(Request $request): array
++    {
++        return [
++            'token' => $this->resource['token'],
++            'user' => [
++                'id' => $this->resource['user']->id,
++                'name' => $this->resource['user']->name,
++                'email' => $this->resource['user']->email,
++                'role' => $this->resource['user']->role,
++            ],
++        ];
++    }
++}
+diff --git a/app/Http/Resources/Branch/BranchResource.php b/app/Http/Resources/Branch/BranchResource.php
+new file mode 100644
+index 0000000..e0fa8e6
+--- /dev/null
++++ b/app/Http/Resources/Branch/BranchResource.php
+@@ -0,0 +1,33 @@
++<?php
++
++namespace App\Http\Resources\Branch;
++
++use App\Http\Resources\Concerns\ResolvesLocale;
++use Illuminate\Http\Request;
++use Illuminate\Http\Resources\Json\JsonResource;
++
++class BranchResource extends JsonResource
++{
++    use ResolvesLocale;
++
++    public function toArray(Request $request): array
++    {
++        return [
++            'id' => $this->id,
++            'name' => $this->resolveLocale($this->name_ar, $this->name_en),
++            'name_ar' => $this->name_ar,
++            'name_en' => $this->name_en,
++            'location' => $this->resolveLocale($this->location_ar, $this->location_en),
++            'location_ar' => $this->location_ar,
++            'location_en' => $this->location_en,
++            'city' => $this->city,
++            'phone' => $this->phone,
++            'opening_time' => $this->opening_time,
++            'closing_time' => $this->closing_time,
++            'google_maps_url' => $this->google_maps_url,
++            'image_url' => $this->image_url,
++            'order' => $this->order,
++            'locale' => app()->getLocale(),
++        ];
++    }
++}
+diff --git a/app/Http/Resources/Category/CategoryResource.php b/app/Http/Resources/Category/CategoryResource.php
+new file mode 100644
+index 0000000..f98e474
+--- /dev/null
++++ b/app/Http/Resources/Category/CategoryResource.php
+@@ -0,0 +1,25 @@
++<?php
++
++namespace App\Http\Resources\Category;
++
++use App\Http\Resources\Concerns\ResolvesLocale;
++use Illuminate\Http\Request;
++use Illuminate\Http\Resources\Json\JsonResource;
++
++class CategoryResource extends JsonResource
++{
++    use ResolvesLocale;
++
++    public function toArray(Request $request): array
++    {
++        return [
++            'id' => $this->id,
++            'name' => $this->resolveLocale($this->name_ar, $this->name_en),
++            'name_ar' => $this->name_ar,
++            'name_en' => $this->name_en,
++            'slug' => $this->slug,
++            'order' => $this->order,
++            'locale' => app()->getLocale(),
++        ];
++    }
++}
+diff --git a/app/Http/Resources/Catering/PackageResource.php b/app/Http/Resources/Catering/PackageResource.php
+new file mode 100644
+index 0000000..0ad277f
+--- /dev/null
++++ b/app/Http/Resources/Catering/PackageResource.php
+@@ -0,0 +1,36 @@
++<?php
++
++namespace App\Http\Resources\Catering;
++
++use App\Http\Resources\Concerns\ResolvesLocale;
++use Illuminate\Http\Request;
++use Illuminate\Http\Resources\Json\JsonResource;
++
++class PackageResource extends JsonResource
++{
++    use ResolvesLocale;
++
++    public function toArray(Request $request): array
++    {
++        return [
++            'id' => $this->id,
++            'name' => $this->resolveLocale($this->name_ar, $this->name_en),
++            'name_ar' => $this->name_ar,
++            'name_en' => $this->name_en,
++            'description' => $this->resolveLocale($this->description_ar, $this->description_en),
++            'description_ar' => $this->description_ar,
++            'description_en' => $this->description_en,
++            'tag_en' => $this->tag_en,
++            'price_starting_from' => $this->price_starting_from,
++            'is_featured' => $this->is_featured,
++            'features' => $this->whenLoaded('features', fn () => $this->features->map(fn ($feature) => [
++                'feature_ar' => $feature->feature_ar,
++                'feature_en' => $feature->feature_en,
++                'order' => $feature->order,
++            ])),
++            'image_url' => $this->image_url,
++            'order' => $this->order,
++            'locale' => app()->getLocale(),
++        ];
++    }
++}
+diff --git a/app/Http/Resources/Catering/QuoteRequestResource.php b/app/Http/Resources/Catering/QuoteRequestResource.php
+new file mode 100644
+index 0000000..a8a1025
+--- /dev/null
++++ b/app/Http/Resources/Catering/QuoteRequestResource.php
+@@ -0,0 +1,30 @@
++<?php
++
++namespace App\Http\Resources\Catering;
++
++use Illuminate\Http\Request;
++use Illuminate\Http\Resources\Json\JsonResource;
++
++class QuoteRequestResource extends JsonResource
++{
++    public function toArray(Request $request): array
++    {
++        return [
++            'id' => $this->id,
++            'name' => $this->name,
++            'phone' => $this->phone,
++            'email' => $this->email,
++            'event_date' => $this->event_date?->toDateString(),
++            'guests_count' => $this->guests_count,
++            'branch' => $this->branch,
++            'event_type' => $this->event_type->value,
++            'budget_range' => $this->budget_range?->value,
++            'notes' => $this->notes,
++            'status' => [
++                'value' => $this->status->value,
++                'label' => $this->status->label(),
++            ],
++            'created_at' => $this->created_at?->toIso8601String(),
++        ];
++    }
++}
+diff --git a/app/Http/Resources/Catering/SampleMenuResource.php b/app/Http/Resources/Catering/SampleMenuResource.php
+new file mode 100644
+index 0000000..e6e73ef
+--- /dev/null
++++ b/app/Http/Resources/Catering/SampleMenuResource.php
+@@ -0,0 +1,32 @@
++<?php
++
++namespace App\Http\Resources\Catering;
++
++use App\Http\Resources\Concerns\ResolvesLocale;
++use Illuminate\Http\Request;
++use Illuminate\Http\Resources\Json\JsonResource;
++
++class SampleMenuResource extends JsonResource
++{
++    use ResolvesLocale;
++
++    public function toArray(Request $request): array
++    {
++        return [
++            'id' => $this->id,
++            'name' => $this->resolveLocale($this->name_ar, $this->name_en),
++            'name_ar' => $this->name_ar,
++            'name_en' => $this->name_en,
++            'tag_en' => $this->tag_en,
++            'is_featured' => $this->is_featured,
++            'dishes' => $this->whenLoaded('dishes', fn () => $this->dishes->map(fn ($dish) => [
++                'dish_name_ar' => $dish->dish_name_ar,
++                'dish_name_en' => $dish->dish_name_en,
++                'order' => $dish->order,
++            ])),
++            'image_url' => $this->image_url,
++            'order' => $this->order,
++            'locale' => app()->getLocale(),
++        ];
++    }
++}
+diff --git a/app/Http/Resources/Concerns/ResolvesLocale.php b/app/Http/Resources/Concerns/ResolvesLocale.php
+new file mode 100644
+index 0000000..13cd658
+--- /dev/null
++++ b/app/Http/Resources/Concerns/ResolvesLocale.php
+@@ -0,0 +1,11 @@
++<?php
++
++namespace App\Http\Resources\Concerns;
++
++trait ResolvesLocale
++{
++    protected function resolveLocale(?string $ar, ?string $en): ?string
++    {
++        return app()->getLocale() === 'ar' ? $ar : $en;
++    }
++}
+diff --git a/app/Http/Resources/DeliveryApp/DeliveryAppResource.php b/app/Http/Resources/DeliveryApp/DeliveryAppResource.php
+new file mode 100644
+index 0000000..5dff5f7
+--- /dev/null
++++ b/app/Http/Resources/DeliveryApp/DeliveryAppResource.php
+@@ -0,0 +1,27 @@
++<?php
++
++namespace App\Http\Resources\DeliveryApp;
++
++use App\Http\Resources\Concerns\ResolvesLocale;
++use Illuminate\Http\Request;
++use Illuminate\Http\Resources\Json\JsonResource;
++
++class DeliveryAppResource extends JsonResource
++{
++    use ResolvesLocale;
++
++    public function toArray(Request $request): array
++    {
++        return [
++            'id' => $this->id,
++            'name' => $this->resolveLocale($this->name_ar, $this->name_en),
++            'name_ar' => $this->name_ar,
++            'name_en' => $this->name_en,
++            'order_url' => $this->order_url,
++            'logo_url' => $this->logo_url,
++            'is_active' => $this->is_active,
++            'order' => $this->order,
++            'locale' => app()->getLocale(),
++        ];
++    }
++}
+diff --git a/app/Http/Resources/Dish/DishCollection.php b/app/Http/Resources/Dish/DishCollection.php
+new file mode 100644
+index 0000000..064a52e
+--- /dev/null
++++ b/app/Http/Resources/Dish/DishCollection.php
+@@ -0,0 +1,24 @@
++<?php
++
++namespace App\Http\Resources\Dish;
++
++use Illuminate\Http\Request;
++use Illuminate\Http\Resources\Json\ResourceCollection;
++
++class DishCollection extends ResourceCollection
++{
++    public $collects = DishResource::class;
++
++    public function toArray(Request $request): array
++    {
++        return [
++            'items' => $this->collection,
++            'meta' => [
++                'current_page' => $this->currentPage(),
++                'last_page' => $this->lastPage(),
++                'per_page' => $this->perPage(),
++                'total' => $this->total(),
++            ],
++        ];
++    }
++}
+diff --git a/app/Http/Resources/Dish/DishResource.php b/app/Http/Resources/Dish/DishResource.php
+new file mode 100644
+index 0000000..aa327bf
+--- /dev/null
++++ b/app/Http/Resources/Dish/DishResource.php
+@@ -0,0 +1,33 @@
++<?php
++
++namespace App\Http\Resources\Dish;
++
++use App\Http\Resources\Category\CategoryResource;
++use App\Http\Resources\Concerns\ResolvesLocale;
++use Illuminate\Http\Request;
++use Illuminate\Http\Resources\Json\JsonResource;
++
++class DishResource extends JsonResource
++{
++    use ResolvesLocale;
++
++    public function toArray(Request $request): array
++    {
++        return [
++            'id' => $this->id,
++            'name' => $this->resolveLocale($this->name_ar, $this->name_en),
++            'name_ar' => $this->name_ar,
++            'name_en' => $this->name_en,
++            'description' => $this->resolveLocale($this->description_ar, $this->description_en),
++            'description_ar' => $this->description_ar,
++            'description_en' => $this->description_en,
++            'price' => $this->price,
++            'category' => new CategoryResource($this->whenLoaded('category')),
++            'is_featured' => $this->is_featured,
++            'is_signature' => $this->is_signature,
++            'image_url' => $this->image_url,
++            'order' => $this->order,
++            'locale' => app()->getLocale(),
++        ];
++    }
++}
+diff --git a/app/Http/Resources/MediaItem/MediaItemResource.php b/app/Http/Resources/MediaItem/MediaItemResource.php
+new file mode 100644
+index 0000000..46586b9
+--- /dev/null
++++ b/app/Http/Resources/MediaItem/MediaItemResource.php
+@@ -0,0 +1,27 @@
++<?php
++
++namespace App\Http\Resources\MediaItem;
++
++use App\Http\Resources\Concerns\ResolvesLocale;
++use Illuminate\Http\Request;
++use Illuminate\Http\Resources\Json\JsonResource;
++
++class MediaItemResource extends JsonResource
++{
++    use ResolvesLocale;
++
++    public function toArray(Request $request): array
++    {
++        return [
++            'id' => $this->id,
++            'page' => $this->page,
++            'section' => $this->section,
++            'key' => $this->key,
++            'url' => $this->url,
++            'alt' => $this->resolveLocale($this->alt_ar, $this->alt_en),
++            'alt_ar' => $this->alt_ar,
++            'alt_en' => $this->alt_en,
++            'locale' => app()->getLocale(),
++        ];
++    }
++}
+diff --git a/app/Http/Resources/PageContent/PageContentResource.php b/app/Http/Resources/PageContent/PageContentResource.php
+new file mode 100644
+index 0000000..8adf653
+--- /dev/null
++++ b/app/Http/Resources/PageContent/PageContentResource.php
+@@ -0,0 +1,28 @@
++<?php
++
++namespace App\Http\Resources\PageContent;
++
++use App\Http\Resources\Concerns\ResolvesLocale;
++use Illuminate\Http\Request;
++use Illuminate\Http\Resources\Json\JsonResource;
++
++class PageContentResource extends JsonResource
++{
++    use ResolvesLocale;
++
++    public function toArray(Request $request): array
++    {
++        return [
++            'id' => $this->id,
++            'page' => $this->page,
++            'section' => $this->section,
++            'key' => $this->key,
++            'value' => $this->resolveLocale($this->value_ar, $this->value_en),
++            'value_ar' => $this->value_ar,
++            'value_en' => $this->value_en,
++            'type' => $this->type,
++            'order' => $this->order,
++            'locale' => app()->getLocale(),
++        ];
++    }
++}
+diff --git a/app/Http/Resources/Setting/SettingResource.php b/app/Http/Resources/Setting/SettingResource.php
+new file mode 100644
+index 0000000..48cde3f
+--- /dev/null
++++ b/app/Http/Resources/Setting/SettingResource.php
+@@ -0,0 +1,27 @@
++<?php
++
++namespace App\Http\Resources\Setting;
++
++use App\Http\Resources\Concerns\ResolvesLocale;
++use Illuminate\Http\Request;
++use Illuminate\Http\Resources\Json\JsonResource;
++
++class SettingResource extends JsonResource
++{
++    use ResolvesLocale;
++
++    public function toArray(Request $request): array
++    {
++        return [
++            'id' => $this->id,
++            'key' => $this->key,
++            'value' => $this->value,
++            'type' => $this->type,
++            'group' => $this->group,
++            'label' => $this->resolveLocale($this->label_ar, $this->label_en),
++            'label_ar' => $this->label_ar,
++            'label_en' => $this->label_en,
++            'locale' => app()->getLocale(),
++        ];
++    }
++}
+diff --git a/app/Http/Resources/Testimonial/TestimonialResource.php b/app/Http/Resources/Testimonial/TestimonialResource.php
+new file mode 100644
+index 0000000..45d3c55
+--- /dev/null
++++ b/app/Http/Resources/Testimonial/TestimonialResource.php
+@@ -0,0 +1,26 @@
++<?php
++
++namespace App\Http\Resources\Testimonial;
++
++use App\Http\Resources\Concerns\ResolvesLocale;
++use Illuminate\Http\Request;
++use Illuminate\Http\Resources\Json\JsonResource;
++
++class TestimonialResource extends JsonResource
++{
++    use ResolvesLocale;
++
++    public function toArray(Request $request): array
++    {
++        return [
++            'id' => $this->id,
++            'name' => $this->name,
++            'quote' => $this->resolveLocale($this->quote_ar, $this->quote_en),
++            'quote_ar' => $this->quote_ar,
++            'quote_en' => $this->quote_en,
++            'is_active' => $this->is_active,
++            'order' => $this->order,
++            'locale' => app()->getLocale(),
++        ];
++    }
++}
+diff --git a/app/Http/Resources/Timeline/TimelineResource.php b/app/Http/Resources/Timeline/TimelineResource.php
+new file mode 100644
+index 0000000..bb0ef70
+--- /dev/null
++++ b/app/Http/Resources/Timeline/TimelineResource.php
+@@ -0,0 +1,29 @@
++<?php
++
++namespace App\Http\Resources\Timeline;
++
++use App\Http\Resources\Concerns\ResolvesLocale;
++use Illuminate\Http\Request;
++use Illuminate\Http\Resources\Json\JsonResource;
++
++class TimelineResource extends JsonResource
++{
++    use ResolvesLocale;
++
++    public function toArray(Request $request): array
++    {
++        return [
++            'id' => $this->id,
++            'year' => $this->year,
++            'location_en' => $this->location_en,
++            'title' => $this->resolveLocale($this->title_ar, $this->title_en),
++            'title_ar' => $this->title_ar,
++            'title_en' => $this->title_en,
++            'description' => $this->resolveLocale($this->description_ar, $this->description_en),
++            'description_ar' => $this->description_ar,
++            'description_en' => $this->description_en,
++            'order' => $this->order,
++            'locale' => app()->getLocale(),
++        ];
++    }
++}
+diff --git a/app/Http/Resources/User/UserResource.php b/app/Http/Resources/User/UserResource.php
+new file mode 100644
+index 0000000..3ccf9a2
+--- /dev/null
++++ b/app/Http/Resources/User/UserResource.php
+@@ -0,0 +1,20 @@
++<?php
++
++namespace App\Http\Resources\User;
++
++use Illuminate\Http\Request;
++use Illuminate\Http\Resources\Json\JsonResource;
++
++class UserResource extends JsonResource
++{
++    public function toArray(Request $request): array
++    {
++        return [
++            'id' => $this->id,
++            'name' => $this->name,
++            'email' => $this->email,
++            'role' => $this->role,
++            'created_at' => $this->created_at?->toIso8601String(),
++        ];
++    }
++}
+diff --git a/bootstrap/app.php b/bootstrap/app.php
+index 2536e85..ad39d25 100644
+--- a/bootstrap/app.php
++++ b/bootstrap/app.php
+@@ -2,9 +2,13 @@
+ 
+ use App\Http\Middleware\CheckApiKey;
+ use App\Http\Middleware\SetLocale;
++use Illuminate\Auth\AuthenticationException;
++use Illuminate\Database\Eloquent\ModelNotFoundException;
+ use Illuminate\Foundation\Application;
+ use Illuminate\Foundation\Configuration\Exceptions;
+ use Illuminate\Foundation\Configuration\Middleware;
++use Illuminate\Http\Request;
++use Illuminate\Validation\ValidationException;
+ 
+ return Application::configure(basePath: dirname(__DIR__))
+     ->withRouting(
+@@ -28,5 +32,33 @@
+         ]);
+     })
+     ->withExceptions(function (Exceptions $exceptions): void {
+-        //
++        $exceptions->render(function (AuthenticationException $e, Request $request) {
++            if ($request->is('api/*') || $request->expectsJson()) {
++                return response()->json([
++                    'success' => false,
++                    'message' => 'Unauthenticated.',
++                    'errors' => (object) [],
++                ], 401);
++            }
++        });
++
++        $exceptions->render(function (ModelNotFoundException $e, Request $request) {
++            if ($request->is('api/*') || $request->expectsJson()) {
++                return response()->json([
++                    'success' => false,
++                    'message' => 'Resource not found.',
++                    'errors' => (object) [],
++                ], 404);
++            }
++        });
++
++        $exceptions->render(function (ValidationException $e, Request $request) {
++            if ($request->is('api/*') || $request->expectsJson()) {
++                return response()->json([
++                    'success' => false,
++                    'message' => 'Validation failed',
++                    'errors' => $e->errors(),
++                ], 422);
++            }
++        });
+     })->create();
+diff --git a/lang/ar/validation.php b/lang/ar/validation.php
+new file mode 100644
+index 0000000..bc54b7f
+--- /dev/null
++++ b/lang/ar/validation.php
+@@ -0,0 +1,91 @@
++<?php
++
++return [
++    'required' => 'حقل :attribute مطلوب.',
++    'email' => 'حقل :attribute يجب أن يكون بريدًا إلكترونيًا صالحًا.',
++    'string' => 'حقل :attribute يجب أن يكون نصًا.',
++    'numeric' => 'حقل :attribute يجب أن يكون رقمًا.',
++    'integer' => 'حقل :attribute يجب أن يكون عددًا صحيحًا.',
++    'boolean' => 'حقل :attribute يجب أن يكون صحيحًا أو خاطئًا.',
++    'array' => 'حقل :attribute يجب أن يكون مصفوفة.',
++    'url' => 'حقل :attribute يجب أن يكون رابطًا صالحًا.',
++    'date' => 'حقل :attribute يجب أن يكون تاريخًا صالحًا.',
++    'confirmed' => 'تأكيد حقل :attribute غير مطابق.',
++    'file' => 'حقل :attribute يجب أن يكون ملفًا.',
++
++    'min' => [
++        'numeric' => 'يجب ألا تقل قيمة :attribute عن :min.',
++        'file' => 'يجب ألا يقل حجم :attribute عن :min كيلوبايت.',
++        'string' => 'يجب ألا يقل عدد أحرف :attribute عن :min.',
++        'array' => 'يجب أن يحتوي :attribute على :min عناصر على الأقل.',
++    ],
++
++    'max' => [
++        'numeric' => 'يجب ألا تزيد قيمة :attribute عن :max.',
++        'file' => 'يجب ألا يزيد حجم :attribute عن :max كيلوبايت.',
++        'string' => 'يجب ألا يزيد عدد أحرف :attribute عن :max.',
++        'array' => 'يجب ألا يحتوي :attribute على أكثر من :max عناصر.',
++    ],
++
++    'exists' => 'القيمة المحددة لحقل :attribute غير موجودة.',
++    'unique' => 'قيمة حقل :attribute مُستخدمة من قبل.',
++    'in' => 'القيمة المحددة لحقل :attribute غير صالحة.',
++    'mimes' => 'يجب أن يكون :attribute ملفًا من نوع: :values.',
++    'after' => 'يجب أن يكون :attribute تاريخًا بعد :date.',
++
++    'attributes' => [
++        'email' => 'البريد الإلكتروني',
++        'password' => 'كلمة المرور',
++        'name' => 'الاسم',
++        'name_ar' => 'الاسم بالعربي',
++        'name_en' => 'الاسم بالإنجليزي',
++        'description_ar' => 'الوصف بالعربي',
++        'description_en' => 'الوصف بالإنجليزي',
++        'value_ar' => 'القيمة بالعربي',
++        'value_en' => 'القيمة بالإنجليزي',
++        'quote_ar' => 'الاقتباس بالعربي',
++        'quote_en' => 'الاقتباس بالإنجليزي',
++        'title_ar' => 'العنوان بالعربي',
++        'title_en' => 'العنوان بالإنجليزي',
++        'location_ar' => 'الموقع بالعربي',
++        'location_en' => 'الموقع بالإنجليزي',
++        'label_ar' => 'التسمية بالعربي',
++        'label_en' => 'التسمية بالإنجليزي',
++        'alt_ar' => 'النص البديل بالعربي',
++        'alt_en' => 'النص البديل بالإنجليزي',
++        'feature_ar' => 'الميزة بالعربي',
++        'feature_en' => 'الميزة بالإنجليزي',
++        'price' => 'السعر',
++        'price_starting_from' => 'السعر ابتداءً من',
++        'category_id' => 'التصنيف',
++        'image' => 'الصورة',
++        'logo' => 'الشعار',
++        'order' => 'الترتيب',
++        'city' => 'المدينة',
++        'phone' => 'رقم الهاتف',
++        'opening_time' => 'وقت الفتح',
++        'closing_time' => 'وقت الإغلاق',
++        'google_maps_url' => 'رابط خرائط جوجل',
++        'order_url' => 'رابط الطلب',
++        'status' => 'الحالة',
++        'role' => 'الصلاحية',
++        'event_date' => 'تاريخ المناسبة',
++        'guests_count' => 'عدد الضيوف',
++        'branch' => 'الفرع',
++        'event_type' => 'نوع المناسبة',
++        'budget_range' => 'نطاق الميزانية',
++        'notes' => 'ملاحظات',
++        'is_active' => 'الحالة',
++        'is_featured' => 'مميز',
++        'is_signature' => 'طبق مميز',
++        'settings' => 'الإعدادات',
++        'items' => 'العناصر',
++        'features' => 'الميزات',
++        'dishes' => 'الأطباق',
++        'page' => 'الصفحة',
++        'section' => 'القسم',
++        'key' => 'المفتاح',
++        'slug' => 'المعرّف',
++        'year' => 'السنة',
++    ],
++];
+diff --git a/routes/api.php b/routes/api.php
+index fa29f7c..719c6e7 100644
+--- a/routes/api.php
++++ b/routes/api.php
+@@ -1,11 +1,117 @@
+ <?php
+ 
++use App\Http\Controllers\Auth\AuthController;
++use App\Http\Controllers\BranchController;
++use App\Http\Controllers\Catering\CateringPackageController;
++use App\Http\Controllers\Catering\QuoteRequestController;
++use App\Http\Controllers\Catering\SampleMenuController;
++use App\Http\Controllers\CategoryController;
++use App\Http\Controllers\DeliveryAppController;
++use App\Http\Controllers\DishController;
++use App\Http\Controllers\MediaItemController;
++use App\Http\Controllers\PageContentController;
++use App\Http\Controllers\SettingController;
++use App\Http\Controllers\TestimonialController;
++use App\Http\Controllers\TimelineController;
++use App\Http\Controllers\UserController;
+ use Illuminate\Support\Facades\Route;
+ 
+-Route::middleware('check.api.key')->get('/v1/ping', function () {
+-    return response()->json([
+-        'success' => true,
+-        'message' => 'pong',
+-        'locale' => app()->getLocale(),
+-    ]);
++Route::prefix('v1')->group(function () {
++
++    // ── PUBLIC (X-API-Key) ──────────────────────────────────
++    Route::middleware('check.api.key')->group(function () {
++
++        Route::get('/ping', function () {
++            return response()->json([
++                'success' => true,
++                'message' => 'pong',
++                'locale' => app()->getLocale(),
++            ]);
++        });
++
++        // Content & Media (full CMS)
++        Route::get('page-contents', [PageContentController::class, 'index']);
++        Route::get('media-items', [MediaItemController::class, 'index']);
++        Route::get('settings', [SettingController::class, 'index']);
++
++        // Core data
++        Route::get('categories', [CategoryController::class, 'index']);
++        Route::get('dishes', [DishController::class, 'index']);
++        Route::get('dishes/{id}', [DishController::class, 'show']);
++        Route::get('branches', [BranchController::class, 'index']);
++        Route::get('catering/packages', [CateringPackageController::class, 'index']);
++        Route::get('catering/sample-menus', [SampleMenuController::class, 'index']);
++        Route::get('testimonials', [TestimonialController::class, 'index']);
++        Route::get('timeline', [TimelineController::class, 'index']);
++        Route::get('delivery-apps', [DeliveryAppController::class, 'index']);
++
++        // Public form submission
++        Route::post('catering/quote-requests', [QuoteRequestController::class, 'store']);
++    });
++
++    // ── AUTH ────────────────────────────────────────────────
++    Route::post('auth/login', [AuthController::class, 'login']);
++
++    Route::middleware('auth:sanctum')->group(function () {
++        Route::post('auth/logout', [AuthController::class, 'logout']);
++        Route::get('auth/me', [AuthController::class, 'me']);
++
++        // ── CMS (Page Content & Media) ───────────────────────
++        Route::get('page-contents/{id}', [PageContentController::class, 'show']);
++        Route::put('page-contents/{id}', [PageContentController::class, 'update']);
++        Route::post('page-contents/bulk', [PageContentController::class, 'bulkUpdate']);
++
++        Route::get('media-items/{id}', [MediaItemController::class, 'show']);
++        Route::post('media-items', [MediaItemController::class, 'store']);
++        Route::put('media-items/{id}', [MediaItemController::class, 'update']);
++        Route::delete('media-items/{id}', [MediaItemController::class, 'destroy']);
++
++        // ── Settings ─────────────────────────────────────────
++        Route::put('settings', [SettingController::class, 'bulkUpdate']);
++
++        // ── Core CRUD ────────────────────────────────────────
++        Route::post('categories', [CategoryController::class, 'store']);
++        Route::put('categories/{id}', [CategoryController::class, 'update']);
++        Route::delete('categories/{id}', [CategoryController::class, 'destroy']);
++
++        Route::post('dishes', [DishController::class, 'store']);
++        Route::put('dishes/{id}', [DishController::class, 'update']);
++        Route::delete('dishes/{id}', [DishController::class, 'destroy']);
++
++        Route::post('branches', [BranchController::class, 'store']);
++        Route::put('branches/{id}', [BranchController::class, 'update']);
++        Route::delete('branches/{id}', [BranchController::class, 'destroy']);
++
++        Route::post('catering/packages', [CateringPackageController::class, 'store']);
++        Route::put('catering/packages/{id}', [CateringPackageController::class, 'update']);
++        Route::delete('catering/packages/{id}', [CateringPackageController::class, 'destroy']);
++
++        Route::post('catering/sample-menus', [SampleMenuController::class, 'store']);
++        Route::put('catering/sample-menus/{id}', [SampleMenuController::class, 'update']);
++        Route::delete('catering/sample-menus/{id}', [SampleMenuController::class, 'destroy']);
++
++        // ── Quote Requests ───────────────────────────────────
++        Route::get('catering/quote-requests', [QuoteRequestController::class, 'index']);
++        Route::get('catering/quote-requests/{id}', [QuoteRequestController::class, 'show']);
++        Route::patch('catering/quote-requests/{id}/status', [QuoteRequestController::class, 'updateStatus']);
++
++        Route::post('testimonials', [TestimonialController::class, 'store']);
++        Route::put('testimonials/{id}', [TestimonialController::class, 'update']);
++        Route::delete('testimonials/{id}', [TestimonialController::class, 'destroy']);
++
++        Route::post('timeline', [TimelineController::class, 'store']);
++        Route::put('timeline/{id}', [TimelineController::class, 'update']);
++        Route::delete('timeline/{id}', [TimelineController::class, 'destroy']);
++
++        Route::post('delivery-apps', [DeliveryAppController::class, 'store']);
++        Route::put('delivery-apps/{id}', [DeliveryAppController::class, 'update']);
++        Route::delete('delivery-apps/{id}', [DeliveryAppController::class, 'destroy']);
++
++        // ── Users ────────────────────────────────────────────
++        Route::get('users', [UserController::class, 'index']);
++        Route::post('users', [UserController::class, 'store']);
++        Route::get('users/{id}', [UserController::class, 'show']);
++        Route::put('users/{id}', [UserController::class, 'update']);
++        Route::delete('users/{id}', [UserController::class, 'destroy']);
++    });
+ });
+diff --git a/tests/Feature/AdminApiTest.php b/tests/Feature/AdminApiTest.php
+new file mode 100644
+index 0000000..c2f485c
+--- /dev/null
++++ b/tests/Feature/AdminApiTest.php
+@@ -0,0 +1,63 @@
++<?php
++
++namespace Tests\Feature;
++
++use App\Models\User;
++use Illuminate\Foundation\Testing\RefreshDatabase;
++use Tests\TestCase;
++
++class AdminApiTest extends TestCase
++{
++    use RefreshDatabase;
++
++    protected function setUp(): void
++    {
++        parent::setUp();
++
++        $this->seed();
++    }
++
++    public function test_login_with_correct_credentials_returns_200_with_token(): void
++    {
++        $response = $this->postJson('/api/v1/auth/login', [
++            'email' => 'admin@abouelsid.com',
++            'password' => 'password',
++        ]);
++
++        $response->assertStatus(200)
++            ->assertJson(['success' => true])
++            ->assertJsonStructure(['data' => ['token', 'user' => ['id', 'name', 'email', 'role']]]);
++    }
++
++    public function test_login_with_wrong_password_returns_401(): void
++    {
++        $response = $this->postJson('/api/v1/auth/login', [
++            'email' => 'admin@abouelsid.com',
++            'password' => 'wrong-password',
++        ]);
++
++        $response->assertStatus(401)
++            ->assertJson(['success' => false]);
++    }
++
++    public function test_get_quote_requests_without_token_returns_401(): void
++    {
++        $response = $this->getJson('/api/v1/catering/quote-requests');
++
++        $response->assertStatus(401)
++            ->assertJson(['success' => false]);
++    }
++
++    public function test_get_quote_requests_with_token_returns_200(): void
++    {
++        $user = User::where('email', 'admin@abouelsid.com')->first();
++        $token = $user->createToken('test-token')->plainTextToken;
++
++        $response = $this->getJson('/api/v1/catering/quote-requests', [
++            'Authorization' => "Bearer {$token}",
++        ]);
++
++        $response->assertStatus(200)
++            ->assertJson(['success' => true]);
++    }
++}
+diff --git a/tests/Feature/PublicApiTest.php b/tests/Feature/PublicApiTest.php
+new file mode 100644
+index 0000000..cd1958c
+--- /dev/null
++++ b/tests/Feature/PublicApiTest.php
+@@ -0,0 +1,122 @@
++<?php
++
++namespace Tests\Feature;
++
++use App\Models\Category;
++use Illuminate\Foundation\Testing\RefreshDatabase;
++use Tests\TestCase;
++
++class PublicApiTest extends TestCase
++{
++    use RefreshDatabase;
++
++    protected function setUp(): void
++    {
++        parent::setUp();
++
++        $this->seed();
++    }
++
++    private function apiKey(): string
++    {
++        return env('WEBSITE_API_KEY');
++    }
++
++    public function test_get_dishes_with_correct_api_key_returns_200(): void
++    {
++        $response = $this->getJson('/api/v1/dishes', ['X-API-Key' => $this->apiKey()]);
++
++        $response->assertStatus(200)
++            ->assertJson(['success' => true])
++            ->assertJsonPath('data.meta.total', 5);
++    }
++
++    public function test_get_dishes_without_key_returns_401(): void
++    {
++        $response = $this->getJson('/api/v1/dishes');
++
++        $response->assertStatus(401)
++            ->assertJson(['success' => false]);
++    }
++
++    public function test_get_dishes_filtered_by_category_returns_only_that_categorys_dishes(): void
++    {
++        $mainsId = Category::where('slug', 'mains')->first()->id;
++
++        $response = $this->getJson("/api/v1/dishes?category_id={$mainsId}", ['X-API-Key' => $this->apiKey()]);
++
++        $response->assertStatus(200)
++            ->assertJsonPath('data.meta.total', 2);
++
++        foreach ($response->json('data.items') as $dish) {
++            $this->assertSame($mainsId, $dish['category']['id']);
++        }
++    }
++
++    public function test_get_branches_returns_two_branches_with_both_languages(): void
++    {
++        $response = $this->getJson('/api/v1/branches', ['X-API-Key' => $this->apiKey()]);
++
++        $response->assertStatus(200)
++            ->assertJsonCount(2, 'data');
++
++        $branch = $response->json('data.0');
++        $this->assertArrayHasKey('name_ar', $branch);
++        $this->assertArrayHasKey('name_en', $branch);
++    }
++
++    public function test_get_page_contents_for_home_hero_returns_hero_content(): void
++    {
++        $response = $this->getJson('/api/v1/page-contents?page=home&section=hero', ['X-API-Key' => $this->apiKey()]);
++
++        $response->assertStatus(200);
++
++        $data = $response->json('data');
++        $this->assertArrayHasKey('hero', $data);
++        $this->assertArrayHasKey('title', $data['hero']);
++        $this->assertSame('أبو السيد', $data['hero']['title']['value_ar']);
++    }
++
++    public function test_get_testimonials_returns_ten(): void
++    {
++        $response = $this->getJson('/api/v1/testimonials', ['X-API-Key' => $this->apiKey()]);
++
++        $response->assertStatus(200)
++            ->assertJsonCount(10, 'data');
++    }
++
++    public function test_submit_quote_request_with_valid_data_returns_201(): void
++    {
++        $response = $this->postJson('/api/v1/catering/quote-requests', [
++            'name' => 'نورة العتيبي',
++            'phone' => '0551234567',
++            'email' => 'noura@example.com',
++            'event_date' => now()->addMonth()->toDateString(),
++            'guests_count' => 150,
++            'branch' => 'jeddah_delivery',
++            'event_type' => 'wedding',
++            'budget_range' => '25k_50k',
++            'notes' => 'نريد قائمة مخصصة',
++        ], ['X-API-Key' => $this->apiKey()]);
++
++        $response->assertStatus(201)
++            ->assertJson(['success' => true]);
++
++        $this->assertDatabaseHas('quote_requests', ['phone' => '0551234567']);
++    }
++
++    public function test_submit_quote_request_with_missing_name_returns_422(): void
++    {
++        $response = $this->postJson('/api/v1/catering/quote-requests', [
++            'phone' => '0551234567',
++            'event_date' => now()->addMonth()->toDateString(),
++            'guests_count' => 150,
++            'branch' => 'jeddah_delivery',
++            'event_type' => 'wedding',
++        ], ['X-API-Key' => $this->apiKey()]);
++
++        $response->assertStatus(422)
++            ->assertJson(['success' => false, 'message' => 'Validation failed'])
++            ->assertJsonValidationErrors(['name']);
++    }
++}
