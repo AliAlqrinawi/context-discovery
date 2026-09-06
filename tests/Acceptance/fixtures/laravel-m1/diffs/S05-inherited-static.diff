@@ -1,0 +1,15 @@
+diff --git a/app/Repositories/PackageRepository.php b/app/Repositories/PackageRepository.php
+--- a/app/Repositories/PackageRepository.php
++++ b/app/Repositories/PackageRepository.php
+@@ -46,6 +46,11 @@
+         return $package->fresh('features');
+     }
+ 
++    public function newQuery(): object
++    {
++        return Package::query();
++    }
++
+     public function normalise(array $data): array
+     {
+         $data['slug'] = Str::slug($data['name']);

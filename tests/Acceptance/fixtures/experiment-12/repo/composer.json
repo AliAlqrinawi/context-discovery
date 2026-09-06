@@ -1,0 +1,6 @@
+{
+    "name": "context-discovery/fixture-experiment-12",
+    "description": "M12 · cross-file duplication. One changed file references six others in five different evidence states, so 'the declaring file is in the diff' can be separated from 'the declaration is in the diff'.",
+    "type": "project",
+    "autoload": { "psr-4": { "App\\": "app/" } }
+}

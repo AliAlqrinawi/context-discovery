@@ -1,0 +1,90 @@
+diff --git a/app/Consumer.php b/app/Consumer.php
+--- a/app/Consumer.php
++++ b/app/Consumer.php
+@@ -14,4 +14,20 @@
+     {
+         return 'unchanged';
+     }
++
++    public function exercise(string $input): array
++    {
++        return [
++            'created_member'  => NewService::run($input),        // M12.1
++            'visible_member'  => VisibleService::run($input),    // M12.2
++            'hidden_member'   => HiddenService::run($input),     // M12.3 / M12.4
++            'not_in_diff'     => Untouched::go(),                // M12.8 control
++            'noisy'           => Noisy::shout(),                 // M12.5
++        ];
++    }
++
++    public function surface(): ?NewService
++    {
++        return null;                                             // M12.1b — bare class, created file
++    }
+ }
+diff --git a/app/Services/NewService.php b/app/Services/NewService.php
+new file mode 100644
+index 0000000..1111111
+--- /dev/null
++++ b/app/Services/NewService.php
+@@ -0,0 +1,13 @@
++<?php
++
++namespace App\Services;
++
++class NewService
++{
++    public const MODE = 'new';
++
++    public static function run(string $input): string
++    {
++        return 'new:' . $input;
++    }
++}
+diff --git a/app/Services/VisibleService.php b/app/Services/VisibleService.php
+--- a/app/Services/VisibleService.php
++++ b/app/Services/VisibleService.php
+@@ -11,6 +11,6 @@
+ 
+     public static function run(string $input): string
+     {
+-        return 'visible:' . $input;
++        return 'visible!' . $input;
+     }
+ }
+diff --git a/app/Services/HiddenService.php b/app/Services/HiddenService.php
+--- a/app/Services/HiddenService.php
++++ b/app/Services/HiddenService.php
+@@ -26,6 +26,6 @@
+ 
+     public function touched(): string
+     {
+-        return 'original';
++        return 'changed';
+     }
+ }
+diff --git a/app/Services/Noisy.php b/app/Services/Noisy.php
+new file mode 100644
+index 0000000..1111111
+--- /dev/null
++++ b/app/Services/Noisy.php
+@@ -0,0 +1,19 @@
++<?php
++
++namespace App\Services;
++
++/**
++ * Docblock noise: NewService::run() and Untouched::go() are prose here.
++ *
++ * @see HiddenService::run()
++ */
++class Noisy
++{
++    public static function shout(): string
++    {
++        // Comment noise: VisibleService::run() and Untouched::go() are named here only.
++        $names = ['NewService::run', 'App\\Services\\Untouched::go', Noisy::class];
++
++        return implode(',', $names);
++    }
++}

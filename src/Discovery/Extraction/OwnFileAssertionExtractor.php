@@ -328,7 +328,12 @@ final class OwnFileAssertionExtractor implements RegionAssertionExtractor
     {
         $tokens = [];
 
-        foreach (@token_get_all('<?php ' . $code) as $token) {
+        // Text that already opens with `<?php` must not be given a second opening tag: the
+        // literal would re-tokenise as `<`, `?`, T_STRING(php), and the `?` then satisfies the
+        // `?Name` nullable-type rule — which is how the open tag became a class name (ADR-A018).
+        $opening = str_starts_with(ltrim($code), '<?php') ? '' : '<?php ';
+
+        foreach (@token_get_all($opening . $code) as $token) {
             $tokens[] = is_array($token)
                 ? ['id' => $token[0], 'text' => $token[1]]
                 : ['id' => null, 'text' => $token];

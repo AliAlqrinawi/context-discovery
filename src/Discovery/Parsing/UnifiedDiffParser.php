@@ -43,6 +43,7 @@ final class UnifiedDiffParser
         $path = null;
         $fileOpen = false;
         $sawStructure = false;
+        $isNew = false;
         $hunk = null;
 
         foreach ($lines as $line) {
@@ -68,10 +69,11 @@ final class UnifiedDiffParser
 
             if (str_starts_with($line, 'diff --git ')) {
                 if ($fileOpen) {
-                    $files[] = $this->toFile($path, $regions);
+                    $files[] = $this->toFile($path, $regions, $isNew);
                 }
                 $path = null;
                 $fileOpen = false;
+                $isNew = false;
                 $regions = [];
                 $sawStructure = true;
                 continue;
@@ -79,11 +81,15 @@ final class UnifiedDiffParser
 
             if (str_starts_with($line, '--- ')) {
                 if ($fileOpen) {
-                    $files[] = $this->toFile($path, $regions);
+                    $files[] = $this->toFile($path, $regions, $isNew);
                     $regions = [];
                     $fileOpen = false;
                 }
                 $path = $this->parsePath(substr($line, 4));
+                // `--- /dev/null` is the format's own statement that the file did not exist before.
+                // The old path is the only place it is said, so it is read here rather than inferred
+                // from the hunk header or from a `new file mode` line (ADR-A018).
+                $isNew = $path === null;
                 $sawStructure = true;
                 continue;
             }
@@ -109,7 +115,7 @@ final class UnifiedDiffParser
         }
 
         if ($fileOpen) {
-            $files[] = $this->toFile($path, $regions);
+            $files[] = $this->toFile($path, $regions, $isNew);
         }
 
         if ($files === [] && !$sawStructure && trim($diffText) !== '') {
@@ -237,7 +243,7 @@ final class UnifiedDiffParser
     /**
      * @param list<ChangedRegion> $regions
      */
-    private function toFile(?string $path, array $regions): ChangedFile
+    private function toFile(?string $path, array $regions, bool $isNew = false): ChangedFile
     {
         if ($path === null) {
             throw new InvalidArgumentException(
@@ -245,7 +251,7 @@ final class UnifiedDiffParser
             );
         }
 
-        return new ChangedFile($path, $regions, $this->membersIn($path, $regions));
+        return new ChangedFile($path, $regions, $this->membersIn($path, $regions), $isNew);
     }
 
     /**

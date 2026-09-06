@@ -1,0 +1,6 @@
+new file: app/Services/NewService.php — own-file context is in the diff, not fetched
+new file: app/Services/Noisy.php — own-file context is in the diff, not fetched
+already in the diff: App\Services\NewService::run declared in app/Services/NewService.php; not fetched again
+already in the diff: App\Services\VisibleService::run declared in app/Services/VisibleService.php; not fetched again
+already in the diff: App\Services\Noisy::shout declared in app/Services/Noisy.php; not fetched again
+already in the diff: App\Services\NewService declared in app/Services/NewService.php; not fetched again

@@ -1,0 +1,8 @@
+# Variant B needs a real `composer install` (see README.md §2). The framework source is never
+# committed to this repository: the fixture must exercise real Laravel behaviour, not a copy of it
+# that could drift from what Composer actually installs.
+#
+# composer.lock IS committed, for the same reason the project's own is (P8, determinism): the
+# fixture pins laravel/framework to an exact version, and the lock pins everything under it.
+repo-b-vendor-map/vendor/
+repo-c-vendor-installed/vendor/

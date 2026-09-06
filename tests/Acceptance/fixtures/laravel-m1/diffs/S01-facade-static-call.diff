@@ -1,0 +1,19 @@
+diff --git a/app/Repositories/PackageRepository.php b/app/Repositories/PackageRepository.php
+--- a/app/Repositories/PackageRepository.php
++++ b/app/Repositories/PackageRepository.php
+@@ -16,6 +16,15 @@
+     public function count(): int
+     {
+         return 0;
++    }
++
++    public function audit(string $action): void
++    {
++        Log::info('package.audit', ['action' => $action]);
++
++        DB::transaction(function () use ($action): void {
++            Log::info('package.audit.committed', ['action' => $action]);
++        });
+     }
+ 
+     public function store(array $data): Package

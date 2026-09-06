@@ -1,0 +1,393 @@
+{
+    "bundle_version": 1,
+    "budget_tokens": 8000,
+    "used_tokens": 1231,
+    "items": [
+        {
+            "lever": "fetched",
+            "reason": "the region uses php, which the file's use block does not import",
+            "assertion_kind": "same_file_symbol_absence",
+            "provenance": {
+                "path": "app/Http/Controllers/Admin/MenuPdfController.php",
+                "lines": [
+                    5,
+                    9
+                ]
+            },
+            "payload": "use App\\Http\\Controllers\\Controller;\nuse App\\Models\\Setting;\nuse Illuminate\\Http\\JsonResponse;\nuse Illuminate\\Http\\Request;\nuse Illuminate\\Support\\Facades\\Storage;",
+            "tokens": 41
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region uses php, which the file's use block does not import",
+            "assertion_kind": "same_file_symbol_absence",
+            "provenance": {
+                "path": "app/Http/Controllers/Admin/MenuPdfController.php",
+                "member": "SETTING_KEY",
+                "lines": [
+                    13,
+                    13
+                ]
+            },
+            "payload": "    private const SETTING_KEY = 'menu_pdf_path';",
+            "tokens": 12
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region uses php, which the file's use block does not import",
+            "assertion_kind": "same_file_symbol_absence",
+            "provenance": {
+                "path": "app/Services/MenuQrService.php",
+                "lines": [
+                    5,
+                    10
+                ]
+            },
+            "payload": "use App\\Models\\MediaItem;\nuse Endroid\\QrCode\\Builder\\Builder;\nuse Endroid\\QrCode\\Color\\Color;\nuse Endroid\\QrCode\\ErrorCorrectionLevel;\nuse Endroid\\QrCode\\Writer\\PngWriter;\nuse Illuminate\\Support\\Facades\\Storage;",
+            "tokens": 53
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region uses php, which the file's use block does not import",
+            "assertion_kind": "same_file_symbol_absence",
+            "provenance": {
+                "path": "app/Services/MenuQrService.php",
+                "member": "LOGO_RATIO",
+                "lines": [
+                    14,
+                    15
+                ]
+            },
+            "payload": "    /** Share of the QR width the logo may cover; beyond ~0.3 the code stops scanning. */\n    private const LOGO_RATIO = 0.25;",
+            "tokens": 32
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region uses php, which the file's use block does not import",
+            "assertion_kind": "same_file_symbol_absence",
+            "provenance": {
+                "path": "tests/Feature/MenuPdfTest.php",
+                "lines": [
+                    5,
+                    12
+                ]
+            },
+            "payload": "use App\\Models\\MediaItem;\nuse App\\Models\\Setting;\nuse App\\Models\\User;\nuse Illuminate\\Foundation\\Testing\\RefreshDatabase;\nuse Illuminate\\Http\\UploadedFile;\nuse Illuminate\\Support\\Facades\\Storage;\nuse Laravel\\Sanctum\\Sanctum;\nuse Tests\\TestCase;",
+            "tokens": 61
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region uses php, which the file's use block does not import",
+            "assertion_kind": "same_file_symbol_absence",
+            "provenance": {
+                "path": "tests/Feature/MenuPdfTest.php",
+                "member": "setUp",
+                "lines": [
+                    18,
+                    28
+                ]
+            },
+            "payload": "    protected function setUp(): void\n    {\n        parent::setUp();\n\n        Storage::fake('public');\n\n        Setting::create([\n            'key' => 'menu_pdf_path', 'value' => '', 'type' => 'text', 'group' => 'general',\n            'label_ar' => 'ملف قائمة الطعام PDF', 'label_en' => 'Menu PDF File',\n        ]);\n    }",
+            "tokens": 84
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region calls the sibling member payload, whose contract the diff does not show",
+            "assertion_kind": "same_file_reference",
+            "provenance": {
+                "path": "app/Http/Controllers/Admin/MenuPdfController.php",
+                "member": "payload",
+                "lines": [
+                    74,
+                    84
+                ]
+            },
+            "payload": "    private function payload(): array\n    {\n        $path = $this->storedPath();\n\n        return [\n            'has_pdf' => $path !== null && Storage::disk('public')->exists($path),\n            'permanent_url' => config('app.frontend_url').'/menu/pdf',\n            'qr_url' => route('menu.qr'),\n            'qr_download' => route('menu.qr.download'),\n        ];\n    }",
+            "tokens": 92
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region calls the sibling member storedPath, whose contract the diff does not show",
+            "assertion_kind": "same_file_reference",
+            "provenance": {
+                "path": "app/Http/Controllers/Admin/MenuPdfController.php",
+                "member": "storedPath",
+                "lines": [
+                    67,
+                    72
+                ]
+            },
+            "payload": "    private function storedPath(): ?string\n    {\n        $path = Setting::where('key', self::SETTING_KEY)->value('value');\n\n        return $path !== '' ? $path : null;\n    }",
+            "tokens": 44
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region calls the sibling member logoPath, whose contract the diff does not show",
+            "assertion_kind": "same_file_reference",
+            "provenance": {
+                "path": "app/Services/MenuQrService.php",
+                "member": "logoPath",
+                "lines": [
+                    38,
+                    50
+                ]
+            },
+            "payload": "    private function logoPath(): ?string\n    {\n        $logo = MediaItem::where('page', 'global')\n            ->where('section', 'brand')\n            ->where('key', 'logo_dark')\n            ->first();\n\n        if (! $logo?->path || ! Storage::disk('public')->exists($logo->path)) {\n            return null;\n        }\n\n        return Storage::disk('public')->path($logo->path);\n    }",
+            "tokens": 96
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region calls the sibling member actingAsAdmin, whose contract the diff does not show",
+            "assertion_kind": "same_file_reference",
+            "provenance": {
+                "path": "tests/Feature/MenuPdfTest.php",
+                "member": "actingAsAdmin",
+                "lines": [
+                    30,
+                    36
+                ]
+            },
+            "payload": "    private function actingAsAdmin(): void\n    {\n        Sanctum::actingAs(User::create([\n            'name' => 'Admin', 'email' => 'admin@example.com',\n            'password' => 'secret', 'role' => 'super_admin',\n        ]));\n    }",
+            "tokens": 58
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region calls the sibling member createLogoFixture, whose contract the diff does not show",
+            "assertion_kind": "same_file_reference",
+            "provenance": {
+                "path": "tests/Feature/MenuPdfTest.php",
+                "member": "createLogoFixture",
+                "lines": [
+                    143,
+                    153
+                ]
+            },
+            "payload": "    private function createLogoFixture(): string\n    {\n        $image = imagecreatetruecolor(225, 225);\n        imagefill($image, 0, 0, imagecolorallocate($image, 200, 40, 40));\n\n        $path = tempnam(sys_get_temp_dir(), 'logo').'.png';\n        imagepng($image, $path);\n        imagedestroy($image);\n\n        return $path;\n    }",
+            "tokens": 83
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region calls the sibling member pdf, whose contract the diff does not show",
+            "assertion_kind": "same_file_reference",
+            "provenance": {
+                "path": "tests/Feature/MenuPdfTest.php",
+                "member": "pdf",
+                "lines": [
+                    38,
+                    41
+                ]
+            },
+            "payload": "    private function pdf(string $name = 'menu.pdf'): UploadedFile\n    {\n        return UploadedFile::fake()->create($name, 120, 'application/pdf');\n    }",
+            "tokens": 39
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Models\\Setting::updateOrCreate, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Http/Controllers/Admin/MenuPdfController.php",
+                "member": "App\\Models\\Setting::updateOrCreate",
+                "lines": [
+                    1,
+                    85
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Models\\Setting::where, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Http/Controllers/Admin/MenuPdfController.php",
+                "member": "App\\Models\\Setting::where",
+                "lines": [
+                    1,
+                    85
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Models\\MediaItem::where, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Services/MenuQrService.php",
+                "member": "App\\Models\\MediaItem::where",
+                "lines": [
+                    1,
+                    51
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Services\\MenuQrService, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Services/MenuQrService.php",
+                "member": "LOGO_RATIO",
+                "lines": [
+                    14,
+                    15
+                ]
+            },
+            "payload": "    /** Share of the QR width the logo may cover; beyond ~0.3 the code stops scanning. */\n    private const LOGO_RATIO = 0.25;",
+            "tokens": 32
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Services\\MenuQrService, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Services/MenuQrService.php",
+                "member": "logoPath",
+                "lines": [
+                    38,
+                    50
+                ]
+            },
+            "payload": "    private function logoPath(): ?string\n    {\n        $logo = MediaItem::where('page', 'global')\n            ->where('section', 'brand')\n            ->where('key', 'logo_dark')\n            ->first();\n\n        if (! $logo?->path || ! Storage::disk('public')->exists($logo->path)) {\n            return null;\n        }\n\n        return Storage::disk('public')->path($logo->path);\n    }",
+            "tokens": 96
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Services\\MenuQrService, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Services/MenuQrService.php",
+                "member": "png",
+                "lines": [
+                    17,
+                    36
+                ]
+            },
+            "payload": "    public function png(int $size = 500): string\n    {\n        $arguments = [\n            'writer' => new PngWriter(),\n            'data' => rtrim(config('app.frontend_url'), '/').'/menu/pdf',\n            'errorCorrectionLevel' => ErrorCorrectionLevel::High,\n            'size' => $size,\n            'margin' => 10,\n            'foregroundColor' => new Color(26, 23, 0),\n            'backgroundColor' => new Color(246, 239, 223),\n        ];\n\n        if ($logoPath = $this->logoPath()) {\n            $arguments['logoPath'] = $logoPath;\n            $arguments['logoResizeToWidth'] = (int) round($size * self::LOGO_RATIO);\n            $arguments['logoPunchoutBackground'] = true;\n        }\n\n        return (new Builder(...$arguments))->build()->getString();\n    }",
+            "tokens": 190
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Models\\Setting::updateOrCreate, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "database/seeders/SettingSeeder.php",
+                "member": "App\\Models\\Setting::updateOrCreate",
+                "lines": [
+                    29,
+                    39
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Models\\Setting::where, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "routes/web.php",
+                "member": "App\\Models\\Setting::where",
+                "lines": [
+                    1,
+                    45
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Models\\MediaItem::create, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "tests/Feature/MenuPdfTest.php",
+                "member": "App\\Models\\MediaItem::create",
+                "lines": [
+                    1,
+                    154
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Models\\Setting::create, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "tests/Feature/MenuPdfTest.php",
+                "member": "App\\Models\\Setting::create",
+                "lines": [
+                    1,
+                    154
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Models\\Setting::where, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "tests/Feature/MenuPdfTest.php",
+                "member": "App\\Models\\Setting::where",
+                "lines": [
+                    1,
+                    154
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Models\\User::create, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "tests/Feature/MenuPdfTest.php",
+                "member": "App\\Models\\User::create",
+                "lines": [
+                    1,
+                    154
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region performs several persistence writes; whether a transaction wraps them is decided by the caller, which the diff does not show",
+            "assertion_kind": "unverifiable_premise",
+            "provenance": {
+                "path": "app/Http/Controllers/Admin/MenuPdfController.php",
+                "lines": [
+                    1,
+                    85
+                ]
+            },
+            "payload": "ASSUMPTION: this code assumes a surrounding transaction; caller not checked",
+            "tokens": 19
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region performs several persistence writes; whether a transaction wraps them is decided by the caller, which the diff does not show",
+            "assertion_kind": "unverifiable_premise",
+            "provenance": {
+                "path": "tests/Feature/MenuPdfTest.php",
+                "lines": [
+                    1,
+                    154
+                ]
+            },
+            "payload": "ASSUMPTION: this code assumes a surrounding transaction; caller not checked",
+            "tokens": 19
+        }
+    ],
+    "dropped": []
+}

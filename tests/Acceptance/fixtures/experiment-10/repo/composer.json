@@ -1,0 +1,12 @@
+{
+    "name": "context-discovery/fixture-experiment-10",
+    "description": "M10 · diagnostic truthfulness. Two project prefixes and one framework prefix, so the three states — no mapping, mapping without a file, file without the member — can each be produced deliberately.",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/",
+            "Acme\\Lib\\": "lib/",
+            "Illuminate\\": "vendor/laravel/framework/src/Illuminate/"
+        }
+    }
+}

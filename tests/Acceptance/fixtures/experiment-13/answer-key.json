@@ -1,0 +1,63 @@
+{
+  "experiment": "experiment-13",
+  "written": "2026-09-05, from the fixture sources, BEFORE the CLI was run (ADR-001 key-first)",
+  "question": "Does `Model::method()` carry enough evidence to request the model surface, and what boundary keeps that from becoming 'extract every Class::method()'?",
+  "the_trap": "Extracting a surface for every `Name::member` is NOT acceptable. The key states the wanted OUTCOME per case; the report then measures which candidate boundary produces it. The key does not name a boundary.",
+  "evidence_available_at_extraction": "Only the changed file's text and its `use` block. The extractor is handed (ChangedFile, ChangedRegion, fileText) and holds a MemberSlicer — no ClassLocator, no SourceRepository. So 'is this an Eloquent model?', 'is it project code?' and 'does the member exist?' are ALL unanswerable at extraction time. Any boundary that needs them must live at resolution.",
+  "budget_tokens": 8000,
+  "rows": [
+    {
+      "id": "G1.A", "case": "model reached only by a static call", "reference": "App\\Models\\Package::where",
+      "expected_items": "the Package SURFACE fetched (fillable, casts, scopeActive) + the existing flag for the unresolved member",
+      "why": "Experiment 1's earned move: 'The PlaidAccount model — resolves forItem, official_name, fillable/casts.' The diff mass-uses the model; whether those columns exist is off-diff and only the model settles it. Today it fires only when the class also appears in a `new`/type position, which real Laravel code does not do.",
+      "must_not": "must not be produced by matching the method name"
+    },
+    {
+      "id": "G1.B", "case": "create / updateOrCreate", "reference": "App\\Models\\Package::create, App\\Models\\Setting::updateOrCreate",
+      "expected_items": "surfaces of BOTH Package and Setting fetched + existing flags",
+      "why": "`create($data)` mass-assigns. `$fillable` is the contract being relied on and it is exactly what the surface carries. Setting is a second, independent model so the result cannot come from one lucky class."
+    },
+    {
+      "id": "G1.C", "case": "query()", "reference": "App\\Models\\Package::query",
+      "expected_items": "no ADDITIONAL surface — Package's surface is already requested by G1.A/B; the flag for ::query is unchanged",
+      "why": "Three references to one model must yield one surface, not three. De-duplication is already the extractor facade's job."
+    },
+    {
+      "id": "G1.D", "case": "the forms already accepted", "reference": "Widget via `new Widget()`, `Widget $widget`, `?Widget`",
+      "expected_items": "Widget surface fetched — UNCHANGED from today",
+      "why": "The control. Whatever boundary is chosen must not alter behaviour that Experiment 1 already earned."
+    },
+    {
+      "id": "G1.E", "case": "non-model project class, same member name", "reference": "App\\Services\\Registry::create",
+      "expected_items": "the `create` MEMBER slice only — NOT the surface",
+      "why": "THE TRAP ROW. `create` is Eloquent's most recognisable name, and Registry is an ordinary final class that declares it. The member resolves, so the minimal slice IS the member — the spec's 'ideally one method or class member' and Experiment 4's `PlaidClient::createLinkToken`, 'one method (the mode switch)'. Fetching `__construct` and `all` as well would be a new over-fetch.",
+      "must_not": "must not be classified from the method name, and must not gain a surface"
+    },
+    {
+      "id": "G1.F", "case": "unknown class", "reference": "App\\Contracts\\MissingGateway::resolve",
+      "expected_items": "exactly ONE flagged item, as today",
+      "why": "A boundary that also emits a bare-class assertion here would produce a SECOND flag for one reference — a new false positive, and a doubling of the noisiest item type in the bundle."
+    },
+    {
+      "id": "G1.G", "case": "framework facade", "reference": "Illuminate\\Support\\Facades\\Log::info",
+      "expected_items": "no item — M3's framework-known settlement, unchanged",
+      "why": "Preserved regardless of boundary. Note a bare-class assertion for Log would be settled by ADR-A012 as a dependency class, so it costs no item — but it does cost a second diagnostic line, which the report should count."
+    },
+    {
+      "id": "G1.H", "case": "lexical noise", "reference": "docblock, `@see`, line comment, string literals, `Package::class`",
+      "expected_items": "ZERO items from any of them",
+      "why": "The docblock names Package::where() and Log::info(); a comment names Package::create() and Setting::updateOrCreate(); the array holds 'Package::where', 'Package::create' and a `Package::class` constant. None is a reference."
+    },
+    {
+      "id": "G1.X", "case": "everything else", "reference": "-",
+      "expected_items": "bundle_version, schema, assertion kinds, premises, levers, provenance, priority bands and token accounting UNCHANGED",
+      "why": "M13 is an experiment. Nothing may move at all in this milestone."
+    }
+  ],
+  "candidate_boundaries_to_measure": {
+    "B0": "today — form 3 excludes the static-call position",
+    "B1": "form 3 as the FROZEN table words it — include the static-call position, unconditionally",
+    "B2": "B1, but only when the class resolves to project source (ADR-A012's ownership test)",
+    "B3": "surface requested only when the referenced member cannot be resolved in the class's own file — a resolution-time fallback, not an extraction change"
+  }
+}

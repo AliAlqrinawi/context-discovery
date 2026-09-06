@@ -1,0 +1,80 @@
+{
+  "experiment": "experiment-09",
+  "written": "2026-09-05, from the fixture sources, BEFORE the CLI was run (ADR-001 key-first)",
+  "question": "At the moment resolution gives up, which facts are in hand — and do any of them separate a member the framework really supplies from one that does not exist at all?",
+  "facts_available_at_that_moment": [
+    "1. whether a PSR-4 prefix covers the class name",
+    "2. whether the file that prefix points at exists",
+    "3. whether that path is project source or a dependency's (ADR-A012)",
+    "4. the full text of that one file",
+    "5. whether the member is declared in it",
+    "6. whether `scope<Name>` is declared in it (ADR-A011)",
+    "7. whether the file declares a class extending Illuminate\\Support\\Facades\\Facade and carries a matching `@method static` tag (ADR-A011)"
+  ],
+  "deliberately_unavailable": "anything in a second file — the parent, a trait, Eloquent\\Builder, Query\\Builder (ADR-A010, reaffirmed by ADR-A015)",
+  "budget_tokens": 8000,
+  "rows": [
+    {
+      "id": "OQ6.1", "subject": "App\\Support\\Helper::run", "expected": "FETCH",
+      "evidence": "fact 5 — the member is declared at app/Support/Helper.php",
+      "why": "The control. This is the fetch-collaborator move working."
+    },
+    {
+      "id": "OQ6.2", "subject": "App\\Support\\Helper::nope", "expected": "FLAG",
+      "evidence": "facts 1,2,4 hold; fact 5 fails — class placed and read, member absent",
+      "why": "Genuinely unresolved. The flag is correct and must survive any OQ6 rule."
+    },
+    {
+      "id": "OQ6.3", "subject": "App\\Models\\Package::create", "expected": "OMIT (ideal) / FLAG (safe)",
+      "evidence": "facts 1,2,3,4 hold; fact 5 fails; fact 6 fails (no scopeCreate); fact 7 fails (not a facade)",
+      "why": "A Laravel reviewer needs nothing here, so OMIT is the ideal outcome. But the tool may only reach it if some available fact PROVES the member exists. The decisive test is whether this row's facts differ from OQ6.4's. If they do not, FLAG is the only safe answer and OQ6 fails for this shape.",
+      "decides": "H2 and H3"
+    },
+    {
+      "id": "OQ6.4", "subject": "App\\Models\\Package::activatte", "expected": "FLAG",
+      "evidence": "identical to OQ6.3 in every one of facts 1-7",
+      "why": "THE GUARD. A typo against an Eloquent model. If any rule settles OQ6.3 it must not settle this — and if the two rows are fact-identical, no rule can tell them apart.",
+      "non_negotiable": true
+    },
+    {
+      "id": "OQ6.5", "subject": "App\\Ghost\\Missing::create", "expected": "FLAG",
+      "evidence": "fact 1 holds (App\\ covers it), fact 2 fails — the file is absent",
+      "why": "Unknown class wearing a known-looking member name. Note this differs from OQ6.2 and OQ6.4 in fact 2, which is the one distinction the existing evidence CAN make."
+    },
+    {
+      "id": "OQ6.6", "subject": "App\\Support\\Helper::slug", "expected": "FETCH",
+      "evidence": "fact 5 — declared at app/Support/Helper.php",
+      "why": "A project member with Laravel's most recognisable helper name. Ownership decides, never the name. Must not become framework-known."
+    },
+    {
+      "id": "OQ6.7", "subject": "Illuminate\\Support\\Facades\\Log::info", "expected": "OMIT",
+      "evidence": "fact 7 — Log.php declares `class Log extends Facade` and carries `@method static void info(...)`",
+      "why": "M3/M5 behaviour, unchanged. This row exists to show what a PROVEN framework member looks like: a positive, in-file, machine-readable fact. OQ6.3 has no equivalent."
+    },
+    {
+      "id": "OQ6.8", "subject": "App\\Models\\Package::totallyUnknownThing", "expected": "FLAG",
+      "evidence": "identical to OQ6.3 and OQ6.4",
+      "why": "A third fact-identical row. Three references, one set of facts, three different correct answers — which is the proof that the facts are insufficient."
+    },
+    {
+      "id": "OQ6.C1", "subject": "Helper::Run (capitalisation)", "expected": "FLAG",
+      "evidence": "fact 5 fails — the slicer matches the declared name exactly",
+      "why": "Lexical control. PHP resolves method names case-insensitively at runtime; the tool does not, and must not start guessing."
+    },
+    {
+      "id": "OQ6.C2", "subject": "Package::create / Log::info in a comment and a docblock", "expected": "OMIT",
+      "evidence": "tokens skip T_COMMENT and T_DOC_COMMENT",
+      "why": "Lexical control."
+    },
+    {
+      "id": "OQ6.C3", "subject": "'Package::create' as a string literal", "expected": "OMIT",
+      "evidence": "T_CONSTANT_ENCAPSED_STRING is never T_STRING",
+      "why": "Lexical control."
+    },
+    {
+      "id": "OQ6.C4", "subject": "Package::class", "expected": "OMIT",
+      "evidence": "the extractor skips `Foo::class` — it names no member contract",
+      "why": "Lexical control."
+    }
+  ]
+}

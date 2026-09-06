@@ -1,0 +1,17 @@
+diff --git a/app/Repositories/PackageRepository.php b/app/Repositories/PackageRepository.php
+--- a/app/Repositories/PackageRepository.php
++++ b/app/Repositories/PackageRepository.php
+@@ -58,6 +58,13 @@
+         return Arr::only($data, ['name', 'slug', 'price']);
+     }
+ 
++    public function labelled(): Registry
++    {
++        Package::active()->get();
++
++        return Registry::create(['catering' => 'Catering']);
++    }
++
+     public function reconcile(string $reference): void
+     {
+         MissingGateway::resolve($reference);

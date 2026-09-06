@@ -1,0 +1,142 @@
+{
+    "bundle_version": 1,
+    "budget_tokens": 8000,
+    "used_tokens": 239,
+    "items": [
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Ghost\\Missing::create, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Consumer.php",
+                "member": "App\\Ghost\\Missing::create",
+                "lines": [
+                    13,
+                    39
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Models\\Package::activatte, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Consumer.php",
+                "member": "App\\Models\\Package::activatte",
+                "lines": [
+                    13,
+                    39
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Models\\Package::create, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Consumer.php",
+                "member": "App\\Models\\Package::create",
+                "lines": [
+                    13,
+                    39
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Models\\Package::totallyUnknownThing, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Consumer.php",
+                "member": "App\\Models\\Package::totallyUnknownThing",
+                "lines": [
+                    13,
+                    39
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Support\\Helper::Run, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Consumer.php",
+                "member": "App\\Support\\Helper::Run",
+                "lines": [
+                    13,
+                    39
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Support\\Helper::nope, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Consumer.php",
+                "member": "App\\Support\\Helper::nope",
+                "lines": [
+                    13,
+                    39
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Support\\Helper::run, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Support/Helper.php",
+                "member": "run",
+                "lines": [
+                    7,
+                    11
+                ]
+            },
+            "payload": "    /** Declared here. The control for \"the member really is in this file\". */\n    public static function run(string $input): string\n    {\n        return trim($input);\n    }",
+            "tokens": 44
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Support\\Helper::slug, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Support/Helper.php",
+                "member": "slug",
+                "lines": [
+                    13,
+                    17
+                ]
+            },
+            "payload": "    /** A project member whose name is one of Laravel's most recognisable. Ownership decides. */\n    public static function slug(string $title): string\n    {\n        return strtolower(str_replace(' ', '-', $title));\n    }",
+            "tokens": 56
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region performs several persistence writes; whether a transaction wraps them is decided by the caller, which the diff does not show",
+            "assertion_kind": "unverifiable_premise",
+            "provenance": {
+                "path": "app/Consumer.php",
+                "lines": [
+                    13,
+                    39
+                ]
+            },
+            "payload": "ASSUMPTION: this code assumes a surrounding transaction; caller not checked",
+            "tokens": 19
+        }
+    ],
+    "dropped": []
+}

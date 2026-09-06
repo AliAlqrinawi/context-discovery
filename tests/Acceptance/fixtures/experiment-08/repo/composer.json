@@ -1,0 +1,6 @@
+{
+    "name": "context-discovery/fixture-experiment-08",
+    "description": "M8 · one question per class: where is a referenced member declared, and how many files must be opened to find out. No framework and no vendor directory — the PHP-inheritance question is separated from the Laravel dynamic-dispatch question on purpose (M8 Phase 5).",
+    "type": "project",
+    "autoload": { "psr-4": { "App\\": "app/" } }
+}

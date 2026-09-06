@@ -1,0 +1,112 @@
+{
+    "bundle_version": 1,
+    "budget_tokens": 8000,
+    "used_tokens": 143,
+    "items": [
+        {
+            "lever": "flagged",
+            "reason": "the region depends on Acme\\Lib\\Thing::make, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Consumer.php",
+                "member": "Acme\\Lib\\Thing::make",
+                "lines": [
+                    16,
+                    32
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Foo\\Bar\\Deep::go, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Consumer.php",
+                "member": "App\\Foo\\Bar\\Deep::go",
+                "lines": [
+                    16,
+                    32
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Ghost\\Missing::create, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Consumer.php",
+                "member": "App\\Ghost\\Missing::create",
+                "lines": [
+                    16,
+                    32
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Models\\Package::activatte, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Consumer.php",
+                "member": "App\\Models\\Package::activatte",
+                "lines": [
+                    16,
+                    32
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on MissingNamespace\\Ghost::create, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Consumer.php",
+                "member": "MissingNamespace\\Ghost::create",
+                "lines": [
+                    16,
+                    32
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Support\\Helper::run, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Support/Helper.php",
+                "member": "run",
+                "lines": [
+                    7,
+                    10
+                ]
+            },
+            "payload": "    public static function run(string $input): string\n    {\n        return trim($input);\n    }",
+            "tokens": 24
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region performs several persistence writes; whether a transaction wraps them is decided by the caller, which the diff does not show",
+            "assertion_kind": "unverifiable_premise",
+            "provenance": {
+                "path": "app/Consumer.php",
+                "lines": [
+                    16,
+                    32
+                ]
+            },
+            "payload": "ASSUMPTION: this code assumes a surrounding transaction; caller not checked",
+            "tokens": 19
+        }
+    ],
+    "dropped": []
+}

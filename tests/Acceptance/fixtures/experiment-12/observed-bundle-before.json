@@ -1,0 +1,113 @@
+{
+    "bundle_version": 1,
+    "budget_tokens": 8000,
+    "used_tokens": 194,
+    "items": [
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Services\\HiddenService::run, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Services/HiddenService.php",
+                "member": "run",
+                "lines": [
+                    7,
+                    10
+                ]
+            },
+            "payload": "    public static function run(string $input): string\n    {\n        return 'hidden:' . $input;\n    }",
+            "tokens": 25
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Services\\NewService, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Services/NewService.php",
+                "member": "MODE",
+                "lines": [
+                    7,
+                    7
+                ]
+            },
+            "payload": "    public const MODE = 'new';",
+            "tokens": 8
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Services\\NewService::run, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Services/NewService.php",
+                "member": "run",
+                "lines": [
+                    9,
+                    12
+                ]
+            },
+            "payload": "    public static function run(string $input): string\n    {\n        return 'new:' . $input;\n    }",
+            "tokens": 25
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Services\\NewService, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Services/NewService.php",
+                "member": "run",
+                "lines": [
+                    9,
+                    12
+                ]
+            },
+            "payload": "    public static function run(string $input): string\n    {\n        return 'new:' . $input;\n    }",
+            "tokens": 25
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Services\\Noisy::shout, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Services/Noisy.php",
+                "member": "shout",
+                "lines": [
+                    12,
+                    18
+                ]
+            },
+            "payload": "    public static function shout(): string\n    {\n        // Comment noise: VisibleService::run() and Untouched::go() are named here only.\n        $names = ['NewService::run', 'App\\\\Services\\\\Untouched::go', Noisy::class];\n\n        return implode(',', $names);\n    }",
+            "tokens": 67
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Services\\Untouched::go, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Services/Untouched.php",
+                "member": "go",
+                "lines": [
+                    7,
+                    10
+                ]
+            },
+            "payload": "    public static function go(): string\n    {\n        return 'go';\n    }",
+            "tokens": 18
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Services\\VisibleService::run, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Services/VisibleService.php",
+                "member": "run",
+                "lines": [
+                    12,
+                    15
+                ]
+            },
+            "payload": "    public static function run(string $input): string\n    {\n        return 'visible!' . $input;\n    }",
+            "tokens": 26
+        }
+    ],
+    "dropped": []
+}

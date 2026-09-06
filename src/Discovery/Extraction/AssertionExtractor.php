@@ -19,6 +19,17 @@ use ContextDiscovery\Ports\SourceRepository;
  * A changed file whose current text cannot be read yields no assertions: a deleted file has no
  * current text, which is correct rather than missing. The pipeline reports unreadable paths on
  * stderr.
+ *
+ * Two things are gated here rather than inside each extractor, because both are facts about the
+ * *file* and every extractor would otherwise have to re-derive them (ADR-A018):
+ *
+ * - a file that is not PHP is not read as PHP. `menu:\n  label: Menu` tokenises into identifiers
+ *   like any other text, and `: Menu` satisfies the return-type rule, so a YAML file was producing
+ *   assertions about classes named `Menu`;
+ * - a file the diff **created** yields no own-file assertions. Every line of it is an added line, so
+ *   its `use` block, its enclosing member and its siblings are already in front of the reviewer, and
+ *   fetching them hands the diff back as context (ADR-A005). Its *external* references are extracted
+ *   exactly as before — a new file may certainly pull context, just not its own.
  */
 final class AssertionExtractor
 {
@@ -38,6 +49,10 @@ final class AssertionExtractor
         $seen = [];
 
         foreach ($diff->files as $file) {
+            if (!$file->isPhp()) {
+                continue;
+            }
+
             $text = $source->text($file->path);
 
             if ($text === null) {
@@ -46,6 +61,10 @@ final class AssertionExtractor
 
             foreach ($file->regions as $region) {
                 foreach ($this->extractors as $extractor) {
+                    if ($file->isNew && $extractor instanceof OwnFileAssertionExtractor) {
+                        continue;
+                    }
+
                     foreach ($extractor->forRegion($file, $region, $text) as $assertion) {
                         $key = sprintf(
                             '%s|%s|%s|%d',

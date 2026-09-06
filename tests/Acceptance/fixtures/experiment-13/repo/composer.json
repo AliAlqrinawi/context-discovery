@@ -1,0 +1,6 @@
+{
+    "name": "context-discovery/fixture-experiment-13",
+    "description": "M13 · G1. Three Laravel models used ONLY through static calls, one model used through the forms the extractor already accepts, one non-model project class with an identically named static, one unknown class and one facade — so 'reached by Model::method()' can be separated from 'is a model', 'is project code' and 'exists at all'.",
+    "type": "project",
+    "autoload": { "psr-4": { "App\\": "app/", "Illuminate\\": "vendor/laravel/framework/src/Illuminate/" } }
+}

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ContextDiscovery\Tests\Unit\Discovery\Resolution;
 
+use ContextDiscovery\Discovery\Framework\LaravelFrameworkKnowledge;
 use ContextDiscovery\Adapters\Php\TokenizerMemberSlicer;
 use ContextDiscovery\Discovery\Resolution\NamedReferenceResolver;
 use ContextDiscovery\Domain\Assertion\Assertion;
@@ -132,7 +133,7 @@ final class NamedReferenceResolverTest extends TestCase
             }
         };
 
-        $resolver = new NamedReferenceResolver($this->locator(), $this->source(), $spy);
+        $resolver = new NamedReferenceResolver($this->locator(), $this->source(), $spy, new LaravelFrameworkKnowledge());
 
         $resolver->resolve($this->assertion('App\Models\PlaidAccount::forItem'));
         $resolver->resolve($this->assertion('App\Models\PlaidAccount'));
@@ -183,7 +184,7 @@ final class NamedReferenceResolverTest extends TestCase
 
     private function resolver(): NamedReferenceResolver
     {
-        return new NamedReferenceResolver($this->locator(), $this->source(), new TokenizerMemberSlicer());
+        return new NamedReferenceResolver($this->locator(), $this->source(), new TokenizerMemberSlicer(), new LaravelFrameworkKnowledge());
     }
 
     private function locator(): FakeClassLocator

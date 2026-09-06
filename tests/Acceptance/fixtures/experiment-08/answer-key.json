@@ -1,0 +1,70 @@
+{
+  "experiment": "experiment-08",
+  "written": "2026-09-05, from the fixture sources, BEFORE the CLI was run",
+  "question": "Where is a referenced member declared, how many files must be opened to establish that, and by which mechanism — asked once per mechanism, with the framework question deliberately excluded.",
+  "budget_tokens": 8000,
+  "rows": [
+    {
+      "id": "X8.1", "subject": "App\\Support\\Direct::run", "mechanism": "declared directly",
+      "hops": 1, "declared_at": "app/Support/Direct.php",
+      "expected": "FETCH",
+      "why": "The control. One file beyond the changed one, the member is there, and this is the fetch-collaborator move exactly as Experiment 4 earned it."
+    },
+    {
+      "id": "X8.2", "subject": "App\\Support\\Direct::slug", "mechanism": "declared directly, framework-sounding name",
+      "hops": 1, "declared_at": "app/Support/Direct.php",
+      "expected": "FETCH",
+      "why": "Ownership decides, never the name. `slug` is the project's, so it is fetched like any other project member — the guard M5 built, restated here as a control."
+    },
+    {
+      "id": "X8.3", "subject": "App\\Support\\OneLevel::run", "mechanism": "inherited once (extends)",
+      "hops": 2, "declared_at": "app/Support/Direct.php via OneLevel extends Direct",
+      "expected": "FETCH",
+      "why": "PHP guarantees OneLevel::run() resolves to Direct::run(). A reviewer asking what the call does needs that body, and it is project code. This is ADR-A010's own minimal case (S05) in project form.",
+      "blocked_by": "ADR-A010 D2 — one file beyond the changed file."
+    },
+    {
+      "id": "X8.4", "subject": "App\\Support\\TwoLevel::run", "mechanism": "inherited twice",
+      "hops": 3, "declared_at": "app/Support/Direct.php via TwoLevel -> OneLevel -> Direct",
+      "expected": "FLAG",
+      "why": "Deliberately NOT FETCH. Two intermediate files is where a bounded hop stops being bounded, and no evidence asks for it. A flag is the honest output; this row exists to define the far side of any boundary M8 might draw."
+    },
+    {
+      "id": "X8.5", "subject": "App\\Support\\WithTrait::greet", "mechanism": "trait applied on the class itself",
+      "hops": 2, "declared_at": "app/Support/Greeter.php via WithTrait use Greeter",
+      "expected": "FETCH",
+      "why": "Same distance as X8.3 by a different language construct, and equally guaranteed by PHP. If a boundary admits one it should admit the other, or the rule keys on syntax rather than on distance.",
+      "blocked_by": "ADR-A010 D2."
+    },
+    {
+      "id": "X8.6", "subject": "App\\Support\\ViaParent::greet", "mechanism": "trait applied on the PARENT (the E5.4 shape)",
+      "hops": 3, "declared_at": "app/Support/Greeter.php via ViaParent -> Controllerish -> Greeter",
+      "expected": "FLAG",
+      "why": "THE ROW THE TRIGGER IS ABOUT. This is `MenuPdfController -> Controller -> ApiResponse::success` exactly: an abstract parent that declares nothing and applies a trait. It is THREE files from the changed one, so even a one-hop relaxation does not reach it. Expected FLAG, and the answer key records that a flag here is a loss the reviewer feels."
+    },
+    {
+      "id": "X8.7", "subject": "App\\Support\\Dynamic::create", "mechanism": "dynamic dispatch (__callStatic)",
+      "hops": null, "declared_at": "nowhere — it exists only at runtime",
+      "expected": "FLAG",
+      "why": "Eloquent's shape without Laravel. No file declares `create`; no traversal of any depth finds it. This is the control proving that the depth boundary is not what blocks G2 — nothing is there to reach."
+    },
+    {
+      "id": "X8.8", "subject": "App\\Support\\Direct::nope", "mechanism": "unknown member",
+      "hops": null, "declared_at": "nowhere",
+      "expected": "FLAG",
+      "why": "Must remain flagged. The class is placed and read; the member genuinely is not there."
+    },
+    {
+      "id": "X8.9", "subject": "App\\Support\\Direct::runn", "mechanism": "typo against a real member",
+      "hops": null, "declared_at": "nowhere",
+      "expected": "FLAG",
+      "why": "The silent-omission guard, restated. Any rule that settles X8.3 must not settle this."
+    },
+    {
+      "id": "X8.10", "subject": "$this->instanceGreet(...)", "mechanism": "inherited member called on $this",
+      "hops": 3, "declared_at": "app/Support/Greeter.php",
+      "expected": "FLAG",
+      "why": "G5's true shape. The reviewer needs the contract, and today the tool emits NOTHING — no item, no diagnostic. P10 rates a silent omission worse than a flag, so the key asks for at least a flag. Note the blocker here is EXTRACTION, not depth: no assertion is formed at all, so relaxing the depth bound would change nothing."
+    }
+  ]
+}

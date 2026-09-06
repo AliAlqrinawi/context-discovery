@@ -1,0 +1,75 @@
+{
+  "experiment": "experiment-10",
+  "written": "2026-09-05, from the fixture sources, BEFORE the CLI was run (ADR-001 key-first)",
+  "question": "The tool can be in three distinct states when it cannot settle a named reference. It reports two of them with one message, and that message is false for one of them. What is the smallest set of exactly-true messages?",
+  "states": {
+    "A": "no PSR-4 prefix covers the class name",
+    "B": "a prefix covers it, but no file is there",
+    "C": "the file is there, but the member is not declared in it"
+  },
+  "scope": "stderr diagnostic text only. No bundle item, lever, premise, provenance, assertion kind, ordering or token count may change in any row.",
+  "expected_messages": {
+    "A": "missing PSR-4 entry: <subject> named in <path>   — UNCHANGED; it is already true of this state",
+    "B": "class file not found: <subject> named in <path>  — NEW; the only message this milestone adds",
+    "C": "unresolved named_reference: <subject> in <path>  — UNCHANGED"
+  },
+  "why_not_one_message": "Collapsing A and B into a single vague message would fix the falsity by discarding attribution — the move ADR-A009 rejects for premises ('losing which lookup failed'). A is already reported truthfully; only B is wrong, so only B changes.",
+  "rows": [
+    {
+      "id": "M10.1", "subject": "App\\Ghost\\Missing::create", "state": "B",
+      "current_diagnostic": "missing PSR-4 entry",
+      "expected_diagnostic": "class file not found",
+      "expected_bundle": "flagged named_reference, unresolved-reference premise — UNCHANGED",
+      "why": "`App\\` is mapped to app/. The entry exists; app/Ghost/Missing.php does not. The current message asserts the opposite of the truth."
+    },
+    {
+      "id": "M10.2", "subject": "MissingNamespace\\Ghost::create", "state": "A",
+      "current_diagnostic": "missing PSR-4 entry",
+      "expected_diagnostic": "missing PSR-4 entry",
+      "expected_bundle": "flagged named_reference — UNCHANGED",
+      "why": "No prefix covers MissingNamespace\\. The existing message is exactly true here and must not change."
+    },
+    {
+      "id": "M10.3", "subject": "App\\Support\\Helper::run", "state": "resolved",
+      "current_diagnostic": "none",
+      "expected_diagnostic": "none",
+      "expected_bundle": "fetched named_reference, slice of Helper::run — UNCHANGED",
+      "why": "Mapped and present. No diagnostic of any kind."
+    },
+    {
+      "id": "M10.4", "subject": "Acme\\Lib\\Thing::make", "state": "B",
+      "current_diagnostic": "missing PSR-4 entry",
+      "expected_diagnostic": "class file not found",
+      "expected_bundle": "flagged named_reference — UNCHANGED",
+      "why": "A second, differently-shaped prefix (Acme\\Lib\\ -> lib/). Proves the rule reads the prefix set rather than assuming App\\."
+    },
+    {
+      "id": "M10.5", "subject": "App\\Foo\\Bar\\Deep::go", "state": "B",
+      "current_diagnostic": "missing PSR-4 entry",
+      "expected_diagnostic": "class file not found",
+      "expected_bundle": "flagged named_reference — UNCHANGED",
+      "why": "Deeply nested under a mapped prefix. Must not be mistaken for a missing prefix just because the namespace is long."
+    },
+    {
+      "id": "M10.6", "subject": "App\\Models\\Package::activatte", "state": "C",
+      "current_diagnostic": "unresolved named_reference",
+      "expected_diagnostic": "unresolved named_reference",
+      "expected_bundle": "flagged named_reference — UNCHANGED",
+      "why": "The class is mapped AND present; only the member is absent. This is a different state and keeps its own message. The typo guard stays intact."
+    },
+    {
+      "id": "M10.7", "subject": "any row above", "state": "all",
+      "current_diagnostic": "-",
+      "expected_diagnostic": "-",
+      "expected_bundle": "assertion_kind, lever, premise text, provenance, ordering and tokens identical to before",
+      "why": "Only stderr wording moves. Anything else changing is a defect in this milestone."
+    },
+    {
+      "id": "M10.8", "subject": "Illuminate\\Support\\Facades\\Log::info", "state": "framework-known",
+      "current_diagnostic": "framework reference: ... (@method static ...)",
+      "expected_diagnostic": "framework reference: ... (@method static ...)",
+      "expected_bundle": "no item — UNCHANGED",
+      "why": "M3/M5/M9 behaviour. A diagnostic change must not disturb the settled path."
+    }
+  ]
+}

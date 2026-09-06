@@ -1,0 +1,2 @@
+new file: app/Services/NewService.php — own-file context is in the diff, not fetched
+new file: app/Services/Noisy.php — own-file context is in the diff, not fetched

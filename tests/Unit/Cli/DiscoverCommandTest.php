@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ContextDiscovery\Tests\Unit\Cli;
 
+use ContextDiscovery\Discovery\Framework\LaravelFrameworkKnowledge;
 use ContextDiscovery\Adapters\Php\TokenizerMemberSlicer;
 use ContextDiscovery\Adapters\Serialization\JsonBundleWriter;
 use ContextDiscovery\Adapters\Serialization\MarkdownBundleWriter;
@@ -142,7 +143,7 @@ final class DiscoverCommandTest extends TestCase
             new LeverPolicy(),
             $locator,
             new OwnFileResolver($source, $slicer),
-            new NamedReferenceResolver($locator, $source, $slicer),
+            new NamedReferenceResolver($locator, $source, $slicer, new LaravelFrameworkKnowledge()),
             new CallerResolver(new ScopedGrepCallSiteSearch($source), $source, 'app/', 20),
             new AssumptionWriter(),
             new BundleAssembler(new TokenEstimate()),

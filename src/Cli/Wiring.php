@@ -20,6 +20,7 @@ use ContextDiscovery\Discovery\Extraction\NamedReferenceAssertionExtractor;
 use ContextDiscovery\Discovery\Extraction\OwnFileAssertionExtractor;
 use ContextDiscovery\Discovery\Extraction\UnverifiablePremiseAssertionExtractor;
 use ContextDiscovery\Discovery\Flagging\AssumptionWriter;
+use ContextDiscovery\Discovery\Framework\LaravelFrameworkKnowledge;
 use ContextDiscovery\Discovery\Lever\LeverPolicy;
 use ContextDiscovery\Discovery\Parsing\UnifiedDiffParser;
 use ContextDiscovery\Discovery\Resolution\CallerResolver;
@@ -68,7 +69,10 @@ final class Wiring
             new LeverPolicy(),
             $locator,
             new OwnFileResolver($source, $slicer),
-            new NamedReferenceResolver($locator, $source, $slicer),
+            // The one place a framework is chosen. Every other class in Discovery names the
+            // `FrameworkKnowledge` interface and no framework symbol; another framework changes
+            // this line and nothing else.
+            new NamedReferenceResolver($locator, $source, $slicer, new LaravelFrameworkKnowledge()),
             new CallerResolver(
                 new ScopedGrepCallSiteSearch($source),
                 $source,

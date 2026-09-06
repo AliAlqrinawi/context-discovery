@@ -1,0 +1,12 @@
+BOUNDARY                                     added   slices    tokens   what each added class becomes
+B0 - today                                   0       0         0        -
+B1 - frozen form 3, unconditional            5       7         135      Package(+3) Setting(+1) Registry(+3) MissingGateway EXTRA-FLAG Log settled(no item)
+B2 - B1, project source only                 3       7         135      Package(+3) Setting(+1) Registry(+3)
+B3 - only when the member does not resolve   4       4         70       Package(+3) Setting(+1) MissingGateway EXTRA-FLAG Log settled(no item)
+B4 - placeable AND project AND member unresolved 2       4         70       Package(+3) Setting(+1)
+BOUNDARY                                     added   slices    tokens   what each added class becomes
+B0 - today                                   0       0         0        -
+B1 - frozen form 3, unconditional            7       7         388      Storage settled(no item) Setting(+2) ErrorCorrectionLevel settled(no item) MediaItem(+2) Route settled(no item) Sanctum settled(no item) User(+3)
+B2 - B1, project source only                 3       7         388      Setting(+2) MediaItem(+2) User(+3)
+B3 - only when the member does not resolve   5       7         388      Storage settled(no item) Setting(+2) MediaItem(+2) Route settled(no item) User(+3)
+B4 - placeable AND project AND member unresolved 3       7         388      Setting(+2) MediaItem(+2) User(+3)

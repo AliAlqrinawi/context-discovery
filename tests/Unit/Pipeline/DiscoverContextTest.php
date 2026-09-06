@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ContextDiscovery\Tests\Unit\Pipeline;
 
+use ContextDiscovery\Discovery\Framework\LaravelFrameworkKnowledge;
 use ContextDiscovery\Adapters\Php\TokenizerMemberSlicer;
 use ContextDiscovery\Assembly\BudgetEnforcer;
 use ContextDiscovery\Assembly\BundleAssembler;
@@ -461,7 +462,7 @@ final class DiscoverContextTest extends TestCase
             new LeverPolicy(),
             $locator,
             new OwnFileResolver($source, $slicer),
-            new NamedReferenceResolver($locator, $source, $slicer),
+            new NamedReferenceResolver($locator, $source, $slicer, new LaravelFrameworkKnowledge()),
             new CallerResolver(new ScopedGrepCallSiteSearch($source), $source, $this->callerScope, $this->maxCallSites),
             new AssumptionWriter(),
             new BundleAssembler(new TokenEstimate()),

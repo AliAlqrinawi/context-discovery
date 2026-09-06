@@ -1,0 +1,517 @@
+{
+    "repo-a-app-map": {
+        "S01-facade-static-call": {
+            "items": 2,
+            "fetched": 0,
+            "flagged": 2,
+            "used_tokens": 40,
+            "dropped": 0,
+            "assertion_kinds": {
+                "named_reference": 2
+            },
+            "fetched_slices_by_path": [],
+            "flagged_subjects": [
+                "Illuminate\\Support\\Facades\\DB::transaction",
+                "Illuminate\\Support\\Facades\\Log::info"
+            ],
+            "stderr": [
+                "missing PSR-4 entry: Illuminate\\Support\\Facades\\Log::info named in app/Repositories/PackageRepository.php",
+                "missing PSR-4 entry: Illuminate\\Support\\Facades\\DB::transaction named in app/Repositories/PackageRepository.php"
+            ]
+        },
+        "S02-eloquent-static-create": {
+            "items": 5,
+            "fetched": 4,
+            "flagged": 1,
+            "used_tokens": 136,
+            "dropped": 0,
+            "assertion_kinds": {
+                "named_reference": 5
+            },
+            "fetched_slices_by_path": {
+                "app/Models/Package.php": 4
+            },
+            "flagged_subjects": [
+                "App\\Models\\Package::create"
+            ],
+            "stderr": [
+                "unresolved named_reference: App\\Models\\Package::create in app/Repositories/PackageRepository.php"
+            ]
+        },
+        "S03-eloquent-static-and-chain": {
+            "items": 7,
+            "fetched": 4,
+            "flagged": 3,
+            "used_tokens": 176,
+            "dropped": 0,
+            "assertion_kinds": {
+                "named_reference": 7
+            },
+            "fetched_slices_by_path": {
+                "app/Models/Package.php": 4
+            },
+            "flagged_subjects": [
+                "App\\Models\\Package::orderBy",
+                "App\\Models\\Package::where",
+                "Illuminate\\Support\\Collection"
+            ],
+            "stderr": [
+                "unresolved named_reference: App\\Models\\Package::orderBy in app/Repositories/PackageRepository.php",
+                "unresolved named_reference: App\\Models\\Package::where in app/Repositories/PackageRepository.php",
+                "missing PSR-4 entry: Illuminate\\Support\\Collection named in app/Repositories/PackageRepository.php"
+            ]
+        },
+        "S04-relation-and-instance": {
+            "items": 4,
+            "fetched": 4,
+            "flagged": 0,
+            "used_tokens": 116,
+            "dropped": 0,
+            "assertion_kinds": {
+                "named_reference": 4
+            },
+            "fetched_slices_by_path": {
+                "app/Models/Package.php": 4
+            },
+            "flagged_subjects": [],
+            "stderr": []
+        },
+        "S05-inherited-static": {
+            "items": 5,
+            "fetched": 4,
+            "flagged": 1,
+            "used_tokens": 136,
+            "dropped": 0,
+            "assertion_kinds": {
+                "named_reference": 5
+            },
+            "fetched_slices_by_path": {
+                "app/Models/Package.php": 4
+            },
+            "flagged_subjects": [
+                "App\\Models\\Package::query"
+            ],
+            "stderr": [
+                "unresolved named_reference: App\\Models\\Package::query in app/Repositories/PackageRepository.php"
+            ]
+        },
+        "S06-declared-framework-static": {
+            "items": 2,
+            "fetched": 0,
+            "flagged": 2,
+            "used_tokens": 40,
+            "dropped": 0,
+            "assertion_kinds": {
+                "named_reference": 2
+            },
+            "fetched_slices_by_path": [],
+            "flagged_subjects": [
+                "Illuminate\\Support\\Arr::only",
+                "Illuminate\\Support\\Str::slug"
+            ],
+            "stderr": [
+                "missing PSR-4 entry: Illuminate\\Support\\Str::slug named in app/Repositories/PackageRepository.php",
+                "missing PSR-4 entry: Illuminate\\Support\\Arr::only named in app/Repositories/PackageRepository.php"
+            ]
+        },
+        "S07-project-local-lookalikes": {
+            "items": 5,
+            "fetched": 5,
+            "flagged": 0,
+            "used_tokens": 179,
+            "dropped": 0,
+            "assertion_kinds": {
+                "named_reference": 5
+            },
+            "fetched_slices_by_path": {
+                "app/Models/Package.php": 1,
+                "app/Services/Registry.php": 4
+            },
+            "flagged_subjects": [],
+            "stderr": []
+        },
+        "S08-genuinely-unresolved": {
+            "items": 6,
+            "fetched": 4,
+            "flagged": 2,
+            "used_tokens": 156,
+            "dropped": 0,
+            "assertion_kinds": {
+                "named_reference": 6
+            },
+            "fetched_slices_by_path": {
+                "app/Models/Package.php": 4
+            },
+            "flagged_subjects": [
+                "App\\Contracts\\MissingGateway::resolve",
+                "App\\Models\\Package::activatte"
+            ],
+            "stderr": [
+                "class file not found: App\\Contracts\\MissingGateway::resolve named in app/Repositories/PackageRepository.php",
+                "unresolved named_reference: App\\Models\\Package::activatte in app/Repositories/PackageRepository.php"
+            ]
+        },
+        "S09-comments-strings-docblocks": {
+            "items": 0,
+            "fetched": 0,
+            "flagged": 0,
+            "used_tokens": 0,
+            "dropped": 0,
+            "assertion_kinds": [],
+            "fetched_slices_by_path": [],
+            "flagged_subjects": [],
+            "stderr": []
+        },
+        "S10-missing-import-absence": {
+            "items": 1,
+            "fetched": 1,
+            "flagged": 0,
+            "used_tokens": 29,
+            "dropped": 0,
+            "assertion_kinds": {
+                "same_file_symbol_absence": 1
+            },
+            "fetched_slices_by_path": {
+                "app/Support/Auditor.php": 1
+            },
+            "flagged_subjects": [],
+            "stderr": []
+        }
+    },
+    "repo-b-vendor-map": {
+        "S01-facade-static-call": {
+            "items": 0,
+            "fetched": 0,
+            "flagged": 0,
+            "used_tokens": 0,
+            "dropped": 0,
+            "assertion_kinds": [],
+            "fetched_slices_by_path": [],
+            "flagged_subjects": [],
+            "stderr": [
+                "framework reference: Illuminate\\Support\\Facades\\Log::info declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Log.php:25 (@method static void info(string|\\Stringable $message, array $context = []))",
+                "framework reference: Illuminate\\Support\\Facades\\DB::transaction declared at vendor/laravel/framework/src/Illuminate/Support/Facades/DB.php:112 (@method static mixed transaction(\\Closure $callback, int $attempts = 1))"
+            ]
+        },
+        "S02-eloquent-static-create": {
+            "items": 5,
+            "fetched": 4,
+            "flagged": 1,
+            "used_tokens": 136,
+            "dropped": 0,
+            "assertion_kinds": {
+                "named_reference": 5
+            },
+            "fetched_slices_by_path": {
+                "app/Models/Package.php": 4
+            },
+            "flagged_subjects": [
+                "App\\Models\\Package::create"
+            ],
+            "stderr": [
+                "unresolved named_reference: App\\Models\\Package::create in app/Repositories/PackageRepository.php"
+            ]
+        },
+        "S03-eloquent-static-and-chain": {
+            "items": 6,
+            "fetched": 4,
+            "flagged": 2,
+            "used_tokens": 156,
+            "dropped": 0,
+            "assertion_kinds": {
+                "named_reference": 6
+            },
+            "fetched_slices_by_path": {
+                "app/Models/Package.php": 4
+            },
+            "flagged_subjects": [
+                "App\\Models\\Package::orderBy",
+                "App\\Models\\Package::where"
+            ],
+            "stderr": [
+                "unresolved named_reference: App\\Models\\Package::orderBy in app/Repositories/PackageRepository.php",
+                "unresolved named_reference: App\\Models\\Package::where in app/Repositories/PackageRepository.php",
+                "dependency class: Illuminate\\Support\\Collection provided by vendor/laravel/framework/src/Illuminate/Collections/Collection.php; surface not fetched"
+            ]
+        },
+        "S04-relation-and-instance": {
+            "items": 4,
+            "fetched": 4,
+            "flagged": 0,
+            "used_tokens": 116,
+            "dropped": 0,
+            "assertion_kinds": {
+                "named_reference": 4
+            },
+            "fetched_slices_by_path": {
+                "app/Models/Package.php": 4
+            },
+            "flagged_subjects": [],
+            "stderr": []
+        },
+        "S05-inherited-static": {
+            "items": 5,
+            "fetched": 4,
+            "flagged": 1,
+            "used_tokens": 136,
+            "dropped": 0,
+            "assertion_kinds": {
+                "named_reference": 5
+            },
+            "fetched_slices_by_path": {
+                "app/Models/Package.php": 4
+            },
+            "flagged_subjects": [
+                "App\\Models\\Package::query"
+            ],
+            "stderr": [
+                "unresolved named_reference: App\\Models\\Package::query in app/Repositories/PackageRepository.php"
+            ]
+        },
+        "S06-declared-framework-static": {
+            "items": 0,
+            "fetched": 0,
+            "flagged": 0,
+            "used_tokens": 0,
+            "dropped": 0,
+            "assertion_kinds": [],
+            "fetched_slices_by_path": [],
+            "flagged_subjects": [],
+            "stderr": [
+                "dependency member: Illuminate\\Support\\Str::slug declared at vendor/laravel/framework/src/Illuminate/Support/Str.php:1543; source not fetched",
+                "dependency member: Illuminate\\Support\\Arr::only declared at vendor/laravel/framework/src/Illuminate/Collections/Arr.php:718; source not fetched"
+            ]
+        },
+        "S07-project-local-lookalikes": {
+            "items": 5,
+            "fetched": 5,
+            "flagged": 0,
+            "used_tokens": 179,
+            "dropped": 0,
+            "assertion_kinds": {
+                "named_reference": 5
+            },
+            "fetched_slices_by_path": {
+                "app/Models/Package.php": 1,
+                "app/Services/Registry.php": 4
+            },
+            "flagged_subjects": [],
+            "stderr": []
+        },
+        "S08-genuinely-unresolved": {
+            "items": 6,
+            "fetched": 4,
+            "flagged": 2,
+            "used_tokens": 156,
+            "dropped": 0,
+            "assertion_kinds": {
+                "named_reference": 6
+            },
+            "fetched_slices_by_path": {
+                "app/Models/Package.php": 4
+            },
+            "flagged_subjects": [
+                "App\\Contracts\\MissingGateway::resolve",
+                "App\\Models\\Package::activatte"
+            ],
+            "stderr": [
+                "class file not found: App\\Contracts\\MissingGateway::resolve named in app/Repositories/PackageRepository.php",
+                "unresolved named_reference: App\\Models\\Package::activatte in app/Repositories/PackageRepository.php"
+            ]
+        },
+        "S09-comments-strings-docblocks": {
+            "items": 0,
+            "fetched": 0,
+            "flagged": 0,
+            "used_tokens": 0,
+            "dropped": 0,
+            "assertion_kinds": [],
+            "fetched_slices_by_path": [],
+            "flagged_subjects": [],
+            "stderr": []
+        },
+        "S10-missing-import-absence": {
+            "items": 1,
+            "fetched": 1,
+            "flagged": 0,
+            "used_tokens": 29,
+            "dropped": 0,
+            "assertion_kinds": {
+                "same_file_symbol_absence": 1
+            },
+            "fetched_slices_by_path": {
+                "app/Support/Auditor.php": 1
+            },
+            "flagged_subjects": [],
+            "stderr": []
+        }
+    },
+    "repo-c-vendor-installed": {
+        "S01-facade-static-call": {
+            "items": 0,
+            "fetched": 0,
+            "flagged": 0,
+            "used_tokens": 0,
+            "dropped": 0,
+            "assertion_kinds": [],
+            "fetched_slices_by_path": [],
+            "flagged_subjects": [],
+            "stderr": [
+                "framework reference: Illuminate\\Support\\Facades\\Log::info declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Log.php:25 (@method static void info(string|\\Stringable $message, array $context = []))",
+                "framework reference: Illuminate\\Support\\Facades\\DB::transaction declared at vendor/laravel/framework/src/Illuminate/Support/Facades/DB.php:112 (@method static mixed transaction(\\Closure $callback, int $attempts = 1))"
+            ]
+        },
+        "S02-eloquent-static-create": {
+            "items": 5,
+            "fetched": 4,
+            "flagged": 1,
+            "used_tokens": 136,
+            "dropped": 0,
+            "assertion_kinds": {
+                "named_reference": 5
+            },
+            "fetched_slices_by_path": {
+                "app/Models/Package.php": 4
+            },
+            "flagged_subjects": [
+                "App\\Models\\Package::create"
+            ],
+            "stderr": [
+                "unresolved named_reference: App\\Models\\Package::create in app/Repositories/PackageRepository.php"
+            ]
+        },
+        "S03-eloquent-static-and-chain": {
+            "items": 6,
+            "fetched": 4,
+            "flagged": 2,
+            "used_tokens": 156,
+            "dropped": 0,
+            "assertion_kinds": {
+                "named_reference": 6
+            },
+            "fetched_slices_by_path": {
+                "app/Models/Package.php": 4
+            },
+            "flagged_subjects": [
+                "App\\Models\\Package::orderBy",
+                "App\\Models\\Package::where"
+            ],
+            "stderr": [
+                "unresolved named_reference: App\\Models\\Package::orderBy in app/Repositories/PackageRepository.php",
+                "unresolved named_reference: App\\Models\\Package::where in app/Repositories/PackageRepository.php",
+                "dependency class: Illuminate\\Support\\Collection provided by vendor/laravel/framework/src/Illuminate/Collections/Collection.php; surface not fetched"
+            ]
+        },
+        "S04-relation-and-instance": {
+            "items": 4,
+            "fetched": 4,
+            "flagged": 0,
+            "used_tokens": 116,
+            "dropped": 0,
+            "assertion_kinds": {
+                "named_reference": 4
+            },
+            "fetched_slices_by_path": {
+                "app/Models/Package.php": 4
+            },
+            "flagged_subjects": [],
+            "stderr": []
+        },
+        "S05-inherited-static": {
+            "items": 5,
+            "fetched": 4,
+            "flagged": 1,
+            "used_tokens": 136,
+            "dropped": 0,
+            "assertion_kinds": {
+                "named_reference": 5
+            },
+            "fetched_slices_by_path": {
+                "app/Models/Package.php": 4
+            },
+            "flagged_subjects": [
+                "App\\Models\\Package::query"
+            ],
+            "stderr": [
+                "unresolved named_reference: App\\Models\\Package::query in app/Repositories/PackageRepository.php"
+            ]
+        },
+        "S06-declared-framework-static": {
+            "items": 0,
+            "fetched": 0,
+            "flagged": 0,
+            "used_tokens": 0,
+            "dropped": 0,
+            "assertion_kinds": [],
+            "fetched_slices_by_path": [],
+            "flagged_subjects": [],
+            "stderr": [
+                "dependency member: Illuminate\\Support\\Str::slug declared at vendor/laravel/framework/src/Illuminate/Support/Str.php:1543; source not fetched",
+                "dependency member: Illuminate\\Support\\Arr::only declared at vendor/laravel/framework/src/Illuminate/Collections/Arr.php:718; source not fetched"
+            ]
+        },
+        "S07-project-local-lookalikes": {
+            "items": 5,
+            "fetched": 5,
+            "flagged": 0,
+            "used_tokens": 179,
+            "dropped": 0,
+            "assertion_kinds": {
+                "named_reference": 5
+            },
+            "fetched_slices_by_path": {
+                "app/Models/Package.php": 1,
+                "app/Services/Registry.php": 4
+            },
+            "flagged_subjects": [],
+            "stderr": []
+        },
+        "S08-genuinely-unresolved": {
+            "items": 6,
+            "fetched": 4,
+            "flagged": 2,
+            "used_tokens": 156,
+            "dropped": 0,
+            "assertion_kinds": {
+                "named_reference": 6
+            },
+            "fetched_slices_by_path": {
+                "app/Models/Package.php": 4
+            },
+            "flagged_subjects": [
+                "App\\Contracts\\MissingGateway::resolve",
+                "App\\Models\\Package::activatte"
+            ],
+            "stderr": [
+                "class file not found: App\\Contracts\\MissingGateway::resolve named in app/Repositories/PackageRepository.php",
+                "unresolved named_reference: App\\Models\\Package::activatte in app/Repositories/PackageRepository.php"
+            ]
+        },
+        "S09-comments-strings-docblocks": {
+            "items": 0,
+            "fetched": 0,
+            "flagged": 0,
+            "used_tokens": 0,
+            "dropped": 0,
+            "assertion_kinds": [],
+            "fetched_slices_by_path": [],
+            "flagged_subjects": [],
+            "stderr": []
+        },
+        "S10-missing-import-absence": {
+            "items": 1,
+            "fetched": 1,
+            "flagged": 0,
+            "used_tokens": 29,
+            "dropped": 0,
+            "assertion_kinds": {
+                "same_file_symbol_absence": 1
+            },
+            "fetched_slices_by_path": {
+                "app/Support/Auditor.php": 1
+            },
+            "flagged_subjects": [],
+            "stderr": []
+        }
+    }
+}

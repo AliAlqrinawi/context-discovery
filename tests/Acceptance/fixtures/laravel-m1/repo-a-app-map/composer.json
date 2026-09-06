@@ -1,0 +1,11 @@
+{
+    "name": "context-discovery/fixture-laravel-m1-app-map",
+    "description": "M1 fixture, variant A: a Laravel application whose PSR-4 map is what `laravel/laravel` actually ships — App\\ and nothing else. No vendor directory is required, because nothing outside App\\ is placeable either way. This variant isolates M0 problem A (Composer/PSR-4 placement).",
+    "type": "project",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/"
+        }
+    }
+}

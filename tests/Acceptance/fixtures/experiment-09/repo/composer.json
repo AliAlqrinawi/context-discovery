@@ -1,0 +1,11 @@
+{
+    "name": "context-discovery/fixture-experiment-09",
+    "description": "M9 · OQ6. Every row differs from its neighbour in exactly one fact that is available at the moment resolution gives up. The Illuminate\\ prefix is declared here (the variant-B device) so the facade control works without a full install; the two framework files are copied from the M1 fixture, never fabricated.",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/",
+            "Illuminate\\": "vendor/laravel/framework/src/Illuminate/"
+        }
+    }
+}

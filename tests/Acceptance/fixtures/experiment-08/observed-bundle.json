@@ -1,0 +1,143 @@
+{
+    "bundle_version": 1,
+    "budget_tokens": 8000,
+    "used_tokens": 238,
+    "items": [
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Support\\Direct::nope, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Consumer.php",
+                "member": "App\\Support\\Direct::nope",
+                "lines": [
+                    15,
+                    34
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Support\\Direct::runn, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Consumer.php",
+                "member": "App\\Support\\Direct::runn",
+                "lines": [
+                    15,
+                    34
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Support\\Dynamic::create, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Consumer.php",
+                "member": "App\\Support\\Dynamic::create",
+                "lines": [
+                    15,
+                    34
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Support\\OneLevel::run, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Consumer.php",
+                "member": "App\\Support\\OneLevel::run",
+                "lines": [
+                    15,
+                    34
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Support\\TwoLevel::run, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Consumer.php",
+                "member": "App\\Support\\TwoLevel::run",
+                "lines": [
+                    15,
+                    34
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Support\\ViaParent::greet, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Consumer.php",
+                "member": "App\\Support\\ViaParent::greet",
+                "lines": [
+                    15,
+                    34
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Support\\WithTrait::greet, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Consumer.php",
+                "member": "App\\Support\\WithTrait::greet",
+                "lines": [
+                    15,
+                    34
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Support\\Direct::run, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Support/Direct.php",
+                "member": "run",
+                "lines": [
+                    7,
+                    11
+                ]
+            },
+            "payload": "    /** Declared here. The control: this is what already works. */\n    public static function run(string $input): string\n    {\n        return trim($input);\n    }",
+            "tokens": 41
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Support\\Direct::slug, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Support/Direct.php",
+                "member": "slug",
+                "lines": [
+                    13,
+                    17
+                ]
+            },
+            "payload": "    /** A project member whose name resembles a framework helper. Ownership, not the name, decides. */\n    public static function slug(string $title): string\n    {\n        return strtolower(str_replace(' ', '-', $title));\n    }",
+            "tokens": 57
+        }
+    ],
+    "dropped": []
+}

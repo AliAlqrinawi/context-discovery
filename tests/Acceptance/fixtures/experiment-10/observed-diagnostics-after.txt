@@ -1,0 +1,6 @@
+class file not found: App\Ghost\Missing::create named in app/Consumer.php
+missing PSR-4 entry: MissingNamespace\Ghost::create named in app/Consumer.php
+class file not found: Acme\Lib\Thing::make named in app/Consumer.php
+class file not found: App\Foo\Bar\Deep::go named in app/Consumer.php
+unresolved named_reference: App\Models\Package::activatte in app/Consumer.php
+framework reference: Illuminate\Support\Facades\Log::info declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Log.php:25 (@method static void info(string|\Stringable $message, array $context = []))

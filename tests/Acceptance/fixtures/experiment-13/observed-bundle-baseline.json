@@ -1,0 +1,142 @@
+{
+    "bundle_version": 1,
+    "budget_tokens": 8000,
+    "used_tokens": 176,
+    "items": [
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Contracts\\MissingGateway::resolve, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Consumer.php",
+                "member": "App\\Contracts\\MissingGateway::resolve",
+                "lines": [
+                    15,
+                    40
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Models\\Package::create, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Consumer.php",
+                "member": "App\\Models\\Package::create",
+                "lines": [
+                    15,
+                    40
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Models\\Package::query, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Consumer.php",
+                "member": "App\\Models\\Package::query",
+                "lines": [
+                    15,
+                    40
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Models\\Package::where, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Consumer.php",
+                "member": "App\\Models\\Package::where",
+                "lines": [
+                    15,
+                    40
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Models\\Setting::updateOrCreate, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Consumer.php",
+                "member": "App\\Models\\Setting::updateOrCreate",
+                "lines": [
+                    15,
+                    40
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Widget, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Widget.php",
+                "member": "fillable",
+                "lines": [
+                    9,
+                    9
+                ]
+            },
+            "payload": "    protected $fillable = ['label'];",
+            "tokens": 9
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Widget, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Widget.php",
+                "member": "label",
+                "lines": [
+                    11,
+                    14
+                ]
+            },
+            "payload": "    public function label(): string\n    {\n        return (string) $this->label;\n    }",
+            "tokens": 22
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Services\\Registry::create, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Services/Registry.php",
+                "member": "create",
+                "lines": [
+                    11,
+                    14
+                ]
+            },
+            "payload": "    public static function create(array $entries): self\n    {\n        return new self($entries);\n    }",
+            "tokens": 26
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region performs several persistence writes; whether a transaction wraps them is decided by the caller, which the diff does not show",
+            "assertion_kind": "unverifiable_premise",
+            "provenance": {
+                "path": "app/Consumer.php",
+                "lines": [
+                    15,
+                    40
+                ]
+            },
+            "payload": "ASSUMPTION: this code assumes a surrounding transaction; caller not checked",
+            "tokens": 19
+        }
+    ],
+    "dropped": []
+}

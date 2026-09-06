@@ -1,0 +1,24 @@
+diff --git a/app/Consumer.php b/app/Consumer.php
+--- a/app/Consumer.php
++++ b/app/Consumer.php
+@@ -15,4 +15,20 @@
+     {
+         return 'unchanged';
+     }
++
++    public function exercise(string $input): array
++    {
++        return [
++            'direct' => Direct::run($input),
++            'lookalike' => Direct::slug($input),
++            'one_level' => OneLevel::run($input),
++            'two_level' => TwoLevel::run($input),
++            'trait_here' => WithTrait::greet($input),
++            'trait_via_parent' => ViaParent::greet($input),
++            'dynamic' => Dynamic::create($input),
++            'unknown' => Direct::nope($input),
++            'typo' => Direct::runn($input),
++            'inherited_on_this' => $this->instanceGreet($input),
++        ];
++    }
+ }

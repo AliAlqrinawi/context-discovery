@@ -1,0 +1,88 @@
+{
+  "experiment": "experiment-12",
+  "written": "2026-09-05, from the fixture sources, BEFORE any implementation (ADR-001 key-first)",
+  "question": "When is the changed diff sufficient to replace repository context for ANOTHER file?",
+  "safety_rule": "A fetch may be suppressed only when the EXACT required declaration is already in the diff. 'The declaring file appears in the diff' is NOT sufficient and must never be used on its own — a modified file shows only its hunks.",
+  "evidence_model": {
+    "A": "modified file, the declaration lies WHOLLY inside a changed region — visible",
+    "B": "modified file, the declaration lies outside every changed region — NOT visible",
+    "C": "created file — every line is an added line, so any declaration in it is visible",
+    "D": "modified file where only unrelated content changed — a special case of B",
+    "E": "the file does not declare the subject, or is not in the diff at all"
+  },
+  "containment_must_be_total": "A declaration that only PARTIALLY overlaps a region is state B, not A. The reviewer sees part of it, which is not the contract.",
+  "budget_tokens": 8000,
+  "rows": [
+    {
+      "id": "M12.1", "subject": "App\\NewService::run", "declaring_file": "app/NewService.php",
+      "state": "C", "expected": "DO NOT FETCH",
+      "evidence": "app/NewService.php is created by this diff (`--- /dev/null`), so its `run()` is an added line at region 1-13.",
+      "why": "ADR-A005: the reviewer already has the diff. Fetching returns it."
+    },
+    {
+      "id": "M12.1b", "subject": "App\\NewService (bare class, surface)", "declaring_file": "app/NewService.php",
+      "state": "C", "expected": "DO NOT FETCH",
+      "evidence": "same file, referenced as `?NewService` in a return type. Every member the surface move would slice is an added line.",
+      "why": "THIS IS M7's EXACT SHAPE — MenuQrService referenced from routes/web.php while the same diff creates it. If any row justifies the milestone, it is this one."
+    },
+    {
+      "id": "M12.2", "subject": "App\\VisibleService::run", "declaring_file": "app/VisibleService.php",
+      "state": "A", "expected": "DO NOT FETCH",
+      "evidence": "the file is MODIFIED; hunk `@@ -11,6 +11,6 @@` covers lines 11-16 and `run()` is declared at line 12, wholly inside it.",
+      "why": "The declaration is in the diff in its post-change form. Suppressing needs the region span, not the file's presence."
+    },
+    {
+      "id": "M12.3", "subject": "App\\HiddenService::run", "declaring_file": "app/HiddenService.php",
+      "state": "B", "expected": "FETCH",
+      "evidence": "the file is MODIFIED, but its only hunk is `@@ -26,6 +26,6 @@` (lines 26-31) while `run()` is declared at line 7.",
+      "why": "THE CRITICAL COUNTER-CASE. A path-level rule would wrongly suppress this and lose real context. It is the row that proves the boundary is declaration-level."
+    },
+    {
+      "id": "M12.4", "subject": "App\\HiddenService::run (only unrelated content changed)", "declaring_file": "app/HiddenService.php",
+      "state": "D", "expected": "FETCH",
+      "evidence": "the hunk changes `touched()`, not `run()`. Same file, same diff, wrong declaration.",
+      "why": "Same as M12.3 — recorded separately because the milestone names it separately."
+    },
+    {
+      "id": "M12.5", "subject": "App\\Noisy::shout + the noise inside app/Noisy.php", "declaring_file": "app/Noisy.php",
+      "state": "C", "expected": "DO NOT FETCH; and zero items from the noise",
+      "evidence": "created file. Its docblock names NewService::run() and HiddenService::run(); a comment names VisibleService::run(); it holds the string literals 'NewService::run' and 'App\\Untouched::go' and a `Noisy::class` constant.",
+      "why": "No accidental extraction, no own-file duplication (M11), and no cross-file fetch caused by prose."
+    },
+    {
+      "id": "M12.6", "subject": "two changed files, declaration visible", "declaring_file": "-",
+      "state": "C", "expected": "covered by M12.1 and M12.1b",
+      "evidence": "Consumer.php is modified and NewService.php is created in the same diff; Consumer references it.",
+      "why": "Recorded as satisfied by the rows above rather than duplicated."
+    },
+    {
+      "id": "M12.7", "subject": "two changed files, declaration hidden", "declaring_file": "-",
+      "state": "B", "expected": "covered by M12.3",
+      "evidence": "Consumer.php modified, HiddenService.php modified, declaration off-hunk.",
+      "why": "As above."
+    },
+    {
+      "id": "M12.8", "subject": "App\\Untouched::go", "declaring_file": "app/Untouched.php",
+      "state": "E", "expected": "FETCH",
+      "evidence": "app/Untouched.php does not appear in the diff at all.",
+      "why": "The control. Ordinary fetch-collaborator behaviour must be untouched."
+    },
+    {
+      "id": "M12.9", "subject": "a reference into a DELETED file", "declaring_file": "-",
+      "state": "boundary", "expected": "record, do not invent",
+      "evidence": "Measured in Phase 1: a deleted file parses with isNew=false, the OLD path, an empty region span (lastLine < firstLine) and only removed lines. Its text is absent from a post-change checkout, so ClassLocator cannot place it.",
+      "why": "The existing outcome is a flag via the M10 wording. No deletion semantics are invented here."
+    },
+    {
+      "id": "M12.10", "subject": "the real Experiment 5 diff", "declaring_file": "app/Services/MenuQrService.php",
+      "state": "to be measured", "expected": "determine, do not assume",
+      "evidence": "M11 left 318 tokens of MenuQrService surface, fetched because routes/web.php names it. MenuQrService.php is created by the same diff — if so this is state C and the fetch is removable.",
+      "why": "The milestone's motivating case. The key does not presume the answer; §M12.10 of the report records what was measured."
+    },
+    {
+      "id": "M12.X", "subject": "everything else", "declaring_file": "-",
+      "state": "-", "expected": "bundle_version, schema, assertion kinds, premises, levers, provenance, priority bands and token accounting UNCHANGED",
+      "evidence": "-", "why": "M12 narrows when a fetch happens. Nothing else may move."
+    }
+  ]
+}

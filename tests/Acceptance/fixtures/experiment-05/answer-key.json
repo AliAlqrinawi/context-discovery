@@ -1,0 +1,110 @@
+{
+  "experiment": "experiment-05",
+  "written": "2026-09-05, from the diff and the referenced sources, BEFORE the CLI was run (ADR-001: answer key first)",
+  "repository": "abouelsid-backend (private), laravel/framework v12.64.0, vendor installed",
+  "commit": "ec924032f3b3167fd97c51e8b15af73a59c011f6",
+  "budget_tokens": 8000,
+  "verdicts": {
+    "FETCH": "the bundle should carry a minimal slice; the diff cannot settle it and the source is the project's",
+    "FLAG": "the bundle should state an unverified premise; no file settles it",
+    "OMIT": "the bundle should carry nothing — the reviewer already has it, or it is a dependency's business"
+  },
+  "rows": [
+    {
+      "id": "E5.1", "region": "MenuPdfController::upload / destroy / storedPath",
+      "reference": "App\\Models\\Setting",
+      "expected": "FETCH", "source": "app/Models/Setting.php",
+      "why": "upload() mass-assigns six columns through updateOrCreate. Whether key/value/type/group/label_ar/label_en are fillable is a real correctness question the diff cannot answer, and it is exactly Experiment 1's model-surface move.",
+      "why_not_more": "The model is ~25 lines. Nothing above it — the Eloquent base, the builder — adds anything a reviewer of THIS change needs."
+    },
+    {
+      "id": "E5.2", "region": "MenuQrService::logoPath",
+      "reference": "App\\Models\\MediaItem",
+      "expected": "FETCH", "source": "app/Models/MediaItem.php",
+      "why": "The lookup filters on page/section/key and then reads $logo->path. Whether those columns exist is off-diff and only the model settles it.",
+      "why_not_more": "The migration would settle the columns more definitively, but X3 defers a schema resolver; the model surface is the earned move."
+    },
+    {
+      "id": "E5.3", "region": "MenuPdfController::upload",
+      "reference": "surrounding-transaction premise",
+      "expected": "FLAG", "source": "-",
+      "why": "upload() deletes a file, writes a new file, then writes the database — with no transaction and no cleanup if the write fails. This is a REAL defect: commit 04328a5 later fixed exactly this class of bug across the codebase. A flag naming the unverified premise is the right output.",
+      "why_not_more": "Resolving it needs the caller and the runtime failure path; fetch-vs-flag.md names this the canonical flag case."
+    },
+    {
+      "id": "E5.4", "region": "MenuPdfController::success / deleted",
+      "reference": "App\\Traits\\ApiResponse::success",
+      "expected": "FETCH", "source": "app/Traits/ApiResponse.php",
+      "why": "The controller's whole return contract is $this->success()/$this->deleted(), inherited through the abstract Controller from the ApiResponse trait. A reviewer cannot judge the response shape without it, and it is project code.",
+      "why_not_more": "One or two method bodies; the trait's other members are not called here.",
+      "known_gap": "ADR-A010 forbids the traversal that would reach it (changed file -> Controller -> ApiResponse). Expected to be a FALSE NEGATIVE."
+    },
+    {
+      "id": "E5.5", "region": "both new files",
+      "reference": "Illuminate\\Support\\Facades\\Storage::disk",
+      "expected": "OMIT", "source": "-",
+      "why": "Framework-known. Experiment 2: a naked-diff review that knows Laravel catches these unaided. ADR-A011/A013 settle it with a diagnostic and no item.",
+      "why_not_more": "Fetching the facade or its container binding is the precision failure M1 measured."
+    },
+    {
+      "id": "E5.6", "region": "MenuPdfController, SettingSeeder, routes/web.php",
+      "reference": "App\\Models\\Setting::updateOrCreate / ::where",
+      "expected": "OMIT", "source": "-",
+      "why": "Eloquent's dynamic static dispatch. The member is the framework's, on the project's class. A Laravel reviewer needs nothing; the model's own surface (E5.1) carries what matters.",
+      "known_gap": "ADR-A010 blocks Model -> Builder, so these are expected to FLAG. Predicted FALSE POSITIVE."
+    },
+    {
+      "id": "E5.7", "region": "MenuQrService::logoPath",
+      "reference": "App\\Models\\MediaItem::where (chained ->where->where->first)",
+      "expected": "OMIT", "source": "-",
+      "why": "Same as E5.6, and additionally a fluent chain. Only the head of the chain is even visible to the extractor.",
+      "known_gap": "Head flags (ADR-A010); the chain links are silent (ADR-A003's closed form list)."
+    },
+    {
+      "id": "E5.8", "region": "MenuPdfController signatures",
+      "reference": "Illuminate\\Http\\JsonResponse, Illuminate\\Http\\Request",
+      "expected": "OMIT", "source": "-",
+      "why": "Bare dependency classes in type positions. ADR-A012: the surface move is the project's own classes; a dependency is settled from its path, not dumped.",
+      "why_not_more": "Illuminate\\Http\\Request has a very large surface — this is precisely the over-fetch M4 closed."
+    },
+    {
+      "id": "E5.9", "region": "MenuQrService::png",
+      "reference": "Endroid\\QrCode\\Builder\\Builder, Color, PngWriter, ErrorCorrectionLevel::High",
+      "expected": "OMIT", "source": "-",
+      "why": "A third-party package the developer just added. Its argument names are a fair review question, but the answer is the library's documentation, not a dump of its source into the bundle. ADR-A012/A013 settle each with a citation.",
+      "why_not_more": "Proves the ownership rule is not Laravel-specific: Endroid is treated exactly like Illuminate."
+    },
+    {
+      "id": "E5.10", "region": "both new files",
+      "reference": "$this->storedPath(), $this->payload(), $this->logoPath()",
+      "expected": "OMIT", "source": "-",
+      "why": "Same-file siblings whose bodies are IN THE DIFF — both files are new. ADR-A005 rejects putting the diff back into the bundle: 'The reviewer already receives the diff ... duplicating it would double-count tokens.'",
+      "known_gap": "The own-file move does not know the file is new, so a fetch here is expected. Predicted OVER-FETCH."
+    },
+    {
+      "id": "E5.11", "region": "routes/web.php, routes/admin.php",
+      "reference": "App\\Services\\MenuQrService",
+      "expected": "OMIT", "source": "-",
+      "why": "Named from the routes, but its source is the same PR — the reviewer already has it. Fetching it duplicates the diff (ADR-A005)."
+    },
+    {
+      "id": "E5.12", "region": "tests/Feature/MenuPdfTest.php",
+      "reference": "test-only references (Storage::fake, UploadedFile::fake, Sanctum::actingAs, factories)",
+      "expected": "OMIT", "source": "-",
+      "why": "Test scaffolding. Nothing here is a contract the change relies on, and Experiment 2 is explicit that pulling context 'just in case' is a precision failure."
+    },
+    {
+      "id": "E5.13", "region": "all files",
+      "reference": "comments, docblocks, string literals containing class-like names",
+      "expected": "OMIT", "source": "-",
+      "why": "Prose and data. Notably routes/web.php carries a two-line comment naming the QR/PDF contract, and the controller carries 'application/pdf' and filename strings."
+    },
+    {
+      "id": "E5.14", "region": "both new files",
+      "reference": "the `<?php` opening tag read as an unimported symbol",
+      "expected": "OMIT", "source": "-",
+      "why": "Not a reference at all.",
+      "known_gap": "M0 defect D1: every whole-file diff produces same_file_symbol_absence items reasoned as 'the region uses php'. Predicted FALSE POSITIVE, and this diff has TWO new files."
+    }
+  ]
+}

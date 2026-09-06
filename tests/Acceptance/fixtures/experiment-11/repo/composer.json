@@ -1,0 +1,6 @@
+{
+    "name": "context-discovery/fixture-experiment-11",
+    "description": "M11 · G3 and D1. One new PHP file, one modified PHP file and one new non-PHP file in a single diff, so new-file handling can be compared against unchanged modified-file handling in the same run.",
+    "type": "project",
+    "autoload": { "psr-4": { "App\\": "app/", "Illuminate\\": "vendor/laravel/framework/src/Illuminate/" } }
+}

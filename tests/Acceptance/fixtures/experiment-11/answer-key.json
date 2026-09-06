@@ -1,0 +1,50 @@
+{
+  "experiment": "experiment-11",
+  "written": "2026-09-05, from the fixture sources, BEFORE any implementation (ADR-001 key-first)",
+  "invariant": "The changed diff is input, not fetched context. A new file may cause EXTERNAL dependencies to be fetched, but the changed file itself must never be fetched merely because it is new — every one of its lines is already in front of the reviewer.",
+  "grounded_in": "ADR-A005: 'The reviewer already receives the diff — condition C is diff PLUS bundle. Duplicating it would double-count tokens.' The own-file move was earned by Experiment 1's `upsertFromPlaid`, a sibling in a MODIFIED file that the diff did not show. A new file shows everything.",
+  "budget_tokens": 8000,
+  "rows": [
+    {
+      "id": "M11.1", "case": "new PHP file — app/Services/NewService.php",
+      "expected_fetched_paths": "app/Services/NewService.php MUST NOT appear",
+      "expected_items": "no same_file_symbol_absence and no same_file_reference for this file",
+      "why": "namespace, use block, class, LABEL, store(), audit() are all added lines. Fetching any of them returns the diff to the reviewer who already has it."
+    },
+    {
+      "id": "M11.2", "case": "external references from the new file",
+      "expected_items": "App\\Models\\Package surface FETCHED (it is off-diff); App\\Support\\Existing is ALSO changed by this diff, so it is a judgement call recorded below",
+      "expected_diagnostics": "Log::info settled as framework-known; Package::create and Package::where flagged unresolved (ADR-A016, unchanged)",
+      "why": "A new file may absolutely pull external context. Only its OWN content is barred.",
+      "note": "Existing.php is itself in this diff. The key does not require the tool to notice that — cross-file de-duplication is a different question and is NOT in M11's scope. Whatever v0.1.0 does for it must simply not change."
+    },
+    {
+      "id": "M11.3", "case": "modified PHP file — app/Support/Existing.php",
+      "expected_fetched_paths": "app/Support/Existing.php MAY appear",
+      "expected_items": "existing own-file behaviour UNCHANGED — the added extra() calls $this->helper(), whose body the diff does not show, so a same_file_reference fetch of helper() is correct and must survive",
+      "why": "This is Experiment 1's earned move. M11 must narrow the move to new files only, and this row proves it did not narrow further."
+    },
+    {
+      "id": "M11.4", "case": "new non-PHP file — config/thing.yml",
+      "expected_items": "none",
+      "expected_diagnostics": "none",
+      "why": "UnifiedDiffParser::membersIn filters on the .php extension. Record the existing behaviour; invent nothing."
+    },
+    {
+      "id": "M11.5", "case": "the `<?php` open tag (D1)",
+      "expected_items": "ZERO. No same_file_symbol_absence whose reason names `php`.",
+      "why": "Root cause measured: the extractor tokenises '<?php ' . $regionText, and when the region itself begins with `<?php` the literal re-tokenises as `<`, `?`, T_STRING(php). The `?` then satisfies isClassNamePosition()'s nullable-type rule (`?Name`), so `php` is recorded as a class name the use block does not import.",
+      "reachable_only_via": "addedLines contains only `+` lines, so `<?php` can only be an added line when the file is new. D1 is therefore a strict subset of G3 — but the tokenisation is wrong on its own terms and is fixed at the token layer, not by relying on the G3 suppression."
+    },
+    {
+      "id": "M11.6", "case": "lexical noise inside the new file",
+      "expected_items": "none",
+      "why": "The class docblock names Package::create() and Log::warning(); a line comment names Existing::helper() and Package::where(); audit() contains the string literals 'Package::create' and 'Illuminate\\Support\\Facades\\Log::info' and a Package::class constant. None is a reference."
+    },
+    {
+      "id": "M11.7", "case": "everything else",
+      "expected": "bundle_version, schema, assertion kinds, premises, levers, provenance shape, ItemPriority bands and token accounting all UNCHANGED",
+      "why": "M11 narrows one move for one file state. Anything else moving is a defect."
+    }
+  ]
+}

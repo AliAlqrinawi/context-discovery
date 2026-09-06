@@ -1,0 +1,26 @@
+diff --git a/app/Repositories/BranchRepository.php b/app/Repositories/BranchRepository.php
+--- a/app/Repositories/BranchRepository.php
++++ b/app/Repositories/BranchRepository.php
+@@ -16,6 +16,22 @@
+         }
+ 
+         return $query->get();
++    }
++
++    /**
++     * Historically this used Setting::where() and Storage::disk('public'), before the
++     * lookup moved into MenuQrService. See Illuminate\Support\Facades\Cache::lock().
++     *
++     * @see Log::warning()
++     */
++    private function legacyNotes(): array
++    {
++        // Branch::create() and MediaItem::where() used to be called from here.
++        return [
++            'Setting::updateOrCreate',
++            'Illuminate\\Support\\Facades\\Storage::disk',
++            'Endroid\\QrCode\\Builder\\Builder',
++        ];
+     }
+ 
+     public function getById(int $id): Branch

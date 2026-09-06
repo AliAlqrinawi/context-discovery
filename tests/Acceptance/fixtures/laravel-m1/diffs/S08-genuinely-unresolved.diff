@@ -1,0 +1,14 @@
+diff --git a/app/Repositories/PackageRepository.php b/app/Repositories/PackageRepository.php
+--- a/app/Repositories/PackageRepository.php
++++ b/app/Repositories/PackageRepository.php
+@@ -65,4 +65,10 @@
+         return Registry::create(['catering' => 'Catering']);
+     }
+ 
++    public function reconcile(string $reference): void
++    {
++        MissingGateway::resolve($reference);
++
++        Package::activatte($reference);
++    }
+ }

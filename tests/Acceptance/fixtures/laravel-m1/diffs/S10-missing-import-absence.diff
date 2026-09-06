@@ -1,0 +1,12 @@
+diff --git a/app/Support/Auditor.php b/app/Support/Auditor.php
+--- a/app/Support/Auditor.php
++++ b/app/Support/Auditor.php
+@@ -4,4 +4,8 @@
+ 
+ final class Auditor
+ {
++    public function record(string $action): void
++    {
++        Log::info('auditor', ['action' => $action]);
++    }
+ }

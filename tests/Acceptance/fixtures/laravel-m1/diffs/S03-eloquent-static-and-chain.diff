@@ -1,0 +1,17 @@
+diff --git a/app/Repositories/PackageRepository.php b/app/Repositories/PackageRepository.php
+--- a/app/Repositories/PackageRepository.php
++++ b/app/Repositories/PackageRepository.php
+@@ -30,6 +30,13 @@
+     public function store(array $data): Package
+     {
+         return Package::create($data);
++    }
++
++    public function listing(): Collection
++    {
++        Package::orderBy('position')->get();
++
++        return Package::where('is_active', true)->orderBy('position')->get();
+     }
+ 
+     public function withFeatures(Package $package, array $rows): Package

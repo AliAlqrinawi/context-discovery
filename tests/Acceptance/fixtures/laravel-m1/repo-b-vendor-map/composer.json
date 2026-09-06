@@ -1,0 +1,25 @@
+{
+    "name": "context-discovery/fixture-laravel-m1-vendor-map",
+    "description": "M1 fixture, variant B: the same application, with the framework's own PSR-4 roots transcribed verbatim from Composer's generated vendor/composer/autoload_psr4.php. This is a FIXTURE DEVICE that simulates M0 proposal S1 having landed; the CLI's ComposerPsr4ClassLocator was NOT widened. It isolates M0 problem B (Laravel dynamic dispatch) by removing problem A.",
+    "type": "project",
+    "license": "MIT",
+    "require": {
+        "php": "^8.2",
+        "laravel/framework": "12.64.0"
+    },
+    "config": {
+        "optimize-autoloader": false
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/",
+            "Illuminate\\Support\\": [
+                "vendor/laravel/framework/src/Illuminate/Macroable",
+                "vendor/laravel/framework/src/Illuminate/Collections",
+                "vendor/laravel/framework/src/Illuminate/Conditionable",
+                "vendor/laravel/framework/src/Illuminate/Reflection"
+            ],
+            "Illuminate\\": "vendor/laravel/framework/src/Illuminate/"
+        }
+    }
+}

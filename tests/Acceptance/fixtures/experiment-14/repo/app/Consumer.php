@@ -1,0 +1,49 @@
+<?php
+
+namespace App;
+
+use App\Contracts\MissingGateway;
+use App\Models\Invoice;
+use App\Models\Package;
+use App\Models\Setting;
+use App\Models\Widget;
+use App\Services\Registry;
+use Illuminate\Support\Facades\Log;
+
+class Consumer
+{
+    public function existing(): string
+    {
+        return 'unchanged';
+    }
+
+    /**
+     * J · docblock noise: Package::where() and Illuminate\Support\Facades\Log::info() are prose.
+     *
+     * @see Package::create()
+     */
+    public function exercise(array $data, Widget $widget): ?Widget
+    {
+        // J · comment noise: Package::create() and Setting::updateOrCreate() are named here only.
+        $names = ['Package::where', 'Package::create', 'Illuminate\\Support\\Facades\\Log', Package::class];
+
+        Package::where('slug', $data['slug']);                  // A
+        Package::create($data);                                 // B
+        Package::query();                                       // C
+        Setting::updateOrCreate(['key' => 'k'], $data);         // D
+
+        Registry::create($names);                               // E
+        MissingGateway::resolve('x');                           // F
+        Log::info('done');                                      // G
+        Package::activatte($data);                              // H · typo, same three conditions as B
+
+        return new Widget();                                    // I · already-supported form
+    }
+
+    public function invoice(array $data): ?Invoice
+    {
+        Invoice::create($data);                                  // I · bare AND unresolved member
+
+        return null;
+    }
+}

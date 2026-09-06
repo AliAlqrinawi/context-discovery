@@ -16,6 +16,13 @@
         </testsuite>
         <testsuite name="Acceptance">
             <directory>tests/Acceptance</directory>
+            <!--
+                Fixture repositories are input to the tool under test, never test code. An operator
+                who supplies a real checkout (the four Phase 0 fixtures) or runs `composer install`
+                (the laravel-m1 fixture) puts a vendor tree here, and PHPUnit's suite scanner would
+                otherwise try to load every *Test.php inside it and abort the whole run.
+            -->
+            <exclude>tests/Acceptance/fixtures</exclude>
         </testsuite>
     </testsuites>
     <source>

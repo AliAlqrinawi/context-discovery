@@ -70,6 +70,18 @@ final class DiscoverContext
         foreach ($diff->files as $file) {
             if ($this->source->text($file->path) === null) {
                 $diagnostic(sprintf('unreadable path: %s (no assertions extracted)', $file->path));
+
+                continue;
+            }
+
+            // A created file yields no own-file context: all of it is in the diff already
+            // (ADR-A005, ADR-A018). Said once per file so the omission is visible, never silent
+            // (P10, AA11).
+            if ($file->isNew && $file->isPhp()) {
+                $diagnostic(sprintf(
+                    'new file: %s — own-file context is in the diff, not fetched',
+                    $file->path,
+                ));
             }
         }
 
@@ -78,6 +90,24 @@ final class DiscoverContext
 
         $resolved = [];
 
+        // ADR-A020 bookkeeping. `$bareClasses` are the classes some assertion already names on
+        // its own, and those take the surface path in 5a; the member fallback stands down for them
+        // rather than fetching the same members twice. Read from the whole assertion list before
+        // the loop, so the answer does not depend on which reference the parser happened to reach
+        // first (P8). `$surfaced` then holds one entry per class the fallback has served, so three
+        // unresolved members on one model produce one surface.
+        $bareClasses = [];
+
+        foreach ($assertions as $assertion) {
+            if ($assertion->kind === AssertionKind::NamedReference
+                && NamedReferenceResolver::split($assertion->subject)[1] === null
+            ) {
+                $bareClasses[$assertion->subject] = true;
+            }
+        }
+
+        $surfaced = [];
+
         foreach ($assertions as $assertion) {
             // 4 · Choose the lever, by cost. The single decision point (P2).
             $lever = $this->leverPolicy->leverFor($assertion, $this->classLocator);
@@ -85,10 +115,16 @@ final class DiscoverContext
             // 5b · Flag the expensive or unknowable.
             if ($lever === Lever::Flagged) {
                 if ($assertion->kind === AssertionKind::NamedReference) {
-                    // The PSR-4 map could not place it: a missing entry, or no composer.json at
-                    // all. One line per unplaceable reference (01-architecture.md §5).
+                    // The map could not place it, for one of two reasons, and they are not the same
+                    // thing to a reader: either the project declares no prefix that covers the name,
+                    // or it declares one and there is no file at the end of it. Saying the first
+                    // when the truth is the second states the opposite of what happened (ADR-A017).
+                    // One line per unplaceable reference (01-architecture.md §5).
                     $diagnostic(sprintf(
-                        'missing PSR-4 entry: %s named in %s',
+                        '%s: %s named in %s',
+                        $this->classLocator->hasMappingFor(
+                            NamedReferenceResolver::split($assertion->subject)[0]
+                        ) ? 'class file not found' : 'missing PSR-4 entry',
                         $assertion->subject,
                         $assertion->originPath,
                     ));
@@ -130,7 +166,74 @@ final class DiscoverContext
                     $this->assumptionWriter->statementFor($assertion),
                 );
 
+                // 5c-i · The member could not be accounted for, and the class is the project's
+                //        own. Then the class's *surface* is what the region can be read against —
+                //        ADR-A020, M13's boundary B4, the gap G1 that kept Experiment 1's move
+                //        from ever firing on real Laravel code.
+                //
+                //        The flag above **stays**. `Package::activatte` — a typo — satisfies the
+                //        same three conditions as `Package::create`, and ADR-A016 established that
+                //        no available fact separates them; replacing the flag would report the
+                //        typo as satisfied context, which is M0's risk R1 and the silence P10
+                //        forbids. One assertion, two outcomes — the shape call-site truncation
+                //        below has used since freeze review 06.
+                $surface = $this->namedReferenceResolver->unresolvedMemberSurface($assertion);
+                $class = NamedReferenceResolver::split($assertion->subject)[0];
+
+                if ($surface !== [] && !isset($surfaced[$class]) && !isset($bareClasses[$class])) {
+                    $surfaced[$class] = true;
+
+                    // Same visibility rule as 5e: a member the diff already shows in full is not
+                    // context (ADR-A019). No diagnostic — the flag has already spoken for this
+                    // reference, and a second line would say nothing new.
+                    $surface = array_values(array_filter(
+                        $surface,
+                        static fn ($slice): bool => !$diff->showsEntirely(
+                            $slice->path,
+                            $slice->firstLine,
+                            $slice->lastLine,
+                        ),
+                    ));
+
+                    if ($surface !== []) {
+                        $resolved[] = ResolvedAssertion::fetched($assertion, $surface);
+                    }
+                }
+
                 continue;
+            }
+
+            // 5e · A cross-file slice the diff already shows in full is not context: the reviewer
+            //      is reading it. ADR-A005 — "the reviewer already receives the diff … duplicating
+            //      it would double-count tokens". Judged per slice and only on the diff's own
+            //      evidence: created file, or a region that contains the span entirely (ADR-A019).
+            //
+            //      Own-file slices are deliberately out of scope. Their whole point is material the
+            //      hunk does not show, and for a modified file the enclosing member often sits
+            //      inside its own region — suppressing that would delete Experiment 1's finding.
+            if ($assertion->kind === AssertionKind::NamedReference && $slices !== []) {
+                $needed = array_values(array_filter(
+                    $slices,
+                    static fn ($slice): bool => !$diff->showsEntirely(
+                        $slice->path,
+                        $slice->firstLine,
+                        $slice->lastLine,
+                    ),
+                ));
+
+                if ($needed === []) {
+                    // Settled, not failed: the contract was found and the reader already holds it.
+                    // Same shape as any other successful negative — no item, one line (freeze 05).
+                    $diagnostic(sprintf(
+                        'already in the diff: %s declared in %s; not fetched again',
+                        $assertion->subject,
+                        $slices[0]->path,
+                    ));
+
+                    continue;
+                }
+
+                $slices = $needed;
             }
 
             // The caller search is the one bounded lookup, and its bound is visible. The resolver
@@ -187,17 +290,65 @@ final class DiscoverContext
      */
     private function negativeFor(Assertion $assertion): string
     {
-        return $assertion->kind === AssertionKind::ChangedSignature
-            ? sprintf(
+        return match ($assertion->kind) {
+            AssertionKind::ChangedSignature => sprintf(
                 'caller search for %s( under %s: 0 call sites',
                 $assertion->subject,
                 $this->callerResolver->scope(),
-            )
-            : sprintf(
+            ),
+
+            // Two settled answers, each with its own true sentence. Sharing one would restore the
+            // free-text problem that fixed statements exist to prevent (freeze review 06).
+            AssertionKind::NamedReference => $this->namedReferenceSettlement($assertion),
+
+            AssertionKind::SameFileSymbolAbsence,
+            AssertionKind::SameFileReference => sprintf(
                 'own-file lookup for %s in %s: nothing to slice',
                 $assertion->subject,
                 $assertion->originPath,
+            ),
+
+            // Always flagged, so it never reaches a resolver and never a negative.
+            AssertionKind::UnverifiablePremise => throw new LogicException(
+                'A premise is flagged, never resolved.'
+            ),
+        };
+    }
+
+    /**
+     * What settled a named reference, when the answer was "nothing to fetch".
+     *
+     * - the **framework declares the member** — cited to the tag that says so (ADR-A011);
+     * - the member is **declared by an installed dependency**, cited to its line (ADR-A013);
+     * - the class is an **installed dependency's**, so the surface move does not apply and its
+     *   source is not this project's to dump (ADR-A012).
+     */
+    private function namedReferenceSettlement(Assertion $assertion): string
+    {
+        // The framework's own declaration first: its citation names the tag that documents the
+        // member, which is more than the path alone can say (ADR-A011). It is also the only rule
+        // that reaches a *project* facade, where ownership says nothing.
+        $declaration = $this->namedReferenceResolver->frameworkDeclarationFor($assertion);
+
+        if ($declaration !== null) {
+            return sprintf('framework reference: %s declared at %s', $assertion->subject, $declaration);
+        }
+
+        $memberDeclaration = $this->namedReferenceResolver->dependencyMemberDeclarationFor($assertion);
+
+        if ($memberDeclaration !== null) {
+            return sprintf(
+                'dependency member: %s declared at %s; source not fetched',
+                $assertion->subject,
+                $memberDeclaration,
             );
+        }
+
+        return sprintf(
+            'dependency class: %s provided by %s; surface not fetched',
+            $assertion->subject,
+            $this->namedReferenceResolver->dependencyPathFor($assertion) ?? 'an installed package',
+        );
     }
 
     /**

@@ -1,0 +1,127 @@
+{
+    "bundle_version": 1,
+    "budget_tokens": 8000,
+    "used_tokens": 186,
+    "items": [
+        {
+            "lever": "fetched",
+            "reason": "the region uses php, which the file's use block does not import",
+            "assertion_kind": "same_file_symbol_absence",
+            "provenance": {
+                "path": "app/Services/NewService.php",
+                "lines": [
+                    5,
+                    7
+                ]
+            },
+            "payload": "use App\\Models\\Package;\nuse App\\Support\\Existing;\nuse Illuminate\\Support\\Facades\\Log;",
+            "tokens": 22
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region uses php, which the file's use block does not import",
+            "assertion_kind": "same_file_symbol_absence",
+            "provenance": {
+                "path": "app/Services/NewService.php",
+                "member": "LABEL",
+                "lines": [
+                    17,
+                    17
+                ]
+            },
+            "payload": "    private const LABEL = 'menu';",
+            "tokens": 9
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region calls the sibling member audit, whose contract the diff does not show",
+            "assertion_kind": "same_file_reference",
+            "provenance": {
+                "path": "app/Services/NewService.php",
+                "member": "audit",
+                "lines": [
+                    30,
+                    35
+                ]
+            },
+            "payload": "    private function audit(array $data): void\n    {\n        $names = ['Package::create', 'Illuminate\\\\Support\\\\Facades\\\\Log::info', Package::class];\n\n        Log::info('audited', ['names' => $names, 'count' => count($data)]);\n    }",
+            "tokens": 58
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region calls the sibling member helper, whose contract the diff does not show",
+            "assertion_kind": "same_file_reference",
+            "provenance": {
+                "path": "app/Support/Existing.php",
+                "member": "helper",
+                "lines": [
+                    14,
+                    17
+                ]
+            },
+            "payload": "    public function helper(Package $package): string\n    {\n        return $package->label();\n    }",
+            "tokens": 25
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Package, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Package.php",
+                "member": "fillable",
+                "lines": [
+                    9,
+                    9
+                ]
+            },
+            "payload": "    protected $fillable = ['name', 'slug'];",
+            "tokens": 11
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Package, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Package.php",
+                "member": "label",
+                "lines": [
+                    11,
+                    14
+                ]
+            },
+            "payload": "    public function label(): string\n    {\n        return (string) $this->name;\n    }",
+            "tokens": 21
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Models\\Package::create, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Services/NewService.php",
+                "member": "App\\Models\\Package::create",
+                "lines": [
+                    1,
+                    36
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Models\\Package::where, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Services/NewService.php",
+                "member": "App\\Models\\Package::where",
+                "lines": [
+                    1,
+                    36
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        }
+    ],
+    "dropped": []
+}

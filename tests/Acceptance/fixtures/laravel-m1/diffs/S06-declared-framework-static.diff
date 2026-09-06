@@ -1,0 +1,17 @@
+diff --git a/app/Repositories/PackageRepository.php b/app/Repositories/PackageRepository.php
+--- a/app/Repositories/PackageRepository.php
++++ b/app/Repositories/PackageRepository.php
+@@ -51,6 +51,13 @@
+         return Package::query();
+     }
+ 
++    public function normalise(array $data): array
++    {
++        $data['slug'] = Str::slug($data['name']);
++
++        return Arr::only($data, ['name', 'slug', 'price']);
++    }
++
+     public function labelled(): Registry
+     {
+         Package::active()->get();

@@ -1,0 +1,15 @@
+diff --git a/app/Repositories/PackageRepository.php b/app/Repositories/PackageRepository.php
+--- a/app/Repositories/PackageRepository.php
++++ b/app/Repositories/PackageRepository.php
+@@ -25,6 +25,11 @@
+         DB::transaction(function () use ($action): void {
+             Log::info('package.audit.committed', ['action' => $action]);
+         });
++    }
++
++    public function store(array $data): Package
++    {
++        return Package::create($data);
+     }
+ 
+     public function listing(): Collection

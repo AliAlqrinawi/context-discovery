@@ -1,0 +1,7 @@
+unresolved named_reference: App\Support\OneLevel::run in app/Consumer.php
+unresolved named_reference: App\Support\TwoLevel::run in app/Consumer.php
+unresolved named_reference: App\Support\WithTrait::greet in app/Consumer.php
+unresolved named_reference: App\Support\ViaParent::greet in app/Consumer.php
+unresolved named_reference: App\Support\Dynamic::create in app/Consumer.php
+unresolved named_reference: App\Support\Direct::nope in app/Consumer.php
+unresolved named_reference: App\Support\Direct::runn in app/Consumer.php
