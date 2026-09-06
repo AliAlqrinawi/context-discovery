@@ -1,0 +1,2961 @@
+[
+    {
+        "sha": "5eed81d",
+        "state": "CONTESTED",
+        "why": "E1 pass but E2 fail — nothing under a test root asserts this behaviour",
+        "e1": true,
+        "e2": false,
+        "added": 119,
+        "lost": 0,
+        "lost_examples": [],
+        "subject": "bugs"
+    },
+    {
+        "sha": "6ccc33b",
+        "state": "CONTESTED",
+        "why": "E1 fail — 1 of 1 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": false,
+        "added": 1,
+        "lost": 1,
+        "lost_examples": [
+            "$product = Product::where(\"sku\", $row[1])->first();"
+        ],
+        "subject": "change import excel"
+    },
+    {
+        "sha": "0b94b48",
+        "state": "CONTESTED",
+        "why": "E1 fail — 3 of 6 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": false,
+        "added": 6,
+        "lost": 3,
+        "lost_examples": [
+            "'en' => $row[3],",
+            "$newProduct->location = $row[6];"
+        ],
+        "subject": "add location to products"
+    },
+    {
+        "sha": "973aa7c",
+        "state": "CONTESTED",
+        "why": "E1 pass but E2 fail — nothing under a test root asserts this behaviour",
+        "e1": true,
+        "e2": false,
+        "added": 23,
+        "lost": 0,
+        "lost_examples": [],
+        "subject": "Number of products, sections and products"
+    },
+    {
+        "sha": "28f2411",
+        "state": "CONTESTED",
+        "why": "E1 fail — 9 of 17 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": false,
+        "added": 17,
+        "lost": 9,
+        "lost_examples": [
+            "$product = Product::where(\"id\", $row[0])->first();",
+            "$newProduct->sku = $row[1];"
+        ],
+        "subject": "Modify the method of uploading products"
+    },
+    {
+        "sha": "b9b3193",
+        "state": "CONTESTED",
+        "why": "E1 pass but E2 fail — nothing under a test root asserts this behaviour",
+        "e1": true,
+        "e2": false,
+        "added": 2,
+        "lost": 0,
+        "lost_examples": [],
+        "subject": "bugs"
+    },
+    {
+        "sha": "1a55793",
+        "state": "CONTESTED",
+        "why": "E1 fail — 7 of 9 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": false,
+        "added": 9,
+        "lost": 7,
+        "lost_examples": [
+            "return Product::select('id' ,\"sku\" ,'name->ar as name_ar', 'name->en as name_en', 'barcode', 'price')",
+            "$product = Product::where(\"id\", $row[0])->first();"
+        ],
+        "subject": "modification for excel products"
+    },
+    {
+        "sha": "9ba34b3",
+        "state": "CONTESTED",
+        "why": "E1 fail — 6 of 22 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": false,
+        "added": 22,
+        "lost": 6,
+        "lost_examples": [
+            "Product::updateOrCreate([\"sku\" => $row[0]], [",
+            "'price' => $row[4],"
+        ],
+        "subject": "bugs"
+    },
+    {
+        "sha": "b5b2859",
+        "state": "CONTESTED",
+        "why": "E1 fail — 1 of 11 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": true,
+        "added": 11,
+        "lost": 1,
+        "lost_examples": [
+            "'location'=>'nullable|required|max:255'"
+        ],
+        "subject": "add location to products"
+    },
+    {
+        "sha": "00095a9",
+        "state": "CONTESTED",
+        "why": "E1 fail — 2 of 88 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": false,
+        "added": 88,
+        "lost": 2,
+        "lost_examples": [
+            "return Product::select('id', 'name->ar as name_ar', 'name->en as name_en', \"sku\", 'barcode', 'price')",
+            "return $this->productService->import($request->all());"
+        ],
+        "subject": "export products"
+    },
+    {
+        "sha": "85beaae",
+        "state": "CONTESTED",
+        "why": "E1 fail — 3 of 5 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": false,
+        "added": 5,
+        "lost": 3,
+        "lost_examples": [
+            "'price' => $row[4],",
+            "'sku' => $row[0],"
+        ],
+        "subject": "import products"
+    },
+    {
+        "sha": "71593ca",
+        "state": "CONTESTED",
+        "why": "E1 pass but E2 fail — nothing under a test root asserts this behaviour",
+        "e1": true,
+        "e2": false,
+        "added": 1,
+        "lost": 0,
+        "lost_examples": [],
+        "subject": "import products"
+    },
+    {
+        "sha": "a26380b",
+        "state": "CONTESTED",
+        "why": "E1 fail — 10 of 40 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": false,
+        "added": 40,
+        "lost": 10,
+        "lost_examples": [
+            "Product::updateOrCreate([\"sku\" => $row[3]], [",
+            "'en' => $row[0],"
+        ],
+        "subject": "import Products"
+    },
+    {
+        "sha": "12fd7ee",
+        "state": "CONTESTED",
+        "why": "E1 pass but E2 fail — nothing under a test root asserts this behaviour",
+        "e1": true,
+        "e2": false,
+        "added": 2,
+        "lost": 0,
+        "lost_examples": [],
+        "subject": "bugs"
+    },
+    {
+        "sha": "ed8f057",
+        "state": "CONTESTED",
+        "why": "E1 fail — 1 of 16 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": false,
+        "added": 16,
+        "lost": 1,
+        "lost_examples": [
+            "<button type=\"button\" class=\"btn btn-success waves-effect waves-light dropdown-toggle\" data-toggle=\"dropdown\""
+        ],
+        "subject": "bugs"
+    },
+    {
+        "sha": "f263b79",
+        "state": "CONTESTED",
+        "why": "E1 pass but E2 fail — nothing under a test root asserts this behaviour",
+        "e1": true,
+        "e2": false,
+        "added": 27,
+        "lost": 0,
+        "lost_examples": [],
+        "subject": "remove Products From Category"
+    },
+    {
+        "sha": "05c00c3",
+        "state": "CONTESTED",
+        "why": "E1 pass but E2 fail — nothing under a test root asserts this behaviour",
+        "e1": true,
+        "e2": false,
+        "added": 22,
+        "lost": 0,
+        "lost_examples": [],
+        "subject": "bugs"
+    },
+    {
+        "sha": "5eddad1",
+        "state": "CONTESTED",
+        "why": "E1 fail — 16 of 50 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": false,
+        "added": 50,
+        "lost": 16,
+        "lost_examples": [
+            "$category = Category::find($data[\"category_for_add\"]);",
+            "$productIds = explode(',',$data['selected_ids']);"
+        ],
+        "subject": "add products to the Category"
+    },
+    {
+        "sha": "b053fc7",
+        "state": "CONTESTED",
+        "why": "E1 fail — 1 of 13 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": false,
+        "added": 13,
+        "lost": 1,
+        "lost_examples": [
+            "} catch (\\Exception $e) {"
+        ],
+        "subject": "Update UploadTmpToSpaces.php"
+    },
+    {
+        "sha": "42925d3",
+        "state": "CONTESTED",
+        "why": "E1 pass but E2 fail — nothing under a test root asserts this behaviour",
+        "e1": true,
+        "e2": false,
+        "added": 28,
+        "lost": 0,
+        "lost_examples": [],
+        "subject": "Drivers withdrawal"
+    },
+    {
+        "sha": "4339768",
+        "state": "CONTESTED",
+        "why": "E1 pass but E2 fail — nothing under a test root asserts this behaviour",
+        "e1": true,
+        "e2": false,
+        "added": 1,
+        "lost": 0,
+        "lost_examples": [],
+        "subject": "Update 2024_02_25_143701_create_products_table.php"
+    },
+    {
+        "sha": "b4f5840",
+        "state": "CONTESTED",
+        "why": "E1 fail — 2 of 28 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": true,
+        "added": 28,
+        "lost": 2,
+        "lost_examples": [
+            "FireBase::sendFCMTopic('/topics/' . $topic, $data['title'], $data['body'], $data, true);",
+            "Schema::table('notifications_schedule', function (Blueprint $table) {"
+        ],
+        "subject": "notifications_schedule"
+    },
+    {
+        "sha": "900298d",
+        "state": "UNUSABLE",
+        "why": "no substantive PHP addition",
+        "e1": null,
+        "e2": null,
+        "added": 0,
+        "lost": 0
+    },
+    {
+        "sha": "73ea394",
+        "state": "CONTESTED",
+        "why": "E1 fail — 9 of 45 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": true,
+        "added": 45,
+        "lost": 9,
+        "lost_examples": [
+            "$schedule->job(new ScheduleNotificationJob())->everyMinute();",
+            "protected $topic;"
+        ],
+        "subject": "ScheduleNotificationJob"
+    },
+    {
+        "sha": "36ce497",
+        "state": "CONTESTED",
+        "why": "E1 fail — 1 of 192 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": true,
+        "added": 192,
+        "lost": 1,
+        "lost_examples": [
+            "protected $fillable = [\"title\", \"content\", \"url\", \"category_id\", \"product_id\", \"product_ids\", \"topic\", \"send_at\"];"
+        ],
+        "subject": "Schedule Notifications"
+    },
+    {
+        "sha": "051fe9d",
+        "state": "CONTESTED",
+        "why": "E1 pass but E2 fail — nothing under a test root asserts this behaviour",
+        "e1": true,
+        "e2": false,
+        "added": 2,
+        "lost": 0,
+        "lost_examples": [],
+        "subject": "update Code Product Position"
+    },
+    {
+        "sha": "3b91194",
+        "state": "CONTESTED",
+        "why": "E1 fail — 2 of 113 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": false,
+        "added": 113,
+        "lost": 2,
+        "lost_examples": [
+            "$product = Product::find($request->product_id);",
+            "$product->position = $request->position;"
+        ],
+        "subject": "change location position"
+    },
+    {
+        "sha": "6431f57",
+        "state": "CONTROL",
+        "why": "E1 pass (all 36 added lines survive) + E2 pass: HEAD:tests/Feature/Auth/AuthenticationTest.php (extends)",
+        "e1": true,
+        "e2": true,
+        "added": 36,
+        "lost": 0,
+        "lost_examples": [],
+        "subject": "add position for products"
+    },
+    {
+        "sha": "ccb487f",
+        "state": "CONTESTED",
+        "why": "E1 fail — 1 of 92 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": true,
+        "added": 92,
+        "lost": 1,
+        "lost_examples": [
+            "Route::PUT('products/international/{product}', [ProductController::class, 'international'])->name('products.international');"
+        ],
+        "subject": "add button ClaerCach in SideBar"
+    },
+    {
+        "sha": "1660381",
+        "state": "CONTESTED",
+        "why": "E1 fail — 2 of 13 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": false,
+        "added": 13,
+        "lost": 2,
+        "lost_examples": [
+            "return \\responder::success(new BaseCollection($this->categoryService->index(), CategoryResource::class));",
+            "->mainCategory()->orderBy(\"position\" , \"ASC\")->paginate(10);"
+        ],
+        "subject": "positions category on the application"
+    },
+    {
+        "sha": "c387b65",
+        "state": "UNUSABLE",
+        "why": ">500 changed lines",
+        "e1": null,
+        "e2": null,
+        "added": 0,
+        "lost": 0
+    },
+    {
+        "sha": "3d917cf",
+        "state": "CONTESTED",
+        "why": "E1 fail — 18 of 112 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": false,
+        "added": 112,
+        "lost": 18,
+        "lost_examples": [
+            "Column::make('id')->title( __(\"#\") ),",
+            "Column::make(\"checkbox\")"
+        ],
+        "subject": "Modify the design of the product page and add glass to change it more to global, local, active and non-active"
+    },
+    {
+        "sha": "e3e402c",
+        "state": "CONTESTED",
+        "why": "E1 pass but E2 fail — nothing under a test root asserts this behaviour",
+        "e1": true,
+        "e2": false,
+        "added": 3,
+        "lost": 0,
+        "lost_examples": [],
+        "subject": "Change translation of words"
+    },
+    {
+        "sha": "ef704fb",
+        "state": "CONTESTED",
+        "why": "E1 pass but E2 fail — nothing under a test root asserts this behaviour",
+        "e1": true,
+        "e2": false,
+        "added": 2,
+        "lost": 0,
+        "lost_examples": [],
+        "subject": "change width sub categories"
+    },
+    {
+        "sha": "08384ae",
+        "state": "CONTESTED",
+        "why": "E1 fail — 5 of 16 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": false,
+        "added": 16,
+        "lost": 5,
+        "lost_examples": [
+            "->rawColumns(['name', 'sub_categories', 'image', 'date', 'status', 'home', 'action'])",
+            "href=\"{{ route('admin.products.index') . '?categories=' . $category->id }}\" target=\"_blank\""
+        ],
+        "subject": "Coding Optimization"
+    },
+    {
+        "sha": "31dbfd4",
+        "state": "CONTESTED",
+        "why": "E1 fail — 12 of 44 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": false,
+        "added": 44,
+        "lost": 12,
+        "lost_examples": [
+            "$subCategories = \"<aside><details><summary class='btn btn-outline-success btn-sm waves-effect' style='padding-left:20px; padding-right:20px; margin-bottom: 3px;'>{$category->name}</summary>",
+            "<div style='width: 200px;' class='row'><a style='padding:3px; margin: 1.5px;' href='\".route('admin.products.index').'?categories='.$category->id.\"'  target='_blank' class='btn btn-success btn-sm col-3'>"
+        ],
+        "subject": "Modify the design and the way to go to the sub-sections and move the sections to the products page"
+    },
+    {
+        "sha": "c0d43a0",
+        "state": "UNUSABLE",
+        "why": ">500 changed lines",
+        "e1": null,
+        "e2": null,
+        "added": 0,
+        "lost": 0
+    },
+    {
+        "sha": "bd6bc5a",
+        "state": "CONTESTED",
+        "why": "E1 fail — 3 of 13 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": false,
+        "added": 13,
+        "lost": 3,
+        "lost_examples": [
+            "if(request()->is_international && request()->coin_price)",
+            "if(request()->is_international && request()->coin_price && $offerPrice)"
+        ],
+        "subject": "feat : add price based country"
+    },
+    {
+        "sha": "2ed279a",
+        "state": "CONTESTED",
+        "why": "E1 fail — 2 of 32 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": true,
+        "added": 32,
+        "lost": 2,
+        "lost_examples": [
+            "return $this->hasMany(self::class)->active()->international();",
+            "$query->when(request()->type, function ($q) use ($request) {"
+        ],
+        "subject": "feat : add internationl task"
+    },
+    {
+        "sha": "2a5abd7",
+        "state": "CONTESTED",
+        "why": "E1 fail — 1 of 25 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": false,
+        "added": 25,
+        "lost": 1,
+        "lost_examples": [
+            "->dom('Blfrtip') // Include 'l' for the length menu"
+        ],
+        "subject": "feat : add table lenght"
+    },
+    {
+        "sha": "7dc5000",
+        "state": "UNUSABLE",
+        "why": "no substantive PHP addition",
+        "e1": null,
+        "e2": null,
+        "added": 0,
+        "lost": 0
+    },
+    {
+        "sha": "98263fc",
+        "state": "CONTESTED",
+        "why": "E1 pass but E2 fail — nothing under a test root asserts this behaviour",
+        "e1": true,
+        "e2": false,
+        "added": 7,
+        "lost": 0,
+        "lost_examples": [],
+        "subject": "Create ProductPhotosTableSeeder.php"
+    },
+    {
+        "sha": "aadcb06",
+        "state": "UNUSABLE",
+        "why": "no substantive PHP addition",
+        "e1": null,
+        "e2": null,
+        "added": 0,
+        "lost": 0
+    },
+    {
+        "sha": "80532e5",
+        "state": "UNUSABLE",
+        "why": "no substantive PHP addition",
+        "e1": null,
+        "e2": null,
+        "added": 0,
+        "lost": 0
+    },
+    {
+        "sha": "8faf60b",
+        "state": "CONTESTED",
+        "why": "E1 pass but E2 fail — nothing under a test root asserts this behaviour",
+        "e1": true,
+        "e2": false,
+        "added": 6,
+        "lost": 0,
+        "lost_examples": [],
+        "subject": "Create CategoriesPhotosTableSeeder.php"
+    },
+    {
+        "sha": "ffc8b3e",
+        "state": "UNUSABLE",
+        "why": "no substantive PHP addition",
+        "e1": null,
+        "e2": null,
+        "added": 0,
+        "lost": 0
+    },
+    {
+        "sha": "e7798a5",
+        "state": "CONTESTED",
+        "why": "E1 fail — 7 of 27 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": false,
+        "added": 27,
+        "lost": 7,
+        "lost_examples": [
+            "$localPath = __DIR__ . \"/../../../../assets/tmp\";",
+            "$totalFiles = count($files);"
+        ],
+        "subject": "Update UploadTmpToSpaces.php"
+    },
+    {
+        "sha": "65863ba",
+        "state": "CONTESTED",
+        "why": "E1 fail — 20 of 21 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": false,
+        "added": 21,
+        "lost": 20,
+        "lost_examples": [
+            "$localPath = public_path('test');",
+            "$client = new Client();"
+        ],
+        "subject": "Update UploadTmpToSpaces.php"
+    },
+    {
+        "sha": "e191c32",
+        "state": "CONTESTED",
+        "why": "E1 pass but E2 fail — nothing under a test root asserts this behaviour",
+        "e1": true,
+        "e2": false,
+        "added": 3,
+        "lost": 0,
+        "lost_examples": [],
+        "subject": "feat  : add lock orders"
+    },
+    {
+        "sha": "f41d32c",
+        "state": "UNUSABLE",
+        "why": "no substantive PHP addition",
+        "e1": null,
+        "e2": null,
+        "added": 0,
+        "lost": 0
+    },
+    {
+        "sha": "1c79d3c",
+        "state": "CONTESTED",
+        "why": "E1 pass but E2 fail — nothing under a test root asserts this behaviour",
+        "e1": true,
+        "e2": false,
+        "added": 2,
+        "lost": 0,
+        "lost_examples": [],
+        "subject": "fix : coupon trans"
+    },
+    {
+        "sha": "6cbfc5b",
+        "state": "CONTESTED",
+        "why": "E1 fail — 1 of 2 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": false,
+        "added": 2,
+        "lost": 1,
+        "lost_examples": [
+            "<div class=\"col-md-6 mt-2\">"
+        ],
+        "subject": "Update index.blade.php"
+    },
+    {
+        "sha": "e7899fc",
+        "state": "CONTESTED",
+        "why": "E1 pass but E2 fail — nothing under a test root asserts this behaviour",
+        "e1": true,
+        "e2": false,
+        "added": 5,
+        "lost": 0,
+        "lost_examples": [],
+        "subject": "Create ProductCategoryTableSeeder.php"
+    },
+    {
+        "sha": "e4d92dd",
+        "state": "CONTESTED",
+        "why": "E1 fail — 3 of 7 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": false,
+        "added": 7,
+        "lost": 3,
+        "lost_examples": [
+            "return $q->where('categories.id',$value);",
+            "return auth()->user()->favorites()->with('categories')->orderBy('id', 'desc')->paginate(10);"
+        ],
+        "subject": "fix : product category relations"
+    },
+    {
+        "sha": "812a701",
+        "state": "CONTESTED",
+        "why": "E1 fail — 11 of 34 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": true,
+        "added": 34,
+        "lost": 11,
+        "lost_examples": [
+            "->rawColumns(['action', 'checkbox','name','international','image', 'categories','date', 'status'])",
+            "Column::computed('categories')->title(__('categories')),"
+        ],
+        "subject": "feat : update category in products"
+    },
+    {
+        "sha": "183ca31",
+        "state": "CONTESTED",
+        "why": "E1 pass but E2 fail — nothing under a test root asserts this behaviour",
+        "e1": true,
+        "e2": false,
+        "added": 3,
+        "lost": 0,
+        "lost_examples": [],
+        "subject": "feat : fix settings trans"
+    },
+    {
+        "sha": "cc63603",
+        "state": "CONTESTED",
+        "why": "E1 fail — 1 of 2 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": false,
+        "added": 2,
+        "lost": 1,
+        "lost_examples": [
+            "<span class=\"menu-title\" data-i18n=\"Starter kit\">{{ __('log out') }} </span>"
+        ],
+        "subject": "fix : settings"
+    },
+    {
+        "sha": "a554424",
+        "state": "CONTESTED",
+        "why": "E1 pass but E2 fail — nothing under a test root asserts this behaviour",
+        "e1": true,
+        "e2": false,
+        "added": 1,
+        "lost": 0,
+        "lost_examples": [],
+        "subject": "Update StoreRequest.php"
+    },
+    {
+        "sha": "6a9d811",
+        "state": "CONTROL",
+        "why": "E1 pass (all 12 added lines survive) + E2 pass: HEAD:tests/Feature/Auth/AuthenticationTest.php (User)",
+        "e1": true,
+        "e2": true,
+        "added": 12,
+        "lost": 0,
+        "lost_examples": [],
+        "subject": "feat : nullable product image"
+    },
+    {
+        "sha": "f65f389",
+        "state": "CONTESTED",
+        "why": "E1 fail — 20 of 20 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": false,
+        "added": 20,
+        "lost": 20,
+        "lost_examples": [
+            "$filename = basename($file);",
+            "$this->uploadFileToSpace($file, 'photos/' . $filename);"
+        ],
+        "subject": "Update UploadTmpToSpaces.php"
+    },
+    {
+        "sha": "dcd57c6",
+        "state": "CONTESTED",
+        "why": "E1 fail — 9 of 14 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": false,
+        "added": 14,
+        "lost": 9,
+        "lost_examples": [
+            "$localPath = __DIR__.\"/../../../../assets/tmp\";",
+            "$doSpacesPath = 'photos';"
+        ],
+        "subject": "Create UploadTmpToSpaces.php"
+    },
+    {
+        "sha": "954de78",
+        "state": "UNUSABLE",
+        "why": ">500 changed lines",
+        "e1": null,
+        "e2": null,
+        "added": 0,
+        "lost": 0
+    },
+    {
+        "sha": "f89b882",
+        "state": "CONTESTED",
+        "why": "E1 pass but E2 fail — nothing under a test root asserts this behaviour",
+        "e1": true,
+        "e2": false,
+        "added": 3,
+        "lost": 0,
+        "lost_examples": [],
+        "subject": "fix : qty"
+    },
+    {
+        "sha": "d5d59ff",
+        "state": "UNUSABLE",
+        "why": "no substantive PHP addition",
+        "e1": null,
+        "e2": null,
+        "added": 0,
+        "lost": 0
+    },
+    {
+        "sha": "722b559",
+        "state": "CONTESTED",
+        "why": "E1 pass but E2 fail — nothing under a test root asserts this behaviour",
+        "e1": true,
+        "e2": false,
+        "added": 13,
+        "lost": 0,
+        "lost_examples": [],
+        "subject": "feat : add notify in status all"
+    },
+    {
+        "sha": "44b5151",
+        "state": "CONTESTED",
+        "why": "E1 pass but E2 fail — nothing under a test root asserts this behaviour",
+        "e1": true,
+        "e2": false,
+        "added": 5,
+        "lost": 0,
+        "lost_examples": [],
+        "subject": "Update ContactDataTable.php"
+    },
+    {
+        "sha": "5f59b8c",
+        "state": "CONTESTED",
+        "why": "E1 pass but E2 fail — nothing under a test root asserts this behaviour",
+        "e1": true,
+        "e2": false,
+        "added": 5,
+        "lost": 0,
+        "lost_examples": [],
+        "subject": "Update OrderDataTable.php"
+    },
+    {
+        "sha": "2955994",
+        "state": "CONTESTED",
+        "why": "E1 pass but E2 fail — nothing under a test root asserts this behaviour",
+        "e1": true,
+        "e2": false,
+        "added": 5,
+        "lost": 0,
+        "lost_examples": [],
+        "subject": "feat : add whatsapp"
+    },
+    {
+        "sha": "3c4de00",
+        "state": "CONTESTED",
+        "why": "E1 fail — 1 of 38 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": false,
+        "added": 38,
+        "lost": 1,
+        "lost_examples": [
+            "return $this->model->productIds($ids)->pluck('name','id');"
+        ],
+        "subject": "fix: select products"
+    },
+    {
+        "sha": "d2a8375",
+        "state": "CONTESTED",
+        "why": "E1 pass but E2 fail — nothing under a test root asserts this behaviour",
+        "e1": true,
+        "e2": false,
+        "added": 2,
+        "lost": 0,
+        "lost_examples": [],
+        "subject": "Update charts.blade.php"
+    },
+    {
+        "sha": "fce035a",
+        "state": "CONTESTED",
+        "why": "E1 pass but E2 fail — nothing under a test root asserts this behaviour",
+        "e1": true,
+        "e2": false,
+        "added": 5,
+        "lost": 0,
+        "lost_examples": [],
+        "subject": "feat : add coupon in order"
+    },
+    {
+        "sha": "54bc7c2",
+        "state": "CONTESTED",
+        "why": "E1 fail — 1 of 40 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": false,
+        "added": 40,
+        "lost": 1,
+        "lost_examples": [
+            "channel.bind('App\\\\Events\\\\OrderNotificationEvent', function(data) {"
+        ],
+        "subject": "feat : add pusher"
+    },
+    {
+        "sha": "d038d95",
+        "state": "CONTESTED",
+        "why": "E1 pass but E2 fail — nothing under a test root asserts this behaviour",
+        "e1": true,
+        "e2": false,
+        "added": 15,
+        "lost": 0,
+        "lost_examples": [],
+        "subject": "fix : unread count notification"
+    },
+    {
+        "sha": "d6be97d",
+        "state": "CONTESTED",
+        "why": "E1 fail — 3 of 17 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": false,
+        "added": 17,
+        "lost": 3,
+        "lost_examples": [
+            "if( $user )  return \\responder::success(new UserResource($user->load('address.governorate.country','address.city','lastActiveOrder','wallet')->loadCount('unreadNotifications')));",
+            "return \\responder::success(new UserResource($user->load('address.governorate.country','address.city','lastActiveOrder','wallet')->loadCount('unreadNotifications')));"
+        ],
+        "subject": "feat: read notifications"
+    },
+    {
+        "sha": "e550ccc",
+        "state": "CONTESTED",
+        "why": "E1 fail — 1 of 14 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": false,
+        "added": 14,
+        "lost": 1,
+        "lost_examples": [
+            "{!! Form::select('products[]', [], null, ['class' => 'form-control select2-data-ajax ', 'multiple' => true]) !!}"
+        ],
+        "subject": "feat : add products in notification"
+    },
+    {
+        "sha": "4087a98",
+        "state": "CONTESTED",
+        "why": "E1 pass but E2 fail — nothing under a test root asserts this behaviour",
+        "e1": true,
+        "e2": false,
+        "added": 14,
+        "lost": 0,
+        "lost_examples": [],
+        "subject": "feat : add order status trans"
+    },
+    {
+        "sha": "4156f2c",
+        "state": "CONTESTED",
+        "why": "E1 fail — 3 of 8 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": false,
+        "added": 8,
+        "lost": 3,
+        "lost_examples": [
+            "<span class=\"order-span\"> {{ __('pick-up time') }} : <span class=\"text-secondary\">{{ $new_order->delivery_type == \\App\\Enum\\OrderDeliveryTypeEnum::LATER ? __($new_order->delivery_day) . ' ' . $new_order->delivery_time : __($new_order->delivery_type) }}</span></span>",
+            "<span class=\"order-span\"> {{ __('pick-up time') }} : <span class=\"text-secondary\">{{ $pending_order->delivery_type == \\App\\Enum\\OrderDeliveryTypeEnum::LATER ? __($pending_order->delivery_day) . ' ' . $pending_order->delivery_time : __($pending_order->delivery_type) }}</span></span>"
+        ],
+        "subject": "feat : add delivery time in orders"
+    },
+    {
+        "sha": "72cd5a7",
+        "state": "CONTESTED",
+        "why": "E1 fail — 2 of 13 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": false,
+        "added": 13,
+        "lost": 2,
+        "lost_examples": [
+            "return \\responder::success(new OrderResource($order->load('address.governorate','address.city','driver','items.product')));",
+            "return auth()->user()->orders()->with('address.governorate','address.city','driver','items.product')->latest()->paginate(10);"
+        ],
+        "subject": "fix : order resource"
+    },
+    {
+        "sha": "9c625c2",
+        "state": "UNUSABLE",
+        "why": "no substantive PHP addition",
+        "e1": null,
+        "e2": null,
+        "added": 0,
+        "lost": 0
+    },
+    {
+        "sha": "d60e044",
+        "state": "CONTESTED",
+        "why": "E1 pass but E2 fail — nothing under a test root asserts this behaviour",
+        "e1": true,
+        "e2": false,
+        "added": 1,
+        "lost": 0,
+        "lost_examples": [],
+        "subject": "remove payment methods"
+    },
+    {
+        "sha": "b08e9b4",
+        "state": "CONTESTED",
+        "why": "E1 pass but E2 fail — nothing under a test root asserts this behaviour",
+        "e1": true,
+        "e2": false,
+        "added": 2,
+        "lost": 0,
+        "lost_examples": [],
+        "subject": "fix error in print"
+    },
+    {
+        "sha": "725d13b",
+        "state": "CONTESTED",
+        "why": "E1 fail — 1 of 89 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": true,
+        "added": 89,
+        "lost": 1,
+        "lost_examples": [
+            "} catch (\\Exception $e) {"
+        ],
+        "subject": "feat : add payment url"
+    },
+    {
+        "sha": "cdee835",
+        "state": "CONTESTED",
+        "why": "E1 fail — 1 of 50 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": true,
+        "added": 50,
+        "lost": 1,
+        "lost_examples": [
+            "'order_limit' => 'required|numeric|min:0',"
+        ],
+        "subject": "feat : add payment methods in cities"
+    },
+    {
+        "sha": "b2aaeef",
+        "state": "CONTESTED",
+        "why": "E1 fail — 1 of 3 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": false,
+        "added": 3,
+        "lost": 1,
+        "lost_examples": [
+            "'delivery_hours'=>'required|numeric'"
+        ],
+        "subject": "feat : add delivery hours in dashboard"
+    },
+    {
+        "sha": "b97b1b3",
+        "state": "CONTESTED",
+        "why": "E1 pass but E2 fail — nothing under a test root asserts this behaviour",
+        "e1": true,
+        "e2": false,
+        "added": 1,
+        "lost": 0,
+        "lost_examples": [],
+        "subject": "Update OrderDataTable.php"
+    },
+    {
+        "sha": "38d8894",
+        "state": "CONTESTED",
+        "why": "E1 fail — 4 of 65 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": true,
+        "added": 65,
+        "lost": 4,
+        "lost_examples": [
+            "->rawColumns(['action', 'checkbox', 'user_name','city','country','status','user_order_count'])",
+            "return view('dashboard.banners.create',[ 'categories'=> $this->categories() ,'types'=>$this->bannerService->getBannerTypes() ,'type'=>request()->type, 'selectedPoducts'=>[]]);"
+        ],
+        "subject": "feat : add delivery type"
+    },
+    {
+        "sha": "59b94ea",
+        "state": "CONTESTED",
+        "why": "E1 pass but E2 fail — nothing under a test root asserts this behaviour",
+        "e1": true,
+        "e2": false,
+        "added": 5,
+        "lost": 0,
+        "lost_examples": [],
+        "subject": "feat : add permission"
+    },
+    {
+        "sha": "49ed9ad",
+        "state": "UNUSABLE",
+        "why": ">500 changed lines",
+        "e1": null,
+        "e2": null,
+        "added": 0,
+        "lost": 0
+    },
+    {
+        "sha": "2e12275",
+        "state": "CONTESTED",
+        "why": "E1 pass but E2 fail — nothing under a test root asserts this behaviour",
+        "e1": true,
+        "e2": false,
+        "added": 3,
+        "lost": 0,
+        "lost_examples": [],
+        "subject": "feat : add balance in users"
+    },
+    {
+        "sha": "ed1d2d9",
+        "state": "UNUSABLE",
+        "why": "no substantive PHP addition",
+        "e1": null,
+        "e2": null,
+        "added": 0,
+        "lost": 0
+    },
+    {
+        "sha": "11e36b5",
+        "state": "CONTESTED",
+        "why": "E1 pass but E2 fail — nothing under a test root asserts this behaviour",
+        "e1": true,
+        "e2": false,
+        "added": 5,
+        "lost": 0,
+        "lost_examples": [],
+        "subject": "add validation on offer price"
+    },
+    {
+        "sha": "fc89715",
+        "state": "CONTESTED",
+        "why": "E1 pass but E2 fail — nothing under a test root asserts this behaviour",
+        "e1": true,
+        "e2": false,
+        "added": 5,
+        "lost": 0,
+        "lost_examples": [],
+        "subject": "fix : product update"
+    },
+    {
+        "sha": "5b5aa63",
+        "state": "CONTESTED",
+        "why": "E1 fail — 2 of 17 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": true,
+        "added": 17,
+        "lost": 2,
+        "lost_examples": [
+            "return $this->hasMany(self::class)->where('is_active',1);",
+            "return $this->model->with('subCategories')->active()->mainCategory()->latest()->paginate(10);"
+        ],
+        "subject": "fix : category resource"
+    },
+    {
+        "sha": "dfd6ac2",
+        "state": "CONTESTED",
+        "why": "E1 fail — 5 of 13 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": false,
+        "added": 13,
+        "lost": 5,
+        "lost_examples": [
+            "return  \\responder::success(new ProductResource($product->load('category','media')) );",
+            "return $query->whereHas('category', function($q){"
+        ],
+        "subject": "feat: cart active products"
+    },
+    {
+        "sha": "5725877",
+        "state": "CONTESTED",
+        "why": "E1 pass but E2 fail — nothing under a test root asserts this behaviour",
+        "e1": true,
+        "e2": false,
+        "added": 2,
+        "lost": 0,
+        "lost_examples": [],
+        "subject": "Update ProductResource.php"
+    },
+    {
+        "sha": "44930f0",
+        "state": "CONTESTED",
+        "why": "E1 pass but E2 fail — nothing under a test root asserts this behaviour",
+        "e1": true,
+        "e2": false,
+        "added": 2,
+        "lost": 0,
+        "lost_examples": [],
+        "subject": "Update HomeController.php"
+    },
+    {
+        "sha": "933f6a3",
+        "state": "CONTESTED",
+        "why": "E1 pass but E2 fail — nothing under a test root asserts this behaviour",
+        "e1": true,
+        "e2": false,
+        "added": 2,
+        "lost": 0,
+        "lost_examples": [],
+        "subject": "Update ProfileRequest.php"
+    },
+    {
+        "sha": "b35cbfb",
+        "state": "CONTESTED",
+        "why": "E1 pass but E2 fail — nothing under a test root asserts this behaviour",
+        "e1": true,
+        "e2": false,
+        "added": 8,
+        "lost": 0,
+        "lost_examples": [],
+        "subject": "fix : country resource"
+    },
+    {
+        "sha": "b0fabba",
+        "state": "CONTESTED",
+        "why": "E1 pass but E2 fail — nothing under a test root asserts this behaviour",
+        "e1": true,
+        "e2": false,
+        "added": 5,
+        "lost": 0,
+        "lost_examples": [],
+        "subject": "fix : address deliver if no active"
+    },
+    {
+        "sha": "d481f38",
+        "state": "CONTESTED",
+        "why": "E1 pass but E2 fail — nothing under a test root asserts this behaviour",
+        "e1": true,
+        "e2": false,
+        "added": 1,
+        "lost": 0,
+        "lost_examples": [],
+        "subject": "Update 2024_03_06_122915_create_orders_table.php"
+    },
+    {
+        "sha": "0663505",
+        "state": "CONTESTED",
+        "why": "E1 fail — 1 of 5 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": false,
+        "added": 5,
+        "lost": 1,
+        "lost_examples": [
+            "->rawColumns(['action', 'checkbox', 'user_name','payment','city','country','status','user_order_count'])"
+        ],
+        "subject": "fix : orders"
+    },
+    {
+        "sha": "4303d7c",
+        "state": "UNUSABLE",
+        "why": "no substantive PHP addition",
+        "e1": null,
+        "e2": null,
+        "added": 0,
+        "lost": 0
+    },
+    {
+        "sha": "f6f0a88",
+        "state": "CONTESTED",
+        "why": "E1 pass but E2 fail — nothing under a test root asserts this behaviour",
+        "e1": true,
+        "e2": false,
+        "added": 1,
+        "lost": 0,
+        "lost_examples": [],
+        "subject": "Update BannerRepository.php"
+    },
+    {
+        "sha": "c1c39c7",
+        "state": "CONTESTED",
+        "why": "E1 pass but E2 fail — nothing under a test root asserts this behaviour",
+        "e1": true,
+        "e2": false,
+        "added": 1,
+        "lost": 0,
+        "lost_examples": [],
+        "subject": "Update 2024_02_26_190023_create_banners_table.php"
+    },
+    {
+        "sha": "e4c665e",
+        "state": "CONTESTED",
+        "why": "E1 pass but E2 fail — nothing under a test root asserts this behaviour",
+        "e1": true,
+        "e2": false,
+        "added": 2,
+        "lost": 0,
+        "lost_examples": [],
+        "subject": "Update 2024_02_26_190023_create_banners_table.php"
+    },
+    {
+        "sha": "ccd0c40",
+        "state": "UNUSABLE",
+        "why": ">500 changed lines",
+        "e1": null,
+        "e2": null,
+        "added": 0,
+        "lost": 0
+    },
+    {
+        "sha": "158d334",
+        "state": "UNUSABLE",
+        "why": ">500 changed lines",
+        "e1": null,
+        "e2": null,
+        "added": 0,
+        "lost": 0
+    },
+    {
+        "sha": "0816120",
+        "state": "CONTESTED",
+        "why": "E1 fail — 1 of 26 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": true,
+        "added": 26,
+        "lost": 1,
+        "lost_examples": [
+            "Route::group(['middleware' => ['auth:admin', Localization::class ,'optimizeImages']], function () {"
+        ],
+        "subject": "feat : add image optimizer"
+    },
+    {
+        "sha": "0e912b9",
+        "state": "CONTESTED",
+        "why": "E1 pass but E2 fail — nothing under a test root asserts this behaviour",
+        "e1": true,
+        "e2": false,
+        "added": 14,
+        "lost": 0,
+        "lost_examples": [],
+        "subject": "Update index.blade.php"
+    },
+    {
+        "sha": "f53e3b3",
+        "state": "CONTESTED",
+        "why": "E1 fail — 6 of 54 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": true,
+        "added": 54,
+        "lost": 6,
+        "lost_examples": [
+            "return view('dashboard.banners.create',['products' => $this->products() , 'categories'=> $this->categories() ,'types'=>$this->bannerService->getBannerTypes() ,'type'=>request()->type, 'selectedPoducts'=>[]]);",
+            "$selectedPoducts = $banner->products->pluck('name','id');"
+        ],
+        "subject": "feat : add remote search"
+    },
+    {
+        "sha": "ec24eee",
+        "state": "CONTESTED",
+        "why": "E1 pass but E2 fail — nothing under a test root asserts this behaviour",
+        "e1": true,
+        "e2": false,
+        "added": 22,
+        "lost": 0,
+        "lost_examples": [],
+        "subject": "feat : add order status notify"
+    },
+    {
+        "sha": "6f704fe",
+        "state": "CONTESTED",
+        "why": "E1 fail — 6 of 39 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": true,
+        "added": 39,
+        "lost": 6,
+        "lost_examples": [
+            "$notificaitons = $this->authService->getUserNotifications();",
+            "return \\responder::success(new BaseCollection($notificaitons,NotificationResource::class));"
+        ],
+        "subject": "feat : add notification api"
+    },
+    {
+        "sha": "1fc1acd",
+        "state": "CONTESTED",
+        "why": "E1 pass but E2 fail — nothing under a test root asserts this behaviour",
+        "e1": true,
+        "e2": false,
+        "added": 1,
+        "lost": 0,
+        "lost_examples": [],
+        "subject": "Update UpdateBannerStatusCommand.php"
+    },
+    {
+        "sha": "9922ea9",
+        "state": "CONTESTED",
+        "why": "E1 fail — 2 of 17 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": true,
+        "added": 17,
+        "lost": 2,
+        "lost_examples": [
+            "protected $signature = 'update-banner-status';",
+            "protected $description = 'update banner status to inactive if after allowed days';"
+        ],
+        "subject": "fix : banner cost"
+    },
+    {
+        "sha": "5cb4f0b",
+        "state": "CONTESTED",
+        "why": "E1 fail — 2 of 34 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": false,
+        "added": 34,
+        "lost": 2,
+        "lost_examples": [
+            "{!! Form::select('product_id', \\App\\Models\\Product::pluck('name', 'id'), request('product_id'), [",
+            "Route::get('reports/index', [HomeController::class,'index'])->name('reports.index');"
+        ],
+        "subject": "feat : fix log filters"
+    },
+    {
+        "sha": "8622c14",
+        "state": "CONTESTED",
+        "why": "E1 pass but E2 fail — nothing under a test root asserts this behaviour",
+        "e1": true,
+        "e2": false,
+        "added": 9,
+        "lost": 0,
+        "lost_examples": [],
+        "subject": "fix : products charts"
+    },
+    {
+        "sha": "ace706e",
+        "state": "CONTESTED",
+        "why": "E1 pass but E2 fail — nothing under a test root asserts this behaviour",
+        "e1": true,
+        "e2": false,
+        "added": 13,
+        "lost": 0,
+        "lost_examples": [],
+        "subject": "Update DriverDataTable.php"
+    },
+    {
+        "sha": "f703af3",
+        "state": "CONTESTED",
+        "why": "E1 fail — 1 of 4 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": false,
+        "added": 4,
+        "lost": 1,
+        "lost_examples": [
+            "Column::computed('international')->title(__('international'))->exportable(false),"
+        ],
+        "subject": "feat : add excel"
+    },
+    {
+        "sha": "eddb0d6",
+        "state": "CONTESTED",
+        "why": "E1 pass but E2 fail — nothing under a test root asserts this behaviour",
+        "e1": true,
+        "e2": false,
+        "added": 7,
+        "lost": 0,
+        "lost_examples": [],
+        "subject": "Update assignDriverAll.blade.php"
+    },
+    {
+        "sha": "4a0a0c7",
+        "state": "CONTESTED",
+        "why": "E1 fail — 5 of 62 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": false,
+        "added": 62,
+        "lost": 5,
+        "lost_examples": [
+            "return $this->getSelectedOrders($data)->update(['status'=>OrderStatusEnum::SHIPPING]);",
+            "$this->repo->shippingStatusAll($data);"
+        ],
+        "subject": "fix : order pending process"
+    },
+    {
+        "sha": "b46d9d1",
+        "state": "CONTESTED",
+        "why": "E1 fail — 4 of 132 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": false,
+        "added": 132,
+        "lost": 4,
+        "lost_examples": [
+            "return $this->model->with(['items.product','address.city','user.country','driver','deliveryType','payment','user'])->withSum('items','quantity')->orderIds($data)->get();",
+            "<a class=\"btn btn-info btn-icon\" style=\"margin:10px 10px;\" onclick=\"print_all_form(this)\" data-href=\"{{ route('admin.orders.printAll') }}\">"
+        ],
+        "subject": "feat : add print all"
+    },
+    {
+        "sha": "5fd2f45",
+        "state": "CONTESTED",
+        "why": "E1 fail — 27 of 124 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": false,
+        "added": 124,
+        "lost": 27,
+        "lost_examples": [
+            "return view('dashboard.orders.print',['order'=> $order->load('items.product','address.city','address.governorate','driver','deliveryType','payment','user')->loadSum('items','quantity')]);",
+            "font-family: \"Cairo\";"
+        ],
+        "subject": "feat : order print"
+    },
+    {
+        "sha": "a980a8e",
+        "state": "CONTESTED",
+        "why": "E1 fail — 1 of 18 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": false,
+        "added": 18,
+        "lost": 1,
+        "lost_examples": [
+            "return $model->filterByDate()->newQuery()->latest();"
+        ],
+        "subject": "feat : add driver filter"
+    },
+    {
+        "sha": "f915790",
+        "state": "CONTESTED",
+        "why": "E1 pass but E2 fail — nothing under a test root asserts this behaviour",
+        "e1": true,
+        "e2": false,
+        "added": 30,
+        "lost": 0,
+        "lost_examples": [],
+        "subject": "feat : add filter in banners"
+    },
+    {
+        "sha": "ac599ba",
+        "state": "CONTESTED",
+        "why": "E1 fail — 1 of 9 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": false,
+        "added": 9,
+        "lost": 1,
+        "lost_examples": [
+            "Column::make('category')->title(__('name'))->searchable(),"
+        ],
+        "subject": "feat : add search to all  dashboard"
+    },
+    {
+        "sha": "cb3f180",
+        "state": "CONTESTED",
+        "why": "E1 pass but E2 fail — nothing under a test root asserts this behaviour",
+        "e1": true,
+        "e2": false,
+        "added": 4,
+        "lost": 0,
+        "lost_examples": [],
+        "subject": "fix order log activities"
+    },
+    {
+        "sha": "28834be",
+        "state": "CONTESTED",
+        "why": "E1 pass but E2 fail — nothing under a test root asserts this behaviour",
+        "e1": true,
+        "e2": false,
+        "added": 4,
+        "lost": 0,
+        "lost_examples": [],
+        "subject": "update product log qty"
+    },
+    {
+        "sha": "aad514a",
+        "state": "CONTESTED",
+        "why": "E1 fail — 3 of 35 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": false,
+        "added": 35,
+        "lost": 3,
+        "lost_examples": [
+            "$logId = request('id');",
+            "$builder->where('id',$logId);"
+        ],
+        "subject": "feat : log filter"
+    },
+    {
+        "sha": "e6deda2",
+        "state": "UNUSABLE",
+        "why": "no substantive PHP addition",
+        "e1": null,
+        "e2": null,
+        "added": 0,
+        "lost": 0
+    },
+    {
+        "sha": "a4a0fed",
+        "state": "CONTESTED",
+        "why": "E1 fail — 5 of 89 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": false,
+        "added": 89,
+        "lost": 5,
+        "lost_examples": [
+            "return $model->with('admin')->newQuery()->latest();",
+            "<a href=\"{{route('admin.log-activities.index')}}\"><i class=\"feather icon-archive\"></i><span class=\"menu-title\" data-i18n=\"Starter kit\">{{ __('employee activities') }} </span></a>"
+        ],
+        "subject": "feat : add log activities index"
+    },
+    {
+        "sha": "d2cf1e8",
+        "state": "CONTESTED",
+        "why": "E1 fail — 2 of 83 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": true,
+        "added": 83,
+        "lost": 2,
+        "lost_examples": [
+            "$this->middleware('log.activity:update_user_status_all,Update The status of all Aelected user')->only('activeAll');",
+            "$this->middleware('log.activity:delete__all_selected_user,Delete all selected user')->only('deleteAll');"
+        ],
+        "subject": "feat : add log activities"
+    },
+    {
+        "sha": "41c69fe",
+        "state": "CONTESTED",
+        "why": "E1 fail — 2 of 42 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": true,
+        "added": 42,
+        "lost": 2,
+        "lost_examples": [
+            "'delivery_type_id',",
+            "Route::PUT('orders/assign-driver/{order}', [OrderController::class,'assignDriver'])->name('orders.assignDriver');"
+        ],
+        "subject": "feat : add comments in orders"
+    },
+    {
+        "sha": "96f99f2",
+        "state": "CONTESTED",
+        "why": "E1 fail — 4 of 30 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": false,
+        "added": 30,
+        "lost": 4,
+        "lost_examples": [
+            "<a class=\"nav-link\" href=\"{{ route('change-language', ['lang' => (app()->getLocale() === 'ar' ? 'en' : 'ar')]) }}\">",
+            "@if(app()->getLocale() === 'ar')"
+        ],
+        "subject": "feat : add lang switch"
+    },
+    {
+        "sha": "0b01ee7",
+        "state": "CONTESTED",
+        "why": "E1 pass but E2 fail — nothing under a test root asserts this behaviour",
+        "e1": true,
+        "e2": false,
+        "added": 16,
+        "lost": 0,
+        "lost_examples": [],
+        "subject": "fix : coupon validation"
+    },
+    {
+        "sha": "644f63a",
+        "state": "CONTESTED",
+        "why": "E1 pass but E2 fail — nothing under a test root asserts this behaviour",
+        "e1": true,
+        "e2": false,
+        "added": 15,
+        "lost": 0,
+        "lost_examples": [],
+        "subject": "feat : add product event"
+    },
+    {
+        "sha": "364dc64",
+        "state": "CONTESTED",
+        "why": "E1 fail — 3 of 55 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": false,
+        "added": 55,
+        "lost": 3,
+        "lost_examples": [
+            "const orders = JSON.parse(lineChart.dataset.orders);",
+            "fill: false, // Optionally, you can set fill to false for line charts"
+        ],
+        "subject": "feat : add orders and products chart"
+    },
+    {
+        "sha": "188f897",
+        "state": "CONTESTED",
+        "why": "E1 fail — 3 of 88 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": false,
+        "added": 88,
+        "lost": 3,
+        "lost_examples": [
+            "label: 'total',",
+            "@include('dashboard.charts',['monthYearLabels'=>$monthYearLabels , 'totalAmountLabels'=>$totalAmountLabels])"
+        ],
+        "subject": "feat : add chart for orders total"
+    },
+    {
+        "sha": "b1be757",
+        "state": "CONTESTED",
+        "why": "E1 fail — 8 of 89 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": false,
+        "added": 89,
+        "lost": 8,
+        "lost_examples": [
+            "return $product->order?->created_at->format('d/m/Y');",
+            "->select('product_id')"
+        ],
+        "subject": "feat : items report"
+    },
+    {
+        "sha": "d3544b2",
+        "state": "CONTESTED",
+        "why": "E1 fail — 5 of 99 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": false,
+        "added": 99,
+        "lost": 5,
+        "lost_examples": [
+            "return $user->created_at->format('d/m/Y');",
+            "public function getOrderReport(OrderReportDataTable $dataTable)"
+        ],
+        "subject": "feat : daily selling order"
+    },
+    {
+        "sha": "271a9d0",
+        "state": "CONTESTED",
+        "why": "E1 fail — 1 of 3 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": false,
+        "added": 3,
+        "lost": 1,
+        "lost_examples": [
+            "if($model->status ==  OrderStatusEnum::PENDING) $this->repo->restockItems($model);"
+        ],
+        "subject": "fix : stock in cancel"
+    },
+    {
+        "sha": "a472c41",
+        "state": "CONTESTED",
+        "why": "E1 pass but E2 fail — nothing under a test root asserts this behaviour",
+        "e1": true,
+        "e2": false,
+        "added": 1,
+        "lost": 0,
+        "lost_examples": [],
+        "subject": "Update index.blade.php"
+    },
+    {
+        "sha": "1bc5470",
+        "state": "CONTESTED",
+        "why": "E1 fail — 1 of 10 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": false,
+        "added": 10,
+        "lost": 1,
+        "lost_examples": [
+            "$orders =  $this->model->orderIds($data);"
+        ],
+        "subject": "feat : add restock items in cancel"
+    },
+    {
+        "sha": "64abba5",
+        "state": "CONTESTED",
+        "why": "E1 pass but E2 fail — nothing under a test root asserts this behaviour",
+        "e1": true,
+        "e2": false,
+        "added": 4,
+        "lost": 0,
+        "lost_examples": [],
+        "subject": "fix driver report"
+    },
+    {
+        "sha": "e56ba95",
+        "state": "CONTESTED",
+        "why": "E1 fail — 22 of 94 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": true,
+        "added": 94,
+        "lost": 22,
+        "lost_examples": [
+            "$orders =  $this->model->orderIds($data)->notPendingStatus();",
+            "return $this->model->orderIds($data)->updateupdate(['status'=>OrderStatusEnum::SHIPPING]);"
+        ],
+        "subject": "feat : update assign  driver to orders"
+    },
+    {
+        "sha": "395b9c3",
+        "state": "CONTESTED",
+        "why": "E1 fail — 3 of 11 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": false,
+        "added": 11,
+        "lost": 3,
+        "lost_examples": [
+            "return \\responder::success(new OrderResource($order->load('address','items.product')));",
+            "if(!in_array($model->status , [OrderStatusEnum::NEW , OrderStatusEnum::PENDING]))"
+        ],
+        "subject": "feat : add canceled order"
+    },
+    {
+        "sha": "a356270",
+        "state": "CONTESTED",
+        "why": "E1 fail — 4 of 8 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": false,
+        "added": 8,
+        "lost": 4,
+        "lost_examples": [
+            "public function scopeNewAndPendingStatus($query)",
+            "return $query->whereIn('status',[OrderStatusEnum::NEW , OrderStatusEnum::PENDING]);"
+        ],
+        "subject": "feat : add stock on update all"
+    },
+    {
+        "sha": "d0d1388",
+        "state": "CONTESTED",
+        "why": "E1 fail — 1 of 10 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": false,
+        "added": 10,
+        "lost": 1,
+        "lost_examples": [
+            "if($status == OrderStatusEnum::SHIPPING )"
+        ],
+        "subject": "feat : update stock"
+    },
+    {
+        "sha": "58e74be",
+        "state": "CONTESTED",
+        "why": "E1 pass but E2 fail — nothing under a test root asserts this behaviour",
+        "e1": true,
+        "e2": false,
+        "added": 1,
+        "lost": 0,
+        "lost_examples": [],
+        "subject": "Update OrderResource.php"
+    },
+    {
+        "sha": "b881c2a",
+        "state": "CONTESTED",
+        "why": "E1 fail — 1 of 2 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": false,
+        "added": 2,
+        "lost": 1,
+        "lost_examples": [
+            "return \\responder::success(new OrderResource($order->load('address','items.product')));"
+        ],
+        "subject": "feat : update orders resource"
+    },
+    {
+        "sha": "8ef3eef",
+        "state": "CONTROL",
+        "why": "E1 pass (all 94 added lines survive) + E2 pass: HEAD:tests/Feature/ProfileTest.php (address)",
+        "e1": true,
+        "e2": true,
+        "added": 94,
+        "lost": 0,
+        "lost_examples": [],
+        "subject": "feat : user filters"
+    },
+    {
+        "sha": "ffa68e1",
+        "state": "CONTESTED",
+        "why": "E1 fail — 12 of 57 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": false,
+        "added": 57,
+        "lost": 12,
+        "lost_examples": [
+            "public function scopeValidOrder($query)",
+            "return $query->where('status','!=',OrderStatusEnum::CANCELLED)->where(function($q){"
+        ],
+        "subject": "feat : driver report"
+    },
+    {
+        "sha": "8df4389",
+        "state": "CONTESTED",
+        "why": "E1 pass but E2 fail — nothing under a test root asserts this behaviour",
+        "e1": true,
+        "e2": false,
+        "added": 7,
+        "lost": 0,
+        "lost_examples": [],
+        "subject": "feat : add toastr in push order"
+    },
+    {
+        "sha": "9eef356",
+        "state": "CONTESTED",
+        "why": "E1 pass but E2 fail — nothing under a test root asserts this behaviour",
+        "e1": true,
+        "e2": false,
+        "added": 1,
+        "lost": 0,
+        "lost_examples": [],
+        "subject": "feat : add alert sound"
+    },
+    {
+        "sha": "62f164b",
+        "state": "CONTESTED",
+        "why": "E1 fail — 4 of 77 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": false,
+        "added": 77,
+        "lost": 4,
+        "lost_examples": [
+            "'delivery_time'=> __('Delivery ASAP'),",
+            "{!! Form::open(['route' => 'admin.orders.shippingStatusAll']) !!}"
+        ],
+        "subject": "feat : add push orders"
+    },
+    {
+        "sha": "ab60c09",
+        "state": "CONTESTED",
+        "why": "E1 fail — 7 of 28 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": false,
+        "added": 28,
+        "lost": 7,
+        "lost_examples": [
+            "<a href=\"{{route('admin.orders.processes')}}\"><i class=\"feather icon-aperture\">",
+            "<li class=\" nav-item {{ request()->is('dashboard/orders*') && !request()->is('dashboard/orders/processes*') ? 'active' : '' }}\">"
+        ],
+        "subject": "feat : add select all in processes"
+    },
+    {
+        "sha": "ea9a499",
+        "state": "UNUSABLE",
+        "why": ">500 changed lines",
+        "e1": null,
+        "e2": null,
+        "added": 0,
+        "lost": 0
+    },
+    {
+        "sha": "c9cf98c",
+        "state": "CONTESTED",
+        "why": "E1 pass but E2 fail — nothing under a test root asserts this behaviour",
+        "e1": true,
+        "e2": false,
+        "added": 16,
+        "lost": 0,
+        "lost_examples": [],
+        "subject": "Update form.blade.php"
+    },
+    {
+        "sha": "72f60bc",
+        "state": "CONTROL",
+        "why": "E1 pass (all 60 added lines survive) + E2 pass: HEAD:tests/Feature/Auth/PasswordUpdateTest.php (update)",
+        "e1": true,
+        "e2": true,
+        "added": 60,
+        "lost": 0,
+        "lost_examples": [],
+        "subject": "refactor : role controller"
+    },
+    {
+        "sha": "afee579",
+        "state": "CONTESTED",
+        "why": "E1 fail — 33 of 135 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": true,
+        "added": 135,
+        "lost": 33,
+        "lost_examples": [
+            "$permissionsByModel = Permission::all()->groupBy('model')->toArray();",
+            "return view('dashboard.roles.create',compact('permissionsByModel'));"
+        ],
+        "subject": "feat : add role crud"
+    },
+    {
+        "sha": "7fda3af",
+        "state": "CONTESTED",
+        "why": "E1 pass but E2 fail — nothing under a test root asserts this behaviour",
+        "e1": true,
+        "e2": false,
+        "added": 97,
+        "lost": 0,
+        "lost_examples": [],
+        "subject": "feat : add role & permission"
+    },
+    {
+        "sha": "f446d61",
+        "state": "CONTESTED",
+        "why": "E1 fail — 1 of 92 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": true,
+        "added": 92,
+        "lost": 1,
+        "lost_examples": [
+            "$createdPermissions[] = Permission::updateOrCreate(['name' => $permission . ' ' . $role],['guard_name' => 'admin']);"
+        ],
+        "subject": "feat : add role to admins"
+    },
+    {
+        "sha": "5a5fd55",
+        "state": "CONTESTED",
+        "why": "E1 fail — 4 of 95 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": true,
+        "added": 95,
+        "lost": 4,
+        "lost_examples": [
+            "throw new \\Exception('Error: config/permission.php not loaded. Run [php artisan config:clear] and try again.');",
+            "throw new \\Exception('Error: team_foreign_key on config/permission.php not loaded. Run [php artisan config:clear] and try again.');"
+        ],
+        "subject": "feat : start at role and permission"
+    },
+    {
+        "sha": "cd16422",
+        "state": "CONTESTED",
+        "why": "E1 pass but E2 fail — nothing under a test root asserts this behaviour",
+        "e1": true,
+        "e2": false,
+        "added": 26,
+        "lost": 0,
+        "lost_examples": [],
+        "subject": "feat : finish archive"
+    },
+    {
+        "sha": "3ffb001",
+        "state": "CONTESTED",
+        "why": "E1 pass but E2 fail — nothing under a test root asserts this behaviour",
+        "e1": true,
+        "e2": false,
+        "added": 4,
+        "lost": 0,
+        "lost_examples": [],
+        "subject": "Update index.blade.php"
+    },
+    {
+        "sha": "0ae8128",
+        "state": "CONTESTED",
+        "why": "E1 fail — 15 of 98 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": false,
+        "added": 98,
+        "lost": 15,
+        "lost_examples": [
+            "return $model->filter()->with('category')",
+            "'name', 'image', 'category_id', 'price', 'offer_price', 'quantity', 'weight', 'sort_order', 'barcode', 'sku', 'show_in', 'description', 'keywords', 'is_active', 'is_international'"
+        ],
+        "subject": "feat : product filters"
+    },
+    {
+        "sha": "5075d8d",
+        "state": "CONTESTED",
+        "why": "E1 pass but E2 fail — nothing under a test root asserts this behaviour",
+        "e1": true,
+        "e2": false,
+        "added": 9,
+        "lost": 0,
+        "lost_examples": [],
+        "subject": "fix : orders icons"
+    },
+    {
+        "sha": "050b2e0",
+        "state": "CONTESTED",
+        "why": "E1 fail — 24 of 59 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": false,
+        "added": 59,
+        "lost": 24,
+        "lost_examples": [
+            "<h4 class=\"card-title\">الطلبات الجديدة</h4>",
+            "<h2 class=\"text-bold-700\">2</h2>"
+        ],
+        "subject": "process-page"
+    },
+    {
+        "sha": "a7a4da4",
+        "state": "CONTESTED",
+        "why": "E1 fail — 23 of 93 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": false,
+        "added": 93,
+        "lost": 23,
+        "lost_examples": [
+            "return $this->model->orderIds($data)->delete();",
+            "public function pendingStatusAll($data)"
+        ],
+        "subject": "feat : add  orders button select all"
+    },
+    {
+        "sha": "1e96577",
+        "state": "CONTESTED",
+        "why": "E1 fail — 4 of 29 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": false,
+        "added": 29,
+        "lost": 4,
+        "lost_examples": [
+            "return 'btn-success-gradient';",
+            "$this->repo->changeStatus($model , $status);"
+        ],
+        "subject": "feat : add orders change status"
+    },
+    {
+        "sha": "4256ed5",
+        "state": "CONTESTED",
+        "why": "E1 fail — 1 of 35 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": false,
+        "added": 35,
+        "lost": 1,
+        "lost_examples": [
+            "return __('charged');"
+        ],
+        "subject": "feat : add orders status"
+    },
+    {
+        "sha": "b3adb1b",
+        "state": "CONTESTED",
+        "why": "E1 fail — 6 of 90 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": true,
+        "added": 90,
+        "lost": 6,
+        "lost_examples": [
+            "'delivery_type_id'",
+            "public function deliveryType()"
+        ],
+        "subject": "feat : add orders filters"
+    },
+    {
+        "sha": "f9f8811",
+        "state": "CONTESTED",
+        "why": "E1 fail — 2 of 6 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": true,
+        "added": 6,
+        "lost": 2,
+        "lost_examples": [
+            "if (request('id')) {",
+            "$builder->where('id',request('id') );"
+        ],
+        "subject": "feat : add users id filter"
+    },
+    {
+        "sha": "382fc17",
+        "state": "CONTESTED",
+        "why": "E1 fail — 5 of 56 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": true,
+        "added": 56,
+        "lost": 5,
+        "lost_examples": [
+            "<a href=\"#\" class=\"show-modal btn btn-success  btn-icon\" data-toggle=\"modal\" data-target=\"#show_modal\">",
+            "<a href=\"#\" class=\"items-modal btn btn-info  btn-icon\" data-toggle=\"modal\" data-target=\"#item_modal\">"
+        ],
+        "subject": "feat : assign drivers to orders"
+    },
+    {
+        "sha": "bdc29b7",
+        "state": "CONTESTED",
+        "why": "E1 fail — 3 of 21 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": false,
+        "added": 21,
+        "lost": 3,
+        "lost_examples": [
+            "->with(['items.product','address.city','user.country','driver','deliveryType','payment','user' => function($query){",
+            "<a href=\"#\" class=\"items-modal btn btn-primary btn-icon\" data-toggle=\"modal\" data-target=\"#item_modal\">"
+        ],
+        "subject": "feat : orders item"
+    },
+    {
+        "sha": "d083aa6",
+        "state": "CONTESTED",
+        "why": "E1 pass but E2 fail — nothing under a test root asserts this behaviour",
+        "e1": true,
+        "e2": false,
+        "added": 9,
+        "lost": 0,
+        "lost_examples": [],
+        "subject": "fix : order details"
+    },
+    {
+        "sha": "c7ea302",
+        "state": "CONTESTED",
+        "why": "E1 fail — 25 of 164 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": true,
+        "added": 164,
+        "lost": 25,
+        "lost_examples": [
+            "$class = $this->getClass($order);",
+            "return view('dashboard.orders.status', ['order'=>$order , 'class'=>$class]);"
+        ],
+        "subject": "feat : orders index and details"
+    },
+    {
+        "sha": "d2c84b9",
+        "state": "CONTESTED",
+        "why": "E1 fail — 7 of 71 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": true,
+        "added": 71,
+        "lost": 7,
+        "lost_examples": [
+            "public function __construct(SettingService $settingService)",
+            "<a href=\"{{route('admin.settings.index')}}\"><i class=\"feather icon-map\"></i><span class=\"menu-title\" data-i18n=\"Starter kit\"> {{ __('settings') }} </span></a>"
+        ],
+        "subject": "feat : settings"
+    },
+    {
+        "sha": "892cd65",
+        "state": "CONTESTED",
+        "why": "E1 fail — 6 of 121 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": true,
+        "added": 121,
+        "lost": 6,
+        "lost_examples": [
+            "Column::computed('name')->title(__('name')),",
+            "whatsapp($user->phone ,$this->createCode().' Is Your activation code.');"
+        ],
+        "subject": "feat : add archives"
+    },
+    {
+        "sha": "26ae455",
+        "state": "CONTESTED",
+        "why": "E1 fail — 11 of 118 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": true,
+        "added": 118,
+        "lost": 11,
+        "lost_examples": [
+            "->rawColumns(['status','action'])",
+            "$this->deliveryTypeService = $deliveryTypeService;"
+        ],
+        "subject": "feat : delivery-types crud"
+    },
+    {
+        "sha": "4f600ef",
+        "state": "CONTESTED",
+        "why": "E1 pass but E2 fail — nothing under a test root asserts this behaviour",
+        "e1": true,
+        "e2": false,
+        "added": 77,
+        "lost": 0,
+        "lost_examples": [],
+        "subject": "feat : payment methods index"
+    },
+    {
+        "sha": "9f5f388",
+        "state": "CONTESTED",
+        "why": "E1 fail — 4 of 72 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": false,
+        "added": 72,
+        "lost": 4,
+        "lost_examples": [
+            "->rawColumns(['email','date'])",
+            "<h4 class=\"card-title\">{{__('contacts')}}</h4>"
+        ],
+        "subject": "feat : add contact"
+    },
+    {
+        "sha": "063df84",
+        "state": "CONTESTED",
+        "why": "E1 fail — 3 of 18 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": false,
+        "added": 18,
+        "lost": 3,
+        "lost_examples": [
+            "$discountExpire_at = optional($this->coupon)->expire_at;",
+            "$requestExpire_at = $this->request->get('expire_at');"
+        ],
+        "subject": "fix : update coupon request"
+    },
+    {
+        "sha": "3d6a6b0",
+        "state": "CONTESTED",
+        "why": "E1 fail — 31 of 69 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": true,
+        "added": 69,
+        "lost": 31,
+        "lost_examples": [
+            "return view('dashboard.coupons.edit', ['Coupon' => $coupon]);",
+            "'code' => 'required|unique:coupons,code,' . object_get($this->route('coupon'), 'id') . ',id' ,"
+        ],
+        "subject": "feat : coupon crud"
+    },
+    {
+        "sha": "80d94ab",
+        "state": "CONTESTED",
+        "why": "E1 fail — 15 of 166 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": true,
+        "added": 166,
+        "lost": 15,
+        "lost_examples": [
+            "return $model->localization($type)->newQuery()->latest();",
+            "Column::make('max_discount')->title(__('maximum')),"
+        ],
+        "subject": "feat : add coupons index"
+    },
+    {
+        "sha": "a65cd61",
+        "state": "CONTESTED",
+        "why": "E1 fail — 7 of 132 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": true,
+        "added": 132,
+        "lost": 7,
+        "lost_examples": [
+            "->rawColumns(['status','type','action'])",
+            "<x-select name=\"type\" :items=\"[\\App\\Enum\\DriverTypeEnum::EXTERNAL=>__(\\App\\Enum\\DriverTypeEnum::EXTERNAL),\\App\\Enum\\DriverTypeEnum::EMPLOYEE=>__(\\App\\Enum\\DriverTypeEnum::EMPLOYEE)]\" title=\"{{ __('type') }}\" />"
+        ],
+        "subject": "feat : add drivers crud"
+    },
+    {
+        "sha": "26d9e6c",
+        "state": "CONTESTED",
+        "why": "E1 fail — 7 of 42 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": false,
+        "added": 42,
+        "lost": 7,
+        "lost_examples": [
+            "if(!$request->request_type)",
+            "return redirect()->route('admin.products.index',['type'=>$request->request_type]);"
+        ],
+        "subject": "fix :  redirect in products list"
+    },
+    {
+        "sha": "1a61058",
+        "state": "CONTESTED",
+        "why": "E1 fail — 29 of 47 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": false,
+        "added": 47,
+        "lost": 29,
+        "lost_examples": [
+            "return $model->with('category')",
+            "->when(request()->type, function ($q)  {"
+        ],
+        "subject": "feat : add products list"
+    },
+    {
+        "sha": "378442d",
+        "state": "CONTESTED",
+        "why": "E1 fail — 5 of 36 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": false,
+        "added": 36,
+        "lost": 5,
+        "lost_examples": [
+            "public function scopeProductIds($query,$value)",
+            "return $query->where('is_active',0);"
+        ],
+        "subject": "feat : add active all product function"
+    },
+    {
+        "sha": "1aed52e",
+        "state": "CONTESTED",
+        "why": "E1 fail — 4 of 17 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": false,
+        "added": 17,
+        "lost": 4,
+        "lost_examples": [
+            "($model->quantity - 100) < 0  ? $model->update(['quantity'=>0]) : $model->decrement('quantity',100);",
+            "$model->increment('quantity',100);"
+        ],
+        "subject": "feat : add and remove qty functions"
+    },
+    {
+        "sha": "e780238",
+        "state": "UNUSABLE",
+        "why": ">500 changed lines",
+        "e1": null,
+        "e2": null,
+        "added": 0,
+        "lost": 0
+    },
+    {
+        "sha": "30d8f31",
+        "state": "CONTESTED",
+        "why": "E1 fail — 5 of 13 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": false,
+        "added": 13,
+        "lost": 5,
+        "lost_examples": [
+            "'delivery_cost'=>'required|numeric|min:0',",
+            "'driver_cost'=>'required|numeric|min:0',"
+        ],
+        "subject": "feat : add cities crud"
+    },
+    {
+        "sha": "0802e2b",
+        "state": "CONTESTED",
+        "why": "E1 pass but E2 fail — nothing under a test root asserts this behaviour",
+        "e1": true,
+        "e2": false,
+        "added": 8,
+        "lost": 0,
+        "lost_examples": [],
+        "subject": "fix : city index data"
+    },
+    {
+        "sha": "353577f",
+        "state": "UNUSABLE",
+        "why": ">500 changed lines",
+        "e1": null,
+        "e2": null,
+        "added": 0,
+        "lost": 0
+    },
+    {
+        "sha": "9180988",
+        "state": "CONTESTED",
+        "why": "E1 fail — 10 of 154 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": true,
+        "added": 154,
+        "lost": 10,
+        "lost_examples": [
+            "Column::computed('name')->title(__('name')),",
+            "<x-number title=\"{{ __('coin price') }}\" name=\"coin_price\" size=\"6\" step=\"0.001\"></x-number>"
+        ],
+        "subject": "feat : country crud"
+    },
+    {
+        "sha": "dbb28a5",
+        "state": "CONTESTED",
+        "why": "E1 fail — 9 of 32 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": false,
+        "added": 32,
+        "lost": 9,
+        "lost_examples": [
+            "return $model->international($type)->newQuery()->latest();",
+            "return view('dashboard.banners.create',['products' => $this->products() , 'categories'=> $this->categories() ,'types'=>$this->bannerService->getBannerTypes() ,'type'=>request()->type]);"
+        ],
+        "subject": "feat : add banners crud"
+    },
+    {
+        "sha": "f78ad04",
+        "state": "UNUSABLE",
+        "why": ">500 changed lines",
+        "e1": null,
+        "e2": null,
+        "added": 0,
+        "lost": 0
+    },
+    {
+        "sha": "6258d9d",
+        "state": "CONTESTED",
+        "why": "E1 fail — 23 of 148 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": true,
+        "added": 148,
+        "lost": 23,
+        "lost_examples": [
+            "->addColumn('category', function ($category) {",
+            "$route = route('admin.sub-categories.index', ['category_id' => $category->id]);"
+        ],
+        "subject": "feat : sub category crud"
+    },
+    {
+        "sha": "ad61232",
+        "state": "CONTESTED",
+        "why": "E1 fail — 7 of 38 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": false,
+        "added": 38,
+        "lost": 7,
+        "lost_examples": [
+            "return view('dashboard.categories.international', ['category'=>$category]);",
+            "return view('dashboard.categories.in_home', ['category'=>$category]);"
+        ],
+        "subject": "feat : category crud"
+    },
+    {
+        "sha": "71f3aee",
+        "state": "CONTESTED",
+        "why": "E1 pass but E2 fail — nothing under a test root asserts this behaviour",
+        "e1": true,
+        "e2": false,
+        "added": 1,
+        "lost": 0,
+        "lost_examples": [],
+        "subject": "Update helpers.php"
+    },
+    {
+        "sha": "be53ab9",
+        "state": "CONTESTED",
+        "why": "E1 fail — 21 of 165 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": true,
+        "added": 165,
+        "lost": 21,
+        "lost_examples": [
+            "return view('dashboard.categories.status', ['category'=>$category]);",
+            "->rawColumns(['name','image','date','status','action'])"
+        ],
+        "subject": "feat : add category index"
+    },
+    {
+        "sha": "ea297fd",
+        "state": "CONTESTED",
+        "why": "E1 fail — 2 of 112 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": true,
+        "added": 112,
+        "lost": 2,
+        "lost_examples": [
+            "Route::get('addresses/{id}', [AddressController::class,'index'])->name('addresses.index');",
+            "Route::resource('addresses', AddressController::class)->except('index','create');"
+        ],
+        "subject": "feat : add user address"
+    },
+    {
+        "sha": "a1527d3",
+        "state": "CONTESTED",
+        "why": "E1 fail — 2 of 52 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": true,
+        "added": 52,
+        "lost": 2,
+        "lost_examples": [
+            "return $this->model->userIds($data)->update(['status' => UserStatusEnum::ACTIVE]);",
+            "@if ($user->verification_cod == \\App\\Enum\\UserStatusEnum::PENDING)"
+        ],
+        "subject": "feat : add user details"
+    },
+    {
+        "sha": "1e51507",
+        "state": "CONTESTED",
+        "why": "E1 fail — 2 of 55 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": false,
+        "added": 55,
+        "lost": 2,
+        "lost_examples": [
+            "Route::get('wallet/{user}',[UserController::class,'editWallet'])->name('wallet.edit');",
+            "Route::post('wallet',[UserController::class,'updateWallet'])->name('wallet.update');"
+        ],
+        "subject": "feat : update user wallet"
+    },
+    {
+        "sha": "84edf5e",
+        "state": "CONTESTED",
+        "why": "E1 fail — 17 of 108 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": true,
+        "added": 108,
+        "lost": 17,
+        "lost_examples": [
+            "->rawColumns(['action', 'checkbox', 'country', 'wallet', 'date', 'status','code','block'])",
+            "return $model->with('country', 'wallet')->newQuery()->latest();"
+        ],
+        "subject": "feat : users actions"
+    },
+    {
+        "sha": "7a6899d",
+        "state": "CONTESTED",
+        "why": "E1 fail — 33 of 196 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": true,
+        "added": 196,
+        "lost": 33,
+        "lost_examples": [
+            "return $user->wallet?->balance ?? \"0.000\";",
+            "->rawColumns(['action', 'checkbox','country','wallet','date'])"
+        ],
+        "subject": "feat : add users crud"
+    },
+    {
+        "sha": "52cd98a",
+        "state": "CONTESTED",
+        "why": "E1 fail — 9 of 184 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": false,
+        "added": 184,
+        "lost": 9,
+        "lost_examples": [
+            "Button::make('print')->text(__('Print')),",
+            "Button::make('reset')->text(__('Reset')),"
+        ],
+        "subject": "feat : add admins crud"
+    },
+    {
+        "sha": "547ed48",
+        "state": "UNUSABLE",
+        "why": ">500 changed lines",
+        "e1": null,
+        "e2": null,
+        "added": 0,
+        "lost": 0
+    },
+    {
+        "sha": "589fcee",
+        "state": "CONTESTED",
+        "why": "E1 fail — 2 of 2 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": false,
+        "added": 2,
+        "lost": 2,
+        "lost_examples": [
+            "throw ValidationException::withMessages([__(\"The allowed number of orders for product\") .$product->name. __(\"is\").$product->order_limit . __(\"pieces per order\")]);",
+            "throw ValidationException::withMessages([__(\"You exceeded the quantity you are allowed to order the product\") .$product->name ]);"
+        ],
+        "subject": "update validation mssage"
+    },
+    {
+        "sha": "c6fa57c",
+        "state": "CONTESTED",
+        "why": "E1 fail — 1 of 32 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": false,
+        "added": 32,
+        "lost": 1,
+        "lost_examples": [
+            "$this->deliveryTypeService = $deliveryTypeService;"
+        ],
+        "subject": "feat : add delivery types"
+    },
+    {
+        "sha": "ce68dbc",
+        "state": "CONTESTED",
+        "why": "E1 fail — 14 of 49 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": true,
+        "added": 49,
+        "lost": 14,
+        "lost_examples": [
+            "'payment_id'=>['required','exists:payments,id'],",
+            "'delivery_type_id'=>['required','exists:delivery_types,id'],"
+        ],
+        "subject": "feat : add order wallet"
+    },
+    {
+        "sha": "ae08721",
+        "state": "CONTESTED",
+        "why": "E1 pass but E2 fail — nothing under a test root asserts this behaviour",
+        "e1": true,
+        "e2": false,
+        "added": 8,
+        "lost": 0,
+        "lost_examples": [],
+        "subject": "Update CouponRepository.php"
+    },
+    {
+        "sha": "f3c9d58",
+        "state": "CONTESTED",
+        "why": "E1 fail — 1 of 2 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": true,
+        "added": 2,
+        "lost": 1,
+        "lost_examples": [
+            "->whereBetween('created_at' , [Carbon::now()->subHours(3), Carbon::now()->addHours(3)])"
+        ],
+        "subject": "Update User.php"
+    },
+    {
+        "sha": "ce663aa",
+        "state": "CONTESTED",
+        "why": "E1 fail — 6 of 54 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": true,
+        "added": 54,
+        "lost": 6,
+        "lost_examples": [
+            "return \\responder::success(__('created'));",
+            "if (isset($request['code'])) $this->couponOperations($request);"
+        ],
+        "subject": "feat: add order limit user validation"
+    },
+    {
+        "sha": "d4374b0",
+        "state": "CONTESTED",
+        "why": "E1 fail — 8 of 25 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": true,
+        "added": 25,
+        "lost": 8,
+        "lost_examples": [
+            "->with(['items' => function ($query) use ($product) {",
+            "$query->where('product_id', $product);"
+        ],
+        "subject": "feat: add user limit for products on orders"
+    },
+    {
+        "sha": "75e60d6",
+        "state": "CONTESTED",
+        "why": "E1 fail — 7 of 30 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": false,
+        "added": 30,
+        "lost": 7,
+        "lost_examples": [
+            "return \\responder::success(new BaseCollection($this->categoryService->index(),CategoryResource::class));",
+            "$q->whereRaw('lower(JSON_EXTRACT(keywords, \"$.en\")) LIKE \"%'.strtolower($value).'%\" OR lower(JSON_EXTRACT(keywords, \"$.ar\")) LIKE \"%'.strtolower($value).'%\"');"
+        ],
+        "subject": "feat: add pagination"
+    },
+    {
+        "sha": "b2a1783",
+        "state": "CONTESTED",
+        "why": "E1 fail — 6 of 12 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": true,
+        "added": 12,
+        "lost": 6,
+        "lost_examples": [
+            "if( $user )  return \\responder::success(new UserResource($user->load('address.governorate.country','address.city','lastActiveOrder')));",
+            "return \\responder::success(new UserResource($user->load('address.governorate.country','address.city','lastActiveOrder')));"
+        ],
+        "subject": "feat: check last  active order"
+    },
+    {
+        "sha": "aac72dc",
+        "state": "CONTESTED",
+        "why": "E1 fail — 14 of 36 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": false,
+        "added": 36,
+        "lost": 14,
+        "lost_examples": [
+            "'items.*.quantity'=>['required','integer','min:1',new QuantityCheckRule()],",
+            "if ($coupon && $coupon->loadCount('orders')->orders_count < $coupon->use_limit)"
+        ],
+        "subject": "feat: add coupon validation in order"
+    },
+    {
+        "sha": "f7fe53b",
+        "state": "CONTESTED",
+        "why": "E1 fail — 18 of 42 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": false,
+        "added": 42,
+        "lost": 18,
+        "lost_examples": [
+            "return \\responder::success(new OrderResource($order->load('items')));",
+            "'items.*.quantity'=>['required','integer','min:1',new QuantityCheckRule()]"
+        ],
+        "subject": "feat: orders operations"
+    },
+    {
+        "sha": "5cc91c3",
+        "state": "CONTESTED",
+        "why": "E1 fail — 6 of 49 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": true,
+        "added": 49,
+        "lost": 6,
+        "lost_examples": [
+            "public function __invoke(CouponRequest $request)",
+            "return $query->where('code',$value)"
+        ],
+        "subject": "feat: check valid coupon"
+    },
+    {
+        "sha": "0533f5c",
+        "state": "CONTESTED",
+        "why": "E1 fail — 23 of 99 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": true,
+        "added": 99,
+        "lost": 23,
+        "lost_examples": [
+            "class OrderTypeEnum",
+            "return \\responder::success(OrderResource::collection($this->orderService->index()));"
+        ],
+        "subject": "feat: add orders"
+    },
+    {
+        "sha": "3368b85",
+        "state": "CONTESTED",
+        "why": "E1 fail — 1 of 33 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": true,
+        "added": 33,
+        "lost": 1,
+        "lost_examples": [
+            "'code', 'discount', 'type', 'use_limit', 'min_order', 'max_discount', 'expire_at','is_active'"
+        ],
+        "subject": "feat: add drivers"
+    },
+    {
+        "sha": "95e8859",
+        "state": "CONTESTED",
+        "why": "E1 fail — 2 of 31 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": true,
+        "added": 31,
+        "lost": 2,
+        "lost_examples": [
+            "'code', 'discount', 'type', 'use_limit', 'min_order', 'max_discount', 'expire_at'",
+            "$table->decimal('max_discount')->nullable();"
+        ],
+        "subject": "feat: add coupon"
+    },
+    {
+        "sha": "6cdcd75",
+        "state": "UNUSABLE",
+        "why": ">500 changed lines",
+        "e1": null,
+        "e2": null,
+        "added": 0,
+        "lost": 0
+    },
+    {
+        "sha": "9cddb80",
+        "state": "CONTESTED",
+        "why": "E1 fail — 2 of 30 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": true,
+        "added": 30,
+        "lost": 2,
+        "lost_examples": [
+            "protected $fillable = ['user_id','user_type','amount', 'notes'];",
+            "$table->decimal('amount', 8, 3);"
+        ],
+        "subject": "feat: db structure"
+    },
+    {
+        "sha": "5703bcb",
+        "state": "CONTESTED",
+        "why": "E1 fail — 2 of 5 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": false,
+        "added": 5,
+        "lost": 2,
+        "lost_examples": [
+            "public function scopeSearch($query,$value)",
+            "$q->whereRaw('lower(JSON_EXTRACT(name, \"$.en\")) LIKE \"%'.strtolower($value).'%\" OR lower(JSON_EXTRACT(name, \"$.ar\")) LIKE \"%'.strtolower($value).'%\"');"
+        ],
+        "subject": "feat: add search"
+    },
+    {
+        "sha": "9fd64d7",
+        "state": "CONTESTED",
+        "why": "E1 fail — 2 of 6 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": true,
+        "added": 6,
+        "lost": 2,
+        "lost_examples": [
+            "if( $user )  return \\responder::success(new UserResource($user->load('address.governorate.country','address.city')));",
+            "return $this->hasOne(Address::class)->where('is_default',1);"
+        ],
+        "subject": "feat: update user auth"
+    },
+    {
+        "sha": "06698dd",
+        "state": "CONTESTED",
+        "why": "E1 pass but E2 fail — nothing under a test root asserts this behaviour",
+        "e1": true,
+        "e2": false,
+        "added": 6,
+        "lost": 0,
+        "lost_examples": [],
+        "subject": "feat: add default address"
+    },
+    {
+        "sha": "7b5961e",
+        "state": "CONTESTED",
+        "why": "E1 pass but E2 fail — nothing under a test root asserts this behaviour",
+        "e1": true,
+        "e2": false,
+        "added": 11,
+        "lost": 0,
+        "lost_examples": [],
+        "subject": "feat: update default address"
+    },
+    {
+        "sha": "303dc94",
+        "state": "CONTESTED",
+        "why": "E1 pass but E2 fail — nothing under a test root asserts this behaviour",
+        "e1": true,
+        "e2": false,
+        "added": 10,
+        "lost": 0,
+        "lost_examples": [],
+        "subject": "feat: add pop up banners"
+    },
+    {
+        "sha": "238a954",
+        "state": "CONTESTED",
+        "why": "E1 fail — 8 of 41 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": false,
+        "added": 41,
+        "lost": 8,
+        "lost_examples": [
+            "$data['banners'] = BannerResource::collection($this->bannerService->index(['type'=>BannerTypeEnum::HOME_FIRST]));",
+            "return  \\responder::success(ProductResource::collection($this->productService->index($request->all())));"
+        ],
+        "subject": "feat: add home"
+    },
+    {
+        "sha": "f5cb62a",
+        "state": "CONTESTED",
+        "why": "E1 fail — 4 of 37 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": true,
+        "added": 37,
+        "lost": 4,
+        "lost_examples": [
+            "return  \\responder::success(ProductResource::collection($this->favoriteService->index()));",
+            "return  \\responder::success(ProductResource::collection($this->productService->index($request->only('category_id'))));"
+        ],
+        "subject": "feat: add favorite"
+    },
+    {
+        "sha": "b4741d3",
+        "state": "CONTESTED",
+        "why": "E1 fail — 3 of 121 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": true,
+        "added": 121,
+        "lost": 3,
+        "lost_examples": [
+            "$query = $this->model->with('category','products.category');",
+            "Watchers\\EventWatcher::class => ["
+        ],
+        "subject": "feat: add total clicks"
+    },
+    {
+        "sha": "42eeb92",
+        "state": "CONTESTED",
+        "why": "E1 fail — 3 of 7 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": false,
+        "added": 7,
+        "lost": 3,
+        "lost_examples": [
+            "return $this->model->with('subCategories')->active()->latest()->get();",
+            "return $this->model->with('category')->active()->category($request['category_id'])->inStock(0)->latest()->get();"
+        ],
+        "subject": "fix: active scope"
+    },
+    {
+        "sha": "13e38f0",
+        "state": "CONTESTED",
+        "why": "E1 fail — 19 of 86 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": true,
+        "added": 86,
+        "lost": 19,
+        "lost_examples": [
+            "const FIRST_OF_THE_PAGE = 'fisrt_of_page';",
+            "const MIDPAGE = 'mid_page';"
+        ],
+        "subject": "feat: add banners"
+    },
+    {
+        "sha": "51b67a8",
+        "state": "CONTROL",
+        "why": "E1 pass (all 38 added lines survive) + E2 pass: HEAD:tests/Feature/Auth/AuthenticationTest.php (extends)",
+        "e1": true,
+        "e2": true,
+        "added": 38,
+        "lost": 0,
+        "lost_examples": [],
+        "subject": "feat: add contact"
+    },
+    {
+        "sha": "ec0ad1f",
+        "state": "CONTROL",
+        "why": "E1 pass (all 50 added lines survive) + E2 pass: HEAD:tests/CreatesApplication.php (create)",
+        "e1": true,
+        "e2": true,
+        "added": 50,
+        "lost": 0,
+        "lost_examples": [],
+        "subject": "feat: settings"
+    },
+    {
+        "sha": "efae630",
+        "state": "CONTESTED",
+        "why": "E1 fail — 1 of 25 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": true,
+        "added": 25,
+        "lost": 1,
+        "lost_examples": [
+            "return  \\responder::success(new ProductResource($product->load('category','media')) );"
+        ],
+        "subject": "feat: add product media"
+    },
+    {
+        "sha": "e63bb69",
+        "state": "CONTESTED",
+        "why": "E1 fail — 16 of 68 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": true,
+        "added": 68,
+        "lost": 16,
+        "lost_examples": [
+            "return  \\responder::success(ProductResource::collection($this->productService->index($request->only($request->category_id))));",
+            "return  \\responder::success(new ProductResource($product->load('category')) );"
+        ],
+        "subject": "feat: products modules"
+    },
+    {
+        "sha": "e7e86e7",
+        "state": "UNUSABLE",
+        "why": "merge or root",
+        "e1": null,
+        "e2": null,
+        "added": 0,
+        "lost": 0
+    }
+]

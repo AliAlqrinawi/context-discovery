@@ -1,0 +1,489 @@
+[
+    {
+        "sha": "450d91f",
+        "state": "UNUSABLE",
+        "why": "no substantive PHP addition",
+        "e1": null,
+        "e2": null,
+        "added": 0,
+        "lost": 0
+    },
+    {
+        "sha": "6e00280",
+        "state": "UNUSABLE",
+        "why": "no substantive PHP addition",
+        "e1": null,
+        "e2": null,
+        "added": 0,
+        "lost": 0
+    },
+    {
+        "sha": "18de5ee",
+        "state": "UNUSABLE",
+        "why": "no substantive PHP addition",
+        "e1": null,
+        "e2": null,
+        "added": 0,
+        "lost": 0
+    },
+    {
+        "sha": "3f31452",
+        "state": "UNUSABLE",
+        "why": "no substantive PHP addition",
+        "e1": null,
+        "e2": null,
+        "added": 0,
+        "lost": 0
+    },
+    {
+        "sha": "508f03b",
+        "state": "UNUSABLE",
+        "why": "no substantive PHP addition",
+        "e1": null,
+        "e2": null,
+        "added": 0,
+        "lost": 0
+    },
+    {
+        "sha": "cca9a8f",
+        "state": "UNUSABLE",
+        "why": "no substantive PHP addition",
+        "e1": null,
+        "e2": null,
+        "added": 0,
+        "lost": 0
+    },
+    {
+        "sha": "13b891f",
+        "state": "UNUSABLE",
+        "why": "no substantive PHP addition",
+        "e1": null,
+        "e2": null,
+        "added": 0,
+        "lost": 0
+    },
+    {
+        "sha": "2c2a7b4",
+        "state": "CONTROL",
+        "why": "E1 pass (all 2 added lines survive) + E2 pass: HEAD:tests/Feature/MenuPdfTest.php (MenuPdfTest)",
+        "e1": true,
+        "e2": true,
+        "added": 2,
+        "lost": 0,
+        "lost_examples": [],
+        "subject": "fix: menu PDF permanent_url uses frontend domain not API domain"
+    },
+    {
+        "sha": "3ef4d1a",
+        "state": "CONTESTED",
+        "why": "E1 pass but E2 fail — nothing under a test root asserts this behaviour",
+        "e1": true,
+        "e2": false,
+        "added": 6,
+        "lost": 0,
+        "lost_examples": [],
+        "subject": "feat: point menu QR code at the website /menu/pdf page"
+    },
+    {
+        "sha": "ec92403",
+        "state": "UNUSABLE",
+        "why": ">500 changed lines",
+        "e1": null,
+        "e2": null,
+        "added": 0,
+        "lost": 0
+    },
+    {
+        "sha": "11c0ced",
+        "state": "CONTROL",
+        "why": "E1 pass (all 44 added lines survive) + E2 pass: HEAD:tests/Feature/Actions/UpdateDishActionTest.php (UpdateDishActionTest)",
+        "e1": true,
+        "e2": true,
+        "added": 44,
+        "lost": 0,
+        "lost_examples": [],
+        "subject": "fix: clear dish description when updated with empty value"
+    },
+    {
+        "sha": "fc573d2",
+        "state": "CONTROL",
+        "why": "E1 pass (all 14 added lines survive) + E2 pass: HEAD:tests/Feature/Actions/CacheGroupTest.php (extends)",
+        "e1": true,
+        "e2": true,
+        "added": 14,
+        "lost": 0,
+        "lost_examples": [],
+        "subject": "fix: make dish description optional (nullable)"
+    },
+    {
+        "sha": "fdef4a9",
+        "state": "CONTROL",
+        "why": "E1 pass (all 14 added lines survive) + E2 pass: HEAD:tests/Feature/Actions/CacheGroupTest.php (extends)",
+        "e1": true,
+        "e2": true,
+        "added": 14,
+        "lost": 0,
+        "lost_examples": [],
+        "subject": "feat: add whatsapp_number field to branches"
+    },
+    {
+        "sha": "915ccf9",
+        "state": "CONTESTED",
+        "why": "E1 pass but E2 fail — nothing under a test root asserts this behaviour",
+        "e1": true,
+        "e2": false,
+        "added": 1,
+        "lost": 0,
+        "lost_examples": [],
+        "subject": "feat: add catering_enabled setting for sitewide catering toggle"
+    },
+    {
+        "sha": "560b21b",
+        "state": "CONTROL",
+        "why": "E1 pass (all 79 added lines survive) + E2 pass: HEAD:tests/Feature/Actions/CacheGroupTest.php (CacheGroup)",
+        "e1": true,
+        "e2": true,
+        "added": 79,
+        "lost": 0,
+        "lost_examples": [],
+        "subject": "fix: replace Cache::tags() with Cache::remember() for file driver compatibility"
+    },
+    {
+        "sha": "04328a5",
+        "state": "CONTROL",
+        "why": "E1 pass (all 64 added lines survive) + E2 pass: HEAD:tests/Feature/Actions/FileUploadRollbackTest.php (FileUploadRollbackTest)",
+        "e1": true,
+        "e2": true,
+        "added": 64,
+        "lost": 0,
+        "lost_examples": [],
+        "subject": "fix: delete orphaned uploaded files when a DB write fails after upload"
+    },
+    {
+        "sha": "ebbd1d6",
+        "state": "UNUSABLE",
+        "why": ">500 changed lines",
+        "e1": null,
+        "e2": null,
+        "added": 0,
+        "lost": 0
+    },
+    {
+        "sha": "e4bbfcc",
+        "state": "CONTESTED",
+        "why": "E1 pass but E2 fail — nothing under a test root asserts this behaviour",
+        "e1": true,
+        "e2": false,
+        "added": 9,
+        "lost": 0,
+        "lost_examples": [],
+        "subject": "feat(content): move remaining hardcoded frontend strings into page_contents"
+    },
+    {
+        "sha": "375bf5c",
+        "state": "CONTROL",
+        "why": "E1 pass (all 3 added lines survive) + E2 pass: HEAD:tests/Feature/RepositoriesTest.php (RepositoriesTest)",
+        "e1": true,
+        "e2": true,
+        "added": 3,
+        "lost": 0,
+        "lost_examples": [],
+        "subject": "fix: remove unused media slots (global textures, home hero background)"
+    },
+    {
+        "sha": "f490fb9",
+        "state": "CONTROL",
+        "why": "E1 pass (all 14 added lines survive) + E2 pass: HEAD:tests/Feature/PublicApiTest.php (test_get_dishes_filtered_by_signature_returns_only_signature_dishes_ordered)",
+        "e1": true,
+        "e2": true,
+        "added": 14,
+        "lost": 0,
+        "lost_examples": [],
+        "subject": "feat(menu): make signature dish banner badge CMS-editable"
+    },
+    {
+        "sha": "ee5a2e6",
+        "state": "UNUSABLE",
+        "why": ">500 changed lines",
+        "e1": null,
+        "e2": null,
+        "added": 0,
+        "lost": 0
+    },
+    {
+        "sha": "dae67ab",
+        "state": "CONTESTED",
+        "why": "E1 pass but E2 fail — nothing under a test root asserts this behaviour",
+        "e1": true,
+        "e2": false,
+        "added": 5,
+        "lost": 0,
+        "lost_examples": [],
+        "subject": "fix(content): seed full story narrative and make PageContentSeeder idempotent"
+    },
+    {
+        "sha": "c31783d",
+        "state": "CONTROL",
+        "why": "E1 pass (all 11 added lines survive) + E2 pass: HEAD:tests/Unit/EnumsTest.php (PageEnum)",
+        "e1": true,
+        "e2": true,
+        "added": 11,
+        "lost": 0,
+        "lost_examples": [],
+        "subject": "feat(content): seed CMS content for privacy and terms pages"
+    },
+    {
+        "sha": "cb66103",
+        "state": "CONTROL",
+        "why": "E1 pass (all 39 added lines survive) + E2 pass: HEAD:tests/Feature/Actions/CacheGroupTest.php (execute)",
+        "e1": true,
+        "e2": true,
+        "added": 39,
+        "lost": 0,
+        "lost_examples": [],
+        "subject": "feat(branches): add per-branch show_in_footer toggle"
+    },
+    {
+        "sha": "1fa1f66",
+        "state": "CONTESTED",
+        "why": "E1 pass but E2 fail — nothing under a test root asserts this behaviour",
+        "e1": true,
+        "e2": false,
+        "added": 5,
+        "lost": 0,
+        "lost_examples": [],
+        "subject": "fix: cast featured/signature query params to boolean in public DishController"
+    },
+    {
+        "sha": "1fb0268",
+        "state": "CONTESTED",
+        "why": "E1 pass but E2 fail — nothing under a test root asserts this behaviour",
+        "e1": true,
+        "e2": false,
+        "added": 2,
+        "lost": 0,
+        "lost_examples": [],
+        "subject": "feat: add logo_dark and logo_white media slots"
+    },
+    {
+        "sha": "e770086",
+        "state": "CONTESTED",
+        "why": "E1 fail — 1 of 7 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": true,
+        "added": 7,
+        "lost": 1,
+        "lost_examples": [
+            "$key = 'media_items_' . ($page ?? 'all') . '_' . ($section ?? 'all');"
+        ],
+        "subject": "fix: make page filter optional in MediaItemController to return all slots"
+    },
+    {
+        "sha": "f3a7fcd",
+        "state": "CONTESTED",
+        "why": "E1 fail — 1 of 3 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": true,
+        "added": 3,
+        "lost": 1,
+        "lost_examples": [
+            "$this->assertCount(19, $result);"
+        ],
+        "subject": "feat: add restaurant name and hours to settings"
+    },
+    {
+        "sha": "fdf15e5",
+        "state": "CONTROL",
+        "why": "E1 pass (all 62 added lines survive) + E2 pass: HEAD:tests/Feature/DashboardStatsTest.php (stats)",
+        "e1": true,
+        "e2": true,
+        "added": 62,
+        "lost": 0,
+        "lost_examples": [],
+        "subject": "feat: add dashboard stats endpoint (single request for all counts)"
+    },
+    {
+        "sha": "4411454",
+        "state": "CONTROL",
+        "why": "E1 pass (all 82 added lines survive) + E2 pass: HEAD:tests/Feature/PublicApiTest.php (show)",
+        "e1": true,
+        "e2": true,
+        "added": 82,
+        "lost": 0,
+        "lost_examples": [],
+        "subject": "feat: add profile endpoints (show, update, update password)"
+    },
+    {
+        "sha": "721ea3c",
+        "state": "CONTROL",
+        "why": "E1 pass (all 3 added lines survive) + E2 pass: HEAD:tests/Feature/Actions/FileUploadRollbackTest.php (DishRepository)",
+        "e1": true,
+        "e2": true,
+        "added": 3,
+        "lost": 0,
+        "lost_examples": [],
+        "subject": "fix: set default pagination to 10 items per page"
+    },
+    {
+        "sha": "2996b89",
+        "state": "UNUSABLE",
+        "why": ">500 changed lines",
+        "e1": null,
+        "e2": null,
+        "added": 0,
+        "lost": 0
+    },
+    {
+        "sha": "e5e48ce",
+        "state": "UNUSABLE",
+        "why": ">500 changed lines",
+        "e1": null,
+        "e2": null,
+        "added": 0,
+        "lost": 0
+    },
+    {
+        "sha": "0a6e7d1",
+        "state": "CONTROL",
+        "why": "E1 pass (all 4 added lines survive) + E2 pass: HEAD:tests/Feature/Actions/CacheGroupTest.php (GetDishesAction)",
+        "e1": true,
+        "e2": true,
+        "added": 4,
+        "lost": 0,
+        "lost_examples": [],
+        "subject": "feat: add pagination to dishes, quote-requests, and users endpoints"
+    },
+    {
+        "sha": "9b8f9c6",
+        "state": "CONTESTED",
+        "why": "E1 fail — 3 of 217 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": true,
+        "added": 217,
+        "lost": 3,
+        "lost_examples": [
+            "return $this->success(DeliveryAppResource::collection($action->execute($activeOnly)), __('messages.fetched'));",
+            "return $this->success(new DishCollection($result), __('messages.fetched'));"
+        ],
+        "subject": "feat: add bilingual lang files (ar/en) for validation and messages"
+    },
+    {
+        "sha": "b2eebe7",
+        "state": "CONTESTED",
+        "why": "E1 fail — 56 of 87 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": true,
+        "added": 87,
+        "lost": 56,
+        "lost_examples": [
+            "return $this->success(new AuthResource($result), 'Login successful');",
+            "return $this->success(null, 'Logout successful');"
+        ],
+        "subject": "refactor: add ApiResponse trait and clean up all controllers"
+    },
+    {
+        "sha": "b969836",
+        "state": "CONTROL",
+        "why": "E1 pass (all 2 added lines survive) + E2 pass: HEAD:tests/Feature/CheckApiKeyTest.php (CheckApiKey)",
+        "e1": true,
+        "e2": true,
+        "added": 2,
+        "lost": 0,
+        "lost_examples": [],
+        "subject": "fix: allow Sanctum Bearer Token to bypass CheckApiKey middleware"
+    },
+    {
+        "sha": "c88afc8",
+        "state": "UNUSABLE",
+        "why": ">500 changed lines",
+        "e1": null,
+        "e2": null,
+        "added": 0,
+        "lost": 0
+    },
+    {
+        "sha": "0cdb910",
+        "state": "CONTROL",
+        "why": "E1 pass (all 11 added lines survive) + E2 pass: HEAD:tests/Feature/CheckApiKeyTest.php (CheckApiKey)",
+        "e1": true,
+        "e2": true,
+        "added": 11,
+        "lost": 0,
+        "lost_examples": [],
+        "subject": "feat: final verification, Scramble docs, and POSTMAN_GUIDE"
+    },
+    {
+        "sha": "4c6a83b",
+        "state": "UNUSABLE",
+        "why": ">500 changed lines",
+        "e1": null,
+        "e2": null,
+        "added": 0,
+        "lost": 0
+    },
+    {
+        "sha": "8054003",
+        "state": "UNUSABLE",
+        "why": ">500 changed lines",
+        "e1": null,
+        "e2": null,
+        "added": 0,
+        "lost": 0
+    },
+    {
+        "sha": "44726d0",
+        "state": "UNUSABLE",
+        "why": ">500 changed lines",
+        "e1": null,
+        "e2": null,
+        "added": 0,
+        "lost": 0
+    },
+    {
+        "sha": "ec76dc4",
+        "state": "UNUSABLE",
+        "why": ">500 changed lines",
+        "e1": null,
+        "e2": null,
+        "added": 0,
+        "lost": 0
+    },
+    {
+        "sha": "e4e3f24",
+        "state": "UNUSABLE",
+        "why": ">500 changed lines",
+        "e1": null,
+        "e2": null,
+        "added": 0,
+        "lost": 0
+    },
+    {
+        "sha": "407c110",
+        "state": "CONTROL",
+        "why": "E1 pass (all 101 added lines survive) + E2 pass: HEAD:tests/Feature/Actions/CacheGroupTest.php (extends)",
+        "e1": true,
+        "e2": true,
+        "added": 101,
+        "lost": 0,
+        "lost_examples": [],
+        "subject": "feat: add all database migrations (15 app tables)"
+    },
+    {
+        "sha": "c48963d",
+        "state": "UNUSABLE",
+        "why": ">500 changed lines",
+        "e1": null,
+        "e2": null,
+        "added": 0,
+        "lost": 0
+    },
+    {
+        "sha": "4eb427c",
+        "state": "UNUSABLE",
+        "why": "merge or root",
+        "e1": null,
+        "e2": null,
+        "added": 0,
+        "lost": 0
+    }
+]

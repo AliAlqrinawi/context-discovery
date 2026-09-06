@@ -1,0 +1,43 @@
+[
+    {
+        "sha": "28f2411",
+        "state": "CONTESTED",
+        "why": "E1 fail — 9 of 17 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": false,
+        "added": 17,
+        "lost": 9,
+        "lost_examples": [
+            "$product = Product::where(\"id\", $row[0])->first();",
+            "$newProduct->sku = $row[1];"
+        ],
+        "subject": "Modify the method of uploading products"
+    },
+    {
+        "sha": "b5b2859",
+        "state": "CONTESTED",
+        "why": "E1 fail — 1 of 11 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": true,
+        "added": 11,
+        "lost": 1,
+        "lost_examples": [
+            "'location'=>'nullable|required|max:255'"
+        ],
+        "subject": "add location to products"
+    },
+    {
+        "sha": "00095a9",
+        "state": "CONTESTED",
+        "why": "E1 fail — 2 of 88 added lines no longer exist at HEAD; supersession not yet classified as correction vs move",
+        "e1": false,
+        "e2": false,
+        "added": 88,
+        "lost": 2,
+        "lost_examples": [
+            "return Product::select('id', 'name->ar as name_ar', 'name->en as name_en', \"sku\", 'barcode', 'price')",
+            "return $this->productService->import($request->all());"
+        ],
+        "subject": "export products"
+    }
+]
