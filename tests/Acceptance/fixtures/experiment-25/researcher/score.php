@@ -18,7 +18,7 @@ $answers = [];
 foreach (preg_split('/^## /m', $raw) as $block) {
     if (!preg_match('/^(H\d\d)/', $block, $m)) { continue; }
     $get = static function (string $q) use ($block): string {
-        return preg_match('/\*\*' . $q . '\*\*[^:]*:\s*(.*)$/m', $block, $x) ? trim($x[1]) : '';
+        return preg_match('/^\s*-\s*\*\*' . $q . '\*\*[^:\r\n]*:\s*(.*?)\s*$/m', $block, $x) ? trim($x[1]) : '';
     };
     $answers[$m[1]] = ['Q1' => strtoupper($get('Q1')), 'Q2' => $get('Q2'), 'Q3' => $get('Q3'),
                        'Q4' => strtoupper($get('Q4')), 'Q5' => $get('Q5')];
