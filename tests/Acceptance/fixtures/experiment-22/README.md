@@ -1,27 +1,33 @@
 # Experiment 22 · the false-positive axis
 
-**Incomplete.** All 11 DIFF_ONLY reviewers finished; **7 of 11 DIFF_PLUS_BUNDLE agents terminated
-with HTTP 429** (session rate limit). Four complete pairs. Missing cells are recorded as `MISSING` —
-nothing was substituted or inferred.
+**Complete — 22 of 22 cells.** The first attempt was truncated by an HTTP 429 session limit; the
+seven affected DIFF_PLUS_BUNDLE cells were re-run unchanged after the reset, with fresh agents and
+the identical committed packets.
 
-11 control commits keyed NO, bundles from **1 item / 25 tokens** to **76 / 2423**, generated with
+11 control commits keyed NO. Bundles from **1 item / 25 tokens** to **76 / 2423**, generated with
 M20's corrected same-commit-tree harness.
 
-## What survives the truncation
+## Result
 
-**K03 replicated a third time** — DIFF_ONLY abstains, DIFF_PLUS_BUNDLE answers NO quoting
-`'password' => 'hashed',` from the bundle's `User::casts` slice. M19 K3, M20 C1, M22 K03: three
-reviewers, three milestones, one commit, the same transition.
+| Measure (n = 11) | DIFF_ONLY | DIFF_PLUS_BUNDLE |
+|---|---:|---:|
+| correct control decisions | 1/11 | **6/11** |
+| **verified false positives** | **0/11** | **0/11** |
+| confident false positives | 0 | 0 |
+| abstentions | 9/11 | 4/11 |
+| regressions | — | **0** |
 
-**M21 did not replicate.** Its 5-of-6 (83%) false-positive rate came back as **1 of 11 (9%)** here —
-and that one is a **verified real defect**, so the spurious rate on this set is **0/11**. The axis is
-dominated by which controls are chosen, not by the condition.
+**The bundle does not increase false positives**, and it converted five abstentions into correct
+answers with nothing broken. Two of those five (**K03**, **K09**) rest on evidence verified absent
+from the diff.
 
-**K11 is contested** — keyed NO, but `GetEffectiveSeoAction`'s `robots_noindex` inheritance is dead
-code (the column is NOT NULL with a default). Verified; the key was not changed. Sixth key miss in
-five milestones.
+**But M21 did not replicate.** Its 5-of-6 (83%) false-positive rate came back as **0 of 11** here.
+The axis is dominated by which controls are chosen, not by the condition — so the headline was
+measured against a floor of zero, and is weaker than it sounds.
 
-To finish: re-run the seven `K05–K11` B-arm packets in `packets/*-B/` once the limit resets. The key,
-packets and harness are committed and deterministic.
+**K11 is contested** — keyed NO, but *both* reviewers independently found that
+`GetEffectiveSeoAction`'s `robots_noindex` inheritance is dead code (the column is NOT NULL with a
+default). Verified; the key was not changed. Sixth key miss in five milestones. The bundle carried
+nothing about it.
 
 See [`docs/research/M22-false-positive-axis.md`](../../../../docs/research/M22-false-positive-axis.md).

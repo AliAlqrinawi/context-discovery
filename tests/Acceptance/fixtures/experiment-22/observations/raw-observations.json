@@ -1,43 +1,214 @@
 {
-  "note": "Verbatim answers. THE RUN IS INCOMPLETE: all 11 DIFF_ONLY reviewers finished, but 7 of 11 DIFF_PLUS_BUNDLE agents terminated with HTTP 429 (session rate limit). Nothing has been substituted, inferred or re-run. The missing cells are recorded as MISSING.",
-  "completed": {"DIFF_ONLY": 11, "DIFF_PLUS_BUNDLE": 4},
-  "missing_diff_plus_bundle": ["K05","K06","K07","K08","K09","K10","K11"],
+  "note": "Verbatim answers from twenty-two independent reviewer agents, one per (task, condition). The run was truncated by an HTTP 429 session rate limit on the first attempt; the seven affected DIFF_PLUS_BUNDLE cells were re-run unchanged after the limit reset, with fresh agents and the identical packets. All 22 cells are complete. Nothing was substituted or inferred.",
+  "completed": {
+    "DIFF_ONLY": 11,
+    "DIFF_PLUS_BUNDLE": 11
+  },
   "observations": [
-    {"task":"K01","condition":"DIFF_ONLY","Q1":"CANNOT_TELL","Q2":"-","Q3":"database/seeders/PageContentSeeder.php::run (whether it is a single bulk insert over heterogeneous rows or a per-row create)","Q4":"MEDIUM","Q5":"+            ['page' => 'menu', 'section' => 'signature_banner', 'key' => 'badge', 'type' => 'text', ...]"},
-    {"task":"K01","condition":"DIFF_PLUS_BUNDLE","Q1":"CANNOT_TELL","Q2":"-","Q3":"database/seeders/PageContentSeeder.php::run","Q4":"MEDIUM","Q5":"+            ['page' => 'menu', 'section' => 'signature_banner', 'key' => 'badge', 'type' => 'text', ...]","reviewer_remark":"the bundle contained a single fetched item (25 of 8000 tokens) and supplied nothing about the seeder's insertion mechanism"},
-
-    {"task":"K02","condition":"DIFF_ONLY","Q1":"CANNOT_TELL","Q2":"-","Q3":"app/Observers/MediaItemObserver.php::saved — or wherever the media_items cache entries are invalidated","Q4":"MEDIUM","Q5":"$key = 'media_items_' . ($page ?? 'all') . '_' . ($section ?? 'all');"},
-    {"task":"K02","condition":"DIFF_PLUS_BUNDLE","Q1":"NO","Q2":"-","Q3":"app/Actions/MediaItem/GetMediaItemsAction.php::execute — the call sites the tool truncated (diagnostics: \"call sites truncated at 20 for execute under app/\")","Q4":"MEDIUM","Q5":"if ($page !== null) {"},
-
-    {"task":"K03","condition":"DIFF_ONLY","Q1":"CANNOT_TELL","Q2":"-","Q3":"app/Http/Controllers/Controller.php::error","Q4":"MEDIUM","Q5":"NONE_VISIBLE"},
-    {"task":"K03","condition":"DIFF_PLUS_BUNDLE","Q1":"NO","Q2":"-","Q3":"app/Http/Controllers/Controller.php::error","Q4":"MEDIUM","Q5":"'password' => 'hashed',"},
-
-    {"task":"K04","condition":"DIFF_ONLY","Q1":"CANNOT_TELL","Q2":"-","Q3":"app/Repositories/BranchRepository.php::update","Q4":"MEDIUM","Q5":"+            show_in_footer: $request->has('show_in_footer') ? $request->boolean('show_in_footer') : null,"},
-    {"task":"K04","condition":"DIFF_PLUS_BUNDLE","Q1":"CANNOT_TELL","Q2":"-","Q3":"app/Repositories/BranchRepository.php::update","Q4":"MEDIUM","Q5":"show_in_footer: $request->has('show_in_footer') ? $request->boolean('show_in_footer') : null,"},
-
-    {"task":"K05","condition":"DIFF_ONLY","Q1":"CANNOT_TELL","Q2":"-","Q3":"app/Http/Controllers/Controller.php::paginated","Q4":"LOW","Q5":"return $this->paginated(DishResource::collection($result), $result, __('messages.fetched'));"},
-    {"task":"K05","condition":"DIFF_PLUS_BUNDLE","Q1":"MISSING","Q2":"-","Q3":"-","Q4":"-","Q5":"-","failure":"HTTP 429 session rate limit"},
-
-    {"task":"K06","condition":"DIFF_ONLY","Q1":"CANNOT_TELL","Q2":"-","Q3":"tests/Feature/DishControllerTest::test_index_paginates","Q4":"LOW","Q5":"NONE_VISIBLE"},
-    {"task":"K06","condition":"DIFF_PLUS_BUNDLE","Q1":"MISSING","Q2":"-","Q3":"-","Q4":"-","Q5":"-","failure":"HTTP 429 session rate limit"},
-
-    {"task":"K07","condition":"DIFF_ONLY","Q1":"CANNOT_TELL","Q2":"-","Q3":"app/Actions/Branch/UpdateBranchAction.php::execute (whether null DTO fields are filtered before Branch::update)","Q4":"MEDIUM","Q5":"'whatsapp_number' => $this->whatsapp_number ?? $this->phone,"},
-    {"task":"K07","condition":"DIFF_PLUS_BUNDLE","Q1":"MISSING","Q2":"-","Q3":"-","Q4":"-","Q5":"-","failure":"HTTP 429 session rate limit"},
-
-    {"task":"K08","condition":"DIFF_ONLY","Q1":"CANNOT_TELL","Q2":"-","Q3":"app/DTOs/Dish/UpdateDishDTO.php::fromRequest","Q4":"MEDIUM","Q5":"$data[$key] = $dto->{$key};"},
-    {"task":"K08","condition":"DIFF_PLUS_BUNDLE","Q1":"MISSING","Q2":"-","Q3":"-","Q4":"-","Q5":"-","failure":"HTTP 429 session rate limit"},
-
-    {"task":"K09","condition":"DIFF_ONLY","Q1":"CANNOT_TELL","Q2":"-","Q3":"app/Actions/Dish/UpdateDishAction.php::execute","Q4":"MEDIUM","Q5":"                $this->imageService->delete($stored['path']);"},
-    {"task":"K09","condition":"DIFF_PLUS_BUNDLE","Q1":"MISSING","Q2":"-","Q3":"-","Q4":"-","Q5":"-","failure":"HTTP 429 session rate limit"},
-
-    {"task":"K10","condition":"DIFF_ONLY","Q1":"NO","Q2":"-","Q3":"app/Http/Controllers/Auth/AuthController.php::class AuthController (its extends clause)","Q4":"MEDIUM","Q5":"return $this->success($data, $message, 201);"},
-    {"task":"K10","condition":"DIFF_PLUS_BUNDLE","Q1":"MISSING","Q2":"-","Q3":"-","Q4":"-","Q5":"-","failure":"HTTP 429 session rate limit"},
-
-    {"task":"K11","condition":"DIFF_ONLY","Q1":"YES","Q2":"In GetEffectiveSeoAction::merge the per-page inheritance of robots_noindex is dead: the column is NOT NULL with default false and the seeder creates a row per page, so $override?->robots_noindex is never null and the ?? $global fallback can never fire.","Q3":"NONE","Q4":"MEDIUM","Q5":"$result['robots_noindex'] = $override?->robots_noindex ?? $global?->robots_noindex ?? false;"},
-    {"task":"K11","condition":"DIFF_PLUS_BUNDLE","Q1":"MISSING","Q2":"-","Q3":"-","Q4":"-","Q5":"-","failure":"HTTP 429 session rate limit"}
+    {
+      "task": "K01",
+      "condition": "DIFF_ONLY",
+      "Q1": "CANNOT_TELL",
+      "Q2": "-",
+      "Q3": "database/seeders/PageContentSeeder.php::run (whether it is a single bulk insert over heterogeneous rows or a per-row create)",
+      "Q4": "MEDIUM",
+      "Q5": "+            ['page' => 'menu', 'section' => 'signature_banner', 'key' => 'badge', 'type' => 'text', ...]"
+    },
+    {
+      "task": "K01",
+      "condition": "DIFF_PLUS_BUNDLE",
+      "Q1": "CANNOT_TELL",
+      "Q2": "-",
+      "Q3": "database/seeders/PageContentSeeder.php::run",
+      "Q4": "MEDIUM",
+      "Q5": "+            ['page' => 'menu', 'section' => 'signature_banner', 'key' => 'badge', 'type' => 'text', ...]",
+      "reviewer_remark": "the bundle contained a single fetched item (25 of 8000 tokens) and supplied nothing about the seeder's insertion mechanism"
+    },
+    {
+      "task": "K02",
+      "condition": "DIFF_ONLY",
+      "Q1": "CANNOT_TELL",
+      "Q2": "-",
+      "Q3": "app/Observers/MediaItemObserver.php::saved — or wherever the media_items cache entries are invalidated",
+      "Q4": "MEDIUM",
+      "Q5": "$key = 'media_items_' . ($page ?? 'all') . '_' . ($section ?? 'all');"
+    },
+    {
+      "task": "K02",
+      "condition": "DIFF_PLUS_BUNDLE",
+      "Q1": "NO",
+      "Q2": "-",
+      "Q3": "app/Actions/MediaItem/GetMediaItemsAction.php::execute — the call sites the tool truncated (diagnostics: \"call sites truncated at 20 for execute under app/\")",
+      "Q4": "MEDIUM",
+      "Q5": "if ($page !== null) {"
+    },
+    {
+      "task": "K03",
+      "condition": "DIFF_ONLY",
+      "Q1": "CANNOT_TELL",
+      "Q2": "-",
+      "Q3": "app/Http/Controllers/Controller.php::error",
+      "Q4": "MEDIUM",
+      "Q5": "NONE_VISIBLE"
+    },
+    {
+      "task": "K03",
+      "condition": "DIFF_PLUS_BUNDLE",
+      "Q1": "NO",
+      "Q2": "-",
+      "Q3": "app/Http/Controllers/Controller.php::error",
+      "Q4": "MEDIUM",
+      "Q5": "'password' => 'hashed',"
+    },
+    {
+      "task": "K04",
+      "condition": "DIFF_ONLY",
+      "Q1": "CANNOT_TELL",
+      "Q2": "-",
+      "Q3": "app/Repositories/BranchRepository.php::update",
+      "Q4": "MEDIUM",
+      "Q5": "+            show_in_footer: $request->has('show_in_footer') ? $request->boolean('show_in_footer') : null,"
+    },
+    {
+      "task": "K04",
+      "condition": "DIFF_PLUS_BUNDLE",
+      "Q1": "CANNOT_TELL",
+      "Q2": "-",
+      "Q3": "app/Repositories/BranchRepository.php::update",
+      "Q4": "MEDIUM",
+      "Q5": "show_in_footer: $request->has('show_in_footer') ? $request->boolean('show_in_footer') : null,"
+    },
+    {
+      "task": "K05",
+      "condition": "DIFF_ONLY",
+      "Q1": "CANNOT_TELL",
+      "Q2": "-",
+      "Q3": "app/Http/Controllers/Controller.php::paginated",
+      "Q4": "LOW",
+      "Q5": "return $this->paginated(DishResource::collection($result), $result, __('messages.fetched'));"
+    },
+    {
+      "task": "K05",
+      "condition": "DIFF_PLUS_BUNDLE",
+      "Q1": "CANNOT_TELL",
+      "Q2": "-",
+      "Q3": "app/Http/Controllers/Controller.php::paginated",
+      "Q4": "MEDIUM",
+      "Q5": "+        return $this->paginated(DishResource::collection($result), $result, __('messages.fetched'));"
+    },
+    {
+      "task": "K06",
+      "condition": "DIFF_ONLY",
+      "Q1": "CANNOT_TELL",
+      "Q2": "-",
+      "Q3": "tests/Feature/DishControllerTest::test_index_paginates",
+      "Q4": "LOW",
+      "Q5": "NONE_VISIBLE"
+    },
+    {
+      "task": "K06",
+      "condition": "DIFF_PLUS_BUNDLE",
+      "Q1": "NO",
+      "Q2": "-",
+      "Q3": "app/Http/Controllers/UserController.php::index",
+      "Q4": "MEDIUM",
+      "Q5": "-        return User::with('roles')->paginate(15);\n+        return User::with('roles')->paginate(10);"
+    },
+    {
+      "task": "K07",
+      "condition": "DIFF_ONLY",
+      "Q1": "CANNOT_TELL",
+      "Q2": "-",
+      "Q3": "app/Actions/Branch/UpdateBranchAction.php::execute (whether null DTO fields are filtered before Branch::update)",
+      "Q4": "MEDIUM",
+      "Q5": "'whatsapp_number' => $this->whatsapp_number ?? $this->phone,"
+    },
+    {
+      "task": "K07",
+      "condition": "DIFF_PLUS_BUNDLE",
+      "Q1": "CANNOT_TELL",
+      "Q2": "-",
+      "Q3": "app/Actions/Branch/UpdateBranchAction.php::execute",
+      "Q4": "MEDIUM",
+      "Q5": "ASSUMPTION: named reference could not be resolved on disk; contract unverified"
+    },
+    {
+      "task": "K08",
+      "condition": "DIFF_ONLY",
+      "Q1": "CANNOT_TELL",
+      "Q2": "-",
+      "Q3": "app/DTOs/Dish/UpdateDishDTO.php::fromRequest",
+      "Q4": "MEDIUM",
+      "Q5": "$data[$key] = $dto->{$key};"
+    },
+    {
+      "task": "K08",
+      "condition": "DIFF_PLUS_BUNDLE",
+      "Q1": "NO",
+      "Q2": "-",
+      "Q3": "app/Actions/Dish/UpdateDishAction.php::execute (the unshown tail that hands $data to $this->repository->update(), plus that repository method)",
+      "Q4": "MEDIUM",
+      "Q5": "fn (string $key) => $request->has($key),"
+    },
+    {
+      "task": "K09",
+      "condition": "DIFF_ONLY",
+      "Q1": "CANNOT_TELL",
+      "Q2": "-",
+      "Q3": "app/Actions/Dish/UpdateDishAction.php::execute",
+      "Q4": "MEDIUM",
+      "Q5": "                $this->imageService->delete($stored['path']);"
+    },
+    {
+      "task": "K09",
+      "condition": "DIFF_PLUS_BUNDLE",
+      "Q1": "NO",
+      "Q2": "-",
+      "Q3": "app/Services/ImageService.php::store",
+      "Q4": "MEDIUM",
+      "Q5": "public readonly UploadedFile $image,"
+    },
+    {
+      "task": "K10",
+      "condition": "DIFF_ONLY",
+      "Q1": "NO",
+      "Q2": "-",
+      "Q3": "app/Http/Controllers/Auth/AuthController.php::class AuthController (its extends clause)",
+      "Q4": "MEDIUM",
+      "Q5": "return $this->success($data, $message, 201);"
+    },
+    {
+      "task": "K10",
+      "condition": "DIFF_PLUS_BUNDLE",
+      "Q1": "NO",
+      "Q2": "-",
+      "Q3": "app/Http/Controllers/CategoryController.php::CategoryController class declaration (the extends Controller clause)",
+      "Q4": "MEDIUM",
+      "Q5": "+        return response()->json([\n+            'success' => true,\n+            'message' => $message,\n+            'data'    => $data,\n+        ], $status);"
+    },
+    {
+      "task": "K11",
+      "condition": "DIFF_ONLY",
+      "Q1": "YES",
+      "Q2": "In GetEffectiveSeoAction::merge the per-page inheritance of robots_noindex is dead: the column is NOT NULL with default false and the seeder creates a row per page, so $override?->robots_noindex is never null and the ?? $global fallback can never fire.",
+      "Q3": "NONE",
+      "Q4": "MEDIUM",
+      "Q5": "$result['robots_noindex'] = $override?->robots_noindex ?? $global?->robots_noindex ?? false;"
+    },
+    {
+      "task": "K11",
+      "condition": "DIFF_PLUS_BUNDLE",
+      "Q1": "YES",
+      "Q2": "GetEffectiveSeoAction::merge tries to inherit robots_noindex from the global row with ??, but the column is NOT NULL with default false and the seeder creates a row for every page, so a per-page override value is never null and a global robots_noindex = true can never propagate to any page.",
+      "Q3": "NONE",
+      "Q4": "MEDIUM",
+      "Q5": "$result['robots_noindex'] = $override?->robots_noindex ?? $global?->robots_noindex ?? false;"
+    }
   ],
   "verification_of_reviewer_YES_answers": {
     "K11-A": "VERIFIED REAL. The migration declares $table->boolean('robots_noindex')->default(false) — NOT NULL with a default — so $override?->robots_noindex is never null once a page row exists, and SeoSettingSeeder creates rows. The global robots_noindex can never take effect on any page while every other nullable field inherits correctly. The key said NO. Key NOT modified; K11 is marked CONTESTED.",
-    "K10-A": "answered NO — correct, no verification needed."
-  }
+    "K10-A": "answered NO — correct, no verification needed.",
+    "K11-B": "VERIFIED REAL — the same defect K11-A found, reported independently. The bundle carried nothing about robots_noindex (zero mentions), so it neither helped nor hindered here."
+  },
+  "evidence_provenance": "All 22 Q5 quotes verified present in that reviewer's material. Bundle-only (absent from the diff): K03-B ('password' => 'hashed'), K07-B (a flag statement), K09-B (public readonly UploadedFile $image). K08-B appears in both. Every other quote is from the diff."
 }

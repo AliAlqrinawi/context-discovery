@@ -1,60 +1,51 @@
 # Experiment 22 · scored — the false-positive axis
 
-> **The run is incomplete.** All 11 DIFF_ONLY reviewers finished; **7 of 11 DIFF_PLUS_BUNDLE agents
-> terminated with HTTP 429** (session rate limit). Only **K01–K04** have both arms. Nothing has been
-> substituted or inferred; missing cells are marked MISSING.
+All 22 cells complete. The first attempt was truncated by an HTTP 429 session limit; the seven
+affected DIFF_PLUS_BUNDLE cells were re-run unchanged after the reset, with fresh agents and the
+identical packets.
 
-## The 4 complete pairs
+## Per task
 
 | Task | bundle | A · DIFF_ONLY | B · DIFF_PLUS_BUNDLE | Outcome |
 |---|---:|---|---|---|
-| K01 | 1 item / 25 tok | CANNOT_TELL · MED | CANNOT_TELL · MED | no change |
-| K02 | 30 / 504 | CANNOT_TELL · MED | **NO** · MED | **abstention → correct** |
-| K03 | 16 / 479 | CANNOT_TELL · MED | **NO** · MED | **abstention → correct, bundle-only evidence** |
-| K04 | 76 / 1372 | CANNOT_TELL · MED | CANNOT_TELL · MED | no change |
+| K01 | 1 / 25 | CANNOT_TELL | CANNOT_TELL | no change |
+| K02 | 30 / 504 | CANNOT_TELL | **NO** | abstain → correct |
+| K03 | 16 / 479 | CANNOT_TELL | **NO** | abstain → correct · **bundle-only evidence** |
+| K04 | 76 / 1372 | CANNOT_TELL | CANNOT_TELL | no change |
+| K05 | 4 / 449 | CANNOT_TELL | CANNOT_TELL | no change |
+| K06 | 4 / 185 | CANNOT_TELL | **NO** | abstain → correct |
+| K07 | 2 / 40 | CANNOT_TELL | CANNOT_TELL | no change |
+| K08 | 12 / 888 | CANNOT_TELL | **NO** | abstain → correct |
+| K09 | 41 / 2115 | CANNOT_TELL | **NO** | abstain → correct · **bundle-only evidence** |
+| K10 | 27 / 2423 | NO | NO | no change (both correct) |
+| K11 | 53 / 1468 | **YES** | **YES** | no change — both found the same **verified-real** defect |
 
-| Measure (n = 4) | DIFF_ONLY | DIFF_PLUS_BUNDLE |
-|---|---:|---:|
-| correct control decisions (NO) | **0/4** | **2/4** |
-| **false positives** | **0/4** | **0/4** |
-| confident false positives (YES + HIGH) | **0** | **0** |
-| abstentions | 4/4 | 2/4 |
+## Totals (n = 11)
 
-**On these four the bundle raised correct control decisions from 0 to 2 and added no false
-positive.** n = 4. No further claim is available.
+| Measure | DIFF_ONLY | DIFF_PLUS_BUNDLE | Δ |
+|---|---:|---:|---:|
+| correct control decisions (NO) | **1/11 · 9%** | **6/11 · 55%** | **+5** |
+| defect reported (YES) | 1/11 | 1/11 | **0** |
+| **verified false positives** | **0/11** | **0/11** | **0** |
+| confident false positives (YES + HIGH) | **0** | **0** | 0 |
+| abstentions | **9/11 · 82%** | **4/11 · 36%** | **−5** |
+| evidence-supported | 11/11 | 11/11 | 0 |
+| regressions (correct → incorrect) | — | **0** | — |
 
-## K03 — a third replication
+**The bundle did not increase false positives.** Both arms report exactly one defect, on K11, and it
+is verified real — so the spurious rate is **0/11 in both**.
 
-DIFF_ONLY abstained. DIFF_PLUS_BUNDLE answered **NO** quoting `'password' => 'hashed',` — verified
-absent from the diff and present in the bundle's `User::casts` slice.
+**It converted five abstentions into correct control decisions**, with **zero** regressions.
 
-| | milestone | harness | bundle | result |
-|---|---|---|---|---|
-| 1 | M19 K3 | at HEAD (defective) | 7 items / 299 tok | abstain → NO, same quote |
-| 2 | M20 C1 | corrected | 16 / 479 | abstain → NO, same quote |
-| 3 | **M22 K03** | corrected | 16 / 479 | abstain → NO, same quote |
+## Evidence provenance
 
-Three independent reviewers, three milestones, the same commit, the same transition, the same
-bundle-sourced quotation. This is the most reproducible result the scored series has produced.
+All 22 Q5 quotes verified in their own material. **Bundle-only** (absent from the diff): **K03-B**
+`'password' => 'hashed',` · **K07-B** a flag statement · **K09-B** `public readonly UploadedFile
+$image,`. K08-B appears in both. Every other quote is from the diff.
 
-## The DIFF_ONLY arm alone — complete, 11 controls
+So of the five improvements, **two (K03, K09) rest on evidence the diff could not have supplied**.
 
-| | |
-|---|---:|
-| correct control decisions (NO) | **1/11** |
-| **defect reported (YES)** | **1/11 · 9%** |
-| abstentions | **9/11 · 82%** |
-| confident false positives | **0** |
+## K03 — the third replication
 
-Of the single YES — **K11 — the claim is VERIFIED REAL**, so the false-positive rate on this control
-set is **0/11**, not 1/11.
-
-### This flatly contradicts M21
-
-M21 measured DIFF_ONLY on 6 controls and got **5 YES (83%)**. M22 measures 11 controls and gets
-**1 YES (9%)**, and that one is a real defect.
-
-Same protocol, same reviewer model, same repository, different control commits. **The
-false-positive rate is not stable across control sets**, which means M21's 5/6 was not a baseline
-this milestone could be compared against — and that neither figure supports a claim about "the"
-false-positive rate.
+M19 K3 → M20 C1 → M22 K03: three reviewers, three milestones, one commit, the same abstain → NO
+transition on the same bundle-sourced quotation.
