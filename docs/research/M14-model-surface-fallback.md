@@ -165,24 +165,37 @@ Budget: 8000 → 606 used, 0 dropped; 2000 → 606, 0 dropped; 500 → 460 used,
 recorded with reason and token count. Determinism: 5× JSON @8000, 5× Markdown @8000, 5× JSON @500 —
 one distinct output each, on both streams.
 
-## 9 · The new false positive, named
+## 9 · The new unkeyed item, named
+
+> **Corrected by M15.** This section originally called the `User` surface a **false positive**. It
+> is not: M7's key contains no row that decides a project-model reference from a test file, so the
+> honest description is **unkeyed**. See
+> [`M15-origin-value.md`](M15-origin-value.md) §10, and §2 there for why E5.12 does not supply the
+> row it appears to. M15 keyed the case directly and answered **FETCH**.
 
 `app/Models/User.php`, 3 slices, **165 tokens**, caused by `User::create(...)` in
 `tests/Feature/MenuPdfTest.php`.
 
-No key row asks for it. E5.12 marks test-only references OMIT; E5.6 permits the flag but points at
-E5.1's model surface as what carries the value, and there is no E5.x row wanting `User`.
+No key row asks for it — and, as M15 established, none forbids it either. E5.12's rationale reads
+as though it covers this, but the four references it names are all dependency classes, omitted by
+ownership in any file whatever.
 
 It is not a boundary failure — `User` satisfies all three conditions exactly as `Setting` does, and
 under ADR-A016 nothing available distinguishes a model surface wanted by a controller from the same
 surface wanted by a test. It is the honest cost of the rule.
 
 Precision therefore moves from **1/11 (9%)** at M12 to **5/18 (28%)** — wanted items being E5.1's
-two `Setting` slices, E5.2's two `MediaItem` slices, and E5.3's premise flag.
+two `Setting` slices, E5.2's two `MediaItem` slices, and E5.3's premise flag. *(M15 recount: 5/18 is
+a floor that charges all 8 unkeyed items as errors; 5/10 over the items the key decides is the
+ceiling. M7's key does not decide 8 of the 18.)*
 
 **Recorded, not fixed.** The obvious lever — *a reference originating in a test file is scaffolding*
 — is a new discriminator with no experiment behind it, and inventing one inside an implementation
 milestone is the thing ADR-A003 exists to prevent. It is written up as a M15 candidate in §14.
+
+> **M15 ran that experiment and the discriminator did not survive.** Every candidate boundary lost
+> keyed context without removing a single keyed false positive, and dropping dev-origin references
+> destroyed a surface a *production* row demanded. Origin-blind behaviour stands.
 
 ## 10 · The M1 baseline — 9 entries changed, and why
 

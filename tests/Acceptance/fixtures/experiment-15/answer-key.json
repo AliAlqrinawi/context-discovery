@@ -1,0 +1,89 @@
+{
+  "experiment": "experiment-15",
+  "written": "2026-09-06, from the fixture sources, BEFORE the CLI was run against them and BEFORE any production code was read for this purpose",
+  "question": "Does the file in which a named reference originates provide enough evidence to justify a different resolution or bundling outcome?",
+  "budget_tokens": 8000,
+
+  "origin_categories_in_this_fixture": {
+    "note": "Taken from the real corpus, not invented. abouelsid-backend declares exactly these, and the tool ALREADY reads both sections of composer.json.",
+    "production": "app/** and database/seeders/** — both declared by composer.json `autoload.psr-4`",
+    "dev": "tests/** — declared by composer.json `autoload-dev.psr-4` as `Tests\\`",
+    "unmapped": "routes/** — no PSR-4 section maps it at all; Laravel `require`s it"
+  },
+
+  "how_each_row_was_decided": [
+    "fetch-vs-flag.md states the corpus's decision rule in full: `is the resolving source named, single, and depth-one on disk? -> yes -> FETCH the minimal slice`. It contains no term for where the reference originates.",
+    "context-types.md type 2 is `a class, model, enum, or method THE DIFF explicitly references` — the diff, not a privileged part of it.",
+    "Experiment 1 earned the model surface because `the change relies on the referenced thing's contract — a model's columns`. A mass-assignment is a mass-assignment wherever it is written.",
+    "Experiment 2 warns that pulling context `just in case` is a precision failure. That is a warning about SPECULATIVE fetches — a reference the diff does not make — not about references that are really there.",
+    "M7's E5.12 is the only row in the whole corpus that reasons about test files. Its stated rationale is broad (`test scaffolding`), but the four references it actually names — Storage::fake, UploadedFile::fake, Sanctum::actingAs, factories — are ALL dependency classes, already omitted by ADR-A012/A013 whatever file they appear in. It therefore supplies a rationale but not one discriminating instance."
+  ],
+
+  "rows": [
+    { "id": "P1", "origin": "app/Http/Controllers/OrderController.php", "origin_category": "production",
+      "reference": "App\\Services\\OrderCalculator::total", "member_state": "declared",
+      "expect_flag": false, "expect_surface": false, "expect_member_slice": "total",
+      "why": "Named, single, depth-one, and the member is right there — fetch-vs-flag's FETCH side. The minimal slice IS the member (A020 condition 3)." },
+
+    { "id": "T1a", "origin": "tests/Feature/OrderTest.php", "origin_category": "dev",
+      "reference": "App\\Services\\OrderCalculator::total", "member_state": "declared",
+      "expect_flag": false, "expect_surface": false, "expect_member_slice": "total (the SAME slice as P1 — exactly one copy in the bundle)",
+      "why": "Identical subject to P1 from a different origin. The bundle must carry one copy: two identical slices double-count tokens for one fact (ADR-A005). This row tests DUPLICATION, not origin." },
+
+    { "id": "T1b", "origin": "tests/Feature/OrderTest.php", "origin_category": "dev",
+      "reference": "App\\Services\\OrderCalculator::subtotal", "member_state": "declared",
+      "expect_flag": false, "expect_surface": false, "expect_member_slice": "subtotal",
+      "why": "A resolving member reached ONLY from a test. The corpus's decision rule has no origin term, and a reviewer judging this test line needs to know what subtotal() returns. FETCH, exactly as P1." },
+
+    { "id": "P2", "origin": "app/Http/Controllers/OrderController.php", "origin_category": "production",
+      "reference": "App\\Models\\Order::create", "member_state": "unresolved",
+      "expect_flag": true, "expect_surface": "App\\Models\\Order — fillable, casts, scopeActive",
+      "why": "E5.1's exact shape, and ADR-A020's settled case: flag retained, surface fetched." },
+
+    { "id": "T2", "origin": "tests/Feature/OrderTest.php", "origin_category": "dev",
+      "reference": "App\\Models\\Order::create", "member_state": "unresolved",
+      "expect_flag": true, "expect_surface": "none ADDITIONAL — Order's surface is already in the bundle from P2",
+      "why": "Its own flag, because the flag's provenance names a DIFFERENT line the reviewer must look at; M7 already emits one flag per origin for a repeated subject and that was accepted. But one surface per class, never two." },
+
+    { "id": "T3", "origin": "tests/Feature/OrderTest.php", "origin_category": "dev",
+      "reference": "App\\Models\\AuditLog::create", "member_state": "unresolved",
+      "expect_flag": true, "expect_surface": "App\\Models\\AuditLog — fillable, casts",
+      "why": "THE DECIDING ROW — the M7 `User::create` case, keyed for the first time. AuditLog is reached from a test and nowhere else. It is keyed FETCH because every reason Experiment 1 gives for the model surface applies to this line: `AuditLog::create(['action' => ...])` mass-assigns, and whether `action` is fillable is a real correctness question about a line IN THIS DIFF that no other file settles. Nothing in the corpus's decision rule, in context-types type 2, or in Experiment 1's rationale mentions where the referencing line lives. This key does NOT assume `test means omit`; it looked for evidence for that rule and did not find any." },
+
+    { "id": "H1", "origin": "tests/Support/CreatesOrders.php", "origin_category": "dev (a test SUPPORT file, not a test case)",
+      "reference": "App\\Models\\Order::updateOrCreate", "member_state": "unresolved",
+      "expect_flag": true, "expect_surface": "none ADDITIONAL",
+      "why": "Present so `test case` and `test support` can be separated if the evidence ever asks for it. It does not: Composer declares both under the same `Tests\\` prefix, so the tool has no fact that tells them apart — the same position ADR-A016 reached about a typo." },
+
+    { "id": "S1", "origin": "database/seeders/OrderSeeder.php", "origin_category": "production (composer `autoload`, not `autoload-dev`)",
+      "reference": "App\\Models\\Order::firstOrCreate", "member_state": "unresolved",
+      "expect_flag": true, "expect_surface": "none ADDITIONAL",
+      "why": "GUARD. A seeder LOOKS like scaffolding but the project's own composer.json declares it production. Any rule built on the word `test`, or on a hand-written path list, risks catching it. M7 emitted exactly this flag from SettingSeeder and no key row objected." },
+
+    { "id": "R1", "origin": "routes/web.php", "origin_category": "unmapped by any PSR-4 section",
+      "reference": "App\\Models\\Order::whereActive", "member_state": "unresolved",
+      "expect_flag": true, "expect_surface": "none ADDITIONAL",
+      "why": "GUARD, third state. A binary production/dev rule has no answer for a file Composer maps in neither section. M7 emitted this flag from routes/web.php and no key row objected." },
+
+    { "id": "V1", "origin": "BOTH app/Http/Controllers/OrderController.php AND tests/Feature/OrderTest.php", "origin_category": "production and dev",
+      "reference": "App\\Models\\Coupon::create", "member_state": "unresolved; app/Models/Coupon.php is CREATED by this diff",
+      "expect_flag": "one per origin — two flags", "expect_surface": "NONE",
+      "why": "GUARD for ADR-A019. The surface is withheld because the diff already shows the whole file, not because of where the reference came from. Any origin rule must leave this row exactly as it is — and must not become a second, redundant reason for the same suppression." },
+
+    { "id": "N1", "origin": "a production file AND a test file", "origin_category": "both",
+      "reference": "docblock `@see AuditLog::create()`, line comments, string literals, `Order::class`, `AuditLog::class`",
+      "expect_flag": false, "expect_surface": false, "expect_member_slice": null,
+      "why": "ZERO items, from both categories. Deliberately duplicated across a production and a test file so a new origin rule cannot appear to `fix` noise it never caused." },
+
+    { "id": "X", "origin": "-", "origin_category": "-", "reference": "the frozen contract",
+      "expect_flag": null, "expect_surface": null,
+      "why": "bundle_version 1, five ports, five assertion kinds, seven premises, two levers, provenance shape, ItemPriority bands and token accounting all unchanged. Unverifiable-premise items are whatever the premise catalogue already produces; origin must not change them either." }
+  ],
+
+  "the_answer_this_key_encodes": {
+    "summary": "NO. Not one row's correct outcome differs because of the file the reference originates in.",
+    "consequence_if_true": "M15 is outcome C — record the gap, leave production untouched — and M14's section 9 claim that the `User` surface is a false positive must be corrected: it was inferred from E5.12's rationale, and E5.12 does not support it.",
+    "what_would_falsify_this": "A row where the same reference shape, same ownership, same member state and same diff visibility yields a different correct answer solely because of the origin file. This fixture was built to contain such a row if one exists (T3 versus P2), and keying it honestly produced the same answer on both sides.",
+    "separately_predicted": "T1a is expected to expose a DUPLICATE member slice — two copies of OrderCalculator::total for one fact. That is an origin-independent defect and, if it appears, belongs to its own milestone, not to this one."
+  }
+}

@@ -1,0 +1,111 @@
+diff --git a/app/Http/Controllers/OrderController.php b/app/Http/Controllers/OrderController.php
+index 801c47d..1e060f2 100644
+--- a/app/Http/Controllers/OrderController.php
++++ b/app/Http/Controllers/OrderController.php
+@@ -12,4 +12,21 @@ class OrderController
+     {
+         return 'unchanged';
+     }
++
++    /**
++     * N1 · docblock noise: Order::create() and AuditLog::create() are prose here.
++     *
++     * @see AuditLog::create()
++     */
++    public function store(array $data): array
++    {
++        // N1 · comment noise: AuditLog::create() is named here only.
++        $labels = ['Order::create', 'App\\Models\\AuditLog::create', Order::class];
++
++        $total = OrderCalculator::total($data['lines']);     // P1 · resolving member
++        $order = Order::create($data + ['total' => $total]); // P2 · unresolved member
++        $coupon = Coupon::create(['code' => 'X']);           // V1 · declared in a file this diff creates
++
++        return [$order, $coupon, $labels];
++    }
+ }
+diff --git a/app/Models/Coupon.php b/app/Models/Coupon.php
+new file mode 100644
+index 0000000..f47f8b1
+--- /dev/null
++++ b/app/Models/Coupon.php
+@@ -0,0 +1,10 @@
++<?php
++
++namespace App\Models;
++
++use Illuminate\Database\Eloquent\Model;
++
++class Coupon extends Model
++{
++    protected $fillable = ['code'];
++}
+diff --git a/database/seeders/OrderSeeder.php b/database/seeders/OrderSeeder.php
+index acc6a44..191cf3d 100644
+--- a/database/seeders/OrderSeeder.php
++++ b/database/seeders/OrderSeeder.php
+@@ -10,4 +10,9 @@ class OrderSeeder
+     {
+         return 'unchanged';
+     }
++
++    public function run(): void
++    {
++        Order::firstOrCreate(['sku' => 'SEED'], ['total' => 0]);  // S1 · autoload (production) origin
++    }
+ }
+diff --git a/routes/web.php b/routes/web.php
+index e222f39..bc6ac70 100644
+--- a/routes/web.php
++++ b/routes/web.php
+@@ -1,3 +1,6 @@
+ <?php
+ 
+ use App\Models\Order;
++
++// R1 · a file no PSR-4 section maps at all.
++$count = Order::whereActive()->count();
+diff --git a/tests/Feature/OrderTest.php b/tests/Feature/OrderTest.php
+index e0e1b0e..d41637c 100644
+--- a/tests/Feature/OrderTest.php
++++ b/tests/Feature/OrderTest.php
+@@ -13,4 +13,25 @@ class OrderTest
+     {
+         return 'unchanged';
+     }
++
++    /**
++     * N1 · docblock noise in a TEST file: Order::create() and AuditLog::create() are prose.
++     */
++    public function test_it_stores_an_order(): void
++    {
++        // N1 · comment noise in a test: AuditLog::create() is named here only.
++        $labels = ['AuditLog::create', 'App\\Models\\Order::create', AuditLog::class];
++
++        OrderCalculator::total([1, 2]);                       // T1a · same member as P1
++        OrderCalculator::subtotal([1, 2]);                    // T1b · test-only resolving member
++        Order::create(['sku' => 'A', 'total' => 1]);          // T2 · class also used from production
++        AuditLog::create(['action' => 'stored']);             // T3 · class used ONLY from a test
++        Coupon::create(['code' => 'X']);                      // V1 · created file, from a test
++
++        $this->assertSame([], $labels);
++    }
++
++    private function assertSame(array $a, array $b): void
++    {
++    }
+ }
+diff --git a/tests/Support/CreatesOrders.php b/tests/Support/CreatesOrders.php
+index ed5dc3f..912f226 100644
+--- a/tests/Support/CreatesOrders.php
++++ b/tests/Support/CreatesOrders.php
+@@ -10,4 +10,9 @@ trait CreatesOrders
+     {
+         return 'unchanged';
+     }
++
++    public function makeOrder(): Order
++    {
++        return Order::updateOrCreate(['sku' => 'A'], ['total' => 1]);  // H1 · test-support origin
++    }
+ }
