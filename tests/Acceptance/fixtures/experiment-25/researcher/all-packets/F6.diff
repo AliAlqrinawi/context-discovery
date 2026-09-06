@@ -1,0 +1,126 @@
+diff --git a/app/Http/Requests/Admin/Category/StoreRequest.php b/app/Http/Requests/Admin/Category/StoreRequest.php
+index 5c71b76..dbf7d60 100644
+--- a/app/Http/Requests/Admin/Category/StoreRequest.php
++++ b/app/Http/Requests/Admin/Category/StoreRequest.php
+@@ -25,7 +25,7 @@ public function rules(): array
+             'name' => 'required|array' ,
+             'name.ar'=>'required|string|min:1|max:255',
+             'name.en'=>'required|string|min:1|max:255',
+-            'image'=>'required|image',
++            'image'=>'nullable|image',
+             'category_id'=>'nullable|exists:categories,id',
+             'is_active'=>'required|in:0,1'
+         ];
+diff --git a/app/Http/Requests/Admin/Category/UpdateRequest.php b/app/Http/Requests/Admin/Category/UpdateRequest.php
+index 81a8235..912905e 100644
+--- a/app/Http/Requests/Admin/Category/UpdateRequest.php
++++ b/app/Http/Requests/Admin/Category/UpdateRequest.php
+@@ -25,7 +25,7 @@ public function rules(): array
+             'name' => 'required|array' ,
+             'name.ar'=>'required|string|min:1|max:255',
+             'name.en'=>'required|string|min:1|max:255',
+-            'image'=>'sometimes|image',
++            'image'=>'nullable|image',
+             'category_id'=>'nullable|exists:categories,id',
+             'is_active'=>'required|in:0,1'
+         ];
+diff --git a/app/Http/Requests/Admin/Product/StoreRequest.php b/app/Http/Requests/Admin/Product/StoreRequest.php
+index fa5eab5..02e82d5 100644
+--- a/app/Http/Requests/Admin/Product/StoreRequest.php
++++ b/app/Http/Requests/Admin/Product/StoreRequest.php
+@@ -26,8 +26,8 @@ public function rules(): array
+             'name' => 'required|array' ,
+             'name.ar'=>'required|string|min:1|max:255',
+             'name.en'=>'required|string|min:1|max:255',
+-            'image'=>[request()->isMethod('post') ? 'required' : 'sometimes','image'],
+-            'images' => [request()->isMethod('post') ? 'required' : 'nullable','array'],
++            'image'=>'nullable|image',
++            'images' => 'nullable|array',
+             'images.*.images' => 'image',
+             'keywords' => 'nullable|array' ,
+             'keywords.ar'=>'nullable|string|min:1',
+diff --git a/app/Http/Traits/AvatarOperations.php b/app/Http/Traits/AvatarOperations.php
+new file mode 100644
+index 0000000..47946de
+--- /dev/null
++++ b/app/Http/Traits/AvatarOperations.php
+@@ -0,0 +1,30 @@
++<?php
++
++
++namespace App\Http\Traits;
++
++trait AvatarOperations
++{
++
++    public function getImageAttribute($value)
++    {
++        if ($value)
++            return getimg($value);
++        elseif (filter_var($value, FILTER_VALIDATE_URL)) {
++            return $value;
++        } else
++        return asset('placeholders/logo.jpg');
++    }
++
++
++    public function setImageAttribute($value)
++    {
++        if (is_file($value))
++            $this->attributes['image'] = uploader($value);
++        else
++            $this->attributes['image'] = $value;
++
++    }
++
++
++}
+diff --git a/app/Http/Traits/ImageOperations.php b/app/Http/Traits/ImageOperations.php
+index c05100e..8caa9c2 100644
+--- a/app/Http/Traits/ImageOperations.php
++++ b/app/Http/Traits/ImageOperations.php
+@@ -12,8 +12,7 @@ public function getImageAttribute($value)
+             return getimg($value);
+         elseif (filter_var($value, FILTER_VALIDATE_URL)) {
+             return $value;
+-        } else
+-            return asset('placeholders/logo.jpg');
++        } 
+     }
+ 
+ 
+diff --git a/app/Models/User.php b/app/Models/User.php
+index 979e382..31007ca 100644
+--- a/app/Models/User.php
++++ b/app/Models/User.php
+@@ -7,7 +7,7 @@
+ use App\Enum\OrderStatusEnum;
+ use App\Enum\UserStatusEnum;
+ use Laravel\Sanctum\HasApiTokens;
+-use App\Http\Traits\ImageOperations;
++use App\Http\Traits\AvatarOperations;
+ use Illuminate\Notifications\Notifiable;
+ use Illuminate\Database\Eloquent\Factories\HasFactory;
+ use Illuminate\Foundation\Auth\User as Authenticatable;
+@@ -17,7 +17,7 @@
+ 
+ class User extends Authenticatable
+ {
+-    use HasApiTokens, HasFactory, Notifiable, ImageOperations, SoftDeletes;
++    use HasApiTokens, HasFactory, Notifiable, AvatarOperations, SoftDeletes;
+ 
+     /**
+      * The attributes that are mass assignable.
+diff --git a/database/migrations/2024_02_25_143701_create_products_table.php b/database/migrations/2024_02_25_143701_create_products_table.php
+index 0328652..a4051c3 100644
+--- a/database/migrations/2024_02_25_143701_create_products_table.php
++++ b/database/migrations/2024_02_25_143701_create_products_table.php
+@@ -14,7 +14,7 @@ public function up(): void
+         Schema::create('products', function (Blueprint $table) {
+             $table->id();
+             $table->text('name');
+-            $table->string('image');
++            $table->string('image')->nullable();
+             $table->foreignIdFor(\App\Models\Category::class)->constrained()->cascadeOnDelete();
+             $table->decimal('price', 10, 3);
+             $table->decimal('offer_price', 10, 3)->nullable();

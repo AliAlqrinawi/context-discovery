@@ -1,0 +1,52 @@
+diff --git a/app/Models/Order.php b/app/Models/Order.php
+index 0000000..0000000
+--- a/app/Models/Order.php
++++ b/app/Models/Order.php
+@@ -180,6 +180,11 @@ public function scopeNotPendingStatus($query)
+       return $query->where('status','!=',OrderStatusEnum::PENDING);
+    }
+ 
++   public function scopeNotNewStatus($query)
++   {
++      return $query->where('status','!=',OrderStatusEnum::NEW);
++   }
++
+    
+ 
+ 
+diff --git a/app/Repositories/OrderRepository.php b/app/Repositories/OrderRepository.php
+index 0000000..0000000
+--- a/app/Repositories/OrderRepository.php
++++ b/app/Repositories/OrderRepository.php
+@@ -53,6 +53,13 @@ public function updateStock($model)
+         }
+     }
+ 
++    public function restockItems($model)
++    {
++        foreach ($model->items()->with('product')->get() as $item) {
++            $item->product->increment('quantity', $item->quantity);
++        }
++    }
++
+    
+ 
+     public function getDriverCommission($model , $driver)
+@@ -98,7 +105,16 @@ public function completeStatusAll($data)
+     }
+     public function cancelledStatusAll($data)
+     {
+-        return $this->model->orderIds($data)->update(['status'=>OrderStatusEnum::CANCELLED]);
++        DB::beginTransaction();
++        $orders =  $this->model->orderIds($data);
++        foreach($orders->notNewStatus()->with('items')->get() as $order)
++        {
++           
++            $this->restockItems($order);
++        }
++         $orders->update(['status'=>OrderStatusEnum::CANCELLED]);
++        DB::commit();
++        return true;
+     }
+     public function canceledOrder($model)
+     {

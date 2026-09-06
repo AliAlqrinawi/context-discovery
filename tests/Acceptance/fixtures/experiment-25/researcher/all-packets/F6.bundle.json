@@ -1,0 +1,22 @@
+{
+    "bundle_version": 1,
+    "budget_tokens": 8000,
+    "used_tokens": 29,
+    "items": [
+        {
+            "lever": "flagged",
+            "reason": "the change removes a trait from a class body; how pre-existing rows behave after it depends on production data state",
+            "assertion_kind": "unverifiable_premise",
+            "provenance": {
+                "path": "app/Models/User.php",
+                "lines": [
+                    17,
+                    23
+                ]
+            },
+            "payload": "ASSUMPTION: behaviour depends on whether pre-existing rows are affected in production; no backfill migration present",
+            "tokens": 29
+        }
+    ],
+    "dropped": []
+}

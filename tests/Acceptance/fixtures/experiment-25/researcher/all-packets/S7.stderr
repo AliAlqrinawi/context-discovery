@@ -1,0 +1,11 @@
+already in the diff: App\Services\OrderService::create declared in app/Services/OrderService.php; not fetched again
+already in the diff: App\Rules\QuantityCheckRule declared in app/Rules/QuantityCheckRule.php; not fetched again
+missing PSR-4 entry: Illuminate\Database\Eloquent\Model::find named in app/Repositories/BaseRepository.php
+already in the diff: App\Repositories\AddressRepository::getCity declared in app/Repositories/AddressRepository.php; not fetched again
+call sites truncated at 20 for __construct under app/
+missing PSR-4 entry: Illuminate\Support\Facades\DB::beginTransaction named in app/Services/OrderService.php
+missing PSR-4 entry: Illuminate\Support\Facades\DB::commit named in app/Services/OrderService.php
+missing PSR-4 entry: Illuminate\Validation\ValidationException::withMessages named in app/Services/OrderService.php
+unresolved named_reference: App\Repositories\OrderRepository::create in app/Services/OrderService.php
+unresolved named_reference: App\Repositories\ProductRepository::find in app/Services/OrderService.php
+already in the diff: App\Repositories\AddressRepository::getCity declared in app/Repositories/AddressRepository.php; not fetched again

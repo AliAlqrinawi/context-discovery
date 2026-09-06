@@ -1,0 +1,39 @@
+diff --git a/app/Repositories/DishRepository.php b/app/Repositories/DishRepository.php
+index 0000000..0000000
+--- a/app/Repositories/DishRepository.php
++++ b/app/Repositories/DishRepository.php
+@@ -23,7 +23,7 @@ public function getAll(array $filters = []): LengthAwarePaginator
+             $query->where('is_signature', $filters['signature']);
+         }
+ 
+-        return $query->paginate($filters['per_page'] ?? 12);
++        return $query->paginate($filters['per_page'] ?? 10);
+     }
+ 
+     public function getById(int $id): Dish
+diff --git a/app/Repositories/QuoteRequestRepository.php b/app/Repositories/QuoteRequestRepository.php
+index 0000000..0000000
+--- a/app/Repositories/QuoteRequestRepository.php
++++ b/app/Repositories/QuoteRequestRepository.php
+@@ -23,7 +23,7 @@ public function getAll(array $filters = []): LengthAwarePaginator
+             $query->where('branch', $filters['branch']);
+         }
+ 
+-        return $query->paginate(15);
++        return $query->paginate(10);
+     }
+ 
+     public function getById(int $id): QuoteRequest
+diff --git a/app/Repositories/UserRepository.php b/app/Repositories/UserRepository.php
+index 0000000..0000000
+--- a/app/Repositories/UserRepository.php
++++ b/app/Repositories/UserRepository.php
+@@ -10,7 +10,7 @@ class UserRepository
+ {
+     public function getAll(): LengthAwarePaginator
+     {
+-        return User::with('roles')->paginate(15);
++        return User::with('roles')->paginate(10);
+     }
+ 
+     public function getById(int $id): User

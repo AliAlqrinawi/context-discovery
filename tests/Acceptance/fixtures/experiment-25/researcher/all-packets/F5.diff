@@ -1,0 +1,823 @@
+diff --git a/app/Http/Controllers/Auth/AuthController.php b/app/Http/Controllers/Auth/AuthController.php
+index e4e6283..028d0a0 100644
+--- a/app/Http/Controllers/Auth/AuthController.php
++++ b/app/Http/Controllers/Auth/AuthController.php
+@@ -18,30 +18,18 @@ public function login(LoginRequest $request, LoginAction $action): JsonResponse
+     {
+         $result = $action->execute(LoginDTO::fromRequest($request));
+ 
+-        return response()->json([
+-            'success' => true,
+-            'message' => 'Login successful',
+-            'data' => new AuthResource($result),
+-        ]);
++        return $this->success(new AuthResource($result), 'Login successful');
+     }
+ 
+     public function logout(Request $request, LogoutAction $action): JsonResponse
+     {
+         $action->execute($request->user());
+ 
+-        return response()->json([
+-            'success' => true,
+-            'message' => 'Logout successful',
+-            'data' => null,
+-        ]);
++        return $this->success(null, 'Logout successful');
+     }
+ 
+     public function me(Request $request): JsonResponse
+     {
+-        return response()->json([
+-            'success' => true,
+-            'message' => 'Authenticated user',
+-            'data' => new UserResource($request->user()),
+-        ]);
++        return $this->success(new UserResource($request->user()), 'Authenticated user');
+     }
+ }
+diff --git a/app/Http/Controllers/BranchController.php b/app/Http/Controllers/BranchController.php
+index 10aeeb5..a9cb02f 100644
+--- a/app/Http/Controllers/BranchController.php
++++ b/app/Http/Controllers/BranchController.php
+@@ -17,43 +17,27 @@ class BranchController extends Controller
+ {
+     public function index(GetBranchesAction $action): JsonResponse
+     {
+-        return response()->json([
+-            'success' => true,
+-            'message' => 'Branches retrieved',
+-            'data' => BranchResource::collection($action->execute()),
+-        ]);
++        return $this->success(BranchResource::collection($action->execute()), 'Branches retrieved');
+     }
+ 
+     public function store(StoreBranchRequest $request, CreateBranchAction $action): JsonResponse
+     {
+         $branch = $action->execute(CreateBranchDTO::fromRequest($request));
+ 
+-        return response()->json([
+-            'success' => true,
+-            'message' => 'Branch created',
+-            'data' => new BranchResource($branch),
+-        ], 201);
++        return $this->created(new BranchResource($branch), 'Branch created');
+     }
+ 
+     public function update(UpdateBranchRequest $request, int $id, UpdateBranchAction $action): JsonResponse
+     {
+         $branch = $action->execute($id, UpdateBranchDTO::fromRequest($request));
+ 
+-        return response()->json([
+-            'success' => true,
+-            'message' => 'Branch updated',
+-            'data' => new BranchResource($branch),
+-        ]);
++        return $this->success(new BranchResource($branch), 'Branch updated');
+     }
+ 
+     public function destroy(int $id, DeleteBranchAction $action): JsonResponse
+     {
+         $action->execute($id);
+ 
+-        return response()->json([
+-            'success' => true,
+-            'message' => 'Branch deleted',
+-            'data' => null,
+-        ]);
++        return $this->deleted('Branch deleted');
+     }
+ }
+diff --git a/app/Http/Controllers/CategoryController.php b/app/Http/Controllers/CategoryController.php
+index 119e920..2a886d6 100644
+--- a/app/Http/Controllers/CategoryController.php
++++ b/app/Http/Controllers/CategoryController.php
+@@ -15,43 +15,27 @@ public function __construct(
+ 
+     public function index(): JsonResponse
+     {
+-        return response()->json([
+-            'success' => true,
+-            'message' => 'Categories retrieved',
+-            'data' => CategoryResource::collection($this->repository->getAll()),
+-        ]);
++        return $this->success(CategoryResource::collection($this->repository->getAll()), 'Categories retrieved');
+     }
+ 
+     public function store(Request $request): JsonResponse
+     {
+         $category = $this->repository->create($request->only(['name_ar', 'name_en', 'slug', 'order']));
+ 
+-        return response()->json([
+-            'success' => true,
+-            'message' => 'Category created',
+-            'data' => new CategoryResource($category),
+-        ], 201);
++        return $this->created(new CategoryResource($category), 'Category created');
+     }
+ 
+     public function update(Request $request, int $id): JsonResponse
+     {
+         $category = $this->repository->update($id, $request->only(['name_ar', 'name_en', 'slug', 'order']));
+ 
+-        return response()->json([
+-            'success' => true,
+-            'message' => 'Category updated',
+-            'data' => new CategoryResource($category),
+-        ]);
++        return $this->success(new CategoryResource($category), 'Category updated');
+     }
+ 
+     public function destroy(int $id): JsonResponse
+     {
+         $this->repository->delete($id);
+ 
+-        return response()->json([
+-            'success' => true,
+-            'message' => 'Category deleted',
+-            'data' => null,
+-        ]);
++        return $this->deleted('Category deleted');
+     }
+ }
+diff --git a/app/Http/Controllers/Catering/CateringPackageController.php b/app/Http/Controllers/Catering/CateringPackageController.php
+index 413f202..4fdd1b8 100644
+--- a/app/Http/Controllers/Catering/CateringPackageController.php
++++ b/app/Http/Controllers/Catering/CateringPackageController.php
+@@ -18,43 +18,27 @@ class CateringPackageController extends Controller
+ {
+     public function index(GetPackagesAction $action): JsonResponse
+     {
+-        return response()->json([
+-            'success' => true,
+-            'message' => 'Catering packages retrieved',
+-            'data' => PackageResource::collection($action->execute()),
+-        ]);
++        return $this->success(PackageResource::collection($action->execute()), 'Catering packages retrieved');
+     }
+ 
+     public function store(StorePackageRequest $request, CreatePackageAction $action): JsonResponse
+     {
+         $package = $action->execute(CreatePackageDTO::fromRequest($request));
+ 
+-        return response()->json([
+-            'success' => true,
+-            'message' => 'Catering package created',
+-            'data' => new PackageResource($package),
+-        ], 201);
++        return $this->created(new PackageResource($package), 'Catering package created');
+     }
+ 
+     public function update(UpdatePackageRequest $request, int $id, UpdatePackageAction $action): JsonResponse
+     {
+         $package = $action->execute($id, UpdatePackageDTO::fromRequest($request));
+ 
+-        return response()->json([
+-            'success' => true,
+-            'message' => 'Catering package updated',
+-            'data' => new PackageResource($package),
+-        ]);
++        return $this->success(new PackageResource($package), 'Catering package updated');
+     }
+ 
+     public function destroy(int $id, DeletePackageAction $action): JsonResponse
+     {
+         $action->execute($id);
+ 
+-        return response()->json([
+-            'success' => true,
+-            'message' => 'Catering package deleted',
+-            'data' => null,
+-        ]);
++        return $this->deleted('Catering package deleted');
+     }
+ }
+diff --git a/app/Http/Controllers/Catering/QuoteRequestController.php b/app/Http/Controllers/Catering/QuoteRequestController.php
+index 21e4fe8..63ea6c1 100644
+--- a/app/Http/Controllers/Catering/QuoteRequestController.php
++++ b/app/Http/Controllers/Catering/QuoteRequestController.php
+@@ -20,11 +20,7 @@ public function store(StoreQuoteRequestRequest $request, SubmitQuoteRequestActio
+     {
+         $quoteRequest = $action->execute(SubmitQuoteRequestDTO::fromRequest($request));
+ 
+-        return response()->json([
+-            'success' => true,
+-            'message' => 'Quote request submitted',
+-            'data' => new QuoteRequestResource($quoteRequest),
+-        ], 201);
++        return $this->created(new QuoteRequestResource($quoteRequest), 'Quote request submitted');
+     }
+ 
+     public function index(Request $request, QuoteRequestRepository $repository): JsonResponse
+@@ -37,38 +33,18 @@ public function index(Request $request, QuoteRequestRepository $repository): Jso
+ 
+         $result = $repository->getAll($filters);
+ 
+-        return response()->json([
+-            'success' => true,
+-            'message' => 'Quote requests retrieved',
+-            'data' => [
+-                'items' => QuoteRequestResource::collection($result),
+-                'meta' => [
+-                    'current_page' => $result->currentPage(),
+-                    'last_page' => $result->lastPage(),
+-                    'per_page' => $result->perPage(),
+-                    'total' => $result->total(),
+-                ],
+-            ],
+-        ]);
++        return $this->paginated(QuoteRequestResource::collection($result), $result, 'Quote requests retrieved');
+     }
+ 
+     public function show(int $id, QuoteRequestRepository $repository): JsonResponse
+     {
+-        return response()->json([
+-            'success' => true,
+-            'message' => 'Quote request retrieved',
+-            'data' => new QuoteRequestResource($repository->getById($id)),
+-        ]);
++        return $this->success(new QuoteRequestResource($repository->getById($id)), 'Quote request retrieved');
+     }
+ 
+     public function updateStatus(UpdateQuoteRequestStatusRequest $request, int $id, UpdateQuoteRequestStatusAction $action): JsonResponse
+     {
+         $quoteRequest = $action->execute($id, UpdateQuoteRequestStatusDTO::fromRequest($request));
+ 
+-        return response()->json([
+-            'success' => true,
+-            'message' => 'Quote request status updated',
+-            'data' => new QuoteRequestResource($quoteRequest),
+-        ]);
++        return $this->success(new QuoteRequestResource($quoteRequest), 'Quote request status updated');
+     }
+ }
+diff --git a/app/Http/Controllers/Catering/SampleMenuController.php b/app/Http/Controllers/Catering/SampleMenuController.php
+index 7aa3186..4919e73 100644
+--- a/app/Http/Controllers/Catering/SampleMenuController.php
++++ b/app/Http/Controllers/Catering/SampleMenuController.php
+@@ -16,43 +16,27 @@ class SampleMenuController extends Controller
+ {
+     public function index(GetSampleMenusAction $action): JsonResponse
+     {
+-        return response()->json([
+-            'success' => true,
+-            'message' => 'Sample menus retrieved',
+-            'data' => SampleMenuResource::collection($action->execute()),
+-        ]);
++        return $this->success(SampleMenuResource::collection($action->execute()), 'Sample menus retrieved');
+     }
+ 
+     public function store(StoreSampleMenuRequest $request, CreateSampleMenuAction $action): JsonResponse
+     {
+         $menu = $action->execute(CreateSampleMenuDTO::fromRequest($request));
+ 
+-        return response()->json([
+-            'success' => true,
+-            'message' => 'Sample menu created',
+-            'data' => new SampleMenuResource($menu),
+-        ], 201);
++        return $this->created(new SampleMenuResource($menu), 'Sample menu created');
+     }
+ 
+     public function update(StoreSampleMenuRequest $request, int $id, UpdateSampleMenuAction $action): JsonResponse
+     {
+         $menu = $action->execute($id, CreateSampleMenuDTO::fromRequest($request));
+ 
+-        return response()->json([
+-            'success' => true,
+-            'message' => 'Sample menu updated',
+-            'data' => new SampleMenuResource($menu),
+-        ]);
++        return $this->success(new SampleMenuResource($menu), 'Sample menu updated');
+     }
+ 
+     public function destroy(int $id, DeleteSampleMenuAction $action): JsonResponse
+     {
+         $action->execute($id);
+ 
+-        return response()->json([
+-            'success' => true,
+-            'message' => 'Sample menu deleted',
+-            'data' => null,
+-        ]);
++        return $this->deleted('Sample menu deleted');
+     }
+ }
+diff --git a/app/Http/Controllers/Controller.php b/app/Http/Controllers/Controller.php
+index 8677cd5..f87ab02 100644
+--- a/app/Http/Controllers/Controller.php
++++ b/app/Http/Controllers/Controller.php
+@@ -2,7 +2,9 @@
+ 
+ namespace App\Http\Controllers;
+ 
++use App\Traits\ApiResponse;
++
+ abstract class Controller
+ {
+-    //
++    use ApiResponse;
+ }
+diff --git a/app/Http/Controllers/DeliveryAppController.php b/app/Http/Controllers/DeliveryAppController.php
+index adb8717..331269c 100644
+--- a/app/Http/Controllers/DeliveryAppController.php
++++ b/app/Http/Controllers/DeliveryAppController.php
+@@ -17,43 +17,27 @@ public function index(GetDeliveryAppsAction $action): JsonResponse
+     {
+         $activeOnly = ! auth('sanctum')->check();
+ 
+-        return response()->json([
+-            'success' => true,
+-            'message' => 'Delivery apps retrieved',
+-            'data' => DeliveryAppResource::collection($action->execute($activeOnly)),
+-        ]);
++        return $this->success(DeliveryAppResource::collection($action->execute($activeOnly)), 'Delivery apps retrieved');
+     }
+ 
+     public function store(StoreDeliveryAppRequest $request, CreateDeliveryAppAction $action): JsonResponse
+     {
+         $deliveryApp = $action->execute(CreateDeliveryAppDTO::fromRequest($request));
+ 
+-        return response()->json([
+-            'success' => true,
+-            'message' => 'Delivery app created',
+-            'data' => new DeliveryAppResource($deliveryApp),
+-        ], 201);
++        return $this->created(new DeliveryAppResource($deliveryApp), 'Delivery app created');
+     }
+ 
+     public function update(StoreDeliveryAppRequest $request, int $id, UpdateDeliveryAppAction $action): JsonResponse
+     {
+         $deliveryApp = $action->execute($id, CreateDeliveryAppDTO::fromRequest($request));
+ 
+-        return response()->json([
+-            'success' => true,
+-            'message' => 'Delivery app updated',
+-            'data' => new DeliveryAppResource($deliveryApp),
+-        ]);
++        return $this->success(new DeliveryAppResource($deliveryApp), 'Delivery app updated');
+     }
+ 
+     public function destroy(int $id, DeleteDeliveryAppAction $action): JsonResponse
+     {
+         $action->execute($id);
+ 
+-        return response()->json([
+-            'success' => true,
+-            'message' => 'Delivery app deleted',
+-            'data' => null,
+-        ]);
++        return $this->deleted('Delivery app deleted');
+     }
+ }
+diff --git a/app/Http/Controllers/DishController.php b/app/Http/Controllers/DishController.php
+index a8d9a22..3a2c214 100644
+--- a/app/Http/Controllers/DishController.php
++++ b/app/Http/Controllers/DishController.php
+@@ -29,52 +29,32 @@ public function index(Request $request, GetDishesAction $action): JsonResponse
+ 
+         $result = $action->execute($filters);
+ 
+-        return response()->json([
+-            'success' => true,
+-            'message' => 'Dishes retrieved',
+-            'data' => new DishCollection($result),
+-        ]);
++        return $this->success(new DishCollection($result), 'Dishes retrieved');
+     }
+ 
+     public function show(int $id, GetDishAction $action): JsonResponse
+     {
+-        return response()->json([
+-            'success' => true,
+-            'message' => 'Dish retrieved',
+-            'data' => new DishResource($action->execute($id)),
+-        ]);
++        return $this->success(new DishResource($action->execute($id)), 'Dish retrieved');
+     }
+ 
+     public function store(StoreDishRequest $request, CreateDishAction $action): JsonResponse
+     {
+         $dish = $action->execute(CreateDishDTO::fromRequest($request));
+ 
+-        return response()->json([
+-            'success' => true,
+-            'message' => 'Dish created',
+-            'data' => new DishResource($dish),
+-        ], 201);
++        return $this->created(new DishResource($dish), 'Dish created');
+     }
+ 
+     public function update(UpdateDishRequest $request, int $id, UpdateDishAction $action): JsonResponse
+     {
+         $dish = $action->execute($id, UpdateDishDTO::fromRequest($request));
+ 
+-        return response()->json([
+-            'success' => true,
+-            'message' => 'Dish updated',
+-            'data' => new DishResource($dish),
+-        ]);
++        return $this->success(new DishResource($dish), 'Dish updated');
+     }
+ 
+     public function destroy(int $id, DeleteDishAction $action): JsonResponse
+     {
+         $action->execute($id);
+ 
+-        return response()->json([
+-            'success' => true,
+-            'message' => 'Dish deleted',
+-            'data' => null,
+-        ]);
++        return $this->deleted('Dish deleted');
+     }
+ }
+diff --git a/app/Http/Controllers/MediaItemController.php b/app/Http/Controllers/MediaItemController.php
+index b0e6901..6707b12 100644
+--- a/app/Http/Controllers/MediaItemController.php
++++ b/app/Http/Controllers/MediaItemController.php
+@@ -25,52 +25,32 @@ public function index(Request $request, GetMediaItemsAction $action): JsonRespon
+             fn ($section) => $section->map(fn ($item) => new MediaItemResource($item))
+         );
+ 
+-        return response()->json([
+-            'success' => true,
+-            'message' => 'Media items retrieved',
+-            'data' => $resourced,
+-        ]);
++        return $this->success($resourced, 'Media items retrieved');
+     }
+ 
+     public function store(UploadMediaRequest $request, UploadMediaAction $action): JsonResponse
+     {
+         $mediaItem = $action->execute(UploadMediaDTO::fromRequest($request));
+ 
+-        return response()->json([
+-            'success' => true,
+-            'message' => 'Media item uploaded',
+-            'data' => new MediaItemResource($mediaItem),
+-        ], 201);
++        return $this->created(new MediaItemResource($mediaItem), 'Media item uploaded');
+     }
+ 
+     public function show(int $id, MediaItemRepository $repository): JsonResponse
+     {
+-        return response()->json([
+-            'success' => true,
+-            'message' => 'Media item retrieved',
+-            'data' => new MediaItemResource($repository->getById($id)),
+-        ]);
++        return $this->success(new MediaItemResource($repository->getById($id)), 'Media item retrieved');
+     }
+ 
+     public function update(UploadMediaRequest $request, int $id, UploadMediaAction $action): JsonResponse
+     {
+         $mediaItem = $action->execute(UploadMediaDTO::fromRequest($request));
+ 
+-        return response()->json([
+-            'success' => true,
+-            'message' => 'Media item updated',
+-            'data' => new MediaItemResource($mediaItem),
+-        ]);
++        return $this->success(new MediaItemResource($mediaItem), 'Media item updated');
+     }
+ 
+     public function destroy(int $id, DeleteMediaAction $action): JsonResponse
+     {
+         $action->execute($id);
+ 
+-        return response()->json([
+-            'success' => true,
+-            'message' => 'Media item deleted',
+-            'data' => null,
+-        ]);
++        return $this->deleted('Media item deleted');
+     }
+ }
+diff --git a/app/Http/Controllers/PageContentController.php b/app/Http/Controllers/PageContentController.php
+index f8a17f5..ff4f0ad 100644
+--- a/app/Http/Controllers/PageContentController.php
++++ b/app/Http/Controllers/PageContentController.php
+@@ -27,41 +27,25 @@ public function index(Request $request, GetPageContentAction $action): JsonRespo
+             fn ($section) => $section->map(fn ($item) => new PageContentResource($item))
+         );
+ 
+-        return response()->json([
+-            'success' => true,
+-            'message' => 'Page contents retrieved',
+-            'data' => $resourced,
+-        ]);
++        return $this->success($resourced, 'Page contents retrieved');
+     }
+ 
+     public function show(int $id, PageContentRepository $repository): JsonResponse
+     {
+-        return response()->json([
+-            'success' => true,
+-            'message' => 'Page content retrieved',
+-            'data' => new PageContentResource($repository->getById($id)),
+-        ]);
++        return $this->success(new PageContentResource($repository->getById($id)), 'Page content retrieved');
+     }
+ 
+     public function update(UpdatePageContentRequest $request, int $id, UpdatePageContentAction $action): JsonResponse
+     {
+         $pageContent = $action->execute($id, UpdatePageContentDTO::fromRequest($request));
+ 
+-        return response()->json([
+-            'success' => true,
+-            'message' => 'Page content updated',
+-            'data' => new PageContentResource($pageContent),
+-        ]);
++        return $this->success(new PageContentResource($pageContent), 'Page content updated');
+     }
+ 
+     public function bulkUpdate(BulkUpdatePageContentRequest $request, BulkUpdatePageContentAction $action): JsonResponse
+     {
+         $action->execute(BulkUpdatePageContentDTO::fromRequest($request));
+ 
+-        return response()->json([
+-            'success' => true,
+-            'message' => 'Page contents updated',
+-            'data' => null,
+-        ]);
++        return $this->success(null, 'Page contents updated');
+     }
+ }
+diff --git a/app/Http/Controllers/SettingController.php b/app/Http/Controllers/SettingController.php
+index 5267a36..25a4fd8 100644
+--- a/app/Http/Controllers/SettingController.php
++++ b/app/Http/Controllers/SettingController.php
+@@ -18,21 +18,13 @@ public function index(Request $request, GetSettingsAction $action): JsonResponse
+             $request->filled('group') ? $request->string('group')->toString() : null,
+         );
+ 
+-        return response()->json([
+-            'success' => true,
+-            'message' => 'Settings retrieved',
+-            'data' => $result->map(fn ($setting) => new SettingResource($setting)),
+-        ]);
++        return $this->success($result->map(fn ($setting) => new SettingResource($setting)), 'Settings retrieved');
+     }
+ 
+     public function bulkUpdate(UpdateSettingRequest $request, UpdateSettingsAction $action): JsonResponse
+     {
+         $action->execute(UpdateSettingDTO::fromRequest($request));
+ 
+-        return response()->json([
+-            'success' => true,
+-            'message' => 'Settings updated',
+-            'data' => null,
+-        ]);
++        return $this->success(null, 'Settings updated');
+     }
+ }
+diff --git a/app/Http/Controllers/TestimonialController.php b/app/Http/Controllers/TestimonialController.php
+index 1eaddb8..0a99885 100644
+--- a/app/Http/Controllers/TestimonialController.php
++++ b/app/Http/Controllers/TestimonialController.php
+@@ -17,43 +17,27 @@ public function index(GetTestimonialsAction $action): JsonResponse
+     {
+         $activeOnly = ! auth('sanctum')->check();
+ 
+-        return response()->json([
+-            'success' => true,
+-            'message' => 'Testimonials retrieved',
+-            'data' => TestimonialResource::collection($action->execute($activeOnly)),
+-        ]);
++        return $this->success(TestimonialResource::collection($action->execute($activeOnly)), 'Testimonials retrieved');
+     }
+ 
+     public function store(StoreTestimonialRequest $request, CreateTestimonialAction $action): JsonResponse
+     {
+         $testimonial = $action->execute(CreateTestimonialDTO::fromRequest($request));
+ 
+-        return response()->json([
+-            'success' => true,
+-            'message' => 'Testimonial created',
+-            'data' => new TestimonialResource($testimonial),
+-        ], 201);
++        return $this->created(new TestimonialResource($testimonial), 'Testimonial created');
+     }
+ 
+     public function update(StoreTestimonialRequest $request, int $id, UpdateTestimonialAction $action): JsonResponse
+     {
+         $testimonial = $action->execute($id, CreateTestimonialDTO::fromRequest($request));
+ 
+-        return response()->json([
+-            'success' => true,
+-            'message' => 'Testimonial updated',
+-            'data' => new TestimonialResource($testimonial),
+-        ]);
++        return $this->success(new TestimonialResource($testimonial), 'Testimonial updated');
+     }
+ 
+     public function destroy(int $id, DeleteTestimonialAction $action): JsonResponse
+     {
+         $action->execute($id);
+ 
+-        return response()->json([
+-            'success' => true,
+-            'message' => 'Testimonial deleted',
+-            'data' => null,
+-        ]);
++        return $this->deleted('Testimonial deleted');
+     }
+ }
+diff --git a/app/Http/Controllers/TimelineController.php b/app/Http/Controllers/TimelineController.php
+index 1d9ad41..a686e45 100644
+--- a/app/Http/Controllers/TimelineController.php
++++ b/app/Http/Controllers/TimelineController.php
+@@ -15,43 +15,27 @@ class TimelineController extends Controller
+ {
+     public function index(GetTimelineAction $action): JsonResponse
+     {
+-        return response()->json([
+-            'success' => true,
+-            'message' => 'Timeline retrieved',
+-            'data' => TimelineResource::collection($action->execute()),
+-        ]);
++        return $this->success(TimelineResource::collection($action->execute()), 'Timeline retrieved');
+     }
+ 
+     public function store(StoreTimelineRequest $request, CreateTimelineAction $action): JsonResponse
+     {
+         $timeline = $action->execute(CreateTimelineDTO::fromRequest($request));
+ 
+-        return response()->json([
+-            'success' => true,
+-            'message' => 'Timeline entry created',
+-            'data' => new TimelineResource($timeline),
+-        ], 201);
++        return $this->created(new TimelineResource($timeline), 'Timeline entry created');
+     }
+ 
+     public function update(StoreTimelineRequest $request, int $id, UpdateTimelineAction $action): JsonResponse
+     {
+         $timeline = $action->execute($id, CreateTimelineDTO::fromRequest($request));
+ 
+-        return response()->json([
+-            'success' => true,
+-            'message' => 'Timeline entry updated',
+-            'data' => new TimelineResource($timeline),
+-        ]);
++        return $this->success(new TimelineResource($timeline), 'Timeline entry updated');
+     }
+ 
+     public function destroy(int $id, DeleteTimelineAction $action): JsonResponse
+     {
+         $action->execute($id);
+ 
+-        return response()->json([
+-            'success' => true,
+-            'message' => 'Timeline entry deleted',
+-            'data' => null,
+-        ]);
++        return $this->deleted('Timeline entry deleted');
+     }
+ }
+diff --git a/app/Http/Controllers/UserController.php b/app/Http/Controllers/UserController.php
+index 204c70b..6261341 100644
+--- a/app/Http/Controllers/UserController.php
++++ b/app/Http/Controllers/UserController.php
+@@ -20,60 +20,32 @@ public function index(GetUsersAction $action): JsonResponse
+     {
+         $result = $action->execute();
+ 
+-        return response()->json([
+-            'success' => true,
+-            'message' => 'Users retrieved',
+-            'data' => [
+-                'items' => UserResource::collection($result),
+-                'meta' => [
+-                    'current_page' => $result->currentPage(),
+-                    'last_page' => $result->lastPage(),
+-                    'per_page' => $result->perPage(),
+-                    'total' => $result->total(),
+-                ],
+-            ],
+-        ]);
++        return $this->paginated(UserResource::collection($result), $result, 'Users retrieved');
+     }
+ 
+     public function store(StoreUserRequest $request, CreateUserAction $action): JsonResponse
+     {
+         $user = $action->execute(CreateUserDTO::fromRequest($request));
+ 
+-        return response()->json([
+-            'success' => true,
+-            'message' => 'User created',
+-            'data' => new UserResource($user),
+-        ], 201);
++        return $this->created(new UserResource($user), 'User created');
+     }
+ 
+     public function show(int $id, UserRepository $repository): JsonResponse
+     {
+-        return response()->json([
+-            'success' => true,
+-            'message' => 'User retrieved',
+-            'data' => new UserResource($repository->getById($id)),
+-        ]);
++        return $this->success(new UserResource($repository->getById($id)), 'User retrieved');
+     }
+ 
+     public function update(UpdateUserRequest $request, int $id, UpdateUserAction $action): JsonResponse
+     {
+         $user = $action->execute($id, UpdateUserDTO::fromRequest($request));
+ 
+-        return response()->json([
+-            'success' => true,
+-            'message' => 'User updated',
+-            'data' => new UserResource($user),
+-        ]);
++        return $this->success(new UserResource($user), 'User updated');
+     }
+ 
+     public function destroy(int $id, DeleteUserAction $action): JsonResponse
+     {
+         $action->execute($id);
+ 
+-        return response()->json([
+-            'success' => true,
+-            'message' => 'User deleted',
+-            'data' => null,
+-        ]);
++        return $this->deleted('User deleted');
+     }
+ }
+diff --git a/app/Traits/ApiResponse.php b/app/Traits/ApiResponse.php
+new file mode 100644
+index 0000000..4223952
+--- /dev/null
++++ b/app/Traits/ApiResponse.php
+@@ -0,0 +1,69 @@
++<?php
++
++namespace App\Traits;
++
++use Illuminate\Http\JsonResponse;
++
++trait ApiResponse
++{
++    protected function success(
++        mixed $data = null,
++        string $message = 'Operation completed successfully',
++        int $status = 200
++    ): JsonResponse {
++        return response()->json([
++            'success' => true,
++            'message' => $message,
++            'data'    => $data,
++        ], $status);
++    }
++
++    protected function created(
++        mixed $data = null,
++        string $message = 'Created successfully'
++    ): JsonResponse {
++        return $this->success($data, $message, 201);
++    }
++
++    protected function deleted(
++        string $message = 'Deleted successfully'
++    ): JsonResponse {
++        return response()->json([
++            'success' => true,
++            'message' => $message,
++            'data'    => null,
++        ], 200);
++    }
++
++    protected function paginated(
++        mixed $collection,
++        mixed $paginator,
++        string $message = 'Data fetched successfully'
++    ): JsonResponse {
++        return response()->json([
++            'success' => true,
++            'message' => $message,
++            'data'    => [
++                'items' => $collection,
++                'meta'  => [
++                    'current_page' => $paginator->currentPage(),
++                    'last_page'    => $paginator->lastPage(),
++                    'per_page'     => $paginator->perPage(),
++                    'total'        => $paginator->total(),
++                ],
++            ],
++        ], 200);
++    }
++
++    protected function error(
++        string $message = 'Something went wrong',
++        int $status = 400,
++        array $errors = []
++    ): JsonResponse {
++        return response()->json([
++            'success' => false,
++            'message' => $message,
++            'errors'  => $errors,
++        ], $status);
++    }
++}

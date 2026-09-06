@@ -1,0 +1,4 @@
+missing PSR-4 entry: Yajra\DataTables\Html\Column::make named in app/DataTables/UserDataTable.php
+missing PSR-4 entry: Carbon\Carbon::now named in app/Models/User.php
+missing PSR-4 entry: Illuminate\Database\Eloquent\Builder named in app/Models/User.php
+own-file lookup for Form in resources/views/dashboard/users/index.blade.php: nothing to slice

@@ -1,0 +1,77 @@
+diff --git a/app/DTOs/Dish/CreateDishDTO.php b/app/DTOs/Dish/CreateDishDTO.php
+index 0000000..0000000
+--- a/app/DTOs/Dish/CreateDishDTO.php
++++ b/app/DTOs/Dish/CreateDishDTO.php
+@@ -10,8 +10,8 @@ class CreateDishDTO
+     public function __construct(
+         public readonly string $name_ar,
+         public readonly string $name_en,
+-        public readonly string $description_ar,
+-        public readonly string $description_en,
++        public readonly ?string $description_ar,
++        public readonly ?string $description_en,
+         public readonly float $price,
+         public readonly int $category_id,
+         public readonly bool $is_featured,
+@@ -25,8 +25,8 @@ public static function fromRequest(Request $request): self
+         return new self(
+             name_ar: $request->string('name_ar')->toString(),
+             name_en: $request->string('name_en')->toString(),
+-            description_ar: $request->string('description_ar')->toString(),
+-            description_en: $request->string('description_en')->toString(),
++            description_ar: $request->filled('description_ar') ? $request->string('description_ar')->toString() : null,
++            description_en: $request->filled('description_en') ? $request->string('description_en')->toString() : null,
+             price: (float) $request->input('price'),
+             category_id: (int) $request->input('category_id'),
+             is_featured: $request->boolean('is_featured'),
+diff --git a/app/Http/Requests/Dish/StoreDishRequest.php b/app/Http/Requests/Dish/StoreDishRequest.php
+index 0000000..0000000
+--- a/app/Http/Requests/Dish/StoreDishRequest.php
++++ b/app/Http/Requests/Dish/StoreDishRequest.php
+@@ -16,8 +16,8 @@ public function rules(): array
+         return [
+             'name_ar' => ['required', 'string', 'max:200'],
+             'name_en' => ['required', 'string', 'max:200'],
+-            'description_ar' => ['required', 'string'],
+-            'description_en' => ['required', 'string'],
++            'description_ar' => ['nullable', 'string'],
++            'description_en' => ['nullable', 'string'],
+             'price' => ['required', 'numeric', 'min:0'],
+             'category_id' => ['required', 'integer', 'exists:categories,id'],
+             'is_featured' => ['boolean'],
+diff --git a/database/migrations/2026_08_11_091844_make_dish_descriptions_nullable.php b/database/migrations/2026_08_11_091844_make_dish_descriptions_nullable.php
+new file mode 100644
+index 0000000..0000000
+--- /dev/null
++++ b/database/migrations/2026_08_11_091844_make_dish_descriptions_nullable.php
+@@ -0,0 +1,30 @@
++<?php
++
++use Illuminate\Database\Migrations\Migration;
++use Illuminate\Database\Schema\Blueprint;
++use Illuminate\Support\Facades\Schema;
++
++return new class extends Migration
++{
++    /**
++     * Run the migrations.
++     */
++    public function up(): void
++    {
++        Schema::table('dishes', function (Blueprint $table) {
++            $table->text('description_ar')->nullable()->change();
++            $table->text('description_en')->nullable()->change();
++        });
++    }
++
++    /**
++     * Reverse the migrations.
++     */
++    public function down(): void
++    {
++        Schema::table('dishes', function (Blueprint $table) {
++            $table->text('description_ar')->nullable(false)->change();
++            $table->text('description_en')->nullable(false)->change();
++        });
++    }
++};

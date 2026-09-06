@@ -1,0 +1,364 @@
+diff --git a/app/DataTables/UserDataTable.php b/app/DataTables/UserDataTable.php
+index 0000000..0000000
+--- a/app/DataTables/UserDataTable.php
++++ b/app/DataTables/UserDataTable.php
+@@ -36,7 +36,7 @@ public function dataTable(QueryBuilder $query): EloquentDataTable
+                 return $user->country?->name;
+             })
+             ->addColumn('wallet', function ($user) {
+-                return $user->wallet?->balance ?? "0.000";
++                return $user->wallet?->balance ?? "";
+             })
+             ->addColumn('date', function ($user) {
+                 return $user->created_at->format('d/m/Y, h:i:s a');
+@@ -114,7 +114,8 @@ public function getColumns(): array
+                 ->orderable(false)
+                 ->exportable(false)
+                 ->printable(false),
+-            Column::computed('DT_RowIndex')->title('#'),
++            //Column::computed('DT_RowIndex')->title('#'),
++            Column::make('id')->title('#'),
+             Column::make('name')->title(__('name')),
+             Column::make('phone')->title(__('phone')),
+             Column::computed('country')->title(__('country')),
+diff --git a/app/Models/User.php b/app/Models/User.php
+index 0000000..0000000
+--- a/app/Models/User.php
++++ b/app/Models/User.php
+@@ -5,6 +5,7 @@
+ // use Illuminate\Contracts\Auth\MustVerifyEmail;
+ 
+ use App\Enum\OrderStatusEnum;
++use App\Enum\UserStatusEnum;
+ use Laravel\Sanctum\HasApiTokens;
+ use App\Http\Traits\ImageOperations;
+ use Illuminate\Notifications\Notifiable;
+@@ -16,7 +17,7 @@
+ 
+ class User extends Authenticatable
+ {
+-    use HasApiTokens, HasFactory, Notifiable,ImageOperations,SoftDeletes;
++    use HasApiTokens, HasFactory, Notifiable, ImageOperations, SoftDeletes;
+ 
+     /**
+      * The attributes that are mass assignable.
+@@ -24,7 +25,7 @@ class User extends Authenticatable
+      * @var array<int, string>
+      */
+     protected $fillable = [
+-        'name', 'phone', 'image', 'verification_code', 'locale', 'ip_address', 'status','is_blocked', 'fcm_token',
++        'name', 'phone', 'image', 'verification_code', 'locale', 'ip_address', 'status', 'is_blocked', 'fcm_token',
+         'country_id'
+     ];
+ 
+@@ -47,60 +48,141 @@ class User extends Authenticatable
+         'password' => 'hashed',
+     ];
+ 
+-     #relations 
+-     public function addresses()
+-     {
+-         return $this->hasMany(Address::class);
+-     }
+-     public function country()
+-     {
+-         return $this->belongsTo(Country::class);
+-     }
+-     public function orders()
+-     {
+-         return $this->hasMany(Order::class);
+-     }
+-     public function address()
+-     {
+-         return $this->hasOne(Address::class)->where('is_default',1);
+-     }
+-     public function favorites()
+-     {
+-         return $this->belongsToMany(Product::class,'favorites');
+-     }
+-     public function confirmedOrders()
+-      {
++    #relations 
++    public function addresses()
++    {
++        return $this->hasMany(Address::class);
++    }
++    public function country()
++    {
++        return $this->belongsTo(Country::class);
++    }
++    public function orders()
++    {
++        return $this->hasMany(Order::class);
++    }
++    public function address()
++    {
++        return $this->hasOne(Address::class)->where('is_default', 1);
++    }
++    public function favorites()
++    {
++        return $this->belongsToMany(Product::class, 'favorites');
++    }
++    public function confirmedOrders()
++    {
+         return $this->hasMany(Order::class)->where('status', '!=', OrderStatusEnum::CANCELLED);
+-      }
+-     
+-     public function lastActiveOrder()
+-     {
++    }
++
++    public function lastActiveOrder()
++    {
+         return $this->hasOne(Order::class)
+-        ->whereBetween('created_at' , [Carbon::now()->subHours(3), Carbon::now()->addHours(3)])
+-        ->where('status','!=',OrderStatusEnum::CANCELLED);
+-       
+-     }
+-
+-     public function wallet()
+-     {
+-         return $this->morphOne(Wallet::class, 'user');
+-     }
+-
+-     #scopes
+-     public function scopeUserIds($query,$value)
+-     {
+-         return $query->whereIn('id',$value);
+-     }
+-
+-     public function scopeFilter(Builder $builder)
+-     {
+-         
+-         if (request('id')) {
+-             $builder->where('id',request('id') );
+-         }
++            ->whereBetween('created_at', [Carbon::now()->subHours(3), Carbon::now()->addHours(3)])
++            ->where('status', '!=', OrderStatusEnum::CANCELLED);
++    }
++
++    public function wallet()
++    {
++        return $this->morphOne(Wallet::class, 'user');
++    }
++
++    #scopes
++    public function scopeUserIds($query, $value)
++    {
++        return $query->whereIn('id', $value);
++    }
++
++    public function scopeFilter(Builder $builder)
++    {
++        $builder
++            ->filterByStatus()
++            ->filterById()
++            ->filterByName()
++            ->filterByPhone()
++            ->filterByCountry()
++            ->filterByBalance()
++            ->filterByDate();
++    }
++
++    public function scopeFilterById(Builder $builder)
++    {
++        $id = request('id');
++
++        if ($id) {
++            $builder->where('id', $id);
++        }
++    }
++
++    public function scopeFilterByName(Builder $builder)
++    {
++        $name = request('name');
++
++        if ($name) {
++            $builder->where('name', 'like', '%' . $name . '%');
++        }
++    }
++
++    public function scopeFilterByPhone(Builder $builder)
++    {
++        $phone = request('phone');
++
++        if ($phone) {
++            $builder->where('phone', $phone);
++        }
++    }
++
++    public function scopeFilterByBalance(Builder $builder)
++    {
++        $balance = request('balance');
++        $value = request('value');
++
++        if ($balance and $value) {
++            $builder->whereHas('wallet', function ($query) use ($balance , $value) {
++                $query->where('balance',"$value",$balance);
++            });
++        }
++    }
++
++    public function scopeFilterByCountry(Builder $builder)
++    {
++        $country = request('country');
++
++        if ($country) {
++            $builder->whereHas('country', function ($query) use ($country) {
++                $query->where(function ($q) use ($country) {
++                    $q->whereRaw('lower(JSON_EXTRACT(name, "$.en")) LIKE "%' . strtolower($country) . '%" OR lower(JSON_EXTRACT(name, "$.ar")) LIKE "%' . strtolower($country) . '%"');
++                });
++            });
++        }
++    }
++
++
++    public function scopeFilterByStatus(Builder $builder)
++    {
++        $status = request('stauts');
++
++        if ($status) {
++            $builder->where('status', $status);
++        }
++    }
++
++    public function scopeFilterByDate(Builder $builder)
++    {
++       $dateFrom = request('date_from');
++       $dateTo = request('date_to');
+  
+-     }
+-     
++       if ($dateFrom && $dateTo) {
++          $builder->where('created_at', '>=', $dateFrom)->where('created_at', '<=', $dateTo);
++       }
++    }
++
+ 
+-     
++    public static function UserStatus()
++    {
++        return [
++            UserStatusEnum::ACTIVE => __(UserStatusEnum::ACTIVE),
++            UserStatusEnum::INACTIVE => __(UserStatusEnum::INACTIVE),
++            UserStatusEnum::PENDING => __(UserStatusEnum::PENDING),
++        ];
++    }
+ }
+diff --git a/lang/ar.json b/lang/ar.json
+index 0000000..0000000
+--- a/lang/ar.json
++++ b/lang/ar.json
+@@ -39,7 +39,7 @@
+     "Deleted successfully !":"تم الحذف بنجاح",
+     "Updated successfully !":"تم التعديل بنجاح",
+     "Added successfully !":"تم الإضافة بنجاح",
+-    "phone":"الجوال",
++    "phone":"رقم الهاتف",
+     "charged balance":"الرصيد المشحون",
+     "country":"الدولة",
+     "created date":"تاريخ التسجيل",
+@@ -214,6 +214,12 @@
+     "commission":"العمولة",
+     "total cash":"مجموع الكاش",
+     "report":"التقرير",
+-    "driver report":"تقرير السائق"
++    "driver report":"تقرير السائق",
++    "equal":"يساوي",
++    "Greater Than":"اكبر من",
++    "Less Than":"اقل من",
++    "balance":"الرصيد",
++    "from":"من",
++    "to":"الي"
+ 
+ }
+\ No newline at end of file
+diff --git a/resources/views/dashboard/users/index.blade.php b/resources/views/dashboard/users/index.blade.php
+index 0000000..0000000
+--- a/resources/views/dashboard/users/index.blade.php
++++ b/resources/views/dashboard/users/index.blade.php
+@@ -13,6 +13,84 @@
+                         </div>
+                         <div class="card-content">
+                             <div class="card-body card-dashboard">
++                                {!! Form::open(['route' => 'admin.users.index', 'class' => 'form', 'method' => 'get']) !!}
++                                <div class="row col-12">
++                                    <div class="col-md-3">
++                                        <label>{{ __('name')  }} </label>
++                                        {!! Form::text('name', request('name'), [
++                                            'class' => 'form-control',
++                                            'placeholder' => __('name'),
++                                        ]) !!}
++                                    </div>
++                                    <div class="col-md-3">
++                                        <label>{{ __('phone') }} </label>
++                                        {!! Form::text('phone', request('phone'), [
++                                            'class' => 'form-control',
++                                            'placeholder' => __('phone'),
++                                        ]) !!}
++                                    </div>
++                                    <div class="col-md-3">
++                                        <label>{{ __('country')  }} </label>
++                                        {!! Form::text('country', request('country'), [
++                                            'class' => 'form-control',
++                                            'placeholder' => __('country'),
++                                        ]) !!}
++                                    </div>
++                                    <div class="col-md-3">
++                                        <label> {{ __('status')  }} </label>
++                                        {!! Form::select('stauts', \App\Models\User::UserStatus(), request('status'), [
++                                            'class' => 'form-control',
++                                            'placeholder' => __('status'),
++                                        ]) !!}
++
++                                    </div>
++                                    <div class="col-md-3">
++                                        <label> </label>
++                                        {!! Form::select('value',['='=>__('equal') , '>'=> __('Greater Than') , '<'=> __('Less Than')], request('value'), [
++                                            'class' => 'form-control',
++                                           
++                                        ]) !!}
++
++                                    </div>
++
++                                    <div class="col-md-3">
++                                        <label>{{ __('balance')  }} </label>
++                                        {!! Form::text('balance', request('balance'), [
++                                            'class' => 'form-control',
++                                            'placeholder' => __('balance'),
++                                        ]) !!}
++                                    </div>
++
++                                    <div class="col-md-3">
++                                        <label>{{ __('id')  }} </label>
++                                        {!! Form::text('id', request('id'), [
++                                            'class' => 'form-control',
++                                            'placeholder' => 'id',
++                                        ]) !!}
++                                    </div>
++                                   
++                                    <div class="col-md-3">
++                                                <label>{{ __('from') }} </label>
++                                        {!! Form::date('date_from', request('date_from'), [
++                                            'class' => 'form-control date-picker',
++                                        ]) !!}
++
++                                    </div>
++                                    <div class="col-md-3">
++                                        <label>{{ __('to') }}</label>
++                                        {!! Form::date('date_to', request('date_to'), ['class' => 'form-control date-picker', 'placeholder' => 'الي']) !!}
++
++                                    </div>
++                                    
++                                   
++                                    <div class="col-md-6 m-2">
++                                        <button  type="submit" class="btn btn-primary">
++                                            {{ __('search') }}
++                                        </button>
++                                    </div>
++                                </div>
++
++                                {!! Form::close() !!}
+                                 <div style="display: flex;">
+                                     @include('dashboard.users.active')
+                                     @can('Delete Users')

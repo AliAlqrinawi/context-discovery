@@ -1,0 +1,1 @@
+new file: app/Http/Traits/AvatarOperations.php — own-file context is in the diff, not fetched

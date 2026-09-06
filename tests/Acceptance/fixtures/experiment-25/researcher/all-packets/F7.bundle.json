@@ -1,0 +1,272 @@
+{
+    "bundle_version": 1,
+    "budget_tokens": 8000,
+    "used_tokens": 867,
+    "items": [
+        {
+            "lever": "fetched",
+            "reason": "the region uses Address, which the file's use block does not import",
+            "assertion_kind": "same_file_symbol_absence",
+            "provenance": {
+                "path": "app/Models/User.php",
+                "lines": [
+                    7,
+                    16
+                ]
+            },
+            "payload": "use App\\Enum\\OrderStatusEnum;\nuse App\\Enum\\UserStatusEnum;\nuse Laravel\\Sanctum\\HasApiTokens;\nuse App\\Http\\Traits\\ImageOperations;\nuse Illuminate\\Notifications\\Notifiable;\nuse Illuminate\\Database\\Eloquent\\Factories\\HasFactory;\nuse Illuminate\\Foundation\\Auth\\User as Authenticatable;\nuse Illuminate\\Database\\Eloquent\\SoftDeletes;\nuse Carbon\\Carbon;\nuse Illuminate\\Database\\Eloquent\\Builder;",
+            "tokens": 97
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region uses Country, which the file's use block does not import",
+            "assertion_kind": "same_file_symbol_absence",
+            "provenance": {
+                "path": "app/Models/User.php",
+                "lines": [
+                    7,
+                    16
+                ]
+            },
+            "payload": "use App\\Enum\\OrderStatusEnum;\nuse App\\Enum\\UserStatusEnum;\nuse Laravel\\Sanctum\\HasApiTokens;\nuse App\\Http\\Traits\\ImageOperations;\nuse Illuminate\\Notifications\\Notifiable;\nuse Illuminate\\Database\\Eloquent\\Factories\\HasFactory;\nuse Illuminate\\Foundation\\Auth\\User as Authenticatable;\nuse Illuminate\\Database\\Eloquent\\SoftDeletes;\nuse Carbon\\Carbon;\nuse Illuminate\\Database\\Eloquent\\Builder;",
+            "tokens": 97
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region uses Order, which the file's use block does not import",
+            "assertion_kind": "same_file_symbol_absence",
+            "provenance": {
+                "path": "app/Models/User.php",
+                "lines": [
+                    7,
+                    16
+                ]
+            },
+            "payload": "use App\\Enum\\OrderStatusEnum;\nuse App\\Enum\\UserStatusEnum;\nuse Laravel\\Sanctum\\HasApiTokens;\nuse App\\Http\\Traits\\ImageOperations;\nuse Illuminate\\Notifications\\Notifiable;\nuse Illuminate\\Database\\Eloquent\\Factories\\HasFactory;\nuse Illuminate\\Foundation\\Auth\\User as Authenticatable;\nuse Illuminate\\Database\\Eloquent\\SoftDeletes;\nuse Carbon\\Carbon;\nuse Illuminate\\Database\\Eloquent\\Builder;",
+            "tokens": 97
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region uses Product, which the file's use block does not import",
+            "assertion_kind": "same_file_symbol_absence",
+            "provenance": {
+                "path": "app/Models/User.php",
+                "lines": [
+                    7,
+                    16
+                ]
+            },
+            "payload": "use App\\Enum\\OrderStatusEnum;\nuse App\\Enum\\UserStatusEnum;\nuse Laravel\\Sanctum\\HasApiTokens;\nuse App\\Http\\Traits\\ImageOperations;\nuse Illuminate\\Notifications\\Notifiable;\nuse Illuminate\\Database\\Eloquent\\Factories\\HasFactory;\nuse Illuminate\\Foundation\\Auth\\User as Authenticatable;\nuse Illuminate\\Database\\Eloquent\\SoftDeletes;\nuse Carbon\\Carbon;\nuse Illuminate\\Database\\Eloquent\\Builder;",
+            "tokens": 97
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region uses Wallet, which the file's use block does not import",
+            "assertion_kind": "same_file_symbol_absence",
+            "provenance": {
+                "path": "app/Models/User.php",
+                "lines": [
+                    7,
+                    16
+                ]
+            },
+            "payload": "use App\\Enum\\OrderStatusEnum;\nuse App\\Enum\\UserStatusEnum;\nuse Laravel\\Sanctum\\HasApiTokens;\nuse App\\Http\\Traits\\ImageOperations;\nuse Illuminate\\Notifications\\Notifiable;\nuse Illuminate\\Database\\Eloquent\\Factories\\HasFactory;\nuse Illuminate\\Foundation\\Auth\\User as Authenticatable;\nuse Illuminate\\Database\\Eloquent\\SoftDeletes;\nuse Carbon\\Carbon;\nuse Illuminate\\Database\\Eloquent\\Builder;",
+            "tokens": 97
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region uses Address, which the file's use block does not import",
+            "assertion_kind": "same_file_symbol_absence",
+            "provenance": {
+                "path": "app/Models/User.php",
+                "member": "casts",
+                "lines": [
+                    41,
+                    49
+                ]
+            },
+            "payload": "    /**\n     * The attributes that should be cast.\n     *\n     * @var array<string, string>\n     */\n    protected $casts = [\n        'email_verified_at' => 'datetime',\n        'password' => 'hashed',\n    ];",
+            "tokens": 52
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region uses Country, which the file's use block does not import",
+            "assertion_kind": "same_file_symbol_absence",
+            "provenance": {
+                "path": "app/Models/User.php",
+                "member": "casts",
+                "lines": [
+                    41,
+                    49
+                ]
+            },
+            "payload": "    /**\n     * The attributes that should be cast.\n     *\n     * @var array<string, string>\n     */\n    protected $casts = [\n        'email_verified_at' => 'datetime',\n        'password' => 'hashed',\n    ];",
+            "tokens": 52
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region uses Order, which the file's use block does not import",
+            "assertion_kind": "same_file_symbol_absence",
+            "provenance": {
+                "path": "app/Models/User.php",
+                "member": "casts",
+                "lines": [
+                    41,
+                    49
+                ]
+            },
+            "payload": "    /**\n     * The attributes that should be cast.\n     *\n     * @var array<string, string>\n     */\n    protected $casts = [\n        'email_verified_at' => 'datetime',\n        'password' => 'hashed',\n    ];",
+            "tokens": 52
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region uses Product, which the file's use block does not import",
+            "assertion_kind": "same_file_symbol_absence",
+            "provenance": {
+                "path": "app/Models/User.php",
+                "member": "casts",
+                "lines": [
+                    41,
+                    49
+                ]
+            },
+            "payload": "    /**\n     * The attributes that should be cast.\n     *\n     * @var array<string, string>\n     */\n    protected $casts = [\n        'email_verified_at' => 'datetime',\n        'password' => 'hashed',\n    ];",
+            "tokens": 52
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region uses Wallet, which the file's use block does not import",
+            "assertion_kind": "same_file_symbol_absence",
+            "provenance": {
+                "path": "app/Models/User.php",
+                "member": "casts",
+                "lines": [
+                    41,
+                    49
+                ]
+            },
+            "payload": "    /**\n     * The attributes that should be cast.\n     *\n     * @var array<string, string>\n     */\n    protected $casts = [\n        'email_verified_at' => 'datetime',\n        'password' => 'hashed',\n    ];",
+            "tokens": 52
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on Yajra\\DataTables\\Html\\Column::make, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/DataTables/UserDataTable.php",
+                "member": "Yajra\\DataTables\\Html\\Column::make",
+                "lines": [
+                    114,
+                    121
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Enum\\OrderStatusEnum::CANCELLED, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Enum/OrderStatusEnum.php",
+                "member": "CANCELLED",
+                "lines": [
+                    11,
+                    11
+                ]
+            },
+            "payload": "  const CANCELLED = 'cancelled';",
+            "tokens": 8
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Enum\\UserStatusEnum::ACTIVE, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Enum/UserStatusEnum.php",
+                "member": "ACTIVE",
+                "lines": [
+                    8,
+                    8
+                ]
+            },
+            "payload": "  const ACTIVE = 'active';",
+            "tokens": 7
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Enum\\UserStatusEnum::INACTIVE, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Enum/UserStatusEnum.php",
+                "member": "INACTIVE",
+                "lines": [
+                    9,
+                    9
+                ]
+            },
+            "payload": "  const INACTIVE = 'inactive';",
+            "tokens": 8
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Enum\\UserStatusEnum::PENDING, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Enum/UserStatusEnum.php",
+                "member": "PENDING",
+                "lines": [
+                    7,
+                    7
+                ]
+            },
+            "payload": "  const PENDING = 'pending activation';",
+            "tokens": 10
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on Carbon\\Carbon::now, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/User.php",
+                "member": "Carbon\\Carbon::now",
+                "lines": [
+                    48,
+                    188
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on Illuminate\\Database\\Eloquent\\Builder, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/User.php",
+                "member": "Illuminate\\Database\\Eloquent\\Builder",
+                "lines": [
+                    48,
+                    188
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the change removes a trait from a class body; how pre-existing rows behave after it depends on production data state",
+            "assertion_kind": "unverifiable_premise",
+            "provenance": {
+                "path": "app/Models/User.php",
+                "lines": [
+                    17,
+                    23
+                ]
+            },
+            "payload": "ASSUMPTION: behaviour depends on whether pre-existing rows are affected in production; no backfill migration present",
+            "tokens": 29
+        }
+    ],
+    "dropped": []
+}

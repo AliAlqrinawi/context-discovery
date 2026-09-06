@@ -1,0 +1,117 @@
+{
+    "generated_at_cli_head": "c0c98fcb879fcb255637473f99b9ace0b0f4fa0d",
+    "artefacts": [
+        {
+            "internal": "S1",
+            "repository": "abouelsid",
+            "commit": "ec92403",
+            "harness": "ADR-A022 detached worktree at the commit itself",
+            "diff_sha256": "a4fb56a3b31a6bbc36c8c15d9bb2c2def54780997f32dc4651cd969643765ed3",
+            "bundle_sha256": "c17fba74398fd7246b4aa896a5181784836e444258e9743354d3beda26ce81e1"
+        },
+        {
+            "internal": "S2",
+            "repository": "abouelsid",
+            "commit": "fc573d2",
+            "harness": "ADR-A022 detached worktree at the commit itself",
+            "diff_sha256": "33b25f8a2c4ec1a1519e6323d7d4b0b95c885773036eb6bf9bb0299b70cb8bd7",
+            "bundle_sha256": "03cb534fa274a29be581275cbbffd9a4754853f51cae6e0852cde76cc8e2ef69"
+        },
+        {
+            "internal": "S3",
+            "repository": "abouelsid",
+            "commit": "e5e48ce",
+            "harness": "ADR-A022 detached worktree at the commit itself",
+            "diff_sha256": "ba6043a70fc90c9bb85ed798f7db9a87d8fee7b899835ab59a0b2aee28fa8251",
+            "bundle_sha256": "d49ac88c616ae3e10f62eecb0fecbd9c37d2f16e9015ccc8240f655567347c61"
+        },
+        {
+            "internal": "S4",
+            "repository": "abouelsid",
+            "commit": "ec76dc4",
+            "harness": "ADR-A022 detached worktree at the commit itself",
+            "diff_sha256": "d502d1e0461618d0837a2097d6667a15e474ff127e3402f58f268b7eb1b10d6c",
+            "bundle_sha256": "f08728a513aa730dbbbcbdabf52f687a6c51c432390c283d0acc4bc4ba6cd211"
+        },
+        {
+            "internal": "S5",
+            "repository": "halaw",
+            "commit": "1bc5470",
+            "harness": "ADR-A022 detached worktree at the commit itself",
+            "diff_sha256": "ba9c1f3f0511f7dcb65b79472c7233dfc285d046feb78a82ddd36ddcc409848e",
+            "bundle_sha256": "535fdcb83e2d7e3d009c369a4470f3cf715739da1c0e0e7272b77c4418501cbf"
+        },
+        {
+            "internal": "S6",
+            "repository": "halaw",
+            "commit": "dfd6ac2",
+            "harness": "ADR-A022 detached worktree at the commit itself",
+            "diff_sha256": "a0970c03bac1410cd8e6d8a9b55dda0610c8c2d036a4f44809eb579d5f267169",
+            "bundle_sha256": "497fdbac77e6972b5f77490d808509eeacf2ead7637298b2a6808211f99b2d2a"
+        },
+        {
+            "internal": "S7",
+            "repository": "halaw",
+            "commit": "f7fe53b",
+            "harness": "ADR-A022 detached worktree at the commit itself",
+            "diff_sha256": "38d685910d398246907d2bb940e4338c2dc39bb253734ac4a099f5c64a5e817e",
+            "bundle_sha256": "bb71815b81480352327b12efbb91c0d02bdec46bbdf7de4ff16d4c6c49086009"
+        },
+        {
+            "internal": "F1",
+            "repository": "abouelsid",
+            "commit": "4411454",
+            "harness": "ADR-A022 detached worktree at the commit itself",
+            "diff_sha256": "ded88c53035679f4532ab2e216963462a7cba4967e823a0fc73f23ec35d6b89a",
+            "bundle_sha256": "802a3d5ce5b07ce961d846f68852ca49191524725c174fc1c8727525ef5e9c39"
+        },
+        {
+            "internal": "F2",
+            "repository": "abouelsid",
+            "commit": "cb66103",
+            "harness": "ADR-A022 detached worktree at the commit itself",
+            "diff_sha256": "6c6aae09c1a6d6d1644e91a4e929980c5af0323dc5d973bf7d63c8447b8c69d7",
+            "bundle_sha256": "941e02c61187abdd5efbe30c8e465a7919674248826d8134bc8eeec462717cf9"
+        },
+        {
+            "internal": "F3",
+            "repository": "abouelsid",
+            "commit": "721ea3c",
+            "harness": "ADR-A022 detached worktree at the commit itself",
+            "diff_sha256": "5c3fa7aea394b3ae9d4fcaf880dc87f45a67230fa97d3235e8aa408131963fb9",
+            "bundle_sha256": "33f8b146c00a729550477b11f985cd43cc150693af72ab0fd5c3e3906e9ddf3b"
+        },
+        {
+            "internal": "F4",
+            "repository": "abouelsid",
+            "commit": "0a6e7d1",
+            "harness": "ADR-A022 detached worktree at the commit itself",
+            "diff_sha256": "19a2dd97ae02bcc06fffa5a978ecbba594e0bcb8e0ac15257b92ec6cc28bbd60",
+            "bundle_sha256": "42e0e38081e923651afd7cd517132d1e54ada95f9f71a8179801cc68335e6c94"
+        },
+        {
+            "internal": "F5",
+            "repository": "abouelsid",
+            "commit": "b2eebe7",
+            "harness": "ADR-A022 detached worktree at the commit itself",
+            "diff_sha256": "2a62b170e5350680892ca7cf75f29af8591d2e22cd93c5580264f23eb5c2671c",
+            "bundle_sha256": "74492bd3668be73a18aaf4fdf0e6533cbc76da7e01831e8e1ba107b2f993ffef"
+        },
+        {
+            "internal": "F6",
+            "repository": "halaw",
+            "commit": "6a9d811",
+            "harness": "ADR-A022 detached worktree at the commit itself",
+            "diff_sha256": "3d3dbb5b07309c7a0b9ce031624f4bdaa77d40dffe4b17938930272e12865261",
+            "bundle_sha256": "d5807ac8a5f930b4b6696217fe5b6fde6f10c0c6110f7282f7b633dfab66be24"
+        },
+        {
+            "internal": "F7",
+            "repository": "halaw",
+            "commit": "8ef3eef",
+            "harness": "ADR-A022 detached worktree at the commit itself",
+            "diff_sha256": "2213b9ff78bf876a3a00a389d671fedf08a4390f8d76179f85475100fa3aa654",
+            "bundle_sha256": "17e6ea265dda3b58f146d688e50d040b758460b8af16c6626f9c5ffd837e190f"
+        }
+    ]
+}

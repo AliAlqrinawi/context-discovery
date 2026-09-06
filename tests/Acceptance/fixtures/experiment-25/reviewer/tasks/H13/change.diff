@@ -1,0 +1,68 @@
+diff --git a/app/Actions/Dish/GetDishesAction.php b/app/Actions/Dish/GetDishesAction.php
+index 0000000..0000000
+--- a/app/Actions/Dish/GetDishesAction.php
++++ b/app/Actions/Dish/GetDishesAction.php
+@@ -17,9 +17,11 @@ public function execute(array $filters = []): LengthAwarePaginator
+         $locale = app()->getLocale();
+         $categoryId = $filters['category_id'] ?? 'all';
+         $featured = array_key_exists('featured', $filters) ? var_export($filters['featured'], true) : 'all';
++        $signature = array_key_exists('signature', $filters) ? var_export($filters['signature'], true) : 'all';
++        $perPage = $filters['per_page'] ?? 'default';
+         $page = request()->integer('page', 1);
+ 
+-        $key = "dishes_{$locale}_{$categoryId}_{$featured}_{$page}";
++        $key = "dishes_{$locale}_{$categoryId}_{$featured}_{$signature}_{$perPage}_{$page}";
+ 
+         return Cache::tags(['dishes'])->remember(
+             $key,
+diff --git a/app/Http/Controllers/DishController.php b/app/Http/Controllers/DishController.php
+index 0000000..0000000
+--- a/app/Http/Controllers/DishController.php
++++ b/app/Http/Controllers/DishController.php
+@@ -11,7 +11,6 @@
+ use App\DTOs\Dish\UpdateDishDTO;
+ use App\Http\Requests\Dish\StoreDishRequest;
+ use App\Http\Requests\Dish\UpdateDishRequest;
+-use App\Http\Resources\Dish\DishCollection;
+ use App\Http\Resources\Dish\DishResource;
+ use Illuminate\Http\JsonResponse;
+ use Illuminate\Http\Request;
+@@ -29,7 +28,7 @@ public function index(Request $request, GetDishesAction $action): JsonResponse
+ 
+         $result = $action->execute($filters);
+ 
+-        return $this->success(new DishCollection($result), __('messages.fetched'));
++        return $this->paginated(DishResource::collection($result), $result, __('messages.fetched'));
+     }
+ 
+     public function show(int $id, GetDishAction $action): JsonResponse
+diff --git a/app/Http/Resources/Dish/DishCollection.php b/app/Http/Resources/Dish/DishCollection.php
+deleted file mode 100644
+index 0000000..0000000
+--- a/app/Http/Resources/Dish/DishCollection.php
++++ /dev/null
+@@ -1,24 +0,0 @@
+-<?php
+-
+-namespace App\Http\Resources\Dish;
+-
+-use Illuminate\Http\Request;
+-use Illuminate\Http\Resources\Json\ResourceCollection;
+-
+-class DishCollection extends ResourceCollection
+-{
+-    public $collects = DishResource::class;
+-
+-    public function toArray(Request $request): array
+-    {
+-        return [
+-            'items' => $this->collection,
+-            'meta' => [
+-                'current_page' => $this->currentPage(),
+-                'last_page' => $this->lastPage(),
+-                'per_page' => $this->perPage(),
+-                'total' => $this->total(),
+-            ],
+-        ];
+-    }
+-}

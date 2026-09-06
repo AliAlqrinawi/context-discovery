@@ -1,0 +1,303 @@
+diff --git a/app/Http/Controllers/Admin/ProfileController.php b/app/Http/Controllers/Admin/ProfileController.php
+new file mode 100644
+index 0000000..0000000
+--- /dev/null
++++ b/app/Http/Controllers/Admin/ProfileController.php
+@@ -0,0 +1,55 @@
++<?php
++
++namespace App\Http\Controllers\Admin;
++
++use App\Http\Controllers\Controller;
++use App\Http\Requests\Profile\UpdatePasswordRequest;
++use App\Http\Requests\Profile\UpdateProfileRequest;
++use App\Http\Resources\User\UserResource;
++use Illuminate\Http\JsonResponse;
++use Illuminate\Http\Request;
++use Illuminate\Support\Facades\Hash;
++
++class ProfileController extends Controller
++{
++    public function show(Request $request): JsonResponse
++    {
++        return $this->success(
++            new UserResource($request->user()),
++            __('messages.fetched')
++        );
++    }
++
++    public function update(UpdateProfileRequest $request): JsonResponse
++    {
++        $user = $request->user();
++        $user->update([
++            'name' => $request->name,
++            'email' => $request->email,
++        ]);
++
++        return $this->success(
++            new UserResource($user->fresh()),
++            __('messages.profile_updated')
++        );
++    }
++
++    public function updatePassword(UpdatePasswordRequest $request): JsonResponse
++    {
++        $user = $request->user();
++
++        if (! Hash::check($request->current_password, $user->password)) {
++            return $this->error(
++                __('messages.invalid_current_password'),
++                422,
++                ['current_password' => [__('messages.invalid_current_password')]]
++            );
++        }
++
++        $user->update([
++            'password' => Hash::make($request->password),
++        ]);
++
++        return $this->success(null, __('messages.password_updated'));
++    }
++}
+diff --git a/app/Http/Requests/Profile/UpdatePasswordRequest.php b/app/Http/Requests/Profile/UpdatePasswordRequest.php
+new file mode 100644
+index 0000000..0000000
+--- /dev/null
++++ b/app/Http/Requests/Profile/UpdatePasswordRequest.php
+@@ -0,0 +1,22 @@
++<?php
++
++namespace App\Http\Requests\Profile;
++
++use App\Http\Requests\BaseFormRequest;
++
++class UpdatePasswordRequest extends BaseFormRequest
++{
++    public function authorize(): bool
++    {
++        return true;
++    }
++
++    public function rules(): array
++    {
++        return [
++            'current_password' => ['required', 'string'],
++            'password' => ['required', 'string', 'min:8', 'confirmed'],
++            'password_confirmation' => ['required', 'string'],
++        ];
++    }
++}
+diff --git a/app/Http/Requests/Profile/UpdateProfileRequest.php b/app/Http/Requests/Profile/UpdateProfileRequest.php
+new file mode 100644
+index 0000000..0000000
+--- /dev/null
++++ b/app/Http/Requests/Profile/UpdateProfileRequest.php
+@@ -0,0 +1,22 @@
++<?php
++
++namespace App\Http\Requests\Profile;
++
++use App\Http\Requests\BaseFormRequest;
++use Illuminate\Validation\Rule;
++
++class UpdateProfileRequest extends BaseFormRequest
++{
++    public function authorize(): bool
++    {
++        return true;
++    }
++
++    public function rules(): array
++    {
++        return [
++            'name' => ['required', 'string', 'max:200'],
++            'email' => ['required', 'email', Rule::unique('users', 'email')->ignore($this->user()->id)],
++        ];
++    }
++}
+diff --git a/lang/ar/messages.php b/lang/ar/messages.php
+index 0000000..0000000
+--- a/lang/ar/messages.php
++++ b/lang/ar/messages.php
+@@ -14,4 +14,7 @@
+     'something_wrong'   => 'حدث خطأ ما، يرجى المحاولة لاحقاً.',
+     'uploaded'          => 'تم رفع الملف بنجاح.',
+     'quote_submitted'   => 'تم استلام طلبكم، سنتواصل معكم قريباً.',
++    'invalid_current_password' => 'كلمة المرور الحالية غير صحيحة.',
++    'password_updated'         => 'تم تحديث كلمة المرور بنجاح.',
++    'profile_updated'          => 'تم تحديث الملف الشخصي بنجاح.',
+ ];
+diff --git a/lang/en/messages.php b/lang/en/messages.php
+index 0000000..0000000
+--- a/lang/en/messages.php
++++ b/lang/en/messages.php
+@@ -14,4 +14,7 @@
+     'something_wrong'   => 'Something went wrong. Please try again.',
+     'uploaded'          => 'File uploaded successfully.',
+     'quote_submitted'   => 'Your request has been received. We will contact you soon.',
++    'invalid_current_password' => 'The current password is incorrect.',
++    'password_updated'         => 'Password updated successfully.',
++    'profile_updated'          => 'Profile updated successfully.',
+ ];
+diff --git a/routes/admin.php b/routes/admin.php
+index 0000000..0000000
+--- a/routes/admin.php
++++ b/routes/admin.php
+@@ -10,6 +10,7 @@
+ use App\Http\Controllers\Admin\DishController;
+ use App\Http\Controllers\Admin\MediaItemController;
+ use App\Http\Controllers\Admin\PageContentController;
++use App\Http\Controllers\Admin\ProfileController;
+ use App\Http\Controllers\Admin\SettingController;
+ use App\Http\Controllers\Admin\TestimonialController;
+ use App\Http\Controllers\Admin\TimelineController;
+@@ -31,6 +32,13 @@
+             Route::get('/me',      'me');
+         });
+ 
++        // ── Profile ───────────────────────────────────────
++        Route::prefix('profile')->controller(ProfileController::class)->group(function () {
++            Route::get('/', 'show');
++            Route::put('/', 'update');
++            Route::put('/password', 'updatePassword');
++        });
++
+         // ── Page Contents ─────────────────────────────────
+         Route::prefix('page-contents')->controller(PageContentController::class)->group(function () {
+             Route::get('/',       'index');
+diff --git a/tests/Feature/ProfileTest.php b/tests/Feature/ProfileTest.php
+new file mode 100644
+index 0000000..0000000
+--- /dev/null
++++ b/tests/Feature/ProfileTest.php
+@@ -0,0 +1,130 @@
++<?php
++
++namespace Tests\Feature;
++
++use App\Models\User;
++use Illuminate\Foundation\Testing\RefreshDatabase;
++use Illuminate\Support\Facades\Hash;
++use Tests\TestCase;
++
++class ProfileTest extends TestCase
++{
++    use RefreshDatabase;
++
++    protected function setUp(): void
++    {
++        parent::setUp();
++
++        $this->seed();
++    }
++
++    private function token(): string
++    {
++        $user = User::where('email', 'admin@examplecorp.com')->first();
++
++        return $user->createToken('test-token')->plainTextToken;
++    }
++
++    public function test_get_profile_authenticated_returns_200_with_user_data(): void
++    {
++        $response = $this->getJson('/api/v1/admin/profile', [
++            'Authorization' => "Bearer {$this->token()}",
++        ]);
++
++        $response->assertStatus(200)
++            ->assertJson(['success' => true])
++            ->assertJsonStructure(['data' => ['id', 'name', 'email', 'role']])
++            ->assertJsonPath('data.email', 'admin@examplecorp.com');
++    }
++
++    public function test_get_profile_unauthenticated_returns_401(): void
++    {
++        $response = $this->getJson('/api/v1/admin/profile');
++
++        $response->assertStatus(401)
++            ->assertJson(['success' => false]);
++    }
++
++    public function test_update_profile_with_valid_data_updates_name_and_email(): void
++    {
++        $response = $this->putJson('/api/v1/admin/profile', [
++            'name' => 'Updated Name',
++            'email' => 'updated@examplecorp.com',
++        ], [
++            'Authorization' => "Bearer {$this->token()}",
++        ]);
++
++        $response->assertStatus(200)
++            ->assertJson(['success' => true])
++            ->assertJsonPath('data.name', 'Updated Name')
++            ->assertJsonPath('data.email', 'updated@examplecorp.com');
++
++        $this->assertDatabaseHas('users', [
++            'email' => 'updated@examplecorp.com',
++            'name' => 'Updated Name',
++        ]);
++    }
++
++    public function test_update_profile_with_duplicate_email_returns_422(): void
++    {
++        User::factory()->create(['email' => 'taken@examplecorp.com']);
++
++        $response = $this->putJson('/api/v1/admin/profile', [
++            'name' => 'Admin',
++            'email' => 'taken@examplecorp.com',
++        ], [
++            'Authorization' => "Bearer {$this->token()}",
++        ]);
++
++        $response->assertStatus(422)
++            ->assertJson(['success' => false])
++            ->assertJsonValidationErrors(['email']);
++    }
++
++    public function test_update_password_with_correct_current_password_returns_200(): void
++    {
++        $response = $this->putJson('/api/v1/admin/profile/password', [
++            'current_password' => 'password',
++            'password' => 'newpassword123',
++            'password_confirmation' => 'newpassword123',
++        ], [
++            'Authorization' => "Bearer {$this->token()}",
++        ]);
++
++        $response->assertStatus(200)
++            ->assertJson(['success' => true]);
++
++        $user = User::where('email', 'admin@examplecorp.com')->first();
++        $this->assertTrue(Hash::check('newpassword123', $user->password));
++    }
++
++    public function test_update_password_with_wrong_current_password_returns_422(): void
++    {
++        $response = $this->putJson('/api/v1/admin/profile/password', [
++            'current_password' => 'wrong-password',
++            'password' => 'newpassword123',
++            'password_confirmation' => 'newpassword123',
++        ], [
++            'Authorization' => "Bearer {$this->token()}",
++        ]);
++
++        $response->assertStatus(422)
++            ->assertJson(['success' => false])
++            ->assertJsonValidationErrors(['current_password']);
++    }
++
++    public function test_update_password_with_mismatched_confirmation_returns_422(): void
++    {
++        $response = $this->putJson('/api/v1/admin/profile/password', [
++            'current_password' => 'password',
++            'password' => 'newpassword123',
++            'password_confirmation' => 'does-not-match',
++        ], [
++            'Authorization' => "Bearer {$this->token()}",
++        ]);
++
++        $response->assertStatus(422)
++            ->assertJson(['success' => false])
++            ->assertJsonValidationErrors(['password']);
++    }
++}

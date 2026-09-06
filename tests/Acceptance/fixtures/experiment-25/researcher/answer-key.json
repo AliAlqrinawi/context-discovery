@@ -1,0 +1,164 @@
+{
+    "experiment": "experiment-25",
+    "frozen": "2026-09-06, before any reviewer packet was assembled",
+    "corpus_correction_before_freeze": "F1/F2/F5 originally named 375bf5c/c31783d/b969836; all three produced EMPTY bundles, which makes a condition-B packet informationally identical to condition A and correlates emptiness with filler status. Replaced with 4411454/cb66103/b2eebe7 under the same non-empty rule M22 and M23 used. No reviewer had seen anything; the superseded checksum is retained in answer-key-superseded.sha256.",
+    "primary_score_population": "the 7 SCORED rows only",
+    "excluded_from_primary": "the 7 CONTESTED filler rows",
+    "protocol": "M17 five-question, unchanged",
+    "tasks": [
+        {
+            "task": "S1",
+            "repository": "abouelsid",
+            "commit": "ec92403",
+            "ground_truth": "DEFECT",
+            "strength": "STRONG",
+            "in_primary_score": true,
+            "expected_defect": "file written and old one deleted before the DB write, no transaction or cleanup; permanent_url returns the API domain",
+            "ground_truth_evidence": "later real commit(s) 04328a5;2c2a7b4 correct this behaviour; verified in source before freezing",
+            "scoring_notes": "Score Q1 against DEFECT. Credit Q2 only if it names this mechanism; a different real defect is recorded separately and NOT counted as identification."
+        },
+        {
+            "task": "S2",
+            "repository": "abouelsid",
+            "commit": "fc573d2",
+            "ground_truth": "DEFECT",
+            "strength": "STRONG",
+            "in_primary_score": true,
+            "expected_defect": "nullable descriptions leave the update path unable to clear a field (Arr::whereNotNull drops the null)",
+            "ground_truth_evidence": "later real commit(s) 11c0ced correct this behaviour; verified in source before freezing",
+            "scoring_notes": "Score Q1 against DEFECT. Credit Q2 only if it names this mechanism; a different real defect is recorded separately and NOT counted as identification."
+        },
+        {
+            "task": "S3",
+            "repository": "abouelsid",
+            "commit": "e5e48ce",
+            "ground_truth": "DEFECT",
+            "strength": "STRONG",
+            "in_primary_score": true,
+            "expected_defect": "raw featured/signature query strings passed through $request->only; \"false\" is truthy",
+            "ground_truth_evidence": "later real commit(s) 1fa1f66 correct this behaviour; verified in source before freezing",
+            "scoring_notes": "Score Q1 against DEFECT. Credit Q2 only if it names this mechanism; a different real defect is recorded separately and NOT counted as identification."
+        },
+        {
+            "task": "S4",
+            "repository": "abouelsid",
+            "commit": "ec76dc4",
+            "ground_truth": "DEFECT",
+            "strength": "STRONG",
+            "in_primary_score": true,
+            "expected_defect": "PageContentSeeder::run uses PageContent::create() in a loop; not idempotent against the unique index",
+            "ground_truth_evidence": "later real commit(s) dae67ab correct this behaviour; verified in source before freezing",
+            "scoring_notes": "Score Q1 against DEFECT. Credit Q2 only if it names this mechanism; a different real defect is recorded separately and NOT counted as identification."
+        },
+        {
+            "task": "S5",
+            "repository": "halaw",
+            "commit": "1bc5470",
+            "ground_truth": "DEFECT",
+            "strength": "STRONG",
+            "in_primary_score": true,
+            "expected_defect": "OrderService::canceledOrder cancels without restocking a PENDING order's items",
+            "ground_truth_evidence": "later real commit(s) 271a9d0 correct this behaviour; verified in source before freezing",
+            "scoring_notes": "Score Q1 against DEFECT. Credit Q2 only if it names this mechanism; a different real defect is recorded separately and NOT counted as identification."
+        },
+        {
+            "task": "S6",
+            "repository": "halaw",
+            "commit": "dfd6ac2",
+            "ground_truth": "DEFECT",
+            "strength": "STRONG",
+            "in_primary_score": true,
+            "expected_defect": "loads relation 'category' (singular) where the model declares many-to-many 'categories'",
+            "ground_truth_evidence": "later real commit(s) e4d92dd correct this behaviour; verified in source before freezing",
+            "scoring_notes": "Score Q1 against DEFECT. Credit Q2 only if it names this mechanism; a different real defect is recorded separately and NOT counted as identification."
+        },
+        {
+            "task": "S7",
+            "repository": "halaw",
+            "commit": "f7fe53b",
+            "ground_truth": "DEFECT",
+            "strength": "STRONG",
+            "in_primary_score": true,
+            "expected_defect": "order placement resolves a delivery city without checking the area is active",
+            "ground_truth_evidence": "later real commit(s) b0fabba correct this behaviour; verified in source before freezing",
+            "scoring_notes": "Score Q1 against DEFECT. Credit Q2 only if it names this mechanism; a different real defect is recorded separately and NOT counted as identification."
+        },
+        {
+            "task": "F1",
+            "repository": "abouelsid",
+            "commit": "4411454",
+            "ground_truth": "CONTESTED",
+            "strength": "NONE",
+            "in_primary_score": false,
+            "expected_defect": null,
+            "ground_truth_evidence": "M24: E1 pass, E2 matched a specific symbol. Replaces 375bf5c, excluded for an empty bundle. Not a defensible control; blinding only.",
+            "scoring_notes": "EXCLUDED from the primary score. M24 established that no defensible CONTROL can be built from repository history, so this row is CONTESTED and exists only to prevent the reviewer inferring that every task contains a defect."
+        },
+        {
+            "task": "F2",
+            "repository": "abouelsid",
+            "commit": "cb66103",
+            "ground_truth": "CONTESTED",
+            "strength": "NONE",
+            "in_primary_score": false,
+            "expected_defect": null,
+            "ground_truth_evidence": "M24: E1 pass. Replaces c31783d, excluded for an empty bundle. Not a defensible control; blinding only.",
+            "scoring_notes": "EXCLUDED from the primary score. M24 established that no defensible CONTROL can be built from repository history, so this row is CONTESTED and exists only to prevent the reviewer inferring that every task contains a defect."
+        },
+        {
+            "task": "F3",
+            "repository": "abouelsid",
+            "commit": "721ea3c",
+            "ground_truth": "CONTESTED",
+            "strength": "NONE",
+            "in_primary_score": false,
+            "expected_defect": null,
+            "ground_truth_evidence": "M24: E1 pass, E2 matched DishRepository. Not a defensible control. Blinding only.",
+            "scoring_notes": "EXCLUDED from the primary score. M24 established that no defensible CONTROL can be built from repository history, so this row is CONTESTED and exists only to prevent the reviewer inferring that every task contains a defect."
+        },
+        {
+            "task": "F4",
+            "repository": "abouelsid",
+            "commit": "0a6e7d1",
+            "ground_truth": "CONTESTED",
+            "strength": "NONE",
+            "in_primary_score": false,
+            "expected_defect": null,
+            "ground_truth_evidence": "M24: E1 pass, E2 matched GetDishesAction. Not a defensible control. Blinding only.",
+            "scoring_notes": "EXCLUDED from the primary score. M24 established that no defensible CONTROL can be built from repository history, so this row is CONTESTED and exists only to prevent the reviewer inferring that every task contains a defect."
+        },
+        {
+            "task": "F5",
+            "repository": "abouelsid",
+            "commit": "b2eebe7",
+            "ground_truth": "CONTESTED",
+            "strength": "NONE",
+            "in_primary_score": false,
+            "expected_defect": null,
+            "ground_truth_evidence": "M24: E1 pass. Replaces b969836, excluded for an empty bundle. Not a defensible control; blinding only.",
+            "scoring_notes": "EXCLUDED from the primary score. M24 established that no defensible CONTROL can be built from repository history, so this row is CONTESTED and exists only to prevent the reviewer inferring that every task contains a defect."
+        },
+        {
+            "task": "F6",
+            "repository": "halaw",
+            "commit": "6a9d811",
+            "ground_truth": "CONTESTED",
+            "strength": "NONE",
+            "in_primary_score": false,
+            "expected_defect": null,
+            "ground_truth_evidence": "M24: E1 pass but E2 matched the generic token 'User'. Not a defensible control. Blinding only.",
+            "scoring_notes": "EXCLUDED from the primary score. M24 established that no defensible CONTROL can be built from repository history, so this row is CONTESTED and exists only to prevent the reviewer inferring that every task contains a defect."
+        },
+        {
+            "task": "F7",
+            "repository": "halaw",
+            "commit": "8ef3eef",
+            "ground_truth": "CONTESTED",
+            "strength": "NONE",
+            "in_primary_score": false,
+            "expected_defect": null,
+            "ground_truth_evidence": "M24: E1 pass but E2 matched the generic token 'address'. Not a defensible control. Blinding only.",
+            "scoring_notes": "EXCLUDED from the primary score. M24 established that no defensible CONTROL can be built from repository history, so this row is CONTESTED and exists only to prevent the reviewer inferring that every task contains a defect."
+        }
+    ]
+}

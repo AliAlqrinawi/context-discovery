@@ -1,0 +1,1 @@
+unresolved named_reference: App\Models\User::with in app/Repositories/UserRepository.php

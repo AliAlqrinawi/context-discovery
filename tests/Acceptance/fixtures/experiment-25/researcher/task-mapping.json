@@ -1,0 +1,119 @@
+{
+    "seed": 20260906,
+    "assignment": "STRATIFIED split-half. Condition balanced within the SCORED stratum and within the FILLER stratum so the primary comparison is not lopsided; for an odd stratum the extra task goes to a randomly chosen arm. Balancing is on a design variable, never on an outcome. Presentation order is then shuffled and opaque H-ids assigned.",
+    "design": "Each commit is assigned ONE condition and appears ONCE in the reviewer set, so a single reviewer never sees the same diff twice. Both A and B packets exist under researcher/all-packets/ for every commit; the unused arm is retained for a future second reviewer.",
+    "mapping": [
+        {
+            "reviewer_task": "H01",
+            "internal": "S2",
+            "repository": "abouelsid",
+            "commit": "fc573d2",
+            "condition": "A",
+            "in_primary_score": true
+        },
+        {
+            "reviewer_task": "H02",
+            "internal": "F7",
+            "repository": "halaw",
+            "commit": "8ef3eef",
+            "condition": "A",
+            "in_primary_score": false
+        },
+        {
+            "reviewer_task": "H03",
+            "internal": "S6",
+            "repository": "halaw",
+            "commit": "dfd6ac2",
+            "condition": "A",
+            "in_primary_score": true
+        },
+        {
+            "reviewer_task": "H04",
+            "internal": "F2",
+            "repository": "abouelsid",
+            "commit": "cb66103",
+            "condition": "B",
+            "in_primary_score": false
+        },
+        {
+            "reviewer_task": "H05",
+            "internal": "F6",
+            "repository": "halaw",
+            "commit": "6a9d811",
+            "condition": "B",
+            "in_primary_score": false
+        },
+        {
+            "reviewer_task": "H06",
+            "internal": "F1",
+            "repository": "abouelsid",
+            "commit": "4411454",
+            "condition": "A",
+            "in_primary_score": false
+        },
+        {
+            "reviewer_task": "H07",
+            "internal": "S5",
+            "repository": "halaw",
+            "commit": "1bc5470",
+            "condition": "A",
+            "in_primary_score": true
+        },
+        {
+            "reviewer_task": "H08",
+            "internal": "F5",
+            "repository": "abouelsid",
+            "commit": "b2eebe7",
+            "condition": "B",
+            "in_primary_score": false
+        },
+        {
+            "reviewer_task": "H09",
+            "internal": "S3",
+            "repository": "abouelsid",
+            "commit": "e5e48ce",
+            "condition": "B",
+            "in_primary_score": true
+        },
+        {
+            "reviewer_task": "H10",
+            "internal": "S7",
+            "repository": "halaw",
+            "commit": "f7fe53b",
+            "condition": "B",
+            "in_primary_score": true
+        },
+        {
+            "reviewer_task": "H11",
+            "internal": "S1",
+            "repository": "abouelsid",
+            "commit": "ec92403",
+            "condition": "A",
+            "in_primary_score": true
+        },
+        {
+            "reviewer_task": "H12",
+            "internal": "S4",
+            "repository": "abouelsid",
+            "commit": "ec76dc4",
+            "condition": "B",
+            "in_primary_score": true
+        },
+        {
+            "reviewer_task": "H13",
+            "internal": "F4",
+            "repository": "abouelsid",
+            "commit": "0a6e7d1",
+            "condition": "A",
+            "in_primary_score": false
+        },
+        {
+            "reviewer_task": "H14",
+            "internal": "F3",
+            "repository": "abouelsid",
+            "commit": "721ea3c",
+            "condition": "B",
+            "in_primary_score": false
+        }
+    ]
+}

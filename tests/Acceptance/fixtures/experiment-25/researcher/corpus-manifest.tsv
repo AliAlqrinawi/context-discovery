@@ -1,0 +1,14 @@
+S1	abouelsid	ec92403	DEFECT	STRONG	SCORED	04328a5;2c2a7b4	file written and old one deleted before the DB write, no transaction or cleanup; permanent_url returns the API domain
+S2	abouelsid	fc573d2	DEFECT	STRONG	SCORED	11c0ced	nullable descriptions leave the update path unable to clear a field (Arr::whereNotNull drops the null)
+S3	abouelsid	e5e48ce	DEFECT	STRONG	SCORED	1fa1f66	raw featured/signature query strings passed through $request->only; "false" is truthy
+S4	abouelsid	ec76dc4	DEFECT	STRONG	SCORED	dae67ab	PageContentSeeder::run uses PageContent::create() in a loop; not idempotent against the unique index
+S5	halaw	1bc5470	DEFECT	STRONG	SCORED	271a9d0	OrderService::canceledOrder cancels without restocking a PENDING order's items
+S6	halaw	dfd6ac2	DEFECT	STRONG	SCORED	e4d92dd	loads relation 'category' (singular) where the model declares many-to-many 'categories'
+S7	halaw	f7fe53b	DEFECT	STRONG	SCORED	b0fabba	order placement resolves a delivery city without checking the area is active
+F1	abouelsid	4411454	CONTESTED	NONE	FILLER	-	M24: E1 pass, E2 matched a specific symbol. Replaces 375bf5c, excluded for an empty bundle. Not a defensible control; blinding only.
+F2	abouelsid	cb66103	CONTESTED	NONE	FILLER	-	M24: E1 pass. Replaces c31783d, excluded for an empty bundle. Not a defensible control; blinding only.
+F3	abouelsid	721ea3c	CONTESTED	NONE	FILLER	-	M24: E1 pass, E2 matched DishRepository. Not a defensible control. Blinding only.
+F4	abouelsid	0a6e7d1	CONTESTED	NONE	FILLER	-	M24: E1 pass, E2 matched GetDishesAction. Not a defensible control. Blinding only.
+F5	abouelsid	b2eebe7	CONTESTED	NONE	FILLER	-	M24: E1 pass. Replaces b969836, excluded for an empty bundle. Not a defensible control; blinding only.
+F6	halaw	6a9d811	CONTESTED	NONE	FILLER	-	M24: E1 pass but E2 matched the generic token 'User'. Not a defensible control. Blinding only.
+F7	halaw	8ef3eef	CONTESTED	NONE	FILLER	-	M24: E1 pass but E2 matched the generic token 'address'. Not a defensible control. Blinding only.

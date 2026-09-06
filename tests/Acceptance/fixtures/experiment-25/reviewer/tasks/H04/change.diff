@@ -1,0 +1,252 @@
+diff --git a/app/Actions/Branch/CreateBranchAction.php b/app/Actions/Branch/CreateBranchAction.php
+index 0000000..0000000
+--- a/app/Actions/Branch/CreateBranchAction.php
++++ b/app/Actions/Branch/CreateBranchAction.php
+@@ -28,6 +28,7 @@ public function execute(CreateBranchDTO $dto): Branch
+             'closing_time' => $dto->closing_time,
+             'google_maps_url' => $dto->google_maps_url,
+             'order' => $dto->order,
++            'show_in_footer' => $dto->show_in_footer,
+         ];
+ 
+         if ($dto->image) {
+diff --git a/app/Actions/Branch/GetBranchesAction.php b/app/Actions/Branch/GetBranchesAction.php
+index 0000000..0000000
+--- a/app/Actions/Branch/GetBranchesAction.php
++++ b/app/Actions/Branch/GetBranchesAction.php
+@@ -12,15 +12,16 @@ public function __construct(
+         private readonly BranchRepository $repository,
+     ) {}
+ 
+-    public function execute(): Collection
++    public function execute(?bool $showInFooter = null): Collection
+     {
+         $locale = app()->getLocale();
+-        $key = "branches_{$locale}";
++        $filter = $showInFooter === null ? 'all' : var_export($showInFooter, true);
++        $key = "branches_{$locale}_{$filter}";
+ 
+         return Cache::tags(['branches'])->remember(
+             $key,
+             now()->addHour(),
+-            fn () => $this->repository->getAll()
++            fn () => $this->repository->getAll($showInFooter)
+         );
+     }
+ }
+diff --git a/app/Actions/Branch/UpdateBranchAction.php b/app/Actions/Branch/UpdateBranchAction.php
+index 0000000..0000000
+--- a/app/Actions/Branch/UpdateBranchAction.php
++++ b/app/Actions/Branch/UpdateBranchAction.php
+@@ -29,6 +29,7 @@ public function execute(int $id, UpdateBranchDTO $dto): Branch
+             'closing_time' => $dto->closing_time,
+             'google_maps_url' => $dto->google_maps_url,
+             'order' => $dto->order,
++            'show_in_footer' => $dto->show_in_footer,
+         ]);
+ 
+         if ($dto->image) {
+diff --git a/app/DTOs/Branch/CreateBranchDTO.php b/app/DTOs/Branch/CreateBranchDTO.php
+index 0000000..0000000
+--- a/app/DTOs/Branch/CreateBranchDTO.php
++++ b/app/DTOs/Branch/CreateBranchDTO.php
+@@ -19,6 +19,7 @@ public function __construct(
+         public readonly ?string $google_maps_url,
+         public readonly ?UploadedFile $image,
+         public readonly int $order,
++        public readonly bool $show_in_footer,
+     ) {}
+ 
+     public static function fromRequest(Request $request): self
+@@ -35,6 +36,7 @@ public static function fromRequest(Request $request): self
+             google_maps_url: $request->filled('google_maps_url') ? $request->string('google_maps_url')->toString() : null,
+             image: $request->file('image'),
+             order: (int) $request->input('order', 0),
++            show_in_footer: $request->boolean('show_in_footer', true),
+         );
+     }
+ }
+diff --git a/app/DTOs/Branch/UpdateBranchDTO.php b/app/DTOs/Branch/UpdateBranchDTO.php
+index 0000000..0000000
+--- a/app/DTOs/Branch/UpdateBranchDTO.php
++++ b/app/DTOs/Branch/UpdateBranchDTO.php
+@@ -19,6 +19,7 @@ public function __construct(
+         public readonly ?string $google_maps_url,
+         public readonly ?UploadedFile $image,
+         public readonly ?int $order,
++        public readonly ?bool $show_in_footer,
+     ) {}
+ 
+     public static function fromRequest(Request $request): self
+@@ -35,6 +36,7 @@ public static function fromRequest(Request $request): self
+             google_maps_url: $request->filled('google_maps_url') ? $request->string('google_maps_url')->toString() : null,
+             image: $request->file('image'),
+             order: $request->filled('order') ? (int) $request->input('order') : null,
++            show_in_footer: $request->has('show_in_footer') ? $request->boolean('show_in_footer') : null,
+         );
+     }
+ }
+diff --git a/app/Http/Controllers/Public/BranchController.php b/app/Http/Controllers/Public/BranchController.php
+index 0000000..0000000
+--- a/app/Http/Controllers/Public/BranchController.php
++++ b/app/Http/Controllers/Public/BranchController.php
+@@ -6,12 +6,15 @@
+ use App\Http\Controllers\Controller;
+ use App\Http\Resources\Branch\BranchResource;
+ use Illuminate\Http\JsonResponse;
++use Illuminate\Http\Request;
+ 
+ class BranchController extends Controller
+ {
+-    public function index(GetBranchesAction $action): JsonResponse
++    public function index(Request $request, GetBranchesAction $action): JsonResponse
+     {
+-        $branches = $action->execute();
++        $showInFooter = $request->has('show_in_footer') ? $request->boolean('show_in_footer') : null;
++
++        $branches = $action->execute($showInFooter);
+ 
+         return $this->success(BranchResource::collection($branches), __('messages.fetched'));
+     }
+diff --git a/app/Http/Requests/Branch/StoreBranchRequest.php b/app/Http/Requests/Branch/StoreBranchRequest.php
+index 0000000..0000000
+--- a/app/Http/Requests/Branch/StoreBranchRequest.php
++++ b/app/Http/Requests/Branch/StoreBranchRequest.php
+@@ -25,6 +25,7 @@ public function rules(): array
+             'google_maps_url' => ['nullable', 'url'],
+             'image' => ['nullable', 'file', 'mimes:jpg,jpeg,png,webp', 'max:5120'],
+             'order' => ['integer', 'min:0'],
++            'show_in_footer' => ['boolean'],
+         ];
+     }
+ }
+diff --git a/app/Http/Requests/Branch/UpdateBranchRequest.php b/app/Http/Requests/Branch/UpdateBranchRequest.php
+index 0000000..0000000
+--- a/app/Http/Requests/Branch/UpdateBranchRequest.php
++++ b/app/Http/Requests/Branch/UpdateBranchRequest.php
+@@ -25,6 +25,7 @@ public function rules(): array
+             'google_maps_url' => ['nullable', 'url'],
+             'image' => ['nullable', 'file', 'mimes:jpg,jpeg,png,webp', 'max:5120'],
+             'order' => ['nullable', 'integer', 'min:0'],
++            'show_in_footer' => ['nullable', 'boolean'],
+         ];
+     }
+ }
+diff --git a/app/Http/Resources/Branch/BranchResource.php b/app/Http/Resources/Branch/BranchResource.php
+index 0000000..0000000
+--- a/app/Http/Resources/Branch/BranchResource.php
++++ b/app/Http/Resources/Branch/BranchResource.php
+@@ -27,6 +27,7 @@ public function toArray(Request $request): array
+             'google_maps_url' => $this->google_maps_url,
+             'image_url' => $this->image_url,
+             'order' => $this->order,
++            'show_in_footer' => $this->show_in_footer,
+             'locale' => app()->getLocale(),
+         ];
+     }
+diff --git a/app/Models/Branch.php b/app/Models/Branch.php
+index 0000000..0000000
+--- a/app/Models/Branch.php
++++ b/app/Models/Branch.php
+@@ -19,5 +19,10 @@ class Branch extends Model
+         'image_path',
+         'image_url',
+         'order',
++        'show_in_footer',
++    ];
++
++    protected $casts = [
++        'show_in_footer' => 'boolean',
+     ];
+ }
+diff --git a/app/Repositories/BranchRepository.php b/app/Repositories/BranchRepository.php
+index 0000000..0000000
+--- a/app/Repositories/BranchRepository.php
++++ b/app/Repositories/BranchRepository.php
+@@ -7,9 +7,15 @@
+ 
+ class BranchRepository
+ {
+-    public function getAll(): Collection
++    public function getAll(?bool $showInFooter = null): Collection
+     {
+-        return Branch::orderBy('order')->get();
++        $query = Branch::orderBy('order');
++
++        if ($showInFooter !== null) {
++            $query->where('show_in_footer', $showInFooter);
++        }
++
++        return $query->get();
+     }
+ 
+     public function getById(int $id): Branch
+diff --git a/database/migrations/2026_07_25_132951_add_show_in_footer_to_branches_table.php b/database/migrations/2026_07_25_132951_add_show_in_footer_to_branches_table.php
+new file mode 100644
+index 0000000..0000000
+--- /dev/null
++++ b/database/migrations/2026_07_25_132951_add_show_in_footer_to_branches_table.php
+@@ -0,0 +1,28 @@
++<?php
++
++use Illuminate\Database\Migrations\Migration;
++use Illuminate\Database\Schema\Blueprint;
++use Illuminate\Support\Facades\Schema;
++
++return new class extends Migration
++{
++    /**
++     * Run the migrations.
++     */
++    public function up(): void
++    {
++        Schema::table('branches', function (Blueprint $table) {
++            $table->boolean('show_in_footer')->default(true)->after('order');
++        });
++    }
++
++    /**
++     * Reverse the migrations.
++     */
++    public function down(): void
++    {
++        Schema::table('branches', function (Blueprint $table) {
++            $table->dropColumn('show_in_footer');
++        });
++    }
++};
+diff --git a/tests/Feature/PublicApiTest.php b/tests/Feature/PublicApiTest.php
+index 0000000..0000000
+--- a/tests/Feature/PublicApiTest.php
++++ b/tests/Feature/PublicApiTest.php
+@@ -65,6 +65,30 @@ public function test_get_branches_returns_two_branches_with_both_languages(): vo
+         $this->assertArrayHasKey('name_en', $branch);
+     }
+ 
++    public function test_get_branches_filtered_by_show_in_footer_excludes_hidden_branch(): void
++    {
++        \App\Models\Branch::first()->update(['show_in_footer' => false]);
++
++        $response = $this->getJson('/api/v1/branches?show_in_footer=true', ['X-API-Key' => $this->apiKey()]);
++
++        $response->assertStatus(200)
++            ->assertJsonCount(1, 'data');
++
++        foreach ($response->json('data') as $branch) {
++            $this->assertTrue($branch['show_in_footer']);
++        }
++    }
++
++    public function test_get_branches_without_show_in_footer_param_returns_all(): void
++    {
++        \App\Models\Branch::first()->update(['show_in_footer' => false]);
++
++        $response = $this->getJson('/api/v1/branches', ['X-API-Key' => $this->apiKey()]);
++
++        $response->assertStatus(200)
++            ->assertJsonCount(2, 'data');
++    }
++
+     public function test_get_page_contents_for_home_hero_returns_hero_content(): void
+     {
+         $response = $this->getJson('/api/v1/page-contents?page=home&section=hero', ['X-API-Key' => $this->apiKey()]);

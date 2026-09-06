@@ -1,0 +1,621 @@
+diff --git a/database/seeders/BranchSeeder.php b/database/seeders/BranchSeeder.php
+new file mode 100644
+index 0000000..0000000
+--- /dev/null
++++ b/database/seeders/BranchSeeder.php
+@@ -0,0 +1,37 @@
++<?php
++
++namespace Database\Seeders;
++
++use App\Models\Branch;
++use Illuminate\Database\Seeder;
++
++class BranchSeeder extends Seeder
++{
++    public function run(): void
++    {
++        $branches = [
++            [
++                'name_ar' => 'فرع جدة', 'name_en' => 'Jeddah Branch',
++                'city' => 'jeddah',
++                'location_ar' => 'ردسي مول، الكورنيش الشمالي', 'location_en' => 'Red Sea Mall, North Corniche',
++                'phone' => '0551718800',
++                'opening_time' => '12:00', 'closing_time' => '01:00',
++                'google_maps_url' => 'https://maps.google.com/?q=Red+Sea+Mall+Jeddah',
++                'order' => 1,
++            ],
++            [
++                'name_ar' => 'فرع الرياض', 'name_en' => 'Riyadh Branch',
++                'city' => 'riyadh',
++                'location_ar' => 'مجمع اسبلاناد، شارع التخصصي', 'location_en' => 'Esplanade Mall, Al Takhassusi Street',
++                'phone' => '0581041912',
++                'opening_time' => '12:00', 'closing_time' => '01:00',
++                'google_maps_url' => 'https://maps.google.com/?q=Esplanade+Mall+Riyadh',
++                'order' => 2,
++            ],
++        ];
++
++        foreach ($branches as $branch) {
++            Branch::create($branch);
++        }
++    }
++}
+diff --git a/database/seeders/CategorySeeder.php b/database/seeders/CategorySeeder.php
+new file mode 100644
+index 0000000..0000000
+--- /dev/null
++++ b/database/seeders/CategorySeeder.php
+@@ -0,0 +1,25 @@
++<?php
++
++namespace Database\Seeders;
++
++use App\Models\Category;
++use Illuminate\Database\Seeder;
++
++class CategorySeeder extends Seeder
++{
++    public function run(): void
++    {
++        $categories = [
++            ['name_ar' => 'المقبلات', 'name_en' => 'Starters', 'slug' => 'starters', 'order' => 1],
++            ['name_ar' => 'الأطباق الرئيسية', 'name_en' => 'Mains', 'slug' => 'mains', 'order' => 2],
++            ['name_ar' => 'الطواجن', 'name_en' => 'Tagines', 'slug' => 'tagines', 'order' => 3],
++            ['name_ar' => 'مأكولات بحرية', 'name_en' => 'Seafood', 'slug' => 'seafood', 'order' => 4],
++            ['name_ar' => 'الحلويات', 'name_en' => 'Desserts', 'slug' => 'desserts', 'order' => 5],
++            ['name_ar' => 'المشروبات', 'name_en' => 'Drinks', 'slug' => 'drinks', 'order' => 6],
++        ];
++
++        foreach ($categories as $category) {
++            Category::create($category);
++        }
++    }
++}
+diff --git a/database/seeders/CateringPackageSeeder.php b/database/seeders/CateringPackageSeeder.php
+new file mode 100644
+index 0000000..0000000
+--- /dev/null
++++ b/database/seeders/CateringPackageSeeder.php
+@@ -0,0 +1,60 @@
++<?php
++
++namespace Database\Seeders;
++
++use App\Models\CateringPackage;
++use Illuminate\Database\Seeder;
++
++class CateringPackageSeeder extends Seeder
++{
++    public function run(): void
++    {
++        $packages = [
++            [
++                'name_ar' => 'الباقة الكلاسيكية', 'name_en' => 'Classic Package',
++                'description_ar' => 'باقة مثالية للتجمعات العائلية والمناسبات الصغيرة.',
++                'description_en' => 'Perfect package for family gatherings and small occasions.',
++                'tag_en' => 'Classic · 6 dishes', 'price_starting_from' => 3000, 'is_featured' => false, 'order' => 1,
++                'features' => [
++                    ['feature_ar' => 'تشكيلة مقبلات شرقية', 'feature_en' => 'Oriental appetizer selection', 'order' => 1],
++                    ['feature_ar' => 'طبقين رئيسيين', 'feature_en' => 'Two main dishes', 'order' => 2],
++                    ['feature_ar' => 'أرز وخبز بلدي', 'feature_en' => 'Rice and local bread', 'order' => 3],
++                    ['feature_ar' => 'حلى الموسم', 'feature_en' => 'Seasonal dessert', 'order' => 4],
++                ],
++            ],
++            [
++                'name_ar' => 'الباقة الملكية', 'name_en' => 'Royal Package',
++                'description_ar' => 'باقة فاخرة لمناسباتكم الكبرى مع طاقم خدمة متكامل.',
++                'description_en' => 'Premium package for grand occasions with full service staff.',
++                'tag_en' => 'Royal · 8 dishes', 'price_starting_from' => 8000, 'is_featured' => true, 'order' => 2,
++                'features' => [
++                    ['feature_ar' => 'تشكيلة مقبلات موسّعة', 'feature_en' => 'Extended appetizer selection', 'order' => 1],
++                    ['feature_ar' => '3 أطباق رئيسية', 'feature_en' => 'Three main dishes', 'order' => 2],
++                    ['feature_ar' => 'طواجن وشوايات', 'feature_en' => 'Tagines and grills', 'order' => 3],
++                    ['feature_ar' => 'قهوة عربية وشاي', 'feature_en' => 'Arabic coffee and tea', 'order' => 4],
++                    ['feature_ar' => 'طاقم خدمة في الموقع', 'feature_en' => 'On-site service staff', 'order' => 5],
++                ],
++            ],
++            [
++                'name_ar' => 'باقة كبار الضيوف', 'name_en' => 'VIP Package',
++                'description_ar' => 'تجربة فاخرة مخصصة بالكامل لمناسباتكم الرسمية وكبار الضيوف.',
++                'description_en' => 'Fully customized luxury experience for formal occasions and VIP guests.',
++                'tag_en' => 'VIP · Custom', 'price_starting_from' => 15000, 'is_featured' => false, 'order' => 3,
++                'features' => [
++                    ['feature_ar' => 'قائمة مخصصة بالكامل', 'feature_en' => 'Fully custom menu', 'order' => 1],
++                    ['feature_ar' => 'تنسيق الديكور التراثي', 'feature_en' => 'Heritage decor arrangement', 'order' => 2],
++                    ['feature_ar' => 'طاقم خدمة متكامل', 'feature_en' => 'Full service team', 'order' => 3],
++                    ['feature_ar' => 'أدوات تقديم تراثية', 'feature_en' => 'Heritage serving ware', 'order' => 4],
++                ],
++            ],
++        ];
++
++        foreach ($packages as $package) {
++            $features = $package['features'];
++            unset($package['features']);
++
++            $createdPackage = CateringPackage::create($package);
++            $createdPackage->features()->createMany($features);
++        }
++    }
++}
+diff --git a/database/seeders/DatabaseSeeder.php b/database/seeders/DatabaseSeeder.php
+index 0000000..0000000
+--- a/database/seeders/DatabaseSeeder.php
++++ b/database/seeders/DatabaseSeeder.php
+@@ -2,7 +2,6 @@
+ 
+ namespace Database\Seeders;
+ 
+-use App\Models\User;
+ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+ use Illuminate\Database\Seeder;
+ 
+@@ -15,11 +14,19 @@ class DatabaseSeeder extends Seeder
+      */
+     public function run(): void
+     {
+-        // User::factory(10)->create();
+-
+-        User::factory()->create([
+-            'name' => 'Test User',
+-            'email' => 'test@example.com',
++        $this->call([
++            UserSeeder::class,
++            CategorySeeder::class,
++            DishSeeder::class,
++            BranchSeeder::class,
++            CateringPackageSeeder::class,
++            SampleMenuSeeder::class,
++            TestimonialSeeder::class,
++            TimelineSeeder::class,
++            DeliveryAppSeeder::class,
++            PageContentSeeder::class,
++            SettingSeeder::class,
++            MediaItemSeeder::class,
+         ]);
+     }
+ }
+diff --git a/database/seeders/DeliveryAppSeeder.php b/database/seeders/DeliveryAppSeeder.php
+new file mode 100644
+index 0000000..0000000
+--- /dev/null
++++ b/database/seeders/DeliveryAppSeeder.php
+@@ -0,0 +1,23 @@
++<?php
++
++namespace Database\Seeders;
++
++use App\Models\DeliveryApp;
++use Illuminate\Database\Seeder;
++
++class DeliveryAppSeeder extends Seeder
++{
++    public function run(): void
++    {
++        $apps = [
++            ['name_ar' => 'هنقرستيشن', 'name_en' => 'HungerStation', 'order_url' => 'https://hungerstation.com', 'is_active' => true, 'order' => 1],
++            ['name_ar' => 'جاهز', 'name_en' => 'Jahez', 'order_url' => 'https://jahez.com', 'is_active' => true, 'order' => 2],
++            ['name_ar' => 'مرسّل', 'name_en' => 'Mrsool', 'order_url' => 'https://mrsool.co', 'is_active' => true, 'order' => 3],
++            ['name_ar' => 'توصيل', 'name_en' => 'Tawseel', 'order_url' => 'https://tawseel.com', 'is_active' => true, 'order' => 4],
++        ];
++
++        foreach ($apps as $app) {
++            DeliveryApp::create($app);
++        }
++    }
++}
+diff --git a/database/seeders/DishSeeder.php b/database/seeders/DishSeeder.php
+new file mode 100644
+index 0000000..0000000
+--- /dev/null
++++ b/database/seeders/DishSeeder.php
+@@ -0,0 +1,53 @@
++<?php
++
++namespace Database\Seeders;
++
++use App\Models\Category;
++use App\Models\Dish;
++use Illuminate\Database\Seeder;
++
++class DishSeeder extends Seeder
++{
++    public function run(): void
++    {
++        $dishes = [
++            [
++                'name_ar' => 'ملوخية بالأرانب', 'name_en' => 'Molokhia with Rabbit',
++                'description_ar' => 'سيدة المائدة المصرية — ملوخية مفرومة باليد، أرانب، طازجة وثوم محمّر على السمن البلدي.',
++                'description_en' => 'Queen of the Egyptian table — hand-chopped molokhia, rabbit, fresh garlic sautéed in local ghee.',
++                'price' => 145, 'category_slug' => 'mains', 'is_featured' => true, 'is_signature' => true, 'order' => 1,
++            ],
++            [
++                'name_ar' => 'كبدة إسكندراني', 'name_en' => 'Alexandrian Liver',
++                'description_ar' => 'كبدة بقري مشوية على الفحم مع الفلفل الألوان والبهارات الإسكندرانية.',
++                'description_en' => 'Grilled beef liver with colorful peppers and Alexandrian spices.',
++                'price' => 95, 'category_slug' => 'mains', 'is_featured' => true, 'is_signature' => true, 'order' => 2,
++            ],
++            [
++                'name_ar' => 'طاجن لحمة بالبصل', 'name_en' => 'Meat Tagine with Onions',
++                'description_ar' => 'لحم بتلو طري مطهو ببطء في طاجن فخاري مع البصل المكرمل والبهارات المصرية.',
++                'description_en' => 'Tender veal slow-cooked in a clay tagine with caramelized onions and Egyptian spices.',
++                'price' => 120, 'category_slug' => 'tagines', 'is_featured' => false, 'is_signature' => false, 'order' => 1,
++            ],
++            [
++                'name_ar' => 'أم علي بالمكسرات', 'name_en' => "Om Ali with Nuts",
++                'description_ar' => 'حلوى مصرية أصيلة من الفيلو المحمّص بالحليب والكريمة والمكسرات المشكلة.',
++                'description_en' => 'Authentic Egyptian dessert of toasted filo with milk, cream and mixed nuts.',
++                'price' => 45, 'category_slug' => 'desserts', 'is_featured' => true, 'is_signature' => false, 'order' => 1,
++            ],
++            [
++                'name_ar' => 'عصير قصب طازج', 'name_en' => 'Fresh Sugarcane Juice',
++                'description_ar' => 'عصير قصب طازج معصور أمامك، منعش وطبيعي 100%.',
++                'description_en' => 'Freshly pressed sugarcane juice, 100% natural and refreshing.',
++                'price' => 25, 'category_slug' => 'drinks', 'is_featured' => false, 'is_signature' => false, 'order' => 1,
++            ],
++        ];
++
++        foreach ($dishes as $dish) {
++            $categoryId = Category::where('slug', $dish['category_slug'])->first()->id;
++            unset($dish['category_slug']);
++
++            Dish::create([...$dish, 'category_id' => $categoryId]);
++        }
++    }
++}
+diff --git a/database/seeders/MediaItemSeeder.php b/database/seeders/MediaItemSeeder.php
+new file mode 100644
+index 0000000..0000000
+--- /dev/null
++++ b/database/seeders/MediaItemSeeder.php
+@@ -0,0 +1,28 @@
++<?php
++
++namespace Database\Seeders;
++
++use App\Models\MediaItem;
++use Illuminate\Database\Seeder;
++
++class MediaItemSeeder extends Seeder
++{
++    public function run(): void
++    {
++        $mediaItems = [
++            ['page' => 'global', 'section' => 'brand', 'key' => 'logo', 'alt_ar' => 'لوجو أبو السيد', 'alt_en' => 'Abou El Sid Logo'],
++            ['page' => 'home', 'section' => 'hero', 'key' => 'portrait', 'alt_ar' => 'شخصية أبو السيد', 'alt_en' => 'Abou El Sid Portrait'],
++            ['page' => 'home', 'section' => 'hero', 'key' => 'background', 'alt_ar' => 'خلفية الهيرو', 'alt_en' => 'Hero Background'],
++            ['page' => 'home', 'section' => 'story_teaser', 'key' => 'image', 'alt_ar' => 'صورة قسم الحكاية', 'alt_en' => 'Story Section Image'],
++            ['page' => 'story', 'section' => 'hero', 'key' => 'portrait', 'alt_ar' => 'بورتريه الحكاية', 'alt_en' => 'Story Portrait'],
++            ['page' => 'catering', 'section' => 'quote_form', 'key' => 'image', 'alt_ar' => 'صورة فورم الكاترينج', 'alt_en' => 'Catering Form Image'],
++            ['page' => 'global', 'section' => 'textures', 'key' => 'green', 'alt_ar' => 'تكستشر أخضر', 'alt_en' => 'Green Texture'],
++            ['page' => 'global', 'section' => 'textures', 'key' => 'gold', 'alt_ar' => 'تكستشر ذهبي', 'alt_en' => 'Gold Texture'],
++            ['page' => 'global', 'section' => 'textures', 'key' => 'red', 'alt_ar' => 'تكستشر أحمر', 'alt_en' => 'Red Texture'],
++        ];
++
++        foreach ($mediaItems as $item) {
++            MediaItem::create($item);
++        }
++    }
++}
+diff --git a/database/seeders/PageContentSeeder.php b/database/seeders/PageContentSeeder.php
+new file mode 100644
+index 0000000..0000000
+--- /dev/null
++++ b/database/seeders/PageContentSeeder.php
+@@ -0,0 +1,110 @@
++<?php
++
++namespace Database\Seeders;
++
++use App\Models\PageContent;
++use Illuminate\Database\Seeder;
++
++class PageContentSeeder extends Seeder
++{
++    public function run(): void
++    {
++        $contents = [
++            // ── HOME PAGE ────────────────────────────────────────────
++            ['page' => 'home', 'section' => 'hero', 'key' => 'badge', 'value_ar' => 'من القاهرة القديمة · EST. OLD CAIRO', 'value_en' => 'From Old Cairo · EST. 1995'],
++            ['page' => 'home', 'section' => 'hero', 'key' => 'title', 'value_ar' => 'أبو السيد', 'value_en' => 'Abou El Sid'],
++            ['page' => 'home', 'section' => 'hero', 'key' => 'subtitle', 'value_ar' => 'Heritage Egyptian Dining', 'value_en' => 'Heritage Egyptian Dining'],
++            ['page' => 'home', 'section' => 'hero', 'key' => 'description', 'value_ar' => 'المطعم المصري الأصيل في قلب السعودية — حيث تلتقي القاهرة القديمة بكرم الضيافة الخليجية، على مائدة تحكي حكاية.', 'value_en' => 'The authentic Egyptian restaurant at the heart of Saudi Arabia — where Old Cairo meets Gulf hospitality, on a table that tells a story.'],
++            ['page' => 'home', 'section' => 'hero', 'key' => 'cta_primary', 'value_ar' => 'اطلب أونلاين', 'value_en' => 'Order Online'],
++            ['page' => 'home', 'section' => 'hero', 'key' => 'cta_secondary', 'value_ar' => 'تصفّح الأطباق', 'value_en' => 'Browse Menu'],
++            ['page' => 'home', 'section' => 'hero', 'key' => 'scroll_label', 'value_ar' => 'اكتشف المزيد', 'value_en' => 'Discover More'],
++
++            ['page' => 'home', 'section' => 'dishes', 'key' => 'badge', 'value_ar' => 'أطباقنا', 'value_en' => 'Our Dishes'],
++            ['page' => 'home', 'section' => 'dishes', 'key' => 'title', 'value_ar' => 'الأطباق التي عشقها الناس', 'value_en' => 'Dishes People Have Loved'],
++            ['page' => 'home', 'section' => 'dishes', 'key' => 'subtitle', 'value_ar' => 'أطباق توارثناها جيلاً بعد جيل', 'value_en' => 'Dishes passed down through generations'],
++            ['page' => 'home', 'section' => 'dishes', 'key' => 'cta', 'value_ar' => 'شاهد القائمة الكاملة', 'value_en' => 'View Full Menu'],
++
++            ['page' => 'home', 'section' => 'story_teaser', 'key' => 'badge', 'value_ar' => 'حكايتنا · OUR STORY', 'value_en' => 'Our Story · OUR STORY'],
++            ['page' => 'home', 'section' => 'story_teaser', 'key' => 'title', 'value_ar' => 'من بيت في القاهرة القديمة إلى موائدكم اليوم', 'value_en' => 'From a House in Old Cairo to Your Tables Today'],
++            ['page' => 'home', 'section' => 'story_teaser', 'key' => 'description', 'value_ar' => 'في أزقة القاهرة القديمة، كان رجلٌ كريم اسمه «أبو السيد» يفتح بيته للضيوف، ويُطعمهم من طبخه بقلب.', 'value_en' => 'In the alleys of Old Cairo, a generous man named Abou El Sid opened his home to guests and fed them from his heart.'],
++            ['page' => 'home', 'section' => 'story_teaser', 'key' => 'cta', 'value_ar' => 'اقرأ حكايتنا', 'value_en' => 'Read Our Story'],
++
++            ['page' => 'home', 'section' => 'catering', 'key' => 'badge', 'value_ar' => 'الكاترينج · CATERING', 'value_en' => 'Catering · CATERING'],
++            ['page' => 'home', 'section' => 'catering', 'key' => 'title', 'value_ar' => 'نكهة أبو السيد في مناسباتكم', 'value_en' => 'Abou El Sid Flavor at Your Events'],
++            ['page' => 'home', 'section' => 'catering', 'key' => 'subtitle', 'value_ar' => 'من العزائم العائلية إلى المناسبات الكبرى — نوصّل مائدة القاهرة القديمة إلى حفلكم، بنفس الأصالة والطعم.', 'value_en' => 'From family gatherings to grand events — we bring the Old Cairo table to your celebration with the same authenticity and taste.'],
++            ['page' => 'home', 'section' => 'catering', 'key' => 'cta', 'value_ar' => 'اطلب عرض سعر مخصص', 'value_en' => 'Request a Custom Quote'],
++
++            ['page' => 'home', 'section' => 'branches', 'key' => 'badge', 'value_ar' => 'فروعنا · OUR LOCATIONS', 'value_en' => 'Our Branches · OUR LOCATIONS'],
++            ['page' => 'home', 'section' => 'branches', 'key' => 'title', 'value_ar' => 'زورونا في فروعنا', 'value_en' => 'Visit Our Branches'],
++            ['page' => 'home', 'section' => 'branches', 'key' => 'subtitle', 'value_ar' => 'في قلب جدة والرياض — نفتح أبوابنا يومياً من الظهيرة حتى الفجر.', 'value_en' => 'In the heart of Jeddah and Riyadh — we open our doors daily from noon until dawn.'],
++            ['page' => 'home', 'section' => 'branches', 'key' => 'cta', 'value_ar' => 'احصل على الاتجاهات', 'value_en' => 'Get Directions'],
++
++            ['page' => 'home', 'section' => 'testimonials', 'key' => 'badge', 'value_ar' => 'ضيوفنا يحكون · WHAT GUESTS SAY', 'value_en' => 'What Guests Say · WHAT GUESTS SAY'],
++            ['page' => 'home', 'section' => 'testimonials', 'key' => 'title', 'value_ar' => 'حكايات من موائدنا', 'value_en' => 'Stories from Our Tables'],
++            ['page' => 'home', 'section' => 'testimonials', 'key' => 'subtitle', 'value_ar' => 'كلمات من ضيوف شاركونا لحظاتهم على مائدة أبو السيد.', 'value_en' => 'Words from guests who shared their moments at the Abou El Sid table.'],
++
++            ['page' => 'home', 'section' => 'cta_final', 'key' => 'title', 'value_ar' => 'جربنا في فروعنا — أو وصّلنا لباب بيتك', 'value_en' => 'Try Us at Our Branches — or We Deliver to Your Door'],
++            ['page' => 'home', 'section' => 'cta_final', 'key' => 'subtitle', 'value_ar' => 'أبواب أبو السيد مفتوحة من 12 ظهراً حتى 1 صباحاً.', 'value_en' => 'Abou El Sid doors are open from 12 noon until 1 AM.'],
++            ['page' => 'home', 'section' => 'cta_final', 'key' => 'cta_primary', 'value_ar' => 'اطلب أونلاين', 'value_en' => 'Order Online'],
++            ['page' => 'home', 'section' => 'cta_final', 'key' => 'cta_secondary', 'value_ar' => 'زورونا في فروعنا', 'value_en' => 'Visit Our Branches'],
++
++            // ── STORY PAGE ───────────────────────────────────────────
++            ['page' => 'story', 'section' => 'hero', 'key' => 'badge', 'value_ar' => 'حكايتنا · OUR STORY', 'value_en' => 'Our Story · OUR STORY'],
++            ['page' => 'story', 'section' => 'hero', 'key' => 'title', 'value_ar' => 'من بيت في القاهرة القديمة إلى موائدكم اليوم', 'value_en' => 'From a House in Old Cairo to Your Tables Today'],
++            ['page' => 'story', 'section' => 'hero', 'key' => 'description', 'value_ar' => 'في أزقة القاهرة القديمة، كان رجلٌ كريم اسمه «أبو السيد» يفتح بيته للضيوف، ويُطعمهم من طبخه بقلب.', 'value_en' => 'In the alleys of Old Cairo, a generous man named Abou El Sid opened his home to guests and fed them from his heart.'],
++            ['page' => 'story', 'section' => 'journey', 'key' => 'badge', 'value_ar' => 'رحلتنا · OUR JOURNEY', 'value_en' => 'Our Journey · OUR JOURNEY'],
++            ['page' => 'story', 'section' => 'journey', 'key' => 'title', 'value_ar' => 'رحلتنا', 'value_en' => 'Our Journey'],
++            ['page' => 'story', 'section' => 'journey', 'key' => 'subtitle', 'value_ar' => 'من القاهرة القديمة، إلى ساحل البحر الأحمر، إلى قلب الرياض.', 'value_en' => 'From Old Cairo, to the Red Sea coast, to the heart of Riyadh.'],
++
++            // ── MENU PAGE ────────────────────────────────────────────
++            ['page' => 'menu', 'section' => 'hero', 'key' => 'badge', 'value_ar' => 'أطباقنا · OUR MENU', 'value_en' => 'Our Menu · OUR MENU'],
++            ['page' => 'menu', 'section' => 'hero', 'key' => 'title', 'value_ar' => 'أطباق توارثناها جيلاً بعد جيل', 'value_en' => 'Dishes Passed Down Through Generations'],
++            ['page' => 'menu', 'section' => 'hero', 'key' => 'subtitle', 'value_ar' => 'Most-loved dishes from old Cairo', 'value_en' => 'Most-loved dishes from old Cairo'],
++            ['page' => 'menu', 'section' => 'hero', 'key' => 'pdf_cta', 'value_ar' => 'حمّل القائمة PDF', 'value_en' => 'Download Menu PDF'],
++            ['page' => 'menu', 'section' => 'cta', 'key' => 'title', 'value_ar' => 'جربنا في فروعنا — أو وصّلنا لباب بيتك', 'value_en' => 'Try Us at Our Branches — or We Deliver to Your Door'],
++            ['page' => 'menu', 'section' => 'cta', 'key' => 'subtitle', 'value_ar' => 'أبواب أبو السيد مفتوحة من 12 ظهراً حتى 1 صباحاً.', 'value_en' => 'Abou El Sid doors are open from 12 noon until 1 AM.'],
++            ['page' => 'menu', 'section' => 'cta', 'key' => 'cta_primary', 'value_ar' => 'اطلب أونلاين', 'value_en' => 'Order Online'],
++            ['page' => 'menu', 'section' => 'cta', 'key' => 'cta_secondary', 'value_ar' => 'زورونا في فروعنا', 'value_en' => 'Visit Our Branches'],
++
++            // ── ORDER PAGE ───────────────────────────────────────────
++            ['page' => 'order', 'section' => 'hero', 'key' => 'badge', 'value_ar' => 'اطلب الآن · ORDER NOW', 'value_en' => 'Order Now · ORDER NOW'],
++            ['page' => 'order', 'section' => 'hero', 'key' => 'title', 'value_ar' => 'اطلب أونلاين', 'value_en' => 'Order Online'],
++            ['page' => 'order', 'section' => 'hero', 'key' => 'subtitle', 'value_ar' => 'وصّلنا لبابك — أو اطلب مباشرة عبر واتساب.', 'value_en' => 'We deliver to your door — or order directly via WhatsApp.'],
++            ['page' => 'order', 'section' => 'info_bar', 'key' => 'hours', 'value_ar' => 'التوصيل من 12 ظهراً حتى 1 صباحاً', 'value_en' => 'Delivery from 12 noon until 1 AM'],
++            ['page' => 'order', 'section' => 'info_bar', 'key' => 'branches', 'value_ar' => 'من فرعَي جدة والرياض', 'value_en' => 'From our Jeddah and Riyadh branches'],
++            ['page' => 'order', 'section' => 'info_bar', 'key' => 'payment', 'value_ar' => 'دفع آمن عبر التطبيقات', 'value_en' => 'Secure payment via apps'],
++            ['page' => 'order', 'section' => 'apps', 'key' => 'title', 'value_ar' => 'تطبيقات التوصيل', 'value_en' => 'Delivery Apps'],
++            ['page' => 'order', 'section' => 'apps', 'key' => 'subtitle', 'value_ar' => 'اختر التطبيق الذي تفضّله — كلهم يوصلونك أبو السيد سريعاً.', 'value_en' => 'Choose the app you prefer — they all deliver Abou El Sid quickly.'],
++            ['page' => 'order', 'section' => 'apps', 'key' => 'btn_prefix', 'value_ar' => 'اطلب الآن من', 'value_en' => 'Order Now from'],
++            ['page' => 'order', 'section' => 'whatsapp', 'key' => 'badge', 'value_ar' => 'WHATSAPP DIRECT ORDER', 'value_en' => 'WHATSAPP DIRECT ORDER'],
++            ['page' => 'order', 'section' => 'whatsapp', 'key' => 'title', 'value_ar' => 'اطلب مباشرة عبر واتساب', 'value_en' => 'Order Directly via WhatsApp'],
++            ['page' => 'order', 'section' => 'whatsapp', 'key' => 'description', 'value_ar' => 'تحدث مع فريق المطعم مباشرة — طلب سريع، تخصيص حسب رغبتك، وتجربة شخصية كأنك تطلب من بيت أبو السيد.', 'value_en' => 'Speak directly with the restaurant team — fast order, customized to your preference, a personal experience as if ordering from Abou El Sid\'s home.'],
++            ['page' => 'order', 'section' => 'whatsapp', 'key' => 'cta', 'value_ar' => 'ابدأ المحادثة الآن', 'value_en' => 'Start the Conversation Now'],
++
++            // ── CATERING PAGE ────────────────────────────────────────
++            ['page' => 'catering', 'section' => 'hero', 'key' => 'badge', 'value_ar' => 'الكاترينج · CATERING', 'value_en' => 'Catering · CATERING'],
++            ['page' => 'catering', 'section' => 'hero', 'key' => 'title', 'value_ar' => 'نكهة أبو السيد في مناسباتكم', 'value_en' => 'Abou El Sid Flavor at Your Events'],
++            ['page' => 'catering', 'section' => 'hero', 'key' => 'subtitle', 'value_ar' => 'من العزائم العائلية إلى المناسبات الكبرى.', 'value_en' => 'From family gatherings to grand events.'],
++            ['page' => 'catering', 'section' => 'packages', 'key' => 'title', 'value_ar' => 'باقاتنا', 'value_en' => 'Our Packages'],
++            ['page' => 'catering', 'section' => 'packages', 'key' => 'subtitle', 'value_ar' => 'اختر الباقة التي تناسب مناسبتكم.', 'value_en' => 'Choose the package that suits your occasion.'],
++            ['page' => 'catering', 'section' => 'sample_menus', 'key' => 'badge', 'value_ar' => 'Sample Menus', 'value_en' => 'Sample Menus'],
++            ['page' => 'catering', 'section' => 'sample_menus', 'key' => 'title', 'value_ar' => 'نماذج من قوائمنا', 'value_en' => 'Sample Menus'],
++            ['page' => 'catering', 'section' => 'sample_menus', 'key' => 'subtitle', 'value_ar' => 'Choose Your Feast', 'value_en' => 'Choose Your Feast'],
++            ['page' => 'catering', 'section' => 'quote_form', 'key' => 'title', 'value_ar' => 'اطلب عرض سعر مخصّص', 'value_en' => 'Request a Custom Quote'],
++            ['page' => 'catering', 'section' => 'quote_form', 'key' => 'subtitle', 'value_ar' => 'شاركنا تفاصيل مناسبتكم وسنعدّ لكم عرضاً يليق بها.', 'value_en' => 'Share your event details and we will prepare a quote worthy of it.'],
++            ['page' => 'catering', 'section' => 'quote_form', 'key' => 'cta', 'value_ar' => 'اطلب عرض سعر', 'value_en' => 'Request a Quote'],
++            ['page' => 'catering', 'section' => 'quote_form', 'key' => 'success_msg', 'value_ar' => 'تم استلام طلبكم، سنتواصل معكم قريباً.', 'value_en' => 'Your request has been received, we will contact you soon.'],
++            ['page' => 'catering', 'section' => 'quote_form', 'key' => 'prices_note', 'value_ar' => 'الأسعار تقريبية وتشمل التحضير والتقديم. الأسعار النهائية تُحتسب بناءً على القائمة والموقع وعدد الضيوف.', 'value_en' => 'Prices are approximate and include preparation and serving. Final prices are calculated based on the menu, location, and number of guests.'],
++
++            // ── BRANCHES PAGE ────────────────────────────────────────
++            ['page' => 'branches', 'section' => 'hero', 'key' => 'badge', 'value_ar' => 'فروعنا · OUR LOCATIONS', 'value_en' => 'Our Branches · OUR LOCATIONS'],
++            ['page' => 'branches', 'section' => 'hero', 'key' => 'title', 'value_ar' => 'فروعنا', 'value_en' => 'Our Branches'],
++            ['page' => 'branches', 'section' => 'hero', 'key' => 'subtitle', 'value_ar' => 'في قلب جدة والرياض — نفتح أبوابنا يومياً من الظهيرة حتى الفجر.', 'value_en' => 'In the heart of Jeddah and Riyadh — we open our doors daily from noon until dawn.'],
++            ['page' => 'branches', 'section' => 'hero', 'key' => 'directions_cta', 'value_ar' => 'احصل على الاتجاهات', 'value_en' => 'Get Directions'],
++        ];
++
++        foreach ($contents as $content) {
++            PageContent::create($content);
++        }
++    }
++}
+diff --git a/database/seeders/SampleMenuSeeder.php b/database/seeders/SampleMenuSeeder.php
+new file mode 100644
+index 0000000..0000000
+--- /dev/null
++++ b/database/seeders/SampleMenuSeeder.php
+@@ -0,0 +1,60 @@
++<?php
++
++namespace Database\Seeders;
++
++use App\Models\SampleMenu;
++use Illuminate\Database\Seeder;
++
++class SampleMenuSeeder extends Seeder
++{
++    public function run(): void
++    {
++        $menus = [
++            [
++                'name_ar' => 'القائمة التراثية', 'name_en' => 'Heritage Menu',
++                'tag_en' => 'Classic · 6 dishes', 'is_featured' => false, 'order' => 1,
++                'dishes' => [
++                    ['dish_name_ar' => 'ملوخية بالأرانب', 'dish_name_en' => 'Molokhia with Rabbit', 'order' => 1],
++                    ['dish_name_ar' => 'محشي ورق عنب', 'dish_name_en' => 'Stuffed Grape Leaves', 'order' => 2],
++                    ['dish_name_ar' => 'كبدة إسكندراني', 'dish_name_en' => 'Alexandrian Liver', 'order' => 3],
++                    ['dish_name_ar' => 'طاجن لحمة بالبصل', 'dish_name_en' => 'Meat Tagine with Onions', 'order' => 4],
++                    ['dish_name_ar' => 'أم علي بالمكسرات', 'dish_name_en' => 'Om Ali with Nuts', 'order' => 5],
++                    ['dish_name_ar' => 'كركديه وشاي بالنعناع', 'dish_name_en' => 'Hibiscus and Mint Tea', 'order' => 6],
++                ],
++            ],
++            [
++                'name_ar' => 'قائمة البحر', 'name_en' => 'Seafood Menu',
++                'tag_en' => 'Seafood · 5 dishes', 'is_featured' => false, 'order' => 2,
++                'dishes' => [
++                    ['dish_name_ar' => 'طاجن سيفود', 'dish_name_en' => 'Seafood Tagine', 'order' => 1],
++                    ['dish_name_ar' => 'سمك صيادية', 'dish_name_en' => 'Fish Sayadieh', 'order' => 2],
++                    ['dish_name_ar' => 'جمبري مشوي بالثوم', 'dish_name_en' => 'Grilled Garlic Shrimp', 'order' => 3],
++                    ['dish_name_ar' => 'سلطات شرقية متنوعة', 'dish_name_en' => 'Assorted Oriental Salads', 'order' => 4],
++                    ['dish_name_ar' => 'كنافة بالقشطة', 'dish_name_en' => 'Kunafa with Cream', 'order' => 5],
++                ],
++            ],
++            [
++                'name_ar' => 'القائمة الملكية', 'name_en' => 'Royal Menu',
++                'tag_en' => 'Royal · 8 dishes', 'is_featured' => true, 'order' => 3,
++                'dishes' => [
++                    ['dish_name_ar' => 'حمام محشي بالفريك', 'dish_name_en' => 'Stuffed Pigeon with Freekeh', 'order' => 1],
++                    ['dish_name_ar' => 'بط مشوي على الفحم', 'dish_name_en' => 'Charcoal Grilled Duck', 'order' => 2],
++                    ['dish_name_ar' => 'ملوخية بالأرانب', 'dish_name_en' => 'Molokhia with Rabbit', 'order' => 3],
++                    ['dish_name_ar' => 'طاجن سيفود فاخر', 'dish_name_en' => 'Luxury Seafood Tagine', 'order' => 4],
++                    ['dish_name_ar' => 'كباب حلّة بالخضار', 'dish_name_en' => 'Pot Kebab with Vegetables', 'order' => 5],
++                    ['dish_name_ar' => 'أم علي + بسبوسة', 'dish_name_en' => 'Om Ali and Basbousa', 'order' => 6],
++                    ['dish_name_ar' => 'قهوة عربية وحلويات', 'dish_name_en' => 'Arabic Coffee and Sweets', 'order' => 7],
++                    ['dish_name_ar' => 'محطة طبخ حية', 'dish_name_en' => 'Live Cooking Station', 'order' => 8],
++                ],
++            ],
++        ];
++
++        foreach ($menus as $menu) {
++            $dishes = $menu['dishes'];
++            unset($menu['dishes']);
++
++            $createdMenu = SampleMenu::create($menu);
++            $createdMenu->dishes()->createMany($dishes);
++        }
++    }
++}
+diff --git a/database/seeders/SettingSeeder.php b/database/seeders/SettingSeeder.php
+new file mode 100644
+index 0000000..0000000
+--- /dev/null
++++ b/database/seeders/SettingSeeder.php
+@@ -0,0 +1,36 @@
++<?php
++
++namespace Database\Seeders;
++
++use App\Models\Setting;
++use Illuminate\Database\Seeder;
++
++class SettingSeeder extends Seeder
++{
++    public function run(): void
++    {
++        $settings = [
++            ['key' => 'whatsapp_number', 'value' => '+966551718800', 'type' => 'phone', 'group' => 'contact', 'label_ar' => 'رقم واتساب', 'label_en' => 'WhatsApp Number'],
++            ['key' => 'phone_jeddah', 'value' => '0551718800', 'type' => 'phone', 'group' => 'contact', 'label_ar' => 'هاتف جدة', 'label_en' => 'Jeddah Phone'],
++            ['key' => 'phone_riyadh', 'value' => '0581041912', 'type' => 'phone', 'group' => 'contact', 'label_ar' => 'هاتف الرياض', 'label_en' => 'Riyadh Phone'],
++            ['key' => 'opening_time', 'value' => '12:00', 'type' => 'text', 'group' => 'hours', 'label_ar' => 'وقت الفتح', 'label_en' => 'Opening Time'],
++            ['key' => 'closing_time', 'value' => '01:00', 'type' => 'text', 'group' => 'hours', 'label_ar' => 'وقت الإغلاق', 'label_en' => 'Closing Time'],
++            ['key' => 'hours_display_ar', 'value' => '12 ظهراً — 1 صباحاً', 'type' => 'text', 'group' => 'hours', 'label_ar' => 'ساعات العمل (عربي)', 'label_en' => 'Working Hours (Arabic)'],
++            ['key' => 'hours_display_en', 'value' => '12 PM — 1 AM', 'type' => 'text', 'group' => 'hours', 'label_ar' => 'ساعات العمل (إنجليزي)', 'label_en' => 'Working Hours (English)'],
++            ['key' => 'instagram_url', 'value' => 'https://instagram.com/examplecorp_ksa', 'type' => 'url', 'group' => 'social', 'label_ar' => 'انستجرام', 'label_en' => 'Instagram'],
++            ['key' => 'tiktok_url', 'value' => 'https://tiktok.com/@examplecorp_ksa', 'type' => 'url', 'group' => 'social', 'label_ar' => 'تيكتوك', 'label_en' => 'TikTok'],
++            ['key' => 'snapchat_url', 'value' => 'https://snapchat.com/add/examplecorp_ksa', 'type' => 'url', 'group' => 'social', 'label_ar' => 'سناب شات', 'label_en' => 'Snapchat'],
++            ['key' => 'twitter_url', 'value' => 'https://x.com/examplecorp_ksa', 'type' => 'url', 'group' => 'social', 'label_ar' => 'X (تويتر)', 'label_en' => 'X (Twitter)'],
++            ['key' => 'social_handle', 'value' => '@examplecorp_ksa', 'type' => 'text', 'group' => 'social', 'label_ar' => 'المعرّف', 'label_en' => 'Social Handle'],
++            ['key' => 'footer_tagline_ar', 'value' => 'أبو السيد — حكاية مصرية، نكهة أصيلة.', 'type' => 'text', 'group' => 'footer', 'label_ar' => 'شعار الفوتر (عربي)', 'label_en' => 'Footer Tagline (Arabic)'],
++            ['key' => 'footer_tagline_en', 'value' => 'Heritage soul · Modern table', 'type' => 'text', 'group' => 'footer', 'label_ar' => 'شعار الفوتر (إنجليزي)', 'label_en' => 'Footer Tagline (English)'],
++            ['key' => 'footer_copyright', 'value' => '© 2026 أبو السيد. جميع الحقوق محفوظة.', 'type' => 'text', 'group' => 'footer', 'label_ar' => 'نص الحقوق', 'label_en' => 'Copyright Text'],
++            ['key' => 'navbar_cta_ar', 'value' => 'اطلب أونلاين', 'type' => 'text', 'group' => 'navbar', 'label_ar' => 'زر الهيدر (عربي)', 'label_en' => 'Navbar CTA (Arabic)'],
++            ['key' => 'navbar_cta_en', 'value' => 'Order Online', 'type' => 'text', 'group' => 'navbar', 'label_ar' => 'زر الهيدر (إنجليزي)', 'label_en' => 'Navbar CTA (English)'],
++        ];
++
++        foreach ($settings as $setting) {
++            Setting::create($setting);
++        }
++    }
++}
+diff --git a/database/seeders/TestimonialSeeder.php b/database/seeders/TestimonialSeeder.php
+new file mode 100644
+index 0000000..0000000
+--- /dev/null
++++ b/database/seeders/TestimonialSeeder.php
+@@ -0,0 +1,29 @@
++<?php
++
++namespace Database\Seeders;
++
++use App\Models\Testimonial;
++use Illuminate\Database\Seeder;
++
++class TestimonialSeeder extends Seeder
++{
++    public function run(): void
++    {
++        $testimonials = [
++            ['name' => 'نورة العتيبي', 'quote_ar' => 'أحسن ملوخية بالأرانب أكلتها خارج مصر — طعم البيت الأصيل.', 'quote_en' => 'Best molokhia with rabbit I had outside Egypt — truly authentic home taste.', 'order' => 1],
++            ['name' => 'أحمد الغامدي', 'quote_ar' => 'المكان والأكل والخدمة كلها تحكي أصالة. تجربة تستحق التكرار.', 'quote_en' => 'The place, food, and service all speak authenticity. An experience worth repeating.', 'order' => 2],
++            ['name' => 'سارة القحطاني', 'quote_ar' => 'حجزنا مناسبة عائلية والكاترينج كان فوق التوقعات. شكراً أبو السيد.', 'quote_en' => 'We booked a family event and the catering exceeded expectations. Thank you Abou El Sid.', 'order' => 3],
++            ['name' => 'خالد الدوسري', 'quote_ar' => 'الكبدة الإسكندراني هنا خيال — بتفكّرني بأيام القاهرة.', 'quote_en' => 'The Alexandrian liver here is incredible — it reminds me of Cairo days.', 'order' => 4],
++            ['name' => 'ريم الشهري', 'quote_ar' => 'أجواء راقية وطعم مصري أصيل. صار مكاننا المفضّل في جدة.', 'quote_en' => 'Elegant atmosphere and authentic Egyptian taste. It became our favorite spot in Jeddah.', 'order' => 5],
++            ['name' => 'فيصل المطيري', 'quote_ar' => 'الخدمة سريعة والتقديم أنيق، وكل طبق له حكاية.', 'quote_en' => 'Fast service, elegant presentation, and every dish tells a story.', 'order' => 6],
++            ['name' => 'لمى العنزي', 'quote_ar' => 'طلبت أونلاين ووصل الطلب ساخن وبنفس جودة المطعم.', 'quote_en' => 'I ordered online and the food arrived hot with the same quality as the restaurant.', 'order' => 7],
++            ['name' => 'عبدالله الحربي', 'quote_ar' => 'الطواجن على السمن البلدي طعمها ما ينوصف. تسلم أياديكم.', 'quote_en' => 'The tagines in local ghee are indescribably good. Hands of gold.', 'order' => 8],
++            ['name' => 'هند القرني', 'quote_ar' => 'احتفلنا بعيد ميلاد والدتي هنا وكانت ليلة لا تُنسى.', 'quote_en' => 'We celebrated my mother\'s birthday here and it was an unforgettable night.', 'order' => 9],
++            ['name' => 'ماجد السبيعي', 'quote_ar' => 'أصالة في كل تفصيلة — من الديكور للطبق للقهوة العربية.', 'quote_en' => 'Authenticity in every detail — from the decor to the dish to the Arabic coffee.', 'order' => 10],
++        ];
++
++        foreach ($testimonials as $testimonial) {
++            Testimonial::create($testimonial);
++        }
++    }
++}
+diff --git a/database/seeders/TimelineSeeder.php b/database/seeders/TimelineSeeder.php
+new file mode 100644
+index 0000000..0000000
+--- /dev/null
++++ b/database/seeders/TimelineSeeder.php
+@@ -0,0 +1,24 @@
++<?php
++
++namespace Database\Seeders;
++
++use App\Models\Timeline;
++use Illuminate\Database\Seeder;
++
++class TimelineSeeder extends Seeder
++{
++    public function run(): void
++    {
++        $timelines = [
++            ['year' => '1995', 'location_en' => 'Cairo · Egypt', 'title_ar' => 'الانطلاقة من القاهرة القديمة', 'title_en' => 'The Start from Old Cairo', 'description_ar' => 'افتتاح أول مطعم بوصفات أبو السيد الأصلية في حي الزمالك بالقاهرة — قائمة من تراث الجدّات، وأجواء من ديكور القاهرة الخديوية.', 'description_en' => 'Opening of the first restaurant with Abou El Sid\'s original recipes in Zamalek, Cairo — a menu from grandmothers\' heritage and the ambiance of Khedival Cairo.', 'order' => 1],
++            ['year' => '2012', 'location_en' => 'Across the Gulf', 'title_ar' => 'رحلة الخليج', 'title_en' => 'The Gulf Journey', 'description_ar' => 'العبور إلى دول الخليج بنفس الوصفات السرية، ونفس الديكور المستوحى من المشربيات والنحاسيات المصرية.', 'description_en' => 'Crossing to the Gulf countries with the same secret recipes and the same decor inspired by Egyptian mashrabiyas and brass work.', 'order' => 2],
++            ['year' => '2018', 'location_en' => 'Jeddah · Red Sea Mall', 'title_ar' => 'فرع جدة — ردسي مول', 'title_en' => 'Jeddah Branch — Red Sea Mall', 'description_ar' => 'افتتاح أول فرع في المملكة العربية السعودية في ردسي مول بجدة، ليصير ملتقى عشاق المطبخ المصري الأصيل على ساحل البحر الأحمر.', 'description_en' => 'Opening the first branch in Saudi Arabia at Red Sea Mall in Jeddah, becoming the meeting point for lovers of authentic Egyptian cuisine on the Red Sea coast.', 'order' => 3],
++            ['year' => '2022', 'location_en' => 'Riyadh · Esplanade', 'title_ar' => 'فرع الرياض — مجمع اسبلاناد', 'title_en' => 'Riyadh Branch — Esplanade Mall', 'description_ar' => 'التوسّع إلى العاصمة بفرع جديد في مجمع اسبلاناد، بمساحات أوسع وقاعات خاصة للمناسبات، وبنفس روح أبو السيد.', 'description_en' => 'Expanding to the capital with a new branch at Esplanade Mall, with wider spaces, private event halls, and the same Abou El Sid spirit.', 'order' => 4],
++            ['year' => 'Today', 'location_en' => 'Tomorrow', 'title_ar' => 'والحكاية بتكمّل', 'title_en' => 'And the Story Continues', 'description_ar' => 'نواصل اليوم تقديم تجربة طعام أصيلة، ونحضّر فروعاً جديدة في المملكة، ومائدة الكاترينج لكل مناسبة كبيرة في حياتكم.', 'description_en' => 'We continue today to deliver an authentic dining experience, preparing new branches across the Kingdom, and catering tables for every big occasion in your life.', 'order' => 5],
++        ];
++
++        foreach ($timelines as $timeline) {
++            Timeline::create($timeline);
++        }
++    }
++}
+diff --git a/database/seeders/UserSeeder.php b/database/seeders/UserSeeder.php
+new file mode 100644
+index 0000000..0000000
+--- /dev/null
++++ b/database/seeders/UserSeeder.php
+@@ -0,0 +1,27 @@
++<?php
++
++namespace Database\Seeders;
++
++use App\Models\User;
++use Illuminate\Database\Seeder;
++use Illuminate\Support\Facades\Hash;
++use Spatie\Permission\Models\Role;
++
++class UserSeeder extends Seeder
++{
++    public function run(): void
++    {
++        Role::firstOrCreate(['name' => 'super_admin', 'guard_name' => 'web']);
++        Role::firstOrCreate(['name' => 'admin', 'guard_name' => 'web']);
++        Role::firstOrCreate(['name' => 'manager', 'guard_name' => 'web']);
++
++        $user = User::create([
++            'name' => 'Admin',
++            'email' => 'admin@examplecorp.com',
++            'password' => Hash::make('password'),
++            'role' => 'super_admin',
++        ]);
++
++        $user->assignRole('super_admin');
++    }
++}

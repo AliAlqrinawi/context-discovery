@@ -1,0 +1,83 @@
+{
+    "bundle_version": 1,
+    "budget_tokens": 8000,
+    "used_tokens": 124,
+    "items": [
+        {
+            "lever": "fetched",
+            "reason": "the region calls the sibling member restockItems, whose contract the diff does not show",
+            "assertion_kind": "same_file_reference",
+            "provenance": {
+                "path": "app/Repositories/OrderRepository.php",
+                "member": "restockItems",
+                "lines": [
+                    56,
+                    61
+                ]
+            },
+            "payload": "    public function restockItems($model)\n    {\n        foreach ($model->items()->with('product')->get() as $item) {\n            $item->product->increment('quantity', $item->quantity);\n        }\n    }",
+            "tokens": 50
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Enum\\OrderStatusEnum::CANCELLED, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Enum/OrderStatusEnum.php",
+                "member": "CANCELLED",
+                "lines": [
+                    11,
+                    11
+                ]
+            },
+            "payload": "  const CANCELLED = 'cancelled';",
+            "tokens": 8
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Order::orderIds, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Order.php",
+                "member": "scopeOrderIds",
+                "lines": [
+                    157,
+                    160
+                ]
+            },
+            "payload": "   public function scopeOrderIds($query,$value)\n   {\n       return $query->whereIn('id',$value);\n   }",
+            "tokens": 26
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on Illuminate\\Support\\Facades\\DB::beginTransaction, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/OrderRepository.php",
+                "member": "Illuminate\\Support\\Facades\\DB::beginTransaction",
+                "lines": [
+                    105,
+                    120
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on Illuminate\\Support\\Facades\\DB::commit, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/OrderRepository.php",
+                "member": "Illuminate\\Support\\Facades\\DB::commit",
+                "lines": [
+                    105,
+                    120
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        }
+    ],
+    "dropped": []
+}

@@ -1,0 +1,790 @@
+# Context bundle
+
+bundle_version 1 · budget 8000 / used 1372 tokens
+
+## fetched · same_file_symbol_absence
+
+**Reason:** the region uses var_export, which the file's use block does not import
+**Source:** `app/Actions/Branch/GetBranchesAction.php` (lines 5-7)
+**Tokens:** 31
+
+```php
+use App\Repositories\BranchRepository;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Cache;
+```
+
+## fetched · same_file_symbol_absence
+
+**Reason:** the region uses var_export, which the file's use block does not import
+**Source:** `app/Actions/Branch/GetBranchesAction.php` :: `__construct` (lines 11-13)
+**Tokens:** 24
+
+```php
+    public function __construct(
+        private readonly BranchRepository $repository,
+    ) {}
+```
+
+## fetched · same_file_reference
+
+**Reason:** the region calls the sibling member apiKey, whose contract the diff does not show
+**Source:** `tests/Feature/PublicApiTest.php` :: `apiKey` (lines 20-23)
+**Tokens:** 25
+
+```php
+    private function apiKey(): string
+    {
+        return config('services.website_api_key');
+    }
+```
+
+## fetched · changed_signature
+
+**Reason:** the signature of execute changed; its call sites are not shown by the diff
+**Source:** `app/Actions/Auth/LoginAction.php` (lines 12-12)
+**Tokens:** 13
+
+```php
+    public function execute(LoginDTO $dto): array
+```
+
+## fetched · changed_signature
+
+**Reason:** the signature of execute changed; its call sites are not shown by the diff
+**Source:** `app/Actions/Auth/LogoutAction.php` (lines 9-9)
+**Tokens:** 12
+
+```php
+    public function execute(User $user): void
+```
+
+## fetched · changed_signature
+
+**Reason:** the signature of execute changed; its call sites are not shown by the diff
+**Source:** `app/Actions/Branch/CreateBranchAction.php` (lines 18-18)
+**Tokens:** 15
+
+```php
+    public function execute(CreateBranchDTO $dto): Branch
+```
+
+## fetched · changed_signature
+
+**Reason:** the signature of execute changed; its call sites are not shown by the diff
+**Source:** `app/Actions/Branch/DeleteBranchAction.php` (lines 16-16)
+**Tokens:** 11
+
+```php
+    public function execute(int $id): void
+```
+
+## fetched · changed_signature
+
+**Reason:** the signature of execute changed; its call sites are not shown by the diff
+**Source:** `app/Actions/Branch/GetBranchesAction.php` (lines 15-15)
+**Tokens:** 17
+
+```php
+    public function execute(?bool $showInFooter = null): Collection
+```
+
+## fetched · changed_signature
+
+**Reason:** the signature of getAll changed; its call sites are not shown by the diff
+**Source:** `app/Actions/Branch/GetBranchesAction.php` (lines 24-24)
+**Tokens:** 16
+
+```php
+            fn () => $this->repository->getAll($showInFooter)
+```
+
+## flagged · changed_signature
+
+**Reason:** the signature of execute changed; its call sites are not shown by the diff
+**Source:** `app/Actions/Branch/GetBranchesAction.php` :: `execute` (lines 12-27)
+**Tokens:** 21
+
+```text
+ASSUMPTION: additional call sites exist beyond the search bound; not all verified
+```
+
+## fetched · changed_signature
+
+**Reason:** the signature of execute changed; its call sites are not shown by the diff
+**Source:** `app/Actions/Branch/UpdateBranchAction.php` (lines 19-19)
+**Tokens:** 17
+
+```php
+    public function execute(int $id, UpdateBranchDTO $dto): Branch
+```
+
+## fetched · changed_signature
+
+**Reason:** the signature of execute changed; its call sites are not shown by the diff
+**Source:** `app/Actions/Catering/CreatePackageAction.php` (lines 18-18)
+**Tokens:** 17
+
+```php
+    public function execute(CreatePackageDTO $dto): CateringPackage
+```
+
+## fetched · changed_signature
+
+**Reason:** the signature of execute changed; its call sites are not shown by the diff
+**Source:** `app/Actions/Catering/CreateSampleMenuAction.php` (lines 18-18)
+**Tokens:** 17
+
+```php
+    public function execute(CreateSampleMenuDTO $dto): SampleMenu
+```
+
+## fetched · changed_signature
+
+**Reason:** the signature of execute changed; its call sites are not shown by the diff
+**Source:** `app/Actions/Catering/DeletePackageAction.php` (lines 16-16)
+**Tokens:** 11
+
+```php
+    public function execute(int $id): void
+```
+
+## fetched · changed_signature
+
+**Reason:** the signature of execute changed; its call sites are not shown by the diff
+**Source:** `app/Actions/Catering/DeleteSampleMenuAction.php` (lines 16-16)
+**Tokens:** 11
+
+```php
+    public function execute(int $id): void
+```
+
+## fetched · changed_signature
+
+**Reason:** the signature of execute changed; its call sites are not shown by the diff
+**Source:** `app/Actions/Catering/GetPackagesAction.php` (lines 15-15)
+**Tokens:** 11
+
+```php
+    public function execute(): Collection
+```
+
+## fetched · changed_signature
+
+**Reason:** the signature of getAll changed; its call sites are not shown by the diff
+**Source:** `app/Actions/Catering/GetPackagesAction.php` (lines 23-23)
+**Tokens:** 12
+
+```php
+            fn () => $this->repository->getAll()
+```
+
+## fetched · changed_signature
+
+**Reason:** the signature of execute changed; its call sites are not shown by the diff
+**Source:** `app/Actions/Catering/GetSampleMenusAction.php` (lines 15-15)
+**Tokens:** 11
+
+```php
+    public function execute(): Collection
+```
+
+## fetched · changed_signature
+
+**Reason:** the signature of getAll changed; its call sites are not shown by the diff
+**Source:** `app/Actions/Catering/GetSampleMenusAction.php` (lines 23-23)
+**Tokens:** 12
+
+```php
+            fn () => $this->repository->getAll()
+```
+
+## fetched · changed_signature
+
+**Reason:** the signature of execute changed; its call sites are not shown by the diff
+**Source:** `app/Actions/Catering/SubmitQuoteRequestAction.php` (lines 16-16)
+**Tokens:** 18
+
+```php
+    public function execute(SubmitQuoteRequestDTO $dto): QuoteRequest
+```
+
+## fetched · changed_signature
+
+**Reason:** the signature of execute changed; its call sites are not shown by the diff
+**Source:** `app/Actions/Catering/UpdatePackageAction.php` (lines 19-19)
+**Tokens:** 19
+
+```php
+    public function execute(int $id, UpdatePackageDTO $dto): CateringPackage
+```
+
+## fetched · changed_signature
+
+**Reason:** the signature of execute changed; its call sites are not shown by the diff
+**Source:** `app/Actions/Catering/UpdateQuoteRequestStatusAction.php` (lines 16-16)
+**Tokens:** 21
+
+```php
+    public function execute(int $id, UpdateQuoteRequestStatusDTO $dto): QuoteRequest
+```
+
+## fetched · changed_signature
+
+**Reason:** the signature of execute changed; its call sites are not shown by the diff
+**Source:** `app/Actions/Catering/UpdateSampleMenuAction.php` (lines 18-18)
+**Tokens:** 19
+
+```php
+    public function execute(int $id, CreateSampleMenuDTO $dto): SampleMenu
+```
+
+## fetched · changed_signature
+
+**Reason:** the signature of execute changed; its call sites are not shown by the diff
+**Source:** `app/Actions/DeliveryApp/CreateDeliveryAppAction.php` (lines 18-18)
+**Tokens:** 17
+
+```php
+    public function execute(CreateDeliveryAppDTO $dto): DeliveryApp
+```
+
+## fetched · changed_signature
+
+**Reason:** the signature of execute changed; its call sites are not shown by the diff
+**Source:** `app/Actions/DeliveryApp/DeleteDeliveryAppAction.php` (lines 16-16)
+**Tokens:** 11
+
+```php
+    public function execute(int $id): void
+```
+
+## fetched · changed_signature
+
+**Reason:** the signature of execute changed; its call sites are not shown by the diff
+**Source:** `app/Actions/DeliveryApp/GetDeliveryAppsAction.php` (lines 15-15)
+**Tokens:** 16
+
+```php
+    public function execute(bool $activeOnly = true): Collection
+```
+
+## fetched · changed_signature
+
+**Reason:** the signature of getAll changed; its call sites are not shown by the diff
+**Source:** `app/Actions/DeliveryApp/GetDeliveryAppsAction.php` (lines 23-23)
+**Tokens:** 15
+
+```php
+            fn () => $this->repository->getAll($activeOnly)
+```
+
+## fetched · changed_signature
+
+**Reason:** the signature of execute changed; its call sites are not shown by the diff
+**Source:** `app/Actions/DeliveryApp/UpdateDeliveryAppAction.php` (lines 18-18)
+**Tokens:** 19
+
+```php
+    public function execute(int $id, CreateDeliveryAppDTO $dto): DeliveryApp
+```
+
+## fetched · changed_signature
+
+**Reason:** the signature of getAll changed; its call sites are not shown by the diff
+**Source:** `app/Actions/Dish/GetDishesAction.php` (lines 29-29)
+**Tokens:** 14
+
+```php
+            fn () => $this->repository->getAll($filters)
+```
+
+## fetched · changed_signature
+
+**Reason:** the signature of getAll changed; its call sites are not shown by the diff
+**Source:** `app/Actions/Setting/GetSettingsAction.php` (lines 22-22)
+**Tokens:** 14
+
+```php
+            fn () => $this->repository->getAll($group)
+```
+
+## fetched · changed_signature
+
+**Reason:** the signature of getAll changed; its call sites are not shown by the diff
+**Source:** `app/Actions/Testimonial/GetTestimonialsAction.php` (lines 23-23)
+**Tokens:** 15
+
+```php
+            fn () => $this->repository->getAll($activeOnly)
+```
+
+## fetched · changed_signature
+
+**Reason:** the signature of getAll changed; its call sites are not shown by the diff
+**Source:** `app/Actions/Timeline/GetTimelineAction.php` (lines 23-23)
+**Tokens:** 12
+
+```php
+            fn () => $this->repository->getAll()
+```
+
+## fetched · changed_signature
+
+**Reason:** the signature of getAll changed; its call sites are not shown by the diff
+**Source:** `app/Actions/User/GetUsersAction.php` (lines 16-16)
+**Tokens:** 11
+
+```php
+        return $this->repository->getAll();
+```
+
+## fetched · changed_signature
+
+**Reason:** the signature of index changed; its call sites are not shown by the diff
+**Source:** `app/Http/Controllers/Admin/BranchController.php` (lines 20-20)
+**Tokens:** 17
+
+```php
+    public function index(GetBranchesAction $action): JsonResponse
+```
+
+## fetched · changed_signature
+
+**Reason:** the signature of index changed; its call sites are not shown by the diff
+**Source:** `app/Http/Controllers/Admin/CategoryController.php` (lines 17-17)
+**Tokens:** 11
+
+```php
+    public function index(): JsonResponse
+```
+
+## fetched · changed_signature
+
+**Reason:** the signature of getAll changed; its call sites are not shown by the diff
+**Source:** `app/Http/Controllers/Admin/CategoryController.php` (lines 19-19)
+**Tokens:** 29
+
+```php
+        return $this->success(CategoryResource::collection($this->repository->getAll()), __('messages.fetched'));
+```
+
+## fetched · changed_signature
+
+**Reason:** the signature of index changed; its call sites are not shown by the diff
+**Source:** `app/Http/Controllers/Admin/Catering/CateringPackageController.php` (lines 19-19)
+**Tokens:** 17
+
+```php
+    public function index(GetPackagesAction $action): JsonResponse
+```
+
+## fetched · changed_signature
+
+**Reason:** the signature of index changed; its call sites are not shown by the diff
+**Source:** `app/Http/Controllers/Admin/Catering/QuoteRequestController.php` (lines 16-16)
+**Tokens:** 24
+
+```php
+    public function index(Request $request, QuoteRequestRepository $repository): JsonResponse
+```
+
+## fetched · changed_signature
+
+**Reason:** the signature of getAll changed; its call sites are not shown by the diff
+**Source:** `app/Http/Controllers/Admin/Catering/QuoteRequestController.php` (lines 24-24)
+**Tokens:** 12
+
+```php
+        $result = $repository->getAll($filters);
+```
+
+## fetched · changed_signature
+
+**Reason:** the signature of index changed; its call sites are not shown by the diff
+**Source:** `app/Http/Controllers/Admin/Catering/SampleMenuController.php` (lines 17-17)
+**Tokens:** 18
+
+```php
+    public function index(GetSampleMenusAction $action): JsonResponse
+```
+
+## fetched · changed_signature
+
+**Reason:** the signature of index changed; its call sites are not shown by the diff
+**Source:** `app/Http/Controllers/Admin/DeliveryAppController.php` (lines 17-17)
+**Tokens:** 18
+
+```php
+    public function index(GetDeliveryAppsAction $action): JsonResponse
+```
+
+## fetched · changed_signature
+
+**Reason:** the signature of index changed; its call sites are not shown by the diff
+**Source:** `app/Http/Controllers/Admin/DishController.php` (lines 21-21)
+**Tokens:** 21
+
+```php
+    public function index(Request $request, GetDishesAction $action): JsonResponse
+```
+
+## fetched · changed_signature
+
+**Reason:** the signature of index changed; its call sites are not shown by the diff
+**Source:** `app/Http/Controllers/Admin/MediaItemController.php` (lines 18-18)
+**Tokens:** 22
+
+```php
+    public function index(Request $request, GetMediaItemsAction $action): JsonResponse
+```
+
+## fetched · changed_signature
+
+**Reason:** the signature of index changed; its call sites are not shown by the diff
+**Source:** `app/Http/Controllers/Admin/PageContentController.php` (lines 20-20)
+**Tokens:** 22
+
+```php
+    public function index(Request $request, GetPageContentAction $action): JsonResponse
+```
+
+## fetched · changed_signature
+
+**Reason:** the signature of index changed; its call sites are not shown by the diff
+**Source:** `app/Http/Controllers/Admin/SettingController.php` (lines 16-16)
+**Tokens:** 21
+
+```php
+    public function index(Request $request, GetSettingsAction $action): JsonResponse
+```
+
+## fetched · changed_signature
+
+**Reason:** the signature of index changed; its call sites are not shown by the diff
+**Source:** `app/Http/Controllers/Admin/TestimonialController.php` (lines 17-17)
+**Tokens:** 18
+
+```php
+    public function index(GetTestimonialsAction $action): JsonResponse
+```
+
+## fetched · changed_signature
+
+**Reason:** the signature of index changed; its call sites are not shown by the diff
+**Source:** `app/Http/Controllers/Admin/TimelineController.php` (lines 17-17)
+**Tokens:** 17
+
+```php
+    public function index(GetTimelineAction $action): JsonResponse
+```
+
+## fetched · changed_signature
+
+**Reason:** the signature of index changed; its call sites are not shown by the diff
+**Source:** `app/Http/Controllers/Admin/UserController.php` (lines 20-20)
+**Tokens:** 16
+
+```php
+    public function index(GetUsersAction $action): JsonResponse
+```
+
+## fetched · changed_signature
+
+**Reason:** the signature of index changed; its call sites are not shown by the diff
+**Source:** `app/Http/Controllers/Public/BranchController.php` (lines 13-13)
+**Tokens:** 21
+
+```php
+    public function index(Request $request, GetBranchesAction $action): JsonResponse
+```
+
+## flagged · changed_signature
+
+**Reason:** the signature of index changed; its call sites are not shown by the diff
+**Source:** `app/Http/Controllers/Public/BranchController.php` :: `index` (lines 6-20)
+**Tokens:** 21
+
+```text
+ASSUMPTION: additional call sites exist beyond the search bound; not all verified
+```
+
+## fetched · changed_signature
+
+**Reason:** the signature of index changed; its call sites are not shown by the diff
+**Source:** `app/Http/Controllers/Public/CategoryController.php` (lines 12-12)
+**Tokens:** 18
+
+```php
+    public function index(CategoryRepository $repository): JsonResponse
+```
+
+## fetched · changed_signature
+
+**Reason:** the signature of getAll changed; its call sites are not shown by the diff
+**Source:** `app/Http/Controllers/Public/CategoryController.php` (lines 14-14)
+**Tokens:** 11
+
+```php
+        $categories = $repository->getAll();
+```
+
+## fetched · changed_signature
+
+**Reason:** the signature of index changed; its call sites are not shown by the diff
+**Source:** `app/Http/Controllers/Public/Catering/CateringPackageController.php` (lines 12-12)
+**Tokens:** 17
+
+```php
+    public function index(GetPackagesAction $action): JsonResponse
+```
+
+## fetched · changed_signature
+
+**Reason:** the signature of index changed; its call sites are not shown by the diff
+**Source:** `app/Http/Controllers/Public/Catering/SampleMenuController.php` (lines 12-12)
+**Tokens:** 18
+
+```php
+    public function index(GetSampleMenusAction $action): JsonResponse
+```
+
+## fetched · changed_signature
+
+**Reason:** the signature of index changed; its call sites are not shown by the diff
+**Source:** `app/Http/Controllers/Public/DeliveryAppController.php` (lines 12-12)
+**Tokens:** 18
+
+```php
+    public function index(GetDeliveryAppsAction $action): JsonResponse
+```
+
+## fetched · changed_signature
+
+**Reason:** the signature of index changed; its call sites are not shown by the diff
+**Source:** `app/Http/Controllers/Public/DishController.php` (lines 14-14)
+**Tokens:** 21
+
+```php
+    public function index(Request $request, GetDishesAction $action): JsonResponse
+```
+
+## fetched · changed_signature
+
+**Reason:** the signature of index changed; its call sites are not shown by the diff
+**Source:** `app/Http/Controllers/Public/MediaItemController.php` (lines 13-13)
+**Tokens:** 22
+
+```php
+    public function index(Request $request, GetMediaItemsAction $action): JsonResponse
+```
+
+## fetched · changed_signature
+
+**Reason:** the signature of getAll changed; its call sites are not shown by the diff
+**Source:** `app/Repositories/BranchRepository.php` (lines 10-10)
+**Tokens:** 17
+
+```php
+    public function getAll(?bool $showInFooter = null): Collection
+```
+
+## flagged · changed_signature
+
+**Reason:** the signature of getAll changed; its call sites are not shown by the diff
+**Source:** `app/Repositories/BranchRepository.php` :: `getAll` (lines 7-21)
+**Tokens:** 21
+
+```text
+ASSUMPTION: additional call sites exist beyond the search bound; not all verified
+```
+
+## fetched · changed_signature
+
+**Reason:** the signature of getAll changed; its call sites are not shown by the diff
+**Source:** `app/Repositories/CategoryRepository.php` (lines 10-10)
+**Tokens:** 10
+
+```php
+    public function getAll(): Collection
+```
+
+## fetched · changed_signature
+
+**Reason:** the signature of getAll changed; its call sites are not shown by the diff
+**Source:** `app/Repositories/CateringPackageRepository.php` (lines 11-11)
+**Tokens:** 10
+
+```php
+    public function getAll(): Collection
+```
+
+## fetched · changed_signature
+
+**Reason:** the signature of getAll changed; its call sites are not shown by the diff
+**Source:** `app/Repositories/DeliveryAppRepository.php` (lines 10-10)
+**Tokens:** 16
+
+```php
+    public function getAll(bool $activeOnly = true): Collection
+```
+
+## fetched · changed_signature
+
+**Reason:** the signature of getAll changed; its call sites are not shown by the diff
+**Source:** `app/Repositories/DishRepository.php` (lines 10-10)
+**Tokens:** 18
+
+```php
+    public function getAll(array $filters = []): LengthAwarePaginator
+```
+
+## fetched · changed_signature
+
+**Reason:** the signature of getAll changed; its call sites are not shown by the diff
+**Source:** `app/Repositories/QuoteRequestRepository.php` (lines 10-10)
+**Tokens:** 18
+
+```php
+    public function getAll(array $filters = []): LengthAwarePaginator
+```
+
+## fetched · changed_signature
+
+**Reason:** the signature of getAll changed; its call sites are not shown by the diff
+**Source:** `app/Repositories/SampleMenuRepository.php` (lines 11-11)
+**Tokens:** 10
+
+```php
+    public function getAll(): Collection
+```
+
+## fetched · changed_signature
+
+**Reason:** the signature of getAll changed; its call sites are not shown by the diff
+**Source:** `app/Repositories/SettingRepository.php` (lines 11-11)
+**Tokens:** 16
+
+```php
+    public function getAll(?string $group = null): Collection
+```
+
+## flagged · named_reference
+
+**Reason:** the region depends on Illuminate\Database\Eloquent\Collection, whose contract is defined in another file
+**Source:** `app/Actions/Branch/GetBranchesAction.php` :: `Illuminate\Database\Eloquent\Collection` (lines 12-27)
+**Tokens:** 20
+
+```text
+ASSUMPTION: named reference could not be resolved on disk; contract unverified
+```
+
+## fetched · named_reference
+
+**Reason:** the region depends on App\Actions\Branch\GetBranchesAction, whose contract is defined in another file
+**Source:** `app/Actions/Branch/GetBranchesAction.php` :: `__construct` (lines 11-13)
+**Tokens:** 24
+
+```php
+    public function __construct(
+        private readonly BranchRepository $repository,
+    ) {}
+```
+
+## flagged · named_reference
+
+**Reason:** the region depends on Illuminate\Http\JsonResponse, whose contract is defined in another file
+**Source:** `app/Http/Controllers/Public/BranchController.php` :: `Illuminate\Http\JsonResponse` (lines 6-20)
+**Tokens:** 20
+
+```text
+ASSUMPTION: named reference could not be resolved on disk; contract unverified
+```
+
+## flagged · named_reference
+
+**Reason:** the region depends on Illuminate\Http\Request, whose contract is defined in another file
+**Source:** `app/Http/Controllers/Public/BranchController.php` :: `Illuminate\Http\Request` (lines 6-20)
+**Tokens:** 20
+
+```text
+ASSUMPTION: named reference could not be resolved on disk; contract unverified
+```
+
+## fetched · named_reference
+
+**Reason:** the region depends on App\Models\Branch::orderBy, whose contract is defined in another file
+**Source:** `app/Models/Branch.php` :: `fillable` (lines 9-23)
+**Tokens:** 78
+
+```php
+    protected $fillable = [
+        'name_ar',
+        'name_en',
+        'city',
+        'location_ar',
+        'location_en',
+        'phone',
+        'opening_time',
+        'closing_time',
+        'google_maps_url',
+        'image_path',
+        'image_url',
+        'order',
+        'show_in_footer',
+    ];
+```
+
+## flagged · named_reference
+
+**Reason:** the region depends on App\Models\Branch::orderBy, whose contract is defined in another file
+**Source:** `app/Repositories/BranchRepository.php` :: `App\Models\Branch::orderBy` (lines 7-21)
+**Tokens:** 20
+
+```text
+ASSUMPTION: named reference could not be resolved on disk; contract unverified
+```
+
+## flagged · named_reference
+
+**Reason:** the region depends on Illuminate\Database\Eloquent\Collection, whose contract is defined in another file
+**Source:** `app/Repositories/BranchRepository.php` :: `Illuminate\Database\Eloquent\Collection` (lines 7-21)
+**Tokens:** 20
+
+```text
+ASSUMPTION: named reference could not be resolved on disk; contract unverified
+```
+
+## flagged · named_reference
+
+**Reason:** the region depends on Illuminate\Database\Schema\Blueprint, whose contract is defined in another file
+**Source:** `database/migrations/2026_07_25_132951_add_show_in_footer_to_branches_table.php` :: `Illuminate\Database\Schema\Blueprint` (lines 1-28)
+**Tokens:** 20
+
+```text
+ASSUMPTION: named reference could not be resolved on disk; contract unverified
+```
+
+## flagged · named_reference
+
+**Reason:** the region depends on Illuminate\Support\Facades\Schema::table, whose contract is defined in another file
+**Source:** `database/migrations/2026_07_25_132951_add_show_in_footer_to_branches_table.php` :: `Illuminate\Support\Facades\Schema::table` (lines 1-28)
+**Tokens:** 20
+
+```text
+ASSUMPTION: named reference could not be resolved on disk; contract unverified
+```
+
+## flagged · unverifiable_premise
+
+**Reason:** the region performs several persistence writes; whether a transaction wraps them is decided by the caller, which the diff does not show
+**Source:** `tests/Feature/PublicApiTest.php` (lines 65-94)
+**Tokens:** 19
+
+```text
+ASSUMPTION: this code assumes a surrounding transaction; caller not checked
+```
+
+## Dropped
+
+Nothing was dropped.

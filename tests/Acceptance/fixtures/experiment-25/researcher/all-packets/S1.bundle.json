@@ -1,0 +1,561 @@
+{
+    "bundle_version": 1,
+    "budget_tokens": 8000,
+    "used_tokens": 986,
+    "items": [
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Models\\Setting::updateOrCreate, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Http/Controllers/Admin/MenuPdfController.php",
+                "member": "App\\Models\\Setting::updateOrCreate",
+                "lines": [
+                    1,
+                    85
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Models\\Setting::where, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Http/Controllers/Admin/MenuPdfController.php",
+                "member": "App\\Models\\Setting::where",
+                "lines": [
+                    1,
+                    85
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on Illuminate\\Http\\JsonResponse, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Http/Controllers/Admin/MenuPdfController.php",
+                "member": "Illuminate\\Http\\JsonResponse",
+                "lines": [
+                    1,
+                    85
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on Illuminate\\Http\\Request, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Http/Controllers/Admin/MenuPdfController.php",
+                "member": "Illuminate\\Http\\Request",
+                "lines": [
+                    1,
+                    85
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on Illuminate\\Support\\Facades\\Storage::disk, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Http/Controllers/Admin/MenuPdfController.php",
+                "member": "Illuminate\\Support\\Facades\\Storage::disk",
+                "lines": [
+                    1,
+                    85
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\MediaItem::where, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/MediaItem.php",
+                "member": "fillable",
+                "lines": [
+                    10,
+                    22
+                ]
+            },
+            "payload": "    protected $fillable = [\n        'page',\n        'section',\n        'key',\n        'path',\n        'url',\n        'alt_ar',\n        'alt_en',\n        'mime_type',\n        'size_bytes',\n        'width',\n        'height',\n    ];",
+            "tokens": 58
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\MediaItem::where, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/MediaItem.php",
+                "member": "scopeForPage",
+                "lines": [
+                    24,
+                    35
+                ]
+            },
+            "payload": "    public function scopeForPage(Builder $query, ?string $page = null, ?string $section = null): Builder\n    {\n        if ($page !== null) {\n            $query->where('page', $page);\n        }\n\n        if ($section !== null) {\n            $query->where('section', $section);\n        }\n\n        return $query;\n    }",
+            "tokens": 79
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Setting::updateOrCreate, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Setting.php",
+                "member": "fillable",
+                "lines": [
+                    10,
+                    17
+                ]
+            },
+            "payload": "    protected $fillable = [\n        'key',\n        'value',\n        'type',\n        'group',\n        'label_ar',\n        'label_en',\n    ];",
+            "tokens": 35
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Setting::updateOrCreate, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Setting.php",
+                "member": "scopeForGroup",
+                "lines": [
+                    19,
+                    26
+                ]
+            },
+            "payload": "    public function scopeForGroup(Builder $query, ?string $group = null): Builder\n    {\n        if ($group !== null) {\n            $query->where('group', $group);\n        }\n\n        return $query;\n    }",
+            "tokens": 51
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\User::create, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/User.php",
+                "member": "casts",
+                "lines": [
+                    40,
+                    51
+                ]
+            },
+            "payload": "    /**\n     * Get the attributes that should be cast.\n     *\n     * @return array<string, string>\n     */\n    protected function casts(): array\n    {\n        return [\n            'email_verified_at' => 'datetime',\n            'password' => 'hashed',\n        ];\n    }",
+            "tokens": 67
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\User::create, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/User.php",
+                "member": "fillable",
+                "lines": [
+                    18,
+                    28
+                ]
+            },
+            "payload": "    /**\n     * The attributes that are mass assignable.\n     *\n     * @var list<string>\n     */\n    protected $fillable = [\n        'name',\n        'email',\n        'password',\n        'role',\n    ];",
+            "tokens": 50
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\User::create, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/User.php",
+                "member": "hidden",
+                "lines": [
+                    30,
+                    38
+                ]
+            },
+            "payload": "    /**\n     * The attributes that should be hidden for serialization.\n     *\n     * @var list<string>\n     */\n    protected $hidden = [\n        'password',\n        'remember_token',\n    ];",
+            "tokens": 48
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Models\\MediaItem::where, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Services/MenuQrService.php",
+                "member": "App\\Models\\MediaItem::where",
+                "lines": [
+                    1,
+                    51
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on Endroid\\QrCode\\Builder\\Builder, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Services/MenuQrService.php",
+                "member": "Endroid\\QrCode\\Builder\\Builder",
+                "lines": [
+                    1,
+                    51
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on Endroid\\QrCode\\Color\\Color, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Services/MenuQrService.php",
+                "member": "Endroid\\QrCode\\Color\\Color",
+                "lines": [
+                    1,
+                    51
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on Endroid\\QrCode\\ErrorCorrectionLevel::High, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Services/MenuQrService.php",
+                "member": "Endroid\\QrCode\\ErrorCorrectionLevel::High",
+                "lines": [
+                    1,
+                    51
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on Endroid\\QrCode\\Writer\\PngWriter, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Services/MenuQrService.php",
+                "member": "Endroid\\QrCode\\Writer\\PngWriter",
+                "lines": [
+                    1,
+                    51
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on Illuminate\\Support\\Facades\\Storage::disk, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Services/MenuQrService.php",
+                "member": "Illuminate\\Support\\Facades\\Storage::disk",
+                "lines": [
+                    1,
+                    51
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Models\\Setting::updateOrCreate, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "database/seeders/SettingSeeder.php",
+                "member": "App\\Models\\Setting::updateOrCreate",
+                "lines": [
+                    29,
+                    39
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on Illuminate\\Support\\Facades\\Route::delete, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "routes/admin.php",
+                "member": "Illuminate\\Support\\Facades\\Route::delete",
+                "lines": [
+                    178,
+                    189
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on Illuminate\\Support\\Facades\\Route::get, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "routes/admin.php",
+                "member": "Illuminate\\Support\\Facades\\Route::get",
+                "lines": [
+                    178,
+                    189
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on Illuminate\\Support\\Facades\\Route::post, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "routes/admin.php",
+                "member": "Illuminate\\Support\\Facades\\Route::post",
+                "lines": [
+                    178,
+                    189
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on Illuminate\\Support\\Facades\\Route::prefix, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "routes/admin.php",
+                "member": "Illuminate\\Support\\Facades\\Route::prefix",
+                "lines": [
+                    178,
+                    189
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Models\\Setting::where, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "routes/web.php",
+                "member": "App\\Models\\Setting::where",
+                "lines": [
+                    1,
+                    45
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on Illuminate\\Support\\Facades\\Route::get, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "routes/web.php",
+                "member": "Illuminate\\Support\\Facades\\Route::get",
+                "lines": [
+                    1,
+                    45
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on Illuminate\\Support\\Facades\\Storage::disk, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "routes/web.php",
+                "member": "Illuminate\\Support\\Facades\\Storage::disk",
+                "lines": [
+                    1,
+                    45
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Models\\MediaItem::create, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "tests/Feature/MenuPdfTest.php",
+                "member": "App\\Models\\MediaItem::create",
+                "lines": [
+                    1,
+                    154
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Models\\Setting::create, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "tests/Feature/MenuPdfTest.php",
+                "member": "App\\Models\\Setting::create",
+                "lines": [
+                    1,
+                    154
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Models\\Setting::where, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "tests/Feature/MenuPdfTest.php",
+                "member": "App\\Models\\Setting::where",
+                "lines": [
+                    1,
+                    154
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Models\\User::create, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "tests/Feature/MenuPdfTest.php",
+                "member": "App\\Models\\User::create",
+                "lines": [
+                    1,
+                    154
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on Illuminate\\Http\\UploadedFile, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "tests/Feature/MenuPdfTest.php",
+                "member": "Illuminate\\Http\\UploadedFile",
+                "lines": [
+                    1,
+                    154
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on Illuminate\\Http\\UploadedFile::fake, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "tests/Feature/MenuPdfTest.php",
+                "member": "Illuminate\\Http\\UploadedFile::fake",
+                "lines": [
+                    1,
+                    154
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on Illuminate\\Support\\Facades\\Storage::disk, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "tests/Feature/MenuPdfTest.php",
+                "member": "Illuminate\\Support\\Facades\\Storage::disk",
+                "lines": [
+                    1,
+                    154
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on Illuminate\\Support\\Facades\\Storage::fake, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "tests/Feature/MenuPdfTest.php",
+                "member": "Illuminate\\Support\\Facades\\Storage::fake",
+                "lines": [
+                    1,
+                    154
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on Laravel\\Sanctum\\Sanctum::actingAs, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "tests/Feature/MenuPdfTest.php",
+                "member": "Laravel\\Sanctum\\Sanctum::actingAs",
+                "lines": [
+                    1,
+                    154
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region performs several persistence writes; whether a transaction wraps them is decided by the caller, which the diff does not show",
+            "assertion_kind": "unverifiable_premise",
+            "provenance": {
+                "path": "app/Http/Controllers/Admin/MenuPdfController.php",
+                "lines": [
+                    1,
+                    85
+                ]
+            },
+            "payload": "ASSUMPTION: this code assumes a surrounding transaction; caller not checked",
+            "tokens": 19
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region performs several persistence writes; whether a transaction wraps them is decided by the caller, which the diff does not show",
+            "assertion_kind": "unverifiable_premise",
+            "provenance": {
+                "path": "tests/Feature/MenuPdfTest.php",
+                "lines": [
+                    1,
+                    154
+                ]
+            },
+            "payload": "ASSUMPTION: this code assumes a surrounding transaction; caller not checked",
+            "tokens": 19
+        }
+    ],
+    "dropped": []
+}

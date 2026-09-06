@@ -1,0 +1,67 @@
+{
+    "bundle_version": 1,
+    "budget_tokens": 8000,
+    "used_tokens": 449,
+    "items": [
+        {
+            "lever": "fetched",
+            "reason": "the region uses var_export, which the file's use block does not import",
+            "assertion_kind": "same_file_symbol_absence",
+            "provenance": {
+                "path": "app/Actions/Dish/GetDishesAction.php",
+                "lines": [
+                    5,
+                    7
+                ]
+            },
+            "payload": "use App\\Repositories\\DishRepository;\nuse Illuminate\\Pagination\\LengthAwarePaginator;\nuse Illuminate\\Support\\Facades\\Cache;",
+            "tokens": 31
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region uses var_export, which the file's use block does not import",
+            "assertion_kind": "same_file_symbol_absence",
+            "provenance": {
+                "path": "app/Actions/Dish/GetDishesAction.php",
+                "member": "execute",
+                "lines": [
+                    15,
+                    31
+                ]
+            },
+            "payload": "    public function execute(array $filters = []): LengthAwarePaginator\n    {\n        $locale = app()->getLocale();\n        $categoryId = $filters['category_id'] ?? 'all';\n        $featured = array_key_exists('featured', $filters) ? var_export($filters['featured'], true) : 'all';\n        $signature = array_key_exists('signature', $filters) ? var_export($filters['signature'], true) : 'all';\n        $perPage = $filters['per_page'] ?? 'default';\n        $page = request()->integer('page', 1);\n\n        $key = \"dishes_{$locale}_{$categoryId}_{$featured}_{$signature}_{$perPage}_{$page}\";\n\n        return Cache::tags(['dishes'])->remember(\n            $key,\n            now()->addHour(),\n            fn () => $this->repository->getAll($filters)\n        );\n    }",
+            "tokens": 190
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Http\\Resources\\Dish\\DishResource::collection, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Http/Controllers/DishController.php",
+                "member": "App\\Http\\Resources\\Dish\\DishResource::collection",
+                "lines": [
+                    28,
+                    34
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Http\\Resources\\Dish\\DishResource::collection, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Http/Resources/Dish/DishResource.php",
+                "member": "toArray",
+                "lines": [
+                    14,
+                    32
+                ]
+            },
+            "payload": "    public function toArray(Request $request): array\n    {\n        return [\n            'id' => $this->id,\n            'name' => $this->resolveLocale($this->name_ar, $this->name_en),\n            'name_ar' => $this->name_ar,\n            'name_en' => $this->name_en,\n            'description' => $this->resolveLocale($this->description_ar, $this->description_en),\n            'description_ar' => $this->description_ar,\n            'description_en' => $this->description_en,\n            'price' => $this->price,\n            'category' => new CategoryResource($this->whenLoaded('category')),\n            'is_featured' => $this->is_featured,\n            'is_signature' => $this->is_signature,\n            'image_url' => $this->image_url,\n            'order' => $this->order,\n            'locale' => app()->getLocale(),\n        ];\n    }",
+            "tokens": 208
+        }
+    ],
+    "dropped": []
+}

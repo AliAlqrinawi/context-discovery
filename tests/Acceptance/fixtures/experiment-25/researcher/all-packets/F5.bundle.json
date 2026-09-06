@@ -1,0 +1,413 @@
+{
+    "bundle_version": 1,
+    "budget_tokens": 8000,
+    "used_tokens": 2423,
+    "items": [
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Http\\Resources\\Branch\\BranchResource::collection, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Http/Controllers/BranchController.php",
+                "member": "App\\Http\\Resources\\Branch\\BranchResource::collection",
+                "lines": [
+                    17,
+                    43
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Http\\Resources\\Category\\CategoryResource::collection, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Http/Controllers/CategoryController.php",
+                "member": "App\\Http\\Resources\\Category\\CategoryResource::collection",
+                "lines": [
+                    15,
+                    41
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Http\\Resources\\Catering\\PackageResource::collection, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Http/Controllers/Catering/CateringPackageController.php",
+                "member": "App\\Http\\Resources\\Catering\\PackageResource::collection",
+                "lines": [
+                    18,
+                    44
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Http\\Resources\\Catering\\QuoteRequestResource::collection, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Http/Controllers/Catering/QuoteRequestController.php",
+                "member": "App\\Http\\Resources\\Catering\\QuoteRequestResource::collection",
+                "lines": [
+                    33,
+                    50
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Http\\Resources\\Catering\\SampleMenuResource::collection, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Http/Controllers/Catering/SampleMenuController.php",
+                "member": "App\\Http\\Resources\\Catering\\SampleMenuResource::collection",
+                "lines": [
+                    16,
+                    42
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Http\\Resources\\DeliveryApp\\DeliveryAppResource::collection, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Http/Controllers/DeliveryAppController.php",
+                "member": "App\\Http\\Resources\\DeliveryApp\\DeliveryAppResource::collection",
+                "lines": [
+                    17,
+                    43
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Http\\Resources\\Testimonial\\TestimonialResource::collection, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Http/Controllers/TestimonialController.php",
+                "member": "App\\Http\\Resources\\Testimonial\\TestimonialResource::collection",
+                "lines": [
+                    17,
+                    43
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Http\\Resources\\Timeline\\TimelineResource::collection, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Http/Controllers/TimelineController.php",
+                "member": "App\\Http\\Resources\\Timeline\\TimelineResource::collection",
+                "lines": [
+                    15,
+                    41
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Http\\Resources\\User\\UserResource::collection, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Http/Controllers/UserController.php",
+                "member": "App\\Http\\Resources\\User\\UserResource::collection",
+                "lines": [
+                    20,
+                    51
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Http\\Resources\\Auth\\AuthResource, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Http/Resources/Auth/AuthResource.php",
+                "member": "toArray",
+                "lines": [
+                    10,
+                    21
+                ]
+            },
+            "payload": "    public function toArray(Request $request): array\n    {\n        return [\n            'token' => $this->resource['token'],\n            'user' => [\n                'id' => $this->resource['user']->id,\n                'name' => $this->resource['user']->name,\n                'email' => $this->resource['user']->email,\n                'role' => $this->resource['user']->role,\n            ],\n        ];\n    }",
+            "tokens": 102
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Http\\Resources\\Branch\\BranchResource, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Http/Resources/Branch/BranchResource.php",
+                "member": "toArray",
+                "lines": [
+                    13,
+                    32
+                ]
+            },
+            "payload": "    public function toArray(Request $request): array\n    {\n        return [\n            'id' => $this->id,\n            'name' => $this->resolveLocale($this->name_ar, $this->name_en),\n            'name_ar' => $this->name_ar,\n            'name_en' => $this->name_en,\n            'location' => $this->resolveLocale($this->location_ar, $this->location_en),\n            'location_ar' => $this->location_ar,\n            'location_en' => $this->location_en,\n            'city' => $this->city,\n            'phone' => $this->phone,\n            'opening_time' => $this->opening_time,\n            'closing_time' => $this->closing_time,\n            'google_maps_url' => $this->google_maps_url,\n            'image_url' => $this->image_url,\n            'order' => $this->order,\n            'locale' => app()->getLocale(),\n        ];\n    }",
+            "tokens": 206
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Http\\Resources\\Category\\CategoryResource, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Http/Resources/Category/CategoryResource.php",
+                "member": "toArray",
+                "lines": [
+                    13,
+                    24
+                ]
+            },
+            "payload": "    public function toArray(Request $request): array\n    {\n        return [\n            'id' => $this->id,\n            'name' => $this->resolveLocale($this->name_ar, $this->name_en),\n            'name_ar' => $this->name_ar,\n            'name_en' => $this->name_en,\n            'slug' => $this->slug,\n            'order' => $this->order,\n            'locale' => app()->getLocale(),\n        ];\n    }",
+            "tokens": 100
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Http\\Resources\\Catering\\PackageResource, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Http/Resources/Catering/PackageResource.php",
+                "member": "toArray",
+                "lines": [
+                    13,
+                    35
+                ]
+            },
+            "payload": "    public function toArray(Request $request): array\n    {\n        return [\n            'id' => $this->id,\n            'name' => $this->resolveLocale($this->name_ar, $this->name_en),\n            'name_ar' => $this->name_ar,\n            'name_en' => $this->name_en,\n            'description' => $this->resolveLocale($this->description_ar, $this->description_en),\n            'description_ar' => $this->description_ar,\n            'description_en' => $this->description_en,\n            'tag_en' => $this->tag_en,\n            'price_starting_from' => $this->price_starting_from,\n            'is_featured' => $this->is_featured,\n            'features' => $this->whenLoaded('features', fn () => $this->features->map(fn ($feature) => [\n                'feature_ar' => $feature->feature_ar,\n                'feature_en' => $feature->feature_en,\n                'order' => $feature->order,\n            ])),\n            'image_url' => $this->image_url,\n            'order' => $this->order,\n            'locale' => app()->getLocale(),\n        ];\n    }",
+            "tokens": 261
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Http\\Resources\\Catering\\QuoteRequestResource, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Http/Resources/Catering/QuoteRequestResource.php",
+                "member": "toArray",
+                "lines": [
+                    10,
+                    29
+                ]
+            },
+            "payload": "    public function toArray(Request $request): array\n    {\n        return [\n            'id' => $this->id,\n            'name' => $this->name,\n            'phone' => $this->phone,\n            'email' => $this->email,\n            'event_date' => $this->event_date?->toDateString(),\n            'guests_count' => $this->guests_count,\n            'branch' => $this->branch,\n            'event_type' => $this->event_type->value,\n            'budget_range' => $this->budget_range?->value,\n            'notes' => $this->notes,\n            'status' => [\n                'value' => $this->status->value,\n                'label' => $this->status->label(),\n            ],\n            'created_at' => $this->created_at?->toIso8601String(),\n        ];\n    }",
+            "tokens": 186
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Http\\Resources\\Catering\\SampleMenuResource, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Http/Resources/Catering/SampleMenuResource.php",
+                "member": "toArray",
+                "lines": [
+                    13,
+                    31
+                ]
+            },
+            "payload": "    public function toArray(Request $request): array\n    {\n        return [\n            'id' => $this->id,\n            'name' => $this->resolveLocale($this->name_ar, $this->name_en),\n            'name_ar' => $this->name_ar,\n            'name_en' => $this->name_en,\n            'tag_en' => $this->tag_en,\n            'is_featured' => $this->is_featured,\n            'dishes' => $this->whenLoaded('dishes', fn () => $this->dishes->map(fn ($dish) => [\n                'dish_name_ar' => $dish->dish_name_ar,\n                'dish_name_en' => $dish->dish_name_en,\n                'order' => $dish->order,\n            ])),\n            'image_url' => $this->image_url,\n            'order' => $this->order,\n            'locale' => app()->getLocale(),\n        ];\n    }",
+            "tokens": 190
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Http\\Resources\\DeliveryApp\\DeliveryAppResource, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Http/Resources/DeliveryApp/DeliveryAppResource.php",
+                "member": "toArray",
+                "lines": [
+                    13,
+                    26
+                ]
+            },
+            "payload": "    public function toArray(Request $request): array\n    {\n        return [\n            'id' => $this->id,\n            'name' => $this->resolveLocale($this->name_ar, $this->name_en),\n            'name_ar' => $this->name_ar,\n            'name_en' => $this->name_en,\n            'order_url' => $this->order_url,\n            'logo_url' => $this->logo_url,\n            'is_active' => $this->is_active,\n            'order' => $this->order,\n            'locale' => app()->getLocale(),\n        ];\n    }",
+            "tokens": 124
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Http\\Resources\\Dish\\DishCollection, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Http/Resources/Dish/DishCollection.php",
+                "member": "collects",
+                "lines": [
+                    10,
+                    10
+                ]
+            },
+            "payload": "    public $collects = DishResource::class;",
+            "tokens": 11
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Http\\Resources\\Dish\\DishCollection, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Http/Resources/Dish/DishCollection.php",
+                "member": "toArray",
+                "lines": [
+                    12,
+                    23
+                ]
+            },
+            "payload": "    public function toArray(Request $request): array\n    {\n        return [\n            'items' => $this->collection,\n            'meta' => [\n                'current_page' => $this->currentPage(),\n                'last_page' => $this->lastPage(),\n                'per_page' => $this->perPage(),\n                'total' => $this->total(),\n            ],\n        ];\n    }",
+            "tokens": 93
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Http\\Resources\\Dish\\DishResource, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Http/Resources/Dish/DishResource.php",
+                "member": "toArray",
+                "lines": [
+                    14,
+                    32
+                ]
+            },
+            "payload": "    public function toArray(Request $request): array\n    {\n        return [\n            'id' => $this->id,\n            'name' => $this->resolveLocale($this->name_ar, $this->name_en),\n            'name_ar' => $this->name_ar,\n            'name_en' => $this->name_en,\n            'description' => $this->resolveLocale($this->description_ar, $this->description_en),\n            'description_ar' => $this->description_ar,\n            'description_en' => $this->description_en,\n            'price' => $this->price,\n            'category' => new CategoryResource($this->whenLoaded('category')),\n            'is_featured' => $this->is_featured,\n            'is_signature' => $this->is_signature,\n            'image_url' => $this->image_url,\n            'order' => $this->order,\n            'locale' => app()->getLocale(),\n        ];\n    }",
+            "tokens": 208
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Http\\Resources\\MediaItem\\MediaItemResource, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Http/Resources/MediaItem/MediaItemResource.php",
+                "member": "toArray",
+                "lines": [
+                    13,
+                    26
+                ]
+            },
+            "payload": "    public function toArray(Request $request): array\n    {\n        return [\n            'id' => $this->id,\n            'page' => $this->page,\n            'section' => $this->section,\n            'key' => $this->key,\n            'url' => $this->url,\n            'alt' => $this->resolveLocale($this->alt_ar, $this->alt_en),\n            'alt_ar' => $this->alt_ar,\n            'alt_en' => $this->alt_en,\n            'locale' => app()->getLocale(),\n        ];\n    }",
+            "tokens": 115
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Http\\Resources\\PageContent\\PageContentResource, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Http/Resources/PageContent/PageContentResource.php",
+                "member": "toArray",
+                "lines": [
+                    13,
+                    27
+                ]
+            },
+            "payload": "    public function toArray(Request $request): array\n    {\n        return [\n            'id' => $this->id,\n            'page' => $this->page,\n            'section' => $this->section,\n            'key' => $this->key,\n            'value' => $this->resolveLocale($this->value_ar, $this->value_en),\n            'value_ar' => $this->value_ar,\n            'value_en' => $this->value_en,\n            'type' => $this->type,\n            'order' => $this->order,\n            'locale' => app()->getLocale(),\n        ];\n    }",
+            "tokens": 129
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Http\\Resources\\Setting\\SettingResource, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Http/Resources/Setting/SettingResource.php",
+                "member": "toArray",
+                "lines": [
+                    13,
+                    26
+                ]
+            },
+            "payload": "    public function toArray(Request $request): array\n    {\n        return [\n            'id' => $this->id,\n            'key' => $this->key,\n            'value' => $this->value,\n            'type' => $this->type,\n            'group' => $this->group,\n            'label' => $this->resolveLocale($this->label_ar, $this->label_en),\n            'label_ar' => $this->label_ar,\n            'label_en' => $this->label_en,\n            'locale' => app()->getLocale(),\n        ];\n    }",
+            "tokens": 119
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Http\\Resources\\Testimonial\\TestimonialResource, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Http/Resources/Testimonial/TestimonialResource.php",
+                "member": "toArray",
+                "lines": [
+                    13,
+                    25
+                ]
+            },
+            "payload": "    public function toArray(Request $request): array\n    {\n        return [\n            'id' => $this->id,\n            'name' => $this->name,\n            'quote' => $this->resolveLocale($this->quote_ar, $this->quote_en),\n            'quote_ar' => $this->quote_ar,\n            'quote_en' => $this->quote_en,\n            'is_active' => $this->is_active,\n            'order' => $this->order,\n            'locale' => app()->getLocale(),\n        ];\n    }",
+            "tokens": 113
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Http\\Resources\\Timeline\\TimelineResource, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Http/Resources/Timeline/TimelineResource.php",
+                "member": "toArray",
+                "lines": [
+                    13,
+                    28
+                ]
+            },
+            "payload": "    public function toArray(Request $request): array\n    {\n        return [\n            'id' => $this->id,\n            'year' => $this->year,\n            'location_en' => $this->location_en,\n            'title' => $this->resolveLocale($this->title_ar, $this->title_en),\n            'title_ar' => $this->title_ar,\n            'title_en' => $this->title_en,\n            'description' => $this->resolveLocale($this->description_ar, $this->description_en),\n            'description_ar' => $this->description_ar,\n            'description_en' => $this->description_en,\n            'order' => $this->order,\n            'locale' => app()->getLocale(),\n        ];\n    }",
+            "tokens": 165
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Http\\Resources\\User\\UserResource, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Http/Resources/User/UserResource.php",
+                "member": "toArray",
+                "lines": [
+                    10,
+                    19
+                ]
+            },
+            "payload": "    public function toArray(Request $request): array\n    {\n        return [\n            'id' => $this->id,\n            'name' => $this->name,\n            'email' => $this->email,\n            'role' => $this->role,\n            'created_at' => $this->created_at?->toIso8601String(),\n        ];\n    }",
+            "tokens": 75
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\CategoryRepository::getAll, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/CategoryRepository.php",
+                "member": "getAll",
+                "lines": [
+                    10,
+                    13
+                ]
+            },
+            "payload": "    public function getAll(): Collection\n    {\n        return Category::orderBy('order')->get();\n    }",
+            "tokens": 26
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on Illuminate\\Http\\JsonResponse, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Traits/ApiResponse.php",
+                "member": "Illuminate\\Http\\JsonResponse",
+                "lines": [
+                    1,
+                    69
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        }
+    ],
+    "dropped": []
+}
