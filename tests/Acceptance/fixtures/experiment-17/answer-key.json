@@ -1,0 +1,85 @@
+{
+  "experiment": "experiment-17",
+  "written": "2026-09-06, from the repository's own history, BEFORE any bundle was generated and BEFORE any reviewer was run",
+  "repository": "abouelsid-backend (private, operator-supplied) — Laravel 12.64.0",
+  "budget_tokens": 8000,
+  "n": 5,
+  "corpus_note": "Five real commits. Not a large corpus, and not presented as one. Three of the five take their ground truth from a LATER REAL FIX COMMIT in the same repository rather than from the milestone author's judgement, which is the strongest key available here.",
+
+  "tasks": [
+    {
+      "id": "T1",
+      "commit": "ec92403",
+      "subject": "feat: menu PDF upload with permanent URL and QR code with logo",
+      "selected_because": "The only real commit already keyed by an earlier milestone (M7/experiment-05), so its bundle is understood, and it exercises FOUR context types at once: a transaction premise, two model surfaces M14 added, framework-known references, and a trait member ADR-A010 cannot reach.",
+      "defect_present": "YES",
+      "defect": "upload() deletes the previously stored file and writes the new one to disk BEFORE the database write, with no transaction and no cleanup if the write fails — so a failed Setting write leaves an orphaned file on disk and the old file already gone.",
+      "ground_truth_source": "Commit 04328a5, 'fix: delete orphaned uploaded files when a DB write fails after upload', which fixed exactly this class of bug across the codebase. Ground truth is the repository's own later history, not the author's opinion.",
+      "diff_alone_sufficient": false,
+      "required_context": ["app/Models/Setting.php (fillable — whether the six mass-assigned columns are writable)", "app/Models/MediaItem.php", "the caller of upload(), to know whether a transaction surrounds it"],
+      "correct_conclusion": "YES, a defect: the filesystem is mutated before the database write with no rollback path.",
+      "bundle_expected_to_help": "PARTLY. M7's key predicted the tool flags the transaction premise (E5.3) and, since M14, fetches the Setting and MediaItem surfaces (E5.1, E5.2). The flag names the defect's mechanism directly. The trait member ApiResponse::success (E5.4) remains out of reach (ADR-A010)."
+    },
+    {
+      "id": "T2",
+      "commit": "fc573d2",
+      "subject": "fix: make dish description optional (nullable)",
+      "selected_because": "The purest 'the evidence is in another file' case in the history. The change looks complete and correct in isolation; what makes it wrong lives in a file the diff does not touch.",
+      "defect_present": "YES",
+      "defect": "Making descriptions nullable creates an ambiguity on the UPDATE path that this commit does not address: UpdateDishAction filters its payload through Arr::whereNotNull, so a description the client deliberately sends empty becomes null, is dropped, and the old text survives. The change is incomplete, not internally wrong.",
+      "ground_truth_source": "Commit 11c0ced, 'fix: clear dish description when updated with empty value', whose message states the mechanism verbatim: 'UpdateDishDTO mapped an empty description to null and UpdateDishAction then dropped every null via Arr::whereNotNull, so the old text survived.'",
+      "diff_alone_sufficient": false,
+      "required_context": ["app/Actions/Dish/UpdateDishAction.php (the Arr::whereNotNull payload)", "app/DTOs/Dish/UpdateDishDTO.php (fromRequest, which maps empty to null)"],
+      "correct_conclusion": "YES, a defect: the update path cannot express 'clear this field', so an emptied description silently keeps its old value.",
+      "bundle_expected_to_help": "UNCERTAIN, and this is the key's honest position. The diff touches CreateDishDTO, StoreDishRequest and a migration; it does not name UpdateDishAction or UpdateDishDTO at all. The tool only follows references the diff MAKES (P4/X1 — no forward import-following, and no reverse search except for a changed signature). If nothing in the changed regions names the update path, the bundle CANNOT surface it, and the correct outcome for this task is that the bundle does not help. Recorded in advance so a miss here is a prediction met, not a failure discovered."
+    },
+    {
+      "id": "T3",
+      "commit": "fdef4a9",
+      "subject": "feat: add whatsapp_number field to branches",
+      "selected_because": "The mass-assignment question Experiment 1 earned the model surface for — but with $fillable INSIDE the diff. A control for the bundle adding nothing where the diff already answers.",
+      "defect_present": "NO",
+      "defect": null,
+      "ground_truth_source": "Code inspection: the commit adds 'whatsapp_number' to Branch::$fillable, to both DTOs, both form requests, the resource and the migration. Nothing later in the history amends it.",
+      "diff_alone_sufficient": true,
+      "required_context": [],
+      "correct_conclusion": "NO defect. Every layer the new column must pass through is present in the diff, including $fillable.",
+      "bundle_expected_to_help": "NO — and it must not hurt. The right outcome is that both conditions answer NO, and that the bundle does not manufacture a doubt. If DIFF_PLUS_BUNDLE turns this into a YES or a CANNOT_TELL, that is the distraction cost the milestone is looking for."
+    },
+    {
+      "id": "T4",
+      "commit": "1fa1f66",
+      "subject": "fix: cast featured/signature query params to boolean in public DishController",
+      "selected_because": "A single self-contained file, correct on its face. The second control for 'the diff alone is already sufficient', chosen to be a FIX rather than a feature so the two controls do not share a shape.",
+      "defect_present": "NO",
+      "defect": null,
+      "ground_truth_source": "Code inspection: the change replaces raw string query parameters with $request->boolean(), guarded by has(), so an absent filter stays absent. Nothing later in the history amends it.",
+      "diff_alone_sufficient": true,
+      "required_context": [],
+      "correct_conclusion": "NO defect. The cast is correct and the has() guard preserves 'filter not supplied'.",
+      "bundle_expected_to_help": "NO. As T3."
+    },
+    {
+      "id": "T5",
+      "commit": "2c2a7b4",
+      "subject": "fix: menu PDF permanent_url uses frontend domain not API domain",
+      "selected_because": "THE NEGATIVE CONTROL. Correctness here turns on whether config('app.frontend_url') is a defined key with a sane production value — a CONFIGURATION fact. X3 defers a config resolver, so the tool is known not to resolve it. The task exists to catch the bundle appearing to help where it structurally cannot.",
+      "defect_present": "CANNOT_TELL",
+      "defect": null,
+      "ground_truth_source": "The correct answer is genuinely an abstention: no file in the diff, and nothing the tool fetches, establishes whether app.frontend_url is configured. A reviewer who answers YES or NO with HIGH confidence is overclaiming, whichever condition they are in.",
+      "diff_alone_sufficient": false,
+      "required_context": ["config/app.php (whether frontend_url is defined)", ".env / deployment configuration (its value in production)"],
+      "correct_conclusion": "CANNOT_TELL — the change is correct if and only if app.frontend_url is configured, and neither the diff nor the bundle can settle that.",
+      "bundle_expected_to_help": "NO, structurally. If DIFF_PLUS_BUNDLE becomes MORE confident here, the effect is an artefact and casts doubt on the whole result (protocol §9)."
+    }
+  ],
+
+  "predictions_recorded_in_advance": {
+    "T1": "bundle helps — the premise flag names the mechanism",
+    "T2": "bundle does NOT help — the diff never names the update path, so no move can reach it",
+    "T3": "no change; watch for a manufactured doubt",
+    "T4": "no change; watch for a manufactured doubt",
+    "T5": "no change; any increase in confidence is an artefact",
+    "why_this_matters": "Two of five predictions say the bundle will not help, and one says it cannot. Writing them down first is what stops the report being assembled around whichever tasks happened to improve."
+  }
+}

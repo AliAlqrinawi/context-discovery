@@ -1,0 +1,98 @@
+{
+  "note": "Verbatim answers from ten independent reviewer agents, one per (task, condition). No answer has been edited, normalised or re-run. T1-A and T1-B are appended below in the order they returned.",
+  "reviewer": "a fresh general-purpose language-model agent per cell, no conversation history, instructed to read only its own material directory",
+  "observations": [
+    {
+      "task": "T1",
+      "condition": "DIFF_ONLY",
+      "Q1": "YES",
+      "Q2": "The change adds endroid/qr-code 6.1.3, whose locked requirement is PHP ^8.4, while composer.json still declares the application as supporting \"php\": \"^8.2\", so composer install / deployment on PHP 8.2 or 8.3 will now fail (and the newly pulled-in ext-iconv and PngWriter's ext-gd are likewise undeclared).",
+      "Q3": "composer.json::config.platform.php",
+      "Q4": "MEDIUM",
+      "Q5": "\"php\": \"^8.4\""
+    },
+    {
+      "task": "T1",
+      "condition": "DIFF_PLUS_BUNDLE",
+      "Q1": "YES",
+      "Q2": "The change adds endroid/qr-code 6.1.3, whose locked requirement is PHP ^8.4, while the project's composer.json still declares \"php\": \"^8.2\", so `composer install` (and therefore the whole menu/QR feature) breaks on any PHP 8.2/8.3 environment the project claims to support.",
+      "Q3": "app/Http/Controllers/Controller.php::deleted",
+      "Q4": "MEDIUM",
+      "Q5": "\"php\": \"^8.4\""
+    },
+    {
+      "task": "T2",
+      "condition": "DIFF_ONLY",
+      "Q1": "CANNOT_TELL",
+      "Q2": "-",
+      "Q3": "app/Http/Controllers/DishController.php::store (the code that consumes CreateDishDTO and persists it — needed to confirm nothing downstream still requires a non-null string description)",
+      "Q4": "MEDIUM",
+      "Q5": "+        public readonly ?string $description_ar,"
+    },
+    {
+      "task": "T2",
+      "condition": "DIFF_PLUS_BUNDLE",
+      "Q1": "CANNOT_TELL",
+      "Q2": "-",
+      "Q3": "app/Models/Dish.php (and the consumer of CreateDishDTO, e.g. app/Services/DishService.php::create) — where the now-nullable description_ar/description_en are persisted and read back",
+      "Q4": "MEDIUM",
+      "Q5": "bundle_version 1 · budget 8000 / used 0 tokens"
+    },
+    {
+      "task": "T3",
+      "condition": "DIFF_ONLY",
+      "Q1": "YES",
+      "Q2": "BranchResource silently substitutes the branch's phone number for a missing WhatsApp number ($this->whatsapp_number ?? $this->phone), which contradicts the rest of the change — the column, DTOs and validation all deliberately preserve null — so the API can never report \"no WhatsApp\", and a client that reads then writes the resource back will persist the phone number as the WhatsApp number.",
+      "Q3": "app/Actions/Branch/UpdateBranchAction.php::execute",
+      "Q4": "MEDIUM",
+      "Q5": "'whatsapp_number' => $this->whatsapp_number ?? $this->phone,"
+    },
+    {
+      "task": "T3",
+      "condition": "DIFF_PLUS_BUNDLE",
+      "Q1": "YES",
+      "Q2": "BranchResource returns whatsapp_number as a silent fallback to phone, so the read path can never express the null that the write path (nullable column, nullable DTO/validation) deliberately supports — a client that reads a branch and submits it back (edit form prefill, PUT/PATCH round trip) permanently persists the phone number into whatsapp_number, and a branch with no WhatsApp is indistinguishable from one that shares the phone.",
+      "Q3": "app/Actions/Branch/UpdateBranchAction.php::execute",
+      "Q4": "MEDIUM",
+      "Q5": "'whatsapp_number' => $this->whatsapp_number ?? $this->phone,"
+    },
+    {
+      "task": "T4",
+      "condition": "DIFF_ONLY",
+      "Q1": "CANNOT_TELL",
+      "Q2": "-",
+      "Q3": "GetDishesAction::execute",
+      "Q4": "MEDIUM",
+      "Q5": "$dishes = $action->execute($filters);"
+    },
+    {
+      "task": "T4",
+      "condition": "DIFF_PLUS_BUNDLE",
+      "Q1": "CANNOT_TELL",
+      "Q2": "-",
+      "Q3": "GetDishesAction::execute",
+      "Q4": "MEDIUM",
+      "Q5": "$filters['featured'] = $request->boolean('featured');",
+      "unprompted_remark": "the context bundle was empty and diagnostics reported nothing, so the judgement rests on the diff alone"
+    },
+    {
+      "task": "T5",
+      "condition": "DIFF_ONLY",
+      "Q1": "CANNOT_TELL",
+      "Q2": "-",
+      "Q3": "config/app.php::frontend_url",
+      "Q4": "MEDIUM",
+      "Q5": "'permanent_url' => config('app.frontend_url').'/menu/pdf',"
+    },
+    {
+      "task": "T5",
+      "condition": "DIFF_PLUS_BUNDLE",
+      "Q1": "CANNOT_TELL",
+      "Q2": "-",
+      "Q3": "config/app.php::frontend_url",
+      "Q4": "MEDIUM",
+      "Q5": "'permanent_url' => config('app.frontend_url').'/menu/pdf',"
+    }
+  ],
+  "evidence_check": "All ten Q5 quotations were verified mechanically to occur verbatim in the material that reviewer was given. 10/10 evidence-supported."
+}

@@ -1,0 +1,22 @@
+diff --git a/app/Http/Controllers/Public/DishController.php b/app/Http/Controllers/Public/DishController.php
+index 33b644e..2e6d9a8 100644
+--- a/app/Http/Controllers/Public/DishController.php
++++ b/app/Http/Controllers/Public/DishController.php
+@@ -13,7 +13,16 @@ class DishController extends Controller
+ {
+     public function index(Request $request, GetDishesAction $action): JsonResponse
+     {
+-        $filters = $request->only(['category_id', 'featured', 'signature', 'per_page', 'page']);
++        $filters = $request->only(['category_id', 'per_page', 'page']);
++
++        if ($request->has('featured')) {
++            $filters['featured'] = $request->boolean('featured');
++        }
++
++        if ($request->has('signature')) {
++            $filters['signature'] = $request->boolean('signature');
++        }
++
+         $dishes = $action->execute($filters);
+ 
+         return $this->paginated(
