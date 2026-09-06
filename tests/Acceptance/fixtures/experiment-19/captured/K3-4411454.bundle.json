@@ -1,0 +1,112 @@
+{
+    "bundle_version": 1,
+    "budget_tokens": 8000,
+    "used_tokens": 299,
+    "items": [
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Http\\Resources\\User\\UserResource, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Http/Resources/User/UserResource.php",
+                "member": "toArray",
+                "lines": [
+                    10,
+                    19
+                ]
+            },
+            "payload": "    public function toArray(Request $request): array\n    {\n        return [\n            'id' => $this->id,\n            'name' => $this->name,\n            'email' => $this->email,\n            'role' => $this->role,\n            'created_at' => $this->created_at?->toIso8601String(),\n        ];\n    }",
+            "tokens": 75
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\User::where, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/User.php",
+                "member": "casts",
+                "lines": [
+                    40,
+                    51
+                ]
+            },
+            "payload": "    /**\n     * Get the attributes that should be cast.\n     *\n     * @return array<string, string>\n     */\n    protected function casts(): array\n    {\n        return [\n            'email_verified_at' => 'datetime',\n            'password' => 'hashed',\n        ];\n    }",
+            "tokens": 67
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\User::where, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/User.php",
+                "member": "fillable",
+                "lines": [
+                    18,
+                    28
+                ]
+            },
+            "payload": "    /**\n     * The attributes that are mass assignable.\n     *\n     * @var list<string>\n     */\n    protected $fillable = [\n        'name',\n        'email',\n        'password',\n        'role',\n    ];",
+            "tokens": 50
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\User::where, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/User.php",
+                "member": "hidden",
+                "lines": [
+                    30,
+                    38
+                ]
+            },
+            "payload": "    /**\n     * The attributes that should be hidden for serialization.\n     *\n     * @var list<string>\n     */\n    protected $hidden = [\n        'password',\n        'remember_token',\n    ];",
+            "tokens": 48
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Models\\User::factory, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "tests/Feature/ProfileTest.php",
+                "member": "App\\Models\\User::factory",
+                "lines": [
+                    1,
+                    130
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Models\\User::where, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "tests/Feature/ProfileTest.php",
+                "member": "App\\Models\\User::where",
+                "lines": [
+                    1,
+                    130
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region performs several persistence writes; whether a transaction wraps them is decided by the caller, which the diff does not show",
+            "assertion_kind": "unverifiable_premise",
+            "provenance": {
+                "path": "app/Http/Controllers/Admin/ProfileController.php",
+                "lines": [
+                    1,
+                    55
+                ]
+            },
+            "payload": "ASSUMPTION: this code assumes a surrounding transaction; caller not checked",
+            "tokens": 19
+        }
+    ],
+    "dropped": []
+}

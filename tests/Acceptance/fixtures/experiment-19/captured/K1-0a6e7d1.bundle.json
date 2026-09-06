@@ -1,0 +1,37 @@
+{
+    "bundle_version": 1,
+    "budget_tokens": 8000,
+    "used_tokens": 221,
+    "items": [
+        {
+            "lever": "fetched",
+            "reason": "the region uses var_export, which the file's use block does not import",
+            "assertion_kind": "same_file_symbol_absence",
+            "provenance": {
+                "path": "app/Actions/Dish/GetDishesAction.php",
+                "lines": [
+                    5,
+                    7
+                ]
+            },
+            "payload": "use App\\Repositories\\DishRepository;\nuse App\\Services\\CacheGroup;\nuse Illuminate\\Pagination\\LengthAwarePaginator;",
+            "tokens": 29
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region uses var_export, which the file's use block does not import",
+            "assertion_kind": "same_file_symbol_absence",
+            "provenance": {
+                "path": "app/Actions/Dish/GetDishesAction.php",
+                "member": "execute",
+                "lines": [
+                    15,
+                    32
+                ]
+            },
+            "payload": "    public function execute(array $filters = []): LengthAwarePaginator\n    {\n        $locale = app()->getLocale();\n        $categoryId = $filters['category_id'] ?? 'all';\n        $featured = array_key_exists('featured', $filters) ? var_export($filters['featured'], true) : 'all';\n        $signature = array_key_exists('signature', $filters) ? var_export($filters['signature'], true) : 'all';\n        $perPage = $filters['per_page'] ?? 'default';\n        $page = request()->integer('page', 1);\n\n        $key = \"dishes_{$locale}_{$categoryId}_{$featured}_{$signature}_{$perPage}_{$page}\";\n\n        return CacheGroup::remember(\n            'dishes',\n            $key,\n            now()->addHour(),\n            fn () => $this->repository->getAll($filters)\n        );\n    }",
+            "tokens": 192
+        }
+    ],
+    "dropped": []
+}

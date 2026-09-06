@@ -1,0 +1,5 @@
+new file: tests/Feature/Actions/FileUploadRollbackTest.php — own-file context is in the diff, not fetched
+dependency member: Illuminate\Support\Facades\Storage::fake declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Storage.php:94; source not fetched
+dependency member: Illuminate\Http\UploadedFile::fake declared at vendor/laravel/framework/src/Illuminate/Http/UploadedFile.php:17; source not fetched
+framework reference: Illuminate\Support\Facades\Storage::disk declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Storage.php:11 (@method static \Illuminate\Contracts\Filesystem\Filesystem disk(\UnitEnum|string|null $name = null))
+missing PSR-4 entry: RuntimeException named in tests/Feature/Actions/FileUploadRollbackTest.php

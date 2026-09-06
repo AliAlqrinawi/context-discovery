@@ -1,0 +1,17 @@
+new file: app/Http/Controllers/Admin/ProfileController.php — own-file context is in the diff, not fetched
+new file: app/Http/Requests/Profile/UpdatePasswordRequest.php — own-file context is in the diff, not fetched
+new file: app/Http/Requests/Profile/UpdateProfileRequest.php — own-file context is in the diff, not fetched
+new file: tests/Feature/ProfileTest.php — own-file context is in the diff, not fetched
+framework reference: Illuminate\Support\Facades\Hash::check declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Hash.php:11 (@method static bool check(string $value, string $hashedValue, array $options = []))
+framework reference: Illuminate\Support\Facades\Hash::make declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Hash.php:10 (@method static string make(string $value, array $options = []))
+dependency class: Illuminate\Http\Request provided by vendor/laravel/framework/src/Illuminate/Http/Request.php; surface not fetched
+dependency class: Illuminate\Http\JsonResponse provided by vendor/laravel/framework/src/Illuminate/Http/JsonResponse.php; surface not fetched
+already in the diff: App\Http\Requests\Profile\UpdateProfileRequest declared in app/Http/Requests/Profile/UpdateProfileRequest.php; not fetched again
+already in the diff: App\Http\Requests\Profile\UpdatePasswordRequest declared in app/Http/Requests/Profile/UpdatePasswordRequest.php; not fetched again
+dependency member: Illuminate\Validation\Rule::unique declared at vendor/laravel/framework/src/Illuminate/Validation/Rule.php:94; source not fetched
+framework reference: Illuminate\Support\Facades\Route::prefix declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Route.php:100 (@method static \Illuminate\Routing\RouteRegistrar prefix(string $prefix))
+framework reference: Illuminate\Support\Facades\Route::get declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Route.php:6 (@method static \Illuminate\Routing\Route get(string $uri, array|string|callable|null $action = null))
+framework reference: Illuminate\Support\Facades\Route::put declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Route.php:8 (@method static \Illuminate\Routing\Route put(string $uri, array|string|callable|null $action = null))
+unresolved named_reference: App\Models\User::where in tests/Feature/ProfileTest.php
+unresolved named_reference: App\Models\User::factory in tests/Feature/ProfileTest.php
+framework reference: Illuminate\Support\Facades\Hash::check declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Hash.php:11 (@method static bool check(string $value, string $hashedValue, array $options = []))

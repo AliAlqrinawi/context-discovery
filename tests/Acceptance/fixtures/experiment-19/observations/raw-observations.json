@@ -1,0 +1,147 @@
+{
+  "note": "Verbatim answers from fourteen independent reviewer agents, one per (task, condition). Nothing edited, normalised or re-run. K6-B is appended when it returns.",
+  "reviewer": "a fresh general-purpose language-model agent per cell — no conversation history, no prior exposure to the repository, pointed at a directory containing only its own packet",
+  "observations": [
+    {
+      "task": "K1",
+      "commit": "0a6e7d1",
+      "condition": "DIFF_ONLY",
+      "Q1": "CANNOT_TELL",
+      "Q2": "-",
+      "Q3": "app/Traits/ApiResponse.php::paginated",
+      "Q4": "MEDIUM",
+      "Q5": "return $this->paginated(DishResource::collection($result), $result, __('messages.fetched'));"
+    },
+    {
+      "task": "K1",
+      "commit": "0a6e7d1",
+      "condition": "DIFF_PLUS_BUNDLE",
+      "Q1": "CANNOT_TELL",
+      "Q2": "-",
+      "Q3": "app/Http/Controllers/Controller.php::paginated",
+      "Q4": "MEDIUM",
+      "Q5": "unreadable path: app/Http/Controllers/DishController.php (no assertions extracted)"
+    },
+    {
+      "task": "K2",
+      "commit": "721ea3c",
+      "condition": "DIFF_ONLY",
+      "Q1": "NO",
+      "Q2": "-",
+      "Q3": "tests/Feature/DishControllerTest.php::test_index_pagination (any test or Blade listing view that asserts the previous page sizes of 12/15)",
+      "Q4": "MEDIUM",
+      "Q5": "return $query->paginate($filters['per_page'] ?? 10);"
+    },
+    {
+      "task": "K2",
+      "commit": "721ea3c",
+      "condition": "DIFF_PLUS_BUNDLE",
+      "Q1": "NO",
+      "Q2": "-",
+      "Q3": "app/Http/Controllers/UserController.php::index (and the corresponding Dish/QuoteRequest controllers or feature tests that consume these paginators and may assume a page size of 15/12)",
+      "Q4": "LOW",
+      "Q5": "-        return User::with('roles')->paginate(15);\n+        return User::with('roles')->paginate(10);"
+    },
+    {
+      "task": "K3",
+      "commit": "4411454",
+      "condition": "DIFF_ONLY",
+      "Q1": "CANNOT_TELL",
+      "Q2": "-",
+      "Q3": "app/Http/Controllers/Controller.php::error",
+      "Q4": "MEDIUM",
+      "Q5": "['current_password' => [__('messages.invalid_current_password')]]"
+    },
+    {
+      "task": "K3",
+      "commit": "4411454",
+      "condition": "DIFF_PLUS_BUNDLE",
+      "Q1": "NO",
+      "Q2": "-",
+      "Q3": "routes/admin.php::<enclosing route group middleware> (to confirm the new profile group inherits auth:sanctum)",
+      "Q4": "MEDIUM",
+      "Q5": "'password' => 'hashed',"
+    },
+    {
+      "task": "K4",
+      "commit": "e770086",
+      "condition": "DIFF_ONLY",
+      "Q1": "CANNOT_TELL",
+      "Q2": "-",
+      "Q3": "database/migrations/*_create_media_items_table.php::up (the `page`/`section` column definition and permitted values) — needed to tell whether the literal value 'all' can occur, which would make the new sentinel cache key collide with the null/all-pages key",
+      "Q4": "MEDIUM",
+      "Q5": "$key = 'media_items_' . ($page ?? 'all') . '_' . ($section ?? 'all');"
+    },
+    {
+      "task": "K4",
+      "commit": "e770086",
+      "condition": "DIFF_PLUS_BUNDLE",
+      "Q1": "NO",
+      "Q2": "-",
+      "Q3": "app/Actions/MediaItem/GetMediaItemsAction.php::execute — the remaining call sites the tool truncated (\"call sites truncated at 20 for execute under app/\"), i.e. any non-admin caller of this action",
+      "Q4": "MEDIUM",
+      "Q5": "public function getByPage(?string $page = null, ?string $section = null): Collection"
+    },
+    {
+      "task": "K5",
+      "commit": "04328a5",
+      "condition": "DIFF_ONLY",
+      "Q1": "CANNOT_TELL",
+      "Q2": "-",
+      "Q3": "app/Services/ImageService.php::store (the shape of the array it returns — specifically whether it contains a 'path' key that ImageService::delete() accepts, since only $stored['url'] is ever referenced in the shown code)",
+      "Q4": "MEDIUM",
+      "Q5": "$this->imageService->delete($stored['path']);"
+    },
+    {
+      "task": "K5",
+      "commit": "04328a5",
+      "condition": "DIFF_PLUS_BUNDLE",
+      "Q1": "NO",
+      "Q2": "-",
+      "Q3": "app/Services/ImageService.php::store",
+      "Q4": "MEDIUM",
+      "Q5": "            if (isset($stored)) {\n                $this->imageService->delete($stored['path']);\n            }\n\n            throw $e;"
+    },
+    {
+      "task": "K6",
+      "commit": "560b21b",
+      "condition": "DIFF_ONLY",
+      "Q1": "YES",
+      "Q2": "The CacheGroup key index can silently under-represent the live keys — index() returns early for an already-indexed key so the index's 7-day TTL is never refreshed while entry TTLs restart on every cache miss (and the read-modify-write of the index is non-atomic across concurrent requests) — so once the index expires or loses an entry, flush() forgets nothing for those keys and stale content keeps being served after a create/update/delete.",
+      "Q3": "app/Actions/Category/GetCategoriesAction.php::execute",
+      "Q4": "MEDIUM",
+      "Q5": "if (in_array($key, $keys, true)) {"
+    },
+    {
+      "task": "K7",
+      "commit": "11c0ced",
+      "condition": "DIFF_ONLY",
+      "Q1": "CANNOT_TELL",
+      "Q2": "-",
+      "Q3": "app/DTOs/Dish/UpdateDishDTO.php::fromRequest (the elided lines assigning description_ar/description_en)",
+      "Q4": "MEDIUM",
+      "Q5": "$data[$key] = $dto->{$key};"
+    },
+    {
+      "task": "K7",
+      "commit": "11c0ced",
+      "condition": "DIFF_PLUS_BUNDLE",
+      "Q1": "CANNOT_TELL",
+      "Q2": "-",
+      "Q3": "app/Actions/Dish/UpdateDishAction.php::execute (the unshown tail of the method that consumes and persists $data)",
+      "Q4": "MEDIUM",
+      "Q5": "$data = Arr::whereNotNull(["
+    },
+    {
+      "task": "K6",
+      "commit": "560b21b",
+      "condition": "DIFF_PLUS_BUNDLE",
+      "Q1": "YES",
+      "Q2": "CacheGroup's key index is never refreshed once a key is already listed (`index()` returns early on `in_array`), so the 7-day index entry expires while shorter-TTL entries are still cached and, after expiry, only keys read again get re-indexed — leaving the remaining group entries orphaned so a later `CacheGroup::flush()` silently fails to invalidate them (the same read-modify-write index is also lost under concurrent requests, and `flush()` deleting the index orphans any value a concurrent `remember()` is about to write).",
+      "Q3": "config/cache.php::default",
+      "Q4": "MEDIUM",
+      "Q5": "Must outlive the longest entry TTL used by callers, otherwise the index expires while its entries are still cached and they leak."
+    }
+  ],
+  "evidence_check": "All 14 Q5 quotations verified to occur verbatim in that reviewer's own material. Provenance traced: K3-B's quote exists ONLY in the bundle (the User::casts slice) and nowhere in the diff — the one cell where the deciding evidence was structurally unavailable to DIFF_ONLY. K4-B's appears in both. Every other quote is from the diff."
+}

@@ -1,0 +1,1178 @@
+diff --git a/app/Actions/Branch/CreateBranchAction.php b/app/Actions/Branch/CreateBranchAction.php
+index 68b0822..d4ef7f6 100644
+--- a/app/Actions/Branch/CreateBranchAction.php
++++ b/app/Actions/Branch/CreateBranchAction.php
+@@ -5,6 +5,7 @@
+ use App\DTOs\Branch\CreateBranchDTO;
+ use App\Models\Branch;
+ use App\Repositories\BranchRepository;
++use App\Services\CacheGroup;
+ use App\Services\ImageService;
+ use Illuminate\Support\Facades\Cache;
+ 
+@@ -47,7 +48,7 @@ public function execute(CreateBranchDTO $dto): Branch
+             throw $e;
+         }
+ 
+-        Cache::tags(['branches'])->flush();
++        CacheGroup::flush('branches');
+         Cache::forget('dashboard_stats');
+ 
+         return $branch;
+diff --git a/app/Actions/Branch/DeleteBranchAction.php b/app/Actions/Branch/DeleteBranchAction.php
+index a3efb00..ce5f522 100644
+--- a/app/Actions/Branch/DeleteBranchAction.php
++++ b/app/Actions/Branch/DeleteBranchAction.php
+@@ -3,6 +3,7 @@
+ namespace App\Actions\Branch;
+ 
+ use App\Repositories\BranchRepository;
++use App\Services\CacheGroup;
+ use App\Services\ImageService;
+ use Illuminate\Support\Facades\Cache;
+ 
+@@ -23,7 +24,7 @@ public function execute(int $id): void
+ 
+         $this->repository->delete($id);
+ 
+-        Cache::tags(['branches'])->flush();
++        CacheGroup::flush('branches');
+         Cache::forget('dashboard_stats');
+     }
+ }
+diff --git a/app/Actions/Branch/GetBranchesAction.php b/app/Actions/Branch/GetBranchesAction.php
+index 1cdfec2..18c5aab 100644
+--- a/app/Actions/Branch/GetBranchesAction.php
++++ b/app/Actions/Branch/GetBranchesAction.php
+@@ -3,8 +3,8 @@
+ namespace App\Actions\Branch;
+ 
+ use App\Repositories\BranchRepository;
++use App\Services\CacheGroup;
+ use Illuminate\Database\Eloquent\Collection;
+-use Illuminate\Support\Facades\Cache;
+ 
+ class GetBranchesAction
+ {
+@@ -18,7 +18,8 @@ public function execute(?bool $showInFooter = null): Collection
+         $filter = $showInFooter === null ? 'all' : var_export($showInFooter, true);
+         $key = "branches_{$locale}_{$filter}";
+ 
+-        return Cache::tags(['branches'])->remember(
++        return CacheGroup::remember(
++            'branches',
+             $key,
+             now()->addHour(),
+             fn () => $this->repository->getAll($showInFooter)
+diff --git a/app/Actions/Branch/UpdateBranchAction.php b/app/Actions/Branch/UpdateBranchAction.php
+index 6b3213d..0785e08 100644
+--- a/app/Actions/Branch/UpdateBranchAction.php
++++ b/app/Actions/Branch/UpdateBranchAction.php
+@@ -5,9 +5,9 @@
+ use App\DTOs\Branch\UpdateBranchDTO;
+ use App\Models\Branch;
+ use App\Repositories\BranchRepository;
++use App\Services\CacheGroup;
+ use App\Services\ImageService;
+ use Illuminate\Support\Arr;
+-use Illuminate\Support\Facades\Cache;
+ 
+ class UpdateBranchAction
+ {
+@@ -54,7 +54,7 @@ public function execute(int $id, UpdateBranchDTO $dto): Branch
+             throw $e;
+         }
+ 
+-        Cache::tags(['branches'])->flush();
++        CacheGroup::flush('branches');
+ 
+         return $branch;
+     }
+diff --git a/app/Actions/Catering/CreatePackageAction.php b/app/Actions/Catering/CreatePackageAction.php
+index cf8e401..a1d7512 100644
+--- a/app/Actions/Catering/CreatePackageAction.php
++++ b/app/Actions/Catering/CreatePackageAction.php
+@@ -5,8 +5,8 @@
+ use App\DTOs\Catering\CreatePackageDTO;
+ use App\Models\CateringPackage;
+ use App\Repositories\CateringPackageRepository;
++use App\Services\CacheGroup;
+ use App\Services\ImageService;
+-use Illuminate\Support\Facades\Cache;
+ 
+ class CreatePackageAction
+ {
+@@ -44,7 +44,7 @@ public function execute(CreatePackageDTO $dto): CateringPackage
+             throw $e;
+         }
+ 
+-        Cache::tags(['catering_packages'])->flush();
++        CacheGroup::flush('catering_packages');
+ 
+         return $package;
+     }
+diff --git a/app/Actions/Catering/CreateSampleMenuAction.php b/app/Actions/Catering/CreateSampleMenuAction.php
+index 76c5ea3..baf4134 100644
+--- a/app/Actions/Catering/CreateSampleMenuAction.php
++++ b/app/Actions/Catering/CreateSampleMenuAction.php
+@@ -5,8 +5,8 @@
+ use App\DTOs\Catering\CreateSampleMenuDTO;
+ use App\Models\SampleMenu;
+ use App\Repositories\SampleMenuRepository;
++use App\Services\CacheGroup;
+ use App\Services\ImageService;
+-use Illuminate\Support\Facades\Cache;
+ 
+ class CreateSampleMenuAction
+ {
+@@ -41,7 +41,7 @@ public function execute(CreateSampleMenuDTO $dto): SampleMenu
+             throw $e;
+         }
+ 
+-        Cache::tags(['sample_menus'])->flush();
++        CacheGroup::flush('sample_menus');
+ 
+         return $menu;
+     }
+diff --git a/app/Actions/Catering/DeletePackageAction.php b/app/Actions/Catering/DeletePackageAction.php
+index 0ff4d68..7f55e6d 100644
+--- a/app/Actions/Catering/DeletePackageAction.php
++++ b/app/Actions/Catering/DeletePackageAction.php
+@@ -3,8 +3,8 @@
+ namespace App\Actions\Catering;
+ 
+ use App\Repositories\CateringPackageRepository;
++use App\Services\CacheGroup;
+ use App\Services\ImageService;
+-use Illuminate\Support\Facades\Cache;
+ 
+ class DeletePackageAction
+ {
+@@ -23,6 +23,6 @@ public function execute(int $id): void
+ 
+         $this->repository->delete($id);
+ 
+-        Cache::tags(['catering_packages'])->flush();
++        CacheGroup::flush('catering_packages');
+     }
+ }
+diff --git a/app/Actions/Catering/DeleteSampleMenuAction.php b/app/Actions/Catering/DeleteSampleMenuAction.php
+index fe6d14b..b3de65f 100644
+--- a/app/Actions/Catering/DeleteSampleMenuAction.php
++++ b/app/Actions/Catering/DeleteSampleMenuAction.php
+@@ -3,8 +3,8 @@
+ namespace App\Actions\Catering;
+ 
+ use App\Repositories\SampleMenuRepository;
++use App\Services\CacheGroup;
+ use App\Services\ImageService;
+-use Illuminate\Support\Facades\Cache;
+ 
+ class DeleteSampleMenuAction
+ {
+@@ -23,6 +23,6 @@ public function execute(int $id): void
+ 
+         $this->repository->delete($id);
+ 
+-        Cache::tags(['sample_menus'])->flush();
++        CacheGroup::flush('sample_menus');
+     }
+ }
+diff --git a/app/Actions/Catering/GetPackagesAction.php b/app/Actions/Catering/GetPackagesAction.php
+index 3cadd4d..52bd33d 100644
+--- a/app/Actions/Catering/GetPackagesAction.php
++++ b/app/Actions/Catering/GetPackagesAction.php
+@@ -3,8 +3,8 @@
+ namespace App\Actions\Catering;
+ 
+ use App\Repositories\CateringPackageRepository;
++use App\Services\CacheGroup;
+ use Illuminate\Database\Eloquent\Collection;
+-use Illuminate\Support\Facades\Cache;
+ 
+ class GetPackagesAction
+ {
+@@ -17,7 +17,8 @@ public function execute(): Collection
+         $locale = app()->getLocale();
+         $key = "catering_packages_{$locale}";
+ 
+-        return Cache::tags(['catering_packages'])->remember(
++        return CacheGroup::remember(
++            'catering_packages',
+             $key,
+             now()->addHour(),
+             fn () => $this->repository->getAll()
+diff --git a/app/Actions/Catering/GetSampleMenusAction.php b/app/Actions/Catering/GetSampleMenusAction.php
+index 614f2fb..31f694f 100644
+--- a/app/Actions/Catering/GetSampleMenusAction.php
++++ b/app/Actions/Catering/GetSampleMenusAction.php
+@@ -3,8 +3,8 @@
+ namespace App\Actions\Catering;
+ 
+ use App\Repositories\SampleMenuRepository;
++use App\Services\CacheGroup;
+ use Illuminate\Database\Eloquent\Collection;
+-use Illuminate\Support\Facades\Cache;
+ 
+ class GetSampleMenusAction
+ {
+@@ -17,7 +17,8 @@ public function execute(): Collection
+         $locale = app()->getLocale();
+         $key = "sample_menus_{$locale}";
+ 
+-        return Cache::tags(['sample_menus'])->remember(
++        return CacheGroup::remember(
++            'sample_menus',
+             $key,
+             now()->addHour(),
+             fn () => $this->repository->getAll()
+diff --git a/app/Actions/Catering/UpdatePackageAction.php b/app/Actions/Catering/UpdatePackageAction.php
+index c22aedf..2ddab8d 100644
+--- a/app/Actions/Catering/UpdatePackageAction.php
++++ b/app/Actions/Catering/UpdatePackageAction.php
+@@ -5,9 +5,9 @@
+ use App\DTOs\Catering\UpdatePackageDTO;
+ use App\Models\CateringPackage;
+ use App\Repositories\CateringPackageRepository;
++use App\Services\CacheGroup;
+ use App\Services\ImageService;
+ use Illuminate\Support\Arr;
+-use Illuminate\Support\Facades\Cache;
+ 
+ class UpdatePackageAction
+ {
+@@ -51,7 +51,7 @@ public function execute(int $id, UpdatePackageDTO $dto): CateringPackage
+             throw $e;
+         }
+ 
+-        Cache::tags(['catering_packages'])->flush();
++        CacheGroup::flush('catering_packages');
+ 
+         return $package;
+     }
+diff --git a/app/Actions/Catering/UpdateSampleMenuAction.php b/app/Actions/Catering/UpdateSampleMenuAction.php
+index 114b871..1203bc1 100644
+--- a/app/Actions/Catering/UpdateSampleMenuAction.php
++++ b/app/Actions/Catering/UpdateSampleMenuAction.php
+@@ -5,8 +5,8 @@
+ use App\DTOs\Catering\CreateSampleMenuDTO;
+ use App\Models\SampleMenu;
+ use App\Repositories\SampleMenuRepository;
++use App\Services\CacheGroup;
+ use App\Services\ImageService;
+-use Illuminate\Support\Facades\Cache;
+ 
+ class UpdateSampleMenuAction
+ {
+@@ -47,7 +47,7 @@ public function execute(int $id, CreateSampleMenuDTO $dto): SampleMenu
+             throw $e;
+         }
+ 
+-        Cache::tags(['sample_menus'])->flush();
++        CacheGroup::flush('sample_menus');
+ 
+         return $menu;
+     }
+diff --git a/app/Actions/DeliveryApp/CreateDeliveryAppAction.php b/app/Actions/DeliveryApp/CreateDeliveryAppAction.php
+index cc36b5c..17f1a33 100644
+--- a/app/Actions/DeliveryApp/CreateDeliveryAppAction.php
++++ b/app/Actions/DeliveryApp/CreateDeliveryAppAction.php
+@@ -5,8 +5,8 @@
+ use App\DTOs\DeliveryApp\CreateDeliveryAppDTO;
+ use App\Models\DeliveryApp;
+ use App\Repositories\DeliveryAppRepository;
++use App\Services\CacheGroup;
+ use App\Services\ImageService;
+-use Illuminate\Support\Facades\Cache;
+ 
+ class CreateDeliveryAppAction
+ {
+@@ -41,7 +41,7 @@ public function execute(CreateDeliveryAppDTO $dto): DeliveryApp
+             throw $e;
+         }
+ 
+-        Cache::tags(['delivery_apps'])->flush();
++        CacheGroup::flush('delivery_apps');
+ 
+         return $deliveryApp;
+     }
+diff --git a/app/Actions/DeliveryApp/DeleteDeliveryAppAction.php b/app/Actions/DeliveryApp/DeleteDeliveryAppAction.php
+index 79f2ad7..4a8d536 100644
+--- a/app/Actions/DeliveryApp/DeleteDeliveryAppAction.php
++++ b/app/Actions/DeliveryApp/DeleteDeliveryAppAction.php
+@@ -3,8 +3,8 @@
+ namespace App\Actions\DeliveryApp;
+ 
+ use App\Repositories\DeliveryAppRepository;
++use App\Services\CacheGroup;
+ use App\Services\ImageService;
+-use Illuminate\Support\Facades\Cache;
+ 
+ class DeleteDeliveryAppAction
+ {
+@@ -23,6 +23,6 @@ public function execute(int $id): void
+ 
+         $this->repository->delete($id);
+ 
+-        Cache::tags(['delivery_apps'])->flush();
++        CacheGroup::flush('delivery_apps');
+     }
+ }
+diff --git a/app/Actions/DeliveryApp/GetDeliveryAppsAction.php b/app/Actions/DeliveryApp/GetDeliveryAppsAction.php
+index 0ef79f4..65bb847 100644
+--- a/app/Actions/DeliveryApp/GetDeliveryAppsAction.php
++++ b/app/Actions/DeliveryApp/GetDeliveryAppsAction.php
+@@ -3,8 +3,8 @@
+ namespace App\Actions\DeliveryApp;
+ 
+ use App\Repositories\DeliveryAppRepository;
++use App\Services\CacheGroup;
+ use Illuminate\Database\Eloquent\Collection;
+-use Illuminate\Support\Facades\Cache;
+ 
+ class GetDeliveryAppsAction
+ {
+@@ -17,7 +17,8 @@ public function execute(bool $activeOnly = true): Collection
+         $locale = app()->getLocale();
+         $key = "delivery_apps_{$locale}_".($activeOnly ? 'active' : 'all');
+ 
+-        return Cache::tags(['delivery_apps'])->remember(
++        return CacheGroup::remember(
++            'delivery_apps',
+             $key,
+             now()->addHour(),
+             fn () => $this->repository->getAll($activeOnly)
+diff --git a/app/Actions/DeliveryApp/UpdateDeliveryAppAction.php b/app/Actions/DeliveryApp/UpdateDeliveryAppAction.php
+index 3223522..594e4ec 100644
+--- a/app/Actions/DeliveryApp/UpdateDeliveryAppAction.php
++++ b/app/Actions/DeliveryApp/UpdateDeliveryAppAction.php
+@@ -5,8 +5,8 @@
+ use App\DTOs\DeliveryApp\CreateDeliveryAppDTO;
+ use App\Models\DeliveryApp;
+ use App\Repositories\DeliveryAppRepository;
++use App\Services\CacheGroup;
+ use App\Services\ImageService;
+-use Illuminate\Support\Facades\Cache;
+ 
+ class UpdateDeliveryAppAction
+ {
+@@ -47,7 +47,7 @@ public function execute(int $id, CreateDeliveryAppDTO $dto): DeliveryApp
+             throw $e;
+         }
+ 
+-        Cache::tags(['delivery_apps'])->flush();
++        CacheGroup::flush('delivery_apps');
+ 
+         return $deliveryApp;
+     }
+diff --git a/app/Actions/Dish/CreateDishAction.php b/app/Actions/Dish/CreateDishAction.php
+index 7a55aba..16b0838 100644
+--- a/app/Actions/Dish/CreateDishAction.php
++++ b/app/Actions/Dish/CreateDishAction.php
+@@ -5,6 +5,7 @@
+ use App\DTOs\Dish\CreateDishDTO;
+ use App\Models\Dish;
+ use App\Repositories\DishRepository;
++use App\Services\CacheGroup;
+ use App\Services\ImageService;
+ use Illuminate\Support\Facades\Cache;
+ 
+@@ -45,7 +46,7 @@ public function execute(CreateDishDTO $dto): Dish
+             throw $e;
+         }
+ 
+-        Cache::tags(['dishes'])->flush();
++        CacheGroup::flush('dishes');
+         Cache::forget('dashboard_stats');
+ 
+         return $dish;
+diff --git a/app/Actions/Dish/DeleteDishAction.php b/app/Actions/Dish/DeleteDishAction.php
+index 6aee442..d73c88c 100644
+--- a/app/Actions/Dish/DeleteDishAction.php
++++ b/app/Actions/Dish/DeleteDishAction.php
+@@ -3,6 +3,7 @@
+ namespace App\Actions\Dish;
+ 
+ use App\Repositories\DishRepository;
++use App\Services\CacheGroup;
+ use App\Services\ImageService;
+ use Illuminate\Support\Facades\Cache;
+ 
+@@ -23,7 +24,7 @@ public function execute(int $id): void
+ 
+         $this->repository->delete($id);
+ 
+-        Cache::tags(['dishes'])->flush();
++        CacheGroup::flush('dishes');
+         Cache::forget('dashboard_stats');
+     }
+ }
+diff --git a/app/Actions/Dish/GetDishesAction.php b/app/Actions/Dish/GetDishesAction.php
+index 0d49068..ac5a7d4 100644
+--- a/app/Actions/Dish/GetDishesAction.php
++++ b/app/Actions/Dish/GetDishesAction.php
+@@ -3,8 +3,8 @@
+ namespace App\Actions\Dish;
+ 
+ use App\Repositories\DishRepository;
++use App\Services\CacheGroup;
+ use Illuminate\Pagination\LengthAwarePaginator;
+-use Illuminate\Support\Facades\Cache;
+ 
+ class GetDishesAction
+ {
+@@ -23,7 +23,8 @@ public function execute(array $filters = []): LengthAwarePaginator
+ 
+         $key = "dishes_{$locale}_{$categoryId}_{$featured}_{$signature}_{$perPage}_{$page}";
+ 
+-        return Cache::tags(['dishes'])->remember(
++        return CacheGroup::remember(
++            'dishes',
+             $key,
+             now()->addHour(),
+             fn () => $this->repository->getAll($filters)
+diff --git a/app/Actions/Dish/UpdateDishAction.php b/app/Actions/Dish/UpdateDishAction.php
+index de24cee..243caba 100644
+--- a/app/Actions/Dish/UpdateDishAction.php
++++ b/app/Actions/Dish/UpdateDishAction.php
+@@ -5,6 +5,7 @@
+ use App\DTOs\Dish\UpdateDishDTO;
+ use App\Models\Dish;
+ use App\Repositories\DishRepository;
++use App\Services\CacheGroup;
+ use App\Services\ImageService;
+ use Illuminate\Support\Arr;
+ use Illuminate\Support\Facades\Cache;
+@@ -52,7 +53,7 @@ public function execute(int $id, UpdateDishDTO $dto): Dish
+             throw $e;
+         }
+ 
+-        Cache::tags(['dishes'])->flush();
++        CacheGroup::flush('dishes');
+         Cache::forget('dashboard_stats');
+ 
+         return $dish;
+diff --git a/app/Actions/MediaItem/DeleteMediaAction.php b/app/Actions/MediaItem/DeleteMediaAction.php
+index 0d7a6d6..98405cd 100644
+--- a/app/Actions/MediaItem/DeleteMediaAction.php
++++ b/app/Actions/MediaItem/DeleteMediaAction.php
+@@ -3,8 +3,8 @@
+ namespace App\Actions\MediaItem;
+ 
+ use App\Repositories\MediaItemRepository;
++use App\Services\CacheGroup;
+ use App\Services\ImageService;
+-use Illuminate\Support\Facades\Cache;
+ 
+ class DeleteMediaAction
+ {
+@@ -23,6 +23,6 @@ public function execute(int $id): void
+ 
+         $this->repository->delete($id);
+ 
+-        Cache::tags(['media_items'])->flush();
++        CacheGroup::flush('media_items');
+     }
+ }
+diff --git a/app/Actions/MediaItem/GetMediaItemsAction.php b/app/Actions/MediaItem/GetMediaItemsAction.php
+index edf298f..b44299c 100644
+--- a/app/Actions/MediaItem/GetMediaItemsAction.php
++++ b/app/Actions/MediaItem/GetMediaItemsAction.php
+@@ -3,8 +3,8 @@
+ namespace App\Actions\MediaItem;
+ 
+ use App\Repositories\MediaItemRepository;
++use App\Services\CacheGroup;
+ use Illuminate\Support\Collection;
+-use Illuminate\Support\Facades\Cache;
+ 
+ class GetMediaItemsAction
+ {
+@@ -14,9 +14,10 @@ public function __construct(
+ 
+     public function execute(?string $page = null, ?string $section = null): Collection
+     {
+-        $key = 'media_items_' . ($page ?? 'all') . '_' . ($section ?? 'all');
++        $key = 'media_items_'.($page ?? 'all').'_'.($section ?? 'all');
+ 
+-        return Cache::tags(['media_items'])->remember(
++        return CacheGroup::remember(
++            'media_items',
+             $key,
+             now()->addDay(),
+             fn () => $this->repository->getByPage($page, $section)
+diff --git a/app/Actions/MediaItem/UploadMediaAction.php b/app/Actions/MediaItem/UploadMediaAction.php
+index 27f3331..eb95da3 100644
+--- a/app/Actions/MediaItem/UploadMediaAction.php
++++ b/app/Actions/MediaItem/UploadMediaAction.php
+@@ -5,8 +5,8 @@
+ use App\DTOs\MediaItem\UploadMediaDTO;
+ use App\Models\MediaItem;
+ use App\Repositories\MediaItemRepository;
++use App\Services\CacheGroup;
+ use App\Services\ImageService;
+-use Illuminate\Support\Facades\Cache;
+ 
+ class UploadMediaAction
+ {
+@@ -44,7 +44,7 @@ public function execute(UploadMediaDTO $dto): MediaItem
+             throw $e;
+         }
+ 
+-        Cache::tags(['media_items'])->flush();
++        CacheGroup::flush('media_items');
+ 
+         return $mediaItem;
+     }
+diff --git a/app/Actions/PageContent/BulkUpdatePageContentAction.php b/app/Actions/PageContent/BulkUpdatePageContentAction.php
+index 2bb8702..a43045b 100644
+--- a/app/Actions/PageContent/BulkUpdatePageContentAction.php
++++ b/app/Actions/PageContent/BulkUpdatePageContentAction.php
+@@ -4,7 +4,7 @@
+ 
+ use App\DTOs\PageContent\BulkUpdatePageContentDTO;
+ use App\Repositories\PageContentRepository;
+-use Illuminate\Support\Facades\Cache;
++use App\Services\CacheGroup;
+ 
+ class BulkUpdatePageContentAction
+ {
+@@ -16,6 +16,6 @@ public function execute(BulkUpdatePageContentDTO $dto): void
+     {
+         $this->repository->bulkUpdate($dto->items);
+ 
+-        Cache::tags(['page_contents'])->flush();
++        CacheGroup::flush('page_contents');
+     }
+ }
+diff --git a/app/Actions/PageContent/GetPageContentAction.php b/app/Actions/PageContent/GetPageContentAction.php
+index 6383b53..0c7c13a 100644
+--- a/app/Actions/PageContent/GetPageContentAction.php
++++ b/app/Actions/PageContent/GetPageContentAction.php
+@@ -3,8 +3,8 @@
+ namespace App\Actions\PageContent;
+ 
+ use App\Repositories\PageContentRepository;
++use App\Services\CacheGroup;
+ use Illuminate\Support\Collection;
+-use Illuminate\Support\Facades\Cache;
+ 
+ class GetPageContentAction
+ {
+@@ -17,7 +17,8 @@ public function execute(string $page, ?string $section = null): Collection
+         $locale = app()->getLocale();
+         $key = "page_contents_{$page}_{$section}_{$locale}";
+ 
+-        return Cache::tags(['page_contents'])->remember(
++        return CacheGroup::remember(
++            'page_contents',
+             $key,
+             now()->addDay(),
+             fn () => $this->repository->getByPage($page, $section)
+diff --git a/app/Actions/PageContent/UpdatePageContentAction.php b/app/Actions/PageContent/UpdatePageContentAction.php
+index 25ed1b6..bcc15e1 100644
+--- a/app/Actions/PageContent/UpdatePageContentAction.php
++++ b/app/Actions/PageContent/UpdatePageContentAction.php
+@@ -5,7 +5,7 @@
+ use App\DTOs\PageContent\UpdatePageContentDTO;
+ use App\Models\PageContent;
+ use App\Repositories\PageContentRepository;
+-use Illuminate\Support\Facades\Cache;
++use App\Services\CacheGroup;
+ 
+ class UpdatePageContentAction
+ {
+@@ -20,7 +20,7 @@ public function execute(int $id, UpdatePageContentDTO $dto): PageContent
+             'value_en' => $dto->value_en,
+         ]);
+ 
+-        Cache::tags(['page_contents'])->flush();
++        CacheGroup::flush('page_contents');
+ 
+         return $pageContent;
+     }
+diff --git a/app/Actions/Personality/CreatePersonalityAction.php b/app/Actions/Personality/CreatePersonalityAction.php
+index 4ed6898..8f79c29 100644
+--- a/app/Actions/Personality/CreatePersonalityAction.php
++++ b/app/Actions/Personality/CreatePersonalityAction.php
+@@ -5,8 +5,8 @@
+ use App\DTOs\Personality\CreatePersonalityDTO;
+ use App\Models\Personality;
+ use App\Repositories\PersonalityRepository;
++use App\Services\CacheGroup;
+ use App\Services\ImageService;
+-use Illuminate\Support\Facades\Cache;
+ 
+ class CreatePersonalityAction
+ {
+@@ -40,7 +40,7 @@ public function execute(CreatePersonalityDTO $dto): Personality
+             throw $e;
+         }
+ 
+-        Cache::tags(['personalities'])->flush();
++        CacheGroup::flush('personalities');
+ 
+         return $personality;
+     }
+diff --git a/app/Actions/Personality/DeletePersonalityAction.php b/app/Actions/Personality/DeletePersonalityAction.php
+index 8d79b25..e0eb306 100644
+--- a/app/Actions/Personality/DeletePersonalityAction.php
++++ b/app/Actions/Personality/DeletePersonalityAction.php
+@@ -3,8 +3,8 @@
+ namespace App\Actions\Personality;
+ 
+ use App\Repositories\PersonalityRepository;
++use App\Services\CacheGroup;
+ use App\Services\ImageService;
+-use Illuminate\Support\Facades\Cache;
+ 
+ class DeletePersonalityAction
+ {
+@@ -23,6 +23,6 @@ public function execute(int $id): void
+ 
+         $this->repository->delete($id);
+ 
+-        Cache::tags(['personalities'])->flush();
++        CacheGroup::flush('personalities');
+     }
+ }
+diff --git a/app/Actions/Personality/GetPersonalitiesAction.php b/app/Actions/Personality/GetPersonalitiesAction.php
+index 105577e..ee94741 100644
+--- a/app/Actions/Personality/GetPersonalitiesAction.php
++++ b/app/Actions/Personality/GetPersonalitiesAction.php
+@@ -3,8 +3,8 @@
+ namespace App\Actions\Personality;
+ 
+ use App\Repositories\PersonalityRepository;
++use App\Services\CacheGroup;
+ use Illuminate\Database\Eloquent\Collection;
+-use Illuminate\Support\Facades\Cache;
+ 
+ class GetPersonalitiesAction
+ {
+@@ -17,7 +17,8 @@ public function execute(bool $activeOnly = true): Collection
+         $locale = app()->getLocale();
+         $key = "personalities_{$locale}_".($activeOnly ? 'active' : 'all');
+ 
+-        return Cache::tags(['personalities'])->remember(
++        return CacheGroup::remember(
++            'personalities',
+             $key,
+             now()->addHour(),
+             fn () => $this->repository->getAll($activeOnly)
+diff --git a/app/Actions/Personality/UpdatePersonalityAction.php b/app/Actions/Personality/UpdatePersonalityAction.php
+index c08306d..ed66522 100644
+--- a/app/Actions/Personality/UpdatePersonalityAction.php
++++ b/app/Actions/Personality/UpdatePersonalityAction.php
+@@ -5,9 +5,9 @@
+ use App\DTOs\Personality\UpdatePersonalityDTO;
+ use App\Models\Personality;
+ use App\Repositories\PersonalityRepository;
++use App\Services\CacheGroup;
+ use App\Services\ImageService;
+ use Illuminate\Support\Arr;
+-use Illuminate\Support\Facades\Cache;
+ 
+ class UpdatePersonalityAction
+ {
+@@ -47,7 +47,7 @@ public function execute(int $id, UpdatePersonalityDTO $dto): Personality
+             throw $e;
+         }
+ 
+-        Cache::tags(['personalities'])->flush();
++        CacheGroup::flush('personalities');
+ 
+         return $personality;
+     }
+diff --git a/app/Actions/Seo/BulkUpdateSeoSettingsAction.php b/app/Actions/Seo/BulkUpdateSeoSettingsAction.php
+index 89206ec..d4a0cf1 100644
+--- a/app/Actions/Seo/BulkUpdateSeoSettingsAction.php
++++ b/app/Actions/Seo/BulkUpdateSeoSettingsAction.php
+@@ -4,7 +4,7 @@
+ 
+ use App\DTOs\Seo\BulkUpdateSeoSettingsDTO;
+ use App\Repositories\SeoSettingRepository;
+-use Illuminate\Support\Facades\Cache;
++use App\Services\CacheGroup;
+ 
+ class BulkUpdateSeoSettingsAction
+ {
+@@ -16,6 +16,6 @@ public function execute(BulkUpdateSeoSettingsDTO $dto): void
+     {
+         $this->repository->bulkUpdate($dto->items);
+ 
+-        Cache::tags(['seo_settings'])->flush();
++        CacheGroup::flush('seo_settings');
+     }
+ }
+diff --git a/app/Actions/Seo/GetEffectiveSeoAction.php b/app/Actions/Seo/GetEffectiveSeoAction.php
+index 99c7371..8705188 100644
+--- a/app/Actions/Seo/GetEffectiveSeoAction.php
++++ b/app/Actions/Seo/GetEffectiveSeoAction.php
+@@ -5,7 +5,7 @@
+ use App\Models\SeoSetting;
+ use App\Repositories\SeoSettingRepository;
+ use App\Repositories\TrackingSettingRepository;
+-use Illuminate\Support\Facades\Cache;
++use App\Services\CacheGroup;
+ 
+ class GetEffectiveSeoAction
+ {
+@@ -27,7 +27,8 @@ public function execute(?string $page = null): array
+         $locale = app()->getLocale();
+         $key = 'seo_effective_'.($page ?? 'global')."_{$locale}";
+ 
+-        return Cache::tags(['seo_settings'])->remember(
++        return CacheGroup::remember(
++            'seo_settings',
+             $key,
+             now()->addHour(),
+             fn () => $this->merge($page)
+diff --git a/app/Actions/Seo/UpdateSeoSettingAction.php b/app/Actions/Seo/UpdateSeoSettingAction.php
+index a8adfe9..cc499de 100644
+--- a/app/Actions/Seo/UpdateSeoSettingAction.php
++++ b/app/Actions/Seo/UpdateSeoSettingAction.php
+@@ -5,8 +5,8 @@
+ use App\DTOs\Seo\UpdateSeoSettingDTO;
+ use App\Models\SeoSetting;
+ use App\Repositories\SeoSettingRepository;
++use App\Services\CacheGroup;
+ use Illuminate\Support\Arr;
+-use Illuminate\Support\Facades\Cache;
+ 
+ class UpdateSeoSettingAction
+ {
+@@ -34,7 +34,7 @@ public function execute(int $id, UpdateSeoSettingDTO $dto): SeoSetting
+ 
+         $seoSetting = $this->repository->update($id, $data);
+ 
+-        Cache::tags(['seo_settings'])->flush();
++        CacheGroup::flush('seo_settings');
+ 
+         return $seoSetting;
+     }
+diff --git a/app/Actions/Seo/UpdateTrackingSettingsAction.php b/app/Actions/Seo/UpdateTrackingSettingsAction.php
+index 6e96984..09ef0dd 100644
+--- a/app/Actions/Seo/UpdateTrackingSettingsAction.php
++++ b/app/Actions/Seo/UpdateTrackingSettingsAction.php
+@@ -5,7 +5,7 @@
+ use App\DTOs\Seo\UpdateTrackingSettingsDTO;
+ use App\Models\TrackingSetting;
+ use App\Repositories\TrackingSettingRepository;
+-use Illuminate\Support\Facades\Cache;
++use App\Services\CacheGroup;
+ 
+ class UpdateTrackingSettingsAction
+ {
+@@ -23,7 +23,7 @@ public function execute(UpdateTrackingSettingsDTO $dto): TrackingSetting
+             'tiktok_pixel_id' => $dto->tiktok_pixel_id,
+         ]);
+ 
+-        Cache::tags(['seo_settings'])->flush();
++        CacheGroup::flush('seo_settings');
+ 
+         return $trackingSetting;
+     }
+diff --git a/app/Actions/Setting/GetSettingsAction.php b/app/Actions/Setting/GetSettingsAction.php
+index 19d4679..badfeb3 100644
+--- a/app/Actions/Setting/GetSettingsAction.php
++++ b/app/Actions/Setting/GetSettingsAction.php
+@@ -3,8 +3,8 @@
+ namespace App\Actions\Setting;
+ 
+ use App\Repositories\SettingRepository;
++use App\Services\CacheGroup;
+ use Illuminate\Support\Collection;
+-use Illuminate\Support\Facades\Cache;
+ 
+ class GetSettingsAction
+ {
+@@ -16,7 +16,8 @@ public function execute(?string $group = null): Collection
+     {
+         $key = "settings_{$group}";
+ 
+-        return Cache::tags(['settings'])->remember(
++        return CacheGroup::remember(
++            'settings',
+             $key,
+             now()->addDay(),
+             fn () => $this->repository->getAll($group)
+diff --git a/app/Actions/Setting/UpdateSettingsAction.php b/app/Actions/Setting/UpdateSettingsAction.php
+index 021c1b3..8930c6f 100644
+--- a/app/Actions/Setting/UpdateSettingsAction.php
++++ b/app/Actions/Setting/UpdateSettingsAction.php
+@@ -4,7 +4,7 @@
+ 
+ use App\DTOs\Setting\UpdateSettingDTO;
+ use App\Repositories\SettingRepository;
+-use Illuminate\Support\Facades\Cache;
++use App\Services\CacheGroup;
+ 
+ class UpdateSettingsAction
+ {
+@@ -16,6 +16,6 @@ public function execute(UpdateSettingDTO $dto): void
+     {
+         $this->repository->bulkUpdate($dto->settings);
+ 
+-        Cache::tags(['settings'])->flush();
++        CacheGroup::flush('settings');
+     }
+ }
+diff --git a/app/Actions/Testimonial/CreateTestimonialAction.php b/app/Actions/Testimonial/CreateTestimonialAction.php
+index 01be235..e682685 100644
+--- a/app/Actions/Testimonial/CreateTestimonialAction.php
++++ b/app/Actions/Testimonial/CreateTestimonialAction.php
+@@ -5,6 +5,7 @@
+ use App\DTOs\Testimonial\CreateTestimonialDTO;
+ use App\Models\Testimonial;
+ use App\Repositories\TestimonialRepository;
++use App\Services\CacheGroup;
+ use Illuminate\Support\Facades\Cache;
+ 
+ class CreateTestimonialAction
+@@ -23,7 +24,7 @@ public function execute(CreateTestimonialDTO $dto): Testimonial
+             'order' => $dto->order,
+         ]);
+ 
+-        Cache::tags(['testimonials'])->flush();
++        CacheGroup::flush('testimonials');
+         Cache::forget('dashboard_stats');
+ 
+         return $testimonial;
+diff --git a/app/Actions/Testimonial/DeleteTestimonialAction.php b/app/Actions/Testimonial/DeleteTestimonialAction.php
+index 45706de..526de9a 100644
+--- a/app/Actions/Testimonial/DeleteTestimonialAction.php
++++ b/app/Actions/Testimonial/DeleteTestimonialAction.php
+@@ -3,6 +3,7 @@
+ namespace App\Actions\Testimonial;
+ 
+ use App\Repositories\TestimonialRepository;
++use App\Services\CacheGroup;
+ use Illuminate\Support\Facades\Cache;
+ 
+ class DeleteTestimonialAction
+@@ -15,7 +16,7 @@ public function execute(int $id): void
+     {
+         $this->repository->delete($id);
+ 
+-        Cache::tags(['testimonials'])->flush();
++        CacheGroup::flush('testimonials');
+         Cache::forget('dashboard_stats');
+     }
+ }
+diff --git a/app/Actions/Testimonial/GetTestimonialsAction.php b/app/Actions/Testimonial/GetTestimonialsAction.php
+index c8bc18c..f4ee7dd 100644
+--- a/app/Actions/Testimonial/GetTestimonialsAction.php
++++ b/app/Actions/Testimonial/GetTestimonialsAction.php
+@@ -3,8 +3,8 @@
+ namespace App\Actions\Testimonial;
+ 
+ use App\Repositories\TestimonialRepository;
++use App\Services\CacheGroup;
+ use Illuminate\Database\Eloquent\Collection;
+-use Illuminate\Support\Facades\Cache;
+ 
+ class GetTestimonialsAction
+ {
+@@ -17,7 +17,8 @@ public function execute(bool $activeOnly = true): Collection
+         $locale = app()->getLocale();
+         $key = "testimonials_{$locale}_".($activeOnly ? 'active' : 'all');
+ 
+-        return Cache::tags(['testimonials'])->remember(
++        return CacheGroup::remember(
++            'testimonials',
+             $key,
+             now()->addHour(),
+             fn () => $this->repository->getAll($activeOnly)
+diff --git a/app/Actions/Testimonial/UpdateTestimonialAction.php b/app/Actions/Testimonial/UpdateTestimonialAction.php
+index 9d53ad2..03168ca 100644
+--- a/app/Actions/Testimonial/UpdateTestimonialAction.php
++++ b/app/Actions/Testimonial/UpdateTestimonialAction.php
+@@ -5,7 +5,7 @@
+ use App\DTOs\Testimonial\CreateTestimonialDTO;
+ use App\Models\Testimonial;
+ use App\Repositories\TestimonialRepository;
+-use Illuminate\Support\Facades\Cache;
++use App\Services\CacheGroup;
+ 
+ class UpdateTestimonialAction
+ {
+@@ -23,7 +23,7 @@ public function execute(int $id, CreateTestimonialDTO $dto): Testimonial
+             'order' => $dto->order,
+         ]);
+ 
+-        Cache::tags(['testimonials'])->flush();
++        CacheGroup::flush('testimonials');
+ 
+         return $testimonial;
+     }
+diff --git a/app/Actions/Timeline/CreateTimelineAction.php b/app/Actions/Timeline/CreateTimelineAction.php
+index b6219df..69cb250 100644
+--- a/app/Actions/Timeline/CreateTimelineAction.php
++++ b/app/Actions/Timeline/CreateTimelineAction.php
+@@ -5,7 +5,7 @@
+ use App\DTOs\Timeline\CreateTimelineDTO;
+ use App\Models\Timeline;
+ use App\Repositories\TimelineRepository;
+-use Illuminate\Support\Facades\Cache;
++use App\Services\CacheGroup;
+ 
+ class CreateTimelineAction
+ {
+@@ -25,7 +25,7 @@ public function execute(CreateTimelineDTO $dto): Timeline
+             'order' => $dto->order,
+         ]);
+ 
+-        Cache::tags(['timeline'])->flush();
++        CacheGroup::flush('timeline');
+ 
+         return $timeline;
+     }
+diff --git a/app/Actions/Timeline/DeleteTimelineAction.php b/app/Actions/Timeline/DeleteTimelineAction.php
+index ee06f25..b9bf966 100644
+--- a/app/Actions/Timeline/DeleteTimelineAction.php
++++ b/app/Actions/Timeline/DeleteTimelineAction.php
+@@ -3,7 +3,7 @@
+ namespace App\Actions\Timeline;
+ 
+ use App\Repositories\TimelineRepository;
+-use Illuminate\Support\Facades\Cache;
++use App\Services\CacheGroup;
+ 
+ class DeleteTimelineAction
+ {
+@@ -15,6 +15,6 @@ public function execute(int $id): void
+     {
+         $this->repository->delete($id);
+ 
+-        Cache::tags(['timeline'])->flush();
++        CacheGroup::flush('timeline');
+     }
+ }
+diff --git a/app/Actions/Timeline/GetTimelineAction.php b/app/Actions/Timeline/GetTimelineAction.php
+index 0651308..22aaf24 100644
+--- a/app/Actions/Timeline/GetTimelineAction.php
++++ b/app/Actions/Timeline/GetTimelineAction.php
+@@ -3,8 +3,8 @@
+ namespace App\Actions\Timeline;
+ 
+ use App\Repositories\TimelineRepository;
++use App\Services\CacheGroup;
+ use Illuminate\Database\Eloquent\Collection;
+-use Illuminate\Support\Facades\Cache;
+ 
+ class GetTimelineAction
+ {
+@@ -17,7 +17,8 @@ public function execute(): Collection
+         $locale = app()->getLocale();
+         $key = "timeline_{$locale}";
+ 
+-        return Cache::tags(['timeline'])->remember(
++        return CacheGroup::remember(
++            'timeline',
+             $key,
+             now()->addDay(),
+             fn () => $this->repository->getAll()
+diff --git a/app/Actions/Timeline/UpdateTimelineAction.php b/app/Actions/Timeline/UpdateTimelineAction.php
+index 7e1b93d..11c331f 100644
+--- a/app/Actions/Timeline/UpdateTimelineAction.php
++++ b/app/Actions/Timeline/UpdateTimelineAction.php
+@@ -5,7 +5,7 @@
+ use App\DTOs\Timeline\CreateTimelineDTO;
+ use App\Models\Timeline;
+ use App\Repositories\TimelineRepository;
+-use Illuminate\Support\Facades\Cache;
++use App\Services\CacheGroup;
+ 
+ class UpdateTimelineAction
+ {
+@@ -25,7 +25,7 @@ public function execute(int $id, CreateTimelineDTO $dto): Timeline
+             'order' => $dto->order,
+         ]);
+ 
+-        Cache::tags(['timeline'])->flush();
++        CacheGroup::flush('timeline');
+ 
+         return $timeline;
+     }
+diff --git a/app/Services/CacheGroup.php b/app/Services/CacheGroup.php
+new file mode 100644
+index 0000000..5168bd9
+--- /dev/null
++++ b/app/Services/CacheGroup.php
+@@ -0,0 +1,67 @@
++<?php
++
++namespace App\Services;
++
++use Closure;
++use DateTimeInterface;
++use Illuminate\Support\Facades\Cache;
++
++/**
++ * Tag-style cache invalidation for stores that do not support tagging.
++ *
++ * Production runs the file cache driver, which throws on Cache::tags(). Each
++ * group keeps an index of the keys written under it so that flush() can forget
++ * every one of them individually.
++ */
++class CacheGroup
++{
++    /**
++     * Must outlive the longest entry TTL used by callers, otherwise the index
++     * expires while its entries are still cached and they leak.
++     */
++    private const INDEX_TTL_DAYS = 7;
++
++    public static function remember(string $group, string $key, DateTimeInterface $ttl, Closure $callback): mixed
++    {
++        self::index($group, $key);
++
++        return Cache::remember($key, $ttl, $callback);
++    }
++
++    public static function flush(string $group): void
++    {
++        foreach (self::keys($group) as $key) {
++            Cache::forget($key);
++        }
++
++        Cache::forget(self::indexKey($group));
++    }
++
++    /**
++     * @return array<int, string>
++     */
++    public static function keys(string $group): array
++    {
++        $keys = Cache::get(self::indexKey($group), []);
++
++        return is_array($keys) ? $keys : [];
++    }
++
++    private static function index(string $group, string $key): void
++    {
++        $keys = self::keys($group);
++
++        if (in_array($key, $keys, true)) {
++            return;
++        }
++
++        $keys[] = $key;
++
++        Cache::put(self::indexKey($group), $keys, now()->addDays(self::INDEX_TTL_DAYS));
++    }
++
++    private static function indexKey(string $group): string
++    {
++        return "cache_group_index_{$group}";
++    }
++}
+diff --git a/tests/Feature/Actions/CacheGroupTest.php b/tests/Feature/Actions/CacheGroupTest.php
+new file mode 100644
+index 0000000..9fcb07e
+--- /dev/null
++++ b/tests/Feature/Actions/CacheGroupTest.php
+@@ -0,0 +1,102 @@
++<?php
++
++namespace Tests\Feature\Actions;
++
++use App\Actions\Dish\GetDishesAction;
++use App\Actions\Dish\UpdateDishAction;
++use App\Actions\Setting\UpdateSettingsAction;
++use App\DTOs\Dish\UpdateDishDTO;
++use App\DTOs\Setting\UpdateSettingDTO;
++use App\Models\Category;
++use App\Models\Dish;
++use App\Services\CacheGroup;
++use Database\Seeders\CategorySeeder;
++use Database\Seeders\DishSeeder;
++use Illuminate\Foundation\Testing\RefreshDatabase;
++use Illuminate\Support\Facades\Cache;
++use Tests\TestCase;
++
++/**
++ * The rest of the suite runs on the array store, which supports tagging and so
++ * never exercised the driver production actually uses. These tests pin the
++ * cache to the file store — the one that throws on Cache::tags() — and prove
++ * that caching and group invalidation both still work there.
++ */
++class CacheGroupTest extends TestCase
++{
++    use RefreshDatabase;
++
++    protected function setUp(): void
++    {
++        parent::setUp();
++
++        config(['cache.default' => 'file']);
++        Cache::flush();
++
++        $this->seed(CategorySeeder::class);
++        $this->seed(DishSeeder::class);
++    }
++
++    protected function tearDown(): void
++    {
++        Cache::flush();
++
++        parent::tearDown();
++    }
++
++    public function test_reading_dishes_works_on_the_file_driver(): void
++    {
++        $result = app(GetDishesAction::class)->execute();
++
++        $this->assertSame(5, $result->total());
++        $this->assertTrue(Cache::has('dishes_ar_all_all_all_default_1'));
++    }
++
++    public function test_updating_a_dish_invalidates_every_cached_dish_query(): void
++    {
++        $mainsId = Category::where('slug', 'mains')->first()->id;
++        $action = app(GetDishesAction::class);
++
++        // Filter combinations produce keys that cannot be enumerated by hand.
++        $action->execute();
++        $action->execute(['category_id' => $mainsId]);
++        $action->execute(['featured' => true]);
++        $action->execute(['per_page' => 3]);
++
++        $cachedKeys = CacheGroup::keys('dishes');
++        $this->assertCount(4, $cachedKeys);
++
++        app(UpdateDishAction::class)->execute(
++            Dish::first()->id,
++            new UpdateDishDTO(
++                name_ar: 'اسم جديد',
++                name_en: 'New name',
++                description_ar: null,
++                description_en: null,
++                price: null,
++                category_id: null,
++                is_featured: null,
++                is_signature: null,
++                image: null,
++                order: null,
++            ),
++        );
++
++        foreach ($cachedKeys as $key) {
++            $this->assertFalse(Cache::has($key), "stale dish cache left behind under [{$key}]");
++        }
++
++        $this->assertSame([], CacheGroup::keys('dishes'));
++    }
++
++    public function test_flushing_one_group_leaves_other_groups_intact(): void
++    {
++        app(GetDishesAction::class)->execute();
++
++        app(UpdateSettingsAction::class)->execute(
++            new UpdateSettingDTO(settings: ['site_name' => 'Abouelsid']),
++        );
++
++        $this->assertTrue(Cache::has('dishes_ar_all_all_all_default_1'));
++    }
++}

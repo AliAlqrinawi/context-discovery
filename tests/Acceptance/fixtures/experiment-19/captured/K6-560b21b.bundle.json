@@ -1,0 +1,233 @@
+{
+    "bundle_version": 1,
+    "budget_tokens": 8000,
+    "used_tokens": 848,
+    "items": [
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\DTOs\\Dish\\UpdateDishDTO, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/DTOs/Dish/UpdateDishDTO.php",
+                "member": "CLEARABLE",
+                "lines": [
+                    25,
+                    26
+                ]
+            },
+            "payload": "    /** Nullable fields listed here can be cleared by sending them empty. */\n    public const CLEARABLE = ['description_ar', 'description_en'];",
+            "tokens": 36
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\DTOs\\Dish\\UpdateDishDTO, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/DTOs/Dish/UpdateDishDTO.php",
+                "member": "__construct",
+                "lines": [
+                    10,
+                    23
+                ]
+            },
+            "payload": "    public function __construct(\n        public readonly ?string $name_ar,\n        public readonly ?string $name_en,\n        public readonly ?string $description_ar,\n        public readonly ?string $description_en,\n        public readonly ?float $price,\n        public readonly ?int $category_id,\n        public readonly ?bool $is_featured,\n        public readonly ?bool $is_signature,\n        public readonly ?UploadedFile $image,\n        public readonly ?int $order,\n        /** @var list<string> Nullable keys the request actually sent, so they can be cleared. */\n        public readonly array $providedKeys = [],\n    ) {}",
+            "tokens": 157
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\DTOs\\Dish\\UpdateDishDTO, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/DTOs/Dish/UpdateDishDTO.php",
+                "member": "fromRequest",
+                "lines": [
+                    28,
+                    46
+                ]
+            },
+            "payload": "    public static function fromRequest(Request $request): self\n    {\n        return new self(\n            name_ar: $request->filled('name_ar') ? $request->string('name_ar')->toString() : null,\n            name_en: $request->filled('name_en') ? $request->string('name_en')->toString() : null,\n            description_ar: $request->filled('description_ar') ? $request->string('description_ar')->toString() : null,\n            description_en: $request->filled('description_en') ? $request->string('description_en')->toString() : null,\n            price: $request->filled('price') ? (float) $request->input('price') : null,\n            category_id: $request->filled('category_id') ? (int) $request->input('category_id') : null,\n            is_featured: $request->has('is_featured') ? $request->boolean('is_featured') : null,\n            is_signature: $request->has('is_signature') ? $request->boolean('is_signature') : null,\n            image: $request->file('image'),\n            order: $request->filled('order') ? (int) $request->input('order') : null,\n            providedKeys: array_values(array_filter(\n                self::CLEARABLE,\n                fn (string $key) => $request->has($key),\n            )),\n        );\n    }",
+            "tokens": 307
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\DTOs\\Dish\\UpdateDishDTO, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/DTOs/Dish/UpdateDishDTO.php",
+                "member": "wasProvided",
+                "lines": [
+                    48,
+                    51
+                ]
+            },
+            "payload": "    public function wasProvided(string $key): bool\n    {\n        return in_array($key, $this->providedKeys, true);\n    }",
+            "tokens": 30
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\DTOs\\Setting\\UpdateSettingDTO, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/DTOs/Setting/UpdateSettingDTO.php",
+                "member": "__construct",
+                "lines": [
+                    9,
+                    11
+                ]
+            },
+            "payload": "    public function __construct(\n        public readonly array $settings,\n    ) {}",
+            "tokens": 21
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\DTOs\\Setting\\UpdateSettingDTO, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/DTOs/Setting/UpdateSettingDTO.php",
+                "member": "fromRequest",
+                "lines": [
+                    13,
+                    18
+                ]
+            },
+            "payload": "    public static function fromRequest(Request $request): self\n    {\n        return new self(\n            settings: $request->all(),\n        );\n    }",
+            "tokens": 38
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Category::where, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Category.php",
+                "member": "dishes",
+                "lines": [
+                    17,
+                    20
+                ]
+            },
+            "payload": "    public function dishes(): HasMany\n    {\n        return $this->hasMany(Dish::class);\n    }",
+            "tokens": 24
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Category::where, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Category.php",
+                "member": "fillable",
+                "lines": [
+                    10,
+                    15
+                ]
+            },
+            "payload": "    protected $fillable = [\n        'name_ar',\n        'name_en',\n        'slug',\n        'order',\n    ];",
+            "tokens": 27
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Dish::first, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Dish.php",
+                "member": "casts",
+                "lines": [
+                    24,
+                    28
+                ]
+            },
+            "payload": "    protected $casts = [\n        'price' => 'decimal:2',\n        'is_featured' => 'boolean',\n        'is_signature' => 'boolean',\n    ];",
+            "tokens": 34
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Dish::first, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Dish.php",
+                "member": "category",
+                "lines": [
+                    30,
+                    33
+                ]
+            },
+            "payload": "    public function category(): BelongsTo\n    {\n        return $this->belongsTo(Category::class);\n    }",
+            "tokens": 26
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Dish::first, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Dish.php",
+                "member": "fillable",
+                "lines": [
+                    10,
+                    22
+                ]
+            },
+            "payload": "    protected $fillable = [\n        'category_id',\n        'name_ar',\n        'name_en',\n        'description_ar',\n        'description_en',\n        'price',\n        'is_featured',\n        'is_signature',\n        'image_path',\n        'image_url',\n        'order',\n    ];",
+            "tokens": 68
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on Closure, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Services/CacheGroup.php",
+                "member": "Closure",
+                "lines": [
+                    1,
+                    67
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on DateTimeInterface, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Services/CacheGroup.php",
+                "member": "DateTimeInterface",
+                "lines": [
+                    1,
+                    67
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Models\\Category::where, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "tests/Feature/Actions/CacheGroupTest.php",
+                "member": "App\\Models\\Category::where",
+                "lines": [
+                    1,
+                    102
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Models\\Dish::first, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "tests/Feature/Actions/CacheGroupTest.php",
+                "member": "App\\Models\\Dish::first",
+                "lines": [
+                    1,
+                    102
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        }
+    ],
+    "dropped": []
+}

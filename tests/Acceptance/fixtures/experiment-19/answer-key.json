@@ -1,0 +1,68 @@
+{
+  "experiment": "experiment-19",
+  "written": "2026-09-06, from the corpus repository's own history and source, BEFORE any reviewer was run",
+  "protocol": "M17's, unchanged — see tests/Acceptance/fixtures/experiment-17/scoring-protocol.md",
+  "candidates": "M18's seven, used exactly, none added or removed",
+  "budget_tokens": 8000,
+
+  "a_weakness_of_the_candidate_set_stated_before_scoring": {
+    "problem": "All seven tasks key to NO DEFECT. Five of the seven are `fix:` commits, and M18's candidate criteria (C1-C5) selected on bundle size, diff size and readability — never on whether a defect is present.",
+    "consequence": "This corpus CANNOT measure defect detection, because it contains no positive case. It can measure the false-positive rate, evidence access (Q3) and confidence (Q4), and nothing else. Any classification must say so rather than reporting a defect-identification rate of 0/0 as though it meant something.",
+    "recorded_before_scoring": true
+  },
+
+  "ground_truth_strength": {
+    "STRONG": "a later real commit demonstrably fixes something this commit introduced — none of the seven qualifies",
+    "MODERATE": "the commit is itself a fix whose stated mechanism is verifiable in its own diff, and no later commit amends that behaviour",
+    "WEAK": "author-derived judgement only; any conclusion resting on this task is downgraded"
+  },
+
+  "tasks": [
+    { "id": "K1", "commit": "0a6e7d1", "subject": "feat: add pagination to dishes, quote-requests, and users endpoints",
+      "defect_present": "NO", "strength": "WEAK",
+      "why": "Adds $signature and $perPage to the dishes cache key, switches DishController::index to $this->paginated(), and deletes the now-unused DishCollection. The cache key is widened in step with the new filters, which is the thing most likely to be got wrong here, and it is right. No later commit amends this behaviour.",
+      "required_context": ["app/Http/Resources/Dish/DishResource.php", "the ApiResponse trait's paginated()"],
+      "author_derived_caveat": "This is my judgement. The repository never revisited the commit, which is weak evidence of correctness rather than proof of it. 721ea3c later normalises three different default page sizes (12, 15, 15) to 10, but does not touch this commit's files and does not describe it as a fix to this commit." },
+
+    { "id": "K2", "commit": "721ea3c", "subject": "fix: set default pagination to 10 items per page",
+      "defect_present": "NO", "strength": "MODERATE",
+      "why": "Three constants changed — paginate(12)->10, paginate(15)->10 twice — in three repositories. Self-contained and self-evidently what the message says. No later commit touches these files.",
+      "required_context": [] },
+
+    { "id": "K3", "commit": "4411454", "subject": "feat: add profile endpoints (show, update, update password)",
+      "defect_present": "NO", "strength": "MODERATE",
+      "why": "THE SHARPEST TASK IN THE SET. ProfileController::update() mass-assigns name and email, and updatePassword() mass-assigns password, through $user->update([...]). If any of those three were absent from User::$fillable, Eloquent would silently discard the write and the endpoint would still answer 'password_updated'. VERIFIED at this commit: $fillable is ['name','email','password','role'], so all three are writable and there is no defect. updatePassword() does verify the current password with Hash::check before writing.",
+      "required_context": ["app/Models/User.php::fillable — the ONLY thing that settles the mass-assignment, and it is not in the diff"],
+      "why_this_task_matters": "The diff alone cannot confirm the mass-assignment is safe. The generated bundle contains exactly the User::fillable slice that does. If the bundle changes anything anywhere, it should change something here." },
+
+    { "id": "K4", "commit": "e770086", "subject": "fix: make page filter optional in MediaItemController to return all slots",
+      "defect_present": "NO", "strength": "MODERATE",
+      "why": "The optional page parameter is threaded coherently through all four layers — controller (filled() guard), action (signature and cache key), model scope (null guard before the where), repository (signature). The cache key changes shape from \"media_items_{page}_{section}\" to one that spells null as 'all', which changes cache keys but only causes old entries to expire unused. No later commit amends the behaviour.",
+      "required_context": [] },
+
+    { "id": "K5", "commit": "04328a5", "subject": "fix: delete orphaned uploaded files when a DB write fails after upload",
+      "defect_present": "NO", "strength": "MODERATE",
+      "why": "This is the repository's own fix for the defect class M17's T1 keyed — a file written to disk before a database write with no cleanup on failure. It applies the same try/catch-and-delete shape across every upload Action. Reviewing it asks whether the fix is correct, and it is: the cleanup deletes only the file this call wrote. No later commit amends it.",
+      "required_context": ["app/Services/ImageService.php", "the Actions' repositories, to confirm what throws"] },
+
+    { "id": "K6", "commit": "560b21b", "subject": "fix: replace Cache::tags() with Cache::remember() for file driver compatibility",
+      "defect_present": "NO", "strength": "MODERATE",
+      "why": "Removes 44 Cache::tags() call sites, which throw on the file driver the production environment uses, and routes invalidation through a new CacheGroup service that keeps a per-group index of written keys so flush() can forget each one. The commit message explains why hand-enumerating keys was not workable, and adds a test pinned to the file store. No later commit amends it.",
+      "required_context": ["app/Services/CacheGroup.php — new in this commit, so it IS in the diff"] },
+
+    { "id": "K7", "commit": "11c0ced", "subject": "fix: clear dish description when updated with empty value",
+      "defect_present": "NO", "strength": "MODERATE",
+      "why": "The repository's own fix for the defect M17's T2 keyed. UpdateDishDTO now records which clearable keys the request actually carried, and UpdateDishAction writes those explicitly after the Arr::whereNotNull filter, so 'sent empty' and 'omitted' are finally distinguishable without disturbing partial-update semantics. No later commit amends it.",
+      "required_context": ["app/DTOs/Dish/UpdateDishDTO.php::fromRequest — partly in the diff"] },
+
+    { "id": "X", "commit": "-", "subject": "the frozen contract",
+      "defect_present": null, "strength": "-",
+      "why": "No production file may change. bundle_version 1, five ports, five assertion kinds, seven premises, two levers, ordering, budgeting and diagnostics all unchanged. The M17 instrument is used exactly as written." }
+  ],
+
+  "what_this_experiment_can_and_cannot_show": {
+    "cannot": "whether the bundle helps a reviewer FIND a defect — there is no defect in the corpus to find",
+    "can": "whether the bundle causes false positives (a reviewer inventing a defect that is not there), whether it changes what a reviewer says is missing (Q3), and whether it changes confidence (Q4)",
+    "the_sharpest_measurable_thing": "K3. The diff cannot settle the mass-assignment; the bundle contains exactly the slice that does. Q3 and Q4 there are the most informative single cell in the run."
+  }
+}

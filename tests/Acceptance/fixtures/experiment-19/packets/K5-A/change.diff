@@ -1,0 +1,407 @@
+diff --git a/app/Actions/Branch/CreateBranchAction.php b/app/Actions/Branch/CreateBranchAction.php
+index fc8876a..68b0822 100644
+--- a/app/Actions/Branch/CreateBranchAction.php
++++ b/app/Actions/Branch/CreateBranchAction.php
+@@ -37,7 +37,15 @@ public function execute(CreateBranchDTO $dto): Branch
+             $data['image_url'] = $stored['url'];
+         }
+ 
+-        $branch = $this->repository->create($data);
++        try {
++            $branch = $this->repository->create($data);
++        } catch (\Throwable $e) {
++            if (isset($stored)) {
++                $this->imageService->delete($stored['path']);
++            }
++
++            throw $e;
++        }
+ 
+         Cache::tags(['branches'])->flush();
+         Cache::forget('dashboard_stats');
+diff --git a/app/Actions/Branch/UpdateBranchAction.php b/app/Actions/Branch/UpdateBranchAction.php
+index 198a805..6b3213d 100644
+--- a/app/Actions/Branch/UpdateBranchAction.php
++++ b/app/Actions/Branch/UpdateBranchAction.php
+@@ -44,7 +44,15 @@ public function execute(int $id, UpdateBranchDTO $dto): Branch
+             $data['image_url'] = $stored['url'];
+         }
+ 
+-        $branch = $this->repository->update($id, $data);
++        try {
++            $branch = $this->repository->update($id, $data);
++        } catch (\Throwable $e) {
++            if (isset($stored)) {
++                $this->imageService->delete($stored['path']);
++            }
++
++            throw $e;
++        }
+ 
+         Cache::tags(['branches'])->flush();
+ 
+diff --git a/app/Actions/Catering/CreatePackageAction.php b/app/Actions/Catering/CreatePackageAction.php
+index 0bdd8d1..cf8e401 100644
+--- a/app/Actions/Catering/CreatePackageAction.php
++++ b/app/Actions/Catering/CreatePackageAction.php
+@@ -34,7 +34,15 @@ public function execute(CreatePackageDTO $dto): CateringPackage
+             $data['image_url'] = $stored['url'];
+         }
+ 
+-        $package = $this->repository->create($data, $dto->features);
++        try {
++            $package = $this->repository->create($data, $dto->features);
++        } catch (\Throwable $e) {
++            if (isset($stored)) {
++                $this->imageService->delete($stored['path']);
++            }
++
++            throw $e;
++        }
+ 
+         Cache::tags(['catering_packages'])->flush();
+ 
+diff --git a/app/Actions/Catering/CreateSampleMenuAction.php b/app/Actions/Catering/CreateSampleMenuAction.php
+index ba09ba2..76c5ea3 100644
+--- a/app/Actions/Catering/CreateSampleMenuAction.php
++++ b/app/Actions/Catering/CreateSampleMenuAction.php
+@@ -31,7 +31,15 @@ public function execute(CreateSampleMenuDTO $dto): SampleMenu
+             $data['image_url'] = $stored['url'];
+         }
+ 
+-        $menu = $this->repository->create($data, $dto->dishes);
++        try {
++            $menu = $this->repository->create($data, $dto->dishes);
++        } catch (\Throwable $e) {
++            if (isset($stored)) {
++                $this->imageService->delete($stored['path']);
++            }
++
++            throw $e;
++        }
+ 
+         Cache::tags(['sample_menus'])->flush();
+ 
+diff --git a/app/Actions/Catering/UpdatePackageAction.php b/app/Actions/Catering/UpdatePackageAction.php
+index b98c420..c22aedf 100644
+--- a/app/Actions/Catering/UpdatePackageAction.php
++++ b/app/Actions/Catering/UpdatePackageAction.php
+@@ -41,7 +41,15 @@ public function execute(int $id, UpdatePackageDTO $dto): CateringPackage
+             $data['image_url'] = $stored['url'];
+         }
+ 
+-        $package = $this->repository->update($id, $data, $dto->features);
++        try {
++            $package = $this->repository->update($id, $data, $dto->features);
++        } catch (\Throwable $e) {
++            if (isset($stored)) {
++                $this->imageService->delete($stored['path']);
++            }
++
++            throw $e;
++        }
+ 
+         Cache::tags(['catering_packages'])->flush();
+ 
+diff --git a/app/Actions/Catering/UpdateSampleMenuAction.php b/app/Actions/Catering/UpdateSampleMenuAction.php
+index c1c647d..114b871 100644
+--- a/app/Actions/Catering/UpdateSampleMenuAction.php
++++ b/app/Actions/Catering/UpdateSampleMenuAction.php
+@@ -37,7 +37,15 @@ public function execute(int $id, CreateSampleMenuDTO $dto): SampleMenu
+             $data['image_url'] = $stored['url'];
+         }
+ 
+-        $menu = $this->repository->update($id, $data, $dto->dishes);
++        try {
++            $menu = $this->repository->update($id, $data, $dto->dishes);
++        } catch (\Throwable $e) {
++            if (isset($stored)) {
++                $this->imageService->delete($stored['path']);
++            }
++
++            throw $e;
++        }
+ 
+         Cache::tags(['sample_menus'])->flush();
+ 
+diff --git a/app/Actions/DeliveryApp/CreateDeliveryAppAction.php b/app/Actions/DeliveryApp/CreateDeliveryAppAction.php
+index 53633f7..cc36b5c 100644
+--- a/app/Actions/DeliveryApp/CreateDeliveryAppAction.php
++++ b/app/Actions/DeliveryApp/CreateDeliveryAppAction.php
+@@ -31,7 +31,15 @@ public function execute(CreateDeliveryAppDTO $dto): DeliveryApp
+             $data['logo_url'] = $stored['url'];
+         }
+ 
+-        $deliveryApp = $this->repository->create($data);
++        try {
++            $deliveryApp = $this->repository->create($data);
++        } catch (\Throwable $e) {
++            if (isset($stored)) {
++                $this->imageService->delete($stored['path']);
++            }
++
++            throw $e;
++        }
+ 
+         Cache::tags(['delivery_apps'])->flush();
+ 
+diff --git a/app/Actions/DeliveryApp/UpdateDeliveryAppAction.php b/app/Actions/DeliveryApp/UpdateDeliveryAppAction.php
+index 3841ced..3223522 100644
+--- a/app/Actions/DeliveryApp/UpdateDeliveryAppAction.php
++++ b/app/Actions/DeliveryApp/UpdateDeliveryAppAction.php
+@@ -37,7 +37,15 @@ public function execute(int $id, CreateDeliveryAppDTO $dto): DeliveryApp
+             $data['logo_url'] = $stored['url'];
+         }
+ 
+-        $deliveryApp = $this->repository->update($id, $data);
++        try {
++            $deliveryApp = $this->repository->update($id, $data);
++        } catch (\Throwable $e) {
++            if (isset($stored)) {
++                $this->imageService->delete($stored['path']);
++            }
++
++            throw $e;
++        }
+ 
+         Cache::tags(['delivery_apps'])->flush();
+ 
+diff --git a/app/Actions/Dish/CreateDishAction.php b/app/Actions/Dish/CreateDishAction.php
+index a28cb7f..7a55aba 100644
+--- a/app/Actions/Dish/CreateDishAction.php
++++ b/app/Actions/Dish/CreateDishAction.php
+@@ -35,7 +35,15 @@ public function execute(CreateDishDTO $dto): Dish
+             $data['image_url'] = $stored['url'];
+         }
+ 
+-        $dish = $this->repository->create($data);
++        try {
++            $dish = $this->repository->create($data);
++        } catch (\Throwable $e) {
++            if (isset($stored)) {
++                $this->imageService->delete($stored['path']);
++            }
++
++            throw $e;
++        }
+ 
+         Cache::tags(['dishes'])->flush();
+         Cache::forget('dashboard_stats');
+diff --git a/app/Actions/Dish/UpdateDishAction.php b/app/Actions/Dish/UpdateDishAction.php
+index 6fc0d6b..de24cee 100644
+--- a/app/Actions/Dish/UpdateDishAction.php
++++ b/app/Actions/Dish/UpdateDishAction.php
+@@ -42,7 +42,15 @@ public function execute(int $id, UpdateDishDTO $dto): Dish
+             $data['image_url'] = $stored['url'];
+         }
+ 
+-        $dish = $this->repository->update($id, $data);
++        try {
++            $dish = $this->repository->update($id, $data);
++        } catch (\Throwable $e) {
++            if (isset($stored)) {
++                $this->imageService->delete($stored['path']);
++            }
++
++            throw $e;
++        }
+ 
+         Cache::tags(['dishes'])->flush();
+         Cache::forget('dashboard_stats');
+diff --git a/app/Actions/MediaItem/UploadMediaAction.php b/app/Actions/MediaItem/UploadMediaAction.php
+index 0342f9b..27f3331 100644
+--- a/app/Actions/MediaItem/UploadMediaAction.php
++++ b/app/Actions/MediaItem/UploadMediaAction.php
+@@ -34,9 +34,15 @@ public function execute(UploadMediaDTO $dto): MediaItem
+             ...$stored,
+         ];
+ 
+-        $mediaItem = $existing
+-            ? $this->repository->update($existing->id, $data)
+-            : $this->repository->create($data);
++        try {
++            $mediaItem = $existing
++                ? $this->repository->update($existing->id, $data)
++                : $this->repository->create($data);
++        } catch (\Throwable $e) {
++            $this->imageService->delete($stored['path']);
++
++            throw $e;
++        }
+ 
+         Cache::tags(['media_items'])->flush();
+ 
+diff --git a/app/Actions/Personality/CreatePersonalityAction.php b/app/Actions/Personality/CreatePersonalityAction.php
+index 5e6b311..4ed6898 100644
+--- a/app/Actions/Personality/CreatePersonalityAction.php
++++ b/app/Actions/Personality/CreatePersonalityAction.php
+@@ -30,7 +30,15 @@ public function execute(CreatePersonalityDTO $dto): Personality
+             $data['image_url'] = $stored['url'];
+         }
+ 
+-        $personality = $this->repository->create($data);
++        try {
++            $personality = $this->repository->create($data);
++        } catch (\Throwable $e) {
++            if (isset($stored)) {
++                $this->imageService->delete($stored['path']);
++            }
++
++            throw $e;
++        }
+ 
+         Cache::tags(['personalities'])->flush();
+ 
+diff --git a/app/Actions/Personality/UpdatePersonalityAction.php b/app/Actions/Personality/UpdatePersonalityAction.php
+index 1bd60eb..c08306d 100644
+--- a/app/Actions/Personality/UpdatePersonalityAction.php
++++ b/app/Actions/Personality/UpdatePersonalityAction.php
+@@ -37,7 +37,15 @@ public function execute(int $id, UpdatePersonalityDTO $dto): Personality
+             $data['image_url'] = $stored['url'];
+         }
+ 
+-        $personality = $this->repository->update($id, $data);
++        try {
++            $personality = $this->repository->update($id, $data);
++        } catch (\Throwable $e) {
++            if (isset($stored)) {
++                $this->imageService->delete($stored['path']);
++            }
++
++            throw $e;
++        }
+ 
+         Cache::tags(['personalities'])->flush();
+ 
+diff --git a/tests/Feature/Actions/FileUploadRollbackTest.php b/tests/Feature/Actions/FileUploadRollbackTest.php
+new file mode 100644
+index 0000000..23f3a72
+--- /dev/null
++++ b/tests/Feature/Actions/FileUploadRollbackTest.php
+@@ -0,0 +1,126 @@
++<?php
++
++namespace Tests\Feature\Actions;
++
++use App\Actions\Catering\CreatePackageAction;
++use App\Actions\Dish\UpdateDishAction;
++use App\Actions\MediaItem\UploadMediaAction;
++use App\DTOs\Catering\CreatePackageDTO;
++use App\DTOs\Dish\UpdateDishDTO;
++use App\DTOs\MediaItem\UploadMediaDTO;
++use App\Models\Dish;
++use App\Repositories\CateringPackageRepository;
++use App\Repositories\DishRepository;
++use App\Repositories\MediaItemRepository;
++use Illuminate\Http\UploadedFile;
++use Illuminate\Support\Facades\Storage;
++use RuntimeException;
++use Tests\TestCase;
++
++/**
++ * Proves the orphaned-file fix actually works: when the DB write after an
++ * upload fails, the just-stored file must be deleted and the original
++ * exception must still propagate (never swallowed).
++ */
++class FileUploadRollbackTest extends TestCase
++{
++    public function test_create_package_deletes_uploaded_image_when_db_write_fails(): void
++    {
++        Storage::fake('public');
++
++        $this->mock(CateringPackageRepository::class, function ($mock) {
++            $mock->shouldReceive('create')->andThrow(new RuntimeException('simulated DB failure'));
++        });
++
++        $action = app(CreatePackageAction::class);
++
++        $dto = new CreatePackageDTO(
++            name_ar: 'باقة',
++            name_en: 'Package',
++            description_ar: 'وصف',
++            description_en: 'Description',
++            tag_en: null,
++            price_starting_from: 100.0,
++            is_featured: false,
++            image: UploadedFile::fake()->image('package.jpg'),
++            order: 0,
++            features: [],
++        );
++
++        try {
++            $action->execute($dto);
++            $this->fail('Expected exception was not thrown.');
++        } catch (RuntimeException $e) {
++            $this->assertSame('simulated DB failure', $e->getMessage());
++        }
++
++        Storage::disk('public')->assertDirectoryEmpty('catering/packages');
++    }
++
++    public function test_upload_media_deletes_new_file_when_db_write_fails(): void
++    {
++        Storage::fake('public');
++
++        $this->mock(MediaItemRepository::class, function ($mock) {
++            $mock->shouldReceive('findBySlot')->andReturn(null);
++            $mock->shouldReceive('create')->andThrow(new RuntimeException('simulated DB failure'));
++        });
++
++        $action = app(UploadMediaAction::class);
++
++        $dto = new UploadMediaDTO(
++            page: 'home',
++            section: 'hero',
++            key: 'portrait',
++            image: UploadedFile::fake()->image('portrait.jpg'),
++            alt_ar: 'صورة',
++            alt_en: 'Image',
++        );
++
++        try {
++            $action->execute($dto);
++            $this->fail('Expected exception was not thrown.');
++        } catch (RuntimeException $e) {
++            $this->assertSame('simulated DB failure', $e->getMessage());
++        }
++
++        Storage::disk('public')->assertDirectoryEmpty('media/home');
++    }
++
++    public function test_update_dish_deletes_newly_uploaded_image_when_db_write_fails(): void
++    {
++        Storage::fake('public');
++
++        $existingDish = new Dish(['id' => 1, 'image_path' => null]);
++        $existingDish->id = 1;
++
++        $this->mock(DishRepository::class, function ($mock) use ($existingDish) {
++            $mock->shouldReceive('getById')->andReturn($existingDish);
++            $mock->shouldReceive('update')->andThrow(new RuntimeException('simulated DB failure'));
++        });
++
++        $action = app(UpdateDishAction::class);
++
++        $dto = new UpdateDishDTO(
++            name_ar: null,
++            name_en: null,
++            description_ar: null,
++            description_en: null,
++            price: null,
++            category_id: null,
++            is_featured: null,
++            is_signature: null,
++            image: UploadedFile::fake()->image('dish.jpg'),
++            order: null,
++        );
++
++        try {
++            $action->execute(1, $dto);
++            $this->fail('Expected exception was not thrown.');
++        } catch (RuntimeException $e) {
++            $this->assertSame('simulated DB failure', $e->getMessage());
++        }
++
++        Storage::disk('public')->assertDirectoryEmpty('dishes');
++    }
++}
