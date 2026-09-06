@@ -1,0 +1,32 @@
+new file: app/Http/Controllers/Admin/MenuPdfController.php — own-file context is in the diff, not fetched
+new file: app/Services/MenuQrService.php — own-file context is in the diff, not fetched
+new file: tests/Feature/MenuPdfTest.php — own-file context is in the diff, not fetched
+missing PSR-4 entry: Illuminate\Support\Facades\Storage::disk named in app/Http/Controllers/Admin/MenuPdfController.php
+unresolved named_reference: App\Models\Setting::updateOrCreate in app/Http/Controllers/Admin/MenuPdfController.php
+unresolved named_reference: App\Models\Setting::where in app/Http/Controllers/Admin/MenuPdfController.php
+missing PSR-4 entry: Illuminate\Http\JsonResponse named in app/Http/Controllers/Admin/MenuPdfController.php
+missing PSR-4 entry: Illuminate\Http\Request named in app/Http/Controllers/Admin/MenuPdfController.php
+missing PSR-4 entry: Endroid\QrCode\ErrorCorrectionLevel::High named in app/Services/MenuQrService.php
+unresolved named_reference: App\Models\MediaItem::where in app/Services/MenuQrService.php
+missing PSR-4 entry: Illuminate\Support\Facades\Storage::disk named in app/Services/MenuQrService.php
+missing PSR-4 entry: Endroid\QrCode\Writer\PngWriter named in app/Services/MenuQrService.php
+missing PSR-4 entry: Endroid\QrCode\Color\Color named in app/Services/MenuQrService.php
+missing PSR-4 entry: Endroid\QrCode\Builder\Builder named in app/Services/MenuQrService.php
+unresolved named_reference: App\Models\Setting::updateOrCreate in database/seeders/SettingSeeder.php
+missing PSR-4 entry: Illuminate\Support\Facades\Route::prefix named in routes/admin.php
+missing PSR-4 entry: Illuminate\Support\Facades\Route::get named in routes/admin.php
+missing PSR-4 entry: Illuminate\Support\Facades\Route::post named in routes/admin.php
+missing PSR-4 entry: Illuminate\Support\Facades\Route::delete named in routes/admin.php
+missing PSR-4 entry: Illuminate\Support\Facades\Route::get named in routes/web.php
+unresolved named_reference: App\Models\Setting::where in routes/web.php
+missing PSR-4 entry: Illuminate\Support\Facades\Storage::disk named in routes/web.php
+already in the diff: App\Services\MenuQrService declared in app/Services/MenuQrService.php; not fetched again
+missing PSR-4 entry: Illuminate\Support\Facades\Storage::fake named in tests/Feature/MenuPdfTest.php
+unresolved named_reference: App\Models\Setting::create in tests/Feature/MenuPdfTest.php
+missing PSR-4 entry: Laravel\Sanctum\Sanctum::actingAs named in tests/Feature/MenuPdfTest.php
+unresolved named_reference: App\Models\User::create in tests/Feature/MenuPdfTest.php
+missing PSR-4 entry: Illuminate\Http\UploadedFile::fake named in tests/Feature/MenuPdfTest.php
+missing PSR-4 entry: Illuminate\Support\Facades\Storage::disk named in tests/Feature/MenuPdfTest.php
+unresolved named_reference: App\Models\Setting::where in tests/Feature/MenuPdfTest.php
+unresolved named_reference: App\Models\MediaItem::create in tests/Feature/MenuPdfTest.php
+missing PSR-4 entry: Illuminate\Http\UploadedFile named in tests/Feature/MenuPdfTest.php

@@ -1,0 +1,147 @@
+{
+  "note": "Verbatim answers from fourteen independent reviewer agents, one per (task, condition). Nothing edited or re-run. Bundles were generated at each commit's OWN tree (ADR-A022).",
+  "reviewer": "a fresh general-purpose language-model agent per cell — no history, no repository access, pointed at a directory containing only its own packet",
+  "observations": [
+    {
+      "task": "D1",
+      "commit": "ec92403",
+      "condition": "DIFF_ONLY",
+      "Q1": "YES",
+      "Q2": "The change adds endroid/qr-code 6.1.3, whose locked requirement is PHP ^8.4, while the project's composer.json still declares support for \"php\": \"^8.2\", so composer install from this lock fails on any PHP 8.2/8.3 environment the project claims to support.",
+      "Q3": "app/Http/Controllers/Controller.php::deleted",
+      "Q4": "MEDIUM",
+      "Q5": "+            \"require\": {\n+                \"bacon/bacon-qr-code\": \"^3.0\",\n+                \"php\": \"^8.4\"\n+            },"
+    },
+    {
+      "task": "D2",
+      "commit": "fc573d2",
+      "condition": "DIFF_ONLY",
+      "Q1": "CANNOT_TELL",
+      "Q2": "-",
+      "Q3": "database/migrations/*_create_dishes_table.php::up (the original description_ar/description_en column definitions)",
+      "Q4": "MEDIUM",
+      "Q5": "$table->text('description_ar')->nullable()->change();"
+    },
+    {
+      "task": "D2",
+      "commit": "fc573d2",
+      "condition": "DIFF_PLUS_BUNDLE",
+      "Q1": "CANNOT_TELL",
+      "Q2": "-",
+      "Q3": "app/Services/Dish/DishService.php::create (the consumer of CreateDishDTO, plus any read-side code that dereferences Dish::$description_ar assuming a non-null string)",
+      "Q4": "MEDIUM",
+      "Q5": "ASSUMPTION: named reference could not be resolved on disk; contract unverified"
+    },
+    {
+      "task": "D4",
+      "commit": "ec76dc4",
+      "condition": "DIFF_ONLY",
+      "Q1": "CANNOT_TELL",
+      "Q2": "-",
+      "Q3": "app/Models/User.php::$fillable",
+      "Q4": "MEDIUM",
+      "Q5": "'role' => 'super_admin',"
+    },
+    {
+      "task": "D4",
+      "commit": "ec76dc4",
+      "condition": "DIFF_PLUS_BUNDLE",
+      "Q1": "CANNOT_TELL",
+      "Q2": "-",
+      "Q3": "database/migrations/*_create_testimonials_table.php::up",
+      "Q4": "MEDIUM",
+      "Q5": "        'name',\n        'quote_ar',\n        'quote_en',\n        'is_active',\n        'order',"
+    },
+    {
+      "task": "D5",
+      "commit": "44726d0",
+      "condition": "DIFF_ONLY",
+      "Q1": "CANNOT_TELL",
+      "Q2": "-",
+      "Q3": "app/Models/Setting.php::scopeForGroup",
+      "Q4": "MEDIUM",
+      "Q5": "return Setting::forGroup($group)->get()->keyBy('key');"
+    },
+    {
+      "task": "D5",
+      "commit": "44726d0",
+      "condition": "DIFF_PLUS_BUNDLE",
+      "Q1": "NO",
+      "Q2": "-",
+      "Q3": "app/Models/CateringPackageFeature.php::fillable",
+      "Q4": "MEDIUM",
+      "Q5": "$pageContent->update(Arr::only($data, ['value_ar', 'value_en']));"
+    },
+    {
+      "task": "C1",
+      "commit": "4411454",
+      "condition": "DIFF_ONLY",
+      "Q1": "CANNOT_TELL",
+      "Q2": "-",
+      "Q3": "app/Models/User.php::casts",
+      "Q4": "MEDIUM",
+      "Q5": "'password' => Hash::make($request->password),"
+    },
+    {
+      "task": "C1",
+      "commit": "4411454",
+      "condition": "DIFF_PLUS_BUNDLE",
+      "Q1": "NO",
+      "Q2": "-",
+      "Q3": "app/Http/Controllers/Controller.php::error",
+      "Q4": "MEDIUM",
+      "Q5": "'password' => 'hashed',"
+    },
+    {
+      "task": "C2",
+      "commit": "e770086",
+      "condition": "DIFF_ONLY",
+      "Q1": "CANNOT_TELL",
+      "Q2": "-",
+      "Q3": "database/migrations/xxxx_create_media_items_table.php::media_items.page (or a Page enum / config listing the valid `page` values) — needed to know whether 'all' is itself a legitimate page value, in which case the new cache key for page='all', section=null collides with the key for page=null, section=null, which return different result sets",
+      "Q4": "MEDIUM",
+      "Q5": "$key = 'media_items_' . ($page ?? 'all') . '_' . ($section ?? 'all');"
+    },
+    {
+      "task": "C2",
+      "commit": "e770086",
+      "condition": "DIFF_PLUS_BUNDLE",
+      "Q1": "CANNOT_TELL",
+      "Q2": "-",
+      "Q3": "app/Http/Controllers/Admin/MediaItemController.php::store (the media_items cache write/invalidation path that rebuilds the same key string)",
+      "Q4": "MEDIUM",
+      "Q5": "ASSUMPTION: additional call sites exist beyond the search bound; not all verified"
+    },
+    {
+      "task": "D1",
+      "commit": "ec92403",
+      "condition": "DIFF_PLUS_BUNDLE",
+      "Q1": "YES",
+      "Q2": "The change adds endroid/qr-code 6.1.3, whose locked requirement is PHP ^8.4, while composer.json still declares the project's own requirement as \"php\": \"^8.2\", so `composer install` will fail on the PHP 8.2/8.3 runtimes the project claims to support.",
+      "Q3": "NONE",
+      "Q4": "MEDIUM",
+      "Q5": "\"php\": \"^8.4\""
+    },
+    {
+      "task": "D3",
+      "commit": "e5e48ce",
+      "condition": "DIFF_ONLY",
+      "Q1": "CANNOT_TELL",
+      "Q2": "-",
+      "Q3": "app/Repositories/BranchRepository.php::getById",
+      "Q4": "MEDIUM",
+      "Q5": "return $this->success(new BranchResource($repository->getById($id)), __('messages.fetched'));"
+    },
+    {
+      "task": "D3",
+      "commit": "e5e48ce",
+      "condition": "DIFF_PLUS_BUNDLE",
+      "Q1": "CANNOT_TELL",
+      "Q2": "-",
+      "Q3": "app/Http/Controllers/PageContentController.php::index",
+      "Q4": "MEDIUM",
+      "Q5": "class PageContentController extends \\App\\Http\\Controllers\\PageContentController {}"
+    }
+  ],
+  "evidence_check": "All 14 Q5 quotations verified verbatim in that reviewer's own material. Bundle-only (absent from the diff): D2-B, D4-B, C1-B, C2-B. Of those four, only C1-B accompanies a correct answer."
+}

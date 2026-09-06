@@ -1,0 +1,95 @@
+{
+  "experiment": "experiment-20",
+  "written": "2026-09-06, from the corpus repository's own history, BEFORE any reviewer was run and BEFORE any packet was assembled",
+  "protocol": "M17's, unchanged",
+  "harness": "bundles generated against each commit's OWN tree via a detached worktree — the M19 defect, corrected",
+  "budget_tokens": 8000,
+
+  "selection_criteria_fixed_before_selecting": {
+    "S1": "a later REAL commit fixes a behaviour present in the target commit",
+    "S2": "target <= 1000 changed lines and <= 35 files, so a reviewer can read it in one sitting",
+    "S3": "for controls: NO later commit amends the behaviour",
+    "S4": "the target produces a non-empty bundle under the corrected harness — otherwise the two conditions are identical and the task measures nothing",
+    "excluded_by_S2": "8054003 (2339 lines, 71 files) and 4c6a83b (2375 lines, 55 files), each of which has later real fixes. Excluded on size, stated in advance, independent of outcome."
+  },
+
+  "tasks": [
+    { "id": "D1", "commit": "ec92403", "subject": "feat: menu PDF upload with permanent URL and QR code with logo",
+      "defect_present": "YES", "strength": "STRONG",
+      "fixing_commits": ["04328a5", "2c2a7b4"],
+      "defect": "TWO defects, either of which counts as detected. (a) upload() deletes the previously stored file and writes the new one to disk BEFORE the database write, with no transaction and no cleanup, so a failed Setting write leaves an orphaned file and the old file already gone. (b) payload() returns 'permanent_url' => route('menu.pdf'), the API domain, when the URL handed to users must be the frontend domain.",
+      "why_strong": "Both are fixed by later real commits that name the mechanism. 04328a5 'fix: delete orphaned uploaded files when a DB write fails after upload' applies try/catch-and-delete across every upload Action. 2c2a7b4 'fix: menu PDF permanent_url uses frontend domain not API domain' replaces route('menu.pdf') with config('app.frontend_url').'/menu/pdf'.",
+      "visible_in_diff": "PARTLY — the ordering of the file write and the DB write is visible; that no transaction wraps them, and that the URL is the wrong domain, both require knowledge the diff does not carry",
+      "expected_missing_context": ["the caller of upload(), to know whether a transaction surrounds it", "app/Models/Setting.php fillable", "config/app.php frontend_url"],
+      "bundle_relevant": "PARTLY. The bundle flags the surrounding-transaction premise, which names defect (a)'s mechanism almost exactly. Nothing in it can reach defect (b), which is a configuration fact (X3)." },
+
+    { "id": "D2", "commit": "fc573d2", "subject": "fix: make dish description optional (nullable)",
+      "defect_present": "YES", "strength": "STRONG",
+      "fixing_commits": ["11c0ced"],
+      "defect": "Making descriptions nullable creates an ambiguity on the UPDATE path this commit does not address: UpdateDishAction filters its payload through Arr::whereNotNull, so a description the client deliberately sends empty becomes null, is dropped, and the old text survives. The change is incomplete rather than internally wrong.",
+      "why_strong": "11c0ced's message states the mechanism verbatim: 'UpdateDishDTO mapped an empty description to null and UpdateDishAction then dropped every null via Arr::whereNotNull, so the old text survived.'",
+      "visible_in_diff": "NO — the diff touches CreateDishDTO, StoreDishRequest and a migration, and never names the update path",
+      "expected_missing_context": ["app/Actions/Dish/UpdateDishAction.php", "app/DTOs/Dish/UpdateDishDTO.php"],
+      "bundle_relevant": "NO, and this is PREDICTED. The tool follows only references the diff makes (P4/X1). Nothing in the changed regions names the update path, so no move can reach it. The bundle is 2 flags / 40 tokens. A miss here is a prediction met, not a failure discovered." },
+
+    { "id": "D3", "commit": "e5e48ce", "subject": "refactor: proper Public/ and Admin/ controller separation with complete routes",
+      "defect_present": "YES", "strength": "STRONG",
+      "fixing_commits": ["1fa1f66"],
+      "defect": "Public DishController::index passes the raw 'featured' and 'signature' query parameters straight through $request->only([...]). Query parameters arrive as strings, so 'false' and '0' are truthy when the repository uses them in a where clause — ?featured=false returns featured dishes.",
+      "why_strong": "1fa1f66 'fix: cast featured/signature query params to boolean in public DishController' replaces exactly that line with has()-guarded $request->boolean() calls.",
+      "visible_in_diff": "YES in principle — the offending line is in the diff — but it is one line among 715 across 31 files",
+      "expected_missing_context": ["app/Repositories/DishRepository.php::getAll — how the filter values are used in the query"],
+      "bundle_relevant": "UNCERTAIN. The bundle is large (85 items) and may or may not carry the repository's where clause." },
+
+    { "id": "D4", "commit": "ec76dc4", "subject": "feat: add all seeders with realistic bilingual data (12 seeders)",
+      "defect_present": "YES", "strength": "STRONG",
+      "fixing_commits": ["dae67ab"],
+      "defect": "PageContentSeeder::run() writes every row with PageContent::create($content) in a loop, so re-running the seeder against an already-seeded database fails on the (page, section, key) unique constraint. The seeder is not idempotent.",
+      "why_strong": "dae67ab 'fix(content): ... make PageContentSeeder idempotent' replaces create() with updateOrCreate() keyed on (page, section, key), and its message states the failure directly: 'so it can be re-run safely against an already-seeded database instead of failing on the unique constraint'.",
+      "visible_in_diff": "YES — PageContent::create($content) is in the diff; the unique constraint that makes it fail is not",
+      "expected_missing_context": ["the page_contents migration — the unique index on (page, section, key)"],
+      "bundle_relevant": "UNCERTAIN. X3 defers a schema resolver, so the migration is out of reach; the bundle may still carry the PageContent model surface." },
+
+    { "id": "D5", "commit": "44726d0", "subject": "feat: add all Repositories with query logic and tests",
+      "defect_present": "YES", "strength": "MODERATE",
+      "fixing_commits": ["721ea3c"],
+      "defect": "The repositories ship three different default page sizes — paginate($filters['per_page'] ?? 12) in DishRepository, paginate(15) in QuoteRequestRepository and UserRepository — so the API's page size depends on which endpoint is called.",
+      "why_moderate": "721ea3c 'fix: set default pagination to 10 items per page' normalises all three to 10, which establishes that the inconsistency was unwanted. But an inconsistent default is a product decision as much as a correctness defect, and the fix commit does not describe a failure. Deliberately keyed MODERATE rather than inflated to STRONG.",
+      "visible_in_diff": "YES — all three defaults are in the diff",
+      "expected_missing_context": [],
+      "bundle_relevant": "NO obvious relevance." },
+
+    { "id": "C1", "commit": "4411454", "subject": "feat: add profile endpoints (show, update, update password)",
+      "defect_present": "NO", "strength": "MODERATE",
+      "fixing_commits": [],
+      "defect": null,
+      "why": "CONTROL. ProfileController mass-assigns name, email and password through $user->update(); VERIFIED that User::$fillable is ['name','email','password','role'], so all three are writable. updatePassword() verifies the current password with Hash::check before writing. No later commit amends the behaviour.",
+      "visible_in_diff": "NO — the mass-assignment cannot be confirmed without User::$fillable",
+      "expected_missing_context": ["app/Models/User.php::fillable"],
+      "bundle_relevant": "YES. M19 measured this exact task: the bundle supplied the User model surface and the DIFF_PLUS_BUNDLE reviewer quoted it. Carried forward under the CORRECTED harness so the two milestones can be compared." },
+
+    { "id": "C2", "commit": "e770086", "subject": "fix: make page filter optional in MediaItemController to return all slots",
+      "defect_present": "NO", "strength": "MODERATE",
+      "fixing_commits": [],
+      "defect": null,
+      "why": "CONTROL. The optional page parameter is threaded coherently through controller, action, model scope and repository. No later commit amends the behaviour.",
+      "visible_in_diff": "YES",
+      "expected_missing_context": [],
+      "bundle_relevant": "NO strong expectation." },
+
+    { "id": "X", "commit": "-", "subject": "the frozen contract",
+      "defect_present": null, "strength": "-",
+      "why": "No production file may change. bundle_version 1, five ports, five assertion kinds, seven premises, two levers, ordering, budgeting, priority semantics, vendor exclusion and determinism all unchanged." }
+  ],
+
+  "ground_truth_census": { "STRONG": 4, "MODERATE": 3, "WEAK": 0, "of_scored_tasks": 7,
+    "strong_share": "4/7 = 57%, meeting the 'at least half STRONG' standard",
+    "defect_tasks": 5, "control_tasks": 2 },
+
+  "predictions_recorded_in_advance": {
+    "D2": "the bundle CANNOT reach the defect — 2 flags, 40 tokens. A miss is a prediction met.",
+    "D1": "the bundle flags the transaction premise, which names defect (a)'s mechanism; it cannot reach defect (b).",
+    "C1": "M19 measured the bundle helping here. If the corrected harness reverses that, the correction matters more than the effect did.",
+    "why_written_down": "Two of seven predictions say the bundle will not help. Recording them first is what stops the report being assembled around whichever tasks improved."
+  }
+}

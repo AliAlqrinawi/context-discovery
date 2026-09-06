@@ -1,0 +1,80 @@
+new file: app/Repositories/BranchRepository.php — own-file context is in the diff, not fetched
+new file: app/Repositories/CategoryRepository.php — own-file context is in the diff, not fetched
+new file: app/Repositories/CateringPackageRepository.php — own-file context is in the diff, not fetched
+new file: app/Repositories/DeliveryAppRepository.php — own-file context is in the diff, not fetched
+new file: app/Repositories/DishRepository.php — own-file context is in the diff, not fetched
+new file: app/Repositories/MediaItemRepository.php — own-file context is in the diff, not fetched
+new file: app/Repositories/PageContentRepository.php — own-file context is in the diff, not fetched
+new file: app/Repositories/QuoteRequestRepository.php — own-file context is in the diff, not fetched
+new file: app/Repositories/SampleMenuRepository.php — own-file context is in the diff, not fetched
+new file: app/Repositories/SettingRepository.php — own-file context is in the diff, not fetched
+new file: app/Repositories/TestimonialRepository.php — own-file context is in the diff, not fetched
+new file: app/Repositories/TimelineRepository.php — own-file context is in the diff, not fetched
+new file: app/Repositories/UserRepository.php — own-file context is in the diff, not fetched
+new file: tests/Feature/RepositoriesTest.php — own-file context is in the diff, not fetched
+unresolved named_reference: App\Models\Branch::orderBy in app/Repositories/BranchRepository.php
+unresolved named_reference: App\Models\Branch::findOrFail in app/Repositories/BranchRepository.php
+unresolved named_reference: App\Models\Branch::create in app/Repositories/BranchRepository.php
+missing PSR-4 entry: Illuminate\Database\Eloquent\Collection named in app/Repositories/BranchRepository.php
+unresolved named_reference: App\Models\Category::orderBy in app/Repositories/CategoryRepository.php
+unresolved named_reference: App\Models\Category::findOrFail in app/Repositories/CategoryRepository.php
+unresolved named_reference: App\Models\Category::create in app/Repositories/CategoryRepository.php
+missing PSR-4 entry: Illuminate\Database\Eloquent\Collection named in app/Repositories/CategoryRepository.php
+unresolved named_reference: App\Models\CateringPackage::with in app/Repositories/CateringPackageRepository.php
+missing PSR-4 entry: Illuminate\Support\Facades\DB::transaction named in app/Repositories/CateringPackageRepository.php
+unresolved named_reference: App\Models\CateringPackage::create in app/Repositories/CateringPackageRepository.php
+unresolved named_reference: App\Models\CateringPackage::findOrFail in app/Repositories/CateringPackageRepository.php
+missing PSR-4 entry: Illuminate\Database\Eloquent\Collection named in app/Repositories/CateringPackageRepository.php
+unresolved named_reference: App\Models\DeliveryApp::orderBy in app/Repositories/DeliveryAppRepository.php
+unresolved named_reference: App\Models\DeliveryApp::findOrFail in app/Repositories/DeliveryAppRepository.php
+unresolved named_reference: App\Models\DeliveryApp::create in app/Repositories/DeliveryAppRepository.php
+missing PSR-4 entry: Illuminate\Database\Eloquent\Collection named in app/Repositories/DeliveryAppRepository.php
+unresolved named_reference: App\Models\Dish::with in app/Repositories/DishRepository.php
+unresolved named_reference: App\Models\Dish::create in app/Repositories/DishRepository.php
+unresolved named_reference: App\Models\Dish::findOrFail in app/Repositories/DishRepository.php
+missing PSR-4 entry: Illuminate\Pagination\LengthAwarePaginator named in app/Repositories/DishRepository.php
+unresolved named_reference: App\Models\MediaItem::findOrFail in app/Repositories/MediaItemRepository.php
+unresolved named_reference: App\Models\MediaItem::create in app/Repositories/MediaItemRepository.php
+missing PSR-4 entry: Illuminate\Support\Collection named in app/Repositories/MediaItemRepository.php
+unresolved named_reference: App\Models\PageContent::findOrFail in app/Repositories/PageContentRepository.php
+missing PSR-4 entry: Illuminate\Support\Arr::only named in app/Repositories/PageContentRepository.php
+missing PSR-4 entry: Illuminate\Support\Facades\DB::transaction named in app/Repositories/PageContentRepository.php
+missing PSR-4 entry: Illuminate\Support\Collection named in app/Repositories/PageContentRepository.php
+unresolved named_reference: App\Models\QuoteRequest::orderByDesc in app/Repositories/QuoteRequestRepository.php
+unresolved named_reference: App\Models\QuoteRequest::findOrFail in app/Repositories/QuoteRequestRepository.php
+unresolved named_reference: App\Models\QuoteRequest::create in app/Repositories/QuoteRequestRepository.php
+missing PSR-4 entry: Illuminate\Pagination\LengthAwarePaginator named in app/Repositories/QuoteRequestRepository.php
+unresolved named_reference: App\Models\SampleMenu::with in app/Repositories/SampleMenuRepository.php
+missing PSR-4 entry: Illuminate\Support\Facades\DB::transaction named in app/Repositories/SampleMenuRepository.php
+unresolved named_reference: App\Models\SampleMenu::create in app/Repositories/SampleMenuRepository.php
+unresolved named_reference: App\Models\SampleMenu::findOrFail in app/Repositories/SampleMenuRepository.php
+missing PSR-4 entry: Illuminate\Database\Eloquent\Collection named in app/Repositories/SampleMenuRepository.php
+missing PSR-4 entry: Illuminate\Support\Facades\DB::transaction named in app/Repositories/SettingRepository.php
+unresolved named_reference: App\Models\Setting::where in app/Repositories/SettingRepository.php
+missing PSR-4 entry: Illuminate\Support\Collection named in app/Repositories/SettingRepository.php
+unresolved named_reference: App\Models\Testimonial::orderBy in app/Repositories/TestimonialRepository.php
+unresolved named_reference: App\Models\Testimonial::findOrFail in app/Repositories/TestimonialRepository.php
+unresolved named_reference: App\Models\Testimonial::create in app/Repositories/TestimonialRepository.php
+missing PSR-4 entry: Illuminate\Database\Eloquent\Collection named in app/Repositories/TestimonialRepository.php
+unresolved named_reference: App\Models\Timeline::orderBy in app/Repositories/TimelineRepository.php
+unresolved named_reference: App\Models\Timeline::findOrFail in app/Repositories/TimelineRepository.php
+unresolved named_reference: App\Models\Timeline::create in app/Repositories/TimelineRepository.php
+missing PSR-4 entry: Illuminate\Database\Eloquent\Collection named in app/Repositories/TimelineRepository.php
+unresolved named_reference: App\Models\User::with in app/Repositories/UserRepository.php
+missing PSR-4 entry: Illuminate\Support\Facades\DB::transaction named in app/Repositories/UserRepository.php
+unresolved named_reference: App\Models\User::create in app/Repositories/UserRepository.php
+unresolved named_reference: App\Models\User::findOrFail in app/Repositories/UserRepository.php
+missing PSR-4 entry: Illuminate\Pagination\LengthAwarePaginator named in app/Repositories/UserRepository.php
+already in the diff: App\Repositories\PageContentRepository declared in app/Repositories/PageContentRepository.php; not fetched again
+already in the diff: App\Repositories\MediaItemRepository declared in app/Repositories/MediaItemRepository.php; not fetched again
+already in the diff: App\Repositories\SettingRepository declared in app/Repositories/SettingRepository.php; not fetched again
+already in the diff: App\Repositories\CategoryRepository declared in app/Repositories/CategoryRepository.php; not fetched again
+already in the diff: App\Repositories\DishRepository declared in app/Repositories/DishRepository.php; not fetched again
+already in the diff: App\Repositories\BranchRepository declared in app/Repositories/BranchRepository.php; not fetched again
+already in the diff: App\Repositories\CateringPackageRepository declared in app/Repositories/CateringPackageRepository.php; not fetched again
+already in the diff: App\Repositories\SampleMenuRepository declared in app/Repositories/SampleMenuRepository.php; not fetched again
+already in the diff: App\Repositories\QuoteRequestRepository declared in app/Repositories/QuoteRequestRepository.php; not fetched again
+already in the diff: App\Repositories\TestimonialRepository declared in app/Repositories/TestimonialRepository.php; not fetched again
+already in the diff: App\Repositories\TimelineRepository declared in app/Repositories/TimelineRepository.php; not fetched again
+already in the diff: App\Repositories\DeliveryAppRepository declared in app/Repositories/DeliveryAppRepository.php; not fetched again
+already in the diff: App\Repositories\UserRepository declared in app/Repositories/UserRepository.php; not fetched again

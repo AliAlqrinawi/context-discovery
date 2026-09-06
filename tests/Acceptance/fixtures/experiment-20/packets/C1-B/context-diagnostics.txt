@@ -1,0 +1,17 @@
+new file: app/Http/Controllers/Admin/ProfileController.php — own-file context is in the diff, not fetched
+new file: app/Http/Requests/Profile/UpdatePasswordRequest.php — own-file context is in the diff, not fetched
+new file: app/Http/Requests/Profile/UpdateProfileRequest.php — own-file context is in the diff, not fetched
+new file: tests/Feature/ProfileTest.php — own-file context is in the diff, not fetched
+missing PSR-4 entry: Illuminate\Support\Facades\Hash::check named in app/Http/Controllers/Admin/ProfileController.php
+missing PSR-4 entry: Illuminate\Support\Facades\Hash::make named in app/Http/Controllers/Admin/ProfileController.php
+missing PSR-4 entry: Illuminate\Http\Request named in app/Http/Controllers/Admin/ProfileController.php
+missing PSR-4 entry: Illuminate\Http\JsonResponse named in app/Http/Controllers/Admin/ProfileController.php
+already in the diff: App\Http\Requests\Profile\UpdateProfileRequest declared in app/Http/Requests/Profile/UpdateProfileRequest.php; not fetched again
+already in the diff: App\Http\Requests\Profile\UpdatePasswordRequest declared in app/Http/Requests/Profile/UpdatePasswordRequest.php; not fetched again
+missing PSR-4 entry: Illuminate\Validation\Rule::unique named in app/Http/Requests/Profile/UpdateProfileRequest.php
+missing PSR-4 entry: Illuminate\Support\Facades\Route::prefix named in routes/admin.php
+missing PSR-4 entry: Illuminate\Support\Facades\Route::get named in routes/admin.php
+missing PSR-4 entry: Illuminate\Support\Facades\Route::put named in routes/admin.php
+unresolved named_reference: App\Models\User::where in tests/Feature/ProfileTest.php
+unresolved named_reference: App\Models\User::factory in tests/Feature/ProfileTest.php
+missing PSR-4 entry: Illuminate\Support\Facades\Hash::check named in tests/Feature/ProfileTest.php
