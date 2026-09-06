@@ -1,0 +1,98 @@
+{
+  "experiment": "experiment-16",
+  "written": "2026-09-06, from the fixture sources, BEFORE the CLI was run against them and BEFORE any production code was changed",
+  "question": "Does one identical slice per (path, member) always provide the correct reviewer context, or can multiple origins of the same member justify multiple copies?",
+  "budget_tokens": 8000,
+
+  "the_fact_the_key_is_built_on": {
+    "observed_in_phase_0": "A FETCHED item's provenance is the DECLARING site — the path, member and line span of the slice. A FLAGGED item's provenance is the REQUESTING site — the origin file and the changed region's span. Verified on experiment-15: the two OrderCalculator::total items are byte-identical in every schema field including `reason`, while the two Order::create flags differ in provenance because the origin differs.",
+    "consequence": "The origin of a FETCHED item is not represented in the bundle at all — not in the duplicate, and not in the first copy either. So keeping a second copy cannot preserve origin information; it prints the same unlabelled bytes twice. That is what makes 'the second copy carries provenance a reviewer needs' checkable rather than a matter of taste, and on this evidence it is false FOR FETCHED ITEMS ONLY."
+  },
+
+  "does_the_second_copy_add_information": {
+    "fetched_slices": "NO. Every reviewer-visible field is identical. A reviewer cannot tell copy 2 from copy 1, cannot learn from it which region asked, and cannot act on it differently.",
+    "flags": "YES. A flag's provenance IS the origin, so two origins produce two genuinely different items pointing at two different lines a reviewer must visit. M15's row T2 keyed exactly this and it must not regress.",
+    "what_provenance_is_missing": "For a fetched item: which changed region requested it. Adding it would be a SCHEMA CHANGE, and it is missing from single items too — so it is a separate question about item content, not a reason to keep duplicates. Recorded as a gap, not solved here."
+  },
+
+  "rows": [
+    { "id": "R1", "case": "same path + same member, two PRODUCTION files",
+      "reference": "App\\Services\\Calc::total from ControllerA and ControllerB",
+      "expect_items": 1, "expect_fetched": true, "expect_flag": false,
+      "provenance_must_be_preserved": "app/Services/Calc.php::total, lines of the declaration",
+      "duplicate_may_be_removed": true,
+      "why": "Two origins, one declaration. Both copies are byte-identical in every field, so the second is unreadable as a distinct fact. ADR-A005 costs tokens only where they buy something." },
+
+    { "id": "R2", "case": "same path + same member, production and TEST",
+      "reference": "App\\Services\\Calc::total also from tests/Feature/ReportTest.php",
+      "expect_items": "still 1 in total across R1 and R2", "expect_fetched": true, "expect_flag": false,
+      "duplicate_may_be_removed": true,
+      "why": "GUARD FOR M15. The answer here must be the same as R1's for the same reason R1's is — identical fields — and NOT because a test origin is worth less. M15 classification C stands: origin is not consulted." },
+
+    { "id": "R3", "case": "same path + same member requested TWICE from one changed file",
+      "reference": "Calc::total called twice inside ControllerA::store",
+      "expect_items": "no additional item beyond R1's one", "expect_fetched": true, "expect_flag": false,
+      "duplicate_may_be_removed": true,
+      "why": "The narrowest case: one origin, one region, one declaration. If two copies were ever justified this is the row least able to justify them." },
+
+    { "id": "R4", "case": "same path + DIFFERENT members",
+      "reference": "Calc::total and Calc::subtotal",
+      "expect_items": 2, "expect_fetched": true, "expect_flag": false,
+      "duplicate_may_be_removed": false,
+      "why": "GUARD. Different declarations, different spans, different text. Any rule keyed on the PATH alone destroys this row." },
+
+    { "id": "R5", "case": "DIFFERENT paths + same member NAME",
+      "reference": "Calc::total and Formatter::total",
+      "expect_items": 2, "expect_fetched": true, "expect_flag": false,
+      "duplicate_may_be_removed": false,
+      "why": "GUARD. Any rule keyed on the MEMBER NAME alone destroys this row." },
+
+    { "id": "R6", "case": "same path + same member + SAME SPAN, reached by two different resolution routes",
+      "reference": "ControllerA::helper — as a `same_file_reference` from ControllerA's own region, and as a `named_reference` from ControllerB",
+      "expect_items": 2, "expect_fetched": true, "expect_flag": false,
+      "duplicate_may_be_removed": false,
+      "why": "THE DECIDING GUARD. The payload is identical and so is the span, but the two items differ in `assertion_kind` and in `reason` — and `ItemPriority` puts them in DIFFERENT DROP BANDS (2 for same-file, 4 for named). Collapsing them would silently promote or demote one, changing what survives a budget. Identity must therefore be the whole item, never the slice alone." },
+
+    { "id": "R7", "case": "byte-identical slice TEXT, different provenance",
+      "reference": "Alpha::run and Beta::run — the same method body in two classes",
+      "expect_items": 2, "expect_fetched": true, "expect_flag": false,
+      "duplicate_may_be_removed": false,
+      "why": "GUARD. Any rule keyed on the PAYLOAD TEXT alone destroys this row: the reviewer needs to know both classes declare it, and a single copy would name only one of them." },
+
+    { "id": "R8", "case": "same path, DIFFERENT spans",
+      "reference": "app/Http/ControllerA.php — the `use` block (member null, an absence) and the `helper` member",
+      "expect_items": 2, "expect_fetched": true, "expect_flag": false,
+      "duplicate_may_be_removed": false,
+      "why": "GUARD. Two different regions of one file. Proves the span is part of identity, and that no rule may collapse on path alone." },
+
+    { "id": "R9", "case": "a FRAMEWORK-KNOWN reference named from two files",
+      "reference": "Illuminate\\Support\\Facades\\Log::info from ControllerA and ControllerB",
+      "expect_items": 0, "expect_fetched": false, "expect_flag": false,
+      "duplicate_may_be_removed": "not applicable — there is nothing to remove",
+      "why": "GUARD, and the one that must be checked mechanically rather than assumed: TWO diagnostics, ZERO items, and NOTHING from vendor/ in the bundle. ADR-A011's successful negative and ADR-A012's floor are unaffected by anything M16 does." },
+
+    { "id": "R10", "case": "M1/M7 regression shape — an Eloquent model named from two files",
+      "reference": "App\\Models\\Order::create from ControllerA and ControllerB",
+      "expect_items": "2 flags + 2 surface slices (fillable, casts) = 4",
+      "expect_fetched": true, "expect_flag": true,
+      "duplicate_may_be_removed": "the SURFACE is already emitted once by ADR-A020's guard; the two FLAGS must both remain",
+      "why": "THE ASYMMETRY, stated as a keyed row. The two flags differ in provenance — they name two different lines the reviewer must visit — so they are two facts, not one printed twice. The surface is one fact. M14 and M15 both depend on this and neither may regress." },
+
+    { "id": "X", "case": "the frozen contract",
+      "expect_items": null,
+      "why": "bundle_version 1, five ports, five assertion kinds, seven premises, two levers, provenance shape, ItemPriority bands and token accounting unchanged. Ordering is decided in BundleAssembler and must stay a total, stable order (P8)." }
+  ],
+
+  "unit_of_identity_this_key_implies": {
+    "statement": "Two FETCHED items are the same item when every field a reviewer can see is the same: lever, reason, assertion_kind, provenance path, provenance member, provenance span, and payload. Tokens follow from the payload.",
+    "derived_from": "R4 forces member into it, R5 forces path, R6 forces assertion_kind and reason, R7 forces provenance against payload-only, R8 forces the span. Nothing is left over, and no field can be dropped from the tuple without a row going red.",
+    "explicitly_not": "array_unique() over serialized items, string comparison of payloads, or a (path, member) pair. Each of those fails at least one guard row above.",
+    "flags": "Flags are NOT deduplicated: their provenance is the origin, so two origins are two items (R10, and M15 T2)."
+  },
+
+  "where_it_belongs": {
+    "resolution": "NO. A resolver is a pure function of one assertion and has no cross-assertion view; that is the property that makes depth two unreachable (P3). M14 put its surface guard in the pipeline for the same reason.",
+    "budget": "NO. BudgetEnforcer records every drop as `below budget priority`, which would be FALSE of a redundant copy, and it only acts when over budget — so identical copies would survive at 8000 and vanish at 500, which is not one behaviour.",
+    "assembly": "YES, if anything. BundleAssembler is where resolved assertions BECOME items, and where ordering is already decided once so that JSON and Markdown are two renderings of one list. Item identity is an item question and belongs beside it."
+  }
+}

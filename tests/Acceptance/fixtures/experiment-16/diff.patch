@@ -1,0 +1,58 @@
+diff --git a/app/Http/Api/ControllerB.php b/app/Http/Api/ControllerB.php
+index e135729..e6b5590 100644
+--- a/app/Http/Api/ControllerB.php
++++ b/app/Http/Api/ControllerB.php
+@@ -14,4 +14,16 @@ class ControllerB
+     {
+         return 'unchanged';
+     }
++
++    public function report(array $lines): int
++    {
++        $a = Calc::total($lines);         // R1 · SECOND production origin, same path+member
++        $b = Calc::subtotal($lines);      // R4 · same path, DIFFERENT member
++        Beta::run($lines);                // R7 · body byte-identical to Alpha::run
++        Order::create(['sku' => 'y']);    // R10 · M14 shape, second origin
++        Log::info('reported');            // R9 · framework-known, second origin
++        ControllerA::helper($a);          // R6 · the SAME span ControllerA reaches as a sibling
++
++        return $a + $b;
++    }
+ }
+diff --git a/app/Http/ControllerA.php b/app/Http/ControllerA.php
+index 18c2353..95c8eb6 100644
+--- a/app/Http/ControllerA.php
++++ b/app/Http/ControllerA.php
+@@ -19,4 +19,18 @@ class ControllerA
+     {
+         return $n + 1;
+     }
++
++    public function store(array $lines): string
++    {
++        $a = Calc::total($lines);        // R1/R3 · first request
++        $b = Calc::total($lines);        // R3 · SECOND request, same changed file
++        $c = Formatter::total($a + $b);  // R5 · same member NAME, different path
++        Alpha::run($lines);              // R7 · body byte-identical to Beta::run
++        Order::create(['sku' => 'x']);   // R10 · M14 shape, first origin
++        Log::info('stored');             // R9 · framework-known, first origin
++        $this->helper($a);               // R6 · same-file sibling, ALSO named from ControllerB
++        Auditor::note($c);               // R8 · NOT imported — an absence, so the `use` BLOCK is sliced
++
++        return $c;
++    }
+ }
+diff --git a/tests/Feature/ReportTest.php b/tests/Feature/ReportTest.php
+index 8e68ba7..cec67cb 100644
+--- a/tests/Feature/ReportTest.php
++++ b/tests/Feature/ReportTest.php
+@@ -10,4 +10,9 @@ class ReportTest
+     {
+         return 'unchanged';
+     }
++
++    public function test_it_totals(): void
++    {
++        Calc::total([1, 2]);   // R2 · a THIRD origin, declared dev by composer
++    }
+ }

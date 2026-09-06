@@ -46,14 +46,37 @@ final class BundleAssembler
     public function assemble(array $resolved, int $budgetTokens): Bundle
     {
         $items = [];
+        $seen = [];
 
         foreach ($resolved as $resolvedAssertion) {
             foreach ($this->itemsFor($resolvedAssertion) as $item) {
+                $identity = self::identityOf($item);
+
+                if (isset($seen[$identity])) {
+                    // ADR-A021. One member named from two files resolves twice, and the second
+                    // item is identical in every field a reviewer can see — including `reason`,
+                    // because a *fetched* item's provenance is the DECLARING site, never the
+                    // requesting one. So the copy is not a second fact; it is the same bytes
+                    // printed again, and ADR-A005 spends tokens only where they buy something.
+                    //
+                    // Nothing is omitted and nothing is recorded: the surviving item is
+                    // byte-identical to the one skipped, so every reason, provenance and byte
+                    // still reaches the reviewer. That is what separates this from a budget drop,
+                    // which loses an item and must therefore say so (P10).
+                    //
+                    // Flags need no special case. Their provenance IS the origin, so two origins
+                    // give two identities and both survive — the behaviour M15 keyed as row T2.
+                    continue;
+                }
+
+                $seen[$identity] = true;
                 $items[] = $item;
             }
         }
 
         // usort is stable, so items with equal keys keep the order they were resolved in (P8).
+        // The collapse above runs first, so which copy survives is a function of resolution order
+        // alone rather than of the sort's tie-breaking.
         usort($items, $this->compare(...));
 
         return new Bundle(
@@ -127,6 +150,36 @@ final class BundleAssembler
             ),
             $resolved->slices,
         );
+    }
+
+    /**
+     * Everything a reviewer can see, and nothing else — ADR-A021.
+     *
+     * Every field here is forced by a row of `experiment-16`'s key that goes red without it: the
+     * member by R4, the path by R5, the kind and reason by R6, the payload by R7, the line span by
+     * R8. `tokens` is a function of the payload and adds nothing.
+     *
+     * **R6 is why the slice's location is not enough.** `ControllerA::helper` arrives three times
+     * with the same path, member, span and text — as a symbol absence, as a same-file reference,
+     * and as a named reference from another file. Those answer three different questions and sit in
+     * two different `ItemPriority` bands, so collapsing them would change what survives a budget.
+     *
+     * A separator that cannot occur inside a path, a member name or an assertion kind keeps the
+     * concatenation unambiguous for the two fields that could contain anything — reason and
+     * payload — by putting them last and by encoding the null member distinctly from an empty one.
+     */
+    private static function identityOf(BundleItem $item): string
+    {
+        return implode("\0", [
+            $item->lever->value,
+            $item->assertionKind->value,
+            $item->provenance->path,
+            $item->provenance->member ?? "\1",
+            (string) $item->provenance->firstLine,
+            (string) $item->provenance->lastLine,
+            $item->reason,
+            $item->payload,
+        ]);
     }
 
     private function compare(BundleItem $a, BundleItem $b): int

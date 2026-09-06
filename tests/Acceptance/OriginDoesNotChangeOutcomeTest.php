@@ -130,21 +130,33 @@ final class OriginDoesNotChangeOutcomeTest extends TestCase
         );
     }
 
-    // ---------------------------------------------------------------- the recorded defect
+    // ---------------------------------------------------------------- G4, closed by M16
 
-    public function testTheDuplicateMemberSliceIsOriginIndependent(): void
+    public function testTheOnceDuplicatedMemberSliceNowArrivesOnce(): void
     {
-        // G4, found while measuring M15 and deliberately NOT fixed here. `OrderCalculator::total`
-        // is named from a production file and from a test, and arrives twice. The scratch check in
-        // `docs/research/M15-origin-value.md` §9 shows two PRODUCTION files do exactly the same, so
-        // this is a duplicate-subject defect and not an origin one. Asserted as it stands so that
-        // fixing it is a deliberate act with its own key.
+        // G4. M15 found this while measuring something else and asserted it AS IT STOOD — two
+        // byte-identical `OrderCalculator::total` items — so that fixing it would have to be a
+        // deliberate act with its own key. M16 wrote that key and ADR-A021 closed it: two items
+        // are the same item when every field a reviewer can see is the same, and a *fetched*
+        // item's provenance is the declaring site, so two origins produce one readable fact.
+        //
+        // This assertion is the one that bit when the behaviour changed. That is what it was for.
         $total = array_filter(
             $this->fetchedFrom('app/Services/OrderCalculator.php'),
             static fn (array $item): bool => $item['provenance']['member'] === 'total'
         );
 
-        self::assertCount(2, $total, 'recorded, not fixed: one fact, two identical slices');
+        self::assertCount(1, $total, 'one fact, one item (ADR-A021)');
+    }
+
+    public function testTheTwoFlagsForOneSubjectStillSurviveTheCollapse(): void
+    {
+        // The asymmetry ADR-A021 turns on, asserted here rather than only in M16's own fixture:
+        // a flag's provenance IS its origin, so the two `Order::create` flags have two identities
+        // and both live. M15's row T2 is untouched by the deduplication.
+        $flags = array_filter($this->flaggedSubjects(), static fn (string $s): bool => $s === 'App\Models\Order::create');
+
+        self::assertCount(2, $flags, 'two origins, two lines to visit, two items');
     }
 
     // ---------------------------------------------------------------- helpers
