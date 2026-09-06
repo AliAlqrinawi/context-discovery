@@ -1,0 +1,97 @@
+diff --git a/app/Http/Controllers/Api/OrderController.php b/app/Http/Controllers/Api/OrderController.php
+index 2dd3ad2..597f5ab 100644
+--- a/app/Http/Controllers/Api/OrderController.php
++++ b/app/Http/Controllers/Api/OrderController.php
+@@ -2,12 +2,13 @@
+ 
+ namespace App\Http\Controllers\Api;
+ 
++use App\Models\Order;
+ use Illuminate\Http\Request;
+ use App\Services\OrderService;
+ use App\Http\Controllers\Controller;
+ use App\Http\Resources\OrderResource;
+-use App\Http\Requests\Api\OrderRequest;
+ use App\Http\Resources\BaseCollection;
++use App\Http\Requests\Api\OrderRequest;
+ 
+ class OrderController extends Controller
+ {
+@@ -37,4 +38,16 @@ public function store(OrderRequest $request)
+         return \responder::success(new OrderResource($order->load('address','items.product')));
+     }
+ 
++    public function show(Order $order)
++    {
++        return \responder::success(new OrderResource($order->load('address','items.product')));
++    }
++
++    public function canceledOrder(Order $order)
++    {
++        $this->orderService->canceledOrder($order);
++        return \responder::success(__('action done successfully'));
++
++    }
++
+ }
+diff --git a/app/Repositories/OrderRepository.php b/app/Repositories/OrderRepository.php
+index 1406835..e379c1a 100644
+--- a/app/Repositories/OrderRepository.php
++++ b/app/Repositories/OrderRepository.php
+@@ -85,6 +85,10 @@ public function cancelledStatusAll($data)
+     {
+         return $this->model->orderIds($data)->newAndPendingStatus()->update(['status'=>OrderStatusEnum::CANCELLED]);
+     }
++    public function canceledOrder($model)
++    {
++        return $model->update(['status'=>OrderStatusEnum::CANCELLED]);
++    }
+ 
+     public function getNewOrders()
+     {
+diff --git a/app/Services/OrderService.php b/app/Services/OrderService.php
+index d6a2579..8c3253d 100644
+--- a/app/Services/OrderService.php
++++ b/app/Services/OrderService.php
+@@ -148,7 +148,14 @@ public function pushOrder($order)
+         broadcast(new OrderNotificationEvent($order))->toOthers();
+     }
+ 
+-   
++    public function canceledOrder($model)
++    {
++        if(!in_array($model->status , [OrderStatusEnum::NEW , OrderStatusEnum::PENDING]))
++        {
++            throw ValidationException::withMessages([__("Sorry, the order cannot be cancelled, it has been shipped")]);
++        }
++        return $this->repo->canceledOrder($model);
++    }
+ 
+ 
+     private function createOrderItems($order, $items)
+diff --git a/lang/ar.json b/lang/ar.json
+index cdc43d5..03c6942 100644
+--- a/lang/ar.json
++++ b/lang/ar.json
+@@ -220,6 +220,7 @@
+     "Less Than":"اقل من",
+     "balance":"الرصيد",
+     "from":"من",
+-    "to":"الي"
++    "to":"الي",
++    "Sorry, the order cannot be cancelled, it has been shipped":"عفوا لا يمكن إلغاء الطلب لقد تم شحنه"
+ 
+ }
+\ No newline at end of file
+diff --git a/routes/api.php b/routes/api.php
+index 465a156..742f1e7 100644
+--- a/routes/api.php
++++ b/routes/api.php
+@@ -28,6 +28,7 @@
+     });
+     Route::apiResource('addresses',AddressController::class);
+     Route::apiResource('orders',OrderController::class);
++    Route::PUT('orders/canceled/{order}',[OrderController::class,'canceledOrder']);
+     Route::put('default-address/{address}',[AddressController::class,'updateDefaultAddress']);
+     Route::get('favorites',[FavoriteController::class,'index']);
+     Route::post('favorites',[FavoriteController::class,'store']);

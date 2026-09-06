@@ -1,0 +1,308 @@
+{
+    "bundle_version": 1,
+    "budget_tokens": 8000,
+    "used_tokens": 1630,
+    "items": [
+        {
+            "lever": "fetched",
+            "reason": "the region calls the sibling member categories, whose contract the diff does not show",
+            "assertion_kind": "same_file_reference",
+            "provenance": {
+                "path": "app/Http/Controllers/Admin/ProductController.php",
+                "member": "categories",
+                "lines": [
+                    134,
+                    137
+                ]
+            },
+            "payload": "    private function categories()\n    {\n        return $this->categoryService->getModelForSelect();\n    }",
+            "tokens": 27
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\DataTables\\CategoryDataTable, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/DataTables/CategoryDataTable.php",
+                "member": "dataTable",
+                "lines": [
+                    17,
+                    57
+                ]
+            },
+            "payload": "    /**\n     * Build the DataTable class.\n     *\n     * @param QueryBuilder $query Results from query() method.\n     */\n    public function dataTable(QueryBuilder $query): EloquentDataTable\n    {\n        return (new EloquentDataTable($query))\n            ->addColumn('action', 'dashboard.categories.action')\n            ->filterColumn('name', function ($query, $keyword) {\n                $query->whereRaw(\"LOWER(JSON_UNQUOTE(JSON_EXTRACT(name, '$.en'))) like LOWER(?)\", [\"%$keyword%\"])\n                    ->orWhereRaw(\"LOWER(JSON_UNQUOTE(JSON_EXTRACT(name, '$.ar'))) like LOWER(?)\", [\"%$keyword%\"]);\n            })\n            ->addColumn('position', function ($category) {\n                return view('dashboard.categories.position', ['category' => $category]);\n            })\n            ->addColumn('name', function ($category) {\n                return $category->name;\n            })\n            ->addColumn('sub_categories', function ($category) {\n                return view('dashboard.categories.sub_categories', ['category' => $category]);\n            })\n            ->addColumn('image', function ($category) {\n                return \" <img src='{$category->image}'  width='60' height='60'>\";\n            })\n            ->addColumn('status', function ($category) {\n                return view('dashboard.categories.status', ['category' => $category]);\n            })\n            ->addColumn('international', function ($category) {\n                return view('dashboard.categories.international', ['category' => $category]);\n            })\n            ->addColumn('home', function ($category) {\n                return view('dashboard.categories.in_home', ['category' => $category]);\n            })\n            ->addColumn('date', function ($category) {\n                return $category->created_at->format('d/m/Y');\n            })\n            ->addIndexColumn()\n            ->rawColumns(['position' , 'name', 'sub_categories', 'image', 'date', 'status', 'home', 'action'])\n            ->setRowId('id');\n    }",
+            "tokens": 505
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\DataTables\\CategoryDataTable, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/DataTables/CategoryDataTable.php",
+                "member": "filename",
+                "lines": [
+                    131,
+                    137
+                ]
+            },
+            "payload": "    /**\n     * Get the filename for export.\n     */\n    protected function filename(): string\n    {\n        return 'Category_' . date('YmdHis');\n    }",
+            "tokens": 38
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\DataTables\\CategoryDataTable, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/DataTables/CategoryDataTable.php",
+                "member": "getColumns",
+                "lines": [
+                    112,
+                    129
+                ]
+            },
+            "payload": "    /**\n     * Get the dataTable columns definition.\n     */\n    public function getColumns(): array\n    {\n        return [\n            Column::computed('position')->title('#'),\n            Column::computed('DT_RowIndex')->title('#'),\n            Column::make('name')->title(__('Name')),\n            Column::make('sub_categories')->title(__('Sub Categories'))->searchable(),\n            Column::computed('image')->title(__('Image')),\n            Column::computed('status')->title(__('Status')),\n            Column::computed('international')->title(__('International')),\n            Column::computed('home')->title(__('Appearing')),\n            Column::computed('date')->title(__('Created')),\n            Column::computed('action')->title(__('Actions')),\n        ];\n    }",
+            "tokens": 193
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\DataTables\\CategoryDataTable, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/DataTables/CategoryDataTable.php",
+                "member": "html",
+                "lines": [
+                    68,
+                    108
+                ]
+            },
+            "payload": "    /**\n     * Optional method if you want to use the html builder.\n     */\n    public function html(): HtmlBuilder\n    {\n        return $this->builder()\n            ->setTableId('category-table')\n            ->columns($this->getColumns())\n            ->minifiedAjax()\n            ->dom('Bfrtip') // Include 'l' for the length menu\n            ->orderBy(0)\n            ->responsive(true)\n            ->selectStyleSingle()\n            ->buttons([])\n            ->parameters([\n                'dom' => \"<'row'<'col-sm-6 margin-bottom20'B>>\" .\n                    \"<'row'<'col-sm-6'l><'col-sm-6'f>>\" .\n                    \"<'row'<'col-sm-12'tr>>\" .\n                    \"<'row'<'col-sm-5'i><'col-sm-7'p>>\",\n                'lengthMenu' => [50, 100, 200, 300, 500],\n            ])\n            ->language([\n                'lengthMenu' => 'Show _MENU_ entries',\n                'sProcessing' => __('Loading...'),\n                'sZeroRecords' => __('There is no data'),\n                'sEmptyTable' => __('There is no data'),\n                'infoFiltered' => '',\n                'sInfo' => '',\n                'sInfoEmpty' => '',\n                'sInfoPostFix' => '',\n                'sSearch' => '',\n                'sSearchPlaceholder' => __('Search'),\n                'sUrl' => '',\n                'sInfoThousands' => ',',\n                'sLoadingRecords' => __('Loading...'),\n                'oPaginate' => [\n                    'sNext' => \"<i class='next'></i>\",\n                    'sPrevious' => \"<i class='previous'></i>\",\n                ]\n            ]);\n    }",
+            "tokens": 392
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\DataTables\\CategoryDataTable, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/DataTables/CategoryDataTable.php",
+                "member": "query",
+                "lines": [
+                    59,
+                    66
+                ]
+            },
+            "payload": "    /**\n     * Get the query source of dataTable.\n     */\n    public function query(Category $model): QueryBuilder\n    {\n        return $model->newQuery()->mainCategory()->with(\"subCategories\")\n        ->orderBy(\"position\" , \"ASC\");\n    }",
+            "tokens": 60
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Models\\Category::where, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Http/Controllers/Admin/SubCategoryController.php",
+                "member": "App\\Models\\Category::where",
+                "lines": [
+                    29,
+                    41
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Category::where, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Category.php",
+                "member": "activeSubCategories",
+                "lines": [
+                    36,
+                    39
+                ]
+            },
+            "payload": "    public function activeSubCategories()\n    {\n        return $this->hasMany(self::class)->orderBy('position', \"ASC\")->active()->international();\n    }",
+            "tokens": 38
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Category::where, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Category.php",
+                "member": "category",
+                "lines": [
+                    28,
+                    31
+                ]
+            },
+            "payload": "    public function category()\n    {\n        return $this->belongsTo(self::class);\n    }",
+            "tokens": 22
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Category::where, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Category.php",
+                "member": "fillable",
+                "lines": [
+                    17,
+                    25
+                ]
+            },
+            "payload": "    protected $fillable = [\n        'name',\n        'image',\n        'is_international',\n        'home',\n        'is_active',\n        'category_id',\n        \"position\"\n    ];",
+            "tokens": 44
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Category::where, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Category.php",
+                "member": "scopeCategory",
+                "lines": [
+                    50,
+                    53
+                ]
+            },
+            "payload": "    public function scopeCategory($query)\n    {\n        return $query->where('category_id', request()->category_id);\n    }",
+            "tokens": 31
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Category::where, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Category.php",
+                "member": "scopeHome",
+                "lines": [
+                    41,
+                    44
+                ]
+            },
+            "payload": "    public function scopeHome($query)\n    {\n        return $query->where('home', 1);\n    }",
+            "tokens": 23
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Category::mainCategory, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Category.php",
+                "member": "scopeMainCategory",
+                "lines": [
+                    46,
+                    49
+                ]
+            },
+            "payload": "    public function scopeMainCategory($query)\n    {\n        return $query->whereNull('category_id');\n    }",
+            "tokens": 27
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Category::where, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Category.php",
+                "member": "scopeMainCategory",
+                "lines": [
+                    46,
+                    49
+                ]
+            },
+            "payload": "    public function scopeMainCategory($query)\n    {\n        return $query->whereNull('category_id');\n    }",
+            "tokens": 27
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Category::where, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Category.php",
+                "member": "subCategories",
+                "lines": [
+                    32,
+                    35
+                ]
+            },
+            "payload": "    public function subCategories()\n    {\n        return $this->hasMany(self::class);\n    }",
+            "tokens": 23
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Category::where, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Category.php",
+                "member": "translatable",
+                "lines": [
+                    16,
+                    16
+                ]
+            },
+            "payload": "    public $translatable = ['name'];",
+            "tokens": 9
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Product::active, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Product.php",
+                "member": "scopeActive",
+                "lines": [
+                    121,
+                    124
+                ]
+            },
+            "payload": "    public function scopeActive($query)\n    {\n        return $query->where('is_active', 1);\n    }",
+            "tokens": 25
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Product::filter, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Product.php",
+                "member": "scopeFilter",
+                "lines": [
+                    145,
+                    156
+                ]
+            },
+            "payload": "    public function scopeFilter(Builder $builder)\n    {\n\n        $builder\n            ->filterByStatus()\n            ->filterById()\n            ->filterByName()\n            ->filterByCategories()\n            ->filterBySku()\n            ->filterByQuantity()\n            ->filterByDate();\n    }",
+            "tokens": 73
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Product::inactive, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Product.php",
+                "member": "scopeInactive",
+                "lines": [
+                    116,
+                    119
+                ]
+            },
+            "payload": "    public function scopeInactive($query)\n    {\n        return $query->where('is_active', 0);\n    }",
+            "tokens": 25
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Services\\CategoryService::update, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Services/CategoryService.php",
+                "member": "update",
+                "lines": [
+                    31,
+                    34
+                ]
+            },
+            "payload": "    public function update($model ,$request)\n    {\n        return $this->repo->update($model , $request);\n    }",
+            "tokens": 28
+        }
+    ],
+    "dropped": []
+}

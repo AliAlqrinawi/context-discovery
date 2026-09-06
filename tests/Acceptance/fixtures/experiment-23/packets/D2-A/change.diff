@@ -1,0 +1,94 @@
+diff --git a/app/Http/Controllers/Api/ProductController.php b/app/Http/Controllers/Api/ProductController.php
+index c949d62..bff7b46 100644
+--- a/app/Http/Controllers/Api/ProductController.php
++++ b/app/Http/Controllers/Api/ProductController.php
+@@ -30,6 +30,11 @@ public function index(Request $request)
+ 
+    public function show(Product $product)
+    {
+-    return  \responder::success(new ProductResource($product->load('category','media')) );
++      return  \responder::success(new ProductResource($product->load('category','media')) );
++   }
++
++   public function getActiveProducts(Request $request)
++   {
++      return \responder::success(ProductResource::collection($this->productService->getActiveProducts($request->all())));
+    }
+ }
+diff --git a/app/Models/Product.php b/app/Models/Product.php
+index d81d4a6..4637342 100644
+--- a/app/Models/Product.php
++++ b/app/Models/Product.php
+@@ -41,6 +41,13 @@ public function scopeCategory($query, $value)
+     {
+         return $query->where('category_id', $value);
+     }
++    public function scopeActiveCategory($query)
++    {
++        return $query->whereHas('category', function($q){
++            return $q->where('is_active',1);
++
++        });
++    }
+     public function scopeInStock($query, $value)
+     {
+         return $query->where('quantity', '>', $value);
+diff --git a/app/Repositories/ProductRepository.php b/app/Repositories/ProductRepository.php
+index 0e5ab44..4cf1102 100644
+--- a/app/Repositories/ProductRepository.php
++++ b/app/Repositories/ProductRepository.php
+@@ -26,7 +26,7 @@ public function index($request, $pagination)
+             $q->type($request['type']);
+         })->when(isset($request['name']), function ($q) use ($request) {
+             $q->search($request['name']);
+-        })->active()->inStock(0);
++        })->active()->activeCategory()->inStock(0);
+ 
+         if ($pagination) {
+             return $query->latest()->paginate($pagination);
+@@ -34,6 +34,10 @@ public function index($request, $pagination)
+ 
+         return $query->latest()->get();
+     }
++    public function getActiveProducts($productIds)
++    {
++       return $this->model->with('category')->productIds($productIds)->active()->activeCategory()->inStock(0)->latest()->get();
++    }
+ 
+     public function getSelectedProducts($productsId)
+     {
+diff --git a/app/Services/ProductService.php b/app/Services/ProductService.php
+index b0d718f..b56513f 100644
+--- a/app/Services/ProductService.php
++++ b/app/Services/ProductService.php
+@@ -90,4 +90,10 @@ private function explodeData($request)
+         return explode(',',$request['selected_ids']);
+     }
+ 
++    public function getActiveProducts($request)
++    {
++        $productIds = explode(',',$request['product_ids']);
++        return $this->repo->getActiveProducts($productIds);
++    }
++
+ }
+diff --git a/routes/api.php b/routes/api.php
+index ef3d85a..7f4a8b5 100644
+--- a/routes/api.php
++++ b/routes/api.php
+@@ -36,6 +36,7 @@
+     Route::post('coupons',[CouponController::class,'store']);
+     Route::get('coupons/{coupon}',[CouponController::class,'show']);
+     Route::get('notifications',NotificationController::class);
++    
+ 
+ });
+ Route::get('countries',CountryController::class);
+@@ -47,6 +48,7 @@
+ Route::get('categories',CategoryController::class);
+ Route::get('products',[ProductController::class,'index']);
+ Route::get('products/{product}',[ProductController::class,'show']);
++Route::get('active-products',[ProductController::class,'getActiveProducts']);
+ Route::get('settings',SettingController::class);
+ Route::get('payments',PaymentController::class);
+ Route::get('delivery-types',DeliveryTypeController::class);

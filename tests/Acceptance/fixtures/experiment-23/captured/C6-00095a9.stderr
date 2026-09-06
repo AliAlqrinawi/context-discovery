@@ -1,0 +1,11 @@
+new file: app/Exports/ProductsExport.php — own-file context is in the diff, not fetched
+unresolved named_reference: App\Models\Product::select in app/Exports/ProductsExport.php
+already in the diff: App\Services\ProductService::export declared in app/Services/ProductService.php; not fetched again
+missing PSR-4 entry: Illuminate\Http\Request named in app/Http/Controllers/Admin/ProductController.php
+missing PSR-4 entry: Maatwebsite\Excel\Facades\Excel::download named in app/Repositories/ProductRepository.php
+already in the diff: App\Exports\ProductsExport declared in app/Exports/ProductsExport.php; not fetched again
+already in the diff: App\Repositories\ProductRepository::export declared in app/Repositories/ProductRepository.php; not fetched again
+own-file lookup for Form in resources/views/dashboard/products/index.blade.php: nothing to slice
+own-file lookup for Form in resources/views/dashboard/products/index.blade.php: nothing to slice
+own-file lookup for FormData in resources/views/dashboard/products/index.blade.php: nothing to slice
+missing PSR-4 entry: Illuminate\Support\Facades\Route::post named in routes/admin.php

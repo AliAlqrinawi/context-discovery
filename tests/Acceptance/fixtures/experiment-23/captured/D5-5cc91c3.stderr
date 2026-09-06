@@ -1,0 +1,21 @@
+new file: app/Http/Controllers/Api/CouponController.php — own-file context is in the diff, not fetched
+new file: app/Http/Requests/Api/CouponRequest.php — own-file context is in the diff, not fetched
+new file: app/Http/Resources/CouponResource.php — own-file context is in the diff, not fetched
+new file: app/Models/DeliveryType.php — own-file context is in the diff, not fetched
+new file: app/Models/Payment.php — own-file context is in the diff, not fetched
+new file: database/migrations/2024_03_13_120508_create_delivery_types_table.php — own-file context is in the diff, not fetched
+new file: database/migrations/2024_03_13_123628_create_payments_table.php — own-file context is in the diff, not fetched
+already in the diff: App\Services\CouponService::checkIsValidCoupon declared in app/Services/CouponService.php; not fetched again
+already in the diff: App\Http\Requests\Api\CouponRequest declared in app/Http/Requests/Api/CouponRequest.php; not fetched again
+already in the diff: App\Http\Resources\CouponResource declared in app/Http/Resources/CouponResource.php; not fetched again
+missing PSR-4 entry: Illuminate\Http\Request named in app/Http/Resources/CouponResource.php
+already in the diff: App\Models\Coupon::validCoupon declared in app/Models/Coupon.php; not fetched again
+missing PSR-4 entry: Illuminate\Validation\ValidationException::withMessages named in app/Services/CouponService.php
+already in the diff: App\Repositories\CouponRepository::checkIsValidCoupon declared in app/Repositories/CouponRepository.php; not fetched again
+missing PSR-4 entry: Illuminate\Support\Facades\Schema::create named in database/migrations/2024_03_13_120508_create_delivery_types_table.php
+missing PSR-4 entry: Illuminate\Support\Facades\Schema::dropIfExists named in database/migrations/2024_03_13_120508_create_delivery_types_table.php
+missing PSR-4 entry: Illuminate\Database\Schema\Blueprint named in database/migrations/2024_03_13_120508_create_delivery_types_table.php
+missing PSR-4 entry: Illuminate\Support\Facades\Schema::create named in database/migrations/2024_03_13_123628_create_payments_table.php
+missing PSR-4 entry: Illuminate\Support\Facades\Schema::dropIfExists named in database/migrations/2024_03_13_123628_create_payments_table.php
+missing PSR-4 entry: Illuminate\Database\Schema\Blueprint named in database/migrations/2024_03_13_123628_create_payments_table.php
+missing PSR-4 entry: Illuminate\Support\Facades\Route::post named in routes/api.php

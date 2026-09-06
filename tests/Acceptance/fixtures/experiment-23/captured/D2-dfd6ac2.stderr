@@ -1,0 +1,6 @@
+unresolved named_reference: App\Http\Resources\ProductResource::collection in app/Http/Controllers/Api/ProductController.php
+already in the diff: App\Services\ProductService::getActiveProducts declared in app/Services/ProductService.php; not fetched again
+missing PSR-4 entry: Illuminate\Http\Request named in app/Http/Controllers/Api/ProductController.php
+unresolved named_reference: App\Models\Product::with in app/Repositories/ProductRepository.php
+already in the diff: App\Repositories\ProductRepository::getActiveProducts declared in app/Repositories/ProductRepository.php; not fetched again
+missing PSR-4 entry: Illuminate\Support\Facades\Route::get named in routes/api.php

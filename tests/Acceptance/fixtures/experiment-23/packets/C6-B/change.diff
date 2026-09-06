@@ -1,0 +1,323 @@
+diff --git a/app/Exports/ProductsExport.php b/app/Exports/ProductsExport.php
+new file mode 100644
+index 0000000..8bfb56f
+--- /dev/null
++++ b/app/Exports/ProductsExport.php
+@@ -0,0 +1,34 @@
++<?php
++
++namespace App\Exports;
++
++use App\Models\Product;
++use Maatwebsite\Excel\Concerns\FromCollection;
++use Maatwebsite\Excel\Concerns\WithHeadings;
++
++class ProductsExport implements FromCollection, WithHeadings
++{
++
++    public function headings(): array
++    {
++        return [
++            '#',
++            'Product Name en',
++            'Product Name ar',
++            'SKU',
++            'Barcode',
++            'Price',
++        ];
++    }
++
++    /**
++     * @return \Illuminate\Support\Collection
++     */
++    public function collection()
++    {
++        return Product::select('id', 'name->ar as name_ar', 'name->en as name_en', "sku", 'barcode', 'price')
++            ->filter()->when(request()->type, function ($q) {
++                $q->productsType(request()->type);
++            })->get();
++    }
++}
+diff --git a/app/Http/Controllers/Admin/ProductController.php b/app/Http/Controllers/Admin/ProductController.php
+index 8204dcb..37aa8a5 100644
+--- a/app/Http/Controllers/Admin/ProductController.php
++++ b/app/Http/Controllers/Admin/ProductController.php
+@@ -193,8 +193,13 @@ public function removeProductsFromCategory(Request $request)
+ 
+     public function import(Request $request)
+     {
+-        $this->productService->import($request->all());
++        return $this->productService->import($request->all());
+         updated();
+         return back();
+     }
++
++    public function export(Request $request)
++    {
++        return $this->productService->export();
++    }
+ }
+diff --git a/app/Repositories/ProductRepository.php b/app/Repositories/ProductRepository.php
+index c544186..3efb95d 100644
+--- a/app/Repositories/ProductRepository.php
++++ b/app/Repositories/ProductRepository.php
+@@ -5,6 +5,7 @@
+ use App\Models\Product;
+ use App\Enum\OrderStatusEnum;
+ use App\Enum\LocalizationTypeEnum;
++use App\Exports\ProductsExport;
+ use App\Imports\ProductsImport;
+ use App\Models\Category;
+ use Illuminate\Support\Facades\DB;
+@@ -205,4 +206,9 @@ public function import()
+     {
+         Excel::import(new ProductsImport, request()->file('file_for_import_products'));
+     }
++
++    public function export()
++    {
++        return Excel::download(new ProductsExport, 'products.xlsx');
++    }
+ }
+diff --git a/app/Services/ProductService.php b/app/Services/ProductService.php
+index 12c02f2..8e99133 100644
+--- a/app/Services/ProductService.php
++++ b/app/Services/ProductService.php
+@@ -164,4 +164,9 @@ public function import($request)
+     {
+         return $this->repo->import($request);
+     }
++
++    public function export()
++    {
++        return $this->repo->export();
++    }
+ }
+diff --git a/resources/views/dashboard/products/active.blade.php b/resources/views/dashboard/products/active.blade.php
+index 534d4c0..efa28d3 100644
+--- a/resources/views/dashboard/products/active.blade.php
++++ b/resources/views/dashboard/products/active.blade.php
+@@ -1,5 +1,5 @@
+ <div class="btn-group dropdown">
+-    <button type="button" class="btn btn-success waves-effect waves-light dropdown-toggle" data-toggle="dropdown"
++    <button type="button" class="btn btn-secondary waves-effect waves-light dropdown-toggle" data-toggle="dropdown"
+         aria-haspopup="true" aria-expanded="false">
+         <i class="fas fa-clipboard"></i>&nbsp; {{ __('Options') }}
+     </button>
+diff --git a/resources/views/dashboard/products/index.blade.php b/resources/views/dashboard/products/index.blade.php
+index 155201d..bb2df5b 100644
+--- a/resources/views/dashboard/products/index.blade.php
++++ b/resources/views/dashboard/products/index.blade.php
+@@ -16,22 +16,28 @@
+                                 </div>
+                                 <div class="card-content">
+                                     <div class="card-body card-dashboard">
+-                                        {!! Form::open(['route' => 'admin.products.import', 'class' => 'form', 'method' => 'post', 'enctype' => 'multipart/form-data']) !!}
+-                                            <div class="row col-12 mb-2">
+-                                                <div class="col-md-4">
+-                                                    {!! Form::label('file', __("Choose File E-xcel")) !!}
+-                                                    {!! Form::file('file_for_import_products', [
+-                                                        'class' => 'form-control',
+-                                                        'placeholder' => 'E-xcel',
+-                                                        'accept' => '.xlsx'
+-                                                    ]) !!}
+-                                                </div>
+-                                                <div class="col-md-8 mt-2">
+-                                                    <button type="submit" class="btn btn-primary">
+-                                                        {{ __('Save') }}
+-                                                    </button>
+-                                                </div>
++                                        {!! Form::open([
++                                            'route' => 'admin.products.import',
++                                            'class' => 'form',
++                                            'method' => 'post',
++                                            'enctype' => 'multipart/form-data',
++                                        ]) !!}
++                                        <div class="row col-12 mb-2">
++                                            <div class="col-md-4">
++                                                {!! Form::label('file', __('Choose File E-xcel')) !!}
++                                                {!! Form::file('file_for_import_products', [
++                                                    'class' => 'form-control',
++                                                    'placeholder' => 'E-xcel',
++                                                    'accept' => '.xlsx',
++                                                ]) !!}
+                                             </div>
++                                            <div
++                                                class="col-md-8 mt-2 text-{{ app()->getLocale() == 'ar' ? 'left' : 'right' }}">
++                                                <button type="submit" class="btn btn-primary">
++                                                    {{ __('Save') }}
++                                                </button>
++                                            </div>
++                                        </div>
+                                         {!! Form::close() !!}
+                                     </div>
+                                 </div>
+@@ -48,15 +54,121 @@
+                             @can('Create Products')
+                                 <div class="text-{{ app()->getLocale() == 'ar' ? 'right' : 'left' }}">
+                                     @include('dashboard.products.actions_for_add')
++                                {!! Form::open([
++                                        'route' => 'admin.products.export',
++                                        'method' => 'post',
++                                        'class' => 'd-inline',
++                                        'id' => 'form_for_export',
++                                    ]) !!}
++                                    @csrf
++                                    <div hidden>
++                                        <div class="col-md-3">
++                                            <label>SKU </label>
++                                            {!! Form::text('sku', request('sku'), [
++                                                'class' => 'form-control',
++                                                'id' => 'sku',
++                                                'placeholder' => 'SKU',
++                                            ]) !!}
++                                        </div>
++
++                                        <div class="col-md-3">
++                                            <label>{{ __('Product Number') }} </label>
++                                            {!! Form::number('id', request('id'), [
++                                                'class' => 'form-control',
++                                                'id' => 'id',
++                                                'placeholder' => __('Product Number'),
++                                                'step' => 1,
++                                                'min' => 1,
++                                            ]) !!}
++                                        </div>
++
++                                        <div class="col-md-3">
++                                            <label>{{ __('Name') }} </label>
++                                            {!! Form::text('name', request('name'), [
++                                                'class' => 'form-control',
++                                                'id' => 'name',
++                                                'placeholder' => __('name'),
++                                            ]) !!}
++                                        </div>
++
++                                        <div class="col-md-3">
++                                            <label> {{ __('Status') }} </label>
++                                            {!! Form::select('status', [0 => __('inactive'), 1 => __('active')], request('status'), [
++                                                'class' => 'form-control',
++                                                'id' => 'status',
++                                                'placeholder' => __('status'),
++                                            ]) !!}
++                                        </div>
++
++                                        <div class="col-md-3">
++                                            <label>{{ __('Quantity From') }} </label>
++                                            {!! Form::number('quantity_from', request('quantity_from'), [
++                                                'class' => 'form-control',
++                                                'id' => 'quantity_from',
++                                                'placeholder' => __('quantity from'),
++                                                'step' => 1,
++                                                'min' => 0,
++                                            ]) !!}
++                                        </div>
++
++                                        <div class="col-md-3">
++                                            <label>{{ __('Quantity To') }} </label>
++                                            {!! Form::number('quantity_to', request('quantity_to'), [
++                                                'class' => 'form-control',
++                                                'id' => 'quantity_to',
++                                                'placeholder' => __('quantity to'),
++                                                'step' => 1,
++                                                'min' => 0,
++                                            ]) !!}
++                                        </div>
++
++                                        <div class="col-md-3">
++                                            <label>{{ __('Created Date From') }} </label>
++                                            {!! Form::date('date_from', request('date_from'), [
++                                                'class' => 'form-control date-picker',
++                                                'id' => 'date_from',
++                                            ]) !!}
++                                        </div>
++
++                                        <div class="col-md-3">
++                                            <label>{{ __('Created Date To') }}</label>
++                                            {!! Form::date('date_to', request('date_to'), [
++                                                'class' => 'form-control date-picker',
++                                                'id' => 'date_to',
++                                                'placeholder' => 'الي',
++                                            ]) !!}
++                                        </div>
++
++                                        <div class="col-md-3">
++                                            <label> {{ __('Categories') }} </label>
++                                            {!! Form::select('categories', $categories, request('categories'), [
++                                                'class' => 'form-control select2',
++                                                'id' => 'categories',
++                                                'placeholder' => 'No Category',
++                                            ]) !!}
++                                        </div>
++                                    </div>
++                                    <button type="submit" class="btn btn-success">
++                                        {{ __('Export') }}
++                                    </button>
++                                    {!! Form::close() !!}
++
+ 
+                                     @include('dashboard.products.active')
++
++
+                                 </div>
+                             @endcan
+                         </div>
+                         <div class="card-content">
+                             <div class="card-body card-dashboard">
+                                 @if (!request()->has('type'))
+-                                    {!! Form::open(['route' => 'admin.products.index', 'class' => 'form', 'method' => 'get']) !!}
++                                    {!! Form::open([
++                                        'route' => 'admin.products.index',
++                                        'class' => 'form',
++                                        'method' => 'get',
++                                        'id' => 'form_for_search',
++                                    ]) !!}
+                                     <div class="row col-12 mb-2">
+ 
+                                         <div class="col-md-3">
+@@ -143,13 +255,12 @@
+ 
+                                         <div class="col-md-9"></div>
+ 
+-                                        <div class="col-md-12 mt-2 ">
++                                        <div class="col-md-12 mt-2">
+                                             <button type="submit" class="btn btn-primary">
+                                                 {{ __('Search') }}
+                                             </button>
+                                         </div>
+                                     </div>
+-
+                                     {!! Form::close() !!}
+                                 @endif
+                                 <div class="table-responsive">
+@@ -193,4 +304,18 @@
+             });
+         });
+     </script>
++    <script>
++        document.getElementById('form_for_export').addEventListener('submit', function() {
++            const form_for_search = new FormData(document.getElementById('form_for_search'));
++            document.getElementById('sku').value = form_for_search.get('sku');
++            document.getElementById('name').value = form_for_search.get('name');
++            document.getElementById('id').value = form_for_search.get('id');
++            document.getElementById('status').value = form_for_search.get('status');
++            document.getElementById('quantity_from').value = form_for_search.get('quantity_from');
++            document.getElementById('quantity_to').value = form_for_search.get('quantity_to');
++            document.getElementById('date_from').value = form_for_search.get('date_from');
++            document.getElementById('date_to').value = form_for_search.get('date_to');
++            document.getElementById('categories').value = form_for_search.get('categories');
++        });
++    </script>
+ @endpush
+diff --git a/routes/admin.php b/routes/admin.php
+index 70892d5..6ad72b7 100644
+--- a/routes/admin.php
++++ b/routes/admin.php
+@@ -85,6 +85,7 @@
+     Route::post('products/add-new-products-to-category', [ProductController::class, 'addProductsToCategory'])->name('products.addNewProductsToCategory');
+     Route::post('products/remove-products-from-category', [ProductController::class, 'removeProductsFromCategory'])->name('products.removeProductsFromCategory');
+     Route::post('products/import', [ProductController::class, 'import'])->name('products.import');
++    Route::post('products/export', [ProductController::class, 'export'])->name('products.export');
+     ######## drivers ########
+     Route::PUT('drivers/change-status/{driver}', [DriverController::class, 'changeStatus'])->name('drivers.changeStatus');
+     Route::get('all-drivers', [DriverController::class, 'getDrivers'])->name('get.drivers');

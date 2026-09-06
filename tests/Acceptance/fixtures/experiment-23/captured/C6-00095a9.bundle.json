@@ -1,0 +1,532 @@
+{
+    "bundle_version": 1,
+    "budget_tokens": 8000,
+    "used_tokens": 1719,
+    "items": [
+        {
+            "lever": "fetched",
+            "reason": "the region uses ProductController, which the file's use block does not import",
+            "assertion_kind": "same_file_symbol_absence",
+            "provenance": {
+                "path": "routes/admin.php",
+                "lines": [
+                    5,
+                    7
+                ]
+            },
+            "payload": "use App\\Http\\Controllers\\Auth\\AuthenticatedSessionController;\nuse App\\Http\\Middleware\\Localization;\nuse Illuminate\\Support\\Facades\\Route;",
+            "tokens": 35
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Models\\Product::select, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Exports/ProductsExport.php",
+                "member": "App\\Models\\Product::select",
+                "lines": [
+                    1,
+                    34
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on Illuminate\\Http\\Request, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Http/Controllers/Admin/ProductController.php",
+                "member": "Illuminate\\Http\\Request",
+                "lines": [
+                    193,
+                    205
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Product::select, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Product.php",
+                "member": "categories",
+                "lines": [
+                    70,
+                    73
+                ]
+            },
+            "payload": "    public function categories()\n    {\n        return $this->belongsToMany(Category::class);\n    }",
+            "tokens": 25
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Product::select, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Product.php",
+                "member": "category",
+                "lines": [
+                    66,
+                    69
+                ]
+            },
+            "payload": "    public function category()\n    {\n        return $this->belongsTo(Category::class);\n    }",
+            "tokens": 23
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Product::select, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Product.php",
+                "member": "fillable",
+                "lines": [
+                    22,
+                    39
+                ]
+            },
+            "payload": "    protected $fillable = [\n        'name',\n        'image',\n        'category_id',\n        'price',\n        'offer_price',\n        'quantity',\n        'weight',\n        'sort_order',\n        'barcode',\n        'sku',\n        'show_in',\n        'description',\n        'keywords',\n        'is_active',\n        'is_international',\n        'position'\n    ];",
+            "tokens": 89
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Product::select, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Product.php",
+                "member": "getMainPrice",
+                "lines": [
+                    57,
+                    64
+                ]
+            },
+            "payload": "    public function getMainPrice()\n    {\n        $price =  $this->price;\n        if (request()->is_international && request()->coin_price && $price) {\n            return $price * request()->coin_price;\n        }\n        return $price;\n    }",
+            "tokens": 60
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Product::select, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Product.php",
+                "member": "getOfferPrice",
+                "lines": [
+                    49,
+                    56
+                ]
+            },
+            "payload": "    public function getOfferPrice()\n    {\n        $offerPrice =  $this->offer_price;\n        if (request()->is_international && request()->coin_price && $offerPrice) {\n            return $offerPrice * request()->coin_price;\n        }\n        return $offerPrice;\n    }",
+            "tokens": 67
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Product::select, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Product.php",
+                "member": "getPrice",
+                "lines": [
+                    41,
+                    48
+                ]
+            },
+            "payload": "    public function getPrice()\n    {\n        $price =  $this->offer_price ?? $this->price;\n        if (request()->is_international && request()->coin_price) {\n            return $price * request()->coin_price;\n        }\n        return $price;\n    }",
+            "tokens": 62
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Product::select, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Product.php",
+                "member": "orderItems",
+                "lines": [
+                    75,
+                    78
+                ]
+            },
+            "payload": "    public function orderItems()\n    {\n        return $this->hasMany(OrderItem::class);\n    }",
+            "tokens": 24
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Product::select, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Product.php",
+                "member": "scopeActive",
+                "lines": [
+                    120,
+                    123
+                ]
+            },
+            "payload": "    public function scopeActive($query)\n    {\n        return $query->where('is_active', 1);\n    }",
+            "tokens": 25
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Product::select, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Product.php",
+                "member": "scopeActiveCategory",
+                "lines": [
+                    87,
+                    92
+                ]
+            },
+            "payload": "    public function scopeActiveCategory($query)\n    {\n        return $query->whereHas('categories', function ($q) {\n            return $q->where('is_active', 1);\n        });\n    }",
+            "tokens": 45
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Product::select, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Product.php",
+                "member": "scopeCategory",
+                "lines": [
+                    81,
+                    86
+                ]
+            },
+            "payload": "    public function scopeCategory($query, $value)\n    {\n        return $query->whereHas('categories', function ($q) use ($value) {\n            return $q->where('categories.id', $value);\n        });\n    }",
+            "tokens": 51
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Product::select, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Product.php",
+                "member": "scopeFilter",
+                "lines": [
+                    144,
+                    155
+                ]
+            },
+            "payload": "    public function scopeFilter(Builder $builder)\n    {\n\n        $builder\n            ->filterByStatus()\n            ->filterById()\n            ->filterByName()\n            ->filterByCategories()\n            ->filterBySku()\n            ->filterByQuantity()\n            ->filterByDate();\n    }",
+            "tokens": 73
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Product::select, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Product.php",
+                "member": "scopeFilterByCategories",
+                "lines": [
+                    200,
+                    209
+                ]
+            },
+            "payload": "    public function scopeFilterByCategories(Builder $builder)\n    {\n        $categories = request('categories');\n\n        if ($categories) {\n            $builder->whereHas('categories', function ($query) use ($categories) {\n                $query->where('categories.id', $categories);\n            });\n        }\n    }",
+            "tokens": 79
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Product::select, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Product.php",
+                "member": "scopeFilterByCategory",
+                "lines": [
+                    187,
+                    198
+                ]
+            },
+            "payload": "    public function scopeFilterByCategory(Builder $builder)\n    {\n        $category = request('category');\n\n        if ($category) {\n            $builder->whereHas('category', function ($query) use ($category) {\n                $query->where(function ($q) use ($category) {\n                    $q->whereRaw('lower(JSON_EXTRACT(name, \"$.en\")) LIKE \"%' . strtolower($category) . '%\" OR lower(JSON_EXTRACT(name, \"$.ar\")) LIKE \"%' . strtolower($category) . '%\"');\n                });\n            });\n        }\n    }",
+            "tokens": 128
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Product::select, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Product.php",
+                "member": "scopeFilterByDate",
+                "lines": [
+                    230,
+                    238
+                ]
+            },
+            "payload": "    public function scopeFilterByDate(Builder $builder)\n    {\n        $dateFrom = request('date_from');\n        $dateTo = request('date_to');\n\n        if ($dateFrom && $dateTo) {\n            $builder->where('created_at', '>=', $dateFrom)->where('created_at', '<=', $dateTo);\n        }\n    }",
+            "tokens": 73
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Product::select, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Product.php",
+                "member": "scopeFilterById",
+                "lines": [
+                    167,
+                    174
+                ]
+            },
+            "payload": "    public function scopeFilterById(Builder $builder)\n    {\n        $id = request('id');\n\n        if ($id) {\n            $builder->where('id', $id);\n        }\n    }",
+            "tokens": 41
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Product::select, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Product.php",
+                "member": "scopeFilterByName",
+                "lines": [
+                    176,
+                    185
+                ]
+            },
+            "payload": "    public function scopeFilterByName(Builder $builder)\n    {\n        $name = request('name');\n\n        if ($name) {\n            return $builder->where(function ($q) use ($name) {\n                $q->whereRaw('lower(JSON_EXTRACT(name, \"$.en\")) LIKE \"%' . strtolower($name) . '%\" OR lower(JSON_EXTRACT(name, \"$.ar\")) LIKE \"%' . strtolower($name) . '%\"');\n            });\n        }\n    }",
+            "tokens": 97
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Product::select, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Product.php",
+                "member": "scopeFilterByQuantity",
+                "lines": [
+                    220,
+                    228
+                ]
+            },
+            "payload": "    public function scopeFilterByQuantity(Builder $builder)\n    {\n        $quantityFrom = request('quantity_from');\n        $quantityTo = request('quantity_to');\n\n        if ($quantityFrom && $quantityTo) {\n            $builder->where('quantity', '>=', $quantityFrom)->where('quantity', '<=', $quantityTo);\n        }\n    }",
+            "tokens": 81
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Product::select, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Product.php",
+                "member": "scopeFilterBySku",
+                "lines": [
+                    211,
+                    218
+                ]
+            },
+            "payload": "    public function scopeFilterBySku(Builder $builder)\n    {\n        $sku = request('sku');\n\n        if ($sku) {\n            $builder->where('sku', $sku);\n        }\n    }",
+            "tokens": 43
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Product::select, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Product.php",
+                "member": "scopeFilterByStatus",
+                "lines": [
+                    157,
+                    165
+                ]
+            },
+            "payload": "    public function scopeFilterByStatus(Builder $builder)\n    {\n\n        $status = request('status');\n\n        if (isset($status) && $status !== '') {\n            $builder->where('is_active', $status);\n        }\n    }",
+            "tokens": 55
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Product::select, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Product.php",
+                "member": "scopeInStock",
+                "lines": [
+                    93,
+                    96
+                ]
+            },
+            "payload": "    public function scopeInStock($query, $value)\n    {\n        return $query->where('quantity', '>', $value);\n    }",
+            "tokens": 29
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Product::select, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Product.php",
+                "member": "scopeInactive",
+                "lines": [
+                    115,
+                    118
+                ]
+            },
+            "payload": "    public function scopeInactive($query)\n    {\n        return $query->where('is_active', 0);\n    }",
+            "tokens": 25
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Product::select, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Product.php",
+                "member": "scopeInternational",
+                "lines": [
+                    130,
+                    133
+                ]
+            },
+            "payload": "    public function scopeInternational($query)\n    {\n        return $query->where('is_international', 1);\n    }",
+            "tokens": 28
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Product::select, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Product.php",
+                "member": "scopeNotInternational",
+                "lines": [
+                    125,
+                    128
+                ]
+            },
+            "payload": "    public function scopeNotInternational($query)\n    {\n        return $query->where('is_international', 0);\n    }",
+            "tokens": 29
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Product::select, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Product.php",
+                "member": "scopeOrderByPosition",
+                "lines": [
+                    240,
+                    243
+                ]
+            },
+            "payload": "    public function scopeOrderByPosition(Builder $builder)\n    {\n        $builder->orderBy(DB::raw('ISNULL(position), position'), 'asc');\n    }",
+            "tokens": 36
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Product::select, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Product.php",
+                "member": "scopeProductIds",
+                "lines": [
+                    110,
+                    113
+                ]
+            },
+            "payload": "    public function scopeProductIds($query, $value)\n    {\n        return $query->whereIn('id', $value);\n    }",
+            "tokens": 28
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Product::select, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Product.php",
+                "member": "scopeProductsType",
+                "lines": [
+                    135,
+                    142
+                ]
+            },
+            "payload": "    public function scopeProductsType($query, $value)\n    {\n        if (in_array($value, [LocalizationTypeEnum::LOCAL, LocalizationTypeEnum::INTERNATIONAL])) {\n            $type = $value == LocalizationTypeEnum::LOCAL ? 0 : 1;\n            return $query->where('is_international', $type);\n        }\n        return $query->where('show_in', $value);\n    }",
+            "tokens": 88
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Product::select, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Product.php",
+                "member": "scopeSearch",
+                "lines": [
+                    102,
+                    109
+                ]
+            },
+            "payload": "    public function scopeSearch($query, $value)\n    {\n        return $query->where(function ($q) use ($value) {\n            $q->whereRaw('lower(JSON_EXTRACT(name, \"$.en\")) LIKE \"%' . strtolower($value) . '%\" OR lower(JSON_EXTRACT(name, \"$.ar\")) LIKE \"%' . strtolower($value) . '%\"');\n        })->orWhere(function ($q) use ($value) {\n            $q->whereRaw('lower(JSON_EXTRACT(keywords, \"$.en\")) LIKE \"%' . strtolower($value) . '%\" OR lower(JSON_EXTRACT(keywords, \"$.ar\")) LIKE \"%' . strtolower($value) . '%\"');\n        });\n    }",
+            "tokens": 133
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Product::select, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Product.php",
+                "member": "scopeType",
+                "lines": [
+                    97,
+                    101
+                ]
+            },
+            "payload": "    public function scopeType($query, $value)\n    {\n\n        return $query->where('show_in', $value);\n    }",
+            "tokens": 27
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Product::select, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Product.php",
+                "member": "translatable",
+                "lines": [
+                    21,
+                    21
+                ]
+            },
+            "payload": "    public $translatable = ['name', 'keywords', 'description'];",
+            "tokens": 16
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on Maatwebsite\\Excel\\Facades\\Excel::download, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/ProductRepository.php",
+                "member": "Maatwebsite\\Excel\\Facades\\Excel::download",
+                "lines": [
+                    206,
+                    214
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Services\\ProductService::import, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Services/ProductService.php",
+                "member": "import",
+                "lines": [
+                    163,
+                    166
+                ]
+            },
+            "payload": "    public function import($request)\n    {\n        return $this->repo->import($request);\n    }",
+            "tokens": 24
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on Illuminate\\Support\\Facades\\Route::post, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "routes/admin.php",
+                "member": "Illuminate\\Support\\Facades\\Route::post",
+                "lines": [
+                    85,
+                    91
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        }
+    ],
+    "dropped": []
+}

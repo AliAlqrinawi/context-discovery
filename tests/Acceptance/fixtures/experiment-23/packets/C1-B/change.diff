@@ -1,0 +1,61 @@
+diff --git a/app/Exports/ProductsExport.php b/app/Exports/ProductsExport.php
+index e713557..2d96488 100644
+--- a/app/Exports/ProductsExport.php
++++ b/app/Exports/ProductsExport.php
+@@ -14,10 +14,11 @@ public function headings(): array
+         return [
+             'Product Number',
+             'SKU',
+-            'Product Name en',
+             'Product Name ar',
++            'Product Name en',
+             'Barcode',
+             'Price',
++            'Location',
+         ];
+     }
+ 
+@@ -29,7 +30,7 @@ public function collection()
+         ini_set('memory_limit', '2G');
+         ini_set('max_execution_time', 3600);
+ 
+-        return Product::select('id' ,"sku" ,'name->ar as name_ar', 'name->en as name_en', 'barcode', 'price')
++        return Product::select('id' ,"sku" ,'name->ar as name_ar', 'name->en as name_en', 'barcode', 'price' , 'location')
+             ->filter()->when(request()->type, function ($q) {
+                 $q->productsType(request()->type);
+             })->get();
+diff --git a/app/Imports/ProductsImport.php b/app/Imports/ProductsImport.php
+index c94c12c..1fb84f3 100644
+--- a/app/Imports/ProductsImport.php
++++ b/app/Imports/ProductsImport.php
+@@ -38,8 +38,8 @@ public function collection(Collection $rows)
+                         }
+                         if ($row[2] and $row[3]) {
+                             $newProduct->name = [
+-                                'en' => $row[2],
+-                                'ar' => $row[3],
++                                'ar' => $row[2],
++                                'en' => $row[3],
+                             ];
+                         }
+                         if ($row[4]) {
+@@ -48,6 +48,9 @@ public function collection(Collection $rows)
+                         if ($row[5]) {
+                             $newProduct->price = $row[5];
+                         }
++                        if ($row[6]) {
++                            $newProduct->location = $row[6];
++                        }
+                         $newProduct->is_active = 0;
+                         $newProduct->save();
+                     } else {
+@@ -66,6 +69,9 @@ public function collection(Collection $rows)
+                         if ($row[5]) {
+                             $product->price = $row[5];
+                         }
++                        if ($row[6]) {
++                            $product->location = $row[6];
++                        }
+                         $product->save();
+                     }
+                 }

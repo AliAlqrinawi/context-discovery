@@ -1,0 +1,317 @@
+{
+    "bundle_version": 1,
+    "budget_tokens": 8000,
+    "used_tokens": 494,
+    "items": [
+        {
+            "lever": "fetched",
+            "reason": "the region uses Order, which the file's use block does not import",
+            "assertion_kind": "same_file_symbol_absence",
+            "provenance": {
+                "path": "app/Models/Coupon.php",
+                "lines": [
+                    5,
+                    8
+                ]
+            },
+            "payload": "use App\\Http\\Traits\\IsActive;\nuse Illuminate\\Database\\Eloquent\\Model;\nuse Illuminate\\Database\\Eloquent\\Factories\\HasFactory;\nuse Illuminate\\Database\\Eloquent\\SoftDeletes;",
+            "tokens": 43
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region uses Order, which the file's use block does not import",
+            "assertion_kind": "same_file_symbol_absence",
+            "provenance": {
+                "path": "app/Models/Coupon.php",
+                "member": "fillable",
+                "lines": [
+                    13,
+                    15
+                ]
+            },
+            "payload": "    protected $fillable = [\n        'code', 'discount', 'type', 'use_limit', 'min_order', 'max_discount', 'expire_at','is_active'\n    ];",
+            "tokens": 34
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region uses CouponController, which the file's use block does not import",
+            "assertion_kind": "same_file_symbol_absence",
+            "provenance": {
+                "path": "routes/api.php",
+                "lines": [
+                    4,
+                    5
+                ]
+            },
+            "payload": "use Illuminate\\Http\\Request;\nuse Illuminate\\Support\\Facades\\Route;",
+            "tokens": 17
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on Illuminate\\Http\\Request, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Http/Resources/CouponResource.php",
+                "member": "Illuminate\\Http\\Request",
+                "lines": [
+                    1,
+                    24
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on Illuminate\\Validation\\ValidationException::withMessages, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Services/CouponService.php",
+                "member": "Illuminate\\Validation\\ValidationException::withMessages",
+                "lines": [
+                    14,
+                    26
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Services\\CouponService, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Services/CouponService.php",
+                "member": "__construct",
+                "lines": [
+                    12,
+                    15
+                ]
+            },
+            "payload": "    public function __construct(CouponRepository $repo)\n    {\n        $this->repo = $repo;\n    }",
+            "tokens": 24
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Services\\CouponService, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Services/CouponService.php",
+                "member": "create",
+                "lines": [
+                    24,
+                    27
+                ]
+            },
+            "payload": "    public function create($request)\n    {\n        return $this->repo->create($request);\n    }",
+            "tokens": 24
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Services\\CouponService, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Services/CouponService.php",
+                "member": "delete",
+                "lines": [
+                    34,
+                    37
+                ]
+            },
+            "payload": "    public function delete($model)\n    {\n        return $this->repo->delete($model);\n    }",
+            "tokens": 23
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Services\\CouponService, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Services/CouponService.php",
+                "member": "repo",
+                "lines": [
+                    10,
+                    10
+                ]
+            },
+            "payload": "    protected $repo;",
+            "tokens": 5
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Services\\CouponService, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Services/CouponService.php",
+                "member": "update",
+                "lines": [
+                    29,
+                    32
+                ]
+            },
+            "payload": "    public function update($model ,$request)\n    {\n        return $this->repo->update($model , $request);\n    }",
+            "tokens": 28
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on Illuminate\\Database\\Schema\\Blueprint, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "database/migrations/2024_03_13_120508_create_delivery_types_table.php",
+                "member": "Illuminate\\Database\\Schema\\Blueprint",
+                "lines": [
+                    1,
+                    30
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on Illuminate\\Support\\Facades\\Schema::create, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "database/migrations/2024_03_13_120508_create_delivery_types_table.php",
+                "member": "Illuminate\\Support\\Facades\\Schema::create",
+                "lines": [
+                    1,
+                    30
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on Illuminate\\Support\\Facades\\Schema::dropIfExists, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "database/migrations/2024_03_13_120508_create_delivery_types_table.php",
+                "member": "Illuminate\\Support\\Facades\\Schema::dropIfExists",
+                "lines": [
+                    1,
+                    30
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on Illuminate\\Database\\Schema\\Blueprint, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "database/migrations/2024_03_13_123628_create_payments_table.php",
+                "member": "Illuminate\\Database\\Schema\\Blueprint",
+                "lines": [
+                    1,
+                    30
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on Illuminate\\Support\\Facades\\Schema::create, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "database/migrations/2024_03_13_123628_create_payments_table.php",
+                "member": "Illuminate\\Support\\Facades\\Schema::create",
+                "lines": [
+                    1,
+                    30
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on Illuminate\\Support\\Facades\\Schema::dropIfExists, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "database/migrations/2024_03_13_123628_create_payments_table.php",
+                "member": "Illuminate\\Support\\Facades\\Schema::dropIfExists",
+                "lines": [
+                    1,
+                    30
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on Illuminate\\Support\\Facades\\Route::post, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "routes/api.php",
+                "member": "Illuminate\\Support\\Facades\\Route::post",
+                "lines": [
+                    31,
+                    37
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the change removes a trait from a class body; how pre-existing rows behave after it depends on production data state",
+            "assertion_kind": "unverifiable_premise",
+            "provenance": {
+                "path": "app/Models/Address.php",
+                "lines": [
+                    4,
+                    14
+                ]
+            },
+            "payload": "ASSUMPTION: behaviour depends on whether pre-existing rows are affected in production; no backfill migration present",
+            "tokens": 29
+        },
+        {
+            "lever": "flagged",
+            "reason": "the change removes a trait from a class body; how pre-existing rows behave after it depends on production data state",
+            "assertion_kind": "unverifiable_premise",
+            "provenance": {
+                "path": "app/Models/Coupon.php",
+                "lines": [
+                    5,
+                    27
+                ]
+            },
+            "payload": "ASSUMPTION: behaviour depends on whether pre-existing rows are affected in production; no backfill migration present",
+            "tokens": 29
+        },
+        {
+            "lever": "flagged",
+            "reason": "the change removes a trait from a class body; how pre-existing rows behave after it depends on production data state",
+            "assertion_kind": "unverifiable_premise",
+            "provenance": {
+                "path": "app/Models/Driver.php",
+                "lines": [
+                    5,
+                    15
+                ]
+            },
+            "payload": "ASSUMPTION: behaviour depends on whether pre-existing rows are affected in production; no backfill migration present",
+            "tokens": 29
+        },
+        {
+            "lever": "flagged",
+            "reason": "the change removes a trait from a class body; how pre-existing rows behave after it depends on production data state",
+            "assertion_kind": "unverifiable_premise",
+            "provenance": {
+                "path": "app/Models/User.php",
+                "lines": [
+                    8,
+                    18
+                ]
+            },
+            "payload": "ASSUMPTION: behaviour depends on whether pre-existing rows are affected in production; no backfill migration present",
+            "tokens": 29
+        }
+    ],
+    "dropped": []
+}

@@ -1,0 +1,1 @@
+unresolved named_reference: App\Models\Product::select in app/Exports/ProductsExport.php

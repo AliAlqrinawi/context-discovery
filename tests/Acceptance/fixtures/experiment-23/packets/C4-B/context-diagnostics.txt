@@ -1,0 +1,3 @@
+unresolved named_reference: App\Models\Product::select in app/Exports/ProductsExport.php
+unresolved named_reference: App\Models\Product::where in app/Imports/ProductsImport.php
+unresolved named_reference: App\Models\Product::updateOrCreate in app/Imports/ProductsImport.php

@@ -1,0 +1,102 @@
+diff --git a/app/Http/Controllers/Admin/ProductController.php b/app/Http/Controllers/Admin/ProductController.php
+index 37aa8a5..3c38bc1 100644
+--- a/app/Http/Controllers/Admin/ProductController.php
++++ b/app/Http/Controllers/Admin/ProductController.php
+@@ -194,7 +194,7 @@ public function removeProductsFromCategory(Request $request)
+     public function import(Request $request)
+     {
+         return $this->productService->import($request->all());
+-        updated();
++        added();
+         return back();
+     }
+ 
+diff --git a/app/Http/Requests/Admin/Product/StoreRequest.php b/app/Http/Requests/Admin/Product/StoreRequest.php
+index 95371a5..cf9df3e 100644
+--- a/app/Http/Requests/Admin/Product/StoreRequest.php
++++ b/app/Http/Requests/Admin/Product/StoreRequest.php
+@@ -47,7 +47,8 @@ public function rules(): array
+             'order_limit'=>'nullable|integer|min:0',
+             'order_limit_user'=>'nullable|integer|min:0',
+             'is_active'=>'required|in:0,1',
+-            'request_type'=>'nullable'
++            'request_type'=>'nullable',
++            'location'=>'nullable|required|max:255'
+         ];
+     }
+ }
+diff --git a/app/Models/Product.php b/app/Models/Product.php
+index 815ce79..5a057e6 100644
+--- a/app/Models/Product.php
++++ b/app/Models/Product.php
+@@ -35,7 +35,8 @@ class Product extends Model  implements HasMedia
+         'keywords',
+         'is_active',
+         'is_international',
+-        'position'
++        'position',
++        'location'
+     ];
+ 
+     public function getPrice()
+diff --git a/database/migrations/2024_11_18_122542_add_location_to_products.php b/database/migrations/2024_11_18_122542_add_location_to_products.php
+new file mode 100644
+index 0000000..c1fff65
+--- /dev/null
++++ b/database/migrations/2024_11_18_122542_add_location_to_products.php
+@@ -0,0 +1,28 @@
++<?php
++
++use Illuminate\Database\Migrations\Migration;
++use Illuminate\Database\Schema\Blueprint;
++use Illuminate\Support\Facades\Schema;
++
++return new class extends Migration
++{
++    /**
++     * Run the migrations.
++     */
++    public function up(): void
++    {
++        Schema::table('products', function (Blueprint $table) {
++            $table->string("location")->nullable()->after("is_international");
++        });
++    }
++
++    /**
++     * Reverse the migrations.
++     */
++    public function down(): void
++    {
++        Schema::table('products', function (Blueprint $table) {
++            $table->dropColumn(["location"]);
++        });
++    }
++};
+diff --git a/resources/views/dashboard/products/form.blade.php b/resources/views/dashboard/products/form.blade.php
+index 7c0eda3..0a101e1 100644
+--- a/resources/views/dashboard/products/form.blade.php
++++ b/resources/views/dashboard/products/form.blade.php
+@@ -9,8 +9,9 @@
+     <x-number title="{{ __('quantity') }}" name="quantity" size="6"></x-number>
+     <x-number title="{{ __('weight') }}" name="weight" size="6"></x-number>
+     <x-text title="{{ __('sku') }}" name="sku" size="6"></x-text>
+-    <x-number title="{{ __('Position') }}" name="position" size="6"></x-number>
+     <x-text title="{{ __('barcode') }}" name="barcode" size="6"></x-text>
++    <x-text title="{{ __('Location') }}" name="location" size="6"></x-text>
++    <x-number title="{{ __('Position') }}" name="position" size="6"></x-number>
+     @if(!request()->has('type'))
+     <x-select name="show_in" :items="$types" title="{{ __('appearing') }}"  size="6" :options="['placeholder'=>__('choose where to appear')]"/>
+      @else
+diff --git a/resources/views/dashboard/products/index.blade.php b/resources/views/dashboard/products/index.blade.php
+index bb2df5b..05af59d 100644
+--- a/resources/views/dashboard/products/index.blade.php
++++ b/resources/views/dashboard/products/index.blade.php
+@@ -29,6 +29,7 @@
+                                                     'class' => 'form-control',
+                                                     'placeholder' => 'E-xcel',
+                                                     'accept' => '.xlsx',
++                                                    'required' => true,
+                                                 ]) !!}
+                                             </div>
+                                             <div

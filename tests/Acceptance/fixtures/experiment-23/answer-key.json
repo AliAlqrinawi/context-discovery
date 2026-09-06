@@ -1,0 +1,86 @@
+{
+  "experiment": "experiment-23",
+  "written": "2026-09-06, from the halaw repository's own history, BEFORE any reviewer was run",
+  "purpose": "Replicate M22 on an INDEPENDENT repository. Every previous scored milestone used abouelsid-backend; this one uses none of its commits, keys or reviewer answers.",
+  "protocol": "M17's, unchanged",
+  "harness": "M20's corrected same-commit-tree harness (ADR-A022)",
+  "budget_tokens": 8000,
+
+  "independence": {
+    "repository": "Raiyansoft/halaw — 260 commits, 21 merges, Laravel ^10.10",
+    "authors": "aya mazhar 120, ayamazhar83 63, Ali Alqrinawi 35, abdullahessam 21, ayamazhar41 20, eslam shosha 1 — predominantly NOT the operator, and none Claude-authored",
+    "differs_from_abouelsid_by": "different domain (e-commerce/delivery vs restaurant CMS), different Laravel major (10 vs 12), merge-based workflow (21 merges vs 0), different primary authors, terse commit messages rather than descriptive ones",
+    "nothing_reused": "no commit, no answer key, no reviewer answer, no packet from M17-M22"
+  },
+
+  "repository_selection_rule_fixed_before_inspecting_any_corpus": {
+    "R1": "PHP/Laravel with vendor/ installed",
+    "R2": "100-600 commits",
+    "R3": "not abouelsid-backend, not any context-discovery repository",
+    "R4": "among those, the HIGHEST ratio of `fix:` commits to total commits",
+    "result": "halaw won at 26/260 = 10.00%, ahead of chrisweb 5.08%, ezlife_backend 4.29%, kidneycustomerapp_backend 1.33%. The rule was written and applied before any diff, bundle or defect was examined."
+  },
+
+  "task_selection_criteria_fixed_before_selecting": {
+    "S1": "a later real `fix:` commit corrects a behaviour the target introduced",
+    "S2": "target <= 500 changed lines",
+    "S3": "controls: no later `fix:` commit touches the target's files",
+    "S4": "target produces a NON-EMPTY bundle under the corrected harness, else the conditions are identical",
+    "S5": "no selection on expected reviewer outcome",
+    "excluded_by_S4": "d5d59ff (the unsignedInteger-quantity pair) and 85beaae — empty bundles. Losing d5d59ff cost one STRONG defect task and is recorded rather than worked around.",
+    "excluded_as_controls": "commits titled 'bugs' — they read as fixes despite not matching the `fix:` prefix, so they cannot be assumed defect-free"
+  },
+
+  "tasks": [
+    { "id": "D1", "commit": "1bc5470", "lines": 27, "defect_present": "YES", "strength": "STRONG", "fixing_commit": "271a9d0",
+      "defect": "OrderService::canceledOrder cancels an order without restocking its items. A PENDING order's stock was decremented at placement and is never returned on cancellation, so inventory silently drifts down on every cancelled pending order.",
+      "why_strong": "VERIFIED at the commit: canceledOrder is `if (!in_array($model->status,[NEW,PENDING])) throw ...; return $this->repo->canceledOrder($model);` with no restock. 271a9d0 'fix : stock in cancel' adds exactly `if($model->status == OrderStatusEnum::PENDING) $this->repo->restockItems($model);` and wraps the whole thing in a transaction.",
+      "visible_in_diff": true,
+      "expected_missing_context": ["app/Repositories/OrderRepository.php::restockItems — that a restock helper exists at all", "where stock is decremented at placement"] },
+
+    { "id": "D2", "commit": "dfd6ac2", "lines": 38, "defect_present": "YES", "strength": "STRONG", "fixing_commit": "e4d92dd",
+      "defect": "ProductController::show eager-loads the relation 'category' (singular) and ProductResource emits `'category' => new CategoryResource($this->category)`, but Product declares a many-to-many `categories` relation — the model's own scope uses `whereHas('categories')`. The singular relation does not exist, so the load fails or yields null and the API never returns a product's categories.",
+      "why_strong": "VERIFIED at the commit: `$product->load('category','media')` is introduced here. e4d92dd 'fix : product category relations' changes it to `load('categories','media')` and the resource to `CategoryResource::collection($this->categories)`.",
+      "visible_in_diff": true,
+      "expected_missing_context": ["app/Models/Product.php — which relation names actually exist"] },
+
+    { "id": "D3", "commit": "f7fe53b", "lines": 159, "defect_present": "YES", "strength": "STRONG", "fixing_commit": "b0fabba",
+      "defect": "The order-placement path resolves a delivery address to a city and proceeds, without checking whether the city, governorate or country is active. Orders can be placed to delivery areas the operator has switched off.",
+      "why_strong": "VERIFIED: this commit introduces `$city = $this->addressRepo->getCity($request['address_id']);` with no active check. b0fabba 'fix : address deliver if no active' replaces it with a load of city/governorate/country and throws unless all three are active.",
+      "visible_in_diff": true,
+      "expected_missing_context": ["app/Models/City.php / Governorate — that an is_active column exists"] },
+
+    { "id": "D4", "commit": "395b9c3", "lines": 42, "defect_present": "YES", "strength": "MODERATE", "fixing_commit": "72cd5a7",
+      "defect": "The order endpoints eager-load only `address` and `items.product`, while OrderResource renders the address's governorate and city and the assigned driver — so those are either N+1 lazy loads or null.",
+      "why_moderate": "72cd5a7 'fix : order resource' widens the load to `address.governorate`, `address.city`, `driver` and adds a DriverResource, which establishes the omission was unwanted. But a missing eager load is a performance or shape issue whose severity depends on the resource, and the fix message does not describe a failure. Not inflated to STRONG.",
+      "visible_in_diff": true,
+      "expected_missing_context": ["app/Http/Resources/OrderResource.php — what the resource actually renders"] },
+
+    { "id": "D5", "commit": "5cc91c3", "lines": 263, "defect_present": "YES", "strength": "MODERATE", "fixing_commit": "0b01ee7",
+      "defect": "The coupon API is a single-action `__invoke` controller with no `show`, so a coupon cannot be retrieved by model binding, and the validation path is entangled with the invoke handler.",
+      "why_moderate": "0b01ee7 'fix : coupon validation' splits it into `show(Coupon $coupon)` and `store(CouponRequest $request)`. That establishes the shape was wrong, but a single-action controller is a design choice as much as a defect. MODERATE.",
+      "visible_in_diff": true,
+      "expected_missing_context": [] },
+
+    { "id": "C1", "commit": "0b94b48", "lines": 19, "defect_present": "NO", "strength": "MODERATE", "why": "Control. No later `fix:` commit touches these files." },
+    { "id": "C2", "commit": "973aa7c", "lines": 72, "defect_present": "NO", "strength": "MODERATE", "why": "Control. No later `fix:` commit touches these files." },
+    { "id": "C3", "commit": "28f2411", "lines": 51, "defect_present": "NO", "strength": "MODERATE", "why": "Control. No later `fix:` commit touches these files." },
+    { "id": "C4", "commit": "1a55793", "lines": 24, "defect_present": "NO", "strength": "MODERATE", "why": "Control. No later `fix:` commit touches these files." },
+    { "id": "C5", "commit": "b5b2859", "lines": 52, "defect_present": "NO", "strength": "MODERATE", "why": "Control, and the smallest bundle in the corpus at 2 flags / 40 tokens. If the bundle has an effect, it should not be here." },
+    { "id": "C6", "commit": "00095a9", "lines": 230, "defect_present": "NO", "strength": "MODERATE", "why": "Control. No later `fix:` commit touches these files." },
+
+    { "id": "X", "commit": "-", "defect_present": null, "strength": "-",
+      "why": "No production file may change. bundle_version 1, five ports, five assertion kinds, seven premises, two levers, ordering, budgeting and vendor exclusion unchanged." }
+  ],
+
+  "census": { "tasks": 11, "defect": 5, "control": 6, "STRONG": 3, "MODERATE": 8, "WEAK": 0,
+    "strong_share_of_defect_tasks": "3/5 = 60%, meeting the 'at least half' standard",
+    "diff_line_range": "19 to 263", "bundle_item_range": "2 to 40", "bundle_token_range": "40 to 1719" },
+
+  "what_no_defect_means_here": "No later `fix:` commit touches the behaviour, and the author found none on inspection. M21 and M22 both proved this is not proof of absence, so every reviewer YES is verified individually against the source and classified SPURIOUS or REAL, and the key is never edited afterwards.",
+
+  "predictions_recorded_in_advance": {
+    "C5": "2 flags / 40 tokens — no bundle effect expected",
+    "general": "NO directional prediction is made. M22's abouelsid result (false positives 0/11 both arms; correct control decisions 1/11 -> 6/11) is what is being tested for replication, not assumed."
+  }
+}

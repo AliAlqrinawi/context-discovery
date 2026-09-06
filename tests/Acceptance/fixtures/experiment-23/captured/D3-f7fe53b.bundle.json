@@ -1,0 +1,588 @@
+{
+    "bundle_version": 1,
+    "budget_tokens": 8000,
+    "used_tokens": 1508,
+    "items": [
+        {
+            "lever": "fetched",
+            "reason": "the region calls the sibling member addressOperations, whose contract the diff does not show",
+            "assertion_kind": "same_file_reference",
+            "provenance": {
+                "path": "app/Services/OrderService.php",
+                "member": "addressOperations",
+                "lines": [
+                    63,
+                    77
+                ]
+            },
+            "payload": "    private function addressOperations(&$request)\n    {\n        $city = $this->addressRepo->getCity($request['address_id']);\n        if($city)\n        {\n            if($city->order_limit > $request['sub_total'])\n            {\n                throw ValidationException::withMessages([__(\"The minimum order in your area is\").$city->order_limit]);\n\n            }\n            $request['delivery'] = $city->delivery_cost;\n\n        }\n\n    }",
+            "tokens": 109
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region calls the sibling member itemsOperations, whose contract the diff does not show",
+            "assertion_kind": "same_file_reference",
+            "provenance": {
+                "path": "app/Services/OrderService.php",
+                "member": "itemsOperations",
+                "lines": [
+                    45,
+                    61
+                ]
+            },
+            "payload": "    private function itemsOperations(&$request)\n    {\n        $request['sub_total'] = 0;\n        foreach($request['items'] as $item)\n        {\n           $product = $this->productRepo->find($item['id']);\n           if($product)\n           {\n             if( ($product->order_limit) and ($product->order_limit < $item['quantity']))\n             {\n                throw ValidationException::withMessages([__(\"The allowed number of orders for the product is\").$product->order_limit.__(\"pieces per order\")]);\n             }\n             \n            $request['sub_total'] += $product->getPrice();\n           }\n        }\n    }",
+            "tokens": 156
+        },
+        {
+            "lever": "fetched",
+            "reason": "the signature of __construct changed; its call sites are not shown by the diff",
+            "assertion_kind": "changed_signature",
+            "provenance": {
+                "path": "app/Http/Controllers/Api/AddressController.php",
+                "lines": [
+                    16,
+                    16
+                ]
+            },
+            "payload": "    public function __construct(AddressService $addressService)",
+            "tokens": 16
+        },
+        {
+            "lever": "fetched",
+            "reason": "the signature of __construct changed; its call sites are not shown by the diff",
+            "assertion_kind": "changed_signature",
+            "provenance": {
+                "path": "app/Http/Controllers/Api/AuthController.php",
+                "lines": [
+                    17,
+                    17
+                ]
+            },
+            "payload": "    public function __construct(AuthService $authService)",
+            "tokens": 15
+        },
+        {
+            "lever": "fetched",
+            "reason": "the signature of __construct changed; its call sites are not shown by the diff",
+            "assertion_kind": "changed_signature",
+            "provenance": {
+                "path": "app/Http/Controllers/Api/BannerController.php",
+                "lines": [
+                    15,
+                    15
+                ]
+            },
+            "payload": "    public function __construct(BannerService $bannerService )",
+            "tokens": 16
+        },
+        {
+            "lever": "fetched",
+            "reason": "the signature of __construct changed; its call sites are not shown by the diff",
+            "assertion_kind": "changed_signature",
+            "provenance": {
+                "path": "app/Http/Controllers/Api/CategoryController.php",
+                "lines": [
+                    14,
+                    14
+                ]
+            },
+            "payload": "    public function __construct(CategoryService $categoryService )",
+            "tokens": 17
+        },
+        {
+            "lever": "fetched",
+            "reason": "the signature of __construct changed; its call sites are not shown by the diff",
+            "assertion_kind": "changed_signature",
+            "provenance": {
+                "path": "app/Http/Controllers/Api/ContactController.php",
+                "lines": [
+                    14,
+                    14
+                ]
+            },
+            "payload": "    public function __construct(ContactService $contactService)",
+            "tokens": 16
+        },
+        {
+            "lever": "fetched",
+            "reason": "the signature of __construct changed; its call sites are not shown by the diff",
+            "assertion_kind": "changed_signature",
+            "provenance": {
+                "path": "app/Http/Controllers/Api/CountryController.php",
+                "lines": [
+                    14,
+                    14
+                ]
+            },
+            "payload": "    public function __construct(CountryService $countryService)",
+            "tokens": 16
+        },
+        {
+            "lever": "fetched",
+            "reason": "the signature of __construct changed; its call sites are not shown by the diff",
+            "assertion_kind": "changed_signature",
+            "provenance": {
+                "path": "app/Http/Controllers/Api/CouponController.php",
+                "lines": [
+                    14,
+                    14
+                ]
+            },
+            "payload": "    public function __construct(CouponService $couponService)",
+            "tokens": 16
+        },
+        {
+            "lever": "fetched",
+            "reason": "the signature of __construct changed; its call sites are not shown by the diff",
+            "assertion_kind": "changed_signature",
+            "provenance": {
+                "path": "app/Http/Controllers/Api/FavoriteController.php",
+                "lines": [
+                    17,
+                    17
+                ]
+            },
+            "payload": "    public function __construct(FavoriteService $favoriteService)",
+            "tokens": 17
+        },
+        {
+            "lever": "fetched",
+            "reason": "the signature of __construct changed; its call sites are not shown by the diff",
+            "assertion_kind": "changed_signature",
+            "provenance": {
+                "path": "app/Http/Controllers/Api/GovernorateController.php",
+                "lines": [
+                    14,
+                    14
+                ]
+            },
+            "payload": "    public function __construct(GovernorateService $governorateService)",
+            "tokens": 18
+        },
+        {
+            "lever": "fetched",
+            "reason": "the signature of __construct changed; its call sites are not shown by the diff",
+            "assertion_kind": "changed_signature",
+            "provenance": {
+                "path": "app/Http/Controllers/Api/OrderController.php",
+                "lines": [
+                    14,
+                    14
+                ]
+            },
+            "payload": "    public function __construct(OrderService $orderService )",
+            "tokens": 15
+        },
+        {
+            "lever": "fetched",
+            "reason": "the signature of __construct changed; its call sites are not shown by the diff",
+            "assertion_kind": "changed_signature",
+            "provenance": {
+                "path": "app/Http/Controllers/Api/ProductController.php",
+                "lines": [
+                    14,
+                    14
+                ]
+            },
+            "payload": "    public function __construct(ProductService $productService)",
+            "tokens": 16
+        },
+        {
+            "lever": "fetched",
+            "reason": "the signature of __construct changed; its call sites are not shown by the diff",
+            "assertion_kind": "changed_signature",
+            "provenance": {
+                "path": "app/Http/Controllers/Api/SettingController.php",
+                "lines": [
+                    16,
+                    16
+                ]
+            },
+            "payload": "    public function __construct(SettingService $settingService /*,BannerService $bannerService ,*/)",
+            "tokens": 25
+        },
+        {
+            "lever": "fetched",
+            "reason": "the signature of __construct changed; its call sites are not shown by the diff",
+            "assertion_kind": "changed_signature",
+            "provenance": {
+                "path": "app/Repositories/AddressRepository.php",
+                "lines": [
+                    12,
+                    12
+                ]
+            },
+            "payload": "    public function __construct(Address $model)",
+            "tokens": 12
+        },
+        {
+            "lever": "fetched",
+            "reason": "the signature of __construct changed; its call sites are not shown by the diff",
+            "assertion_kind": "changed_signature",
+            "provenance": {
+                "path": "app/Repositories/AddressRepository.php",
+                "lines": [
+                    14,
+                    14
+                ]
+            },
+            "payload": "        parent::__construct($model);",
+            "tokens": 9
+        },
+        {
+            "lever": "fetched",
+            "reason": "the signature of __construct changed; its call sites are not shown by the diff",
+            "assertion_kind": "changed_signature",
+            "provenance": {
+                "path": "app/Repositories/BannerRepository.php",
+                "lines": [
+                    14,
+                    14
+                ]
+            },
+            "payload": "    public function __construct(Banner $model)",
+            "tokens": 12
+        },
+        {
+            "lever": "fetched",
+            "reason": "the signature of __construct changed; its call sites are not shown by the diff",
+            "assertion_kind": "changed_signature",
+            "provenance": {
+                "path": "app/Repositories/BannerRepository.php",
+                "lines": [
+                    16,
+                    16
+                ]
+            },
+            "payload": "        parent::__construct($model);",
+            "tokens": 9
+        },
+        {
+            "lever": "fetched",
+            "reason": "the signature of __construct changed; its call sites are not shown by the diff",
+            "assertion_kind": "changed_signature",
+            "provenance": {
+                "path": "app/Repositories/BaseRepository.php",
+                "lines": [
+                    19,
+                    19
+                ]
+            },
+            "payload": "    public function __construct(Model $model)",
+            "tokens": 12
+        },
+        {
+            "lever": "fetched",
+            "reason": "the signature of __construct changed; its call sites are not shown by the diff",
+            "assertion_kind": "changed_signature",
+            "provenance": {
+                "path": "app/Repositories/CategoryRepository.php",
+                "lines": [
+                    12,
+                    12
+                ]
+            },
+            "payload": "    public function __construct(Category $model)",
+            "tokens": 12
+        },
+        {
+            "lever": "fetched",
+            "reason": "the signature of __construct changed; its call sites are not shown by the diff",
+            "assertion_kind": "changed_signature",
+            "provenance": {
+                "path": "app/Repositories/CategoryRepository.php",
+                "lines": [
+                    14,
+                    14
+                ]
+            },
+            "payload": "        parent::__construct($model);",
+            "tokens": 9
+        },
+        {
+            "lever": "fetched",
+            "reason": "the signature of __construct changed; its call sites are not shown by the diff",
+            "assertion_kind": "changed_signature",
+            "provenance": {
+                "path": "app/Repositories/CityRepository.php",
+                "lines": [
+                    13,
+                    13
+                ]
+            },
+            "payload": "    public function __construct(City $model)",
+            "tokens": 11
+        },
+        {
+            "lever": "flagged",
+            "reason": "the signature of __construct changed; its call sites are not shown by the diff",
+            "assertion_kind": "changed_signature",
+            "provenance": {
+                "path": "app/Services/OrderService.php",
+                "member": "__construct",
+                "lines": [
+                    3,
+                    24
+                ]
+            },
+            "payload": "ASSUMPTION: additional call sites exist beyond the search bound; not all verified",
+            "tokens": 21
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Http\\Requests\\Api\\OrderRequest, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Http/Requests/Api/OrderRequest.php",
+                "member": "authorize",
+                "lines": [
+                    10,
+                    16
+                ]
+            },
+            "payload": "    /**\n     * Determine if the user is authorized to make this request.\n     */\n    public function authorize(): bool\n    {\n        return true;\n    }",
+            "tokens": 38
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Http\\Requests\\Api\\OrderRequest, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Http/Requests/Api/OrderRequest.php",
+                "member": "rules",
+                "lines": [
+                    18,
+                    35
+                ]
+            },
+            "payload": "    /**\n     * Get the validation rules that apply to the request.\n     *\n     * @return array<string, \\Illuminate\\Contracts\\Validation\\ValidationRule|array<mixed>|string>\n     */\n    public function rules(): array\n    {\n        return [\n            'address_id'=>['required','exists:addresses,id'],\n            'code'=>['nullable','exists:coupons,code'],\n            'payment_method'=>['required','string'],\n            'items'=>['required','array'],\n            'items.*.id'=>['required',Rule::exists('products','id')->where(function($q){\n              $q->where('is_active',1);\n            })],\n            'items.*.quantity'=>['required','integer','min:1',new QuantityCheckRule()]\n        ];\n    }",
+            "tokens": 176
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Http\\Resources\\OrderResource, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Http/Resources/OrderResource.php",
+                "member": "toArray",
+                "lines": [
+                    10,
+                    29
+                ]
+            },
+            "payload": "    /**\n     * Transform the resource into an array.\n     *\n     * @return array<string, mixed>\n     */\n    public function toArray(Request $request): array\n    {\n        return [\n            'id'=>$this->id,\n            'code'=>$this->code,\n            'sub_total'=>$this->sub_total,\n            'discount'=>$this->discount,\n            'delivery'=>$this->delivery,\n            'grand_total'=>$this->grand_total,\n            'payment_method'=>$this->payment_method,\n            'address'=>$this->relationLoaded(\"address\") ? new AddressResource($this->address) : null,\n            'items'=>$this->relationLoaded(\"items\") ?  OrderItemResource::collection($this->items) : [],\n\n          ];\n    }",
+            "tokens": 174
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\AddressRepository, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/AddressRepository.php",
+                "member": "__construct",
+                "lines": [
+                    8,
+                    15
+                ]
+            },
+            "payload": "/**\n     * AddressRepository constructor.\n     * @param Address $model\n     */\n    public function __construct(Address $model)\n    {\n        parent::__construct($model);\n    }",
+            "tokens": 44
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\AddressRepository, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/AddressRepository.php",
+                "member": "checkHasDefaultAddress",
+                "lines": [
+                    28,
+                    31
+                ]
+            },
+            "payload": "    public function checkHasDefaultAddress()\n    {\n        return auth()->user()->addresses()->where('is_default',true)->exists();\n    }",
+            "tokens": 34
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\AddressRepository, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/AddressRepository.php",
+                "member": "index",
+                "lines": [
+                    16,
+                    19
+                ]
+            },
+            "payload": "    public function index()\n    {\n        return auth()->user()->addresses()->with('governorate.country','city')->latest()->get();\n    }",
+            "tokens": 34
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\AddressRepository, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/AddressRepository.php",
+                "member": "updateDefaultAddress",
+                "lines": [
+                    21,
+                    26
+                ]
+            },
+            "payload": "    public function updateDefaultAddress(Address $model)\n    {\n        auth()->user()->addresses()->where('is_default',true)->update(['is_default'=>false]);\n        $model->update(['is_default'=>true]);\n        return true;\n    }",
+            "tokens": 58
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on Illuminate\\Database\\Eloquent\\Model::find, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/BaseRepository.php",
+                "member": "Illuminate\\Database\\Eloquent\\Model::find",
+                "lines": [
+                    46,
+                    52
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\OrderRepository, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/OrderRepository.php",
+                "member": "__construct",
+                "lines": [
+                    8,
+                    15
+                ]
+            },
+            "payload": "    /**\n     * OrderRepository constructor.\n     * @param Order $model\n     */\n    public function __construct(Order $model)\n    {\n        parent::__construct($model);\n    }",
+            "tokens": 44
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\OrderRepository, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/OrderRepository.php",
+                "member": "index",
+                "lines": [
+                    17,
+                    20
+                ]
+            },
+            "payload": "    public function index()\n    {\n        return auth()->user()->orders()->with('address','items.product')->latest()->get();\n    }",
+            "tokens": 33
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\ProductRepository, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/ProductRepository.php",
+                "member": "__construct",
+                "lines": [
+                    8,
+                    15
+                ]
+            },
+            "payload": "/**\n     * ProductRepository constructor.\n     * @param Product $model\n     */\n    public function __construct(Product $model)\n    {\n        parent::__construct($model);\n    }",
+            "tokens": 44
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\ProductRepository, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/ProductRepository.php",
+                "member": "index",
+                "lines": [
+                    16,
+                    28
+                ]
+            },
+            "payload": "    public function index($request)\n    {\n        $query = $this->model->with('category');\n        $query->when(isset($request['category_id']), function ($q) use ($request) {\n            $q->category($request['category_id']);\n        })->when(isset($request['type']), function ($q) use ($request) {\n            $q->type($request['type']);\n        })->when(isset($request['name']), function ($q) use ($request) {\n            $q->search($request['name']);\n        })->active()->inStock(0);\n\n        return $query->latest()->get();\n    }",
+            "tokens": 134
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Repositories\\OrderRepository::create, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Services/OrderService.php",
+                "member": "App\\Repositories\\OrderRepository::create",
+                "lines": [
+                    28,
+                    79
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Repositories\\ProductRepository::find, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Services/OrderService.php",
+                "member": "App\\Repositories\\ProductRepository::find",
+                "lines": [
+                    28,
+                    79
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on Illuminate\\Support\\Facades\\DB::beginTransaction, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Services/OrderService.php",
+                "member": "Illuminate\\Support\\Facades\\DB::beginTransaction",
+                "lines": [
+                    28,
+                    79
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on Illuminate\\Support\\Facades\\DB::commit, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Services/OrderService.php",
+                "member": "Illuminate\\Support\\Facades\\DB::commit",
+                "lines": [
+                    28,
+                    79
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on Illuminate\\Validation\\ValidationException::withMessages, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Services/OrderService.php",
+                "member": "Illuminate\\Validation\\ValidationException::withMessages",
+                "lines": [
+                    28,
+                    79
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        }
+    ],
+    "dropped": []
+}

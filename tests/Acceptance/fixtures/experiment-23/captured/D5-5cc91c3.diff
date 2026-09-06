@@ -1,0 +1,418 @@
+diff --git a/app/Http/Controllers/Api/CouponController.php b/app/Http/Controllers/Api/CouponController.php
+new file mode 100644
+index 0000000..cafbea2
+--- /dev/null
++++ b/app/Http/Controllers/Api/CouponController.php
+@@ -0,0 +1,31 @@
++<?php
++
++namespace App\Http\Controllers\Api;
++
++use Illuminate\Http\Request;
++use App\Services\CouponService;
++use App\Http\Controllers\Controller;
++use App\Http\Resources\CouponResource;
++use  App\Http\Requests\Api\CouponRequest;
++class CouponController extends Controller
++{
++    protected $couponService;
++
++    public function __construct(CouponService $couponService)
++    {
++        $this->couponService = $couponService;
++    }
++
++     /**
++     * @return \Illuminate\Http\JsonResponse
++     */
++
++   public function __invoke(CouponRequest $request)
++   { 
++    
++     $validCoupon = $this->couponService->checkIsValidCoupon($request);
++     
++     return \responder::success(new CouponResource($validCoupon));
++
++   }
++}
+diff --git a/app/Http/Requests/Api/CouponRequest.php b/app/Http/Requests/Api/CouponRequest.php
+new file mode 100644
+index 0000000..e53533e
+--- /dev/null
++++ b/app/Http/Requests/Api/CouponRequest.php
+@@ -0,0 +1,28 @@
++<?php
++
++namespace App\Http\Requests\Api;
++
++use Illuminate\Foundation\Http\FormRequest;
++
++class CouponRequest extends FormRequest
++{
++    /**
++     * Determine if the user is authorized to make this request.
++     */
++    public function authorize(): bool
++    {
++        return true;
++    }
++
++    /**
++     * Get the validation rules that apply to the request.
++     *
++     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array|string>
++     */
++    public function rules(): array
++    {
++        return [
++            'code' => ['required','exists:coupons,code']
++        ];
++    }
++}
+diff --git a/app/Http/Resources/CouponResource.php b/app/Http/Resources/CouponResource.php
+new file mode 100644
+index 0000000..f25ad43
+--- /dev/null
++++ b/app/Http/Resources/CouponResource.php
+@@ -0,0 +1,24 @@
++<?php
++
++namespace App\Http\Resources;
++
++use Illuminate\Http\Request;
++use Illuminate\Http\Resources\Json\JsonResource;
++
++class CouponResource extends JsonResource
++{
++    /**
++     * Transform the resource into an array.
++     *
++     * @return array<string, mixed>
++     */
++    public function toArray(Request $request): array
++    {
++        return [
++           'id'=>$this->id,
++           'code'=>$this->code,
++           'type'=>$this->type,
++           'discount'=>$this->discount
++        ];
++    }
++}
+diff --git a/app/Models/Address.php b/app/Models/Address.php
+index 81396d3..c56af05 100644
+--- a/app/Models/Address.php
++++ b/app/Models/Address.php
+@@ -4,10 +4,11 @@
+ 
+ use Illuminate\Database\Eloquent\Factories\HasFactory;
+ use Illuminate\Database\Eloquent\Model;
++use Illuminate\Database\Eloquent\SoftDeletes;
+ 
+ class Address extends Model
+ {
+-    use HasFactory;
++    use HasFactory,SoftDeletes;
+     protected $fillable = [
+         'user_id', 'governorate_id', 'city_id', 'block', 'gada', 'street', 'building', 'flat', 'floor', 'phone', 'type', 'is_default', 'notes'
+     ];
+diff --git a/app/Models/Coupon.php b/app/Models/Coupon.php
+index a2b5a1d..4e6954f 100644
+--- a/app/Models/Coupon.php
++++ b/app/Models/Coupon.php
+@@ -5,11 +5,23 @@
+ use App\Http\Traits\IsActive;
+ use Illuminate\Database\Eloquent\Model;
+ use Illuminate\Database\Eloquent\Factories\HasFactory;
++use Illuminate\Database\Eloquent\SoftDeletes;
+ 
+ class Coupon extends Model
+ {
+-    use HasFactory,IsActive;
++    use HasFactory,SoftDeletes,IsActive;
+     protected $fillable = [
+         'code', 'discount', 'type', 'use_limit', 'min_order', 'max_discount', 'expire_at','is_active'
+     ];
++    public function scopeValidCoupon($query,$value)
++    {
++        return $query->where('code',$value)
++        ->whereDate('expire_at', '>=',now())
++        ->where('is_active',1);
++    }
++     #relations 
++      public function orders()
++      {
++          return $this->hasMany(Order::class);
++      }
+ }
+diff --git a/app/Models/DeliveryType.php b/app/Models/DeliveryType.php
+new file mode 100644
+index 0000000..ebe522a
+--- /dev/null
++++ b/app/Models/DeliveryType.php
+@@ -0,0 +1,18 @@
++<?php
++
++namespace App\Models;
++
++use App\Http\Traits\IsActive;
++use Illuminate\Database\Eloquent\Model;
++use Spatie\Translatable\HasTranslations;
++use Illuminate\Database\Eloquent\SoftDeletes;
++use Illuminate\Database\Eloquent\Factories\HasFactory;
++
++class DeliveryType extends Model
++{
++    use HasFactory ,SoftDeletes,HasTranslations,IsActive;
++    public $translatable = ['name'];
++    protected $fillable = [
++        'name', 'is_active'
++    ];
++}
+diff --git a/app/Models/Driver.php b/app/Models/Driver.php
+index 450ba9e..f80cbca 100644
+--- a/app/Models/Driver.php
++++ b/app/Models/Driver.php
+@@ -5,10 +5,11 @@
+ use App\Http\Traits\IsActive;
+ use Illuminate\Database\Eloquent\Model;
+ use Illuminate\Database\Eloquent\Factories\HasFactory;
++use Illuminate\Database\Eloquent\SoftDeletes;
+ 
+ class Driver extends Model
+ {
+-    use HasFactory,IsActive;
++    use HasFactory,SoftDeletes,IsActive;
+     protected $fillable = [
+         'name', 'phone', 'type', 'is_active'
+     ];
+diff --git a/app/Models/Payment.php b/app/Models/Payment.php
+new file mode 100644
+index 0000000..58ab47f
+--- /dev/null
++++ b/app/Models/Payment.php
+@@ -0,0 +1,11 @@
++<?php
++
++namespace App\Models;
++
++use Illuminate\Database\Eloquent\Factories\HasFactory;
++use Illuminate\Database\Eloquent\Model;
++
++class Payment extends Model
++{
++    use HasFactory;
++}
+diff --git a/app/Models/User.php b/app/Models/User.php
+index 16967cb..85ddf99 100644
+--- a/app/Models/User.php
++++ b/app/Models/User.php
+@@ -8,10 +8,11 @@
+ use Illuminate\Notifications\Notifiable;
+ use Illuminate\Database\Eloquent\Factories\HasFactory;
+ use Illuminate\Foundation\Auth\User as Authenticatable;
++use Illuminate\Database\Eloquent\SoftDeletes;
+ 
+ class User extends Authenticatable
+ {
+-    use HasApiTokens, HasFactory, Notifiable,ImageOperations;
++    use HasApiTokens, HasFactory, Notifiable,ImageOperations,SoftDeletes;
+ 
+     /**
+      * The attributes that are mass assignable.
+diff --git a/app/Repositories/CouponRepository.php b/app/Repositories/CouponRepository.php
+index 83e5f33..dd4b467 100644
+--- a/app/Repositories/CouponRepository.php
++++ b/app/Repositories/CouponRepository.php
+@@ -15,6 +15,19 @@ public function __construct(Coupon $model)
+         parent::__construct($model);
+     }
+ 
++    public function checkIsValidCoupon($request)
++    {
++        if (isset($request['code'])) {
++            $coupon = $this->model->validCoupon($request['code'])->first();
++    
++            if ($coupon && $coupon->loadCount('orders')->orders_count < $coupon->use_limit) {
++                return $coupon;
++            }
++        }
++    
++        return false;
++    }
++
+    
+    
+ }
+diff --git a/app/Services/CouponService.php b/app/Services/CouponService.php
+index 81b48c1..496f343 100644
+--- a/app/Services/CouponService.php
++++ b/app/Services/CouponService.php
+@@ -3,6 +3,7 @@
+ namespace App\Services;
+ 
+ use App\Repositories\CouponRepository;
++use Illuminate\Validation\ValidationException;
+ 
+ class CouponService {
+ 
+@@ -13,6 +14,13 @@ public function __construct(CouponRepository $repo)
+         $this->repo = $repo;
+     }
+ 
++    public function checkIsValidCoupon($request)
++    {
++        $coupon = $this->repo->checkIsValidCoupon($request);
++        throw_unless($coupon, ValidationException::withMessages([__('Coupon Not Available')]));
++        return $coupon;
++    }
++
+     public function create($request)
+     {
+         return $this->repo->create($request);
+diff --git a/database/migrations/2014_10_12_000000_create_users_table.php b/database/migrations/2014_10_12_000000_create_users_table.php
+index dbdec77..883ff02 100644
+--- a/database/migrations/2014_10_12_000000_create_users_table.php
++++ b/database/migrations/2014_10_12_000000_create_users_table.php
+@@ -23,6 +23,7 @@ public function up(): void
+             $table->boolean('is_blocked')->default(false);
+             $table->string('fcm_token')->nullable();
+             $table->rememberToken();
++            $table->softDeletes();
+             $table->timestamps();
+         });
+     }
+diff --git a/database/migrations/2024_02_22_211234_create_addresses_table.php b/database/migrations/2024_02_22_211234_create_addresses_table.php
+index 240799f..0f951c1 100644
+--- a/database/migrations/2024_02_22_211234_create_addresses_table.php
++++ b/database/migrations/2024_02_22_211234_create_addresses_table.php
+@@ -27,6 +27,7 @@ public function up(): void
+             $table->string('type')->default(AddressTypeEnum::HOUSE);
+             $table->boolean('is_default')->default(0);
+             $table->text('notes')->nullable();
++            $table->softDeletes();
+             $table->timestamps();
+         });
+     }
+diff --git a/database/migrations/2024_02_25_143701_create_products_table.php b/database/migrations/2024_02_25_143701_create_products_table.php
+index 3ce0567..13dbe1d 100644
+--- a/database/migrations/2024_02_25_143701_create_products_table.php
++++ b/database/migrations/2024_02_25_143701_create_products_table.php
+@@ -20,6 +20,8 @@ public function up(): void
+             $table->decimal('offer_price', 10, 3)->default(0);
+             $table->unsignedInteger('quantity')->default(0);
+             $table->unsignedInteger('sort_order')->nullable();
++            $table->integer('order_limit')->nullable();
++            $table->integer('order_limit_user')->nullable();
+             $table->string('barcode')->nullable();
+             $table->string('sku')->nullable();
+             $table->string('show_in')->nullable();
+diff --git a/database/migrations/2024_02_29_184753_create_drivers_table.php b/database/migrations/2024_02_29_184753_create_drivers_table.php
+index dbb079f..9eda250 100644
+--- a/database/migrations/2024_02_29_184753_create_drivers_table.php
++++ b/database/migrations/2024_02_29_184753_create_drivers_table.php
+@@ -18,6 +18,7 @@ public function up(): void
+             $table->string('phone')->unique();
+             $table->string('type')->default(DriverTypeEnum::EMPLOYEE);
+             $table->boolean('is_active')->default(1);
++            $table->softDeletes();
+             $table->timestamps();
+         });
+     }
+diff --git a/database/migrations/2024_03_13_120508_create_delivery_types_table.php b/database/migrations/2024_03_13_120508_create_delivery_types_table.php
+new file mode 100644
+index 0000000..f5bc89d
+--- /dev/null
++++ b/database/migrations/2024_03_13_120508_create_delivery_types_table.php
+@@ -0,0 +1,30 @@
++<?php
++
++use Illuminate\Database\Migrations\Migration;
++use Illuminate\Database\Schema\Blueprint;
++use Illuminate\Support\Facades\Schema;
++
++return new class extends Migration
++{
++    /**
++     * Run the migrations.
++     */
++    public function up(): void
++    {
++        Schema::create('delivery_types', function (Blueprint $table) {
++            $table->id();
++            $table->text('name');
++            $table->boolean('is_active')->default(true);
++            $table->softDeletes();
++            $table->timestamps();
++        });
++    }
++
++    /**
++     * Reverse the migrations.
++     */
++    public function down(): void
++    {
++        Schema::dropIfExists('delivery_types');
++    }
++};
+diff --git a/database/migrations/2024_03_13_123628_create_payments_table.php b/database/migrations/2024_03_13_123628_create_payments_table.php
+new file mode 100644
+index 0000000..cdc2e06
+--- /dev/null
++++ b/database/migrations/2024_03_13_123628_create_payments_table.php
+@@ -0,0 +1,30 @@
++<?php
++
++use Illuminate\Database\Migrations\Migration;
++use Illuminate\Database\Schema\Blueprint;
++use Illuminate\Support\Facades\Schema;
++
++return new class extends Migration
++{
++    /**
++     * Run the migrations.
++     */
++    public function up(): void
++    {
++        Schema::create('payments', function (Blueprint $table) {
++            $table->id();
++            $table->text('name');
++            $table->boolean('is_active')->default(true);
++            $table->softDeletes();
++            $table->timestamps();
++        });
++    }
++
++    /**
++     * Reverse the migrations.
++     */
++    public function down(): void
++    {
++        Schema::dropIfExists('payments');
++    }
++};
+diff --git a/lang/ar.json b/lang/ar.json
+index 46cbedb..05fe690 100644
+--- a/lang/ar.json
++++ b/lang/ar.json
+@@ -8,5 +8,6 @@
+     "login successfully":"تم التسجيل بنجاح",
+     "pending activation":"في انتظار التنشيط",
+     "You are not allowed to sign in":"غير مسموح لك بتسجيل الدخول",
+-    "The product is currently out of stock":"المنتج غير متاح حاليا"
++    "The product is currently out of stock":"المنتج غير متاح حاليا",
++    "Coupon Not Available":"كود الخصم غير متاح"
+ }
+\ No newline at end of file
+diff --git a/routes/api.php b/routes/api.php
+index 9d34896..4c0b3c4 100644
+--- a/routes/api.php
++++ b/routes/api.php
+@@ -31,6 +31,7 @@
+     Route::put('default-address/{address}',[AddressController::class,'updateDefaultAddress']);
+     Route::get('favorites',[FavoriteController::class,'index']);
+     Route::post('favorites',[FavoriteController::class,'store']);
++    Route::post('coupons',CouponController::class);
+ });
+ Route::get('countries',CountryController::class);
+ Route::get('governorates',GovernorateController::class);

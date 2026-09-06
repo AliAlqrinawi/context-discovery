@@ -1,0 +1,3 @@
+new file: database/migrations/2024_11_18_122542_add_location_to_products.php — own-file context is in the diff, not fetched
+missing PSR-4 entry: Illuminate\Support\Facades\Schema::table named in database/migrations/2024_11_18_122542_add_location_to_products.php
+missing PSR-4 entry: Illuminate\Database\Schema\Blueprint named in database/migrations/2024_11_18_122542_add_location_to_products.php

@@ -1,0 +1,205 @@
+diff --git a/app/Http/Controllers/Admin/CategoryController.php b/app/Http/Controllers/Admin/CategoryController.php
+index 7e01bad..7475a16 100644
+--- a/app/Http/Controllers/Admin/CategoryController.php
++++ b/app/Http/Controllers/Admin/CategoryController.php
+@@ -9,7 +9,7 @@
+ use App\DataTables\CategoryDataTable;
+ use App\Http\Requests\Admin\Category\StoreRequest;
+ use App\Http\Requests\Admin\Category\UpdateRequest;
+-
++use App\Models\Product;
+ 
+ class CategoryController extends Controller
+ {
+@@ -28,10 +28,15 @@ public function __construct(protected CategoryService $categoryService)
+     /**
+      * Display a listing of the resource.
+      */
+-    public function index(CategoryDataTable $dataTable )
++    public function index(CategoryDataTable $dataTable)
+     {
+-        return $dataTable->render('dashboard.categories.index');
++        $categoryCount = Category::mainCategory()->count();
++
++        $productActiveCount = Product::active()->count();
+ 
++        $productInActiveCount = Product::inactive()->count();
++
++        return $dataTable->render('dashboard.categories.index', ['categoryCount' => $categoryCount, 'productActiveCount' => $productActiveCount, 'productInActiveCount' => $productInActiveCount]);
+     }
+ 
+     /**
+@@ -73,7 +78,7 @@ public function edit(Category $category)
+      */
+     public function update(UpdateRequest $request, Category $category)
+     {
+-        $this->categoryService->update($category , $request->validated());
++        $this->categoryService->update($category, $request->validated());
+         updated();
+         return redirect()->route('admin.categories.index');
+     }
+@@ -93,21 +98,18 @@ public function changeStatus(Category $category)
+         $this->categoryService->activation($category);
+         statusChange();
+         return back();
+-
+     }
+     public function international(Category $category)
+     {
+         $this->categoryService->international($category);
+         updated();
+         return back();
+-
+     }
+     public function appearInHome(Category $category)
+     {
+         $this->categoryService->appearInHome($category);
+         updated();
+         return back();
+-
+     }
+ 
+     public function updateMainCategoryPosition(Request $request)
+@@ -115,5 +117,4 @@ public function updateMainCategoryPosition(Request $request)
+         $this->categoryService->updateMainCategoryPosition($request);
+         return true;
+     }
+-
+ }
+diff --git a/app/Http/Controllers/Admin/ProductController.php b/app/Http/Controllers/Admin/ProductController.php
+index 814d655..6d0b5a0 100644
+--- a/app/Http/Controllers/Admin/ProductController.php
++++ b/app/Http/Controllers/Admin/ProductController.php
+@@ -38,7 +38,8 @@ public function __construct(
+      */
+     public function index(ProductDataTable $dataTable)
+     {
+-        return $dataTable->render('dashboard.products.index',['categories' => $this->categories()]);
++        $productCount = Product::filter()->count();
++        return $dataTable->render('dashboard.products.index',['categories' => $this->categories() , 'productCount' => $productCount]);
+     }
+ 
+ 
+diff --git a/app/Http/Controllers/Admin/SubCategoryController.php b/app/Http/Controllers/Admin/SubCategoryController.php
+index 62d0040..2d8d24b 100644
+--- a/app/Http/Controllers/Admin/SubCategoryController.php
++++ b/app/Http/Controllers/Admin/SubCategoryController.php
+@@ -9,7 +9,7 @@
+ use App\DataTables\SubCategoryDataTable;
+ use App\Http\Requests\Admin\Category\StoreRequest;
+ use App\Http\Requests\Admin\Category\UpdateRequest;
+-
++use App\Models\Product;
+ 
+ class SubCategoryController extends Controller
+ {
+@@ -29,7 +29,13 @@ public function __construct(protected CategoryService $categoryService)
+      */
+     public function index(SubCategoryDataTable $dataTable)
+     {
+-        return $dataTable->render('dashboard.sub_categories.index');
++        $categoryCount = Category::where('category_id', request()->category_id)->count();
++
++        $productActiveCount = Product::active()->filterByCategories()->count();
++
++        $productInActiveCount = Product::inactive()->filterByCategories()->count();
++
++        return $dataTable->render('dashboard.sub_categories.index' , ['categoryCount' => $categoryCount, 'productActiveCount' => $productActiveCount, 'productInActiveCount' => $productInActiveCount]);
+     }
+ 
+     /**
+diff --git a/app/Models/Product.php b/app/Models/Product.php
+index 5a057e6..453d9ba 100644
+--- a/app/Models/Product.php
++++ b/app/Models/Product.php
+@@ -201,10 +201,16 @@ public function scopeFilterByCategory(Builder $builder)
+     public function scopeFilterByCategories(Builder $builder)
+     {
+         $categories = request('categories');
+-
+-        if ($categories) {
+-            $builder->whereHas('categories', function ($query) use ($categories) {
+-                $query->where('categories.id', $categories);
++        $categoryId = request()->category_id;
++
++        if ($categories OR $categoryId) {
++            $builder->whereHas('categories', function ($query) use ($categories , $categoryId) {
++                if ($categories) {
++                    $query->where('categories.id', $categories);
++                }
++                if ($categoryId) {
++                    $query->Where('categories.id', $categoryId);
++                }
+             });
+         }
+     }
+@@ -214,7 +220,7 @@ public function scopeFilterBySku(Builder $builder)
+         $sku = request('sku');
+ 
+         if ($sku) {
+-            $builder->where('sku', $sku);
++            $builder->where('sku', "LIKE" , '%'.$sku.'%');
+         }
+     }
+ 
+diff --git a/lang/ar.json b/lang/ar.json
+index ce7d9c3..f40ff7a 100644
+--- a/lang/ar.json
++++ b/lang/ar.json
+@@ -366,6 +366,9 @@
+     "Choose File E-xcel":"أختبار ملف الإكسل",
+     "Bulk Upload For Products":"تحميل المنتجات",
+     "Save":"حفظ",
++    "Products Active":"المنتجات الفعالة",
++    "Products InActive":"المنتجات غير الفعالة",
++    "":"",
+     "":"",
+     "":""
+ }
+diff --git a/resources/views/dashboard/categories/index.blade.php b/resources/views/dashboard/categories/index.blade.php
+index 95ce41c..2cb3dfc 100644
+--- a/resources/views/dashboard/categories/index.blade.php
++++ b/resources/views/dashboard/categories/index.blade.php
+@@ -8,7 +8,7 @@
+                 <div class="col-12">
+                     <div class="card">
+                         <div class="card-header">
+-                            <h4 class="card-title">{{ __('Categories') }}</h4>
++                            <h4 class="card-title">{{ __('Categories') }} ({{ $categoryCount }})  /  {{ __("Products Active") }} ({{ $productActiveCount }})  /  {{ __("Products InActive") }} ({{ $productInActiveCount }})</h4>
+                             @can('Create Categories')
+                                 <div class="text-{{ app()->getLocale() == 'ar' ? 'right' : 'left' }}">
+                                     <a href="{{ route('admin.categories.create') }}"
+diff --git a/resources/views/dashboard/products/index.blade.php b/resources/views/dashboard/products/index.blade.php
+index f2f2b31..aebd6dc 100644
+--- a/resources/views/dashboard/products/index.blade.php
++++ b/resources/views/dashboard/products/index.blade.php
+@@ -60,7 +60,7 @@ class="col-md-8 mt-2 text-{{ app()->getLocale() == 'ar' ? 'left' : 'right' }}">
+                 <div class="col-12">
+                     <div class="card">
+                         <div class="card-header">
+-                            <h4 class="card-title">{{ __('Products') }}</h4>
++                            <h4 class="card-title">{{ __('Products') }} ({{ $productCount }})</h4>
+                             @can('Create Products')
+                                 <div class="text-{{ app()->getLocale() == 'ar' ? 'right' : 'left' }}">
+                                     @include('dashboard.products.actions_for_add')
+@@ -289,6 +289,7 @@ class="col-md-8 mt-2 text-{{ app()->getLocale() == 'ar' ? 'left' : 'right' }}">
+ 
+ @push('scripts')
+     {{ $dataTable->scripts() }}
++
+     {!! Html::script('vendor/datatables/buttons.server-side.js') !!}
+     <script>
+         $(document).on("change", "#changePosition", function(e) {
+diff --git a/resources/views/dashboard/sub_categories/index.blade.php b/resources/views/dashboard/sub_categories/index.blade.php
+index 7386892..89300de 100644
+--- a/resources/views/dashboard/sub_categories/index.blade.php
++++ b/resources/views/dashboard/sub_categories/index.blade.php
+@@ -8,7 +8,7 @@
+                 <div class="col-12">
+                     <div class="card">
+                         <div class="card-header">
+-                            <h4 class="card-title">{{ __('Sub Categories') }}</h4>
++                            <h4 class="card-title">{{ __('Sub Categories') }} ({{ $categoryCount }})  /  {{ __("Products Active") }} ({{ $productActiveCount }})  /  {{ __("Products InActive") }} ({{ $productInActiveCount }})</h4>
+                             <div class="text-{{ app()->getLocale() == 'ar' ? 'right' : 'left' }}">
+                                 <a href="{{ route('admin.sub-categories.create', request()->category_id) }}"
+                                     class="btn btn-primary waves-effect waves-light">

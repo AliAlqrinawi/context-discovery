@@ -1,0 +1,457 @@
+{
+    "bundle_version": 1,
+    "budget_tokens": 8000,
+    "used_tokens": 1603,
+    "items": [
+        {
+            "lever": "fetched",
+            "reason": "the region uses OrderController, which the file's use block does not import",
+            "assertion_kind": "same_file_symbol_absence",
+            "provenance": {
+                "path": "routes/api.php",
+                "lines": [
+                    4,
+                    5
+                ]
+            },
+            "payload": "use Illuminate\\Http\\Request;\nuse Illuminate\\Support\\Facades\\Route;",
+            "tokens": 17
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Enum\\OrderStatusEnum::CANCELLED, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Enum/OrderStatusEnum.php",
+                "member": "CANCELLED",
+                "lines": [
+                    11,
+                    11
+                ]
+            },
+            "payload": "  const CANCELLED = 'cancelled';",
+            "tokens": 8
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Enum\\OrderStatusEnum::PENDING, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Enum/OrderStatusEnum.php",
+                "member": "PENDING",
+                "lines": [
+                    8,
+                    8
+                ]
+            },
+            "payload": "  const PENDING = 'pending';",
+            "tokens": 7
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Http\\Resources\\OrderResource, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Http/Resources/OrderResource.php",
+                "member": "toArray",
+                "lines": [
+                    10,
+                    30
+                ]
+            },
+            "payload": "    /**\n     * Transform the resource into an array.\n     *\n     * @return array<string, mixed>\n     */\n    public function toArray(Request $request): array\n    {\n        return [\n            'id'=>$this->id,\n            'code'=>$this->code,\n            'payment_url' => $this->payment_url,\n            'sub_total'=>$this->sub_total,\n            'discount'=>$this->discount,\n            'delivery'=>$this->delivery,\n            'grand_total'=>$this->grand_total,\n            'payment_method'=>$this->payment_method,\n            'address'=>$this->relationLoaded(\"address\") ? new AddressResource($this->address) : null,\n            'items'=>$this->relationLoaded(\"items\") ?  OrderItemResource::collection($this->items) : [],\n\n          ];\n    }",
+            "tokens": 186
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Order, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Order.php",
+                "member": "address",
+                "lines": [
+                    36,
+                    39
+                ]
+            },
+            "payload": "   public function address()\n   {\n      return $this->belongsTo(Address::class);\n   }",
+            "tokens": 22
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Order, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Order.php",
+                "member": "deliveryType",
+                "lines": [
+                    40,
+                    43
+                ]
+            },
+            "payload": "   public function deliveryType()\n   {\n      return $this->belongsTo(DeliveryType::class);\n   }",
+            "tokens": 24
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Order, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Order.php",
+                "member": "driver",
+                "lines": [
+                    48,
+                    51
+                ]
+            },
+            "payload": "   public function driver()\n   {\n      return $this->belongsTo(Driver::class);\n   }",
+            "tokens": 21
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Order, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Order.php",
+                "member": "fillable",
+                "lines": [
+                    15,
+                    34
+                ]
+            },
+            "payload": "   protected $fillable = [\n      'user_id',\n      'address_id',\n      'coupon_id',\n      'sub_total',\n      'delivery',\n      'discount',\n      'grand_total',\n      'code',\n      'status',\n      'payment_method',\n      'payment_status',\n      'notes',\n      'device_type',\n      'use_wallet',\n      'wallet_credit',\n      'payment_id',\n      'driver_id',\n      'delivery_type_id'\n   ];",
+            "tokens": 97
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Order, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Order.php",
+                "member": "items",
+                "lines": [
+                    56,
+                    59
+                ]
+            },
+            "payload": "   public function items()\n   {\n      return $this->hasMany(OrderItem::class);\n   }",
+            "tokens": 21
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Order, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Order.php",
+                "member": "orderStatus",
+                "lines": [
+                    200,
+                    209
+                ]
+            },
+            "payload": "   public static function orderStatus()\n   {\n      return [\n         OrderStatusEnum::NEW => self::orderStatusName(OrderStatusEnum::NEW),\n         OrderStatusEnum::PENDING => self::orderStatusName(OrderStatusEnum::PENDING),\n         OrderStatusEnum::SHIPPING => self::orderStatusName(OrderStatusEnum::SHIPPING),\n         OrderStatusEnum::COMPLETE => self::orderStatusName(OrderStatusEnum::COMPLETE),\n         OrderStatusEnum::CANCELLED => self::orderStatusName(OrderStatusEnum::CANCELLED)\n      ];\n   }",
+            "tokens": 126
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Order, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Order.php",
+                "member": "orderStatusName",
+                "lines": [
+                    210,
+                    230
+                ]
+            },
+            "payload": "   public static function orderStatusName($name)\n   {\n      switch ($name) {\n         case OrderStatusEnum::NEW:\n            return __('request accept');\n            break;\n         case OrderStatusEnum::PENDING:\n            return __('order processing');\n            break;\n         case OrderStatusEnum::SHIPPING:\n            return __('shipped');\n            break;\n         case  OrderStatusEnum::COMPLETE:\n            return __('receipt confirmed');\n            break;\n         case OrderStatusEnum::CANCELLED:\n            return __('order canceled');\n            break;\n          \n      }\n   }",
+            "tokens": 150
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Order, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Order.php",
+                "member": "payment",
+                "lines": [
+                    52,
+                    55
+                ]
+            },
+            "payload": "   public function payment()\n   {\n      return $this->belongsTo(Payment::class);\n   }",
+            "tokens": 22
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Order, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Order.php",
+                "member": "paymentStatus",
+                "lines": [
+                    193,
+                    199
+                ]
+            },
+            "payload": "   public static function paymentStatus()\n   {\n      return [\n         OrderPaymentStatusEnum::PAID => __(OrderPaymentStatusEnum::PAID),\n         OrderPaymentStatusEnum::UN_PAID => __(OrderPaymentStatusEnum::UN_PAID)\n      ];\n   }",
+            "tokens": 58
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Order, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Order.php",
+                "member": "scopeFilter",
+                "lines": [
+                    63,
+                    74
+                ]
+            },
+            "payload": "   public function scopeFilter(Builder $builder)\n   {\n      $builder\n         ->filterByStatus()\n         ->filterByPaymentStatus()\n         ->filterByPaymentId()\n         ->filterById()\n         ->filterByName()\n         ->filterByPhone()\n         ->filterByCountry()\n         ->filterByDate();\n   }",
+            "tokens": 75
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Order, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Order.php",
+                "member": "scopeFilterByCountry",
+                "lines": [
+                    134,
+                    145
+                ]
+            },
+            "payload": "   public function scopeFilterByCountry(Builder $builder)\n   {\n      $country = request('country');\n\n      if ($country) {\n         $builder->whereHas('user.country', function ($query) use ($country) {\n            $query->where(function ($q) use ($country) {\n               $q->whereRaw('lower(JSON_EXTRACT(name, \"$.en\")) LIKE \"%' . strtolower($country) . '%\" OR lower(JSON_EXTRACT(name, \"$.ar\")) LIKE \"%' . strtolower($country) . '%\"');\n            });\n         });\n      }\n   }",
+            "tokens": 120
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Order, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Order.php",
+                "member": "scopeFilterByDate",
+                "lines": [
+                    147,
+                    155
+                ]
+            },
+            "payload": "   public function scopeFilterByDate(Builder $builder)\n   {\n      $dateFrom = request('date_from');\n      $dateTo = request('date_to');\n\n      if ($dateFrom && $dateTo) {\n         $builder->where('created_at', '>=', $dateFrom)->where('created_at', '<=', $dateTo);\n      }\n   }",
+            "tokens": 69
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Order, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Order.php",
+                "member": "scopeFilterById",
+                "lines": [
+                    103,
+                    110
+                ]
+            },
+            "payload": "   public function scopeFilterById(Builder $builder)\n   {\n      $id = request('id');\n\n      if ($id) {\n         $builder->where('id', $id);\n      }\n   }",
+            "tokens": 38
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Order, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Order.php",
+                "member": "scopeFilterByName",
+                "lines": [
+                    112,
+                    121
+                ]
+            },
+            "payload": "   public function scopeFilterByName(Builder $builder)\n   {\n      $name = request('name');\n\n      if ($name) {\n         $builder->whereHas('user', function ($q) use ($name) {\n            $q->where('name', 'like', '%' . $name . '%');\n         });\n      }\n   }",
+            "tokens": 65
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Order, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Order.php",
+                "member": "scopeFilterByPaymentId",
+                "lines": [
+                    94,
+                    101
+                ]
+            },
+            "payload": "   public function scopeFilterByPaymentId(Builder $builder)\n   {\n      $paymentId = request('payment_id');\n\n      if ($paymentId) {\n         $builder->where('payment_id', $paymentId);\n      }\n   }",
+            "tokens": 49
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Order, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Order.php",
+                "member": "scopeFilterByPaymentStatus",
+                "lines": [
+                    85,
+                    92
+                ]
+            },
+            "payload": "   public function scopeFilterByPaymentStatus(Builder $builder)\n   {\n      $paymentStatus = request('payment_status');\n\n      if ($paymentStatus) {\n         $builder->where('payment_status', $paymentStatus);\n      }\n   }",
+            "tokens": 55
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Order, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Order.php",
+                "member": "scopeFilterByPhone",
+                "lines": [
+                    123,
+                    132
+                ]
+            },
+            "payload": "   public function scopeFilterByPhone(Builder $builder)\n   {\n      $phone = request('phone');\n\n      if ($phone) {\n         $builder->whereHas('user', function ($q) use ($phone) {\n            $q->where('phone', $phone);\n         });\n      }\n   }",
+            "tokens": 62
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Order, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Order.php",
+                "member": "scopeFilterByStatus",
+                "lines": [
+                    76,
+                    83
+                ]
+            },
+            "payload": "   public function scopeFilterByStatus(Builder $builder)\n   {\n      $status = request('stauts');\n\n      if ($status) {\n         $builder->where('status', $status);\n      }\n   }",
+            "tokens": 44
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Order, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Order.php",
+                "member": "scopeNewAndPendingStatus",
+                "lines": [
+                    182,
+                    185
+                ]
+            },
+            "payload": "   public function scopeNewAndPendingStatus($query)\n   {\n      return $query->whereIn('status',[OrderStatusEnum::NEW , OrderStatusEnum::PENDING]);\n   }",
+            "tokens": 38
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Order, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Order.php",
+                "member": "scopeNewOrders",
+                "lines": [
+                    162,
+                    165
+                ]
+            },
+            "payload": "   public function scopeNewOrders($query)\n   {\n      return $query->where('status',OrderStatusEnum::NEW);\n   }",
+            "tokens": 28
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Order, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Order.php",
+                "member": "scopeOrderIds",
+                "lines": [
+                    157,
+                    160
+                ]
+            },
+            "payload": "   public function scopeOrderIds($query,$value)\n   {\n       return $query->whereIn('id',$value);\n   }",
+            "tokens": 26
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Order, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Order.php",
+                "member": "scopePendingOrders",
+                "lines": [
+                    167,
+                    170
+                ]
+            },
+            "payload": "   public function scopePendingOrders($query)\n   {\n      return $query->where('status',OrderStatusEnum::PENDING);\n   }",
+            "tokens": 30
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Order, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Order.php",
+                "member": "scopeValidOrder",
+                "lines": [
+                    172,
+                    180
+                ]
+            },
+            "payload": "   public function scopeValidOrder($query)\n   {\n      return $query->where('status','!=',OrderStatusEnum::CANCELLED)->where(function($q){\n         $q->where(function($q){\n           $q->where('payment_method',OrderPaymentMethodEnum::CASH)\n              ->orWhere('payment_status',OrderPaymentStatusEnum::PAID);\n          });\n      });\n   }",
+            "tokens": 85
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Order, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Order.php",
+                "member": "user",
+                "lines": [
+                    44,
+                    47
+                ]
+            },
+            "payload": "   public function user()\n   {\n      return $this->belongsTo(User::class);\n   }",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on Illuminate\\Validation\\ValidationException::withMessages, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Services/OrderService.php",
+                "member": "Illuminate\\Validation\\ValidationException::withMessages",
+                "lines": [
+                    148,
+                    161
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on Illuminate\\Support\\Facades\\Route::PUT, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "routes/api.php",
+                "member": "Illuminate\\Support\\Facades\\Route::PUT",
+                "lines": [
+                    28,
+                    34
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        }
+    ],
+    "dropped": []
+}

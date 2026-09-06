@@ -1,0 +1,60 @@
+diff --git a/app/Imports/ProductsImport.php b/app/Imports/ProductsImport.php
+index f5e7911..c94c12c 100644
+--- a/app/Imports/ProductsImport.php
++++ b/app/Imports/ProductsImport.php
+@@ -30,17 +30,44 @@ public function collection(Collection $rows)
+                 }
+             } else {
+                 foreach ($rows as $row) {
+-                    Product::updateOrCreate(["id" => $row[0]], [
+-                        'sku' => $row[1],
+-                        'name' => [
+-                            'en' => $row[2],
+-                            'ar' => $row[3],
+-                        ],
+-                        'barcode' => $row[4],
+-                        'price' => $row[5],
+-                        'is_active' => 0,
+-                        'is_international' => 0,
+-                    ]);
++                    $product = Product::where("id", $row[0])->first();
++                    if (!$product) {
++                        $newProduct = new Product();
++                        if ($row[1]) {
++                            $newProduct->sku = $row[1];
++                        }
++                        if ($row[2] and $row[3]) {
++                            $newProduct->name = [
++                                'en' => $row[2],
++                                'ar' => $row[3],
++                            ];
++                        }
++                        if ($row[4]) {
++                            $newProduct->barcode = $row[4];
++                        }
++                        if ($row[5]) {
++                            $newProduct->price = $row[5];
++                        }
++                        $newProduct->is_active = 0;
++                        $newProduct->save();
++                    } else {
++                        if ($row[1]) {
++                            $product->sku = $row[1];
++                        }
++                        if ($row[2] and $row[3]) {
++                            $product->name = [
++                                'en' => $row[2],
++                                'ar' => $row[3],
++                            ];
++                        }
++                        if ($row[4]) {
++                            $product->barcode = $row[4];
++                        }
++                        if ($row[5]) {
++                            $product->price = $row[5];
++                        }
++                        $product->save();
++                    }
+                 }
+             }
+         } catch (\Throwable $th) {

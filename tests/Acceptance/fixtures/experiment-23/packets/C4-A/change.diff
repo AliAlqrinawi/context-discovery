@@ -1,0 +1,60 @@
+diff --git a/app/Exports/ProductsExport.php b/app/Exports/ProductsExport.php
+index 8bfb56f..1504bf0 100644
+--- a/app/Exports/ProductsExport.php
++++ b/app/Exports/ProductsExport.php
+@@ -12,10 +12,10 @@ class ProductsExport implements FromCollection, WithHeadings
+     public function headings(): array
+     {
+         return [
+-            '#',
++            'Product Number',
++            'SKU',
+             'Product Name en',
+             'Product Name ar',
+-            'SKU',
+             'Barcode',
+             'Price',
+         ];
+@@ -26,7 +26,7 @@ public function headings(): array
+      */
+     public function collection()
+     {
+-        return Product::select('id', 'name->ar as name_ar', 'name->en as name_en', "sku", 'barcode', 'price')
++        return Product::select('id' ,"sku" ,'name->ar as name_ar', 'name->en as name_en', 'barcode', 'price')
+             ->filter()->when(request()->type, function ($q) {
+                 $q->productsType(request()->type);
+             })->get();
+diff --git a/app/Imports/ProductsImport.php b/app/Imports/ProductsImport.php
+index 0eca4f8..030c07f 100644
+--- a/app/Imports/ProductsImport.php
++++ b/app/Imports/ProductsImport.php
+@@ -18,7 +18,7 @@ public function collection(Collection $rows)
+             $rows = $rows->slice(1);
+             if (request("category_for_add")) {
+                 foreach ($rows as $row) {
+-                    $product = Product::where("sku", $row[0])->first();
++                    $product = Product::where("id", $row[0])->first();
+                     if ($product) {
+                         if (!$product->categories->contains(request("category_for_add"))) {
+                             $product->categories()->attach(request("category_for_add"));
+@@ -27,14 +27,14 @@ public function collection(Collection $rows)
+                 }
+             } else {
+                 foreach ($rows as $row) {
+-                    Product::updateOrCreate(["sku" => $row[0]], [
++                    Product::updateOrCreate(["id" => $row[0]], [
++                        'sku' => $row[1],
+                         'name' => [
+-                            'en' => $row[1],
+-                            'ar' => $row[2],
++                            'en' => $row[2],
++                            'ar' => $row[3],
+                         ],
+-                        'price' => $row[4],
+-                        'sku' => $row[0],
+-                        'barcode' => $row[3],
++                        'barcode' => $row[4],
++                        'price' => $row[5],
+                         'is_active' => 0,
+                         'is_international' => 0,
+                     ]);
