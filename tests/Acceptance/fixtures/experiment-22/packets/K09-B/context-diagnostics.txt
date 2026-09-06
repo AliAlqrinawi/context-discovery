@@ -1,0 +1,5 @@
+new file: tests/Feature/Actions/FileUploadRollbackTest.php — own-file context is in the diff, not fetched
+missing PSR-4 entry: Illuminate\Support\Facades\Storage::fake named in tests/Feature/Actions/FileUploadRollbackTest.php
+missing PSR-4 entry: Illuminate\Http\UploadedFile::fake named in tests/Feature/Actions/FileUploadRollbackTest.php
+missing PSR-4 entry: Illuminate\Support\Facades\Storage::disk named in tests/Feature/Actions/FileUploadRollbackTest.php
+missing PSR-4 entry: RuntimeException named in tests/Feature/Actions/FileUploadRollbackTest.php

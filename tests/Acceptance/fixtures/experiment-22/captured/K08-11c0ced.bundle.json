@@ -1,0 +1,186 @@
+{
+    "bundle_version": 1,
+    "budget_tokens": 8000,
+    "used_tokens": 888,
+    "items": [
+        {
+            "lever": "fetched",
+            "reason": "the region uses array_values, which the file's use block does not import",
+            "assertion_kind": "same_file_symbol_absence",
+            "provenance": {
+                "path": "app/DTOs/Dish/UpdateDishDTO.php",
+                "lines": [
+                    5,
+                    6
+                ]
+            },
+            "payload": "use Illuminate\\Http\\Request;\nuse Illuminate\\Http\\UploadedFile;",
+            "tokens": 16
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region uses array_values, which the file's use block does not import",
+            "assertion_kind": "same_file_symbol_absence",
+            "provenance": {
+                "path": "app/DTOs/Dish/UpdateDishDTO.php",
+                "member": "fromRequest",
+                "lines": [
+                    28,
+                    46
+                ]
+            },
+            "payload": "    public static function fromRequest(Request $request): self\n    {\n        return new self(\n            name_ar: $request->filled('name_ar') ? $request->string('name_ar')->toString() : null,\n            name_en: $request->filled('name_en') ? $request->string('name_en')->toString() : null,\n            description_ar: $request->filled('description_ar') ? $request->string('description_ar')->toString() : null,\n            description_en: $request->filled('description_en') ? $request->string('description_en')->toString() : null,\n            price: $request->filled('price') ? (float) $request->input('price') : null,\n            category_id: $request->filled('category_id') ? (int) $request->input('category_id') : null,\n            is_featured: $request->has('is_featured') ? $request->boolean('is_featured') : null,\n            is_signature: $request->has('is_signature') ? $request->boolean('is_signature') : null,\n            image: $request->file('image'),\n            order: $request->filled('order') ? (int) $request->input('order') : null,\n            providedKeys: array_values(array_filter(\n                self::CLEARABLE,\n                fn (string $key) => $request->has($key),\n            )),\n        );\n    }",
+            "tokens": 307
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\DTOs\\Dish\\UpdateDishDTO::fromRequest, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/DTOs/Dish/UpdateDishDTO.php",
+                "member": "fromRequest",
+                "lines": [
+                    28,
+                    46
+                ]
+            },
+            "payload": "    public static function fromRequest(Request $request): self\n    {\n        return new self(\n            name_ar: $request->filled('name_ar') ? $request->string('name_ar')->toString() : null,\n            name_en: $request->filled('name_en') ? $request->string('name_en')->toString() : null,\n            description_ar: $request->filled('description_ar') ? $request->string('description_ar')->toString() : null,\n            description_en: $request->filled('description_en') ? $request->string('description_en')->toString() : null,\n            price: $request->filled('price') ? (float) $request->input('price') : null,\n            category_id: $request->filled('category_id') ? (int) $request->input('category_id') : null,\n            is_featured: $request->has('is_featured') ? $request->boolean('is_featured') : null,\n            is_signature: $request->has('is_signature') ? $request->boolean('is_signature') : null,\n            image: $request->file('image'),\n            order: $request->filled('order') ? (int) $request->input('order') : null,\n            providedKeys: array_values(array_filter(\n                self::CLEARABLE,\n                fn (string $key) => $request->has($key),\n            )),\n        );\n    }",
+            "tokens": 307
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Category::create, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Category.php",
+                "member": "dishes",
+                "lines": [
+                    17,
+                    20
+                ]
+            },
+            "payload": "    public function dishes(): HasMany\n    {\n        return $this->hasMany(Dish::class);\n    }",
+            "tokens": 24
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Category::create, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Category.php",
+                "member": "fillable",
+                "lines": [
+                    10,
+                    15
+                ]
+            },
+            "payload": "    protected $fillable = [\n        'name_ar',\n        'name_en',\n        'slug',\n        'order',\n    ];",
+            "tokens": 27
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Dish, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Dish.php",
+                "member": "casts",
+                "lines": [
+                    24,
+                    28
+                ]
+            },
+            "payload": "    protected $casts = [\n        'price' => 'decimal:2',\n        'is_featured' => 'boolean',\n        'is_signature' => 'boolean',\n    ];",
+            "tokens": 34
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Dish, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Dish.php",
+                "member": "category",
+                "lines": [
+                    30,
+                    33
+                ]
+            },
+            "payload": "    public function category(): BelongsTo\n    {\n        return $this->belongsTo(Category::class);\n    }",
+            "tokens": 26
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Dish, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Dish.php",
+                "member": "fillable",
+                "lines": [
+                    10,
+                    22
+                ]
+            },
+            "payload": "    protected $fillable = [\n        'category_id',\n        'name_ar',\n        'name_en',\n        'description_ar',\n        'description_en',\n        'price',\n        'is_featured',\n        'is_signature',\n        'image_path',\n        'image_url',\n        'order',\n    ];",
+            "tokens": 68
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Models\\Category::create, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "tests/Feature/Actions/UpdateDishActionTest.php",
+                "member": "App\\Models\\Category::create",
+                "lines": [
+                    1,
+                    80
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Models\\Dish::create, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "tests/Feature/Actions/UpdateDishActionTest.php",
+                "member": "App\\Models\\Dish::create",
+                "lines": [
+                    1,
+                    80
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on Illuminate\\Http\\Request::create, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "tests/Feature/Actions/UpdateDishActionTest.php",
+                "member": "Illuminate\\Http\\Request::create",
+                "lines": [
+                    1,
+                    80
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region performs several persistence writes; whether a transaction wraps them is decided by the caller, which the diff does not show",
+            "assertion_kind": "unverifiable_premise",
+            "provenance": {
+                "path": "tests/Feature/Actions/UpdateDishActionTest.php",
+                "lines": [
+                    1,
+                    80
+                ]
+            },
+            "payload": "ASSUMPTION: this code assumes a surrounding transaction; caller not checked",
+            "tokens": 19
+        }
+    ],
+    "dropped": []
+}

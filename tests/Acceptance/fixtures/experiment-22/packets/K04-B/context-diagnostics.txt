@@ -1,0 +1,12 @@
+new file: database/migrations/2026_07_25_132951_add_show_in_footer_to_branches_table.php — own-file context is in the diff, not fetched
+already in the diff: App\Repositories\BranchRepository::getAll declared in app/Repositories/BranchRepository.php; not fetched again
+missing PSR-4 entry: Illuminate\Database\Eloquent\Collection named in app/Actions/Branch/GetBranchesAction.php
+call sites truncated at 20 for execute under app/
+missing PSR-4 entry: Illuminate\Http\Request named in app/Http/Controllers/Public/BranchController.php
+missing PSR-4 entry: Illuminate\Http\JsonResponse named in app/Http/Controllers/Public/BranchController.php
+call sites truncated at 20 for index under app/
+unresolved named_reference: App\Models\Branch::orderBy in app/Repositories/BranchRepository.php
+missing PSR-4 entry: Illuminate\Database\Eloquent\Collection named in app/Repositories/BranchRepository.php
+call sites truncated at 20 for getAll under app/
+missing PSR-4 entry: Illuminate\Support\Facades\Schema::table named in database/migrations/2026_07_25_132951_add_show_in_footer_to_branches_table.php
+missing PSR-4 entry: Illuminate\Database\Schema\Blueprint named in database/migrations/2026_07_25_132951_add_show_in_footer_to_branches_table.php

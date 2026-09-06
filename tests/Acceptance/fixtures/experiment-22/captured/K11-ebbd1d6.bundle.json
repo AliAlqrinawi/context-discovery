@@ -1,0 +1,798 @@
+{
+    "bundle_version": 1,
+    "budget_tokens": 8000,
+    "used_tokens": 1468,
+    "items": [
+        {
+            "lever": "fetched",
+            "reason": "the region uses SeoSettingSeeder, which the file's use block does not import",
+            "assertion_kind": "same_file_symbol_absence",
+            "provenance": {
+                "path": "database/seeders/DatabaseSeeder.php",
+                "lines": [
+                    5,
+                    6
+                ]
+            },
+            "payload": "use Illuminate\\Database\\Console\\Seeds\\WithoutModelEvents;\nuse Illuminate\\Database\\Seeder;",
+            "tokens": 23
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region uses TrackingSettingSeeder, which the file's use block does not import",
+            "assertion_kind": "same_file_symbol_absence",
+            "provenance": {
+                "path": "database/seeders/DatabaseSeeder.php",
+                "lines": [
+                    5,
+                    6
+                ]
+            },
+            "payload": "use Illuminate\\Database\\Console\\Seeds\\WithoutModelEvents;\nuse Illuminate\\Database\\Seeder;",
+            "tokens": 23
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region uses SeoSettingSeeder, which the file's use block does not import",
+            "assertion_kind": "same_file_symbol_absence",
+            "provenance": {
+                "path": "database/seeders/DatabaseSeeder.php",
+                "member": "run",
+                "lines": [
+                    12,
+                    34
+                ]
+            },
+            "payload": "    /**\n     * Seed the application's database.\n     */\n    public function run(): void\n    {\n        $this->call([\n            UserSeeder::class,\n            CategorySeeder::class,\n            DishSeeder::class,\n            BranchSeeder::class,\n            CateringPackageSeeder::class,\n            SampleMenuSeeder::class,\n            TestimonialSeeder::class,\n            TimelineSeeder::class,\n            PersonalitySeeder::class,\n            DeliveryAppSeeder::class,\n            PageContentSeeder::class,\n            SettingSeeder::class,\n            MediaItemSeeder::class,\n            SeoSettingSeeder::class,\n            TrackingSettingSeeder::class,\n        ]);\n    }",
+            "tokens": 170
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region uses TrackingSettingSeeder, which the file's use block does not import",
+            "assertion_kind": "same_file_symbol_absence",
+            "provenance": {
+                "path": "database/seeders/DatabaseSeeder.php",
+                "member": "run",
+                "lines": [
+                    12,
+                    34
+                ]
+            },
+            "payload": "    /**\n     * Seed the application's database.\n     */\n    public function run(): void\n    {\n        $this->call([\n            UserSeeder::class,\n            CategorySeeder::class,\n            DishSeeder::class,\n            BranchSeeder::class,\n            CateringPackageSeeder::class,\n            SampleMenuSeeder::class,\n            TestimonialSeeder::class,\n            TimelineSeeder::class,\n            PersonalitySeeder::class,\n            DeliveryAppSeeder::class,\n            PageContentSeeder::class,\n            SettingSeeder::class,\n            MediaItemSeeder::class,\n            SeoSettingSeeder::class,\n            TrackingSettingSeeder::class,\n        ]);\n    }",
+            "tokens": 170
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on Illuminate\\Support\\Facades\\Cache::tags, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Actions/Seo/BulkUpdateSeoSettingsAction.php",
+                "member": "Illuminate\\Support\\Facades\\Cache::tags",
+                "lines": [
+                    1,
+                    21
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on Illuminate\\Support\\Facades\\Cache::tags, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Actions/Seo/GetEffectiveSeoAction.php",
+                "member": "Illuminate\\Support\\Facades\\Cache::tags",
+                "lines": [
+                    1,
+                    70
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on Illuminate\\Support\\Arr::whereNotNull, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Actions/Seo/UpdateSeoSettingAction.php",
+                "member": "Illuminate\\Support\\Arr::whereNotNull",
+                "lines": [
+                    1,
+                    41
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on Illuminate\\Support\\Facades\\Cache::tags, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Actions/Seo/UpdateSeoSettingAction.php",
+                "member": "Illuminate\\Support\\Facades\\Cache::tags",
+                "lines": [
+                    1,
+                    41
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on Illuminate\\Support\\Facades\\Cache::tags, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Actions/Seo/UpdateTrackingSettingsAction.php",
+                "member": "Illuminate\\Support\\Facades\\Cache::tags",
+                "lines": [
+                    1,
+                    30
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on Illuminate\\Http\\Request, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/DTOs/Seo/BulkUpdateSeoSettingsDTO.php",
+                "member": "Illuminate\\Http\\Request",
+                "lines": [
+                    1,
+                    19
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on Illuminate\\Http\\Request, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/DTOs/Seo/UpdateSeoSettingDTO.php",
+                "member": "Illuminate\\Http\\Request",
+                "lines": [
+                    1,
+                    43
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on Illuminate\\Http\\Request, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/DTOs/Seo/UpdateTrackingSettingsDTO.php",
+                "member": "Illuminate\\Http\\Request",
+                "lines": [
+                    1,
+                    30
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Http\\Resources\\Seo\\SeoSettingResource::collection, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Http/Controllers/Admin/SeoSettingController.php",
+                "member": "App\\Http\\Resources\\Seo\\SeoSettingResource::collection",
+                "lines": [
+                    1,
+                    36
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on Illuminate\\Http\\JsonResponse, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Http/Controllers/Admin/SeoSettingController.php",
+                "member": "Illuminate\\Http\\JsonResponse",
+                "lines": [
+                    1,
+                    36
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on Illuminate\\Http\\JsonResponse, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Http/Controllers/Admin/TrackingSettingController.php",
+                "member": "Illuminate\\Http\\JsonResponse",
+                "lines": [
+                    1,
+                    26
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on Illuminate\\Http\\JsonResponse, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Http/Controllers/Public/SeoController.php",
+                "member": "Illuminate\\Http\\JsonResponse",
+                "lines": [
+                    1,
+                    46
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on Illuminate\\Http\\Request, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Http/Controllers/Public/SeoController.php",
+                "member": "Illuminate\\Http\\Request",
+                "lines": [
+                    1,
+                    46
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on Illuminate\\Http\\Request, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Http/Resources/Seo/SeoSettingResource.php",
+                "member": "Illuminate\\Http\\Request",
+                "lines": [
+                    1,
+                    30
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on Illuminate\\Http\\Request, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Http/Resources/Seo/TrackingSettingResource.php",
+                "member": "Illuminate\\Http\\Request",
+                "lines": [
+                    1,
+                    21
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\User::where, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/User.php",
+                "member": "casts",
+                "lines": [
+                    40,
+                    51
+                ]
+            },
+            "payload": "    /**\n     * Get the attributes that should be cast.\n     *\n     * @return array<string, string>\n     */\n    protected function casts(): array\n    {\n        return [\n            'email_verified_at' => 'datetime',\n            'password' => 'hashed',\n        ];\n    }",
+            "tokens": 67
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\User::where, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/User.php",
+                "member": "fillable",
+                "lines": [
+                    18,
+                    28
+                ]
+            },
+            "payload": "    /**\n     * The attributes that are mass assignable.\n     *\n     * @var list<string>\n     */\n    protected $fillable = [\n        'name',\n        'email',\n        'password',\n        'role',\n    ];",
+            "tokens": 50
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\User::where, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/User.php",
+                "member": "hidden",
+                "lines": [
+                    30,
+                    38
+                ]
+            },
+            "payload": "    /**\n     * The attributes that should be hidden for serialization.\n     *\n     * @var list<string>\n     */\n    protected $hidden = [\n        'password',\n        'remember_token',\n    ];",
+            "tokens": 48
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Models\\SeoSetting::findOrFail, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/SeoSettingRepository.php",
+                "member": "App\\Models\\SeoSetting::findOrFail",
+                "lines": [
+                    1,
+                    58
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Models\\SeoSetting::orderByRaw, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/SeoSettingRepository.php",
+                "member": "App\\Models\\SeoSetting::orderByRaw",
+                "lines": [
+                    1,
+                    58
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Models\\SeoSetting::where, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/SeoSettingRepository.php",
+                "member": "App\\Models\\SeoSetting::where",
+                "lines": [
+                    1,
+                    58
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Models\\SeoSetting::whereNull, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/SeoSettingRepository.php",
+                "member": "App\\Models\\SeoSetting::whereNull",
+                "lines": [
+                    1,
+                    58
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on Illuminate\\Database\\Eloquent\\Collection, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/SeoSettingRepository.php",
+                "member": "Illuminate\\Database\\Eloquent\\Collection",
+                "lines": [
+                    1,
+                    58
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on Illuminate\\Support\\Arr::only, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/SeoSettingRepository.php",
+                "member": "Illuminate\\Support\\Arr::only",
+                "lines": [
+                    1,
+                    58
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on Illuminate\\Support\\Facades\\DB::transaction, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/SeoSettingRepository.php",
+                "member": "Illuminate\\Support\\Facades\\DB::transaction",
+                "lines": [
+                    1,
+                    58
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Models\\TrackingSetting::create, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/TrackingSettingRepository.php",
+                "member": "App\\Models\\TrackingSetting::create",
+                "lines": [
+                    1,
+                    21
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Models\\TrackingSetting::first, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/TrackingSettingRepository.php",
+                "member": "App\\Models\\TrackingSetting::first",
+                "lines": [
+                    1,
+                    21
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on Illuminate\\Database\\Schema\\Blueprint, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "database/migrations/2026_07_26_144327_create_seo_settings_table.php",
+                "member": "Illuminate\\Database\\Schema\\Blueprint",
+                "lines": [
+                    1,
+                    44
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on Illuminate\\Support\\Facades\\Schema::create, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "database/migrations/2026_07_26_144327_create_seo_settings_table.php",
+                "member": "Illuminate\\Support\\Facades\\Schema::create",
+                "lines": [
+                    1,
+                    44
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on Illuminate\\Support\\Facades\\Schema::dropIfExists, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "database/migrations/2026_07_26_144327_create_seo_settings_table.php",
+                "member": "Illuminate\\Support\\Facades\\Schema::dropIfExists",
+                "lines": [
+                    1,
+                    44
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on Illuminate\\Database\\Schema\\Blueprint, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "database/migrations/2026_07_26_144327_create_tracking_settings_table.php",
+                "member": "Illuminate\\Database\\Schema\\Blueprint",
+                "lines": [
+                    1,
+                    35
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on Illuminate\\Support\\Facades\\Schema::create, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "database/migrations/2026_07_26_144327_create_tracking_settings_table.php",
+                "member": "Illuminate\\Support\\Facades\\Schema::create",
+                "lines": [
+                    1,
+                    35
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on Illuminate\\Support\\Facades\\Schema::dropIfExists, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "database/migrations/2026_07_26_144327_create_tracking_settings_table.php",
+                "member": "Illuminate\\Support\\Facades\\Schema::dropIfExists",
+                "lines": [
+                    1,
+                    35
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Models\\SeoSetting::updateOrCreate, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "database/seeders/SeoSettingSeeder.php",
+                "member": "App\\Models\\SeoSetting::updateOrCreate",
+                "lines": [
+                    1,
+                    34
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Models\\TrackingSetting::count, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "database/seeders/TrackingSettingSeeder.php",
+                "member": "App\\Models\\TrackingSetting::count",
+                "lines": [
+                    1,
+                    16
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Models\\TrackingSetting::create, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "database/seeders/TrackingSettingSeeder.php",
+                "member": "App\\Models\\TrackingSetting::create",
+                "lines": [
+                    1,
+                    16
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on Illuminate\\Support\\Facades\\Route::get, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "routes/admin.php",
+                "member": "Illuminate\\Support\\Facades\\Route::get",
+                "lines": [
+                    164,
+                    181
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on Illuminate\\Support\\Facades\\Route::post, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "routes/admin.php",
+                "member": "Illuminate\\Support\\Facades\\Route::post",
+                "lines": [
+                    164,
+                    181
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on Illuminate\\Support\\Facades\\Route::prefix, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "routes/admin.php",
+                "member": "Illuminate\\Support\\Facades\\Route::prefix",
+                "lines": [
+                    164,
+                    181
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on Illuminate\\Support\\Facades\\Route::put, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "routes/admin.php",
+                "member": "Illuminate\\Support\\Facades\\Route::put",
+                "lines": [
+                    164,
+                    181
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on Illuminate\\Support\\Facades\\Route::get, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "routes/api.php",
+                "member": "Illuminate\\Support\\Facades\\Route::get",
+                "lines": [
+                    91,
+                    99
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on Illuminate\\Support\\Facades\\Route::prefix, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "routes/api.php",
+                "member": "Illuminate\\Support\\Facades\\Route::prefix",
+                "lines": [
+                    91,
+                    99
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Models\\SeoSetting::where, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "tests/Feature/SeoSettingsTest.php",
+                "member": "App\\Models\\SeoSetting::where",
+                "lines": [
+                    1,
+                    135
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Models\\SeoSetting::whereNull, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "tests/Feature/SeoSettingsTest.php",
+                "member": "App\\Models\\SeoSetting::whereNull",
+                "lines": [
+                    1,
+                    135
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Models\\TrackingSetting::count, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "tests/Feature/SeoSettingsTest.php",
+                "member": "App\\Models\\TrackingSetting::count",
+                "lines": [
+                    1,
+                    135
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Models\\User::where, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "tests/Feature/SeoSettingsTest.php",
+                "member": "App\\Models\\User::where",
+                "lines": [
+                    1,
+                    135
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region performs several persistence writes; whether a transaction wraps them is decided by the caller, which the diff does not show",
+            "assertion_kind": "unverifiable_premise",
+            "provenance": {
+                "path": "app/Repositories/SeoSettingRepository.php",
+                "lines": [
+                    1,
+                    58
+                ]
+            },
+            "payload": "ASSUMPTION: this code assumes a surrounding transaction; caller not checked",
+            "tokens": 19
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region performs several persistence writes; whether a transaction wraps them is decided by the caller, which the diff does not show",
+            "assertion_kind": "unverifiable_premise",
+            "provenance": {
+                "path": "app/Repositories/TrackingSettingRepository.php",
+                "lines": [
+                    1,
+                    21
+                ]
+            },
+            "payload": "ASSUMPTION: this code assumes a surrounding transaction; caller not checked",
+            "tokens": 19
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region performs several persistence writes; whether a transaction wraps them is decided by the caller, which the diff does not show",
+            "assertion_kind": "unverifiable_premise",
+            "provenance": {
+                "path": "database/seeders/SeoSettingSeeder.php",
+                "lines": [
+                    1,
+                    34
+                ]
+            },
+            "payload": "ASSUMPTION: this code assumes a surrounding transaction; caller not checked",
+            "tokens": 19
+        }
+    ],
+    "dropped": []
+}

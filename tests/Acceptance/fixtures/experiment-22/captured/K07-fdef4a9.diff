@@ -1,0 +1,166 @@
+diff --git a/app/Actions/Branch/CreateBranchAction.php b/app/Actions/Branch/CreateBranchAction.php
+index d4ef7f6..1356d9e 100644
+--- a/app/Actions/Branch/CreateBranchAction.php
++++ b/app/Actions/Branch/CreateBranchAction.php
+@@ -25,6 +25,7 @@ public function execute(CreateBranchDTO $dto): Branch
+             'location_ar' => $dto->location_ar,
+             'location_en' => $dto->location_en,
+             'phone' => $dto->phone,
++            'whatsapp_number' => $dto->whatsapp_number,
+             'opening_time' => $dto->opening_time,
+             'closing_time' => $dto->closing_time,
+             'google_maps_url' => $dto->google_maps_url,
+diff --git a/app/Actions/Branch/UpdateBranchAction.php b/app/Actions/Branch/UpdateBranchAction.php
+index 0785e08..508e2f7 100644
+--- a/app/Actions/Branch/UpdateBranchAction.php
++++ b/app/Actions/Branch/UpdateBranchAction.php
+@@ -25,6 +25,7 @@ public function execute(int $id, UpdateBranchDTO $dto): Branch
+             'location_ar' => $dto->location_ar,
+             'location_en' => $dto->location_en,
+             'phone' => $dto->phone,
++            'whatsapp_number' => $dto->whatsapp_number,
+             'opening_time' => $dto->opening_time,
+             'closing_time' => $dto->closing_time,
+             'google_maps_url' => $dto->google_maps_url,
+diff --git a/app/DTOs/Branch/CreateBranchDTO.php b/app/DTOs/Branch/CreateBranchDTO.php
+index 6d95503..e49a7b5 100644
+--- a/app/DTOs/Branch/CreateBranchDTO.php
++++ b/app/DTOs/Branch/CreateBranchDTO.php
+@@ -14,6 +14,7 @@ public function __construct(
+         public readonly string $location_ar,
+         public readonly string $location_en,
+         public readonly string $phone,
++        public readonly ?string $whatsapp_number,
+         public readonly string $opening_time,
+         public readonly string $closing_time,
+         public readonly ?string $google_maps_url,
+@@ -31,6 +32,7 @@ public static function fromRequest(Request $request): self
+             location_ar: $request->string('location_ar')->toString(),
+             location_en: $request->string('location_en')->toString(),
+             phone: $request->string('phone')->toString(),
++            whatsapp_number: $request->filled('whatsapp_number') ? $request->string('whatsapp_number')->toString() : null,
+             opening_time: $request->string('opening_time')->toString(),
+             closing_time: $request->string('closing_time')->toString(),
+             google_maps_url: $request->filled('google_maps_url') ? $request->string('google_maps_url')->toString() : null,
+diff --git a/app/DTOs/Branch/UpdateBranchDTO.php b/app/DTOs/Branch/UpdateBranchDTO.php
+index 5393560..d33ee35 100644
+--- a/app/DTOs/Branch/UpdateBranchDTO.php
++++ b/app/DTOs/Branch/UpdateBranchDTO.php
+@@ -14,6 +14,7 @@ public function __construct(
+         public readonly ?string $location_ar,
+         public readonly ?string $location_en,
+         public readonly ?string $phone,
++        public readonly ?string $whatsapp_number,
+         public readonly ?string $opening_time,
+         public readonly ?string $closing_time,
+         public readonly ?string $google_maps_url,
+@@ -31,6 +32,7 @@ public static function fromRequest(Request $request): self
+             location_ar: $request->filled('location_ar') ? $request->string('location_ar')->toString() : null,
+             location_en: $request->filled('location_en') ? $request->string('location_en')->toString() : null,
+             phone: $request->filled('phone') ? $request->string('phone')->toString() : null,
++            whatsapp_number: $request->filled('whatsapp_number') ? $request->string('whatsapp_number')->toString() : null,
+             opening_time: $request->filled('opening_time') ? $request->string('opening_time')->toString() : null,
+             closing_time: $request->filled('closing_time') ? $request->string('closing_time')->toString() : null,
+             google_maps_url: $request->filled('google_maps_url') ? $request->string('google_maps_url')->toString() : null,
+diff --git a/app/Http/Requests/Branch/StoreBranchRequest.php b/app/Http/Requests/Branch/StoreBranchRequest.php
+index 495e65c..42397fe 100644
+--- a/app/Http/Requests/Branch/StoreBranchRequest.php
++++ b/app/Http/Requests/Branch/StoreBranchRequest.php
+@@ -20,6 +20,7 @@ public function rules(): array
+             'location_ar' => ['required', 'string', 'max:500'],
+             'location_en' => ['required', 'string', 'max:500'],
+             'phone' => ['required', 'string', 'max:20'],
++            'whatsapp_number' => ['nullable', 'string', 'max:20'],
+             'opening_time' => ['required', 'string'],
+             'closing_time' => ['required', 'string'],
+             'google_maps_url' => ['nullable', 'url'],
+diff --git a/app/Http/Requests/Branch/UpdateBranchRequest.php b/app/Http/Requests/Branch/UpdateBranchRequest.php
+index f55d8d4..6c50a97 100644
+--- a/app/Http/Requests/Branch/UpdateBranchRequest.php
++++ b/app/Http/Requests/Branch/UpdateBranchRequest.php
+@@ -20,6 +20,7 @@ public function rules(): array
+             'location_ar' => ['nullable', 'string', 'max:500'],
+             'location_en' => ['nullable', 'string', 'max:500'],
+             'phone' => ['nullable', 'string', 'max:20'],
++            'whatsapp_number' => ['nullable', 'string', 'max:20'],
+             'opening_time' => ['nullable', 'string'],
+             'closing_time' => ['nullable', 'string'],
+             'google_maps_url' => ['nullable', 'url'],
+diff --git a/app/Http/Resources/Branch/BranchResource.php b/app/Http/Resources/Branch/BranchResource.php
+index 3cd7843..c4a3f10 100644
+--- a/app/Http/Resources/Branch/BranchResource.php
++++ b/app/Http/Resources/Branch/BranchResource.php
+@@ -22,6 +22,7 @@ public function toArray(Request $request): array
+             'location_en' => $this->location_en,
+             'city' => $this->city,
+             'phone' => $this->phone,
++            'whatsapp_number' => $this->whatsapp_number ?? $this->phone,
+             'opening_time' => $this->opening_time,
+             'closing_time' => $this->closing_time,
+             'google_maps_url' => $this->google_maps_url,
+diff --git a/app/Models/Branch.php b/app/Models/Branch.php
+index 77a3f55..f152fcf 100644
+--- a/app/Models/Branch.php
++++ b/app/Models/Branch.php
+@@ -13,6 +13,7 @@ class Branch extends Model
+         'location_ar',
+         'location_en',
+         'phone',
++        'whatsapp_number',
+         'opening_time',
+         'closing_time',
+         'google_maps_url',
+diff --git a/database/migrations/2026_08_11_084346_add_whatsapp_number_to_branches_table.php b/database/migrations/2026_08_11_084346_add_whatsapp_number_to_branches_table.php
+new file mode 100644
+index 0000000..9ef53e7
+--- /dev/null
++++ b/database/migrations/2026_08_11_084346_add_whatsapp_number_to_branches_table.php
+@@ -0,0 +1,28 @@
++<?php
++
++use Illuminate\Database\Migrations\Migration;
++use Illuminate\Database\Schema\Blueprint;
++use Illuminate\Support\Facades\Schema;
++
++return new class extends Migration
++{
++    /**
++     * Run the migrations.
++     */
++    public function up(): void
++    {
++        Schema::table('branches', function (Blueprint $table) {
++            $table->string('whatsapp_number')->nullable()->after('phone');
++        });
++    }
++
++    /**
++     * Reverse the migrations.
++     */
++    public function down(): void
++    {
++        Schema::table('branches', function (Blueprint $table) {
++            $table->dropColumn('whatsapp_number');
++        });
++    }
++};
+diff --git a/database/seeders/BranchSeeder.php b/database/seeders/BranchSeeder.php
+index a64f48e..ed29d08 100644
+--- a/database/seeders/BranchSeeder.php
++++ b/database/seeders/BranchSeeder.php
+@@ -15,6 +15,7 @@ public function run(): void
+                 'city' => 'jeddah',
+                 'location_ar' => 'ردسي مول، الكورنيش الشمالي', 'location_en' => 'Red Sea Mall, North Corniche',
+                 'phone' => '0551718800',
++                'whatsapp_number' => '0551718800',
+                 'opening_time' => '12:00', 'closing_time' => '01:00',
+                 'google_maps_url' => 'https://maps.google.com/?q=Red+Sea+Mall+Jeddah',
+                 'order' => 1,
+@@ -24,6 +25,7 @@ public function run(): void
+                 'city' => 'riyadh',
+                 'location_ar' => 'مجمع اسبلاناد، شارع التخصصي', 'location_en' => 'Esplanade Mall, Al Takhassusi Street',
+                 'phone' => '0581041912',
++                'whatsapp_number' => '0581041912',
+                 'opening_time' => '12:00', 'closing_time' => '01:00',
+                 'google_maps_url' => 'https://maps.google.com/?q=Esplanade+Mall+Riyadh',
+                 'order' => 2,

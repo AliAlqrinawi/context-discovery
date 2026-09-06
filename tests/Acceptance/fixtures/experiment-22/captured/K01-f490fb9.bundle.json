@@ -1,0 +1,23 @@
+{
+    "bundle_version": 1,
+    "budget_tokens": 8000,
+    "used_tokens": 25,
+    "items": [
+        {
+            "lever": "fetched",
+            "reason": "the region calls the sibling member apiKey, whose contract the diff does not show",
+            "assertion_kind": "same_file_reference",
+            "provenance": {
+                "path": "tests/Feature/PublicApiTest.php",
+                "member": "apiKey",
+                "lines": [
+                    20,
+                    23
+                ]
+            },
+            "payload": "    private function apiKey(): string\n    {\n        return config('services.website_api_key');\n    }",
+            "tokens": 25
+        }
+    ],
+    "dropped": []
+}

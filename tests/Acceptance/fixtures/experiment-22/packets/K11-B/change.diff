@@ -1,0 +1,1107 @@
+diff --git a/app/Actions/Seo/BulkUpdateSeoSettingsAction.php b/app/Actions/Seo/BulkUpdateSeoSettingsAction.php
+new file mode 100644
+index 0000000..89206ec
+--- /dev/null
++++ b/app/Actions/Seo/BulkUpdateSeoSettingsAction.php
+@@ -0,0 +1,21 @@
++<?php
++
++namespace App\Actions\Seo;
++
++use App\DTOs\Seo\BulkUpdateSeoSettingsDTO;
++use App\Repositories\SeoSettingRepository;
++use Illuminate\Support\Facades\Cache;
++
++class BulkUpdateSeoSettingsAction
++{
++    public function __construct(
++        private readonly SeoSettingRepository $repository,
++    ) {}
++
++    public function execute(BulkUpdateSeoSettingsDTO $dto): void
++    {
++        $this->repository->bulkUpdate($dto->items);
++
++        Cache::tags(['seo_settings'])->flush();
++    }
++}
+diff --git a/app/Actions/Seo/GetEffectiveSeoAction.php b/app/Actions/Seo/GetEffectiveSeoAction.php
+new file mode 100644
+index 0000000..99c7371
+--- /dev/null
++++ b/app/Actions/Seo/GetEffectiveSeoAction.php
+@@ -0,0 +1,70 @@
++<?php
++
++namespace App\Actions\Seo;
++
++use App\Models\SeoSetting;
++use App\Repositories\SeoSettingRepository;
++use App\Repositories\TrackingSettingRepository;
++use Illuminate\Support\Facades\Cache;
++
++class GetEffectiveSeoAction
++{
++    private const BILINGUAL_FIELDS = [
++        'meta_title_ar', 'meta_title_en',
++        'meta_description_ar', 'meta_description_en',
++        'meta_keywords_ar', 'meta_keywords_en',
++        'og_title_ar', 'og_title_en',
++        'og_description_ar', 'og_description_en',
++    ];
++
++    public function __construct(
++        private readonly SeoSettingRepository $seoRepository,
++        private readonly TrackingSettingRepository $trackingRepository,
++    ) {}
++
++    public function execute(?string $page = null): array
++    {
++        $locale = app()->getLocale();
++        $key = 'seo_effective_'.($page ?? 'global')."_{$locale}";
++
++        return Cache::tags(['seo_settings'])->remember(
++            $key,
++            now()->addHour(),
++            fn () => $this->merge($page)
++        );
++    }
++
++    private function merge(?string $page): array
++    {
++        $global = $this->seoRepository->getGlobal();
++        $override = $page ? $this->seoRepository->getByPage($page) : null;
++
++        $result = ['page' => $page];
++
++        foreach (self::BILINGUAL_FIELDS as $field) {
++            $result[$field] = $this->firstNonEmpty($override, $global, $field);
++        }
++
++        $result['og_image'] = $this->firstNonEmpty($override, $global, 'og_image');
++        $result['canonical_url'] = $this->firstNonEmpty($override, $global, 'canonical_url');
++        $result['robots_noindex'] = $override?->robots_noindex ?? $global?->robots_noindex ?? false;
++
++        $tracking = $this->trackingRepository->get();
++        $result['tracking'] = [
++            'gtm_container_id' => $tracking->gtm_container_id,
++            'ga4_measurement_id' => $tracking->ga4_measurement_id,
++            'meta_pixel_id' => $tracking->meta_pixel_id,
++            'snap_pixel_id' => $tracking->snap_pixel_id,
++            'tiktok_pixel_id' => $tracking->tiktok_pixel_id,
++        ];
++
++        return $result;
++    }
++
++    private function firstNonEmpty(?SeoSetting $override, ?SeoSetting $global, string $field): ?string
++    {
++        return ($override?->{$field} !== null && $override->{$field} !== '')
++            ? $override->{$field}
++            : $global?->{$field};
++    }
++}
+diff --git a/app/Actions/Seo/UpdateSeoSettingAction.php b/app/Actions/Seo/UpdateSeoSettingAction.php
+new file mode 100644
+index 0000000..a8adfe9
+--- /dev/null
++++ b/app/Actions/Seo/UpdateSeoSettingAction.php
+@@ -0,0 +1,41 @@
++<?php
++
++namespace App\Actions\Seo;
++
++use App\DTOs\Seo\UpdateSeoSettingDTO;
++use App\Models\SeoSetting;
++use App\Repositories\SeoSettingRepository;
++use Illuminate\Support\Arr;
++use Illuminate\Support\Facades\Cache;
++
++class UpdateSeoSettingAction
++{
++    public function __construct(
++        private readonly SeoSettingRepository $repository,
++    ) {}
++
++    public function execute(int $id, UpdateSeoSettingDTO $dto): SeoSetting
++    {
++        $data = Arr::whereNotNull([
++            'meta_title_ar' => $dto->meta_title_ar,
++            'meta_title_en' => $dto->meta_title_en,
++            'meta_description_ar' => $dto->meta_description_ar,
++            'meta_description_en' => $dto->meta_description_en,
++            'meta_keywords_ar' => $dto->meta_keywords_ar,
++            'meta_keywords_en' => $dto->meta_keywords_en,
++            'og_title_ar' => $dto->og_title_ar,
++            'og_title_en' => $dto->og_title_en,
++            'og_description_ar' => $dto->og_description_ar,
++            'og_description_en' => $dto->og_description_en,
++            'og_image' => $dto->og_image,
++            'canonical_url' => $dto->canonical_url,
++            'robots_noindex' => $dto->robots_noindex,
++        ]);
++
++        $seoSetting = $this->repository->update($id, $data);
++
++        Cache::tags(['seo_settings'])->flush();
++
++        return $seoSetting;
++    }
++}
+diff --git a/app/Actions/Seo/UpdateTrackingSettingsAction.php b/app/Actions/Seo/UpdateTrackingSettingsAction.php
+new file mode 100644
+index 0000000..6e96984
+--- /dev/null
++++ b/app/Actions/Seo/UpdateTrackingSettingsAction.php
+@@ -0,0 +1,30 @@
++<?php
++
++namespace App\Actions\Seo;
++
++use App\DTOs\Seo\UpdateTrackingSettingsDTO;
++use App\Models\TrackingSetting;
++use App\Repositories\TrackingSettingRepository;
++use Illuminate\Support\Facades\Cache;
++
++class UpdateTrackingSettingsAction
++{
++    public function __construct(
++        private readonly TrackingSettingRepository $repository,
++    ) {}
++
++    public function execute(UpdateTrackingSettingsDTO $dto): TrackingSetting
++    {
++        $trackingSetting = $this->repository->update([
++            'gtm_container_id' => $dto->gtm_container_id,
++            'ga4_measurement_id' => $dto->ga4_measurement_id,
++            'meta_pixel_id' => $dto->meta_pixel_id,
++            'snap_pixel_id' => $dto->snap_pixel_id,
++            'tiktok_pixel_id' => $dto->tiktok_pixel_id,
++        ]);
++
++        Cache::tags(['seo_settings'])->flush();
++
++        return $trackingSetting;
++    }
++}
+diff --git a/app/DTOs/Seo/BulkUpdateSeoSettingsDTO.php b/app/DTOs/Seo/BulkUpdateSeoSettingsDTO.php
+new file mode 100644
+index 0000000..b6a1894
+--- /dev/null
++++ b/app/DTOs/Seo/BulkUpdateSeoSettingsDTO.php
+@@ -0,0 +1,19 @@
++<?php
++
++namespace App\DTOs\Seo;
++
++use Illuminate\Http\Request;
++
++class BulkUpdateSeoSettingsDTO
++{
++    public function __construct(
++        public readonly array $items,
++    ) {}
++
++    public static function fromRequest(Request $request): self
++    {
++        return new self(
++            items: $request->input('items', []),
++        );
++    }
++}
+diff --git a/app/DTOs/Seo/UpdateSeoSettingDTO.php b/app/DTOs/Seo/UpdateSeoSettingDTO.php
+new file mode 100644
+index 0000000..173f6c6
+--- /dev/null
++++ b/app/DTOs/Seo/UpdateSeoSettingDTO.php
+@@ -0,0 +1,43 @@
++<?php
++
++namespace App\DTOs\Seo;
++
++use Illuminate\Http\Request;
++
++class UpdateSeoSettingDTO
++{
++    public function __construct(
++        public readonly ?string $meta_title_ar,
++        public readonly ?string $meta_title_en,
++        public readonly ?string $meta_description_ar,
++        public readonly ?string $meta_description_en,
++        public readonly ?string $meta_keywords_ar,
++        public readonly ?string $meta_keywords_en,
++        public readonly ?string $og_title_ar,
++        public readonly ?string $og_title_en,
++        public readonly ?string $og_description_ar,
++        public readonly ?string $og_description_en,
++        public readonly ?string $og_image,
++        public readonly ?string $canonical_url,
++        public readonly ?bool $robots_noindex,
++    ) {}
++
++    public static function fromRequest(Request $request): self
++    {
++        return new self(
++            meta_title_ar: $request->filled('meta_title_ar') ? $request->string('meta_title_ar')->toString() : null,
++            meta_title_en: $request->filled('meta_title_en') ? $request->string('meta_title_en')->toString() : null,
++            meta_description_ar: $request->filled('meta_description_ar') ? $request->string('meta_description_ar')->toString() : null,
++            meta_description_en: $request->filled('meta_description_en') ? $request->string('meta_description_en')->toString() : null,
++            meta_keywords_ar: $request->filled('meta_keywords_ar') ? $request->string('meta_keywords_ar')->toString() : null,
++            meta_keywords_en: $request->filled('meta_keywords_en') ? $request->string('meta_keywords_en')->toString() : null,
++            og_title_ar: $request->filled('og_title_ar') ? $request->string('og_title_ar')->toString() : null,
++            og_title_en: $request->filled('og_title_en') ? $request->string('og_title_en')->toString() : null,
++            og_description_ar: $request->filled('og_description_ar') ? $request->string('og_description_ar')->toString() : null,
++            og_description_en: $request->filled('og_description_en') ? $request->string('og_description_en')->toString() : null,
++            og_image: $request->filled('og_image') ? $request->string('og_image')->toString() : null,
++            canonical_url: $request->filled('canonical_url') ? $request->string('canonical_url')->toString() : null,
++            robots_noindex: $request->has('robots_noindex') ? $request->boolean('robots_noindex') : null,
++        );
++    }
++}
+diff --git a/app/DTOs/Seo/UpdateTrackingSettingsDTO.php b/app/DTOs/Seo/UpdateTrackingSettingsDTO.php
+new file mode 100644
+index 0000000..8cd7d07
+--- /dev/null
++++ b/app/DTOs/Seo/UpdateTrackingSettingsDTO.php
+@@ -0,0 +1,30 @@
++<?php
++
++namespace App\DTOs\Seo;
++
++use Illuminate\Http\Request;
++
++class UpdateTrackingSettingsDTO
++{
++    public function __construct(
++        public readonly ?string $gtm_container_id,
++        public readonly ?string $ga4_measurement_id,
++        public readonly ?string $meta_pixel_id,
++        public readonly ?string $snap_pixel_id,
++        public readonly ?string $tiktok_pixel_id,
++    ) {}
++
++    public static function fromRequest(Request $request): self
++    {
++        // Unlike the partial-update DTOs elsewhere, this is a full-replace form
++        // (all 5 fields are always submitted together), so an empty value is
++        // taken literally as "clear this field" rather than "leave unchanged".
++        return new self(
++            gtm_container_id: $request->input('gtm_container_id'),
++            ga4_measurement_id: $request->input('ga4_measurement_id'),
++            meta_pixel_id: $request->input('meta_pixel_id'),
++            snap_pixel_id: $request->input('snap_pixel_id'),
++            tiktok_pixel_id: $request->input('tiktok_pixel_id'),
++        );
++    }
++}
+diff --git a/app/Http/Controllers/Admin/SeoSettingController.php b/app/Http/Controllers/Admin/SeoSettingController.php
+new file mode 100644
+index 0000000..4ec40c7
+--- /dev/null
++++ b/app/Http/Controllers/Admin/SeoSettingController.php
+@@ -0,0 +1,36 @@
++<?php
++
++namespace App\Http\Controllers\Admin;
++
++use App\Actions\Seo\BulkUpdateSeoSettingsAction;
++use App\Actions\Seo\UpdateSeoSettingAction;
++use App\DTOs\Seo\BulkUpdateSeoSettingsDTO;
++use App\DTOs\Seo\UpdateSeoSettingDTO;
++use App\Http\Controllers\Controller;
++use App\Http\Requests\Seo\BulkUpdateSeoSettingsRequest;
++use App\Http\Requests\Seo\UpdateSeoSettingRequest;
++use App\Http\Resources\Seo\SeoSettingResource;
++use App\Repositories\SeoSettingRepository;
++use Illuminate\Http\JsonResponse;
++
++class SeoSettingController extends Controller
++{
++    public function index(SeoSettingRepository $repository): JsonResponse
++    {
++        return $this->success(SeoSettingResource::collection($repository->getAll()), __('messages.fetched'));
++    }
++
++    public function update(UpdateSeoSettingRequest $request, int $id, UpdateSeoSettingAction $action): JsonResponse
++    {
++        $seoSetting = $action->execute($id, UpdateSeoSettingDTO::fromRequest($request));
++
++        return $this->success(new SeoSettingResource($seoSetting), __('messages.updated'));
++    }
++
++    public function bulkUpdate(BulkUpdateSeoSettingsRequest $request, BulkUpdateSeoSettingsAction $action): JsonResponse
++    {
++        $action->execute(BulkUpdateSeoSettingsDTO::fromRequest($request));
++
++        return $this->success(null, __('messages.updated'));
++    }
++}
+diff --git a/app/Http/Controllers/Admin/TrackingSettingController.php b/app/Http/Controllers/Admin/TrackingSettingController.php
+new file mode 100644
+index 0000000..e8afeb4
+--- /dev/null
++++ b/app/Http/Controllers/Admin/TrackingSettingController.php
+@@ -0,0 +1,26 @@
++<?php
++
++namespace App\Http\Controllers\Admin;
++
++use App\Actions\Seo\UpdateTrackingSettingsAction;
++use App\DTOs\Seo\UpdateTrackingSettingsDTO;
++use App\Http\Controllers\Controller;
++use App\Http\Requests\Seo\UpdateTrackingSettingsRequest;
++use App\Http\Resources\Seo\TrackingSettingResource;
++use App\Repositories\TrackingSettingRepository;
++use Illuminate\Http\JsonResponse;
++
++class TrackingSettingController extends Controller
++{
++    public function show(TrackingSettingRepository $repository): JsonResponse
++    {
++        return $this->success(new TrackingSettingResource($repository->get()), __('messages.fetched'));
++    }
++
++    public function update(UpdateTrackingSettingsRequest $request, UpdateTrackingSettingsAction $action): JsonResponse
++    {
++        $trackingSetting = $action->execute(UpdateTrackingSettingsDTO::fromRequest($request));
++
++        return $this->success(new TrackingSettingResource($trackingSetting), __('messages.updated'));
++    }
++}
+diff --git a/app/Http/Controllers/Public/SeoController.php b/app/Http/Controllers/Public/SeoController.php
+new file mode 100644
+index 0000000..74f33fc
+--- /dev/null
++++ b/app/Http/Controllers/Public/SeoController.php
+@@ -0,0 +1,46 @@
++<?php
++
++namespace App\Http\Controllers\Public;
++
++use App\Actions\Seo\GetEffectiveSeoAction;
++use App\Http\Controllers\Controller;
++use App\Http\Resources\Concerns\ResolvesLocale;
++use Illuminate\Http\JsonResponse;
++use Illuminate\Http\Request;
++
++class SeoController extends Controller
++{
++    use ResolvesLocale;
++
++    public function show(Request $request, GetEffectiveSeoAction $action): JsonResponse
++    {
++        $page = $request->filled('page') ? $request->string('page')->toString() : null;
++        $seo = $action->execute($page);
++
++        $data = [
++            'page' => $seo['page'],
++            'meta_title' => $this->resolveLocale($seo['meta_title_ar'], $seo['meta_title_en']),
++            'meta_title_ar' => $seo['meta_title_ar'],
++            'meta_title_en' => $seo['meta_title_en'],
++            'meta_description' => $this->resolveLocale($seo['meta_description_ar'], $seo['meta_description_en']),
++            'meta_description_ar' => $seo['meta_description_ar'],
++            'meta_description_en' => $seo['meta_description_en'],
++            'meta_keywords' => $this->resolveLocale($seo['meta_keywords_ar'], $seo['meta_keywords_en']),
++            'meta_keywords_ar' => $seo['meta_keywords_ar'],
++            'meta_keywords_en' => $seo['meta_keywords_en'],
++            'og_title' => $this->resolveLocale($seo['og_title_ar'], $seo['og_title_en']),
++            'og_title_ar' => $seo['og_title_ar'],
++            'og_title_en' => $seo['og_title_en'],
++            'og_description' => $this->resolveLocale($seo['og_description_ar'], $seo['og_description_en']),
++            'og_description_ar' => $seo['og_description_ar'],
++            'og_description_en' => $seo['og_description_en'],
++            'og_image' => $seo['og_image'],
++            'canonical_url' => $seo['canonical_url'],
++            'robots_noindex' => $seo['robots_noindex'],
++            'tracking' => $seo['tracking'],
++            'locale' => app()->getLocale(),
++        ];
++
++        return $this->success($data, __('messages.fetched'));
++    }
++}
+diff --git a/app/Http/Requests/Seo/BulkUpdateSeoSettingsRequest.php b/app/Http/Requests/Seo/BulkUpdateSeoSettingsRequest.php
+new file mode 100644
+index 0000000..0b768c6
+--- /dev/null
++++ b/app/Http/Requests/Seo/BulkUpdateSeoSettingsRequest.php
+@@ -0,0 +1,34 @@
++<?php
++
++namespace App\Http\Requests\Seo;
++
++use App\Http\Requests\BaseFormRequest;
++
++class BulkUpdateSeoSettingsRequest extends BaseFormRequest
++{
++    public function authorize(): bool
++    {
++        return true;
++    }
++
++    public function rules(): array
++    {
++        return [
++            'items' => ['required', 'array', 'min:1'],
++            'items.*.id' => ['required', 'integer', 'exists:seo_settings,id'],
++            'items.*.meta_title_ar' => ['sometimes', 'nullable', 'string', 'max:255'],
++            'items.*.meta_title_en' => ['sometimes', 'nullable', 'string', 'max:255'],
++            'items.*.meta_description_ar' => ['sometimes', 'nullable', 'string'],
++            'items.*.meta_description_en' => ['sometimes', 'nullable', 'string'],
++            'items.*.meta_keywords_ar' => ['sometimes', 'nullable', 'string'],
++            'items.*.meta_keywords_en' => ['sometimes', 'nullable', 'string'],
++            'items.*.og_title_ar' => ['sometimes', 'nullable', 'string', 'max:255'],
++            'items.*.og_title_en' => ['sometimes', 'nullable', 'string', 'max:255'],
++            'items.*.og_description_ar' => ['sometimes', 'nullable', 'string'],
++            'items.*.og_description_en' => ['sometimes', 'nullable', 'string'],
++            'items.*.og_image' => ['sometimes', 'nullable', 'string', 'max:500'],
++            'items.*.canonical_url' => ['sometimes', 'nullable', 'string', 'max:500'],
++            'items.*.robots_noindex' => ['sometimes', 'nullable', 'boolean'],
++        ];
++    }
++}
+diff --git a/app/Http/Requests/Seo/UpdateSeoSettingRequest.php b/app/Http/Requests/Seo/UpdateSeoSettingRequest.php
+new file mode 100644
+index 0000000..cb075c0
+--- /dev/null
++++ b/app/Http/Requests/Seo/UpdateSeoSettingRequest.php
+@@ -0,0 +1,36 @@
++<?php
++
++namespace App\Http\Requests\Seo;
++
++use App\Http\Requests\BaseFormRequest;
++
++class UpdateSeoSettingRequest extends BaseFormRequest
++{
++    public function authorize(): bool
++    {
++        return true;
++    }
++
++    public function rules(): array
++    {
++        return [
++            'meta_title_ar' => ['nullable', 'string', 'max:255'],
++            'meta_title_en' => ['nullable', 'string', 'max:255'],
++            'meta_description_ar' => ['nullable', 'string'],
++            'meta_description_en' => ['nullable', 'string'],
++            // Meta keywords are ignored by Google; stored only for other search
++            // engines / internal use.
++            'meta_keywords_ar' => ['nullable', 'string'],
++            'meta_keywords_en' => ['nullable', 'string'],
++            'og_title_ar' => ['nullable', 'string', 'max:255'],
++            'og_title_en' => ['nullable', 'string', 'max:255'],
++            'og_description_ar' => ['nullable', 'string'],
++            'og_description_en' => ['nullable', 'string'],
++            // May be a full URL or a relative storage path, so kept as a plain
++            // string rather than the stricter `url` rule.
++            'og_image' => ['nullable', 'string', 'max:500'],
++            'canonical_url' => ['nullable', 'string', 'max:500'],
++            'robots_noindex' => ['nullable', 'boolean'],
++        ];
++    }
++}
+diff --git a/app/Http/Requests/Seo/UpdateTrackingSettingsRequest.php b/app/Http/Requests/Seo/UpdateTrackingSettingsRequest.php
+new file mode 100644
+index 0000000..7c4951e
+--- /dev/null
++++ b/app/Http/Requests/Seo/UpdateTrackingSettingsRequest.php
+@@ -0,0 +1,24 @@
++<?php
++
++namespace App\Http\Requests\Seo;
++
++use App\Http\Requests\BaseFormRequest;
++
++class UpdateTrackingSettingsRequest extends BaseFormRequest
++{
++    public function authorize(): bool
++    {
++        return true;
++    }
++
++    public function rules(): array
++    {
++        return [
++            'gtm_container_id' => ['nullable', 'string', 'max:255'],
++            'ga4_measurement_id' => ['nullable', 'string', 'max:255'],
++            'meta_pixel_id' => ['nullable', 'string', 'max:255'],
++            'snap_pixel_id' => ['nullable', 'string', 'max:255'],
++            'tiktok_pixel_id' => ['nullable', 'string', 'max:255'],
++        ];
++    }
++}
+diff --git a/app/Http/Resources/Seo/SeoSettingResource.php b/app/Http/Resources/Seo/SeoSettingResource.php
+new file mode 100644
+index 0000000..6a5cde3
+--- /dev/null
++++ b/app/Http/Resources/Seo/SeoSettingResource.php
+@@ -0,0 +1,30 @@
++<?php
++
++namespace App\Http\Resources\Seo;
++
++use Illuminate\Http\Request;
++use Illuminate\Http\Resources\Json\JsonResource;
++
++class SeoSettingResource extends JsonResource
++{
++    public function toArray(Request $request): array
++    {
++        return [
++            'id' => $this->id,
++            'page' => $this->page,
++            'meta_title_ar' => $this->meta_title_ar,
++            'meta_title_en' => $this->meta_title_en,
++            'meta_description_ar' => $this->meta_description_ar,
++            'meta_description_en' => $this->meta_description_en,
++            'meta_keywords_ar' => $this->meta_keywords_ar,
++            'meta_keywords_en' => $this->meta_keywords_en,
++            'og_title_ar' => $this->og_title_ar,
++            'og_title_en' => $this->og_title_en,
++            'og_description_ar' => $this->og_description_ar,
++            'og_description_en' => $this->og_description_en,
++            'og_image' => $this->og_image,
++            'canonical_url' => $this->canonical_url,
++            'robots_noindex' => $this->robots_noindex,
++        ];
++    }
++}
+diff --git a/app/Http/Resources/Seo/TrackingSettingResource.php b/app/Http/Resources/Seo/TrackingSettingResource.php
+new file mode 100644
+index 0000000..da95e31
+--- /dev/null
++++ b/app/Http/Resources/Seo/TrackingSettingResource.php
+@@ -0,0 +1,21 @@
++<?php
++
++namespace App\Http\Resources\Seo;
++
++use Illuminate\Http\Request;
++use Illuminate\Http\Resources\Json\JsonResource;
++
++class TrackingSettingResource extends JsonResource
++{
++    public function toArray(Request $request): array
++    {
++        return [
++            'id' => $this->id,
++            'gtm_container_id' => $this->gtm_container_id,
++            'ga4_measurement_id' => $this->ga4_measurement_id,
++            'meta_pixel_id' => $this->meta_pixel_id,
++            'snap_pixel_id' => $this->snap_pixel_id,
++            'tiktok_pixel_id' => $this->tiktok_pixel_id,
++        ];
++    }
++}
+diff --git a/app/Models/SeoSetting.php b/app/Models/SeoSetting.php
+new file mode 100644
+index 0000000..ac4c849
+--- /dev/null
++++ b/app/Models/SeoSetting.php
+@@ -0,0 +1,29 @@
++<?php
++
++namespace App\Models;
++
++use Illuminate\Database\Eloquent\Model;
++
++class SeoSetting extends Model
++{
++    protected $fillable = [
++        'page',
++        'meta_title_ar',
++        'meta_title_en',
++        'meta_description_ar',
++        'meta_description_en',
++        'meta_keywords_ar',
++        'meta_keywords_en',
++        'og_title_ar',
++        'og_title_en',
++        'og_description_ar',
++        'og_description_en',
++        'og_image',
++        'canonical_url',
++        'robots_noindex',
++    ];
++
++    protected $casts = [
++        'robots_noindex' => 'boolean',
++    ];
++}
+diff --git a/app/Models/TrackingSetting.php b/app/Models/TrackingSetting.php
+new file mode 100644
+index 0000000..acf1a8a
+--- /dev/null
++++ b/app/Models/TrackingSetting.php
+@@ -0,0 +1,16 @@
++<?php
++
++namespace App\Models;
++
++use Illuminate\Database\Eloquent\Model;
++
++class TrackingSetting extends Model
++{
++    protected $fillable = [
++        'gtm_container_id',
++        'ga4_measurement_id',
++        'meta_pixel_id',
++        'snap_pixel_id',
++        'tiktok_pixel_id',
++    ];
++}
+diff --git a/app/Repositories/SeoSettingRepository.php b/app/Repositories/SeoSettingRepository.php
+new file mode 100644
+index 0000000..d965eda
+--- /dev/null
++++ b/app/Repositories/SeoSettingRepository.php
+@@ -0,0 +1,58 @@
++<?php
++
++namespace App\Repositories;
++
++use App\Models\SeoSetting;
++use Illuminate\Database\Eloquent\Collection;
++use Illuminate\Support\Arr;
++use Illuminate\Support\Facades\DB;
++
++class SeoSettingRepository
++{
++    private const FILLABLE = [
++        'meta_title_ar', 'meta_title_en',
++        'meta_description_ar', 'meta_description_en',
++        'meta_keywords_ar', 'meta_keywords_en',
++        'og_title_ar', 'og_title_en',
++        'og_description_ar', 'og_description_en',
++        'og_image', 'canonical_url', 'robots_noindex',
++    ];
++
++    public function getAll(): Collection
++    {
++        return SeoSetting::orderByRaw('page IS NULL DESC')->orderBy('page')->get();
++    }
++
++    public function getGlobal(): ?SeoSetting
++    {
++        return SeoSetting::whereNull('page')->first();
++    }
++
++    public function getByPage(string $page): ?SeoSetting
++    {
++        return SeoSetting::where('page', $page)->first();
++    }
++
++    public function getById(int $id): SeoSetting
++    {
++        return SeoSetting::findOrFail($id);
++    }
++
++    public function update(int $id, array $data): SeoSetting
++    {
++        $seoSetting = SeoSetting::findOrFail($id);
++        $seoSetting->update(Arr::only($data, self::FILLABLE));
++
++        return $seoSetting;
++    }
++
++    public function bulkUpdate(array $items): void
++    {
++        DB::transaction(function () use ($items) {
++            foreach ($items as $item) {
++                SeoSetting::findOrFail($item['id'])
++                    ->update(Arr::only($item, self::FILLABLE));
++            }
++        });
++    }
++}
+diff --git a/app/Repositories/TrackingSettingRepository.php b/app/Repositories/TrackingSettingRepository.php
+new file mode 100644
+index 0000000..d104b81
+--- /dev/null
++++ b/app/Repositories/TrackingSettingRepository.php
+@@ -0,0 +1,21 @@
++<?php
++
++namespace App\Repositories;
++
++use App\Models\TrackingSetting;
++
++class TrackingSettingRepository
++{
++    public function get(): TrackingSetting
++    {
++        return TrackingSetting::first() ?? TrackingSetting::create();
++    }
++
++    public function update(array $data): TrackingSetting
++    {
++        $trackingSetting = $this->get();
++        $trackingSetting->update($data);
++
++        return $trackingSetting;
++    }
++}
+diff --git a/database/migrations/2026_07_26_144327_create_seo_settings_table.php b/database/migrations/2026_07_26_144327_create_seo_settings_table.php
+new file mode 100644
+index 0000000..c8da50d
+--- /dev/null
++++ b/database/migrations/2026_07_26_144327_create_seo_settings_table.php
+@@ -0,0 +1,44 @@
++<?php
++
++use Illuminate\Database\Migrations\Migration;
++use Illuminate\Database\Schema\Blueprint;
++use Illuminate\Support\Facades\Schema;
++
++return new class extends Migration
++{
++    /**
++     * Run the migrations.
++     */
++    public function up(): void
++    {
++        Schema::create('seo_settings', function (Blueprint $table) {
++            $table->id();
++            // NULL page = the global default row. Non-null = a per-page override.
++            $table->string('page', 50)->nullable()->unique();
++            $table->string('meta_title_ar', 255)->nullable();
++            $table->string('meta_title_en', 255)->nullable();
++            $table->text('meta_description_ar')->nullable();
++            $table->text('meta_description_en')->nullable();
++            // Meta keywords are ignored by Google; stored only for other search
++            // engines / internal use.
++            $table->text('meta_keywords_ar')->nullable();
++            $table->text('meta_keywords_en')->nullable();
++            $table->string('og_title_ar', 255)->nullable();
++            $table->string('og_title_en', 255)->nullable();
++            $table->text('og_description_ar')->nullable();
++            $table->text('og_description_en')->nullable();
++            $table->string('og_image', 500)->nullable();
++            $table->string('canonical_url', 500)->nullable();
++            $table->boolean('robots_noindex')->default(false);
++            $table->timestamps();
++        });
++    }
++
++    /**
++     * Reverse the migrations.
++     */
++    public function down(): void
++    {
++        Schema::dropIfExists('seo_settings');
++    }
++};
+diff --git a/database/migrations/2026_07_26_144327_create_tracking_settings_table.php b/database/migrations/2026_07_26_144327_create_tracking_settings_table.php
+new file mode 100644
+index 0000000..354bb1f
+--- /dev/null
++++ b/database/migrations/2026_07_26_144327_create_tracking_settings_table.php
+@@ -0,0 +1,35 @@
++<?php
++
++use Illuminate\Database\Migrations\Migration;
++use Illuminate\Database\Schema\Blueprint;
++use Illuminate\Support\Facades\Schema;
++
++return new class extends Migration
++{
++    /**
++     * Run the migrations.
++     */
++    public function up(): void
++    {
++        Schema::create('tracking_settings', function (Blueprint $table) {
++            $table->id();
++            // Single-row table by convention (see TrackingSettingRepository) —
++            // there is only ever one global tracking configuration, so a
++            // key-value table would be needless indirection for 5 fixed fields.
++            $table->string('gtm_container_id')->nullable();
++            $table->string('ga4_measurement_id')->nullable();
++            $table->string('meta_pixel_id')->nullable();
++            $table->string('snap_pixel_id')->nullable();
++            $table->string('tiktok_pixel_id')->nullable();
++            $table->timestamps();
++        });
++    }
++
++    /**
++     * Reverse the migrations.
++     */
++    public function down(): void
++    {
++        Schema::dropIfExists('tracking_settings');
++    }
++};
+diff --git a/database/seeders/DatabaseSeeder.php b/database/seeders/DatabaseSeeder.php
+index 3e74bf0..3f00cb5 100644
+--- a/database/seeders/DatabaseSeeder.php
++++ b/database/seeders/DatabaseSeeder.php
+@@ -28,6 +28,8 @@ public function run(): void
+             PageContentSeeder::class,
+             SettingSeeder::class,
+             MediaItemSeeder::class,
++            SeoSettingSeeder::class,
++            TrackingSettingSeeder::class,
+         ]);
+     }
+ }
+diff --git a/database/seeders/SeoSettingSeeder.php b/database/seeders/SeoSettingSeeder.php
+new file mode 100644
+index 0000000..c1b3105
+--- /dev/null
++++ b/database/seeders/SeoSettingSeeder.php
+@@ -0,0 +1,34 @@
++<?php
++
++namespace Database\Seeders;
++
++use App\Models\SeoSetting;
++use Illuminate\Database\Seeder;
++
++class SeoSettingSeeder extends Seeder
++{
++    private const PAGES = ['home', 'story', 'menu', 'order', 'catering', 'branches', 'privacy', 'terms'];
++
++    public function run(): void
++    {
++        SeoSetting::updateOrCreate(['page' => null], [
++            'meta_title_ar' => 'أبو السيد | مطعم مصري أصيل',
++            'meta_title_en' => 'Abou El Sid | Authentic Egyptian Restaurant',
++            'meta_description_ar' => 'أبو السيد — مطعم مصري أصيل في جدة والرياض، يقدّم أشهى الأطباق المصرية بنكهة البيت وحفاوة الضيافة الخليجية.',
++            'meta_description_en' => 'Abou El Sid — an authentic Egyptian restaurant in Jeddah and Riyadh, serving beloved Egyptian dishes with the warmth of home and Gulf hospitality.',
++            'meta_keywords_ar' => 'مطعم مصري, أبو السيد, مطاعم جدة, مطاعم الرياض, أكل مصري',
++            'meta_keywords_en' => 'Egyptian restaurant, Abou El Sid, Jeddah restaurants, Riyadh restaurants, Egyptian food',
++            'og_title_ar' => 'أبو السيد | مطعم مصري أصيل',
++            'og_title_en' => 'Abou El Sid | Authentic Egyptian Restaurant',
++            'og_description_ar' => 'أبو السيد — مطعم مصري أصيل في جدة والرياض، يقدّم أشهى الأطباق المصرية بنكهة البيت وحفاوة الضيافة الخليجية.',
++            'og_description_en' => 'Abou El Sid — an authentic Egyptian restaurant in Jeddah and Riyadh, serving beloved Egyptian dishes with the warmth of home and Gulf hospitality.',
++            'og_image' => null,
++            'canonical_url' => null,
++            'robots_noindex' => false,
++        ]);
++
++        foreach (self::PAGES as $page) {
++            SeoSetting::updateOrCreate(['page' => $page], ['page' => $page]);
++        }
++    }
++}
+diff --git a/database/seeders/TrackingSettingSeeder.php b/database/seeders/TrackingSettingSeeder.php
+new file mode 100644
+index 0000000..4ae6330
+--- /dev/null
++++ b/database/seeders/TrackingSettingSeeder.php
+@@ -0,0 +1,16 @@
++<?php
++
++namespace Database\Seeders;
++
++use App\Models\TrackingSetting;
++use Illuminate\Database\Seeder;
++
++class TrackingSettingSeeder extends Seeder
++{
++    public function run(): void
++    {
++        if (TrackingSetting::count() === 0) {
++            TrackingSetting::create();
++        }
++    }
++}
+diff --git a/routes/admin.php b/routes/admin.php
+index e2f8f8a..d98221f 100644
+--- a/routes/admin.php
++++ b/routes/admin.php
+@@ -13,7 +13,9 @@
+ use App\Http\Controllers\Admin\PageContentController;
+ use App\Http\Controllers\Admin\PersonalityController;
+ use App\Http\Controllers\Admin\ProfileController;
++use App\Http\Controllers\Admin\SeoSettingController;
+ use App\Http\Controllers\Admin\SettingController;
++use App\Http\Controllers\Admin\TrackingSettingController;
+ use App\Http\Controllers\Admin\TestimonialController;
+ use App\Http\Controllers\Admin\TimelineController;
+ use App\Http\Controllers\Admin\UserController;
+@@ -162,5 +164,18 @@
+             Route::put('/{id}',    'update');
+             Route::delete('/{id}', 'destroy');
+         });
++
++        // ── SEO ───────────────────────────────────────────
++        Route::prefix('seo')->controller(SeoSettingController::class)->group(function () {
++            Route::get('/',       'index');
++            Route::put('/{id}',   'update');
++            Route::post('/bulk',  'bulkUpdate');
++        });
++
++        // ── Tracking ──────────────────────────────────────
++        Route::prefix('tracking')->controller(TrackingSettingController::class)->group(function () {
++            Route::get('/', 'show');
++            Route::put('/', 'update');
++        });
+     });
+ });
+diff --git a/routes/api.php b/routes/api.php
+index 00b6d86..f049fd6 100644
+--- a/routes/api.php
++++ b/routes/api.php
+@@ -7,6 +7,7 @@
+ use App\Http\Controllers\Public\MediaItemController;
+ use App\Http\Controllers\Public\PageContentController;
+ use App\Http\Controllers\Public\PersonalityController;
++use App\Http\Controllers\Public\SeoController;
+ use App\Http\Controllers\Public\SettingController;
+ use App\Http\Controllers\Public\TestimonialController;
+ use App\Http\Controllers\Public\TimelineController;
+@@ -90,4 +91,9 @@
+     Route::prefix('delivery-apps')->controller(DeliveryAppController::class)->group(function () {
+         Route::get('/', 'index');
+     });
++
++    // ── SEO ────────────────────────────────────────────────
++    Route::prefix('seo')->controller(SeoController::class)->group(function () {
++        Route::get('/', 'show');
++    });
+ });
+diff --git a/tests/Feature/SeoSettingsTest.php b/tests/Feature/SeoSettingsTest.php
+new file mode 100644
+index 0000000..5027f67
+--- /dev/null
++++ b/tests/Feature/SeoSettingsTest.php
+@@ -0,0 +1,135 @@
++<?php
++
++namespace Tests\Feature;
++
++use App\Models\SeoSetting;
++use App\Models\TrackingSetting;
++use App\Models\User;
++use Illuminate\Foundation\Testing\RefreshDatabase;
++use Tests\TestCase;
++
++class SeoSettingsTest extends TestCase
++{
++    use RefreshDatabase;
++
++    protected function setUp(): void
++    {
++        parent::setUp();
++
++        $this->seed();
++    }
++
++    private function apiKey(): string
++    {
++        return config('services.website_api_key');
++    }
++
++    private function token(): string
++    {
++        $user = User::where('email', 'admin@abouelsid.com')->first();
++
++        return $user->createToken('test-token')->plainTextToken;
++    }
++
++    public function test_public_seo_for_page_with_no_override_inherits_global(): void
++    {
++        $global = SeoSetting::whereNull('page')->first();
++
++        $response = $this->getJson('/api/v1/seo?page=home', ['X-API-Key' => $this->apiKey()]);
++
++        $response->assertStatus(200)
++            ->assertJsonPath('data.page', 'home')
++            ->assertJsonPath('data.meta_title_ar', $global->meta_title_ar)
++            ->assertJsonPath('data.meta_title_en', $global->meta_title_en)
++            ->assertJsonPath('data.robots_noindex', false)
++            ->assertJsonStructure(['data' => ['tracking' => [
++                'gtm_container_id', 'ga4_measurement_id', 'meta_pixel_id', 'snap_pixel_id', 'tiktok_pixel_id',
++            ]]]);
++    }
++
++    public function test_public_seo_without_page_param_returns_global_only(): void
++    {
++        $global = SeoSetting::whereNull('page')->first();
++
++        $response = $this->getJson('/api/v1/seo', ['X-API-Key' => $this->apiKey()]);
++
++        $response->assertStatus(200)
++            ->assertJsonPath('data.page', null)
++            ->assertJsonPath('data.meta_title_ar', $global->meta_title_ar);
++    }
++
++    public function test_admin_seo_index_without_token_returns_401(): void
++    {
++        $response = $this->getJson('/api/v1/admin/seo');
++
++        $response->assertStatus(401)
++            ->assertJson(['success' => false]);
++    }
++
++    public function test_admin_seo_index_returns_nine_rows(): void
++    {
++        $response = $this->getJson('/api/v1/admin/seo', ['Authorization' => "Bearer {$this->token()}"]);
++
++        $response->assertStatus(200)
++            ->assertJsonCount(9, 'data');
++    }
++
++    public function test_admin_update_page_override_reflects_in_public_merge(): void
++    {
++        $homeRow = SeoSetting::where('page', 'home')->first();
++        $global = SeoSetting::whereNull('page')->first();
++
++        $response = $this->putJson("/api/v1/admin/seo/{$homeRow->id}", [
++            'meta_title_ar' => 'الرئيسية المخصصة',
++            'robots_noindex' => true,
++        ], ['Authorization' => "Bearer {$this->token()}"]);
++
++        $response->assertStatus(200)
++            ->assertJson(['success' => true]);
++
++        $public = $this->getJson('/api/v1/seo?page=home', ['X-API-Key' => $this->apiKey()]);
++
++        $public->assertStatus(200)
++            ->assertJsonPath('data.meta_title_ar', 'الرئيسية المخصصة')
++            ->assertJsonPath('data.robots_noindex', true)
++            // Untouched fields still fall back to the global row.
++            ->assertJsonPath('data.meta_description_ar', $global->meta_description_ar);
++    }
++
++    public function test_admin_bulk_update_seo_settings(): void
++    {
++        $menuRow = SeoSetting::where('page', 'menu')->first();
++        $catRow = SeoSetting::where('page', 'catering')->first();
++
++        $response = $this->postJson('/api/v1/admin/seo/bulk', [
++            'items' => [
++                ['id' => $menuRow->id, 'meta_title_ar' => 'القائمة'],
++                ['id' => $catRow->id, 'meta_title_ar' => 'الكاترينج'],
++            ],
++        ], ['Authorization' => "Bearer {$this->token()}"]);
++
++        $response->assertStatus(200)
++            ->assertJson(['success' => true]);
++
++        $this->assertSame('القائمة', $menuRow->fresh()->meta_title_ar);
++        $this->assertSame('الكاترينج', $catRow->fresh()->meta_title_ar);
++    }
++
++    public function test_admin_tracking_show_and_update(): void
++    {
++        $show = $this->getJson('/api/v1/admin/tracking', ['Authorization' => "Bearer {$this->token()}"]);
++        $show->assertStatus(200)->assertJsonPath('data.gtm_container_id', null);
++
++        $update = $this->putJson('/api/v1/admin/tracking', [
++            'gtm_container_id' => 'GTM-TEST123',
++        ], ['Authorization' => "Bearer {$this->token()}"]);
++
++        $update->assertStatus(200)
++            ->assertJsonPath('data.gtm_container_id', 'GTM-TEST123');
++
++        $this->assertSame(1, TrackingSetting::count());
++
++        $public = $this->getJson('/api/v1/seo?page=story', ['X-API-Key' => $this->apiKey()]);
++        $public->assertJsonPath('data.tracking.gtm_container_id', 'GTM-TEST123');
++    }
++}

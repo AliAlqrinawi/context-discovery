@@ -1,0 +1,57 @@
+diff --git a/database/seeders/PageContentSeeder.php b/database/seeders/PageContentSeeder.php
+index 0b20d4b..6ea55a5 100644
+--- a/database/seeders/PageContentSeeder.php
++++ b/database/seeders/PageContentSeeder.php
+@@ -66,6 +66,7 @@ public function run(): void
+             ['page' => 'menu', 'section' => 'hero', 'key' => 'title', 'value_ar' => 'أطباق توارثناها جيلاً بعد جيل', 'value_en' => 'Dishes Passed Down Through Generations'],
+             ['page' => 'menu', 'section' => 'hero', 'key' => 'subtitle', 'value_ar' => 'Most-loved dishes from old Cairo', 'value_en' => 'Most-loved dishes from old Cairo'],
+             ['page' => 'menu', 'section' => 'hero', 'key' => 'pdf_cta', 'value_ar' => 'حمّل القائمة PDF', 'value_en' => 'Download Menu PDF'],
++            ['page' => 'menu', 'section' => 'signature_banner', 'key' => 'badge', 'type' => 'text', 'value_ar' => 'طبق الملوك', 'value_en' => 'Dish of Kings'],
+             ['page' => 'menu', 'section' => 'cta', 'key' => 'title', 'value_ar' => 'جربنا في فروعنا — أو وصّلنا لباب بيتك', 'value_en' => 'Try Us at Our Branches — or We Deliver to Your Door'],
+             ['page' => 'menu', 'section' => 'cta', 'key' => 'subtitle', 'value_ar' => 'أبواب أبو السيد مفتوحة من 12 ظهراً حتى 1 صباحاً.', 'value_en' => 'Abou El Sid doors are open from 12 noon until 1 AM.'],
+             ['page' => 'menu', 'section' => 'cta', 'key' => 'cta_primary', 'value_ar' => 'اطلب أونلاين', 'value_en' => 'Order Online'],
+diff --git a/tests/Feature/PublicApiTest.php b/tests/Feature/PublicApiTest.php
+index 054fea5..fac49ee 100644
+--- a/tests/Feature/PublicApiTest.php
++++ b/tests/Feature/PublicApiTest.php
+@@ -53,6 +53,24 @@ public function test_get_dishes_filtered_by_category_returns_only_that_categorys
+         }
+     }
+ 
++    public function test_get_dishes_filtered_by_signature_returns_only_signature_dishes_ordered(): void
++    {
++        $expectedCount = \App\Models\Dish::where('is_signature', true)->count();
++
++        $response = $this->getJson('/api/v1/dishes?signature=true', ['X-API-Key' => $this->apiKey()]);
++
++        $response->assertStatus(200)
++            ->assertJsonPath('data.meta.total', $expectedCount);
++
++        $orders = [];
++        foreach ($response->json('data.items') as $dish) {
++            $this->assertTrue($dish['is_signature']);
++            $orders[] = $dish['order'];
++        }
++
++        $this->assertSame($orders, collect($orders)->sort()->values()->all());
++    }
++
+     public function test_get_branches_returns_two_branches_with_both_languages(): void
+     {
+         $response = $this->getJson('/api/v1/branches', ['X-API-Key' => $this->apiKey()]);
+@@ -89,6 +107,15 @@ public function test_get_branches_without_show_in_footer_param_returns_all(): vo
+             ->assertJsonCount(2, 'data');
+     }
+ 
++    public function test_get_page_contents_for_menu_signature_banner_returns_badge(): void
++    {
++        $response = $this->getJson('/api/v1/page-contents?page=menu&section=signature_banner', ['X-API-Key' => $this->apiKey()]);
++
++        $response->assertStatus(200)
++            ->assertJsonPath('data.signature_banner.badge.value_ar', 'طبق الملوك')
++            ->assertJsonPath('data.signature_banner.badge.value_en', 'Dish of Kings');
++    }
++
+     public function test_get_page_contents_for_home_hero_returns_hero_content(): void
+     {
+         $response = $this->getJson('/api/v1/page-contents?page=home&section=hero', ['X-API-Key' => $this->apiKey()]);

@@ -1,0 +1,149 @@
+diff --git a/app/Actions/Dish/UpdateDishAction.php b/app/Actions/Dish/UpdateDishAction.php
+index 243caba..f57823c 100644
+--- a/app/Actions/Dish/UpdateDishAction.php
++++ b/app/Actions/Dish/UpdateDishAction.php
+@@ -22,8 +22,6 @@ public function execute(int $id, UpdateDishDTO $dto): Dish
+         $data = Arr::whereNotNull([
+             'name_ar' => $dto->name_ar,
+             'name_en' => $dto->name_en,
+-            'description_ar' => $dto->description_ar,
+-            'description_en' => $dto->description_en,
+             'price' => $dto->price,
+             'category_id' => $dto->category_id,
+             'is_featured' => $dto->is_featured,
+@@ -31,6 +29,15 @@ public function execute(int $id, UpdateDishDTO $dto): Dish
+             'order' => $dto->order,
+         ]);
+ 
++        // Descriptions are nullable, so a null here is ambiguous: it means either
++        // "sent empty" (clear it) or "omitted" (leave it alone). Only the keys the
++        // request actually carried get written.
++        foreach (UpdateDishDTO::CLEARABLE as $key) {
++            if ($dto->wasProvided($key)) {
++                $data[$key] = $dto->{$key};
++            }
++        }
++
+         if ($dto->image) {
+             $existing = $this->repository->getById($id);
+ 
+diff --git a/app/DTOs/Dish/UpdateDishDTO.php b/app/DTOs/Dish/UpdateDishDTO.php
+index a75b717..85ff87e 100644
+--- a/app/DTOs/Dish/UpdateDishDTO.php
++++ b/app/DTOs/Dish/UpdateDishDTO.php
+@@ -18,8 +18,13 @@ public function __construct(
+         public readonly ?bool $is_signature,
+         public readonly ?UploadedFile $image,
+         public readonly ?int $order,
++        /** @var list<string> Nullable keys the request actually sent, so they can be cleared. */
++        public readonly array $providedKeys = [],
+     ) {}
+ 
++    /** Nullable fields listed here can be cleared by sending them empty. */
++    public const CLEARABLE = ['description_ar', 'description_en'];
++
+     public static function fromRequest(Request $request): self
+     {
+         return new self(
+@@ -33,6 +38,15 @@ public static function fromRequest(Request $request): self
+             is_signature: $request->has('is_signature') ? $request->boolean('is_signature') : null,
+             image: $request->file('image'),
+             order: $request->filled('order') ? (int) $request->input('order') : null,
++            providedKeys: array_values(array_filter(
++                self::CLEARABLE,
++                fn (string $key) => $request->has($key),
++            )),
+         );
+     }
++
++    public function wasProvided(string $key): bool
++    {
++        return in_array($key, $this->providedKeys, true);
++    }
+ }
+diff --git a/tests/Feature/Actions/UpdateDishActionTest.php b/tests/Feature/Actions/UpdateDishActionTest.php
+new file mode 100644
+index 0000000..c5e28b3
+--- /dev/null
++++ b/tests/Feature/Actions/UpdateDishActionTest.php
+@@ -0,0 +1,80 @@
++<?php
++
++namespace Tests\Feature\Actions;
++
++use App\Actions\Dish\UpdateDishAction;
++use App\DTOs\Dish\UpdateDishDTO;
++use App\Models\Category;
++use App\Models\Dish;
++use Illuminate\Foundation\Testing\RefreshDatabase;
++use Illuminate\Http\Request;
++use Tests\TestCase;
++
++class UpdateDishActionTest extends TestCase
++{
++    use RefreshDatabase;
++
++    private function dish(): Dish
++    {
++        $category = Category::create([
++            'name_ar' => 'أطباق رئيسية', 'name_en' => 'Mains',
++            'slug' => 'mains', 'order' => 1,
++        ]);
++
++        return Dish::create([
++            'category_id' => $category->id,
++            'name_ar' => 'ملوخية بالأرانب', 'name_en' => 'Molokhia with Rabbit',
++            'description_ar' => 'وصف عربي', 'description_en' => 'English description',
++            'price' => 145, 'order' => 1,
++        ]);
++    }
++
++    private function update(Dish $dish, array $payload): Dish
++    {
++        return app(UpdateDishAction::class)->execute(
++            $dish->id,
++            UpdateDishDTO::fromRequest(Request::create('/x', 'POST', $payload)),
++        );
++    }
++
++    public function test_empty_description_clears_the_stored_value(): void
++    {
++        $dish = $this->update($this->dish(), [
++            'description_ar' => '',
++            'description_en' => '',
++        ]);
++
++        $this->assertNull($dish->description_ar);
++        $this->assertNull($dish->description_en);
++    }
++
++    public function test_omitted_description_leaves_the_stored_value_untouched(): void
++    {
++        $dish = $this->update($this->dish(), ['name_ar' => 'اسم جديد']);
++
++        $this->assertSame('اسم جديد', $dish->name_ar);
++        $this->assertSame('وصف عربي', $dish->description_ar);
++        $this->assertSame('English description', $dish->description_en);
++    }
++
++    public function test_each_description_clears_independently(): void
++    {
++        $dish = $this->update($this->dish(), ['description_ar' => '']);
++
++        $this->assertNull($dish->description_ar);
++        $this->assertSame('English description', $dish->description_en);
++    }
++
++    public function test_partial_update_does_not_reset_other_fields(): void
++    {
++        $original = $this->dish();
++        $original->update(['is_featured' => true, 'is_signature' => true, 'order' => 7]);
++
++        $dish = $this->update($original, ['description_ar' => '']);
++
++        $this->assertTrue($dish->is_featured);
++        $this->assertTrue($dish->is_signature);
++        $this->assertSame(7, $dish->order);
++        $this->assertSame('145.00', $dish->price);
++    }
++}

@@ -1,0 +1,3 @@
+new file: database/migrations/2026_08_11_084346_add_whatsapp_number_to_branches_table.php — own-file context is in the diff, not fetched
+missing PSR-4 entry: Illuminate\Support\Facades\Schema::table named in database/migrations/2026_08_11_084346_add_whatsapp_number_to_branches_table.php
+missing PSR-4 entry: Illuminate\Database\Schema\Blueprint named in database/migrations/2026_08_11_084346_add_whatsapp_number_to_branches_table.php

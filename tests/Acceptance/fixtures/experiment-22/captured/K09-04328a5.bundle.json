@@ -1,0 +1,610 @@
+{
+    "bundle_version": 1,
+    "budget_tokens": 8000,
+    "used_tokens": 2115,
+    "items": [
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\DTOs\\Catering\\CreatePackageDTO, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/DTOs/Catering/CreatePackageDTO.php",
+                "member": "__construct",
+                "lines": [
+                    10,
+                    21
+                ]
+            },
+            "payload": "    public function __construct(\n        public readonly string $name_ar,\n        public readonly string $name_en,\n        public readonly string $description_ar,\n        public readonly string $description_en,\n        public readonly ?string $tag_en,\n        public readonly ?float $price_starting_from,\n        public readonly bool $is_featured,\n        public readonly ?UploadedFile $image,\n        public readonly int $order,\n        public readonly array $features,\n    ) {}",
+            "tokens": 120
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\DTOs\\Catering\\CreatePackageDTO, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/DTOs/Catering/CreatePackageDTO.php",
+                "member": "fromRequest",
+                "lines": [
+                    23,
+                    37
+                ]
+            },
+            "payload": "    public static function fromRequest(Request $request): self\n    {\n        return new self(\n            name_ar: $request->string('name_ar')->toString(),\n            name_en: $request->string('name_en')->toString(),\n            description_ar: $request->string('description_ar')->toString(),\n            description_en: $request->string('description_en')->toString(),\n            tag_en: $request->filled('tag_en') ? $request->string('tag_en')->toString() : null,\n            price_starting_from: $request->filled('price_starting_from') ? (float) $request->input('price_starting_from') : null,\n            is_featured: $request->boolean('is_featured'),\n            image: $request->file('image'),\n            order: (int) $request->input('order', 0),\n            features: $request->input('features', []),\n        );\n    }",
+            "tokens": 206
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\DTOs\\Dish\\UpdateDishDTO, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/DTOs/Dish/UpdateDishDTO.php",
+                "member": "__construct",
+                "lines": [
+                    10,
+                    21
+                ]
+            },
+            "payload": "    public function __construct(\n        public readonly ?string $name_ar,\n        public readonly ?string $name_en,\n        public readonly ?string $description_ar,\n        public readonly ?string $description_en,\n        public readonly ?float $price,\n        public readonly ?int $category_id,\n        public readonly ?bool $is_featured,\n        public readonly ?bool $is_signature,\n        public readonly ?UploadedFile $image,\n        public readonly ?int $order,\n    ) {}",
+            "tokens": 120
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\DTOs\\Dish\\UpdateDishDTO, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/DTOs/Dish/UpdateDishDTO.php",
+                "member": "fromRequest",
+                "lines": [
+                    23,
+                    37
+                ]
+            },
+            "payload": "    public static function fromRequest(Request $request): self\n    {\n        return new self(\n            name_ar: $request->filled('name_ar') ? $request->string('name_ar')->toString() : null,\n            name_en: $request->filled('name_en') ? $request->string('name_en')->toString() : null,\n            description_ar: $request->filled('description_ar') ? $request->string('description_ar')->toString() : null,\n            description_en: $request->filled('description_en') ? $request->string('description_en')->toString() : null,\n            price: $request->filled('price') ? (float) $request->input('price') : null,\n            category_id: $request->filled('category_id') ? (int) $request->input('category_id') : null,\n            is_featured: $request->has('is_featured') ? $request->boolean('is_featured') : null,\n            is_signature: $request->has('is_signature') ? $request->boolean('is_signature') : null,\n            image: $request->file('image'),\n            order: $request->filled('order') ? (int) $request->input('order') : null,\n        );\n    }",
+            "tokens": 267
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\DTOs\\MediaItem\\UploadMediaDTO, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/DTOs/MediaItem/UploadMediaDTO.php",
+                "member": "__construct",
+                "lines": [
+                    10,
+                    17
+                ]
+            },
+            "payload": "    public function __construct(\n        public readonly string $page,\n        public readonly string $section,\n        public readonly string $key,\n        public readonly UploadedFile $image,\n        public readonly string $alt_ar,\n        public readonly string $alt_en,\n    ) {}",
+            "tokens": 71
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\DTOs\\MediaItem\\UploadMediaDTO, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/DTOs/MediaItem/UploadMediaDTO.php",
+                "member": "fromRequest",
+                "lines": [
+                    19,
+                    29
+                ]
+            },
+            "payload": "    public static function fromRequest(Request $request): self\n    {\n        return new self(\n            page: $request->string('page')->toString(),\n            section: $request->string('section')->toString(),\n            key: $request->string('key')->toString(),\n            image: $request->file('image'),\n            alt_ar: $request->string('alt_ar')->toString(),\n            alt_en: $request->string('alt_en')->toString(),\n        );\n    }",
+            "tokens": 112
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Dish, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Dish.php",
+                "member": "casts",
+                "lines": [
+                    24,
+                    28
+                ]
+            },
+            "payload": "    protected $casts = [\n        'price' => 'decimal:2',\n        'is_featured' => 'boolean',\n        'is_signature' => 'boolean',\n    ];",
+            "tokens": 34
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Dish, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Dish.php",
+                "member": "category",
+                "lines": [
+                    30,
+                    33
+                ]
+            },
+            "payload": "    public function category(): BelongsTo\n    {\n        return $this->belongsTo(Category::class);\n    }",
+            "tokens": 26
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Dish, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Dish.php",
+                "member": "fillable",
+                "lines": [
+                    10,
+                    22
+                ]
+            },
+            "payload": "    protected $fillable = [\n        'category_id',\n        'name_ar',\n        'name_en',\n        'description_ar',\n        'description_en',\n        'price',\n        'is_featured',\n        'is_signature',\n        'image_path',\n        'image_url',\n        'order',\n    ];",
+            "tokens": 68
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\BranchRepository::create, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/BranchRepository.php",
+                "member": "create",
+                "lines": [
+                    26,
+                    29
+                ]
+            },
+            "payload": "    public function create(array $data): Branch\n    {\n        return Branch::create($data);\n    }",
+            "tokens": 25
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\BranchRepository::update, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/BranchRepository.php",
+                "member": "update",
+                "lines": [
+                    31,
+                    37
+                ]
+            },
+            "payload": "    public function update(int $id, array $data): Branch\n    {\n        $branch = Branch::findOrFail($id);\n        $branch->update($data);\n\n        return $branch;\n    }",
+            "tokens": 42
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\CateringPackageRepository::create, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/CateringPackageRepository.php",
+                "member": "create",
+                "lines": [
+                    24,
+                    32
+                ]
+            },
+            "payload": "    public function create(array $data, array $features = []): CateringPackage\n    {\n        return DB::transaction(function () use ($data, $features) {\n            $package = CateringPackage::create($data);\n            $package->features()->createMany($features);\n\n            return $package->fresh('features');\n        });\n    }",
+            "tokens": 83
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\CateringPackageRepository::update, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/CateringPackageRepository.php",
+                "member": "update",
+                "lines": [
+                    34,
+                    45
+                ]
+            },
+            "payload": "    public function update(int $id, array $data, array $features = []): CateringPackage\n    {\n        return DB::transaction(function () use ($id, $data, $features) {\n            $package = CateringPackage::findOrFail($id);\n            $package->update($data);\n\n            $package->features()->delete();\n            $package->features()->createMany($features);\n\n            return $package->fresh('features');\n        });\n    }",
+            "tokens": 108
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\DeliveryAppRepository::create, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/DeliveryAppRepository.php",
+                "member": "create",
+                "lines": [
+                    26,
+                    29
+                ]
+            },
+            "payload": "    public function create(array $data): DeliveryApp\n    {\n        return DeliveryApp::create($data);\n    }",
+            "tokens": 27
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\DeliveryAppRepository::update, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/DeliveryAppRepository.php",
+                "member": "update",
+                "lines": [
+                    31,
+                    37
+                ]
+            },
+            "payload": "    public function update(int $id, array $data): DeliveryApp\n    {\n        $deliveryApp = DeliveryApp::findOrFail($id);\n        $deliveryApp->update($data);\n\n        return $deliveryApp;\n    }",
+            "tokens": 49
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\DishRepository::create, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/DishRepository.php",
+                "member": "create",
+                "lines": [
+                    34,
+                    37
+                ]
+            },
+            "payload": "    public function create(array $data): Dish\n    {\n        return Dish::create($data);\n    }",
+            "tokens": 24
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\DishRepository::update, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/DishRepository.php",
+                "member": "update",
+                "lines": [
+                    39,
+                    45
+                ]
+            },
+            "payload": "    public function update(int $id, array $data): Dish\n    {\n        $dish = Dish::findOrFail($id);\n        $dish->update($data);\n\n        return $dish;\n    }",
+            "tokens": 40
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\MediaItemRepository::create, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/MediaItemRepository.php",
+                "member": "create",
+                "lines": [
+                    31,
+                    34
+                ]
+            },
+            "payload": "    public function create(array $data): MediaItem\n    {\n        return MediaItem::create($data);\n    }",
+            "tokens": 26
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\MediaItemRepository::update, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/MediaItemRepository.php",
+                "member": "update",
+                "lines": [
+                    36,
+                    42
+                ]
+            },
+            "payload": "    public function update(int $id, array $data): MediaItem\n    {\n        $mediaItem = MediaItem::findOrFail($id);\n        $mediaItem->update($data);\n\n        return $mediaItem;\n    }",
+            "tokens": 46
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\PersonalityRepository::create, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/PersonalityRepository.php",
+                "member": "create",
+                "lines": [
+                    26,
+                    29
+                ]
+            },
+            "payload": "    public function create(array $data): Personality\n    {\n        return Personality::create($data);\n    }",
+            "tokens": 27
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\PersonalityRepository::update, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/PersonalityRepository.php",
+                "member": "update",
+                "lines": [
+                    31,
+                    37
+                ]
+            },
+            "payload": "    public function update(int $id, array $data): Personality\n    {\n        $personality = Personality::findOrFail($id);\n        $personality->update($data);\n\n        return $personality;\n    }",
+            "tokens": 49
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\SampleMenuRepository::create, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/SampleMenuRepository.php",
+                "member": "create",
+                "lines": [
+                    24,
+                    32
+                ]
+            },
+            "payload": "    public function create(array $data, array $dishes = []): SampleMenu\n    {\n        return DB::transaction(function () use ($data, $dishes) {\n            $menu = SampleMenu::create($data);\n            $menu->dishes()->createMany($dishes);\n\n            return $menu->fresh('dishes');\n        });\n    }",
+            "tokens": 76
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\SampleMenuRepository::update, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/SampleMenuRepository.php",
+                "member": "update",
+                "lines": [
+                    34,
+                    45
+                ]
+            },
+            "payload": "    public function update(int $id, array $data, array $dishes = []): SampleMenu\n    {\n        return DB::transaction(function () use ($id, $data, $dishes) {\n            $menu = SampleMenu::findOrFail($id);\n            $menu->update($data);\n\n            $menu->dishes()->delete();\n            $menu->dishes()->createMany($dishes);\n\n            return $menu->fresh('dishes');\n        });\n    }",
+            "tokens": 98
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Services\\ImageService::delete, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Services/ImageService.php",
+                "member": "delete",
+                "lines": [
+                    53,
+                    58
+                ]
+            },
+            "payload": "    public function delete(string $path): void\n    {\n        if (Storage::disk('public')->exists($path)) {\n            Storage::disk('public')->delete($path);\n        }\n    }",
+            "tokens": 44
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on Illuminate\\Http\\UploadedFile::fake, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "tests/Feature/Actions/FileUploadRollbackTest.php",
+                "member": "Illuminate\\Http\\UploadedFile::fake",
+                "lines": [
+                    1,
+                    126
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on Illuminate\\Support\\Facades\\Storage::disk, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "tests/Feature/Actions/FileUploadRollbackTest.php",
+                "member": "Illuminate\\Support\\Facades\\Storage::disk",
+                "lines": [
+                    1,
+                    126
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on Illuminate\\Support\\Facades\\Storage::fake, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "tests/Feature/Actions/FileUploadRollbackTest.php",
+                "member": "Illuminate\\Support\\Facades\\Storage::fake",
+                "lines": [
+                    1,
+                    126
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on RuntimeException, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "tests/Feature/Actions/FileUploadRollbackTest.php",
+                "member": "RuntimeException",
+                "lines": [
+                    1,
+                    126
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region performs several persistence writes; whether a transaction wraps them is decided by the caller, which the diff does not show",
+            "assertion_kind": "unverifiable_premise",
+            "provenance": {
+                "path": "app/Actions/Branch/CreateBranchAction.php",
+                "lines": [
+                    37,
+                    51
+                ]
+            },
+            "payload": "ASSUMPTION: this code assumes a surrounding transaction; caller not checked",
+            "tokens": 19
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region performs several persistence writes; whether a transaction wraps them is decided by the caller, which the diff does not show",
+            "assertion_kind": "unverifiable_premise",
+            "provenance": {
+                "path": "app/Actions/Branch/UpdateBranchAction.php",
+                "lines": [
+                    44,
+                    58
+                ]
+            },
+            "payload": "ASSUMPTION: this code assumes a surrounding transaction; caller not checked",
+            "tokens": 19
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region performs several persistence writes; whether a transaction wraps them is decided by the caller, which the diff does not show",
+            "assertion_kind": "unverifiable_premise",
+            "provenance": {
+                "path": "app/Actions/Catering/CreatePackageAction.php",
+                "lines": [
+                    34,
+                    48
+                ]
+            },
+            "payload": "ASSUMPTION: this code assumes a surrounding transaction; caller not checked",
+            "tokens": 19
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region performs several persistence writes; whether a transaction wraps them is decided by the caller, which the diff does not show",
+            "assertion_kind": "unverifiable_premise",
+            "provenance": {
+                "path": "app/Actions/Catering/CreateSampleMenuAction.php",
+                "lines": [
+                    31,
+                    45
+                ]
+            },
+            "payload": "ASSUMPTION: this code assumes a surrounding transaction; caller not checked",
+            "tokens": 19
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region performs several persistence writes; whether a transaction wraps them is decided by the caller, which the diff does not show",
+            "assertion_kind": "unverifiable_premise",
+            "provenance": {
+                "path": "app/Actions/Catering/UpdatePackageAction.php",
+                "lines": [
+                    41,
+                    55
+                ]
+            },
+            "payload": "ASSUMPTION: this code assumes a surrounding transaction; caller not checked",
+            "tokens": 19
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region performs several persistence writes; whether a transaction wraps them is decided by the caller, which the diff does not show",
+            "assertion_kind": "unverifiable_premise",
+            "provenance": {
+                "path": "app/Actions/Catering/UpdateSampleMenuAction.php",
+                "lines": [
+                    37,
+                    51
+                ]
+            },
+            "payload": "ASSUMPTION: this code assumes a surrounding transaction; caller not checked",
+            "tokens": 19
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region performs several persistence writes; whether a transaction wraps them is decided by the caller, which the diff does not show",
+            "assertion_kind": "unverifiable_premise",
+            "provenance": {
+                "path": "app/Actions/DeliveryApp/CreateDeliveryAppAction.php",
+                "lines": [
+                    31,
+                    45
+                ]
+            },
+            "payload": "ASSUMPTION: this code assumes a surrounding transaction; caller not checked",
+            "tokens": 19
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region performs several persistence writes; whether a transaction wraps them is decided by the caller, which the diff does not show",
+            "assertion_kind": "unverifiable_premise",
+            "provenance": {
+                "path": "app/Actions/DeliveryApp/UpdateDeliveryAppAction.php",
+                "lines": [
+                    37,
+                    51
+                ]
+            },
+            "payload": "ASSUMPTION: this code assumes a surrounding transaction; caller not checked",
+            "tokens": 19
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region performs several persistence writes; whether a transaction wraps them is decided by the caller, which the diff does not show",
+            "assertion_kind": "unverifiable_premise",
+            "provenance": {
+                "path": "app/Actions/Dish/CreateDishAction.php",
+                "lines": [
+                    35,
+                    49
+                ]
+            },
+            "payload": "ASSUMPTION: this code assumes a surrounding transaction; caller not checked",
+            "tokens": 19
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region performs several persistence writes; whether a transaction wraps them is decided by the caller, which the diff does not show",
+            "assertion_kind": "unverifiable_premise",
+            "provenance": {
+                "path": "app/Actions/Dish/UpdateDishAction.php",
+                "lines": [
+                    42,
+                    56
+                ]
+            },
+            "payload": "ASSUMPTION: this code assumes a surrounding transaction; caller not checked",
+            "tokens": 19
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region performs several persistence writes; whether a transaction wraps them is decided by the caller, which the diff does not show",
+            "assertion_kind": "unverifiable_premise",
+            "provenance": {
+                "path": "app/Actions/MediaItem/UploadMediaAction.php",
+                "lines": [
+                    34,
+                    48
+                ]
+            },
+            "payload": "ASSUMPTION: this code assumes a surrounding transaction; caller not checked",
+            "tokens": 19
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region performs several persistence writes; whether a transaction wraps them is decided by the caller, which the diff does not show",
+            "assertion_kind": "unverifiable_premise",
+            "provenance": {
+                "path": "app/Actions/Personality/CreatePersonalityAction.php",
+                "lines": [
+                    30,
+                    44
+                ]
+            },
+            "payload": "ASSUMPTION: this code assumes a surrounding transaction; caller not checked",
+            "tokens": 19
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region performs several persistence writes; whether a transaction wraps them is decided by the caller, which the diff does not show",
+            "assertion_kind": "unverifiable_premise",
+            "provenance": {
+                "path": "app/Actions/Personality/UpdatePersonalityAction.php",
+                "lines": [
+                    37,
+                    51
+                ]
+            },
+            "payload": "ASSUMPTION: this code assumes a surrounding transaction; caller not checked",
+            "tokens": 19
+        }
+    ],
+    "dropped": []
+}

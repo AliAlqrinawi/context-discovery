@@ -1,0 +1,38 @@
+{
+    "bundle_version": 1,
+    "budget_tokens": 8000,
+    "used_tokens": 40,
+    "items": [
+        {
+            "lever": "flagged",
+            "reason": "the region depends on Illuminate\\Database\\Schema\\Blueprint, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "database/migrations/2026_08_11_084346_add_whatsapp_number_to_branches_table.php",
+                "member": "Illuminate\\Database\\Schema\\Blueprint",
+                "lines": [
+                    1,
+                    28
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on Illuminate\\Support\\Facades\\Schema::table, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "database/migrations/2026_08_11_084346_add_whatsapp_number_to_branches_table.php",
+                "member": "Illuminate\\Support\\Facades\\Schema::table",
+                "lines": [
+                    1,
+                    28
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        }
+    ],
+    "dropped": []
+}

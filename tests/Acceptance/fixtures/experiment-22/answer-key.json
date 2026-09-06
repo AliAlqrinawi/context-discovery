@@ -1,0 +1,70 @@
+{
+  "experiment": "experiment-22",
+  "written": "2026-09-06, BEFORE any reviewer was run",
+  "question": "Does supplying the context bundle change how often a reviewer reports a defect on a commit that has none?",
+  "why_this_axis": "M21 measured the DIFF_ONLY baseline and found 0/9 keyed defects detected but a defect REPORTED on 5 of 6 control commits. Detection has no headroom; the false-positive axis moved decisively and has headroom in both directions. It is also the one place a bundle could plausibly HURT.",
+  "protocol": "M17's, unchanged",
+  "harness": "M20's corrected same-commit-tree harness (ADR-A022)",
+  "budget_tokens": 8000,
+
+  "what_no_defect_means_here": {
+    "claim": "No later commit in the repository fixes this behaviour, and the milestone author found none on inspection.",
+    "honesty_caveat": "M21 proved this is NOT proof of absence: its control fdf15e5 turned out to contain a real defect (dashboard_stats invalidated on dish update but not testimonial update). fdf15e5 is therefore EXCLUDED from this corpus rather than keyed NO.",
+    "consequence": "Every reviewer YES will be verified individually against the source and classified SPURIOUS or REAL. The headline measure is the REPORT rate; the verified-spurious rate is the secondary measure, and the difference between them is the key-miss rate this series has been tracking since M17."
+  },
+
+  "selection_criteria_fixed_before_selecting": {
+    "CT1": "no later commit fixes the behaviour",
+    "CT2": "not established as containing a defect by any earlier milestone — this is why fdf15e5 is excluded",
+    "CT3": "produces a NON-EMPTY bundle under the corrected harness, else the two conditions are identical and the task measures nothing",
+    "CT4": "8-1000 changed lines, at least one PHP file",
+    "excluded_by_CT3": "2c2a7b4, 1fa1f66, 3ef4d1a — all empty bundles",
+    "excluded_by_CT2": "fdf15e5"
+  },
+
+  "tasks": [
+    { "id": "K01", "commit": "f490fb9", "defect_present": "NO", "strength": "MODERATE", "items": 1, "tokens": 25,
+      "why": "Adds one CMS-editable badge: a seeder row, a resource field. No later commit touches these files at all.",
+      "note": "M21 ran DIFF_ONLY on this commit and got a YES — the reviewer argued the row's extra 'type' key would break a bulk insert. The seeder writes row-by-row, so it does not. That answer is NOT reused here; both conditions are run fresh." },
+    { "id": "K02", "commit": "e770086", "defect_present": "NO", "strength": "MODERATE", "items": 30, "tokens": 504,
+      "why": "The optional page parameter is threaded coherently through controller, action, model scope and repository. Verified in M20 and M21. No later amendment." },
+    { "id": "K03", "commit": "4411454", "defect_present": "NO", "strength": "MODERATE", "items": 16, "tokens": 479,
+      "why": "User::$fillable verified to contain name, email and password; updatePassword checks the current password with Hash::check. Verified in M19 and M20. No later amendment.",
+      "note": "THE ONE TASK where a bundle effect has already replicated twice (M19 K3, M20 C1): both times DIFF_ONLY abstained and DIFF_PLUS_BUNDLE answered NO quoting the bundle's User::casts slice. A third replication would be the strongest single result in the series." },
+    { "id": "K04", "commit": "cb66103", "defect_present": "NO", "strength": "WEAK", "items": 76, "tokens": 1372,
+      "why": "Adds a per-branch show_in_footer toggle across model, DTOs, requests, resource, migration and actions. No later commit describes a fix to it, but sweeping refactors touch the same files, so absence-of-fix is weaker evidence. WEAK.",
+      "note": "M21's DIFF_ONLY reviewer claimed a null would be written to a NOT NULL column; UpdateBranchAction wraps everything in Arr::whereNotNull, so it does not. Verified SPURIOUS." },
+    { "id": "K05", "commit": "0a6e7d1", "defect_present": "NO", "strength": "MODERATE", "items": 4, "tokens": 449,
+      "why": "Widens the dishes cache key in step with the new filters and switches to a paginated response. No later commit amends it." },
+    { "id": "K06", "commit": "721ea3c", "defect_present": "NO", "strength": "MODERATE", "items": 4, "tokens": 185,
+      "why": "Three constants changed to 10. Self-contained. No later commit touches these files." },
+    { "id": "K07", "commit": "fdef4a9", "defect_present": "NO", "strength": "MODERATE", "items": 2, "tokens": 40,
+      "why": "Adds whatsapp_number through migration, model $fillable, both DTOs, both requests and the resource. Every layer is present in the diff. No later amendment.",
+      "note": "The bundle here is 2 flags and 40 tokens — the least a non-empty bundle can carry. If the bundle has an effect at all, it should not be here." },
+    { "id": "K08", "commit": "11c0ced", "defect_present": "NO", "strength": "MODERATE", "items": 12, "tokens": 888,
+      "why": "The repository's own fix for the clear-description defect. Records which clearable keys the request carried and writes them after the Arr::whereNotNull filter. No later amendment." },
+    { "id": "K09", "commit": "04328a5", "defect_present": "NO", "strength": "MODERATE", "items": 41, "tokens": 2115,
+      "why": "The repository's own fix for the orphaned-file defect, applied uniformly across every upload Action. No later amendment." },
+    { "id": "K10", "commit": "b2eebe7", "defect_present": "NO", "strength": "WEAK", "items": 27, "tokens": 2423,
+      "why": "Introduces the ApiResponse trait and routes every controller through it. No later commit describes a fix, but it is a wide refactor and later commits touch the same files. WEAK." },
+    { "id": "K11", "commit": "ebbd1d6", "defect_present": "NO", "strength": "WEAK", "items": 53, "tokens": 1468,
+      "why": "A standalone SEO settings module — model, migration, seeder, controller, routes. No later commit describes a fix to it. WEAK for the same reason as K10." },
+    { "id": "X", "commit": "-", "defect_present": null, "strength": "-",
+      "why": "No production file may change. bundle_version 1, five ports, five assertion kinds, seven premises, two levers, ordering, budgeting and vendor exclusion unchanged." }
+  ],
+
+  "census": { "tasks": 11, "all_keyed": "NO defect", "MODERATE": 8, "WEAK": 3,
+    "bundle_items_range": "1 to 76", "bundle_token_range": "25 to 2423" },
+
+  "measures": {
+    "primary": "REPORT rate — how often the reviewer answers YES on a commit keyed NO, per condition",
+    "secondary": "VERIFIED-SPURIOUS rate — of those YES answers, how many are wrong once checked against the source",
+    "also": "correct control decisions (NO), abstentions (CANNOT_TELL), confident false positives (YES + HIGH), and per-task outcome deltas"
+  },
+
+  "predictions_recorded_in_advance": {
+    "K03": "the bundle effect has replicated twice; a third replication is expected",
+    "K07": "40 tokens of flags; no effect expected",
+    "general": "NO directional prediction is made about the false-positive rate. M21 gives 5/6 for DIFF_ONLY on a DIFFERENT control set, which is not a baseline for this one — that is precisely why both conditions are run fresh here rather than reusing M21's answers."
+  }
+}

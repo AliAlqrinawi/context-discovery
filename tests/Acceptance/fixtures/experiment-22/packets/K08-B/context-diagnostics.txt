@@ -1,0 +1,5 @@
+new file: tests/Feature/Actions/UpdateDishActionTest.php — own-file context is in the diff, not fetched
+already in the diff: App\DTOs\Dish\UpdateDishDTO::CLEARABLE declared in app/DTOs/Dish/UpdateDishDTO.php; not fetched again
+unresolved named_reference: App\Models\Category::create in tests/Feature/Actions/UpdateDishActionTest.php
+unresolved named_reference: App\Models\Dish::create in tests/Feature/Actions/UpdateDishActionTest.php
+missing PSR-4 entry: Illuminate\Http\Request::create named in tests/Feature/Actions/UpdateDishActionTest.php

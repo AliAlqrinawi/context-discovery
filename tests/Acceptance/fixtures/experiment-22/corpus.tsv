@@ -1,0 +1,11 @@
+K01	f490fb9	MODERATE	feat(menu): make signature dish banner badge CMS-editable
+K02	e770086	MODERATE	fix: make page filter optional in MediaItemController
+K03	4411454	MODERATE	feat: add profile endpoints (show, update, update password)
+K04	cb66103	WEAK	feat(branches): add per-branch show_in_footer toggle
+K05	0a6e7d1	MODERATE	feat: add pagination to dishes, quote-requests, users
+K06	721ea3c	MODERATE	fix: set default pagination to 10 items per page
+K07	fdef4a9	MODERATE	feat: add whatsapp_number field to branches
+K08	11c0ced	MODERATE	fix: clear dish description when updated with empty value
+K09	04328a5	MODERATE	fix: delete orphaned uploaded files when a DB write fails
+K10	b2eebe7	WEAK	refactor: add ApiResponse trait and clean up all controllers
+K11	ebbd1d6	WEAK	feat(seo): add standalone SEO + marketing settings module
