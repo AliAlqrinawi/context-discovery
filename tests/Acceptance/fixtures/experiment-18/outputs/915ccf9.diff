@@ -1,0 +1,13 @@
+diff --git a/app/Http/Resources/Setting/SettingResource.php b/app/Http/Resources/Setting/SettingResource.php
+index 48cde3f..d2e41db 100644
+--- a/app/Http/Resources/Setting/SettingResource.php
++++ b/app/Http/Resources/Setting/SettingResource.php
+@@ -15,7 +15,7 @@ public function toArray(Request $request): array
+         return [
+             'id' => $this->id,
+             'key' => $this->key,
+-            'value' => $this->value,
++            'value' => $this->type === 'boolean' ? (bool) $this->value : $this->value,
+             'type' => $this->type,
+             'group' => $this->group,
+             'label' => $this->resolveLocale($this->label_ar, $this->label_en),

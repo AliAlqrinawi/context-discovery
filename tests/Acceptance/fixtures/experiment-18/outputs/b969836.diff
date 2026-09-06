@@ -1,0 +1,16 @@
+diff --git a/app/Http/Middleware/CheckApiKey.php b/app/Http/Middleware/CheckApiKey.php
+index 5c6d9c8..9cb8cbc 100644
+--- a/app/Http/Middleware/CheckApiKey.php
++++ b/app/Http/Middleware/CheckApiKey.php
+@@ -10,6 +10,11 @@ class CheckApiKey
+ {
+     public function handle(Request $request, Closure $next): Response
+     {
++        // Dashboard requests authenticate via Sanctum Bearer Token instead of X-API-Key.
++        if ($request->user('sanctum')) {
++            return $next($request);
++        }
++
+         $expectedKey = config('services.website_api_key');
+ 
+         if (empty($expectedKey) || $request->header('X-API-Key') !== $expectedKey) {

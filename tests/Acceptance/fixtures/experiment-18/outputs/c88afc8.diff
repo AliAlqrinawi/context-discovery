@@ -1,0 +1,2361 @@
+diff --git a/postman/abouelsid-dashboard.postman_collection.json b/postman/abouelsid-dashboard.postman_collection.json
+new file mode 100644
+index 0000000..a0dccea
+--- /dev/null
++++ b/postman/abouelsid-dashboard.postman_collection.json
+@@ -0,0 +1,1584 @@
++{
++  "info": {
++    "_postman_id": "82d1a63e-9e98-4dd5-a608-ddd876286fc6",
++    "name": "Abouelsid — Dashboard",
++    "description": "Admin API endpoints for the Abouelsid dashboard. Run Auth/Login first to get a token.",
++    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
++  },
++  "event": [
++    {
++      "listen": "prerequest",
++      "script": {
++        "type": "text/javascript",
++        "exec": [
++          "pm.request.headers.add({ key: 'Authorization', value: 'Bearer ' + pm.collectionVariables.get('auth_token') });",
++          "pm.request.headers.add({ key: 'Accept-Language', value: pm.collectionVariables.get('locale') });",
++          "",
++          "// Don't force JSON content-type on multipart/form-data requests —",
++          "// Postman needs to set its own boundary header for file uploads.",
++          "if (!pm.request.body || pm.request.body.mode !== 'formdata') {",
++          "    pm.request.headers.add({ key: 'Content-Type', value: 'application/json' });",
++          "}"
++        ]
++      }
++    }
++  ],
++  "variable": [
++    {
++      "key": "base_url",
++      "value": "http://localhost:8000/api/v1",
++      "type": "string"
++    },
++    {
++      "key": "auth_token",
++      "value": "",
++      "type": "string"
++    },
++    {
++      "key": "locale",
++      "value": "ar",
++      "type": "string"
++    }
++  ],
++  "item": [
++    {
++      "name": "Auth",
++      "item": [
++        {
++          "name": "Login",
++          "request": {
++            "method": "POST",
++            "header": [
++              {
++                "key": "Content-Type",
++                "value": "application/json"
++              }
++            ],
++            "url": {
++              "raw": "{{base_url}}/auth/login",
++              "host": [
++                "{{base_url}}"
++              ],
++              "path": [
++                "auth",
++                "login"
++              ]
++            },
++            "body": {
++              "mode": "raw",
++              "raw": "{\n    \"email\": \"admin@abouelsid.com\",\n    \"password\": \"password\"\n}",
++              "options": {
++                "raw": {
++                  "language": "json"
++                }
++              }
++            }
++          },
++          "response": [],
++          "event": [
++            {
++              "listen": "test",
++              "script": {
++                "type": "text/javascript",
++                "exec": [
++                  "pm.test(\"Save auth token\", function () {",
++                  "    if (pm.response.code === 200) {",
++                  "        const json = pm.response.json();",
++                  "        pm.collectionVariables.set(\"auth_token\", json.data.token);",
++                  "    }",
++                  "});"
++                ]
++              }
++            }
++          ]
++        },
++        {
++          "name": "Logout",
++          "request": {
++            "method": "POST",
++            "header": [],
++            "url": {
++              "raw": "{{base_url}}/auth/logout",
++              "host": [
++                "{{base_url}}"
++              ],
++              "path": [
++                "auth",
++                "logout"
++              ]
++            }
++          },
++          "response": []
++        },
++        {
++          "name": "Me",
++          "request": {
++            "method": "GET",
++            "header": [],
++            "url": {
++              "raw": "{{base_url}}/auth/me",
++              "host": [
++                "{{base_url}}"
++              ],
++              "path": [
++                "auth",
++                "me"
++              ]
++            }
++          },
++          "response": []
++        }
++      ]
++    },
++    {
++      "name": "CMS — Page Contents",
++      "item": [
++        {
++          "name": "Get Home Page Contents",
++          "request": {
++            "method": "GET",
++            "header": [],
++            "url": {
++              "raw": "{{base_url}}/page-contents?page=home",
++              "host": [
++                "{{base_url}}"
++              ],
++              "path": [
++                "page-contents"
++              ],
++              "query": [
++                {
++                  "key": "page",
++                  "value": "home"
++                }
++              ]
++            }
++          },
++          "response": []
++        },
++        {
++          "name": "Get Page Content by ID",
++          "request": {
++            "method": "GET",
++            "header": [],
++            "url": {
++              "raw": "{{base_url}}/page-contents/1",
++              "host": [
++                "{{base_url}}"
++              ],
++              "path": [
++                "page-contents",
++                "1"
++              ]
++            }
++          },
++          "response": []
++        },
++        {
++          "name": "Update Page Content",
++          "request": {
++            "method": "PUT",
++            "header": [
++              {
++                "key": "Content-Type",
++                "value": "application/json"
++              }
++            ],
++            "url": {
++              "raw": "{{base_url}}/page-contents/1",
++              "host": [
++                "{{base_url}}"
++              ],
++              "path": [
++                "page-contents",
++                "1"
++              ]
++            },
++            "body": {
++              "mode": "raw",
++              "raw": "{\n    \"value_ar\": \"من القاهرة القديمة · EST. OLD CAIRO\",\n    \"value_en\": \"From Old Cairo · EST. 1995\"\n}",
++              "options": {
++                "raw": {
++                  "language": "json"
++                }
++              }
++            }
++          },
++          "response": []
++        },
++        {
++          "name": "Bulk Update Page Contents",
++          "request": {
++            "method": "POST",
++            "header": [
++              {
++                "key": "Content-Type",
++                "value": "application/json"
++              }
++            ],
++            "url": {
++              "raw": "{{base_url}}/page-contents/bulk",
++              "host": [
++                "{{base_url}}"
++              ],
++              "path": [
++                "page-contents",
++                "bulk"
++              ]
++            },
++            "body": {
++              "mode": "raw",
++              "raw": "{\n    \"items\": [\n        {\n            \"id\": 1,\n            \"value_ar\": \"من القاهرة القديمة\",\n            \"value_en\": \"From Old Cairo\"\n        },\n        {\n            \"id\": 2,\n            \"value_ar\": \"أبو السيد\",\n            \"value_en\": \"Abou El Sid\"\n        }\n    ]\n}",
++              "options": {
++                "raw": {
++                  "language": "json"
++                }
++              }
++            }
++          },
++          "response": []
++        }
++      ]
++    },
++    {
++      "name": "CMS — Media Items",
++      "item": [
++        {
++          "name": "Get Home Media Items",
++          "request": {
++            "method": "GET",
++            "header": [],
++            "url": {
++              "raw": "{{base_url}}/media-items?page=home",
++              "host": [
++                "{{base_url}}"
++              ],
++              "path": [
++                "media-items"
++              ],
++              "query": [
++                {
++                  "key": "page",
++                  "value": "home"
++                }
++              ]
++            }
++          },
++          "response": []
++        },
++        {
++          "name": "Get Media Item by ID",
++          "request": {
++            "method": "GET",
++            "header": [],
++            "url": {
++              "raw": "{{base_url}}/media-items/1",
++              "host": [
++                "{{base_url}}"
++              ],
++              "path": [
++                "media-items",
++                "1"
++              ]
++            }
++          },
++          "response": []
++        },
++        {
++          "name": "Upload Media Item",
++          "request": {
++            "method": "POST",
++            "header": [],
++            "url": {
++              "raw": "{{base_url}}/media-items",
++              "host": [
++                "{{base_url}}"
++              ],
++              "path": [
++                "media-items"
++              ]
++            },
++            "body": {
++              "mode": "formdata",
++              "formdata": [
++                {
++                  "key": "page",
++                  "value": "home",
++                  "type": "text"
++                },
++                {
++                  "key": "section",
++                  "value": "hero",
++                  "type": "text"
++                },
++                {
++                  "key": "key",
++                  "value": "portrait",
++                  "type": "text"
++                },
++                {
++                  "key": "image",
++                  "type": "file",
++                  "src": []
++                },
++                {
++                  "key": "alt_ar",
++                  "value": "شخصية أبو السيد",
++                  "type": "text"
++                },
++                {
++                  "key": "alt_en",
++                  "value": "Abou El Sid Portrait",
++                  "type": "text"
++                }
++              ]
++            }
++          },
++          "response": []
++        },
++        {
++          "name": "Delete Media Item",
++          "request": {
++            "method": "DELETE",
++            "header": [],
++            "url": {
++              "raw": "{{base_url}}/media-items/1",
++              "host": [
++                "{{base_url}}"
++              ],
++              "path": [
++                "media-items",
++                "1"
++              ]
++            }
++          },
++          "response": []
++        }
++      ]
++    },
++    {
++      "name": "Settings",
++      "item": [
++        {
++          "name": "Get All Settings",
++          "request": {
++            "method": "GET",
++            "header": [],
++            "url": {
++              "raw": "{{base_url}}/settings",
++              "host": [
++                "{{base_url}}"
++              ],
++              "path": [
++                "settings"
++              ]
++            }
++          },
++          "response": []
++        },
++        {
++          "name": "Update Settings",
++          "request": {
++            "method": "PUT",
++            "header": [
++              {
++                "key": "Content-Type",
++                "value": "application/json"
++              }
++            ],
++            "url": {
++              "raw": "{{base_url}}/settings",
++              "host": [
++                "{{base_url}}"
++              ],
++              "path": [
++                "settings"
++              ]
++            },
++            "body": {
++              "mode": "raw",
++              "raw": "{\n    \"whatsapp_number\": \"+966551718800\",\n    \"instagram_url\": \"https://instagram.com/abouelsid_ksa\",\n    \"footer_tagline_ar\": \"أبو السيد — حكاية مصرية، نكهة أصيلة.\",\n    \"footer_tagline_en\": \"Heritage soul · Modern table\"\n}",
++              "options": {
++                "raw": {
++                  "language": "json"
++                }
++              }
++            }
++          },
++          "response": []
++        }
++      ]
++    },
++    {
++      "name": "Dishes",
++      "item": [
++        {
++          "name": "Get All Dishes",
++          "request": {
++            "method": "GET",
++            "header": [],
++            "url": {
++              "raw": "{{base_url}}/dishes",
++              "host": [
++                "{{base_url}}"
++              ],
++              "path": [
++                "dishes"
++              ]
++            }
++          },
++          "response": []
++        },
++        {
++          "name": "Create Dish",
++          "request": {
++            "method": "POST",
++            "header": [],
++            "url": {
++              "raw": "{{base_url}}/dishes",
++              "host": [
++                "{{base_url}}"
++              ],
++              "path": [
++                "dishes"
++              ]
++            },
++            "body": {
++              "mode": "formdata",
++              "formdata": [
++                {
++                  "key": "name_ar",
++                  "value": "طبق جديد",
++                  "type": "text"
++                },
++                {
++                  "key": "name_en",
++                  "value": "New Dish",
++                  "type": "text"
++                },
++                {
++                  "key": "description_ar",
++                  "value": "وصف الطبق",
++                  "type": "text"
++                },
++                {
++                  "key": "description_en",
++                  "value": "Dish description",
++                  "type": "text"
++                },
++                {
++                  "key": "price",
++                  "value": "95",
++                  "type": "text"
++                },
++                {
++                  "key": "category_id",
++                  "value": "1",
++                  "type": "text"
++                },
++                {
++                  "key": "is_featured",
++                  "value": "false",
++                  "type": "text"
++                },
++                {
++                  "key": "is_signature",
++                  "value": "false",
++                  "type": "text"
++                },
++                {
++                  "key": "image",
++                  "type": "file",
++                  "src": []
++                },
++                {
++                  "key": "order",
++                  "value": "6",
++                  "type": "text"
++                }
++              ]
++            }
++          },
++          "response": []
++        },
++        {
++          "name": "Update Dish",
++          "request": {
++            "method": "PUT",
++            "header": [],
++            "url": {
++              "raw": "{{base_url}}/dishes/1",
++              "host": [
++                "{{base_url}}"
++              ],
++              "path": [
++                "dishes",
++                "1"
++              ]
++            },
++            "body": {
++              "mode": "formdata",
++              "formdata": [
++                {
++                  "key": "name_ar",
++                  "value": "طبق محدث",
++                  "type": "text"
++                },
++                {
++                  "key": "name_en",
++                  "value": "Updated Dish",
++                  "type": "text"
++                },
++                {
++                  "key": "price",
++                  "value": "150",
++                  "type": "text"
++                }
++              ]
++            }
++          },
++          "response": []
++        },
++        {
++          "name": "Delete Dish",
++          "request": {
++            "method": "DELETE",
++            "header": [],
++            "url": {
++              "raw": "{{base_url}}/dishes/1",
++              "host": [
++                "{{base_url}}"
++              ],
++              "path": [
++                "dishes",
++                "1"
++              ]
++            }
++          },
++          "response": []
++        }
++      ]
++    },
++    {
++      "name": "Categories",
++      "item": [
++        {
++          "name": "Get All Categories",
++          "request": {
++            "method": "GET",
++            "header": [],
++            "url": {
++              "raw": "{{base_url}}/categories",
++              "host": [
++                "{{base_url}}"
++              ],
++              "path": [
++                "categories"
++              ]
++            }
++          },
++          "response": []
++        },
++        {
++          "name": "Create Category",
++          "request": {
++            "method": "POST",
++            "header": [
++              {
++                "key": "Content-Type",
++                "value": "application/json"
++              }
++            ],
++            "url": {
++              "raw": "{{base_url}}/categories",
++              "host": [
++                "{{base_url}}"
++              ],
++              "path": [
++                "categories"
++              ]
++            },
++            "body": {
++              "mode": "raw",
++              "raw": "{\n    \"name_ar\": \"المأكولات الخفيفة\",\n    \"name_en\": \"Light Meals\",\n    \"slug\": \"light-meals\",\n    \"order\": 7\n}",
++              "options": {
++                "raw": {
++                  "language": "json"
++                }
++              }
++            }
++          },
++          "response": []
++        },
++        {
++          "name": "Update Category",
++          "request": {
++            "method": "PUT",
++            "header": [
++              {
++                "key": "Content-Type",
++                "value": "application/json"
++              }
++            ],
++            "url": {
++              "raw": "{{base_url}}/categories/1",
++              "host": [
++                "{{base_url}}"
++              ],
++              "path": [
++                "categories",
++                "1"
++              ]
++            },
++            "body": {
++              "mode": "raw",
++              "raw": "{\n    \"name_ar\": \"المقبلات\",\n    \"name_en\": \"Starters\",\n    \"order\": 1\n}",
++              "options": {
++                "raw": {
++                  "language": "json"
++                }
++              }
++            }
++          },
++          "response": []
++        },
++        {
++          "name": "Delete Category",
++          "request": {
++            "method": "DELETE",
++            "header": [],
++            "url": {
++              "raw": "{{base_url}}/categories/1",
++              "host": [
++                "{{base_url}}"
++              ],
++              "path": [
++                "categories",
++                "1"
++              ]
++            }
++          },
++          "response": []
++        }
++      ]
++    },
++    {
++      "name": "Branches",
++      "item": [
++        {
++          "name": "Get All Branches",
++          "request": {
++            "method": "GET",
++            "header": [],
++            "url": {
++              "raw": "{{base_url}}/branches",
++              "host": [
++                "{{base_url}}"
++              ],
++              "path": [
++                "branches"
++              ]
++            }
++          },
++          "response": []
++        },
++        {
++          "name": "Create Branch",
++          "request": {
++            "method": "POST",
++            "header": [],
++            "url": {
++              "raw": "{{base_url}}/branches",
++              "host": [
++                "{{base_url}}"
++              ],
++              "path": [
++                "branches"
++              ]
++            },
++            "body": {
++              "mode": "formdata",
++              "formdata": [
++                {
++                  "key": "name_ar",
++                  "value": "فرع جديد",
++                  "type": "text"
++                },
++                {
++                  "key": "name_en",
++                  "value": "New Branch",
++                  "type": "text"
++                },
++                {
++                  "key": "city",
++                  "value": "jeddah",
++                  "type": "text"
++                },
++                {
++                  "key": "location_ar",
++                  "value": "موقع الفرع",
++                  "type": "text"
++                },
++                {
++                  "key": "location_en",
++                  "value": "Branch location",
++                  "type": "text"
++                },
++                {
++                  "key": "phone",
++                  "value": "0500000000",
++                  "type": "text"
++                },
++                {
++                  "key": "opening_time",
++                  "value": "12:00",
++                  "type": "text"
++                },
++                {
++                  "key": "closing_time",
++                  "value": "01:00",
++                  "type": "text"
++                },
++                {
++                  "key": "google_maps_url",
++                  "value": "https://maps.google.com/?q=New+Branch",
++                  "type": "text"
++                },
++                {
++                  "key": "image",
++                  "type": "file",
++                  "src": []
++                },
++                {
++                  "key": "order",
++                  "value": "3",
++                  "type": "text"
++                }
++              ]
++            }
++          },
++          "response": []
++        },
++        {
++          "name": "Update Branch",
++          "request": {
++            "method": "PUT",
++            "header": [],
++            "url": {
++              "raw": "{{base_url}}/branches/1",
++              "host": [
++                "{{base_url}}"
++              ],
++              "path": [
++                "branches",
++                "1"
++              ]
++            },
++            "body": {
++              "mode": "formdata",
++              "formdata": [
++                {
++                  "key": "name_ar",
++                  "value": "فرع جدة المحدث",
++                  "type": "text"
++                },
++                {
++                  "key": "name_en",
++                  "value": "Updated Jeddah Branch",
++                  "type": "text"
++                }
++              ]
++            }
++          },
++          "response": []
++        },
++        {
++          "name": "Delete Branch",
++          "request": {
++            "method": "DELETE",
++            "header": [],
++            "url": {
++              "raw": "{{base_url}}/branches/1",
++              "host": [
++                "{{base_url}}"
++              ],
++              "path": [
++                "branches",
++                "1"
++              ]
++            }
++          },
++          "response": []
++        }
++      ]
++    },
++    {
++      "name": "Catering — Packages",
++      "item": [
++        {
++          "name": "Get Catering Packages",
++          "request": {
++            "method": "GET",
++            "header": [],
++            "url": {
++              "raw": "{{base_url}}/catering/packages",
++              "host": [
++                "{{base_url}}"
++              ],
++              "path": [
++                "catering",
++                "packages"
++              ]
++            }
++          },
++          "response": []
++        },
++        {
++          "name": "Create Catering Package",
++          "request": {
++            "method": "POST",
++            "header": [
++              {
++                "key": "Content-Type",
++                "value": "application/json"
++              }
++            ],
++            "url": {
++              "raw": "{{base_url}}/catering/packages",
++              "host": [
++                "{{base_url}}"
++              ],
++              "path": [
++                "catering",
++                "packages"
++              ]
++            },
++            "body": {
++              "mode": "raw",
++              "raw": "{\n    \"name_ar\": \"باقة جديدة\",\n    \"name_en\": \"New Package\",\n    \"description_ar\": \"وصف الباقة\",\n    \"description_en\": \"Package description\",\n    \"tag_en\": \"New · 4 dishes\",\n    \"price_starting_from\": 5000,\n    \"is_featured\": false,\n    \"order\": 4,\n    \"features\": [\n        {\n            \"feature_ar\": \"مقبلات\",\n            \"feature_en\": \"Appetizers\",\n            \"order\": 1\n        },\n        {\n            \"feature_ar\": \"طبق رئيسي\",\n            \"feature_en\": \"Main dish\",\n            \"order\": 2\n        }\n    ]\n}",
++              "options": {
++                "raw": {
++                  "language": "json"
++                }
++              }
++            }
++          },
++          "response": []
++        },
++        {
++          "name": "Update Catering Package",
++          "request": {
++            "method": "PUT",
++            "header": [
++              {
++                "key": "Content-Type",
++                "value": "application/json"
++              }
++            ],
++            "url": {
++              "raw": "{{base_url}}/catering/packages/1",
++              "host": [
++                "{{base_url}}"
++              ],
++              "path": [
++                "catering",
++                "packages",
++                "1"
++              ]
++            },
++            "body": {
++              "mode": "raw",
++              "raw": "{\n    \"name_ar\": \"الباقة الكلاسيكية المحدثة\",\n    \"name_en\": \"Classic Package Updated\",\n    \"price_starting_from\": 3200\n}",
++              "options": {
++                "raw": {
++                  "language": "json"
++                }
++              }
++            }
++          },
++          "response": []
++        },
++        {
++          "name": "Delete Catering Package",
++          "request": {
++            "method": "DELETE",
++            "header": [],
++            "url": {
++              "raw": "{{base_url}}/catering/packages/1",
++              "host": [
++                "{{base_url}}"
++              ],
++              "path": [
++                "catering",
++                "packages",
++                "1"
++              ]
++            }
++          },
++          "response": []
++        }
++      ]
++    },
++    {
++      "name": "Catering — Sample Menus",
++      "item": [
++        {
++          "name": "Get Sample Menus",
++          "request": {
++            "method": "GET",
++            "header": [],
++            "url": {
++              "raw": "{{base_url}}/catering/sample-menus",
++              "host": [
++                "{{base_url}}"
++              ],
++              "path": [
++                "catering",
++                "sample-menus"
++              ]
++            }
++          },
++          "response": []
++        },
++        {
++          "name": "Create Sample Menu",
++          "request": {
++            "method": "POST",
++            "header": [
++              {
++                "key": "Content-Type",
++                "value": "application/json"
++              }
++            ],
++            "url": {
++              "raw": "{{base_url}}/catering/sample-menus",
++              "host": [
++                "{{base_url}}"
++              ],
++              "path": [
++                "catering",
++                "sample-menus"
++              ]
++            },
++            "body": {
++              "mode": "raw",
++              "raw": "{\n    \"name_ar\": \"قائمة جديدة\",\n    \"name_en\": \"New Menu\",\n    \"tag_en\": \"New · 3 dishes\",\n    \"is_featured\": false,\n    \"order\": 4,\n    \"dishes\": [\n        {\n            \"dish_name_ar\": \"طبق أول\",\n            \"dish_name_en\": \"First Dish\",\n            \"order\": 1\n        },\n        {\n            \"dish_name_ar\": \"طبق ثانٍ\",\n            \"dish_name_en\": \"Second Dish\",\n            \"order\": 2\n        }\n    ]\n}",
++              "options": {
++                "raw": {
++                  "language": "json"
++                }
++              }
++            }
++          },
++          "response": []
++        },
++        {
++          "name": "Update Sample Menu",
++          "request": {
++            "method": "PUT",
++            "header": [
++              {
++                "key": "Content-Type",
++                "value": "application/json"
++              }
++            ],
++            "url": {
++              "raw": "{{base_url}}/catering/sample-menus/1",
++              "host": [
++                "{{base_url}}"
++              ],
++              "path": [
++                "catering",
++                "sample-menus",
++                "1"
++              ]
++            },
++            "body": {
++              "mode": "raw",
++              "raw": "{\n    \"name_ar\": \"القائمة التراثية المحدثة\",\n    \"name_en\": \"Heritage Menu Updated\"\n}",
++              "options": {
++                "raw": {
++                  "language": "json"
++                }
++              }
++            }
++          },
++          "response": []
++        },
++        {
++          "name": "Delete Sample Menu",
++          "request": {
++            "method": "DELETE",
++            "header": [],
++            "url": {
++              "raw": "{{base_url}}/catering/sample-menus/1",
++              "host": [
++                "{{base_url}}"
++              ],
++              "path": [
++                "catering",
++                "sample-menus",
++                "1"
++              ]
++            }
++          },
++          "response": []
++        }
++      ]
++    },
++    {
++      "name": "Catering — Quote Requests",
++      "item": [
++        {
++          "name": "Get All Quote Requests",
++          "request": {
++            "method": "GET",
++            "header": [],
++            "url": {
++              "raw": "{{base_url}}/catering/quote-requests",
++              "host": [
++                "{{base_url}}"
++              ],
++              "path": [
++                "catering",
++                "quote-requests"
++              ]
++            }
++          },
++          "response": []
++        },
++        {
++          "name": "Get Pending Quote Requests",
++          "request": {
++            "method": "GET",
++            "header": [],
++            "url": {
++              "raw": "{{base_url}}/catering/quote-requests?status=pending",
++              "host": [
++                "{{base_url}}"
++              ],
++              "path": [
++                "catering",
++                "quote-requests"
++              ],
++              "query": [
++                {
++                  "key": "status",
++                  "value": "pending"
++                }
++              ]
++            }
++          },
++          "response": []
++        },
++        {
++          "name": "Get Wedding Quote Requests",
++          "request": {
++            "method": "GET",
++            "header": [],
++            "url": {
++              "raw": "{{base_url}}/catering/quote-requests?event_type=wedding",
++              "host": [
++                "{{base_url}}"
++              ],
++              "path": [
++                "catering",
++                "quote-requests"
++              ],
++              "query": [
++                {
++                  "key": "event_type",
++                  "value": "wedding"
++                }
++              ]
++            }
++          },
++          "response": []
++        },
++        {
++          "name": "Get Quote Request by ID",
++          "request": {
++            "method": "GET",
++            "header": [],
++            "url": {
++              "raw": "{{base_url}}/catering/quote-requests/1",
++              "host": [
++                "{{base_url}}"
++              ],
++              "path": [
++                "catering",
++                "quote-requests",
++                "1"
++              ]
++            }
++          },
++          "response": []
++        },
++        {
++          "name": "Update Quote Request Status",
++          "request": {
++            "method": "PATCH",
++            "header": [
++              {
++                "key": "Content-Type",
++                "value": "application/json"
++              }
++            ],
++            "url": {
++              "raw": "{{base_url}}/catering/quote-requests/1/status",
++              "host": [
++                "{{base_url}}"
++              ],
++              "path": [
++                "catering",
++                "quote-requests",
++                "1",
++                "status"
++              ]
++            },
++            "body": {
++              "mode": "raw",
++              "raw": "{\n    \"status\": \"reviewed\"\n}",
++              "options": {
++                "raw": {
++                  "language": "json"
++                }
++              }
++            }
++          },
++          "response": []
++        }
++      ]
++    },
++    {
++      "name": "Testimonials",
++      "item": [
++        {
++          "name": "Get All Testimonials",
++          "request": {
++            "method": "GET",
++            "header": [],
++            "url": {
++              "raw": "{{base_url}}/testimonials",
++              "host": [
++                "{{base_url}}"
++              ],
++              "path": [
++                "testimonials"
++              ]
++            }
++          },
++          "response": []
++        },
++        {
++          "name": "Create Testimonial",
++          "request": {
++            "method": "POST",
++            "header": [
++              {
++                "key": "Content-Type",
++                "value": "application/json"
++              }
++            ],
++            "url": {
++              "raw": "{{base_url}}/testimonials",
++              "host": [
++                "{{base_url}}"
++              ],
++              "path": [
++                "testimonials"
++              ]
++            },
++            "body": {
++              "mode": "raw",
++              "raw": "{\n    \"name\": \"ضيف جديد\",\n    \"quote_ar\": \"تجربة رائعة\",\n    \"quote_en\": \"Amazing experience\",\n    \"is_active\": true,\n    \"order\": 11\n}",
++              "options": {
++                "raw": {
++                  "language": "json"
++                }
++              }
++            }
++          },
++          "response": []
++        },
++        {
++          "name": "Update Testimonial",
++          "request": {
++            "method": "PUT",
++            "header": [
++              {
++                "key": "Content-Type",
++                "value": "application/json"
++              }
++            ],
++            "url": {
++              "raw": "{{base_url}}/testimonials/1",
++              "host": [
++                "{{base_url}}"
++              ],
++              "path": [
++                "testimonials",
++                "1"
++              ]
++            },
++            "body": {
++              "mode": "raw",
++              "raw": "{\n    \"quote_ar\": \"أفضل ملوخية جربتها\",\n    \"quote_en\": \"The best molokhia I've tried\"\n}",
++              "options": {
++                "raw": {
++                  "language": "json"
++                }
++              }
++            }
++          },
++          "response": []
++        },
++        {
++          "name": "Delete Testimonial",
++          "request": {
++            "method": "DELETE",
++            "header": [],
++            "url": {
++              "raw": "{{base_url}}/testimonials/1",
++              "host": [
++                "{{base_url}}"
++              ],
++              "path": [
++                "testimonials",
++                "1"
++              ]
++            }
++          },
++          "response": []
++        }
++      ]
++    },
++    {
++      "name": "Timeline",
++      "item": [
++        {
++          "name": "Get Timeline",
++          "request": {
++            "method": "GET",
++            "header": [],
++            "url": {
++              "raw": "{{base_url}}/timeline",
++              "host": [
++                "{{base_url}}"
++              ],
++              "path": [
++                "timeline"
++              ]
++            }
++          },
++          "response": []
++        },
++        {
++          "name": "Create Timeline Entry",
++          "request": {
++            "method": "POST",
++            "header": [
++              {
++                "key": "Content-Type",
++                "value": "application/json"
++              }
++            ],
++            "url": {
++              "raw": "{{base_url}}/timeline",
++              "host": [
++                "{{base_url}}"
++              ],
++              "path": [
++                "timeline"
++              ]
++            },
++            "body": {
++              "mode": "raw",
++              "raw": "{\n    \"year\": \"2025\",\n    \"location_en\": \"New City\",\n    \"title_ar\": \"فرع جديد\",\n    \"title_en\": \"New Branch\",\n    \"description_ar\": \"وصف الفرع الجديد\",\n    \"description_en\": \"New branch description\",\n    \"order\": 6\n}",
++              "options": {
++                "raw": {
++                  "language": "json"
++                }
++              }
++            }
++          },
++          "response": []
++        },
++        {
++          "name": "Update Timeline Entry",
++          "request": {
++            "method": "PUT",
++            "header": [
++              {
++                "key": "Content-Type",
++                "value": "application/json"
++              }
++            ],
++            "url": {
++              "raw": "{{base_url}}/timeline/1",
++              "host": [
++                "{{base_url}}"
++              ],
++              "path": [
++                "timeline",
++                "1"
++              ]
++            },
++            "body": {
++              "mode": "raw",
++              "raw": "{\n    \"title_ar\": \"الانطلاقة من القاهرة القديمة (محدث)\",\n    \"title_en\": \"The Start from Old Cairo (Updated)\"\n}",
++              "options": {
++                "raw": {
++                  "language": "json"
++                }
++              }
++            }
++          },
++          "response": []
++        },
++        {
++          "name": "Delete Timeline Entry",
++          "request": {
++            "method": "DELETE",
++            "header": [],
++            "url": {
++              "raw": "{{base_url}}/timeline/1",
++              "host": [
++                "{{base_url}}"
++              ],
++              "path": [
++                "timeline",
++                "1"
++              ]
++            }
++          },
++          "response": []
++        }
++      ]
++    },
++    {
++      "name": "Delivery Apps",
++      "item": [
++        {
++          "name": "Get Delivery Apps",
++          "request": {
++            "method": "GET",
++            "header": [],
++            "url": {
++              "raw": "{{base_url}}/delivery-apps",
++              "host": [
++                "{{base_url}}"
++              ],
++              "path": [
++                "delivery-apps"
++              ]
++            }
++          },
++          "response": []
++        },
++        {
++          "name": "Create Delivery App",
++          "request": {
++            "method": "POST",
++            "header": [
++              {
++                "key": "Content-Type",
++                "value": "application/json"
++              }
++            ],
++            "url": {
++              "raw": "{{base_url}}/delivery-apps",
++              "host": [
++                "{{base_url}}"
++              ],
++              "path": [
++                "delivery-apps"
++              ]
++            },
++            "body": {
++              "mode": "raw",
++              "raw": "{\n    \"name_ar\": \"تطبيق جديد\",\n    \"name_en\": \"New App\",\n    \"order_url\": \"https://newapp.com\",\n    \"is_active\": true,\n    \"order\": 5\n}",
++              "options": {
++                "raw": {
++                  "language": "json"
++                }
++              }
++            }
++          },
++          "response": []
++        },
++        {
++          "name": "Update Delivery App",
++          "request": {
++            "method": "PUT",
++            "header": [
++              {
++                "key": "Content-Type",
++                "value": "application/json"
++              }
++            ],
++            "url": {
++              "raw": "{{base_url}}/delivery-apps/1",
++              "host": [
++                "{{base_url}}"
++              ],
++              "path": [
++                "delivery-apps",
++                "1"
++              ]
++            },
++            "body": {
++              "mode": "raw",
++              "raw": "{\n    \"name_ar\": \"هنقرستيشن المحدث\",\n    \"name_en\": \"HungerStation Updated\"\n}",
++              "options": {
++                "raw": {
++                  "language": "json"
++                }
++              }
++            }
++          },
++          "response": []
++        },
++        {
++          "name": "Delete Delivery App",
++          "request": {
++            "method": "DELETE",
++            "header": [],
++            "url": {
++              "raw": "{{base_url}}/delivery-apps/1",
++              "host": [
++                "{{base_url}}"
++              ],
++              "path": [
++                "delivery-apps",
++                "1"
++              ]
++            }
++          },
++          "response": []
++        }
++      ]
++    },
++    {
++      "name": "Users",
++      "item": [
++        {
++          "name": "Get All Users",
++          "request": {
++            "method": "GET",
++            "header": [],
++            "url": {
++              "raw": "{{base_url}}/users",
++              "host": [
++                "{{base_url}}"
++              ],
++              "path": [
++                "users"
++              ]
++            }
++          },
++          "response": []
++        },
++        {
++          "name": "Create User",
++          "request": {
++            "method": "POST",
++            "header": [
++              {
++                "key": "Content-Type",
++                "value": "application/json"
++              }
++            ],
++            "url": {
++              "raw": "{{base_url}}/users",
++              "host": [
++                "{{base_url}}"
++              ],
++              "path": [
++                "users"
++              ]
++            },
++            "body": {
++              "mode": "raw",
++              "raw": "{\n    \"name\": \"Manager User\",\n    \"email\": \"manager@abouelsid.com\",\n    \"password\": \"password\",\n    \"password_confirmation\": \"password\",\n    \"role\": \"manager\"\n}",
++              "options": {
++                "raw": {
++                  "language": "json"
++                }
++              }
++            }
++          },
++          "response": []
++        },
++        {
++          "name": "Get User by ID",
++          "request": {
++            "method": "GET",
++            "header": [],
++            "url": {
++              "raw": "{{base_url}}/users/1",
++              "host": [
++                "{{base_url}}"
++              ],
++              "path": [
++                "users",
++                "1"
++              ]
++            }
++          },
++          "response": []
++        },
++        {
++          "name": "Update User",
++          "request": {
++            "method": "PUT",
++            "header": [
++              {
++                "key": "Content-Type",
++                "value": "application/json"
++              }
++            ],
++            "url": {
++              "raw": "{{base_url}}/users/1",
++              "host": [
++                "{{base_url}}"
++              ],
++              "path": [
++                "users",
++                "1"
++              ]
++            },
++            "body": {
++              "mode": "raw",
++              "raw": "{\n    \"name\": \"Admin Updated\"\n}",
++              "options": {
++                "raw": {
++                  "language": "json"
++                }
++              }
++            }
++          },
++          "response": []
++        },
++        {
++          "name": "Delete User",
++          "request": {
++            "method": "DELETE",
++            "header": [],
++            "url": {
++              "raw": "{{base_url}}/users/1",
++              "host": [
++                "{{base_url}}"
++              ],
++              "path": [
++                "users",
++                "1"
++              ]
++            }
++          },
++          "response": []
++        }
++      ]
++    }
++  ]
++}
+\ No newline at end of file
+diff --git a/postman/abouelsid-website.postman_collection.json b/postman/abouelsid-website.postman_collection.json
+new file mode 100644
+index 0000000..823f561
+--- /dev/null
++++ b/postman/abouelsid-website.postman_collection.json
+@@ -0,0 +1,763 @@
++{
++  "info": {
++    "_postman_id": "649186ec-46ec-4241-922d-8b17b2f22b81",
++    "name": "Abouelsid — Website",
++    "description": "Public API endpoints for the Abouelsid website. All requests require X-API-Key header.",
++    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
++  },
++  "event": [
++    {
++      "listen": "prerequest",
++      "script": {
++        "type": "text/javascript",
++        "exec": [
++          "pm.request.headers.add({ key: 'X-API-Key', value: pm.collectionVariables.get('api_key') });",
++          "pm.request.headers.add({ key: 'Accept-Language', value: pm.collectionVariables.get('locale') });",
++          "",
++          "// Don't force JSON content-type on multipart/form-data requests —",
++          "// Postman needs to set its own boundary header for file uploads.",
++          "if (!pm.request.body || pm.request.body.mode !== 'formdata') {",
++          "    pm.request.headers.add({ key: 'Content-Type', value: 'application/json' });",
++          "}"
++        ]
++      }
++    }
++  ],
++  "variable": [
++    {
++      "key": "base_url",
++      "value": "http://localhost:8000/api/v1",
++      "type": "string"
++    },
++    {
++      "key": "api_key",
++      "value": "abouelsid-secret-key-change-in-production",
++      "type": "string"
++    },
++    {
++      "key": "locale",
++      "value": "ar",
++      "type": "string"
++    }
++  ],
++  "item": [
++    {
++      "name": "Page Contents",
++      "item": [
++        {
++          "name": "Get Home Page Contents",
++          "request": {
++            "method": "GET",
++            "header": [],
++            "url": {
++              "raw": "{{base_url}}/page-contents?page=home",
++              "host": [
++                "{{base_url}}"
++              ],
++              "path": [
++                "page-contents"
++              ],
++              "query": [
++                {
++                  "key": "page",
++                  "value": "home"
++                }
++              ]
++            }
++          },
++          "response": []
++        },
++        {
++          "name": "Get Home Hero Section",
++          "request": {
++            "method": "GET",
++            "header": [],
++            "url": {
++              "raw": "{{base_url}}/page-contents?page=home&section=hero",
++              "host": [
++                "{{base_url}}"
++              ],
++              "path": [
++                "page-contents"
++              ],
++              "query": [
++                {
++                  "key": "page",
++                  "value": "home"
++                },
++                {
++                  "key": "section",
++                  "value": "hero"
++                }
++              ]
++            }
++          },
++          "response": []
++        },
++        {
++          "name": "Get Story Page Contents",
++          "request": {
++            "method": "GET",
++            "header": [],
++            "url": {
++              "raw": "{{base_url}}/page-contents?page=story",
++              "host": [
++                "{{base_url}}"
++              ],
++              "path": [
++                "page-contents"
++              ],
++              "query": [
++                {
++                  "key": "page",
++                  "value": "story"
++                }
++              ]
++            }
++          },
++          "response": []
++        },
++        {
++          "name": "Get Menu Page Contents",
++          "request": {
++            "method": "GET",
++            "header": [],
++            "url": {
++              "raw": "{{base_url}}/page-contents?page=menu",
++              "host": [
++                "{{base_url}}"
++              ],
++              "path": [
++                "page-contents"
++              ],
++              "query": [
++                {
++                  "key": "page",
++                  "value": "menu"
++                }
++              ]
++            }
++          },
++          "response": []
++        },
++        {
++          "name": "Get Order Page Contents",
++          "request": {
++            "method": "GET",
++            "header": [],
++            "url": {
++              "raw": "{{base_url}}/page-contents?page=order",
++              "host": [
++                "{{base_url}}"
++              ],
++              "path": [
++                "page-contents"
++              ],
++              "query": [
++                {
++                  "key": "page",
++                  "value": "order"
++                }
++              ]
++            }
++          },
++          "response": []
++        },
++        {
++          "name": "Get Catering Page Contents",
++          "request": {
++            "method": "GET",
++            "header": [],
++            "url": {
++              "raw": "{{base_url}}/page-contents?page=catering",
++              "host": [
++                "{{base_url}}"
++              ],
++              "path": [
++                "page-contents"
++              ],
++              "query": [
++                {
++                  "key": "page",
++                  "value": "catering"
++                }
++              ]
++            }
++          },
++          "response": []
++        },
++        {
++          "name": "Get Branches Page Contents",
++          "request": {
++            "method": "GET",
++            "header": [],
++            "url": {
++              "raw": "{{base_url}}/page-contents?page=branches",
++              "host": [
++                "{{base_url}}"
++              ],
++              "path": [
++                "page-contents"
++              ],
++              "query": [
++                {
++                  "key": "page",
++                  "value": "branches"
++                }
++              ]
++            }
++          },
++          "response": []
++        }
++      ]
++    },
++    {
++      "name": "Media Items",
++      "item": [
++        {
++          "name": "Get Home Media Items",
++          "request": {
++            "method": "GET",
++            "header": [],
++            "url": {
++              "raw": "{{base_url}}/media-items?page=home",
++              "host": [
++                "{{base_url}}"
++              ],
++              "path": [
++                "media-items"
++              ],
++              "query": [
++                {
++                  "key": "page",
++                  "value": "home"
++                }
++              ]
++            }
++          },
++          "response": []
++        },
++        {
++          "name": "Get Global Textures",
++          "request": {
++            "method": "GET",
++            "header": [],
++            "url": {
++              "raw": "{{base_url}}/media-items?page=global&section=textures",
++              "host": [
++                "{{base_url}}"
++              ],
++              "path": [
++                "media-items"
++              ],
++              "query": [
++                {
++                  "key": "page",
++                  "value": "global"
++                },
++                {
++                  "key": "section",
++                  "value": "textures"
++                }
++              ]
++            }
++          },
++          "response": []
++        },
++        {
++          "name": "Get Story Media Items",
++          "request": {
++            "method": "GET",
++            "header": [],
++            "url": {
++              "raw": "{{base_url}}/media-items?page=story",
++              "host": [
++                "{{base_url}}"
++              ],
++              "path": [
++                "media-items"
++              ],
++              "query": [
++                {
++                  "key": "page",
++                  "value": "story"
++                }
++              ]
++            }
++          },
++          "response": []
++        }
++      ]
++    },
++    {
++      "name": "Settings",
++      "item": [
++        {
++          "name": "Get All Settings",
++          "request": {
++            "method": "GET",
++            "header": [],
++            "url": {
++              "raw": "{{base_url}}/settings",
++              "host": [
++                "{{base_url}}"
++              ],
++              "path": [
++                "settings"
++              ]
++            }
++          },
++          "response": []
++        },
++        {
++          "name": "Get Contact Settings",
++          "request": {
++            "method": "GET",
++            "header": [],
++            "url": {
++              "raw": "{{base_url}}/settings?group=contact",
++              "host": [
++                "{{base_url}}"
++              ],
++              "path": [
++                "settings"
++              ],
++              "query": [
++                {
++                  "key": "group",
++                  "value": "contact"
++                }
++              ]
++            }
++          },
++          "response": []
++        },
++        {
++          "name": "Get Social Settings",
++          "request": {
++            "method": "GET",
++            "header": [],
++            "url": {
++              "raw": "{{base_url}}/settings?group=social",
++              "host": [
++                "{{base_url}}"
++              ],
++              "path": [
++                "settings"
++              ],
++              "query": [
++                {
++                  "key": "group",
++                  "value": "social"
++                }
++              ]
++            }
++          },
++          "response": []
++        },
++        {
++          "name": "Get Hours Settings",
++          "request": {
++            "method": "GET",
++            "header": [],
++            "url": {
++              "raw": "{{base_url}}/settings?group=hours",
++              "host": [
++                "{{base_url}}"
++              ],
++              "path": [
++                "settings"
++              ],
++              "query": [
++                {
++                  "key": "group",
++                  "value": "hours"
++                }
++              ]
++            }
++          },
++          "response": []
++        },
++        {
++          "name": "Get Footer Settings",
++          "request": {
++            "method": "GET",
++            "header": [],
++            "url": {
++              "raw": "{{base_url}}/settings?group=footer",
++              "host": [
++                "{{base_url}}"
++              ],
++              "path": [
++                "settings"
++              ],
++              "query": [
++                {
++                  "key": "group",
++                  "value": "footer"
++                }
++              ]
++            }
++          },
++          "response": []
++        },
++        {
++          "name": "Get Navbar Settings",
++          "request": {
++            "method": "GET",
++            "header": [],
++            "url": {
++              "raw": "{{base_url}}/settings?group=navbar",
++              "host": [
++                "{{base_url}}"
++              ],
++              "path": [
++                "settings"
++              ],
++              "query": [
++                {
++                  "key": "group",
++                  "value": "navbar"
++                }
++              ]
++            }
++          },
++          "response": []
++        }
++      ]
++    },
++    {
++      "name": "Dishes",
++      "item": [
++        {
++          "name": "Get All Dishes",
++          "request": {
++            "method": "GET",
++            "header": [],
++            "url": {
++              "raw": "{{base_url}}/dishes",
++              "host": [
++                "{{base_url}}"
++              ],
++              "path": [
++                "dishes"
++              ]
++            }
++          },
++          "response": []
++        },
++        {
++          "name": "Get Featured Dishes",
++          "request": {
++            "method": "GET",
++            "header": [],
++            "url": {
++              "raw": "{{base_url}}/dishes?featured=true",
++              "host": [
++                "{{base_url}}"
++              ],
++              "path": [
++                "dishes"
++              ],
++              "query": [
++                {
++                  "key": "featured",
++                  "value": "true"
++                }
++              ]
++            }
++          },
++          "response": []
++        },
++        {
++          "name": "Get Dishes by Category",
++          "request": {
++            "method": "GET",
++            "header": [],
++            "url": {
++              "raw": "{{base_url}}/dishes?category_id=1",
++              "host": [
++                "{{base_url}}"
++              ],
++              "path": [
++                "dishes"
++              ],
++              "query": [
++                {
++                  "key": "category_id",
++                  "value": "1"
++                }
++              ]
++            }
++          },
++          "response": []
++        },
++        {
++          "name": "Get Dishes Paginated",
++          "request": {
++            "method": "GET",
++            "header": [],
++            "url": {
++              "raw": "{{base_url}}/dishes?per_page=12&page=1",
++              "host": [
++                "{{base_url}}"
++              ],
++              "path": [
++                "dishes"
++              ],
++              "query": [
++                {
++                  "key": "per_page",
++                  "value": "12"
++                },
++                {
++                  "key": "page",
++                  "value": "1"
++                }
++              ]
++            }
++          },
++          "response": []
++        },
++        {
++          "name": "Get Single Dish",
++          "request": {
++            "method": "GET",
++            "header": [],
++            "url": {
++              "raw": "{{base_url}}/dishes/1",
++              "host": [
++                "{{base_url}}"
++              ],
++              "path": [
++                "dishes",
++                "1"
++              ]
++            }
++          },
++          "response": []
++        }
++      ]
++    },
++    {
++      "name": "Categories",
++      "item": [
++        {
++          "name": "Get All Categories",
++          "request": {
++            "method": "GET",
++            "header": [],
++            "url": {
++              "raw": "{{base_url}}/categories",
++              "host": [
++                "{{base_url}}"
++              ],
++              "path": [
++                "categories"
++              ]
++            }
++          },
++          "response": []
++        }
++      ]
++    },
++    {
++      "name": "Branches",
++      "item": [
++        {
++          "name": "Get All Branches",
++          "request": {
++            "method": "GET",
++            "header": [],
++            "url": {
++              "raw": "{{base_url}}/branches",
++              "host": [
++                "{{base_url}}"
++              ],
++              "path": [
++                "branches"
++              ]
++            }
++          },
++          "response": []
++        }
++      ]
++    },
++    {
++      "name": "Catering",
++      "item": [
++        {
++          "name": "Get Catering Packages",
++          "request": {
++            "method": "GET",
++            "header": [],
++            "url": {
++              "raw": "{{base_url}}/catering/packages",
++              "host": [
++                "{{base_url}}"
++              ],
++              "path": [
++                "catering",
++                "packages"
++              ]
++            }
++          },
++          "response": []
++        },
++        {
++          "name": "Get Sample Menus",
++          "request": {
++            "method": "GET",
++            "header": [],
++            "url": {
++              "raw": "{{base_url}}/catering/sample-menus",
++              "host": [
++                "{{base_url}}"
++              ],
++              "path": [
++                "catering",
++                "sample-menus"
++              ]
++            }
++          },
++          "response": []
++        }
++      ]
++    },
++    {
++      "name": "Quote Request (Public Form)",
++      "item": [
++        {
++          "name": "Submit Quote Request (Valid)",
++          "request": {
++            "method": "POST",
++            "header": [
++              {
++                "key": "Content-Type",
++                "value": "application/json"
++              }
++            ],
++            "url": {
++              "raw": "{{base_url}}/catering/quote-requests",
++              "host": [
++                "{{base_url}}"
++              ],
++              "path": [
++                "catering",
++                "quote-requests"
++              ]
++            },
++            "body": {
++              "mode": "raw",
++              "raw": "{\n    \"name\": \"نورة العتيبي\",\n    \"phone\": \"0551234567\",\n    \"email\": \"noura@example.com\",\n    \"event_date\": \"2026-12-15\",\n    \"guests_count\": 150,\n    \"branch\": \"jeddah_delivery\",\n    \"event_type\": \"wedding\",\n    \"budget_range\": \"25k_50k\",\n    \"notes\": \"نريد قائمة مخصصة\"\n}",
++              "options": {
++                "raw": {
++                  "language": "json"
++                }
++              }
++            }
++          },
++          "response": []
++        },
++        {
++          "name": "Submit Quote Request (Validation Error Example)",
++          "request": {
++            "method": "POST",
++            "header": [
++              {
++                "key": "Content-Type",
++                "value": "application/json"
++              }
++            ],
++            "url": {
++              "raw": "{{base_url}}/catering/quote-requests",
++              "host": [
++                "{{base_url}}"
++              ],
++              "path": [
++                "catering",
++                "quote-requests"
++              ]
++            },
++            "body": {
++              "mode": "raw",
++              "raw": "{\n    \"name\": \"\",\n    \"phone\": \"\"\n}",
++              "options": {
++                "raw": {
++                  "language": "json"
++                }
++              }
++            }
++          },
++          "response": []
++        }
++      ]
++    },
++    {
++      "name": "Testimonials",
++      "item": [
++        {
++          "name": "Get All Testimonials",
++          "request": {
++            "method": "GET",
++            "header": [],
++            "url": {
++              "raw": "{{base_url}}/testimonials",
++              "host": [
++                "{{base_url}}"
++              ],
++              "path": [
++                "testimonials"
++              ]
++            }
++          },
++          "response": []
++        }
++      ]
++    },
++    {
++      "name": "Timeline",
++      "item": [
++        {
++          "name": "Get Timeline",
++          "request": {
++            "method": "GET",
++            "header": [],
++            "url": {
++              "raw": "{{base_url}}/timeline",
++              "host": [
++                "{{base_url}}"
++              ],
++              "path": [
++                "timeline"
++              ]
++            }
++          },
++          "response": []
++        }
++      ]
++    },
++    {
++      "name": "Delivery Apps",
++      "item": [
++        {
++          "name": "Get Delivery Apps",
++          "request": {
++            "method": "GET",
++            "header": [],
++            "url": {
++              "raw": "{{base_url}}/delivery-apps",
++              "host": [
++                "{{base_url}}"
++              ],
++              "path": [
++                "delivery-apps"
++              ]
++            }
++          },
++          "response": []
++        }
++      ]
++    }
++  ]
++}
+\ No newline at end of file

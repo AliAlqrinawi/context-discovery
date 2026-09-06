@@ -1,0 +1,610 @@
+{
+    "head_measured": "b7623af45d3b0562fd9b980ec4b68ea9cef73ff5",
+    "commits": 46,
+    "non_empty": 22,
+    "empty": 24,
+    "pct_non_empty": 47.8,
+    "pct_empty": 52.2,
+    "mean_items": 18.04,
+    "median_items": 0,
+    "mean_tokens": 789.8,
+    "median_tokens": 0,
+    "max_items": 163,
+    "max_tokens": 7894,
+    "mean_fetched": 13.76,
+    "mean_flags": 4.28,
+    "flags_only": 1,
+    "fetched_context": 21,
+    "both": 19,
+    "non_empty_only": {
+        "mean_items": 37.73,
+        "median_items": 18.5,
+        "mean_tokens": 1651.4,
+        "median_tokens": 881
+    },
+    "item_histogram": {
+        "0": 24,
+        "1-2": 2,
+        "3-5": 3,
+        "6-10": 1,
+        "11+": 16
+    },
+    "token_histogram": {
+        "0": 24,
+        "1-100": 2,
+        "101-300": 4,
+        "301-600": 2,
+        "601-1000": 5,
+        "1001+": 9
+    },
+    "empty_by_reason": {
+        "E0": 18,
+        "E2": 1,
+        "E3": 5
+    },
+    "empty_detail": [
+        {
+            "sha": "407c110",
+            "subject": "feat: add all database migrations (15 app tables)",
+            "primary": "E3",
+            "observed": [
+                "E3",
+                "E1",
+                "E2"
+            ],
+            "diagnostics": [
+                "new file: database/migrations/2026_07_16_000001_create_categories_table.php — own-file context is in the diff, not fetched",
+                "new file: database/migrations/2026_07_16_000002_create_dishes_table.php — own-file context is in the diff, not fetched",
+                "new file: database/migrations/2026_07_16_000003_create_branches_table.php — own-file context is in the diff, not fetched",
+                "new file: database/migrations/2026_07_16_000004_create_catering_packages_table.php — own-file context is in the diff, not fetched",
+                "new file: database/migrations/2026_07_16_000005_create_catering_package_features_table.php — own-file context is in the diff, not fetched",
+                "new file: database/migrations/2026_07_16_000006_create_sample_menus_table.php — own-file context is in the diff, not fetched",
+                "new file: database/migrations/2026_07_16_000007_create_sample_menu_dishes_table.php — own-file context is in the diff, not fetched",
+                "new file: database/migrations/2026_07_16_000008_create_quote_requests_table.php — own-file context is in the diff, not fetched",
+                "new file: database/migrations/2026_07_16_000009_create_testimonials_table.php — own-file context is in the diff, not fetched",
+                "new file: database/migrations/2026_07_16_000010_create_timelines_table.php — own-file context is in the diff, not fetched",
+                "new file: database/migrations/2026_07_16_000011_create_delivery_apps_table.php — own-file context is in the diff, not fetched",
+                "new file: database/migrations/2026_07_16_000012_create_page_contents_table.php — own-file context is in the diff, not fetched",
+                "new file: database/migrations/2026_07_16_000013_create_media_items_table.php — own-file context is in the diff, not fetched",
+                "new file: database/migrations/2026_07_16_000014_create_settings_table.php — own-file context is in the diff, not fetched",
+                "framework reference: Illuminate\\Support\\Facades\\Schema::create declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Schema.php:34 (@method static void create(string $table, \\Closure $callback))",
+                "framework reference: Illuminate\\Support\\Facades\\Schema::dropIfExists declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Schema.php:36 (@method static void dropIfExists(string $table))",
+                "dependency class: Illuminate\\Database\\Schema\\Blueprint provided by vendor/laravel/framework/src/Illuminate/Database/Schema/Blueprint.php; surface not fetched",
+                "framework reference: Illuminate\\Support\\Facades\\Schema::create declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Schema.php:34 (@method static void create(string $table, \\Closure $callback))",
+                "framework reference: Illuminate\\Support\\Facades\\Schema::dropIfExists declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Schema.php:36 (@method static void dropIfExists(string $table))",
+                "dependency class: Illuminate\\Database\\Schema\\Blueprint provided by vendor/laravel/framework/src/Illuminate/Database/Schema/Blueprint.php; surface not fetched",
+                "framework reference: Illuminate\\Support\\Facades\\Schema::create declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Schema.php:34 (@method static void create(string $table, \\Closure $callback))",
+                "framework reference: Illuminate\\Support\\Facades\\Schema::dropIfExists declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Schema.php:36 (@method static void dropIfExists(string $table))",
+                "dependency class: Illuminate\\Database\\Schema\\Blueprint provided by vendor/laravel/framework/src/Illuminate/Database/Schema/Blueprint.php; surface not fetched",
+                "framework reference: Illuminate\\Support\\Facades\\Schema::create declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Schema.php:34 (@method static void create(string $table, \\Closure $callback))",
+                "framework reference: Illuminate\\Support\\Facades\\Schema::dropIfExists declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Schema.php:36 (@method static void dropIfExists(string $table))",
+                "dependency class: Illuminate\\Database\\Schema\\Blueprint provided by vendor/laravel/framework/src/Illuminate/Database/Schema/Blueprint.php; surface not fetched",
+                "framework reference: Illuminate\\Support\\Facades\\Schema::create declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Schema.php:34 (@method static void create(string $table, \\Closure $callback))",
+                "framework reference: Illuminate\\Support\\Facades\\Schema::dropIfExists declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Schema.php:36 (@method static void dropIfExists(string $table))",
+                "dependency class: Illuminate\\Database\\Schema\\Blueprint provided by vendor/laravel/framework/src/Illuminate/Database/Schema/Blueprint.php; surface not fetched",
+                "framework reference: Illuminate\\Support\\Facades\\Schema::create declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Schema.php:34 (@method static void create(string $table, \\Closure $callback))",
+                "framework reference: Illuminate\\Support\\Facades\\Schema::dropIfExists declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Schema.php:36 (@method static void dropIfExists(string $table))",
+                "dependency class: Illuminate\\Database\\Schema\\Blueprint provided by vendor/laravel/framework/src/Illuminate/Database/Schema/Blueprint.php; surface not fetched",
+                "framework reference: Illuminate\\Support\\Facades\\Schema::create declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Schema.php:34 (@method static void create(string $table, \\Closure $callback))",
+                "framework reference: Illuminate\\Support\\Facades\\Schema::dropIfExists declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Schema.php:36 (@method static void dropIfExists(string $table))",
+                "dependency class: Illuminate\\Database\\Schema\\Blueprint provided by vendor/laravel/framework/src/Illuminate/Database/Schema/Blueprint.php; surface not fetched",
+                "framework reference: Illuminate\\Support\\Facades\\Schema::create declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Schema.php:34 (@method static void create(string $table, \\Closure $callback))",
+                "framework reference: Illuminate\\Support\\Facades\\Schema::dropIfExists declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Schema.php:36 (@method static void dropIfExists(string $table))",
+                "dependency class: Illuminate\\Database\\Schema\\Blueprint provided by vendor/laravel/framework/src/Illuminate/Database/Schema/Blueprint.php; surface not fetched",
+                "framework reference: Illuminate\\Support\\Facades\\Schema::create declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Schema.php:34 (@method static void create(string $table, \\Closure $callback))",
+                "framework reference: Illuminate\\Support\\Facades\\Schema::dropIfExists declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Schema.php:36 (@method static void dropIfExists(string $table))",
+                "dependency class: Illuminate\\Database\\Schema\\Blueprint provided by vendor/laravel/framework/src/Illuminate/Database/Schema/Blueprint.php; surface not fetched",
+                "framework reference: Illuminate\\Support\\Facades\\Schema::create declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Schema.php:34 (@method static void create(string $table, \\Closure $callback))",
+                "framework reference: Illuminate\\Support\\Facades\\Schema::dropIfExists declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Schema.php:36 (@method static void dropIfExists(string $table))",
+                "dependency class: Illuminate\\Database\\Schema\\Blueprint provided by vendor/laravel/framework/src/Illuminate/Database/Schema/Blueprint.php; surface not fetched",
+                "framework reference: Illuminate\\Support\\Facades\\Schema::create declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Schema.php:34 (@method static void create(string $table, \\Closure $callback))",
+                "framework reference: Illuminate\\Support\\Facades\\Schema::dropIfExists declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Schema.php:36 (@method static void dropIfExists(string $table))",
+                "dependency class: Illuminate\\Database\\Schema\\Blueprint provided by vendor/laravel/framework/src/Illuminate/Database/Schema/Blueprint.php; surface not fetched",
+                "framework reference: Illuminate\\Support\\Facades\\Schema::create declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Schema.php:34 (@method static void create(string $table, \\Closure $callback))",
+                "framework reference: Illuminate\\Support\\Facades\\Schema::dropIfExists declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Schema.php:36 (@method static void dropIfExists(string $table))",
+                "dependency class: Illuminate\\Database\\Schema\\Blueprint provided by vendor/laravel/framework/src/Illuminate/Database/Schema/Blueprint.php; surface not fetched",
+                "framework reference: Illuminate\\Support\\Facades\\Schema::create declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Schema.php:34 (@method static void create(string $table, \\Closure $callback))",
+                "framework reference: Illuminate\\Support\\Facades\\Schema::dropIfExists declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Schema.php:36 (@method static void dropIfExists(string $table))",
+                "dependency class: Illuminate\\Database\\Schema\\Blueprint provided by vendor/laravel/framework/src/Illuminate/Database/Schema/Blueprint.php; surface not fetched",
+                "framework reference: Illuminate\\Support\\Facades\\Schema::create declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Schema.php:34 (@method static void create(string $table, \\Closure $callback))",
+                "framework reference: Illuminate\\Support\\Facades\\Schema::dropIfExists declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Schema.php:36 (@method static void dropIfExists(string $table))",
+                "dependency class: Illuminate\\Database\\Schema\\Blueprint provided by vendor/laravel/framework/src/Illuminate/Database/Schema/Blueprint.php; surface not fetched"
+            ],
+            "files": 15,
+            "changed_lines": 402,
+            "categories": [
+                "migration"
+            ]
+        },
+        {
+            "sha": "0cdb910",
+            "subject": "feat: final verification, Scramble docs, and POSTMAN_GUIDE",
+            "primary": "E2",
+            "observed": [
+                "E1",
+                "E2"
+            ],
+            "diagnostics": [
+                "dependency member: Dedoc\\Scramble\\Scramble::configure declared at vendor/dedoc/scramble/src/Scramble.php:60; source not fetched",
+                "dependency member: Dedoc\\Scramble\\Support\\Generator\\SecurityScheme::apiKey declared at vendor/dedoc/scramble/src/Support/Generator/SecurityScheme.php:25; source not fetched",
+                "dependency member: Dedoc\\Scramble\\Support\\Generator\\SecurityScheme::http declared at vendor/dedoc/scramble/src/Support/Generator/SecurityScheme.php:30; source not fetched",
+                "dependency class: Dedoc\\Scramble\\Support\\Generator\\OpenApi provided by vendor/dedoc/scramble/src/Support/Generator/OpenApi.php; surface not fetched"
+            ],
+            "files": 8,
+            "changed_lines": 71,
+            "categories": [
+                "app-other",
+                "config",
+                "non-php",
+                "other",
+                "test"
+            ]
+        },
+        {
+            "sha": "c88afc8",
+            "subject": "feat: add Postman collections for website and dashboard",
+            "primary": "E0",
+            "observed": [
+                "E0"
+            ],
+            "diagnostics": [],
+            "files": 2,
+            "changed_lines": 2347,
+            "categories": [
+                "non-php"
+            ]
+        },
+        {
+            "sha": "b969836",
+            "subject": "fix: allow Sanctum Bearer Token to bypass CheckApiKey middleware",
+            "primary": "E0",
+            "observed": [
+                "E0"
+            ],
+            "diagnostics": [],
+            "files": 1,
+            "changed_lines": 5,
+            "categories": [
+                "app-other"
+            ]
+        },
+        {
+            "sha": "b2eebe7",
+            "subject": "refactor: add ApiResponse trait and clean up all controllers",
+            "primary": "E3",
+            "observed": [
+                "E3",
+                "E2"
+            ],
+            "diagnostics": [
+                "unreadable path: app/Http/Controllers/Auth/AuthController.php (no assertions extracted)",
+                "unreadable path: app/Http/Controllers/BranchController.php (no assertions extracted)",
+                "unreadable path: app/Http/Controllers/CategoryController.php (no assertions extracted)",
+                "unreadable path: app/Http/Controllers/Catering/CateringPackageController.php (no assertions extracted)",
+                "unreadable path: app/Http/Controllers/Catering/QuoteRequestController.php (no assertions extracted)",
+                "unreadable path: app/Http/Controllers/Catering/SampleMenuController.php (no assertions extracted)",
+                "unreadable path: app/Http/Controllers/DeliveryAppController.php (no assertions extracted)",
+                "unreadable path: app/Http/Controllers/DishController.php (no assertions extracted)",
+                "unreadable path: app/Http/Controllers/MediaItemController.php (no assertions extracted)",
+                "unreadable path: app/Http/Controllers/PageContentController.php (no assertions extracted)",
+                "unreadable path: app/Http/Controllers/SettingController.php (no assertions extracted)",
+                "unreadable path: app/Http/Controllers/TestimonialController.php (no assertions extracted)",
+                "unreadable path: app/Http/Controllers/TimelineController.php (no assertions extracted)",
+                "unreadable path: app/Http/Controllers/UserController.php (no assertions extracted)",
+                "new file: app/Traits/ApiResponse.php — own-file context is in the diff, not fetched",
+                "dependency class: Illuminate\\Http\\JsonResponse provided by vendor/laravel/framework/src/Illuminate/Http/JsonResponse.php; surface not fetched"
+            ],
+            "files": 16,
+            "changed_lines": 425,
+            "categories": [
+                "app-other",
+                "controller"
+            ]
+        },
+        {
+            "sha": "9b8f9c6",
+            "subject": "feat: add bilingual lang files (ar/en) for validation and messages",
+            "primary": "E3",
+            "observed": [
+                "E3"
+            ],
+            "diagnostics": [
+                "unreadable path: app/Http/Controllers/Auth/AuthController.php (no assertions extracted)",
+                "unreadable path: app/Http/Controllers/BranchController.php (no assertions extracted)",
+                "unreadable path: app/Http/Controllers/CategoryController.php (no assertions extracted)",
+                "unreadable path: app/Http/Controllers/Catering/CateringPackageController.php (no assertions extracted)",
+                "unreadable path: app/Http/Controllers/Catering/QuoteRequestController.php (no assertions extracted)",
+                "unreadable path: app/Http/Controllers/Catering/SampleMenuController.php (no assertions extracted)",
+                "unreadable path: app/Http/Controllers/DeliveryAppController.php (no assertions extracted)",
+                "unreadable path: app/Http/Controllers/DishController.php (no assertions extracted)",
+                "unreadable path: app/Http/Controllers/MediaItemController.php (no assertions extracted)",
+                "unreadable path: app/Http/Controllers/PageContentController.php (no assertions extracted)",
+                "unreadable path: app/Http/Controllers/SettingController.php (no assertions extracted)",
+                "unreadable path: app/Http/Controllers/TestimonialController.php (no assertions extracted)",
+                "unreadable path: app/Http/Controllers/TimelineController.php (no assertions extracted)",
+                "unreadable path: app/Http/Controllers/UserController.php (no assertions extracted)",
+                "new file: lang/ar/messages.php — own-file context is in the diff, not fetched",
+                "new file: lang/en/messages.php — own-file context is in the diff, not fetched",
+                "new file: lang/en/validation.php — own-file context is in the diff, not fetched"
+            ],
+            "files": 19,
+            "changed_lines": 389,
+            "categories": [
+                "config",
+                "controller",
+                "other"
+            ]
+        },
+        {
+            "sha": "f3a7fcd",
+            "subject": "feat: add restaurant name and hours to settings",
+            "primary": "E0",
+            "observed": [
+                "E0"
+            ],
+            "diagnostics": [],
+            "files": 2,
+            "changed_lines": 4,
+            "categories": [
+                "database",
+                "test"
+            ]
+        },
+        {
+            "sha": "1fb0268",
+            "subject": "feat: add logo_dark and logo_white media slots",
+            "primary": "E0",
+            "observed": [
+                "E0"
+            ],
+            "diagnostics": [],
+            "files": 1,
+            "changed_lines": 3,
+            "categories": [
+                "database"
+            ]
+        },
+        {
+            "sha": "1fa1f66",
+            "subject": "fix: cast featured/signature query params to boolean in public DishController",
+            "primary": "E0",
+            "observed": [
+                "E0"
+            ],
+            "diagnostics": [],
+            "files": 1,
+            "changed_lines": 11,
+            "categories": [
+                "controller"
+            ]
+        },
+        {
+            "sha": "c31783d",
+            "subject": "feat(content): seed CMS content for privacy and terms pages",
+            "primary": "E0",
+            "observed": [
+                "E0"
+            ],
+            "diagnostics": [],
+            "files": 3,
+            "changed_lines": 16,
+            "categories": [
+                "app-other",
+                "database",
+                "test"
+            ]
+        },
+        {
+            "sha": "375bf5c",
+            "subject": "fix: remove unused media slots (global textures, home hero background)",
+            "primary": "E0",
+            "observed": [
+                "E0"
+            ],
+            "diagnostics": [],
+            "files": 2,
+            "changed_lines": 10,
+            "categories": [
+                "database",
+                "test"
+            ]
+        },
+        {
+            "sha": "e4bbfcc",
+            "subject": "feat(content): move remaining hardcoded frontend strings into page_contents",
+            "primary": "E0",
+            "observed": [
+                "E0"
+            ],
+            "diagnostics": [],
+            "files": 1,
+            "changed_lines": 11,
+            "categories": [
+                "database"
+            ]
+        },
+        {
+            "sha": "915ccf9",
+            "subject": "feat: add catering_enabled setting for sitewide catering toggle",
+            "primary": "E0",
+            "observed": [
+                "E0"
+            ],
+            "diagnostics": [],
+            "files": 1,
+            "changed_lines": 2,
+            "categories": [
+                "app-other"
+            ]
+        },
+        {
+            "sha": "fdef4a9",
+            "subject": "feat: add whatsapp_number field to branches",
+            "primary": "E3",
+            "observed": [
+                "E3",
+                "E1",
+                "E2"
+            ],
+            "diagnostics": [
+                "new file: database/migrations/2026_08_11_084346_add_whatsapp_number_to_branches_table.php — own-file context is in the diff, not fetched",
+                "framework reference: Illuminate\\Support\\Facades\\Schema::table declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Schema.php:33 (@method static void table(string $table, \\Closure $callback))",
+                "dependency class: Illuminate\\Database\\Schema\\Blueprint provided by vendor/laravel/framework/src/Illuminate/Database/Schema/Blueprint.php; surface not fetched"
+            ],
+            "files": 10,
+            "changed_lines": 40,
+            "categories": [
+                "action-service",
+                "app-other",
+                "database",
+                "migration",
+                "model"
+            ]
+        },
+        {
+            "sha": "fc573d2",
+            "subject": "fix: make dish description optional (nullable)",
+            "primary": "E3",
+            "observed": [
+                "E3",
+                "E1",
+                "E2"
+            ],
+            "diagnostics": [
+                "new file: database/migrations/2026_08_11_091844_make_dish_descriptions_nullable.php — own-file context is in the diff, not fetched",
+                "framework reference: Illuminate\\Support\\Facades\\Schema::table declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Schema.php:33 (@method static void table(string $table, \\Closure $callback))",
+                "dependency class: Illuminate\\Database\\Schema\\Blueprint provided by vendor/laravel/framework/src/Illuminate/Database/Schema/Blueprint.php; surface not fetched"
+            ],
+            "files": 3,
+            "changed_lines": 42,
+            "categories": [
+                "app-other",
+                "migration"
+            ]
+        },
+        {
+            "sha": "3ef4d1a",
+            "subject": "feat: point menu QR code at the website /menu/pdf page",
+            "primary": "E0",
+            "observed": [
+                "E0"
+            ],
+            "diagnostics": [],
+            "files": 4,
+            "changed_lines": 19,
+            "categories": [
+                "action-service",
+                "config",
+                "non-php"
+            ]
+        },
+        {
+            "sha": "2c2a7b4",
+            "subject": "fix: menu PDF permanent_url uses frontend domain not API domain",
+            "primary": "E0",
+            "observed": [
+                "E0"
+            ],
+            "diagnostics": [],
+            "files": 2,
+            "changed_lines": 4,
+            "categories": [
+                "controller",
+                "test"
+            ]
+        },
+        {
+            "sha": "13b891f",
+            "subject": "Add Laravel cPanel deploy pipeline",
+            "primary": "E0",
+            "observed": [
+                "E0"
+            ],
+            "diagnostics": [],
+            "files": 1,
+            "changed_lines": 44,
+            "categories": [
+                "non-php"
+            ]
+        },
+        {
+            "sha": "cca9a8f",
+            "subject": "Use PHP 8.4 in CI to match server",
+            "primary": "E0",
+            "observed": [
+                "E0"
+            ],
+            "diagnostics": [],
+            "files": 1,
+            "changed_lines": 2,
+            "categories": [
+                "non-php"
+            ]
+        },
+        {
+            "sha": "508f03b",
+            "subject": "Simplify pipeline, remove tests",
+            "primary": "E0",
+            "observed": [
+                "E0"
+            ],
+            "diagnostics": [],
+            "files": 1,
+            "changed_lines": 8,
+            "categories": [
+                "non-php"
+            ]
+        },
+        {
+            "sha": "3f31452",
+            "subject": "Fix composer path in deploy script",
+            "primary": "E0",
+            "observed": [
+                "E0"
+            ],
+            "diagnostics": [],
+            "files": 1,
+            "changed_lines": 12,
+            "categories": [
+                "non-php"
+            ]
+        },
+        {
+            "sha": "18de5ee",
+            "subject": "Add Docker Hub image build to pipeline",
+            "primary": "E0",
+            "observed": [
+                "E0"
+            ],
+            "diagnostics": [],
+            "files": 3,
+            "changed_lines": 53,
+            "categories": [
+                "non-php"
+            ]
+        },
+        {
+            "sha": "6e00280",
+            "subject": "Add Kubernetes manifests for Laravel deployment",
+            "primary": "E0",
+            "observed": [
+                "E0"
+            ],
+            "diagnostics": [],
+            "files": 2,
+            "changed_lines": 34,
+            "categories": [
+                "non-php"
+            ]
+        },
+        {
+            "sha": "450d91f",
+            "subject": "Add self-hosted k8s deploy job to pipeline",
+            "primary": "E0",
+            "observed": [
+                "E0"
+            ],
+            "diagnostics": [],
+            "files": 1,
+            "changed_lines": 27,
+            "categories": [
+                "non-php"
+            ]
+        }
+    ],
+    "shapes": [
+        [
+            "has a static Name::member on an added line",
+            27,
+            "21/27 (78%)",
+            12,
+            606
+        ],
+        [
+            "no static Name::member on any added line",
+            19,
+            "1/19 (5%)",
+            0,
+            0
+        ],
+        [
+            "creates at least one file",
+            26,
+            "16/26 (62%)",
+            11.5,
+            470
+        ],
+        [
+            "modifies only",
+            20,
+            "6/20 (30%)",
+            0,
+            0
+        ],
+        [
+            "touches a model",
+            8,
+            "7/8 (88%)",
+            21.5,
+            685.5
+        ],
+        [
+            "touches a controller",
+            16,
+            "12/16 (75%)",
+            17,
+            544.5
+        ],
+        [
+            "touches an action/service",
+            13,
+            "11/13 (85%)",
+            19,
+            888
+        ],
+        [
+            "touches tests",
+            21,
+            "16/21 (76%)",
+            15,
+            848
+        ],
+        [
+            "touches a migration",
+            7,
+            "4/7 (57%)",
+            3,
+            60
+        ],
+        [
+            "touches routes",
+            9,
+            "9/9 (100%)",
+            19,
+            888
+        ],
+        [
+            "touches config",
+            4,
+            "1/4 (25%)",
+            0,
+            0
+        ],
+        [
+            "contains a non-PHP file",
+            12,
+            "2/12 (17%)",
+            0,
+            0
+        ],
+        [
+            "no PHP file at all",
+            8,
+            "0/8 (0%)",
+            0,
+            0
+        ]
+    ],
+    "total_vendor_items": 0,
+    "unprocessed": 0
+}

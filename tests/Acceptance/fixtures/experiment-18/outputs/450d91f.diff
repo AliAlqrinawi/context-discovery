@@ -1,0 +1,59 @@
+diff --git a/.github/workflows/deploy.yml b/.github/workflows/deploy.yml
+index 04be0e7..e344cd8 100644
+--- a/.github/workflows/deploy.yml
++++ b/.github/workflows/deploy.yml
+@@ -1,4 +1,4 @@
+-name: Laravel CI/CD to cPanel
++name: Laravel CI/CD to cPanel + Kubernetes
+ 
+ on:
+   push:
+@@ -20,19 +20,18 @@ jobs:
+   docker:
+     needs: build
+     runs-on: ubuntu-latest
++    outputs:
++      image-tag: ${{ steps.meta.outputs.tag }}
+     steps:
+       - uses: actions/checkout@v4
+-
+       - name: Set image tag from commit SHA
+         id: meta
+         run: echo "tag=${GITHUB_SHA::7}" >> "$GITHUB_OUTPUT"
+-
+       - name: Log in to Docker Hub
+         uses: docker/login-action@v3
+         with:
+           username: ${{ secrets.DOCKERHUB_USERNAME }}
+           password: ${{ secrets.DOCKERHUB_TOKEN }}
+-
+       - name: Build and push
+         uses: docker/build-push-action@v6
+         with:
+@@ -42,6 +41,26 @@ jobs:
+             ${{ secrets.DOCKERHUB_USERNAME }}/abouelsid-backend:latest
+             ${{ secrets.DOCKERHUB_USERNAME }}/abouelsid-backend:${{ steps.meta.outputs.tag }}
+ 
++  k8s-deploy:
++    needs: docker
++    runs-on: self-hosted
++    steps:
++      - uses: actions/checkout@v4
++      - name: Set image on deployment
++        run: |
++          IMAGE="${{ secrets.DOCKERHUB_USERNAME }}/abouelsid-backend:${{ needs.docker.outputs.image-tag }}"
++          sed -i '' "s|${{ secrets.DOCKERHUB_USERNAME }}/abouelsid-backend:latest|$IMAGE|g" k8s/deployment.yaml
++      - name: Apply manifests
++        run: |
++          kubectl apply -f k8s/deployment.yaml
++          kubectl apply -f k8s/service.yaml
++      - name: Wait for rollout
++        run: kubectl rollout status deployment/laravel-deployment --timeout=120s
++      - name: Show resources
++        run: |
++          kubectl get pods -o wide
++          kubectl get svc laravel-service
++
+   deploy:
+     needs: build
+     runs-on: ubuntu-latest

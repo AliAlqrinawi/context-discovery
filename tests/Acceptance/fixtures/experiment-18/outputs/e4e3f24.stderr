@@ -1,0 +1,55 @@
+new file: app/Enums/BranchLocationEnum.php — own-file context is in the diff, not fetched
+new file: app/Enums/BudgetRangeEnum.php — own-file context is in the diff, not fetched
+new file: app/Enums/EventTypeEnum.php — own-file context is in the diff, not fetched
+new file: app/Enums/MediaTypeEnum.php — own-file context is in the diff, not fetched
+new file: app/Enums/PageEnum.php — own-file context is in the diff, not fetched
+new file: app/Enums/QuoteRequestStatusEnum.php — own-file context is in the diff, not fetched
+new file: app/Enums/UserRoleEnum.php — own-file context is in the diff, not fetched
+new file: app/Models/Branch.php — own-file context is in the diff, not fetched
+new file: app/Models/Category.php — own-file context is in the diff, not fetched
+new file: app/Models/CateringPackage.php — own-file context is in the diff, not fetched
+new file: app/Models/CateringPackageFeature.php — own-file context is in the diff, not fetched
+new file: app/Models/DeliveryApp.php — own-file context is in the diff, not fetched
+new file: app/Models/Dish.php — own-file context is in the diff, not fetched
+new file: app/Models/MediaItem.php — own-file context is in the diff, not fetched
+new file: app/Models/PageContent.php — own-file context is in the diff, not fetched
+new file: app/Models/QuoteRequest.php — own-file context is in the diff, not fetched
+new file: app/Models/SampleMenu.php — own-file context is in the diff, not fetched
+new file: app/Models/SampleMenuDish.php — own-file context is in the diff, not fetched
+new file: app/Models/Setting.php — own-file context is in the diff, not fetched
+new file: app/Models/Testimonial.php — own-file context is in the diff, not fetched
+new file: app/Models/Timeline.php — own-file context is in the diff, not fetched
+new file: tests/Unit/EnumsTest.php — own-file context is in the diff, not fetched
+new file: tests/Unit/ModelsTest.php — own-file context is in the diff, not fetched
+dependency class: Illuminate\Database\Eloquent\Relations\HasMany provided by vendor/laravel/framework/src/Illuminate/Database/Eloquent/Relations/HasMany.php; surface not fetched
+dependency class: Illuminate\Database\Eloquent\Relations\HasMany provided by vendor/laravel/framework/src/Illuminate/Database/Eloquent/Relations/HasMany.php; surface not fetched
+dependency class: Illuminate\Database\Eloquent\Relations\BelongsTo provided by vendor/laravel/framework/src/Illuminate/Database/Eloquent/Relations/BelongsTo.php; surface not fetched
+dependency class: Illuminate\Database\Eloquent\Relations\BelongsTo provided by vendor/laravel/framework/src/Illuminate/Database/Eloquent/Relations/BelongsTo.php; surface not fetched
+dependency class: Illuminate\Database\Eloquent\Builder provided by vendor/laravel/framework/src/Illuminate/Database/Eloquent/Builder.php; surface not fetched
+dependency class: Illuminate\Database\Eloquent\Builder provided by vendor/laravel/framework/src/Illuminate/Database/Eloquent/Builder.php; surface not fetched
+dependency class: Illuminate\Database\Eloquent\Relations\HasMany provided by vendor/laravel/framework/src/Illuminate/Database/Eloquent/Relations/HasMany.php; surface not fetched
+dependency class: Illuminate\Database\Eloquent\Relations\BelongsTo provided by vendor/laravel/framework/src/Illuminate/Database/Eloquent/Relations/BelongsTo.php; surface not fetched
+dependency class: Illuminate\Database\Eloquent\Builder provided by vendor/laravel/framework/src/Illuminate/Database/Eloquent/Builder.php; surface not fetched
+already in the diff: App\Enums\QuoteRequestStatusEnum::values declared in app/Enums/QuoteRequestStatusEnum.php; not fetched again
+unresolved named_reference: App\Enums\QuoteRequestStatusEnum::cases in tests/Unit/EnumsTest.php
+already in the diff: App\Enums\EventTypeEnum::values declared in app/Enums/EventTypeEnum.php; not fetched again
+unresolved named_reference: App\Enums\EventTypeEnum::cases in tests/Unit/EnumsTest.php
+already in the diff: App\Enums\BudgetRangeEnum::values declared in app/Enums/BudgetRangeEnum.php; not fetched again
+unresolved named_reference: App\Enums\BudgetRangeEnum::cases in tests/Unit/EnumsTest.php
+already in the diff: App\Enums\BranchLocationEnum::values declared in app/Enums/BranchLocationEnum.php; not fetched again
+unresolved named_reference: App\Enums\BranchLocationEnum::cases in tests/Unit/EnumsTest.php
+already in the diff: App\Enums\UserRoleEnum::values declared in app/Enums/UserRoleEnum.php; not fetched again
+unresolved named_reference: App\Enums\UserRoleEnum::cases in tests/Unit/EnumsTest.php
+already in the diff: App\Enums\MediaTypeEnum::values declared in app/Enums/MediaTypeEnum.php; not fetched again
+unresolved named_reference: App\Enums\MediaTypeEnum::cases in tests/Unit/EnumsTest.php
+already in the diff: App\Enums\PageEnum::values declared in app/Enums/PageEnum.php; not fetched again
+unresolved named_reference: App\Enums\PageEnum::cases in tests/Unit/EnumsTest.php
+already in the diff: App\Models\Category declared in app/Models/Category.php; not fetched again
+already in the diff: App\Models\Dish declared in app/Models/Dish.php; not fetched again
+already in the diff: App\Models\CateringPackage declared in app/Models/CateringPackage.php; not fetched again
+already in the diff: App\Models\CateringPackageFeature declared in app/Models/CateringPackageFeature.php; not fetched again
+already in the diff: App\Models\SampleMenu declared in app/Models/SampleMenu.php; not fetched again
+already in the diff: App\Models\SampleMenuDish declared in app/Models/SampleMenuDish.php; not fetched again
+already in the diff: App\Models\PageContent declared in app/Models/PageContent.php; not fetched again
+already in the diff: App\Models\MediaItem declared in app/Models/MediaItem.php; not fetched again
+already in the diff: App\Models\Setting declared in app/Models/Setting.php; not fetched again

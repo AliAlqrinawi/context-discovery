@@ -1,0 +1,46 @@
+diff --git a/k8s/deployment.yaml b/k8s/deployment.yaml
+new file mode 100644
+index 0000000..3f1e0c8
+--- /dev/null
++++ b/k8s/deployment.yaml
+@@ -0,0 +1,22 @@
++apiVersion: apps/v1
++kind: Deployment
++metadata:
++  name: laravel-deployment
++  labels:
++    app: laravel
++spec:
++  replicas: 2
++  selector:
++    matchLabels:
++      app: laravel
++  template:
++    metadata:
++      labels:
++        app: laravel
++    spec:
++      containers:
++        - name: laravel
++          image: alialqrinawi/abouelsid-backend:latest
++          ports:
++            - containerPort: 80
++          imagePullPolicy: Always
+diff --git a/k8s/service.yaml b/k8s/service.yaml
+new file mode 100644
+index 0000000..d2411e0
+--- /dev/null
++++ b/k8s/service.yaml
+@@ -0,0 +1,12 @@
++apiVersion: v1
++kind: Service
++metadata:
++  name: laravel-service
++spec:
++  type: NodePort
++  selector:
++    app: laravel
++  ports:
++    - port: 80
++      targetPort: 80
++      nodePort: 30080

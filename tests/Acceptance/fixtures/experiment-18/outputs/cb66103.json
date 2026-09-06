@@ -1,0 +1,996 @@
+{
+    "bundle_version": 1,
+    "budget_tokens": 8000,
+    "used_tokens": 1265,
+    "items": [
+        {
+            "lever": "fetched",
+            "reason": "the region uses var_export, which the file's use block does not import",
+            "assertion_kind": "same_file_symbol_absence",
+            "provenance": {
+                "path": "app/Actions/Branch/GetBranchesAction.php",
+                "lines": [
+                    5,
+                    7
+                ]
+            },
+            "payload": "use App\\Repositories\\BranchRepository;\nuse App\\Services\\CacheGroup;\nuse Illuminate\\Database\\Eloquent\\Collection;",
+            "tokens": 28
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region uses var_export, which the file's use block does not import",
+            "assertion_kind": "same_file_symbol_absence",
+            "provenance": {
+                "path": "app/Actions/Branch/GetBranchesAction.php",
+                "member": "__construct",
+                "lines": [
+                    11,
+                    13
+                ]
+            },
+            "payload": "    public function __construct(\n        private readonly BranchRepository $repository,\n    ) {}",
+            "tokens": 24
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region calls the sibling member apiKey, whose contract the diff does not show",
+            "assertion_kind": "same_file_reference",
+            "provenance": {
+                "path": "tests/Feature/PublicApiTest.php",
+                "member": "apiKey",
+                "lines": [
+                    20,
+                    23
+                ]
+            },
+            "payload": "    private function apiKey(): string\n    {\n        return config('services.website_api_key');\n    }",
+            "tokens": 25
+        },
+        {
+            "lever": "fetched",
+            "reason": "the signature of execute changed; its call sites are not shown by the diff",
+            "assertion_kind": "changed_signature",
+            "provenance": {
+                "path": "app/Actions/Auth/LoginAction.php",
+                "lines": [
+                    12,
+                    12
+                ]
+            },
+            "payload": "    public function execute(LoginDTO $dto): array",
+            "tokens": 13
+        },
+        {
+            "lever": "fetched",
+            "reason": "the signature of execute changed; its call sites are not shown by the diff",
+            "assertion_kind": "changed_signature",
+            "provenance": {
+                "path": "app/Actions/Auth/LogoutAction.php",
+                "lines": [
+                    9,
+                    9
+                ]
+            },
+            "payload": "    public function execute(User $user): void",
+            "tokens": 12
+        },
+        {
+            "lever": "fetched",
+            "reason": "the signature of execute changed; its call sites are not shown by the diff",
+            "assertion_kind": "changed_signature",
+            "provenance": {
+                "path": "app/Actions/Branch/CreateBranchAction.php",
+                "lines": [
+                    19,
+                    19
+                ]
+            },
+            "payload": "    public function execute(CreateBranchDTO $dto): Branch",
+            "tokens": 15
+        },
+        {
+            "lever": "fetched",
+            "reason": "the signature of execute changed; its call sites are not shown by the diff",
+            "assertion_kind": "changed_signature",
+            "provenance": {
+                "path": "app/Actions/Branch/DeleteBranchAction.php",
+                "lines": [
+                    17,
+                    17
+                ]
+            },
+            "payload": "    public function execute(int $id): void",
+            "tokens": 11
+        },
+        {
+            "lever": "fetched",
+            "reason": "the signature of execute changed; its call sites are not shown by the diff",
+            "assertion_kind": "changed_signature",
+            "provenance": {
+                "path": "app/Actions/Branch/GetBranchesAction.php",
+                "lines": [
+                    15,
+                    15
+                ]
+            },
+            "payload": "    public function execute(?bool $showInFooter = null): Collection",
+            "tokens": 17
+        },
+        {
+            "lever": "fetched",
+            "reason": "the signature of getAll changed; its call sites are not shown by the diff",
+            "assertion_kind": "changed_signature",
+            "provenance": {
+                "path": "app/Actions/Branch/GetBranchesAction.php",
+                "lines": [
+                    25,
+                    25
+                ]
+            },
+            "payload": "            fn () => $this->repository->getAll($showInFooter)",
+            "tokens": 16
+        },
+        {
+            "lever": "flagged",
+            "reason": "the signature of execute changed; its call sites are not shown by the diff",
+            "assertion_kind": "changed_signature",
+            "provenance": {
+                "path": "app/Actions/Branch/GetBranchesAction.php",
+                "member": "execute",
+                "lines": [
+                    12,
+                    27
+                ]
+            },
+            "payload": "ASSUMPTION: additional call sites exist beyond the search bound; not all verified",
+            "tokens": 21
+        },
+        {
+            "lever": "fetched",
+            "reason": "the signature of execute changed; its call sites are not shown by the diff",
+            "assertion_kind": "changed_signature",
+            "provenance": {
+                "path": "app/Actions/Branch/UpdateBranchAction.php",
+                "lines": [
+                    19,
+                    19
+                ]
+            },
+            "payload": "    public function execute(int $id, UpdateBranchDTO $dto): Branch",
+            "tokens": 17
+        },
+        {
+            "lever": "fetched",
+            "reason": "the signature of execute changed; its call sites are not shown by the diff",
+            "assertion_kind": "changed_signature",
+            "provenance": {
+                "path": "app/Actions/Catering/CreatePackageAction.php",
+                "lines": [
+                    18,
+                    18
+                ]
+            },
+            "payload": "    public function execute(CreatePackageDTO $dto): CateringPackage",
+            "tokens": 17
+        },
+        {
+            "lever": "fetched",
+            "reason": "the signature of execute changed; its call sites are not shown by the diff",
+            "assertion_kind": "changed_signature",
+            "provenance": {
+                "path": "app/Actions/Catering/CreateSampleMenuAction.php",
+                "lines": [
+                    18,
+                    18
+                ]
+            },
+            "payload": "    public function execute(CreateSampleMenuDTO $dto): SampleMenu",
+            "tokens": 17
+        },
+        {
+            "lever": "fetched",
+            "reason": "the signature of execute changed; its call sites are not shown by the diff",
+            "assertion_kind": "changed_signature",
+            "provenance": {
+                "path": "app/Actions/Catering/DeletePackageAction.php",
+                "lines": [
+                    16,
+                    16
+                ]
+            },
+            "payload": "    public function execute(int $id): void",
+            "tokens": 11
+        },
+        {
+            "lever": "fetched",
+            "reason": "the signature of execute changed; its call sites are not shown by the diff",
+            "assertion_kind": "changed_signature",
+            "provenance": {
+                "path": "app/Actions/Catering/DeleteSampleMenuAction.php",
+                "lines": [
+                    16,
+                    16
+                ]
+            },
+            "payload": "    public function execute(int $id): void",
+            "tokens": 11
+        },
+        {
+            "lever": "fetched",
+            "reason": "the signature of execute changed; its call sites are not shown by the diff",
+            "assertion_kind": "changed_signature",
+            "provenance": {
+                "path": "app/Actions/Catering/GetPackagesAction.php",
+                "lines": [
+                    15,
+                    15
+                ]
+            },
+            "payload": "    public function execute(): Collection",
+            "tokens": 11
+        },
+        {
+            "lever": "fetched",
+            "reason": "the signature of getAll changed; its call sites are not shown by the diff",
+            "assertion_kind": "changed_signature",
+            "provenance": {
+                "path": "app/Actions/Catering/GetPackagesAction.php",
+                "lines": [
+                    24,
+                    24
+                ]
+            },
+            "payload": "            fn () => $this->repository->getAll()",
+            "tokens": 12
+        },
+        {
+            "lever": "fetched",
+            "reason": "the signature of execute changed; its call sites are not shown by the diff",
+            "assertion_kind": "changed_signature",
+            "provenance": {
+                "path": "app/Actions/Catering/GetSampleMenusAction.php",
+                "lines": [
+                    15,
+                    15
+                ]
+            },
+            "payload": "    public function execute(): Collection",
+            "tokens": 11
+        },
+        {
+            "lever": "fetched",
+            "reason": "the signature of getAll changed; its call sites are not shown by the diff",
+            "assertion_kind": "changed_signature",
+            "provenance": {
+                "path": "app/Actions/Catering/GetSampleMenusAction.php",
+                "lines": [
+                    24,
+                    24
+                ]
+            },
+            "payload": "            fn () => $this->repository->getAll()",
+            "tokens": 12
+        },
+        {
+            "lever": "fetched",
+            "reason": "the signature of execute changed; its call sites are not shown by the diff",
+            "assertion_kind": "changed_signature",
+            "provenance": {
+                "path": "app/Actions/Catering/SubmitQuoteRequestAction.php",
+                "lines": [
+                    16,
+                    16
+                ]
+            },
+            "payload": "    public function execute(SubmitQuoteRequestDTO $dto): QuoteRequest",
+            "tokens": 18
+        },
+        {
+            "lever": "fetched",
+            "reason": "the signature of execute changed; its call sites are not shown by the diff",
+            "assertion_kind": "changed_signature",
+            "provenance": {
+                "path": "app/Actions/Catering/UpdatePackageAction.php",
+                "lines": [
+                    19,
+                    19
+                ]
+            },
+            "payload": "    public function execute(int $id, UpdatePackageDTO $dto): CateringPackage",
+            "tokens": 19
+        },
+        {
+            "lever": "fetched",
+            "reason": "the signature of execute changed; its call sites are not shown by the diff",
+            "assertion_kind": "changed_signature",
+            "provenance": {
+                "path": "app/Actions/Catering/UpdateQuoteRequestStatusAction.php",
+                "lines": [
+                    16,
+                    16
+                ]
+            },
+            "payload": "    public function execute(int $id, UpdateQuoteRequestStatusDTO $dto): QuoteRequest",
+            "tokens": 21
+        },
+        {
+            "lever": "fetched",
+            "reason": "the signature of execute changed; its call sites are not shown by the diff",
+            "assertion_kind": "changed_signature",
+            "provenance": {
+                "path": "app/Actions/Catering/UpdateSampleMenuAction.php",
+                "lines": [
+                    18,
+                    18
+                ]
+            },
+            "payload": "    public function execute(int $id, CreateSampleMenuDTO $dto): SampleMenu",
+            "tokens": 19
+        },
+        {
+            "lever": "fetched",
+            "reason": "the signature of execute changed; its call sites are not shown by the diff",
+            "assertion_kind": "changed_signature",
+            "provenance": {
+                "path": "app/Actions/DeliveryApp/CreateDeliveryAppAction.php",
+                "lines": [
+                    18,
+                    18
+                ]
+            },
+            "payload": "    public function execute(CreateDeliveryAppDTO $dto): DeliveryApp",
+            "tokens": 17
+        },
+        {
+            "lever": "fetched",
+            "reason": "the signature of execute changed; its call sites are not shown by the diff",
+            "assertion_kind": "changed_signature",
+            "provenance": {
+                "path": "app/Actions/DeliveryApp/DeleteDeliveryAppAction.php",
+                "lines": [
+                    16,
+                    16
+                ]
+            },
+            "payload": "    public function execute(int $id): void",
+            "tokens": 11
+        },
+        {
+            "lever": "fetched",
+            "reason": "the signature of execute changed; its call sites are not shown by the diff",
+            "assertion_kind": "changed_signature",
+            "provenance": {
+                "path": "app/Actions/DeliveryApp/GetDeliveryAppsAction.php",
+                "lines": [
+                    15,
+                    15
+                ]
+            },
+            "payload": "    public function execute(bool $activeOnly = true): Collection",
+            "tokens": 16
+        },
+        {
+            "lever": "fetched",
+            "reason": "the signature of getAll changed; its call sites are not shown by the diff",
+            "assertion_kind": "changed_signature",
+            "provenance": {
+                "path": "app/Actions/DeliveryApp/GetDeliveryAppsAction.php",
+                "lines": [
+                    24,
+                    24
+                ]
+            },
+            "payload": "            fn () => $this->repository->getAll($activeOnly)",
+            "tokens": 15
+        },
+        {
+            "lever": "fetched",
+            "reason": "the signature of execute changed; its call sites are not shown by the diff",
+            "assertion_kind": "changed_signature",
+            "provenance": {
+                "path": "app/Actions/DeliveryApp/UpdateDeliveryAppAction.php",
+                "lines": [
+                    18,
+                    18
+                ]
+            },
+            "payload": "    public function execute(int $id, CreateDeliveryAppDTO $dto): DeliveryApp",
+            "tokens": 19
+        },
+        {
+            "lever": "fetched",
+            "reason": "the signature of getAll changed; its call sites are not shown by the diff",
+            "assertion_kind": "changed_signature",
+            "provenance": {
+                "path": "app/Actions/Dish/GetDishesAction.php",
+                "lines": [
+                    30,
+                    30
+                ]
+            },
+            "payload": "            fn () => $this->repository->getAll($filters)",
+            "tokens": 14
+        },
+        {
+            "lever": "fetched",
+            "reason": "the signature of getAll changed; its call sites are not shown by the diff",
+            "assertion_kind": "changed_signature",
+            "provenance": {
+                "path": "app/Actions/Personality/GetPersonalitiesAction.php",
+                "lines": [
+                    24,
+                    24
+                ]
+            },
+            "payload": "            fn () => $this->repository->getAll($activeOnly)",
+            "tokens": 15
+        },
+        {
+            "lever": "fetched",
+            "reason": "the signature of getAll changed; its call sites are not shown by the diff",
+            "assertion_kind": "changed_signature",
+            "provenance": {
+                "path": "app/Actions/Setting/GetSettingsAction.php",
+                "lines": [
+                    23,
+                    23
+                ]
+            },
+            "payload": "            fn () => $this->repository->getAll($group)",
+            "tokens": 14
+        },
+        {
+            "lever": "fetched",
+            "reason": "the signature of getAll changed; its call sites are not shown by the diff",
+            "assertion_kind": "changed_signature",
+            "provenance": {
+                "path": "app/Actions/Testimonial/GetTestimonialsAction.php",
+                "lines": [
+                    24,
+                    24
+                ]
+            },
+            "payload": "            fn () => $this->repository->getAll($activeOnly)",
+            "tokens": 15
+        },
+        {
+            "lever": "fetched",
+            "reason": "the signature of getAll changed; its call sites are not shown by the diff",
+            "assertion_kind": "changed_signature",
+            "provenance": {
+                "path": "app/Actions/Timeline/GetTimelineAction.php",
+                "lines": [
+                    24,
+                    24
+                ]
+            },
+            "payload": "            fn () => $this->repository->getAll()",
+            "tokens": 12
+        },
+        {
+            "lever": "fetched",
+            "reason": "the signature of getAll changed; its call sites are not shown by the diff",
+            "assertion_kind": "changed_signature",
+            "provenance": {
+                "path": "app/Actions/User/GetUsersAction.php",
+                "lines": [
+                    16,
+                    16
+                ]
+            },
+            "payload": "        return $this->repository->getAll();",
+            "tokens": 11
+        },
+        {
+            "lever": "fetched",
+            "reason": "the signature of index changed; its call sites are not shown by the diff",
+            "assertion_kind": "changed_signature",
+            "provenance": {
+                "path": "app/Http/Controllers/Admin/BranchController.php",
+                "lines": [
+                    20,
+                    20
+                ]
+            },
+            "payload": "    public function index(GetBranchesAction $action): JsonResponse",
+            "tokens": 17
+        },
+        {
+            "lever": "fetched",
+            "reason": "the signature of index changed; its call sites are not shown by the diff",
+            "assertion_kind": "changed_signature",
+            "provenance": {
+                "path": "app/Http/Controllers/Admin/CategoryController.php",
+                "lines": [
+                    17,
+                    17
+                ]
+            },
+            "payload": "    public function index(): JsonResponse",
+            "tokens": 11
+        },
+        {
+            "lever": "fetched",
+            "reason": "the signature of getAll changed; its call sites are not shown by the diff",
+            "assertion_kind": "changed_signature",
+            "provenance": {
+                "path": "app/Http/Controllers/Admin/CategoryController.php",
+                "lines": [
+                    19,
+                    19
+                ]
+            },
+            "payload": "        return $this->success(CategoryResource::collection($this->repository->getAll()), __('messages.fetched'));",
+            "tokens": 29
+        },
+        {
+            "lever": "fetched",
+            "reason": "the signature of index changed; its call sites are not shown by the diff",
+            "assertion_kind": "changed_signature",
+            "provenance": {
+                "path": "app/Http/Controllers/Admin/Catering/CateringPackageController.php",
+                "lines": [
+                    19,
+                    19
+                ]
+            },
+            "payload": "    public function index(GetPackagesAction $action): JsonResponse",
+            "tokens": 17
+        },
+        {
+            "lever": "fetched",
+            "reason": "the signature of index changed; its call sites are not shown by the diff",
+            "assertion_kind": "changed_signature",
+            "provenance": {
+                "path": "app/Http/Controllers/Admin/Catering/QuoteRequestController.php",
+                "lines": [
+                    16,
+                    16
+                ]
+            },
+            "payload": "    public function index(Request $request, QuoteRequestRepository $repository): JsonResponse",
+            "tokens": 24
+        },
+        {
+            "lever": "fetched",
+            "reason": "the signature of getAll changed; its call sites are not shown by the diff",
+            "assertion_kind": "changed_signature",
+            "provenance": {
+                "path": "app/Http/Controllers/Admin/Catering/QuoteRequestController.php",
+                "lines": [
+                    24,
+                    24
+                ]
+            },
+            "payload": "        $result = $repository->getAll($filters);",
+            "tokens": 12
+        },
+        {
+            "lever": "fetched",
+            "reason": "the signature of index changed; its call sites are not shown by the diff",
+            "assertion_kind": "changed_signature",
+            "provenance": {
+                "path": "app/Http/Controllers/Admin/Catering/SampleMenuController.php",
+                "lines": [
+                    17,
+                    17
+                ]
+            },
+            "payload": "    public function index(GetSampleMenusAction $action): JsonResponse",
+            "tokens": 18
+        },
+        {
+            "lever": "fetched",
+            "reason": "the signature of index changed; its call sites are not shown by the diff",
+            "assertion_kind": "changed_signature",
+            "provenance": {
+                "path": "app/Http/Controllers/Admin/DeliveryAppController.php",
+                "lines": [
+                    17,
+                    17
+                ]
+            },
+            "payload": "    public function index(GetDeliveryAppsAction $action): JsonResponse",
+            "tokens": 18
+        },
+        {
+            "lever": "fetched",
+            "reason": "the signature of index changed; its call sites are not shown by the diff",
+            "assertion_kind": "changed_signature",
+            "provenance": {
+                "path": "app/Http/Controllers/Admin/DishController.php",
+                "lines": [
+                    21,
+                    21
+                ]
+            },
+            "payload": "    public function index(Request $request, GetDishesAction $action): JsonResponse",
+            "tokens": 21
+        },
+        {
+            "lever": "fetched",
+            "reason": "the signature of index changed; its call sites are not shown by the diff",
+            "assertion_kind": "changed_signature",
+            "provenance": {
+                "path": "app/Http/Controllers/Admin/MediaItemController.php",
+                "lines": [
+                    18,
+                    18
+                ]
+            },
+            "payload": "    public function index(Request $request, GetMediaItemsAction $action): JsonResponse",
+            "tokens": 22
+        },
+        {
+            "lever": "fetched",
+            "reason": "the signature of index changed; its call sites are not shown by the diff",
+            "assertion_kind": "changed_signature",
+            "provenance": {
+                "path": "app/Http/Controllers/Admin/PageContentController.php",
+                "lines": [
+                    20,
+                    20
+                ]
+            },
+            "payload": "    public function index(Request $request, GetPageContentAction $action): JsonResponse",
+            "tokens": 22
+        },
+        {
+            "lever": "fetched",
+            "reason": "the signature of index changed; its call sites are not shown by the diff",
+            "assertion_kind": "changed_signature",
+            "provenance": {
+                "path": "app/Http/Controllers/Admin/PersonalityController.php",
+                "lines": [
+                    19,
+                    19
+                ]
+            },
+            "payload": "    public function index(GetPersonalitiesAction $action): JsonResponse",
+            "tokens": 18
+        },
+        {
+            "lever": "fetched",
+            "reason": "the signature of index changed; its call sites are not shown by the diff",
+            "assertion_kind": "changed_signature",
+            "provenance": {
+                "path": "app/Http/Controllers/Admin/SeoSettingController.php",
+                "lines": [
+                    18,
+                    18
+                ]
+            },
+            "payload": "    public function index(SeoSettingRepository $repository): JsonResponse",
+            "tokens": 19
+        },
+        {
+            "lever": "fetched",
+            "reason": "the signature of getAll changed; its call sites are not shown by the diff",
+            "assertion_kind": "changed_signature",
+            "provenance": {
+                "path": "app/Http/Controllers/Admin/SeoSettingController.php",
+                "lines": [
+                    20,
+                    20
+                ]
+            },
+            "payload": "        return $this->success(SeoSettingResource::collection($repository->getAll()), __('messages.fetched'));",
+            "tokens": 28
+        },
+        {
+            "lever": "fetched",
+            "reason": "the signature of index changed; its call sites are not shown by the diff",
+            "assertion_kind": "changed_signature",
+            "provenance": {
+                "path": "app/Http/Controllers/Admin/SettingController.php",
+                "lines": [
+                    16,
+                    16
+                ]
+            },
+            "payload": "    public function index(Request $request, GetSettingsAction $action): JsonResponse",
+            "tokens": 21
+        },
+        {
+            "lever": "fetched",
+            "reason": "the signature of index changed; its call sites are not shown by the diff",
+            "assertion_kind": "changed_signature",
+            "provenance": {
+                "path": "app/Http/Controllers/Admin/TestimonialController.php",
+                "lines": [
+                    17,
+                    17
+                ]
+            },
+            "payload": "    public function index(GetTestimonialsAction $action): JsonResponse",
+            "tokens": 18
+        },
+        {
+            "lever": "fetched",
+            "reason": "the signature of index changed; its call sites are not shown by the diff",
+            "assertion_kind": "changed_signature",
+            "provenance": {
+                "path": "app/Http/Controllers/Admin/TimelineController.php",
+                "lines": [
+                    17,
+                    17
+                ]
+            },
+            "payload": "    public function index(GetTimelineAction $action): JsonResponse",
+            "tokens": 17
+        },
+        {
+            "lever": "fetched",
+            "reason": "the signature of index changed; its call sites are not shown by the diff",
+            "assertion_kind": "changed_signature",
+            "provenance": {
+                "path": "app/Http/Controllers/Admin/UserController.php",
+                "lines": [
+                    20,
+                    20
+                ]
+            },
+            "payload": "    public function index(GetUsersAction $action): JsonResponse",
+            "tokens": 16
+        },
+        {
+            "lever": "fetched",
+            "reason": "the signature of index changed; its call sites are not shown by the diff",
+            "assertion_kind": "changed_signature",
+            "provenance": {
+                "path": "app/Http/Controllers/Public/BranchController.php",
+                "lines": [
+                    13,
+                    13
+                ]
+            },
+            "payload": "    public function index(Request $request, GetBranchesAction $action): JsonResponse",
+            "tokens": 21
+        },
+        {
+            "lever": "flagged",
+            "reason": "the signature of index changed; its call sites are not shown by the diff",
+            "assertion_kind": "changed_signature",
+            "provenance": {
+                "path": "app/Http/Controllers/Public/BranchController.php",
+                "member": "index",
+                "lines": [
+                    6,
+                    20
+                ]
+            },
+            "payload": "ASSUMPTION: additional call sites exist beyond the search bound; not all verified",
+            "tokens": 21
+        },
+        {
+            "lever": "fetched",
+            "reason": "the signature of index changed; its call sites are not shown by the diff",
+            "assertion_kind": "changed_signature",
+            "provenance": {
+                "path": "app/Http/Controllers/Public/CategoryController.php",
+                "lines": [
+                    12,
+                    12
+                ]
+            },
+            "payload": "    public function index(CategoryRepository $repository): JsonResponse",
+            "tokens": 18
+        },
+        {
+            "lever": "fetched",
+            "reason": "the signature of getAll changed; its call sites are not shown by the diff",
+            "assertion_kind": "changed_signature",
+            "provenance": {
+                "path": "app/Http/Controllers/Public/CategoryController.php",
+                "lines": [
+                    14,
+                    14
+                ]
+            },
+            "payload": "        $categories = $repository->getAll();",
+            "tokens": 11
+        },
+        {
+            "lever": "fetched",
+            "reason": "the signature of index changed; its call sites are not shown by the diff",
+            "assertion_kind": "changed_signature",
+            "provenance": {
+                "path": "app/Http/Controllers/Public/Catering/CateringPackageController.php",
+                "lines": [
+                    12,
+                    12
+                ]
+            },
+            "payload": "    public function index(GetPackagesAction $action): JsonResponse",
+            "tokens": 17
+        },
+        {
+            "lever": "fetched",
+            "reason": "the signature of index changed; its call sites are not shown by the diff",
+            "assertion_kind": "changed_signature",
+            "provenance": {
+                "path": "app/Http/Controllers/Public/Catering/SampleMenuController.php",
+                "lines": [
+                    12,
+                    12
+                ]
+            },
+            "payload": "    public function index(GetSampleMenusAction $action): JsonResponse",
+            "tokens": 18
+        },
+        {
+            "lever": "fetched",
+            "reason": "the signature of index changed; its call sites are not shown by the diff",
+            "assertion_kind": "changed_signature",
+            "provenance": {
+                "path": "app/Http/Controllers/Public/DeliveryAppController.php",
+                "lines": [
+                    12,
+                    12
+                ]
+            },
+            "payload": "    public function index(GetDeliveryAppsAction $action): JsonResponse",
+            "tokens": 18
+        },
+        {
+            "lever": "fetched",
+            "reason": "the signature of getAll changed; its call sites are not shown by the diff",
+            "assertion_kind": "changed_signature",
+            "provenance": {
+                "path": "app/Repositories/BranchRepository.php",
+                "lines": [
+                    10,
+                    10
+                ]
+            },
+            "payload": "    public function getAll(?bool $showInFooter = null): Collection",
+            "tokens": 17
+        },
+        {
+            "lever": "flagged",
+            "reason": "the signature of getAll changed; its call sites are not shown by the diff",
+            "assertion_kind": "changed_signature",
+            "provenance": {
+                "path": "app/Repositories/BranchRepository.php",
+                "member": "getAll",
+                "lines": [
+                    7,
+                    21
+                ]
+            },
+            "payload": "ASSUMPTION: additional call sites exist beyond the search bound; not all verified",
+            "tokens": 21
+        },
+        {
+            "lever": "fetched",
+            "reason": "the signature of getAll changed; its call sites are not shown by the diff",
+            "assertion_kind": "changed_signature",
+            "provenance": {
+                "path": "app/Repositories/CategoryRepository.php",
+                "lines": [
+                    10,
+                    10
+                ]
+            },
+            "payload": "    public function getAll(): Collection",
+            "tokens": 10
+        },
+        {
+            "lever": "fetched",
+            "reason": "the signature of getAll changed; its call sites are not shown by the diff",
+            "assertion_kind": "changed_signature",
+            "provenance": {
+                "path": "app/Repositories/CateringPackageRepository.php",
+                "lines": [
+                    11,
+                    11
+                ]
+            },
+            "payload": "    public function getAll(): Collection",
+            "tokens": 10
+        },
+        {
+            "lever": "fetched",
+            "reason": "the signature of getAll changed; its call sites are not shown by the diff",
+            "assertion_kind": "changed_signature",
+            "provenance": {
+                "path": "app/Repositories/DeliveryAppRepository.php",
+                "lines": [
+                    10,
+                    10
+                ]
+            },
+            "payload": "    public function getAll(bool $activeOnly = true): Collection",
+            "tokens": 16
+        },
+        {
+            "lever": "fetched",
+            "reason": "the signature of getAll changed; its call sites are not shown by the diff",
+            "assertion_kind": "changed_signature",
+            "provenance": {
+                "path": "app/Repositories/DishRepository.php",
+                "lines": [
+                    10,
+                    10
+                ]
+            },
+            "payload": "    public function getAll(array $filters = []): LengthAwarePaginator",
+            "tokens": 18
+        },
+        {
+            "lever": "fetched",
+            "reason": "the signature of getAll changed; its call sites are not shown by the diff",
+            "assertion_kind": "changed_signature",
+            "provenance": {
+                "path": "app/Repositories/PersonalityRepository.php",
+                "lines": [
+                    10,
+                    10
+                ]
+            },
+            "payload": "    public function getAll(bool $activeOnly = true): Collection",
+            "tokens": 16
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Actions\\Branch\\GetBranchesAction, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Actions/Branch/GetBranchesAction.php",
+                "member": "__construct",
+                "lines": [
+                    11,
+                    13
+                ]
+            },
+            "payload": "    public function __construct(\n        private readonly BranchRepository $repository,\n    ) {}",
+            "tokens": 24
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Branch::orderBy, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Branch.php",
+                "member": "fillable",
+                "lines": [
+                    9,
+                    24
+                ]
+            },
+            "payload": "    protected $fillable = [\n        'name_ar',\n        'name_en',\n        'city',\n        'location_ar',\n        'location_en',\n        'phone',\n        'whatsapp_number',\n        'opening_time',\n        'closing_time',\n        'google_maps_url',\n        'image_path',\n        'image_url',\n        'order',\n        'show_in_footer',\n    ];",
+            "tokens": 85
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Models\\Branch::orderBy, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/BranchRepository.php",
+                "member": "App\\Models\\Branch::orderBy",
+                "lines": [
+                    7,
+                    21
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region performs several persistence writes; whether a transaction wraps them is decided by the caller, which the diff does not show",
+            "assertion_kind": "unverifiable_premise",
+            "provenance": {
+                "path": "tests/Feature/PublicApiTest.php",
+                "lines": [
+                    65,
+                    94
+                ]
+            },
+            "payload": "ASSUMPTION: this code assumes a surrounding transaction; caller not checked",
+            "tokens": 19
+        }
+    ],
+    "dropped": []
+}

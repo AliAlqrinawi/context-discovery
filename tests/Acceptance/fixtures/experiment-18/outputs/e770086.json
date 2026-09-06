@@ -1,0 +1,415 @@
+{
+    "bundle_version": 1,
+    "budget_tokens": 8000,
+    "used_tokens": 483,
+    "items": [
+        {
+            "lever": "fetched",
+            "reason": "the signature of execute changed; its call sites are not shown by the diff",
+            "assertion_kind": "changed_signature",
+            "provenance": {
+                "path": "app/Actions/Auth/LoginAction.php",
+                "lines": [
+                    12,
+                    12
+                ]
+            },
+            "payload": "    public function execute(LoginDTO $dto): array",
+            "tokens": 13
+        },
+        {
+            "lever": "fetched",
+            "reason": "the signature of execute changed; its call sites are not shown by the diff",
+            "assertion_kind": "changed_signature",
+            "provenance": {
+                "path": "app/Actions/Auth/LogoutAction.php",
+                "lines": [
+                    9,
+                    9
+                ]
+            },
+            "payload": "    public function execute(User $user): void",
+            "tokens": 12
+        },
+        {
+            "lever": "fetched",
+            "reason": "the signature of execute changed; its call sites are not shown by the diff",
+            "assertion_kind": "changed_signature",
+            "provenance": {
+                "path": "app/Actions/Branch/CreateBranchAction.php",
+                "lines": [
+                    19,
+                    19
+                ]
+            },
+            "payload": "    public function execute(CreateBranchDTO $dto): Branch",
+            "tokens": 15
+        },
+        {
+            "lever": "fetched",
+            "reason": "the signature of execute changed; its call sites are not shown by the diff",
+            "assertion_kind": "changed_signature",
+            "provenance": {
+                "path": "app/Actions/Branch/DeleteBranchAction.php",
+                "lines": [
+                    17,
+                    17
+                ]
+            },
+            "payload": "    public function execute(int $id): void",
+            "tokens": 11
+        },
+        {
+            "lever": "fetched",
+            "reason": "the signature of execute changed; its call sites are not shown by the diff",
+            "assertion_kind": "changed_signature",
+            "provenance": {
+                "path": "app/Actions/Branch/GetBranchesAction.php",
+                "lines": [
+                    15,
+                    15
+                ]
+            },
+            "payload": "    public function execute(?bool $showInFooter = null): Collection",
+            "tokens": 17
+        },
+        {
+            "lever": "fetched",
+            "reason": "the signature of execute changed; its call sites are not shown by the diff",
+            "assertion_kind": "changed_signature",
+            "provenance": {
+                "path": "app/Actions/Branch/UpdateBranchAction.php",
+                "lines": [
+                    19,
+                    19
+                ]
+            },
+            "payload": "    public function execute(int $id, UpdateBranchDTO $dto): Branch",
+            "tokens": 17
+        },
+        {
+            "lever": "fetched",
+            "reason": "the signature of execute changed; its call sites are not shown by the diff",
+            "assertion_kind": "changed_signature",
+            "provenance": {
+                "path": "app/Actions/Catering/CreatePackageAction.php",
+                "lines": [
+                    18,
+                    18
+                ]
+            },
+            "payload": "    public function execute(CreatePackageDTO $dto): CateringPackage",
+            "tokens": 17
+        },
+        {
+            "lever": "fetched",
+            "reason": "the signature of execute changed; its call sites are not shown by the diff",
+            "assertion_kind": "changed_signature",
+            "provenance": {
+                "path": "app/Actions/Catering/CreateSampleMenuAction.php",
+                "lines": [
+                    18,
+                    18
+                ]
+            },
+            "payload": "    public function execute(CreateSampleMenuDTO $dto): SampleMenu",
+            "tokens": 17
+        },
+        {
+            "lever": "fetched",
+            "reason": "the signature of execute changed; its call sites are not shown by the diff",
+            "assertion_kind": "changed_signature",
+            "provenance": {
+                "path": "app/Actions/Catering/DeletePackageAction.php",
+                "lines": [
+                    16,
+                    16
+                ]
+            },
+            "payload": "    public function execute(int $id): void",
+            "tokens": 11
+        },
+        {
+            "lever": "fetched",
+            "reason": "the signature of execute changed; its call sites are not shown by the diff",
+            "assertion_kind": "changed_signature",
+            "provenance": {
+                "path": "app/Actions/Catering/DeleteSampleMenuAction.php",
+                "lines": [
+                    16,
+                    16
+                ]
+            },
+            "payload": "    public function execute(int $id): void",
+            "tokens": 11
+        },
+        {
+            "lever": "fetched",
+            "reason": "the signature of execute changed; its call sites are not shown by the diff",
+            "assertion_kind": "changed_signature",
+            "provenance": {
+                "path": "app/Actions/Catering/GetPackagesAction.php",
+                "lines": [
+                    15,
+                    15
+                ]
+            },
+            "payload": "    public function execute(): Collection",
+            "tokens": 11
+        },
+        {
+            "lever": "fetched",
+            "reason": "the signature of execute changed; its call sites are not shown by the diff",
+            "assertion_kind": "changed_signature",
+            "provenance": {
+                "path": "app/Actions/Catering/GetSampleMenusAction.php",
+                "lines": [
+                    15,
+                    15
+                ]
+            },
+            "payload": "    public function execute(): Collection",
+            "tokens": 11
+        },
+        {
+            "lever": "fetched",
+            "reason": "the signature of execute changed; its call sites are not shown by the diff",
+            "assertion_kind": "changed_signature",
+            "provenance": {
+                "path": "app/Actions/Catering/SubmitQuoteRequestAction.php",
+                "lines": [
+                    16,
+                    16
+                ]
+            },
+            "payload": "    public function execute(SubmitQuoteRequestDTO $dto): QuoteRequest",
+            "tokens": 18
+        },
+        {
+            "lever": "fetched",
+            "reason": "the signature of execute changed; its call sites are not shown by the diff",
+            "assertion_kind": "changed_signature",
+            "provenance": {
+                "path": "app/Actions/Catering/UpdatePackageAction.php",
+                "lines": [
+                    19,
+                    19
+                ]
+            },
+            "payload": "    public function execute(int $id, UpdatePackageDTO $dto): CateringPackage",
+            "tokens": 19
+        },
+        {
+            "lever": "fetched",
+            "reason": "the signature of execute changed; its call sites are not shown by the diff",
+            "assertion_kind": "changed_signature",
+            "provenance": {
+                "path": "app/Actions/Catering/UpdateQuoteRequestStatusAction.php",
+                "lines": [
+                    16,
+                    16
+                ]
+            },
+            "payload": "    public function execute(int $id, UpdateQuoteRequestStatusDTO $dto): QuoteRequest",
+            "tokens": 21
+        },
+        {
+            "lever": "fetched",
+            "reason": "the signature of execute changed; its call sites are not shown by the diff",
+            "assertion_kind": "changed_signature",
+            "provenance": {
+                "path": "app/Actions/Catering/UpdateSampleMenuAction.php",
+                "lines": [
+                    18,
+                    18
+                ]
+            },
+            "payload": "    public function execute(int $id, CreateSampleMenuDTO $dto): SampleMenu",
+            "tokens": 19
+        },
+        {
+            "lever": "fetched",
+            "reason": "the signature of execute changed; its call sites are not shown by the diff",
+            "assertion_kind": "changed_signature",
+            "provenance": {
+                "path": "app/Actions/DeliveryApp/CreateDeliveryAppAction.php",
+                "lines": [
+                    18,
+                    18
+                ]
+            },
+            "payload": "    public function execute(CreateDeliveryAppDTO $dto): DeliveryApp",
+            "tokens": 17
+        },
+        {
+            "lever": "fetched",
+            "reason": "the signature of execute changed; its call sites are not shown by the diff",
+            "assertion_kind": "changed_signature",
+            "provenance": {
+                "path": "app/Actions/DeliveryApp/DeleteDeliveryAppAction.php",
+                "lines": [
+                    16,
+                    16
+                ]
+            },
+            "payload": "    public function execute(int $id): void",
+            "tokens": 11
+        },
+        {
+            "lever": "fetched",
+            "reason": "the signature of execute changed; its call sites are not shown by the diff",
+            "assertion_kind": "changed_signature",
+            "provenance": {
+                "path": "app/Actions/DeliveryApp/GetDeliveryAppsAction.php",
+                "lines": [
+                    15,
+                    15
+                ]
+            },
+            "payload": "    public function execute(bool $activeOnly = true): Collection",
+            "tokens": 16
+        },
+        {
+            "lever": "fetched",
+            "reason": "the signature of execute changed; its call sites are not shown by the diff",
+            "assertion_kind": "changed_signature",
+            "provenance": {
+                "path": "app/Actions/DeliveryApp/UpdateDeliveryAppAction.php",
+                "lines": [
+                    18,
+                    18
+                ]
+            },
+            "payload": "    public function execute(int $id, CreateDeliveryAppDTO $dto): DeliveryApp",
+            "tokens": 19
+        },
+        {
+            "lever": "fetched",
+            "reason": "the signature of getByPage changed; its call sites are not shown by the diff",
+            "assertion_kind": "changed_signature",
+            "provenance": {
+                "path": "app/Actions/MediaItem/GetMediaItemsAction.php",
+                "lines": [
+                    23,
+                    23
+                ]
+            },
+            "payload": "            fn () => $this->repository->getByPage($page, $section)",
+            "tokens": 17
+        },
+        {
+            "lever": "flagged",
+            "reason": "the signature of execute changed; its call sites are not shown by the diff",
+            "assertion_kind": "changed_signature",
+            "provenance": {
+                "path": "app/Actions/MediaItem/GetMediaItemsAction.php",
+                "member": "execute",
+                "lines": [
+                    12,
+                    20
+                ]
+            },
+            "payload": "ASSUMPTION: additional call sites exist beyond the search bound; not all verified",
+            "tokens": 21
+        },
+        {
+            "lever": "fetched",
+            "reason": "the signature of getByPage changed; its call sites are not shown by the diff",
+            "assertion_kind": "changed_signature",
+            "provenance": {
+                "path": "app/Actions/PageContent/GetPageContentAction.php",
+                "lines": [
+                    24,
+                    24
+                ]
+            },
+            "payload": "            fn () => $this->repository->getByPage($page, $section)",
+            "tokens": 17
+        },
+        {
+            "lever": "fetched",
+            "reason": "the signature of getByPage changed; its call sites are not shown by the diff",
+            "assertion_kind": "changed_signature",
+            "provenance": {
+                "path": "app/Actions/Seo/GetEffectiveSeoAction.php",
+                "lines": [
+                    41,
+                    41
+                ]
+            },
+            "payload": "        $override = $page ? $this->seoRepository->getByPage($page) : null;",
+            "tokens": 19
+        },
+        {
+            "lever": "fetched",
+            "reason": "the signature of scopeForPage changed; its call sites are not shown by the diff",
+            "assertion_kind": "changed_signature",
+            "provenance": {
+                "path": "app/Models/MediaItem.php",
+                "lines": [
+                    24,
+                    24
+                ]
+            },
+            "payload": "    public function scopeForPage(Builder $query, ?string $page = null, ?string $section = null): Builder",
+            "tokens": 26
+        },
+        {
+            "lever": "fetched",
+            "reason": "the signature of scopeForPage changed; its call sites are not shown by the diff",
+            "assertion_kind": "changed_signature",
+            "provenance": {
+                "path": "app/Models/PageContent.php",
+                "lines": [
+                    20,
+                    20
+                ]
+            },
+            "payload": "    public function scopeForPage(Builder $query, string $page, ?string $section = null): Builder",
+            "tokens": 24
+        },
+        {
+            "lever": "fetched",
+            "reason": "the signature of getByPage changed; its call sites are not shown by the diff",
+            "assertion_kind": "changed_signature",
+            "provenance": {
+                "path": "app/Repositories/MediaItemRepository.php",
+                "lines": [
+                    10,
+                    10
+                ]
+            },
+            "payload": "    public function getByPage(?string $page = null, ?string $section = null): Collection",
+            "tokens": 22
+        },
+        {
+            "lever": "fetched",
+            "reason": "the signature of getByPage changed; its call sites are not shown by the diff",
+            "assertion_kind": "changed_signature",
+            "provenance": {
+                "path": "app/Repositories/PageContentRepository.php",
+                "lines": [
+                    12,
+                    12
+                ]
+            },
+            "payload": "    public function getByPage(string $page, ?string $section = null): Collection",
+            "tokens": 20
+        },
+        {
+            "lever": "fetched",
+            "reason": "the signature of getByPage changed; its call sites are not shown by the diff",
+            "assertion_kind": "changed_signature",
+            "provenance": {
+                "path": "app/Repositories/SeoSettingRepository.php",
+                "lines": [
+                    31,
+                    31
+                ]
+            },
+            "payload": "    public function getByPage(string $page): ?SeoSetting",
+            "tokens": 14
+        }
+    ],
+    "dropped": []
+}

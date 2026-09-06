@@ -1,0 +1,14 @@
+diff --git a/database/seeders/MediaItemSeeder.php b/database/seeders/MediaItemSeeder.php
+index 4605a08..30902e1 100644
+--- a/database/seeders/MediaItemSeeder.php
++++ b/database/seeders/MediaItemSeeder.php
+@@ -10,7 +10,8 @@ class MediaItemSeeder extends Seeder
+     public function run(): void
+     {
+         $mediaItems = [
+-            ['page' => 'global', 'section' => 'brand', 'key' => 'logo', 'alt_ar' => 'لوجو أبو السيد', 'alt_en' => 'Abou El Sid Logo'],
++            ['page' => 'global', 'section' => 'brand', 'key' => 'logo_dark', 'alt_ar' => 'لوجو أبو السيد (داكن)', 'alt_en' => 'Abou El Sid Logo (Dark)'],
++            ['page' => 'global', 'section' => 'brand', 'key' => 'logo_white', 'alt_ar' => 'لوجو أبو السيد (أبيض)', 'alt_en' => 'Abou El Sid Logo (White)'],
+             ['page' => 'home', 'section' => 'hero', 'key' => 'portrait', 'alt_ar' => 'شخصية أبو السيد', 'alt_en' => 'Abou El Sid Portrait'],
+             ['page' => 'home', 'section' => 'hero', 'key' => 'background', 'alt_ar' => 'خلفية الهيرو', 'alt_en' => 'Hero Background'],
+             ['page' => 'home', 'section' => 'story_teaser', 'key' => 'image', 'alt_ar' => 'صورة قسم الحكاية', 'alt_en' => 'Story Section Image'],

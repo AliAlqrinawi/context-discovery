@@ -1,0 +1,63 @@
+diff --git a/.env.example b/.env.example
+index 33d5a23..8933adf 100644
+--- a/.env.example
++++ b/.env.example
+@@ -3,6 +3,7 @@ APP_ENV=
+ APP_KEY=
+ APP_DEBUG=
+ APP_URL=
++FRONTEND_URL=
+ 
+ APP_LOCALE=
+ APP_FALLBACK_LOCALE=
+diff --git a/app/Services/MenuQrService.php b/app/Services/MenuQrService.php
+index 9e8964e..272a0f4 100644
+--- a/app/Services/MenuQrService.php
++++ b/app/Services/MenuQrService.php
+@@ -18,7 +18,7 @@ public function png(int $size = 500): string
+     {
+         $arguments = [
+             'writer' => new PngWriter(),
+-            'data' => route('menu.pdf'),
++            'data' => rtrim(config('app.frontend_url'), '/').'/menu/pdf',
+             'errorCorrectionLevel' => ErrorCorrectionLevel::High,
+             'size' => $size,
+             'margin' => 10,
+diff --git a/config/app.php b/config/app.php
+index e045a58..60b47d0 100644
+--- a/config/app.php
++++ b/config/app.php
+@@ -54,6 +54,18 @@
+ 
+     'url' => env('APP_URL', 'http://localhost'),
+ 
++    /*
++    |--------------------------------------------------------------------------
++    | Frontend URL
++    |--------------------------------------------------------------------------
++    |
++    | Root of the public website. Used to build links that must open in the
++    | site rather than the API — notably the menu QR code target.
++    |
++    */
++
++    'frontend_url' => env('FRONTEND_URL', 'https://abouelsid.sa'),
++
+     /*
+     |--------------------------------------------------------------------------
+     | Application Timezone
+diff --git a/config/cors.php b/config/cors.php
+index 8d982d5..dd905f8 100644
+--- a/config/cors.php
++++ b/config/cors.php
+@@ -15,7 +15,9 @@
+     |
+     */
+ 
+-    'paths' => ['api/*', 'sanctum/csrf-cookie'],
++    // 'menu/pdf' is outside api/* but the website probes it cross-origin with a
++    // HEAD request before rendering the viewer, so it needs CORS headers too.
++    'paths' => ['api/*', 'menu/pdf', 'sanctum/csrf-cookie'],
+ 
+     'allowed_methods' => ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+ 

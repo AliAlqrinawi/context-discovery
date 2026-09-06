@@ -1,0 +1,158 @@
+diff --git a/POSTMAN_GUIDE.md b/POSTMAN_GUIDE.md
+new file mode 100644
+index 0000000..5a71386
+--- /dev/null
++++ b/POSTMAN_GUIDE.md
+@@ -0,0 +1,44 @@
++# Postman / Bruno Import Guide
++
++## Import the Collection
++
++1. Make sure the server is running: php artisan serve --port=8000
++2. Open Postman or Bruno
++3. Click Import
++4. Use URL: http://localhost:8000/docs/api.json
++5. All endpoints are imported automatically
++
++## Set Up Environments
++
++Create two environments:
++
++### Local
++- base_url: http://localhost:8000/api/v1
++- api_key: abouelsid-secret-key-change-in-production
++- auth_token: (empty — fill after login)
++
++### Production
++- base_url: https://api.abouelsid.com/api/v1
++- api_key: (production key from .env)
++- auth_token: (empty — fill after login)
++
++## How to Get a Token
++
++POST {{base_url}}/auth/login
++Body: { "email": "admin@abouelsid.com", "password": "password" }
++Copy the token from the response and paste it into auth_token variable.
++
++## Authentication
++
++Public endpoints: add header X-API-Key: {{api_key}}
++Admin endpoints: add header Authorization: Bearer {{auth_token}}
++All endpoints: add header Accept-Language: ar (or en)
++
++## Quick Test Sequence
++
++1. GET  {{base_url}}/dishes          → should return 5 dishes
++2. GET  {{base_url}}/branches         → should return 2 branches
++3. GET  {{base_url}}/testimonials     → should return 10 testimonials
++4. GET  {{base_url}}/timeline         → should return 5 items
++5. POST {{base_url}}/auth/login       → get your token
++6. GET  {{base_url}}/catering/quote-requests  → requires token
+diff --git a/app/Http/Middleware/CheckApiKey.php b/app/Http/Middleware/CheckApiKey.php
+index 0321785..5c6d9c8 100644
+--- a/app/Http/Middleware/CheckApiKey.php
++++ b/app/Http/Middleware/CheckApiKey.php
+@@ -10,7 +10,7 @@ class CheckApiKey
+ {
+     public function handle(Request $request, Closure $next): Response
+     {
+-        $expectedKey = env('WEBSITE_API_KEY');
++        $expectedKey = config('services.website_api_key');
+ 
+         if (empty($expectedKey) || $request->header('X-API-Key') !== $expectedKey) {
+             return response()->json([
+diff --git a/app/Providers/AppServiceProvider.php b/app/Providers/AppServiceProvider.php
+index 452e6b6..c231cbe 100644
+--- a/app/Providers/AppServiceProvider.php
++++ b/app/Providers/AppServiceProvider.php
+@@ -2,6 +2,9 @@
+ 
+ namespace App\Providers;
+ 
++use Dedoc\Scramble\Scramble;
++use Dedoc\Scramble\Support\Generator\OpenApi;
++use Dedoc\Scramble\Support\Generator\SecurityScheme;
+ use Illuminate\Support\ServiceProvider;
+ 
+ class AppServiceProvider extends ServiceProvider
+@@ -19,6 +22,14 @@ public function register(): void
+      */
+     public function boot(): void
+     {
+-        //
++        Scramble::configure()
++            ->withDocumentTransformers(function (OpenApi $openApi) {
++                $openApi->secure(
++                    SecurityScheme::apiKey('header', 'X-API-Key')->as('ApiKeyAuth')
++                );
++                $openApi->secure(
++                    SecurityScheme::http('bearer')->as('BearerAuth')
++                );
++            });
+     }
+ }
+diff --git a/bootstrap/app.php b/bootstrap/app.php
+index ad39d25..6f0ca4b 100644
+--- a/bootstrap/app.php
++++ b/bootstrap/app.php
+@@ -30,6 +30,10 @@
+         $middleware->alias([
+             'check.api.key' => CheckApiKey::class,
+         ]);
++
++        // This is an API-only application with no web login route, so guests
++        // must never be redirected — always throw AuthenticationException.
++        $middleware->redirectGuestsTo(fn () => null);
+     })
+     ->withExceptions(function (Exceptions $exceptions): void {
+         $exceptions->render(function (AuthenticationException $e, Request $request) {
+diff --git a/config/services.php b/config/services.php
+index 6a90eb8..ce7091e 100644
+--- a/config/services.php
++++ b/config/services.php
+@@ -35,4 +35,6 @@
+         ],
+     ],
+ 
++    'website_api_key' => env('WEBSITE_API_KEY'),
++
+ ];
+diff --git a/tests/Feature/CheckApiKeyTest.php b/tests/Feature/CheckApiKeyTest.php
+index 25ad100..4d0098d 100644
+--- a/tests/Feature/CheckApiKeyTest.php
++++ b/tests/Feature/CheckApiKeyTest.php
+@@ -9,7 +9,7 @@ class CheckApiKeyTest extends TestCase
+     public function test_correct_api_key_returns_200(): void
+     {
+         $response = $this->getJson('/api/v1/ping', [
+-            'X-API-Key' => env('WEBSITE_API_KEY'),
++            'X-API-Key' => config('services.website_api_key'),
+         ]);
+ 
+         $response->assertStatus(200)
+diff --git a/tests/Feature/PublicApiTest.php b/tests/Feature/PublicApiTest.php
+index cd1958c..c0355cf 100644
+--- a/tests/Feature/PublicApiTest.php
++++ b/tests/Feature/PublicApiTest.php
+@@ -19,7 +19,7 @@ protected function setUp(): void
+ 
+     private function apiKey(): string
+     {
+-        return env('WEBSITE_API_KEY');
++        return config('services.website_api_key');
+     }
+ 
+     public function test_get_dishes_with_correct_api_key_returns_200(): void
+diff --git a/tests/Feature/SetLocaleTest.php b/tests/Feature/SetLocaleTest.php
+index b710fd8..32e807f 100644
+--- a/tests/Feature/SetLocaleTest.php
++++ b/tests/Feature/SetLocaleTest.php
+@@ -8,7 +8,7 @@ class SetLocaleTest extends TestCase
+ {
+     private function headers(?string $acceptLanguage = null): array
+     {
+-        $headers = ['X-API-Key' => env('WEBSITE_API_KEY')];
++        $headers = ['X-API-Key' => config('services.website_api_key')];
+ 
+         if ($acceptLanguage !== null) {
+             $headers['Accept-Language'] = $acceptLanguage;

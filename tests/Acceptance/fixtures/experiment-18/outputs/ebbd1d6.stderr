@@ -1,0 +1,96 @@
+new file: app/Actions/Seo/BulkUpdateSeoSettingsAction.php — own-file context is in the diff, not fetched
+new file: app/Actions/Seo/GetEffectiveSeoAction.php — own-file context is in the diff, not fetched
+new file: app/Actions/Seo/UpdateSeoSettingAction.php — own-file context is in the diff, not fetched
+new file: app/Actions/Seo/UpdateTrackingSettingsAction.php — own-file context is in the diff, not fetched
+new file: app/DTOs/Seo/BulkUpdateSeoSettingsDTO.php — own-file context is in the diff, not fetched
+new file: app/DTOs/Seo/UpdateSeoSettingDTO.php — own-file context is in the diff, not fetched
+new file: app/DTOs/Seo/UpdateTrackingSettingsDTO.php — own-file context is in the diff, not fetched
+new file: app/Http/Controllers/Admin/SeoSettingController.php — own-file context is in the diff, not fetched
+new file: app/Http/Controllers/Admin/TrackingSettingController.php — own-file context is in the diff, not fetched
+new file: app/Http/Controllers/Public/SeoController.php — own-file context is in the diff, not fetched
+new file: app/Http/Requests/Seo/BulkUpdateSeoSettingsRequest.php — own-file context is in the diff, not fetched
+new file: app/Http/Requests/Seo/UpdateSeoSettingRequest.php — own-file context is in the diff, not fetched
+new file: app/Http/Requests/Seo/UpdateTrackingSettingsRequest.php — own-file context is in the diff, not fetched
+new file: app/Http/Resources/Seo/SeoSettingResource.php — own-file context is in the diff, not fetched
+new file: app/Http/Resources/Seo/TrackingSettingResource.php — own-file context is in the diff, not fetched
+new file: app/Models/SeoSetting.php — own-file context is in the diff, not fetched
+new file: app/Models/TrackingSetting.php — own-file context is in the diff, not fetched
+new file: app/Repositories/SeoSettingRepository.php — own-file context is in the diff, not fetched
+new file: app/Repositories/TrackingSettingRepository.php — own-file context is in the diff, not fetched
+new file: database/migrations/2026_07_26_144327_create_seo_settings_table.php — own-file context is in the diff, not fetched
+new file: database/migrations/2026_07_26_144327_create_tracking_settings_table.php — own-file context is in the diff, not fetched
+new file: database/seeders/SeoSettingSeeder.php — own-file context is in the diff, not fetched
+new file: database/seeders/TrackingSettingSeeder.php — own-file context is in the diff, not fetched
+new file: tests/Feature/SeoSettingsTest.php — own-file context is in the diff, not fetched
+already in the diff: App\Repositories\SeoSettingRepository::bulkUpdate declared in app/Repositories/SeoSettingRepository.php; not fetched again
+already in the diff: App\Repositories\SeoSettingRepository declared in app/Repositories/SeoSettingRepository.php; not fetched again
+already in the diff: App\DTOs\Seo\BulkUpdateSeoSettingsDTO declared in app/DTOs/Seo/BulkUpdateSeoSettingsDTO.php; not fetched again
+already in the diff: App\Repositories\SeoSettingRepository::getGlobal declared in app/Repositories/SeoSettingRepository.php; not fetched again
+already in the diff: App\Repositories\SeoSettingRepository::getByPage declared in app/Repositories/SeoSettingRepository.php; not fetched again
+already in the diff: App\Repositories\TrackingSettingRepository::get declared in app/Repositories/TrackingSettingRepository.php; not fetched again
+already in the diff: App\Repositories\SeoSettingRepository declared in app/Repositories/SeoSettingRepository.php; not fetched again
+already in the diff: App\Repositories\TrackingSettingRepository declared in app/Repositories/TrackingSettingRepository.php; not fetched again
+already in the diff: App\Models\SeoSetting declared in app/Models/SeoSetting.php; not fetched again
+dependency member: Illuminate\Support\Arr::whereNotNull declared at vendor/laravel/framework/src/Illuminate/Collections/Arr.php:1284; source not fetched
+already in the diff: App\Repositories\SeoSettingRepository::update declared in app/Repositories/SeoSettingRepository.php; not fetched again
+already in the diff: App\Repositories\SeoSettingRepository declared in app/Repositories/SeoSettingRepository.php; not fetched again
+already in the diff: App\DTOs\Seo\UpdateSeoSettingDTO declared in app/DTOs/Seo/UpdateSeoSettingDTO.php; not fetched again
+already in the diff: App\Models\SeoSetting declared in app/Models/SeoSetting.php; not fetched again
+already in the diff: App\Repositories\TrackingSettingRepository::update declared in app/Repositories/TrackingSettingRepository.php; not fetched again
+already in the diff: App\Repositories\TrackingSettingRepository declared in app/Repositories/TrackingSettingRepository.php; not fetched again
+already in the diff: App\DTOs\Seo\UpdateTrackingSettingsDTO declared in app/DTOs/Seo/UpdateTrackingSettingsDTO.php; not fetched again
+already in the diff: App\Models\TrackingSetting declared in app/Models/TrackingSetting.php; not fetched again
+dependency class: Illuminate\Http\Request provided by vendor/laravel/framework/src/Illuminate/Http/Request.php; surface not fetched
+dependency class: Illuminate\Http\Request provided by vendor/laravel/framework/src/Illuminate/Http/Request.php; surface not fetched
+dependency class: Illuminate\Http\Request provided by vendor/laravel/framework/src/Illuminate/Http/Request.php; surface not fetched
+unresolved named_reference: App\Http\Resources\Seo\SeoSettingResource::collection in app/Http/Controllers/Admin/SeoSettingController.php
+already in the diff: App\DTOs\Seo\UpdateSeoSettingDTO::fromRequest declared in app/DTOs/Seo/UpdateSeoSettingDTO.php; not fetched again
+already in the diff: App\DTOs\Seo\BulkUpdateSeoSettingsDTO::fromRequest declared in app/DTOs/Seo/BulkUpdateSeoSettingsDTO.php; not fetched again
+already in the diff: App\Repositories\SeoSettingRepository declared in app/Repositories/SeoSettingRepository.php; not fetched again
+dependency class: Illuminate\Http\JsonResponse provided by vendor/laravel/framework/src/Illuminate/Http/JsonResponse.php; surface not fetched
+already in the diff: App\Http\Requests\Seo\UpdateSeoSettingRequest declared in app/Http/Requests/Seo/UpdateSeoSettingRequest.php; not fetched again
+already in the diff: App\Actions\Seo\UpdateSeoSettingAction declared in app/Actions/Seo/UpdateSeoSettingAction.php; not fetched again
+already in the diff: App\Http\Resources\Seo\SeoSettingResource declared in app/Http/Resources/Seo/SeoSettingResource.php; not fetched again
+already in the diff: App\Http\Requests\Seo\BulkUpdateSeoSettingsRequest declared in app/Http/Requests/Seo/BulkUpdateSeoSettingsRequest.php; not fetched again
+already in the diff: App\Actions\Seo\BulkUpdateSeoSettingsAction declared in app/Actions/Seo/BulkUpdateSeoSettingsAction.php; not fetched again
+already in the diff: App\DTOs\Seo\UpdateTrackingSettingsDTO::fromRequest declared in app/DTOs/Seo/UpdateTrackingSettingsDTO.php; not fetched again
+already in the diff: App\Repositories\TrackingSettingRepository declared in app/Repositories/TrackingSettingRepository.php; not fetched again
+dependency class: Illuminate\Http\JsonResponse provided by vendor/laravel/framework/src/Illuminate/Http/JsonResponse.php; surface not fetched
+already in the diff: App\Http\Resources\Seo\TrackingSettingResource declared in app/Http/Resources/Seo/TrackingSettingResource.php; not fetched again
+already in the diff: App\Http\Requests\Seo\UpdateTrackingSettingsRequest declared in app/Http/Requests/Seo/UpdateTrackingSettingsRequest.php; not fetched again
+already in the diff: App\Actions\Seo\UpdateTrackingSettingsAction declared in app/Actions/Seo/UpdateTrackingSettingsAction.php; not fetched again
+dependency class: Illuminate\Http\Request provided by vendor/laravel/framework/src/Illuminate/Http/Request.php; surface not fetched
+already in the diff: App\Actions\Seo\GetEffectiveSeoAction declared in app/Actions/Seo/GetEffectiveSeoAction.php; not fetched again
+dependency class: Illuminate\Http\JsonResponse provided by vendor/laravel/framework/src/Illuminate/Http/JsonResponse.php; surface not fetched
+dependency class: Illuminate\Http\Request provided by vendor/laravel/framework/src/Illuminate/Http/Request.php; surface not fetched
+dependency class: Illuminate\Http\Request provided by vendor/laravel/framework/src/Illuminate/Http/Request.php; surface not fetched
+unresolved named_reference: App\Models\SeoSetting::orderByRaw in app/Repositories/SeoSettingRepository.php
+unresolved named_reference: App\Models\SeoSetting::whereNull in app/Repositories/SeoSettingRepository.php
+unresolved named_reference: App\Models\SeoSetting::where in app/Repositories/SeoSettingRepository.php
+unresolved named_reference: App\Models\SeoSetting::findOrFail in app/Repositories/SeoSettingRepository.php
+dependency member: Illuminate\Support\Arr::only declared at vendor/laravel/framework/src/Illuminate/Collections/Arr.php:718; source not fetched
+framework reference: Illuminate\Support\Facades\DB::transaction declared at vendor/laravel/framework/src/Illuminate/Support/Facades/DB.php:112 (@method static mixed transaction(\Closure $callback, int $attempts = 1))
+dependency class: Illuminate\Database\Eloquent\Collection provided by vendor/laravel/framework/src/Illuminate/Database/Eloquent/Collection.php; surface not fetched
+already in the diff: App\Models\SeoSetting declared in app/Models/SeoSetting.php; not fetched again
+unresolved named_reference: App\Models\TrackingSetting::first in app/Repositories/TrackingSettingRepository.php
+unresolved named_reference: App\Models\TrackingSetting::create in app/Repositories/TrackingSettingRepository.php
+already in the diff: App\Models\TrackingSetting declared in app/Models/TrackingSetting.php; not fetched again
+framework reference: Illuminate\Support\Facades\Schema::create declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Schema.php:34 (@method static void create(string $table, \Closure $callback))
+framework reference: Illuminate\Support\Facades\Schema::dropIfExists declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Schema.php:36 (@method static void dropIfExists(string $table))
+dependency class: Illuminate\Database\Schema\Blueprint provided by vendor/laravel/framework/src/Illuminate/Database/Schema/Blueprint.php; surface not fetched
+framework reference: Illuminate\Support\Facades\Schema::create declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Schema.php:34 (@method static void create(string $table, \Closure $callback))
+framework reference: Illuminate\Support\Facades\Schema::dropIfExists declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Schema.php:36 (@method static void dropIfExists(string $table))
+dependency class: Illuminate\Database\Schema\Blueprint provided by vendor/laravel/framework/src/Illuminate/Database/Schema/Blueprint.php; surface not fetched
+unresolved named_reference: App\Models\SeoSetting::updateOrCreate in database/seeders/SeoSettingSeeder.php
+unresolved named_reference: App\Models\TrackingSetting::count in database/seeders/TrackingSettingSeeder.php
+unresolved named_reference: App\Models\TrackingSetting::create in database/seeders/TrackingSettingSeeder.php
+framework reference: Illuminate\Support\Facades\Route::prefix declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Route.php:100 (@method static \Illuminate\Routing\RouteRegistrar prefix(string $prefix))
+framework reference: Illuminate\Support\Facades\Route::get declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Route.php:6 (@method static \Illuminate\Routing\Route get(string $uri, array|string|callable|null $action = null))
+framework reference: Illuminate\Support\Facades\Route::put declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Route.php:8 (@method static \Illuminate\Routing\Route put(string $uri, array|string|callable|null $action = null))
+framework reference: Illuminate\Support\Facades\Route::post declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Route.php:7 (@method static \Illuminate\Routing\Route post(string $uri, array|string|callable|null $action = null))
+framework reference: Illuminate\Support\Facades\Route::prefix declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Route.php:100 (@method static \Illuminate\Routing\RouteRegistrar prefix(string $prefix))
+framework reference: Illuminate\Support\Facades\Route::get declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Route.php:6 (@method static \Illuminate\Routing\Route get(string $uri, array|string|callable|null $action = null))
+unresolved named_reference: App\Models\User::where in tests/Feature/SeoSettingsTest.php
+unresolved named_reference: App\Models\SeoSetting::whereNull in tests/Feature/SeoSettingsTest.php
+unresolved named_reference: App\Models\SeoSetting::where in tests/Feature/SeoSettingsTest.php
+unresolved named_reference: App\Models\TrackingSetting::count in tests/Feature/SeoSettingsTest.php

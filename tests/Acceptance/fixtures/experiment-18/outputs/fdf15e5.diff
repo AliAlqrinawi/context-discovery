@@ -1,0 +1,344 @@
+diff --git a/app/Actions/Branch/CreateBranchAction.php b/app/Actions/Branch/CreateBranchAction.php
+index 4bde483..5f2427a 100644
+--- a/app/Actions/Branch/CreateBranchAction.php
++++ b/app/Actions/Branch/CreateBranchAction.php
+@@ -39,6 +39,7 @@ public function execute(CreateBranchDTO $dto): Branch
+         $branch = $this->repository->create($data);
+ 
+         Cache::tags(['branches'])->flush();
++        Cache::forget('dashboard_stats');
+ 
+         return $branch;
+     }
+diff --git a/app/Actions/Branch/DeleteBranchAction.php b/app/Actions/Branch/DeleteBranchAction.php
+index 825f25c..a3efb00 100644
+--- a/app/Actions/Branch/DeleteBranchAction.php
++++ b/app/Actions/Branch/DeleteBranchAction.php
+@@ -24,5 +24,6 @@ public function execute(int $id): void
+         $this->repository->delete($id);
+ 
+         Cache::tags(['branches'])->flush();
++        Cache::forget('dashboard_stats');
+     }
+ }
+diff --git a/app/Actions/Catering/SubmitQuoteRequestAction.php b/app/Actions/Catering/SubmitQuoteRequestAction.php
+index 5befb91..e0b21ec 100644
+--- a/app/Actions/Catering/SubmitQuoteRequestAction.php
++++ b/app/Actions/Catering/SubmitQuoteRequestAction.php
+@@ -5,6 +5,7 @@
+ use App\DTOs\Catering\SubmitQuoteRequestDTO;
+ use App\Models\QuoteRequest;
+ use App\Repositories\QuoteRequestRepository;
++use Illuminate\Support\Facades\Cache;
+ 
+ class SubmitQuoteRequestAction
+ {
+@@ -14,7 +15,7 @@ public function __construct(
+ 
+     public function execute(SubmitQuoteRequestDTO $dto): QuoteRequest
+     {
+-        return $this->repository->create([
++        $quoteRequest = $this->repository->create([
+             'name' => $dto->name,
+             'phone' => $dto->phone,
+             'email' => $dto->email,
+@@ -26,5 +27,9 @@ public function execute(SubmitQuoteRequestDTO $dto): QuoteRequest
+             'notes' => $dto->notes,
+             'status' => 'pending',
+         ]);
++
++        Cache::forget('dashboard_stats');
++
++        return $quoteRequest;
+     }
+ }
+diff --git a/app/Actions/Catering/UpdateQuoteRequestStatusAction.php b/app/Actions/Catering/UpdateQuoteRequestStatusAction.php
+index a8434f9..94c9cdb 100644
+--- a/app/Actions/Catering/UpdateQuoteRequestStatusAction.php
++++ b/app/Actions/Catering/UpdateQuoteRequestStatusAction.php
+@@ -5,6 +5,7 @@
+ use App\DTOs\Catering\UpdateQuoteRequestStatusDTO;
+ use App\Models\QuoteRequest;
+ use App\Repositories\QuoteRequestRepository;
++use Illuminate\Support\Facades\Cache;
+ 
+ class UpdateQuoteRequestStatusAction
+ {
+@@ -14,6 +15,10 @@ public function __construct(
+ 
+     public function execute(int $id, UpdateQuoteRequestStatusDTO $dto): QuoteRequest
+     {
+-        return $this->repository->updateStatus($id, $dto->status->value);
++        $quoteRequest = $this->repository->updateStatus($id, $dto->status->value);
++
++        Cache::forget('dashboard_stats');
++
++        return $quoteRequest;
+     }
+ }
+diff --git a/app/Actions/Dish/CreateDishAction.php b/app/Actions/Dish/CreateDishAction.php
+index 20e1f7c..a28cb7f 100644
+--- a/app/Actions/Dish/CreateDishAction.php
++++ b/app/Actions/Dish/CreateDishAction.php
+@@ -38,6 +38,7 @@ public function execute(CreateDishDTO $dto): Dish
+         $dish = $this->repository->create($data);
+ 
+         Cache::tags(['dishes'])->flush();
++        Cache::forget('dashboard_stats');
+ 
+         return $dish;
+     }
+diff --git a/app/Actions/Dish/DeleteDishAction.php b/app/Actions/Dish/DeleteDishAction.php
+index 3efac03..6aee442 100644
+--- a/app/Actions/Dish/DeleteDishAction.php
++++ b/app/Actions/Dish/DeleteDishAction.php
+@@ -24,5 +24,6 @@ public function execute(int $id): void
+         $this->repository->delete($id);
+ 
+         Cache::tags(['dishes'])->flush();
++        Cache::forget('dashboard_stats');
+     }
+ }
+diff --git a/app/Actions/Dish/UpdateDishAction.php b/app/Actions/Dish/UpdateDishAction.php
+index 74d1dc5..6fc0d6b 100644
+--- a/app/Actions/Dish/UpdateDishAction.php
++++ b/app/Actions/Dish/UpdateDishAction.php
+@@ -45,6 +45,7 @@ public function execute(int $id, UpdateDishDTO $dto): Dish
+         $dish = $this->repository->update($id, $data);
+ 
+         Cache::tags(['dishes'])->flush();
++        Cache::forget('dashboard_stats');
+ 
+         return $dish;
+     }
+diff --git a/app/Actions/Testimonial/CreateTestimonialAction.php b/app/Actions/Testimonial/CreateTestimonialAction.php
+index 073e483..01be235 100644
+--- a/app/Actions/Testimonial/CreateTestimonialAction.php
++++ b/app/Actions/Testimonial/CreateTestimonialAction.php
+@@ -24,6 +24,7 @@ public function execute(CreateTestimonialDTO $dto): Testimonial
+         ]);
+ 
+         Cache::tags(['testimonials'])->flush();
++        Cache::forget('dashboard_stats');
+ 
+         return $testimonial;
+     }
+diff --git a/app/Actions/Testimonial/DeleteTestimonialAction.php b/app/Actions/Testimonial/DeleteTestimonialAction.php
+index d64a0c1..45706de 100644
+--- a/app/Actions/Testimonial/DeleteTestimonialAction.php
++++ b/app/Actions/Testimonial/DeleteTestimonialAction.php
+@@ -16,5 +16,6 @@ public function execute(int $id): void
+         $this->repository->delete($id);
+ 
+         Cache::tags(['testimonials'])->flush();
++        Cache::forget('dashboard_stats');
+     }
+ }
+diff --git a/app/Actions/User/CreateUserAction.php b/app/Actions/User/CreateUserAction.php
+index 7df7c3c..46a2b8b 100644
+--- a/app/Actions/User/CreateUserAction.php
++++ b/app/Actions/User/CreateUserAction.php
+@@ -5,6 +5,7 @@
+ use App\DTOs\User\CreateUserDTO;
+ use App\Models\User;
+ use App\Repositories\UserRepository;
++use Illuminate\Support\Facades\Cache;
+ use Illuminate\Support\Facades\Hash;
+ 
+ class CreateUserAction
+@@ -15,11 +16,15 @@ public function __construct(
+ 
+     public function execute(CreateUserDTO $dto): User
+     {
+-        return $this->repository->create([
++        $user = $this->repository->create([
+             'name' => $dto->name,
+             'email' => $dto->email,
+             'password' => Hash::make($dto->password),
+             'role' => $dto->role,
+         ], $dto->role);
++
++        Cache::forget('dashboard_stats');
++
++        return $user;
+     }
+ }
+diff --git a/app/Actions/User/DeleteUserAction.php b/app/Actions/User/DeleteUserAction.php
+index 5ec610f..1fbcc53 100644
+--- a/app/Actions/User/DeleteUserAction.php
++++ b/app/Actions/User/DeleteUserAction.php
+@@ -3,6 +3,7 @@
+ namespace App\Actions\User;
+ 
+ use App\Repositories\UserRepository;
++use Illuminate\Support\Facades\Cache;
+ 
+ class DeleteUserAction
+ {
+@@ -13,5 +14,7 @@ public function __construct(
+     public function execute(int $id): void
+     {
+         $this->repository->delete($id);
++
++        Cache::forget('dashboard_stats');
+     }
+ }
+diff --git a/app/Http/Controllers/Admin/DashboardController.php b/app/Http/Controllers/Admin/DashboardController.php
+new file mode 100644
+index 0000000..751ca7d
+--- /dev/null
++++ b/app/Http/Controllers/Admin/DashboardController.php
+@@ -0,0 +1,65 @@
++<?php
++
++namespace App\Http\Controllers\Admin;
++
++use App\Enums\QuoteRequestStatusEnum;
++use App\Http\Controllers\Controller;
++use App\Models\Branch;
++use App\Models\CateringPackage;
++use App\Models\Category;
++use App\Models\DeliveryApp;
++use App\Models\Dish;
++use App\Models\QuoteRequest;
++use App\Models\Testimonial;
++use App\Models\Timeline;
++use App\Models\User;
++use Illuminate\Http\JsonResponse;
++use Illuminate\Support\Facades\Cache;
++
++class DashboardController extends Controller
++{
++    public function stats(): JsonResponse
++    {
++        $stats = Cache::remember('dashboard_stats', now()->addMinutes(5), function () {
++            return [
++                'dishes' => [
++                    'total' => Dish::count(),
++                    'featured' => Dish::where('is_featured', true)->count(),
++                    'signature' => Dish::where('is_signature', true)->count(),
++                ],
++                'categories' => [
++                    'total' => Category::count(),
++                ],
++                'branches' => [
++                    'total' => Branch::count(),
++                ],
++                'catering_packages' => [
++                    'total' => CateringPackage::count(),
++                ],
++                'quote_requests' => [
++                    'total' => QuoteRequest::count(),
++                    'pending' => QuoteRequest::where('status', QuoteRequestStatusEnum::Pending)->count(),
++                    'reviewed' => QuoteRequest::where('status', QuoteRequestStatusEnum::Reviewed)->count(),
++                    'contacted' => QuoteRequest::where('status', QuoteRequestStatusEnum::Contacted)->count(),
++                    'closed' => QuoteRequest::where('status', QuoteRequestStatusEnum::Closed)->count(),
++                ],
++                'testimonials' => [
++                    'total' => Testimonial::count(),
++                    'active' => Testimonial::where('is_active', true)->count(),
++                ],
++                'timeline' => [
++                    'total' => Timeline::count(),
++                ],
++                'delivery_apps' => [
++                    'total' => DeliveryApp::count(),
++                    'active' => DeliveryApp::where('is_active', true)->count(),
++                ],
++                'users' => [
++                    'total' => User::count(),
++                ],
++            ];
++        });
++
++        return $this->success($stats, __('messages.fetched'));
++    }
++}
+diff --git a/routes/admin.php b/routes/admin.php
+index ba67cc1..6462b9f 100644
+--- a/routes/admin.php
++++ b/routes/admin.php
+@@ -6,6 +6,7 @@
+ use App\Http\Controllers\Admin\Catering\QuoteRequestController;
+ use App\Http\Controllers\Admin\Catering\SampleMenuController;
+ use App\Http\Controllers\Admin\CategoryController;
++use App\Http\Controllers\Admin\DashboardController;
+ use App\Http\Controllers\Admin\DeliveryAppController;
+ use App\Http\Controllers\Admin\DishController;
+ use App\Http\Controllers\Admin\MediaItemController;
+@@ -32,6 +33,9 @@
+             Route::get('/me',      'me');
+         });
+ 
++        // ── Dashboard Stats ───────────────────────────────
++        Route::get('dashboard/stats', [DashboardController::class, 'stats']);
++
+         // ── Profile ───────────────────────────────────────
+         Route::prefix('profile')->controller(ProfileController::class)->group(function () {
+             Route::get('/', 'show');
+diff --git a/tests/Feature/DashboardStatsTest.php b/tests/Feature/DashboardStatsTest.php
+new file mode 100644
+index 0000000..fc4bce0
+--- /dev/null
++++ b/tests/Feature/DashboardStatsTest.php
+@@ -0,0 +1,60 @@
++<?php
++
++namespace Tests\Feature;
++
++use App\Models\User;
++use Illuminate\Foundation\Testing\RefreshDatabase;
++use Tests\TestCase;
++
++class DashboardStatsTest extends TestCase
++{
++    use RefreshDatabase;
++
++    protected function setUp(): void
++    {
++        parent::setUp();
++
++        $this->seed();
++    }
++
++    private function token(): string
++    {
++        $user = User::where('email', 'admin@abouelsid.com')->first();
++
++        return $user->createToken('test-token')->plainTextToken;
++    }
++
++    public function test_dashboard_stats_without_token_returns_401(): void
++    {
++        $response = $this->getJson('/api/v1/admin/dashboard/stats');
++
++        $response->assertStatus(401)
++            ->assertJson(['success' => false]);
++    }
++
++    public function test_dashboard_stats_with_token_returns_200_with_expected_counts(): void
++    {
++        $response = $this->getJson('/api/v1/admin/dashboard/stats', [
++            'Authorization' => "Bearer {$this->token()}",
++        ]);
++
++        $response->assertStatus(200)
++            ->assertJson(['success' => true])
++            ->assertJsonStructure([
++                'data' => [
++                    'dishes' => ['total', 'featured', 'signature'],
++                    'categories' => ['total'],
++                    'branches' => ['total'],
++                    'catering_packages' => ['total'],
++                    'quote_requests' => ['total', 'pending', 'reviewed', 'contacted', 'closed'],
++                    'testimonials' => ['total', 'active'],
++                    'timeline' => ['total'],
++                    'delivery_apps' => ['total', 'active'],
++                    'users' => ['total'],
++                ],
++            ])
++            ->assertJsonPath('data.dishes.total', 5)
++            ->assertJsonPath('data.branches.total', 2)
++            ->assertJsonPath('data.testimonials.total', 10);
++    }
++}

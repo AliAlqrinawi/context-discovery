@@ -1,0 +1,71 @@
+new file: app/Actions/Personality/CreatePersonalityAction.php — own-file context is in the diff, not fetched
+new file: app/Actions/Personality/DeletePersonalityAction.php — own-file context is in the diff, not fetched
+new file: app/Actions/Personality/GetPersonalitiesAction.php — own-file context is in the diff, not fetched
+new file: app/Actions/Personality/UpdatePersonalityAction.php — own-file context is in the diff, not fetched
+new file: app/DTOs/Personality/CreatePersonalityDTO.php — own-file context is in the diff, not fetched
+new file: app/DTOs/Personality/UpdatePersonalityDTO.php — own-file context is in the diff, not fetched
+new file: app/Http/Controllers/Admin/PersonalityController.php — own-file context is in the diff, not fetched
+new file: app/Http/Controllers/Public/PersonalityController.php — own-file context is in the diff, not fetched
+new file: app/Http/Requests/Personality/StorePersonalityRequest.php — own-file context is in the diff, not fetched
+new file: app/Http/Requests/Personality/UpdatePersonalityRequest.php — own-file context is in the diff, not fetched
+new file: app/Http/Resources/Personality/PersonalityResource.php — own-file context is in the diff, not fetched
+new file: app/Models/Personality.php — own-file context is in the diff, not fetched
+new file: app/Repositories/PersonalityRepository.php — own-file context is in the diff, not fetched
+new file: database/migrations/2026_07_25_144324_create_personalities_table.php — own-file context is in the diff, not fetched
+new file: database/seeders/PersonalitySeeder.php — own-file context is in the diff, not fetched
+already in the diff: App\Repositories\PersonalityRepository::create declared in app/Repositories/PersonalityRepository.php; not fetched again
+already in the diff: App\Repositories\PersonalityRepository declared in app/Repositories/PersonalityRepository.php; not fetched again
+already in the diff: App\DTOs\Personality\CreatePersonalityDTO declared in app/DTOs/Personality/CreatePersonalityDTO.php; not fetched again
+already in the diff: App\Models\Personality declared in app/Models/Personality.php; not fetched again
+already in the diff: App\Repositories\PersonalityRepository::getById declared in app/Repositories/PersonalityRepository.php; not fetched again
+already in the diff: App\Repositories\PersonalityRepository::delete declared in app/Repositories/PersonalityRepository.php; not fetched again
+already in the diff: App\Repositories\PersonalityRepository declared in app/Repositories/PersonalityRepository.php; not fetched again
+already in the diff: App\Repositories\PersonalityRepository::getAll declared in app/Repositories/PersonalityRepository.php; not fetched again
+already in the diff: App\Repositories\PersonalityRepository declared in app/Repositories/PersonalityRepository.php; not fetched again
+dependency class: Illuminate\Database\Eloquent\Collection provided by vendor/laravel/framework/src/Illuminate/Database/Eloquent/Collection.php; surface not fetched
+dependency member: Illuminate\Support\Arr::whereNotNull declared at vendor/laravel/framework/src/Illuminate/Collections/Arr.php:1284; source not fetched
+already in the diff: App\Repositories\PersonalityRepository::getById declared in app/Repositories/PersonalityRepository.php; not fetched again
+already in the diff: App\Repositories\PersonalityRepository::update declared in app/Repositories/PersonalityRepository.php; not fetched again
+already in the diff: App\Repositories\PersonalityRepository declared in app/Repositories/PersonalityRepository.php; not fetched again
+already in the diff: App\DTOs\Personality\UpdatePersonalityDTO declared in app/DTOs/Personality/UpdatePersonalityDTO.php; not fetched again
+already in the diff: App\Models\Personality declared in app/Models/Personality.php; not fetched again
+dependency class: Illuminate\Http\UploadedFile provided by vendor/laravel/framework/src/Illuminate/Http/UploadedFile.php; surface not fetched
+dependency class: Illuminate\Http\Request provided by vendor/laravel/framework/src/Illuminate/Http/Request.php; surface not fetched
+dependency class: Illuminate\Http\UploadedFile provided by vendor/laravel/framework/src/Illuminate/Http/UploadedFile.php; surface not fetched
+dependency class: Illuminate\Http\Request provided by vendor/laravel/framework/src/Illuminate/Http/Request.php; surface not fetched
+unresolved named_reference: App\Http\Resources\Personality\PersonalityResource::collection in app/Http/Controllers/Admin/PersonalityController.php
+already in the diff: App\DTOs\Personality\CreatePersonalityDTO::fromRequest declared in app/DTOs/Personality/CreatePersonalityDTO.php; not fetched again
+already in the diff: App\DTOs\Personality\UpdatePersonalityDTO::fromRequest declared in app/DTOs/Personality/UpdatePersonalityDTO.php; not fetched again
+already in the diff: App\Actions\Personality\GetPersonalitiesAction declared in app/Actions/Personality/GetPersonalitiesAction.php; not fetched again
+dependency class: Illuminate\Http\JsonResponse provided by vendor/laravel/framework/src/Illuminate/Http/JsonResponse.php; surface not fetched
+already in the diff: App\Http\Requests\Personality\StorePersonalityRequest declared in app/Http/Requests/Personality/StorePersonalityRequest.php; not fetched again
+already in the diff: App\Actions\Personality\CreatePersonalityAction declared in app/Actions/Personality/CreatePersonalityAction.php; not fetched again
+already in the diff: App\Http\Resources\Personality\PersonalityResource declared in app/Http/Resources/Personality/PersonalityResource.php; not fetched again
+already in the diff: App\Http\Requests\Personality\UpdatePersonalityRequest declared in app/Http/Requests/Personality/UpdatePersonalityRequest.php; not fetched again
+already in the diff: App\Actions\Personality\UpdatePersonalityAction declared in app/Actions/Personality/UpdatePersonalityAction.php; not fetched again
+already in the diff: App\Actions\Personality\DeletePersonalityAction declared in app/Actions/Personality/DeletePersonalityAction.php; not fetched again
+unresolved named_reference: App\Http\Resources\Personality\PersonalityResource::collection in app/Http/Controllers/Public/PersonalityController.php
+already in the diff: App\Actions\Personality\GetPersonalitiesAction declared in app/Actions/Personality/GetPersonalitiesAction.php; not fetched again
+dependency class: Illuminate\Http\JsonResponse provided by vendor/laravel/framework/src/Illuminate/Http/JsonResponse.php; surface not fetched
+dependency class: Illuminate\Http\Request provided by vendor/laravel/framework/src/Illuminate/Http/Request.php; surface not fetched
+unresolved named_reference: App\Models\Personality::orderBy in app/Repositories/PersonalityRepository.php
+unresolved named_reference: App\Models\Personality::findOrFail in app/Repositories/PersonalityRepository.php
+unresolved named_reference: App\Models\Personality::create in app/Repositories/PersonalityRepository.php
+dependency class: Illuminate\Database\Eloquent\Collection provided by vendor/laravel/framework/src/Illuminate/Database/Eloquent/Collection.php; surface not fetched
+already in the diff: App\Models\Personality declared in app/Models/Personality.php; not fetched again
+framework reference: Illuminate\Support\Facades\Schema::create declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Schema.php:34 (@method static void create(string $table, \Closure $callback))
+framework reference: Illuminate\Support\Facades\Schema::dropIfExists declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Schema.php:36 (@method static void dropIfExists(string $table))
+dependency class: Illuminate\Database\Schema\Blueprint provided by vendor/laravel/framework/src/Illuminate/Database/Schema/Blueprint.php; surface not fetched
+unresolved named_reference: App\Models\Personality::updateOrCreate in database/seeders/PersonalitySeeder.php
+framework reference: Illuminate\Support\Facades\Route::put declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Route.php:8 (@method static \Illuminate\Routing\Route put(string $uri, array|string|callable|null $action = null))
+framework reference: Illuminate\Support\Facades\Route::put declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Route.php:8 (@method static \Illuminate\Routing\Route put(string $uri, array|string|callable|null $action = null))
+framework reference: Illuminate\Support\Facades\Route::put declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Route.php:8 (@method static \Illuminate\Routing\Route put(string $uri, array|string|callable|null $action = null))
+framework reference: Illuminate\Support\Facades\Route::put declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Route.php:8 (@method static \Illuminate\Routing\Route put(string $uri, array|string|callable|null $action = null))
+framework reference: Illuminate\Support\Facades\Route::prefix declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Route.php:100 (@method static \Illuminate\Routing\RouteRegistrar prefix(string $prefix))
+framework reference: Illuminate\Support\Facades\Route::get declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Route.php:6 (@method static \Illuminate\Routing\Route get(string $uri, array|string|callable|null $action = null))
+framework reference: Illuminate\Support\Facades\Route::post declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Route.php:7 (@method static \Illuminate\Routing\Route post(string $uri, array|string|callable|null $action = null))
+framework reference: Illuminate\Support\Facades\Route::put declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Route.php:8 (@method static \Illuminate\Routing\Route put(string $uri, array|string|callable|null $action = null))
+framework reference: Illuminate\Support\Facades\Route::delete declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Route.php:10 (@method static \Illuminate\Routing\Route delete(string $uri, array|string|callable|null $action = null))
+framework reference: Illuminate\Support\Facades\Route::prefix declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Route.php:100 (@method static \Illuminate\Routing\RouteRegistrar prefix(string $prefix))
+framework reference: Illuminate\Support\Facades\Route::get declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Route.php:6 (@method static \Illuminate\Routing\Route get(string $uri, array|string|callable|null $action = null))
+already in the diff: App\Repositories\PersonalityRepository declared in app/Repositories/PersonalityRepository.php; not fetched again

@@ -1,0 +1,20 @@
+diff --git a/.github/workflows/deploy.yml b/.github/workflows/deploy.yml
+index c01ff85..fecd5ee 100644
+--- a/.github/workflows/deploy.yml
++++ b/.github/workflows/deploy.yml
+@@ -32,9 +32,9 @@ jobs:
+             set -e
+             cd ${{ secrets.DEPLOY_PATH }}
+             git pull origin main
+-            composer install --no-dev --optimize-autoloader
+-            php artisan migrate --force
+-            php artisan config:cache
+-            php artisan route:cache
+-            php artisan view:cache
+-            php artisan queue:restart
++            /usr/local/bin/php ~/composer.phar install --no-dev --optimize-autoloader
++            /usr/local/bin/php artisan migrate --force
++            /usr/local/bin/php artisan config:cache
++            /usr/local/bin/php artisan route:cache
++            /usr/local/bin/php artisan view:cache
++            /usr/local/bin/php artisan queue:restart

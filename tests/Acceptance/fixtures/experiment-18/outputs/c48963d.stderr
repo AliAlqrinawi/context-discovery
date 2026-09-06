@@ -1,0 +1,77 @@
+new file: app/Http/Controllers/Controller.php — own-file context is in the diff, not fetched
+new file: app/Http/Middleware/CheckApiKey.php — own-file context is in the diff, not fetched
+new file: app/Http/Middleware/SetLocale.php — own-file context is in the diff, not fetched
+new file: app/Models/User.php — own-file context is in the diff, not fetched
+new file: app/Providers/AppServiceProvider.php — own-file context is in the diff, not fetched
+new file: bootstrap/app.php — own-file context is in the diff, not fetched
+new file: bootstrap/providers.php — own-file context is in the diff, not fetched
+new file: config/app.php — own-file context is in the diff, not fetched
+new file: config/auth.php — own-file context is in the diff, not fetched
+new file: config/cache.php — own-file context is in the diff, not fetched
+new file: config/cors.php — own-file context is in the diff, not fetched
+new file: config/database.php — own-file context is in the diff, not fetched
+new file: config/filesystems.php — own-file context is in the diff, not fetched
+new file: config/logging.php — own-file context is in the diff, not fetched
+new file: config/mail.php — own-file context is in the diff, not fetched
+new file: config/permission.php — own-file context is in the diff, not fetched
+new file: config/queue.php — own-file context is in the diff, not fetched
+new file: config/sanctum.php — own-file context is in the diff, not fetched
+new file: config/scramble.php — own-file context is in the diff, not fetched
+new file: config/services.php — own-file context is in the diff, not fetched
+new file: config/session.php — own-file context is in the diff, not fetched
+new file: database/factories/UserFactory.php — own-file context is in the diff, not fetched
+new file: database/migrations/0001_01_01_000000_create_users_table.php — own-file context is in the diff, not fetched
+new file: database/migrations/0001_01_01_000001_create_cache_table.php — own-file context is in the diff, not fetched
+new file: database/migrations/0001_01_01_000002_create_jobs_table.php — own-file context is in the diff, not fetched
+new file: database/migrations/2026_07_15_163248_create_permission_tables.php — own-file context is in the diff, not fetched
+new file: database/migrations/2026_07_15_163248_create_personal_access_tokens_table.php — own-file context is in the diff, not fetched
+new file: database/seeders/DatabaseSeeder.php — own-file context is in the diff, not fetched
+new file: public/index.php — own-file context is in the diff, not fetched
+new file: resources/views/vendor/scramble/docs.blade.php — own-file context is in the diff, not fetched
+new file: resources/views/vendor/scramble/scalar.blade.php — own-file context is in the diff, not fetched
+new file: resources/views/welcome.blade.php — own-file context is in the diff, not fetched
+new file: routes/api.php — own-file context is in the diff, not fetched
+new file: routes/console.php — own-file context is in the diff, not fetched
+new file: routes/web.php — own-file context is in the diff, not fetched
+new file: tests/Feature/CheckApiKeyTest.php — own-file context is in the diff, not fetched
+new file: tests/Feature/ExampleTest.php — own-file context is in the diff, not fetched
+new file: tests/Feature/SetLocaleTest.php — own-file context is in the diff, not fetched
+new file: tests/TestCase.php — own-file context is in the diff, not fetched
+new file: tests/Unit/ExampleTest.php — own-file context is in the diff, not fetched
+dependency class: Illuminate\Http\Request provided by vendor/laravel/framework/src/Illuminate/Http/Request.php; surface not fetched
+missing PSR-4 entry: Closure named in app/Http/Middleware/CheckApiKey.php
+dependency class: Symfony\Component\HttpFoundation\Response provided by vendor/symfony/http-foundation/Response.php; surface not fetched
+framework reference: Illuminate\Support\Facades\App::setLocale declared at vendor/laravel/framework/src/Illuminate/Support/Facades/App.php:93 (@method static void setLocale(string $locale))
+dependency class: Illuminate\Http\Request provided by vendor/laravel/framework/src/Illuminate/Http/Request.php; surface not fetched
+missing PSR-4 entry: Closure named in app/Http/Middleware/SetLocale.php
+dependency class: Symfony\Component\HttpFoundation\Response provided by vendor/symfony/http-foundation/Response.php; surface not fetched
+dependency member: Illuminate\Foundation\Application::configure declared at vendor/laravel/framework/src/Illuminate/Foundation/Application.php:228; source not fetched
+dependency class: Illuminate\Foundation\Configuration\Middleware provided by vendor/laravel/framework/src/Illuminate/Foundation/Configuration/Middleware.php; surface not fetched
+dependency class: Illuminate\Foundation\Configuration\Exceptions provided by vendor/laravel/framework/src/Illuminate/Foundation/Configuration/Exceptions.php; surface not fetched
+dependency member: Illuminate\Support\Str::slug declared at vendor/laravel/framework/src/Illuminate/Support/Str.php:1543; source not fetched
+missing PSR-4 entry: Pdo\Mysql::ATTR_SSL_CA named in config/database.php
+dependency member: Illuminate\Support\Str::slug declared at vendor/laravel/framework/src/Illuminate/Support/Str.php:1543; source not fetched
+dependency member: Laravel\Sanctum\Sanctum::currentApplicationUrlWithPort declared at vendor/laravel/sanctum/src/Sanctum.php:40; source not fetched
+dependency member: Illuminate\Support\Str::slug declared at vendor/laravel/framework/src/Illuminate/Support/Str.php:1543; source not fetched
+framework reference: Illuminate\Support\Facades\Hash::make declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Hash.php:10 (@method static string make(string $value, array $options = []))
+dependency member: Illuminate\Support\Str::random declared at vendor/laravel/framework/src/Illuminate/Support/Str.php:1102; source not fetched
+framework reference: Illuminate\Support\Facades\Schema::create declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Schema.php:34 (@method static void create(string $table, \Closure $callback))
+framework reference: Illuminate\Support\Facades\Schema::dropIfExists declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Schema.php:36 (@method static void dropIfExists(string $table))
+dependency class: Illuminate\Database\Schema\Blueprint provided by vendor/laravel/framework/src/Illuminate/Database/Schema/Blueprint.php; surface not fetched
+framework reference: Illuminate\Support\Facades\Schema::create declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Schema.php:34 (@method static void create(string $table, \Closure $callback))
+framework reference: Illuminate\Support\Facades\Schema::dropIfExists declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Schema.php:36 (@method static void dropIfExists(string $table))
+dependency class: Illuminate\Database\Schema\Blueprint provided by vendor/laravel/framework/src/Illuminate/Database/Schema/Blueprint.php; surface not fetched
+framework reference: Illuminate\Support\Facades\Schema::create declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Schema.php:34 (@method static void create(string $table, \Closure $callback))
+framework reference: Illuminate\Support\Facades\Schema::dropIfExists declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Schema.php:36 (@method static void dropIfExists(string $table))
+dependency class: Illuminate\Database\Schema\Blueprint provided by vendor/laravel/framework/src/Illuminate/Database/Schema/Blueprint.php; surface not fetched
+framework reference: Illuminate\Support\Facades\Schema::create declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Schema.php:34 (@method static void create(string $table, \Closure $callback))
+framework reference: Illuminate\Support\Facades\Schema::dropIfExists declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Schema.php:36 (@method static void dropIfExists(string $table))
+dependency class: Illuminate\Database\Schema\Blueprint provided by vendor/laravel/framework/src/Illuminate/Database/Schema/Blueprint.php; surface not fetched
+framework reference: Illuminate\Support\Facades\Schema::create declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Schema.php:34 (@method static void create(string $table, \Closure $callback))
+framework reference: Illuminate\Support\Facades\Schema::dropIfExists declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Schema.php:36 (@method static void dropIfExists(string $table))
+dependency class: Illuminate\Database\Schema\Blueprint provided by vendor/laravel/framework/src/Illuminate/Database/Schema/Blueprint.php; surface not fetched
+dependency member: Illuminate\Http\Request::capture declared at vendor/laravel/framework/src/Illuminate/Http/Request.php:73; source not fetched
+framework reference: Illuminate\Support\Facades\Route::middleware declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Route.php:96 (@method static \Illuminate\Routing\RouteRegistrar middleware(array|string|null $middleware))
+framework reference: Illuminate\Support\Facades\Artisan::command declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Artisan.php:13 (@method static \Illuminate\Foundation\Console\ClosureCommand command(string $signature, \Closure $callback))
+dependency member: Illuminate\Foundation\Inspiring::quote declared at vendor/laravel/framework/src/Illuminate/Foundation/Inspiring.php:46; source not fetched
+framework reference: Illuminate\Support\Facades\Route::get declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Route.php:6 (@method static \Illuminate\Routing\Route get(string $uri, array|string|callable|null $action = null))

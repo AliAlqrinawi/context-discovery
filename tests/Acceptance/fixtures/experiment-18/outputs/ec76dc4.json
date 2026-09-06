@@ -1,0 +1,985 @@
+{
+    "bundle_version": 1,
+    "budget_tokens": 8000,
+    "used_tokens": 3758,
+    "items": [
+        {
+            "lever": "fetched",
+            "reason": "the region uses UserSeeder, which the file's use block does not import",
+            "assertion_kind": "same_file_symbol_absence",
+            "provenance": {
+                "path": "database/seeders/DatabaseSeeder.php",
+                "lines": [
+                    5,
+                    6
+                ]
+            },
+            "payload": "use Illuminate\\Database\\Console\\Seeds\\WithoutModelEvents;\nuse Illuminate\\Database\\Seeder;",
+            "tokens": 23
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region uses CategorySeeder, which the file's use block does not import",
+            "assertion_kind": "same_file_symbol_absence",
+            "provenance": {
+                "path": "database/seeders/DatabaseSeeder.php",
+                "lines": [
+                    5,
+                    6
+                ]
+            },
+            "payload": "use Illuminate\\Database\\Console\\Seeds\\WithoutModelEvents;\nuse Illuminate\\Database\\Seeder;",
+            "tokens": 23
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region uses DishSeeder, which the file's use block does not import",
+            "assertion_kind": "same_file_symbol_absence",
+            "provenance": {
+                "path": "database/seeders/DatabaseSeeder.php",
+                "lines": [
+                    5,
+                    6
+                ]
+            },
+            "payload": "use Illuminate\\Database\\Console\\Seeds\\WithoutModelEvents;\nuse Illuminate\\Database\\Seeder;",
+            "tokens": 23
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region uses BranchSeeder, which the file's use block does not import",
+            "assertion_kind": "same_file_symbol_absence",
+            "provenance": {
+                "path": "database/seeders/DatabaseSeeder.php",
+                "lines": [
+                    5,
+                    6
+                ]
+            },
+            "payload": "use Illuminate\\Database\\Console\\Seeds\\WithoutModelEvents;\nuse Illuminate\\Database\\Seeder;",
+            "tokens": 23
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region uses CateringPackageSeeder, which the file's use block does not import",
+            "assertion_kind": "same_file_symbol_absence",
+            "provenance": {
+                "path": "database/seeders/DatabaseSeeder.php",
+                "lines": [
+                    5,
+                    6
+                ]
+            },
+            "payload": "use Illuminate\\Database\\Console\\Seeds\\WithoutModelEvents;\nuse Illuminate\\Database\\Seeder;",
+            "tokens": 23
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region uses SampleMenuSeeder, which the file's use block does not import",
+            "assertion_kind": "same_file_symbol_absence",
+            "provenance": {
+                "path": "database/seeders/DatabaseSeeder.php",
+                "lines": [
+                    5,
+                    6
+                ]
+            },
+            "payload": "use Illuminate\\Database\\Console\\Seeds\\WithoutModelEvents;\nuse Illuminate\\Database\\Seeder;",
+            "tokens": 23
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region uses TestimonialSeeder, which the file's use block does not import",
+            "assertion_kind": "same_file_symbol_absence",
+            "provenance": {
+                "path": "database/seeders/DatabaseSeeder.php",
+                "lines": [
+                    5,
+                    6
+                ]
+            },
+            "payload": "use Illuminate\\Database\\Console\\Seeds\\WithoutModelEvents;\nuse Illuminate\\Database\\Seeder;",
+            "tokens": 23
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region uses TimelineSeeder, which the file's use block does not import",
+            "assertion_kind": "same_file_symbol_absence",
+            "provenance": {
+                "path": "database/seeders/DatabaseSeeder.php",
+                "lines": [
+                    5,
+                    6
+                ]
+            },
+            "payload": "use Illuminate\\Database\\Console\\Seeds\\WithoutModelEvents;\nuse Illuminate\\Database\\Seeder;",
+            "tokens": 23
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region uses DeliveryAppSeeder, which the file's use block does not import",
+            "assertion_kind": "same_file_symbol_absence",
+            "provenance": {
+                "path": "database/seeders/DatabaseSeeder.php",
+                "lines": [
+                    5,
+                    6
+                ]
+            },
+            "payload": "use Illuminate\\Database\\Console\\Seeds\\WithoutModelEvents;\nuse Illuminate\\Database\\Seeder;",
+            "tokens": 23
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region uses PageContentSeeder, which the file's use block does not import",
+            "assertion_kind": "same_file_symbol_absence",
+            "provenance": {
+                "path": "database/seeders/DatabaseSeeder.php",
+                "lines": [
+                    5,
+                    6
+                ]
+            },
+            "payload": "use Illuminate\\Database\\Console\\Seeds\\WithoutModelEvents;\nuse Illuminate\\Database\\Seeder;",
+            "tokens": 23
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region uses SettingSeeder, which the file's use block does not import",
+            "assertion_kind": "same_file_symbol_absence",
+            "provenance": {
+                "path": "database/seeders/DatabaseSeeder.php",
+                "lines": [
+                    5,
+                    6
+                ]
+            },
+            "payload": "use Illuminate\\Database\\Console\\Seeds\\WithoutModelEvents;\nuse Illuminate\\Database\\Seeder;",
+            "tokens": 23
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region uses MediaItemSeeder, which the file's use block does not import",
+            "assertion_kind": "same_file_symbol_absence",
+            "provenance": {
+                "path": "database/seeders/DatabaseSeeder.php",
+                "lines": [
+                    5,
+                    6
+                ]
+            },
+            "payload": "use Illuminate\\Database\\Console\\Seeds\\WithoutModelEvents;\nuse Illuminate\\Database\\Seeder;",
+            "tokens": 23
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region uses UserSeeder, which the file's use block does not import",
+            "assertion_kind": "same_file_symbol_absence",
+            "provenance": {
+                "path": "database/seeders/DatabaseSeeder.php",
+                "member": "run",
+                "lines": [
+                    12,
+                    34
+                ]
+            },
+            "payload": "    /**\n     * Seed the application's database.\n     */\n    public function run(): void\n    {\n        $this->call([\n            UserSeeder::class,\n            CategorySeeder::class,\n            DishSeeder::class,\n            BranchSeeder::class,\n            CateringPackageSeeder::class,\n            SampleMenuSeeder::class,\n            TestimonialSeeder::class,\n            TimelineSeeder::class,\n            PersonalitySeeder::class,\n            DeliveryAppSeeder::class,\n            PageContentSeeder::class,\n            SettingSeeder::class,\n            MediaItemSeeder::class,\n            SeoSettingSeeder::class,\n            TrackingSettingSeeder::class,\n        ]);\n    }",
+            "tokens": 170
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region uses CategorySeeder, which the file's use block does not import",
+            "assertion_kind": "same_file_symbol_absence",
+            "provenance": {
+                "path": "database/seeders/DatabaseSeeder.php",
+                "member": "run",
+                "lines": [
+                    12,
+                    34
+                ]
+            },
+            "payload": "    /**\n     * Seed the application's database.\n     */\n    public function run(): void\n    {\n        $this->call([\n            UserSeeder::class,\n            CategorySeeder::class,\n            DishSeeder::class,\n            BranchSeeder::class,\n            CateringPackageSeeder::class,\n            SampleMenuSeeder::class,\n            TestimonialSeeder::class,\n            TimelineSeeder::class,\n            PersonalitySeeder::class,\n            DeliveryAppSeeder::class,\n            PageContentSeeder::class,\n            SettingSeeder::class,\n            MediaItemSeeder::class,\n            SeoSettingSeeder::class,\n            TrackingSettingSeeder::class,\n        ]);\n    }",
+            "tokens": 170
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region uses DishSeeder, which the file's use block does not import",
+            "assertion_kind": "same_file_symbol_absence",
+            "provenance": {
+                "path": "database/seeders/DatabaseSeeder.php",
+                "member": "run",
+                "lines": [
+                    12,
+                    34
+                ]
+            },
+            "payload": "    /**\n     * Seed the application's database.\n     */\n    public function run(): void\n    {\n        $this->call([\n            UserSeeder::class,\n            CategorySeeder::class,\n            DishSeeder::class,\n            BranchSeeder::class,\n            CateringPackageSeeder::class,\n            SampleMenuSeeder::class,\n            TestimonialSeeder::class,\n            TimelineSeeder::class,\n            PersonalitySeeder::class,\n            DeliveryAppSeeder::class,\n            PageContentSeeder::class,\n            SettingSeeder::class,\n            MediaItemSeeder::class,\n            SeoSettingSeeder::class,\n            TrackingSettingSeeder::class,\n        ]);\n    }",
+            "tokens": 170
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region uses BranchSeeder, which the file's use block does not import",
+            "assertion_kind": "same_file_symbol_absence",
+            "provenance": {
+                "path": "database/seeders/DatabaseSeeder.php",
+                "member": "run",
+                "lines": [
+                    12,
+                    34
+                ]
+            },
+            "payload": "    /**\n     * Seed the application's database.\n     */\n    public function run(): void\n    {\n        $this->call([\n            UserSeeder::class,\n            CategorySeeder::class,\n            DishSeeder::class,\n            BranchSeeder::class,\n            CateringPackageSeeder::class,\n            SampleMenuSeeder::class,\n            TestimonialSeeder::class,\n            TimelineSeeder::class,\n            PersonalitySeeder::class,\n            DeliveryAppSeeder::class,\n            PageContentSeeder::class,\n            SettingSeeder::class,\n            MediaItemSeeder::class,\n            SeoSettingSeeder::class,\n            TrackingSettingSeeder::class,\n        ]);\n    }",
+            "tokens": 170
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region uses CateringPackageSeeder, which the file's use block does not import",
+            "assertion_kind": "same_file_symbol_absence",
+            "provenance": {
+                "path": "database/seeders/DatabaseSeeder.php",
+                "member": "run",
+                "lines": [
+                    12,
+                    34
+                ]
+            },
+            "payload": "    /**\n     * Seed the application's database.\n     */\n    public function run(): void\n    {\n        $this->call([\n            UserSeeder::class,\n            CategorySeeder::class,\n            DishSeeder::class,\n            BranchSeeder::class,\n            CateringPackageSeeder::class,\n            SampleMenuSeeder::class,\n            TestimonialSeeder::class,\n            TimelineSeeder::class,\n            PersonalitySeeder::class,\n            DeliveryAppSeeder::class,\n            PageContentSeeder::class,\n            SettingSeeder::class,\n            MediaItemSeeder::class,\n            SeoSettingSeeder::class,\n            TrackingSettingSeeder::class,\n        ]);\n    }",
+            "tokens": 170
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region uses SampleMenuSeeder, which the file's use block does not import",
+            "assertion_kind": "same_file_symbol_absence",
+            "provenance": {
+                "path": "database/seeders/DatabaseSeeder.php",
+                "member": "run",
+                "lines": [
+                    12,
+                    34
+                ]
+            },
+            "payload": "    /**\n     * Seed the application's database.\n     */\n    public function run(): void\n    {\n        $this->call([\n            UserSeeder::class,\n            CategorySeeder::class,\n            DishSeeder::class,\n            BranchSeeder::class,\n            CateringPackageSeeder::class,\n            SampleMenuSeeder::class,\n            TestimonialSeeder::class,\n            TimelineSeeder::class,\n            PersonalitySeeder::class,\n            DeliveryAppSeeder::class,\n            PageContentSeeder::class,\n            SettingSeeder::class,\n            MediaItemSeeder::class,\n            SeoSettingSeeder::class,\n            TrackingSettingSeeder::class,\n        ]);\n    }",
+            "tokens": 170
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region uses TestimonialSeeder, which the file's use block does not import",
+            "assertion_kind": "same_file_symbol_absence",
+            "provenance": {
+                "path": "database/seeders/DatabaseSeeder.php",
+                "member": "run",
+                "lines": [
+                    12,
+                    34
+                ]
+            },
+            "payload": "    /**\n     * Seed the application's database.\n     */\n    public function run(): void\n    {\n        $this->call([\n            UserSeeder::class,\n            CategorySeeder::class,\n            DishSeeder::class,\n            BranchSeeder::class,\n            CateringPackageSeeder::class,\n            SampleMenuSeeder::class,\n            TestimonialSeeder::class,\n            TimelineSeeder::class,\n            PersonalitySeeder::class,\n            DeliveryAppSeeder::class,\n            PageContentSeeder::class,\n            SettingSeeder::class,\n            MediaItemSeeder::class,\n            SeoSettingSeeder::class,\n            TrackingSettingSeeder::class,\n        ]);\n    }",
+            "tokens": 170
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region uses TimelineSeeder, which the file's use block does not import",
+            "assertion_kind": "same_file_symbol_absence",
+            "provenance": {
+                "path": "database/seeders/DatabaseSeeder.php",
+                "member": "run",
+                "lines": [
+                    12,
+                    34
+                ]
+            },
+            "payload": "    /**\n     * Seed the application's database.\n     */\n    public function run(): void\n    {\n        $this->call([\n            UserSeeder::class,\n            CategorySeeder::class,\n            DishSeeder::class,\n            BranchSeeder::class,\n            CateringPackageSeeder::class,\n            SampleMenuSeeder::class,\n            TestimonialSeeder::class,\n            TimelineSeeder::class,\n            PersonalitySeeder::class,\n            DeliveryAppSeeder::class,\n            PageContentSeeder::class,\n            SettingSeeder::class,\n            MediaItemSeeder::class,\n            SeoSettingSeeder::class,\n            TrackingSettingSeeder::class,\n        ]);\n    }",
+            "tokens": 170
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region uses DeliveryAppSeeder, which the file's use block does not import",
+            "assertion_kind": "same_file_symbol_absence",
+            "provenance": {
+                "path": "database/seeders/DatabaseSeeder.php",
+                "member": "run",
+                "lines": [
+                    12,
+                    34
+                ]
+            },
+            "payload": "    /**\n     * Seed the application's database.\n     */\n    public function run(): void\n    {\n        $this->call([\n            UserSeeder::class,\n            CategorySeeder::class,\n            DishSeeder::class,\n            BranchSeeder::class,\n            CateringPackageSeeder::class,\n            SampleMenuSeeder::class,\n            TestimonialSeeder::class,\n            TimelineSeeder::class,\n            PersonalitySeeder::class,\n            DeliveryAppSeeder::class,\n            PageContentSeeder::class,\n            SettingSeeder::class,\n            MediaItemSeeder::class,\n            SeoSettingSeeder::class,\n            TrackingSettingSeeder::class,\n        ]);\n    }",
+            "tokens": 170
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region uses PageContentSeeder, which the file's use block does not import",
+            "assertion_kind": "same_file_symbol_absence",
+            "provenance": {
+                "path": "database/seeders/DatabaseSeeder.php",
+                "member": "run",
+                "lines": [
+                    12,
+                    34
+                ]
+            },
+            "payload": "    /**\n     * Seed the application's database.\n     */\n    public function run(): void\n    {\n        $this->call([\n            UserSeeder::class,\n            CategorySeeder::class,\n            DishSeeder::class,\n            BranchSeeder::class,\n            CateringPackageSeeder::class,\n            SampleMenuSeeder::class,\n            TestimonialSeeder::class,\n            TimelineSeeder::class,\n            PersonalitySeeder::class,\n            DeliveryAppSeeder::class,\n            PageContentSeeder::class,\n            SettingSeeder::class,\n            MediaItemSeeder::class,\n            SeoSettingSeeder::class,\n            TrackingSettingSeeder::class,\n        ]);\n    }",
+            "tokens": 170
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region uses SettingSeeder, which the file's use block does not import",
+            "assertion_kind": "same_file_symbol_absence",
+            "provenance": {
+                "path": "database/seeders/DatabaseSeeder.php",
+                "member": "run",
+                "lines": [
+                    12,
+                    34
+                ]
+            },
+            "payload": "    /**\n     * Seed the application's database.\n     */\n    public function run(): void\n    {\n        $this->call([\n            UserSeeder::class,\n            CategorySeeder::class,\n            DishSeeder::class,\n            BranchSeeder::class,\n            CateringPackageSeeder::class,\n            SampleMenuSeeder::class,\n            TestimonialSeeder::class,\n            TimelineSeeder::class,\n            PersonalitySeeder::class,\n            DeliveryAppSeeder::class,\n            PageContentSeeder::class,\n            SettingSeeder::class,\n            MediaItemSeeder::class,\n            SeoSettingSeeder::class,\n            TrackingSettingSeeder::class,\n        ]);\n    }",
+            "tokens": 170
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region uses MediaItemSeeder, which the file's use block does not import",
+            "assertion_kind": "same_file_symbol_absence",
+            "provenance": {
+                "path": "database/seeders/DatabaseSeeder.php",
+                "member": "run",
+                "lines": [
+                    12,
+                    34
+                ]
+            },
+            "payload": "    /**\n     * Seed the application's database.\n     */\n    public function run(): void\n    {\n        $this->call([\n            UserSeeder::class,\n            CategorySeeder::class,\n            DishSeeder::class,\n            BranchSeeder::class,\n            CateringPackageSeeder::class,\n            SampleMenuSeeder::class,\n            TestimonialSeeder::class,\n            TimelineSeeder::class,\n            PersonalitySeeder::class,\n            DeliveryAppSeeder::class,\n            PageContentSeeder::class,\n            SettingSeeder::class,\n            MediaItemSeeder::class,\n            SeoSettingSeeder::class,\n            TrackingSettingSeeder::class,\n        ]);\n    }",
+            "tokens": 170
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Branch::create, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Branch.php",
+                "member": "casts",
+                "lines": [
+                    26,
+                    28
+                ]
+            },
+            "payload": "    protected $casts = [\n        'show_in_footer' => 'boolean',\n    ];",
+            "tokens": 18
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Branch::create, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Branch.php",
+                "member": "fillable",
+                "lines": [
+                    9,
+                    24
+                ]
+            },
+            "payload": "    protected $fillable = [\n        'name_ar',\n        'name_en',\n        'city',\n        'location_ar',\n        'location_en',\n        'phone',\n        'whatsapp_number',\n        'opening_time',\n        'closing_time',\n        'google_maps_url',\n        'image_path',\n        'image_url',\n        'order',\n        'show_in_footer',\n    ];",
+            "tokens": 85
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Category::create, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Category.php",
+                "member": "dishes",
+                "lines": [
+                    17,
+                    20
+                ]
+            },
+            "payload": "    public function dishes(): HasMany\n    {\n        return $this->hasMany(Dish::class);\n    }",
+            "tokens": 24
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Category::create, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Category.php",
+                "member": "fillable",
+                "lines": [
+                    10,
+                    15
+                ]
+            },
+            "payload": "    protected $fillable = [\n        'name_ar',\n        'name_en',\n        'slug',\n        'order',\n    ];",
+            "tokens": 27
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\CateringPackage::create, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/CateringPackage.php",
+                "member": "casts",
+                "lines": [
+                    23,
+                    26
+                ]
+            },
+            "payload": "    protected $casts = [\n        'is_featured' => 'boolean',\n        'price_starting_from' => 'decimal:2',\n    ];",
+            "tokens": 29
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\CateringPackage::create, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/CateringPackage.php",
+                "member": "features",
+                "lines": [
+                    28,
+                    31
+                ]
+            },
+            "payload": "    public function features(): HasMany\n    {\n        return $this->hasMany(CateringPackageFeature::class, 'package_id');\n    }",
+            "tokens": 32
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\CateringPackage::create, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/CateringPackage.php",
+                "member": "fillable",
+                "lines": [
+                    10,
+                    21
+                ]
+            },
+            "payload": "    protected $fillable = [\n        'name_ar',\n        'name_en',\n        'description_ar',\n        'description_en',\n        'tag_en',\n        'price_starting_from',\n        'is_featured',\n        'image_path',\n        'image_url',\n        'order',\n    ];",
+            "tokens": 64
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\DeliveryApp::create, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/DeliveryApp.php",
+                "member": "casts",
+                "lines": [
+                    19,
+                    21
+                ]
+            },
+            "payload": "    protected $casts = [\n        'is_active' => 'boolean',\n    ];",
+            "tokens": 17
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\DeliveryApp::create, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/DeliveryApp.php",
+                "member": "fillable",
+                "lines": [
+                    9,
+                    17
+                ]
+            },
+            "payload": "    protected $fillable = [\n        'name_ar',\n        'name_en',\n        'order_url',\n        'logo_path',\n        'logo_url',\n        'is_active',\n        'order',\n    ];",
+            "tokens": 43
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Dish::create, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Dish.php",
+                "member": "casts",
+                "lines": [
+                    24,
+                    28
+                ]
+            },
+            "payload": "    protected $casts = [\n        'price' => 'decimal:2',\n        'is_featured' => 'boolean',\n        'is_signature' => 'boolean',\n    ];",
+            "tokens": 34
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Dish::create, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Dish.php",
+                "member": "category",
+                "lines": [
+                    30,
+                    33
+                ]
+            },
+            "payload": "    public function category(): BelongsTo\n    {\n        return $this->belongsTo(Category::class);\n    }",
+            "tokens": 26
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Dish::create, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Dish.php",
+                "member": "fillable",
+                "lines": [
+                    10,
+                    22
+                ]
+            },
+            "payload": "    protected $fillable = [\n        'category_id',\n        'name_ar',\n        'name_en',\n        'description_ar',\n        'description_en',\n        'price',\n        'is_featured',\n        'is_signature',\n        'image_path',\n        'image_url',\n        'order',\n    ];",
+            "tokens": 68
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\MediaItem::create, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/MediaItem.php",
+                "member": "fillable",
+                "lines": [
+                    10,
+                    22
+                ]
+            },
+            "payload": "    protected $fillable = [\n        'page',\n        'section',\n        'key',\n        'path',\n        'url',\n        'alt_ar',\n        'alt_en',\n        'mime_type',\n        'size_bytes',\n        'width',\n        'height',\n    ];",
+            "tokens": 58
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\MediaItem::create, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/MediaItem.php",
+                "member": "scopeForPage",
+                "lines": [
+                    24,
+                    35
+                ]
+            },
+            "payload": "    public function scopeForPage(Builder $query, ?string $page = null, ?string $section = null): Builder\n    {\n        if ($page !== null) {\n            $query->where('page', $page);\n        }\n\n        if ($section !== null) {\n            $query->where('section', $section);\n        }\n\n        return $query;\n    }",
+            "tokens": 79
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\PageContent::create, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/PageContent.php",
+                "member": "fillable",
+                "lines": [
+                    10,
+                    18
+                ]
+            },
+            "payload": "    protected $fillable = [\n        'page',\n        'section',\n        'key',\n        'value_ar',\n        'value_en',\n        'type',\n        'order',\n    ];",
+            "tokens": 40
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\PageContent::create, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/PageContent.php",
+                "member": "scopeForPage",
+                "lines": [
+                    20,
+                    29
+                ]
+            },
+            "payload": "    public function scopeForPage(Builder $query, string $page, ?string $section = null): Builder\n    {\n        $query->where('page', $page);\n\n        if ($section !== null) {\n            $query->where('section', $section);\n        }\n\n        return $query;\n    }",
+            "tokens": 66
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\SampleMenu::create, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/SampleMenu.php",
+                "member": "casts",
+                "lines": [
+                    20,
+                    22
+                ]
+            },
+            "payload": "    protected $casts = [\n        'is_featured' => 'boolean',\n    ];",
+            "tokens": 17
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\SampleMenu::create, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/SampleMenu.php",
+                "member": "dishes",
+                "lines": [
+                    24,
+                    27
+                ]
+            },
+            "payload": "    public function dishes(): HasMany\n    {\n        return $this->hasMany(SampleMenuDish::class);\n    }",
+            "tokens": 26
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\SampleMenu::create, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/SampleMenu.php",
+                "member": "fillable",
+                "lines": [
+                    10,
+                    18
+                ]
+            },
+            "payload": "    protected $fillable = [\n        'name_ar',\n        'name_en',\n        'tag_en',\n        'is_featured',\n        'image_path',\n        'image_url',\n        'order',\n    ];",
+            "tokens": 44
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Setting::create, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Setting.php",
+                "member": "fillable",
+                "lines": [
+                    10,
+                    17
+                ]
+            },
+            "payload": "    protected $fillable = [\n        'key',\n        'value',\n        'type',\n        'group',\n        'label_ar',\n        'label_en',\n    ];",
+            "tokens": 35
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Setting::create, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Setting.php",
+                "member": "scopeForGroup",
+                "lines": [
+                    19,
+                    26
+                ]
+            },
+            "payload": "    public function scopeForGroup(Builder $query, ?string $group = null): Builder\n    {\n        if ($group !== null) {\n            $query->where('group', $group);\n        }\n\n        return $query;\n    }",
+            "tokens": 51
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Testimonial::create, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Testimonial.php",
+                "member": "casts",
+                "lines": [
+                    17,
+                    19
+                ]
+            },
+            "payload": "    protected $casts = [\n        'is_active' => 'boolean',\n    ];",
+            "tokens": 17
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Testimonial::create, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Testimonial.php",
+                "member": "fillable",
+                "lines": [
+                    9,
+                    15
+                ]
+            },
+            "payload": "    protected $fillable = [\n        'name',\n        'quote_ar',\n        'quote_en',\n        'is_active',\n        'order',\n    ];",
+            "tokens": 32
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Timeline::create, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Timeline.php",
+                "member": "fillable",
+                "lines": [
+                    9,
+                    17
+                ]
+            },
+            "payload": "    protected $fillable = [\n        'year',\n        'location_en',\n        'title_ar',\n        'title_en',\n        'description_ar',\n        'description_en',\n        'order',\n    ];",
+            "tokens": 46
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\User::create, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/User.php",
+                "member": "casts",
+                "lines": [
+                    40,
+                    51
+                ]
+            },
+            "payload": "    /**\n     * Get the attributes that should be cast.\n     *\n     * @return array<string, string>\n     */\n    protected function casts(): array\n    {\n        return [\n            'email_verified_at' => 'datetime',\n            'password' => 'hashed',\n        ];\n    }",
+            "tokens": 67
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\User::create, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/User.php",
+                "member": "fillable",
+                "lines": [
+                    18,
+                    28
+                ]
+            },
+            "payload": "    /**\n     * The attributes that are mass assignable.\n     *\n     * @var list<string>\n     */\n    protected $fillable = [\n        'name',\n        'email',\n        'password',\n        'role',\n    ];",
+            "tokens": 50
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\User::create, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/User.php",
+                "member": "hidden",
+                "lines": [
+                    30,
+                    38
+                ]
+            },
+            "payload": "    /**\n     * The attributes that should be hidden for serialization.\n     *\n     * @var list<string>\n     */\n    protected $hidden = [\n        'password',\n        'remember_token',\n    ];",
+            "tokens": 48
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Models\\Branch::create, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "database/seeders/BranchSeeder.php",
+                "member": "App\\Models\\Branch::create",
+                "lines": [
+                    1,
+                    37
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Models\\Category::create, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "database/seeders/CategorySeeder.php",
+                "member": "App\\Models\\Category::create",
+                "lines": [
+                    1,
+                    25
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Models\\CateringPackage::create, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "database/seeders/CateringPackageSeeder.php",
+                "member": "App\\Models\\CateringPackage::create",
+                "lines": [
+                    1,
+                    60
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Models\\DeliveryApp::create, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "database/seeders/DeliveryAppSeeder.php",
+                "member": "App\\Models\\DeliveryApp::create",
+                "lines": [
+                    1,
+                    23
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Models\\Category::where, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "database/seeders/DishSeeder.php",
+                "member": "App\\Models\\Category::where",
+                "lines": [
+                    1,
+                    53
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Models\\Dish::create, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "database/seeders/DishSeeder.php",
+                "member": "App\\Models\\Dish::create",
+                "lines": [
+                    1,
+                    53
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Models\\MediaItem::create, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "database/seeders/MediaItemSeeder.php",
+                "member": "App\\Models\\MediaItem::create",
+                "lines": [
+                    1,
+                    28
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Models\\PageContent::create, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "database/seeders/PageContentSeeder.php",
+                "member": "App\\Models\\PageContent::create",
+                "lines": [
+                    1,
+                    110
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Models\\SampleMenu::create, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "database/seeders/SampleMenuSeeder.php",
+                "member": "App\\Models\\SampleMenu::create",
+                "lines": [
+                    1,
+                    60
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Models\\Setting::create, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "database/seeders/SettingSeeder.php",
+                "member": "App\\Models\\Setting::create",
+                "lines": [
+                    1,
+                    36
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Models\\Testimonial::create, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "database/seeders/TestimonialSeeder.php",
+                "member": "App\\Models\\Testimonial::create",
+                "lines": [
+                    1,
+                    29
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Models\\Timeline::create, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "database/seeders/TimelineSeeder.php",
+                "member": "App\\Models\\Timeline::create",
+                "lines": [
+                    1,
+                    24
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Models\\User::create, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "database/seeders/UserSeeder.php",
+                "member": "App\\Models\\User::create",
+                "lines": [
+                    1,
+                    27
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on Spatie\\Permission\\Models\\Role::firstOrCreate, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "database/seeders/UserSeeder.php",
+                "member": "Spatie\\Permission\\Models\\Role::firstOrCreate",
+                "lines": [
+                    1,
+                    27
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region performs several persistence writes; whether a transaction wraps them is decided by the caller, which the diff does not show",
+            "assertion_kind": "unverifiable_premise",
+            "provenance": {
+                "path": "database/seeders/UserSeeder.php",
+                "lines": [
+                    1,
+                    27
+                ]
+            },
+            "payload": "ASSUMPTION: this code assumes a surrounding transaction; caller not checked",
+            "tokens": 19
+        }
+    ],
+    "dropped": []
+}

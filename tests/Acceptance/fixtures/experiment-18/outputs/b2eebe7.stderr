@@ -1,0 +1,16 @@
+unreadable path: app/Http/Controllers/Auth/AuthController.php (no assertions extracted)
+unreadable path: app/Http/Controllers/BranchController.php (no assertions extracted)
+unreadable path: app/Http/Controllers/CategoryController.php (no assertions extracted)
+unreadable path: app/Http/Controllers/Catering/CateringPackageController.php (no assertions extracted)
+unreadable path: app/Http/Controllers/Catering/QuoteRequestController.php (no assertions extracted)
+unreadable path: app/Http/Controllers/Catering/SampleMenuController.php (no assertions extracted)
+unreadable path: app/Http/Controllers/DeliveryAppController.php (no assertions extracted)
+unreadable path: app/Http/Controllers/DishController.php (no assertions extracted)
+unreadable path: app/Http/Controllers/MediaItemController.php (no assertions extracted)
+unreadable path: app/Http/Controllers/PageContentController.php (no assertions extracted)
+unreadable path: app/Http/Controllers/SettingController.php (no assertions extracted)
+unreadable path: app/Http/Controllers/TestimonialController.php (no assertions extracted)
+unreadable path: app/Http/Controllers/TimelineController.php (no assertions extracted)
+unreadable path: app/Http/Controllers/UserController.php (no assertions extracted)
+new file: app/Traits/ApiResponse.php — own-file context is in the diff, not fetched
+dependency class: Illuminate\Http\JsonResponse provided by vendor/laravel/framework/src/Illuminate/Http/JsonResponse.php; surface not fetched

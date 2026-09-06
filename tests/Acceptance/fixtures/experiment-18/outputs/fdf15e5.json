@@ -1,0 +1,623 @@
+{
+    "bundle_version": 1,
+    "budget_tokens": 8000,
+    "used_tokens": 1298,
+    "items": [
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Enums\\QuoteRequestStatusEnum::Closed, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Enums/QuoteRequestStatusEnum.php",
+                "member": "Closed",
+                "lines": [
+                    10,
+                    10
+                ]
+            },
+            "payload": "    case Closed = 'closed';",
+            "tokens": 7
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Enums\\QuoteRequestStatusEnum::Contacted, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Enums/QuoteRequestStatusEnum.php",
+                "member": "Contacted",
+                "lines": [
+                    9,
+                    9
+                ]
+            },
+            "payload": "    case Contacted = 'contacted';",
+            "tokens": 9
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Enums\\QuoteRequestStatusEnum::Pending, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Enums/QuoteRequestStatusEnum.php",
+                "member": "Pending",
+                "lines": [
+                    7,
+                    7
+                ]
+            },
+            "payload": "    case Pending = 'pending';",
+            "tokens": 8
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Enums\\QuoteRequestStatusEnum::Reviewed, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Enums/QuoteRequestStatusEnum.php",
+                "member": "Reviewed",
+                "lines": [
+                    8,
+                    8
+                ]
+            },
+            "payload": "    case Reviewed = 'reviewed';",
+            "tokens": 8
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Models\\Branch::count, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Http/Controllers/Admin/DashboardController.php",
+                "member": "App\\Models\\Branch::count",
+                "lines": [
+                    1,
+                    65
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Models\\Category::count, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Http/Controllers/Admin/DashboardController.php",
+                "member": "App\\Models\\Category::count",
+                "lines": [
+                    1,
+                    65
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Models\\CateringPackage::count, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Http/Controllers/Admin/DashboardController.php",
+                "member": "App\\Models\\CateringPackage::count",
+                "lines": [
+                    1,
+                    65
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Models\\DeliveryApp::count, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Http/Controllers/Admin/DashboardController.php",
+                "member": "App\\Models\\DeliveryApp::count",
+                "lines": [
+                    1,
+                    65
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Models\\DeliveryApp::where, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Http/Controllers/Admin/DashboardController.php",
+                "member": "App\\Models\\DeliveryApp::where",
+                "lines": [
+                    1,
+                    65
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Models\\Dish::count, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Http/Controllers/Admin/DashboardController.php",
+                "member": "App\\Models\\Dish::count",
+                "lines": [
+                    1,
+                    65
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Models\\Dish::where, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Http/Controllers/Admin/DashboardController.php",
+                "member": "App\\Models\\Dish::where",
+                "lines": [
+                    1,
+                    65
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Models\\QuoteRequest::count, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Http/Controllers/Admin/DashboardController.php",
+                "member": "App\\Models\\QuoteRequest::count",
+                "lines": [
+                    1,
+                    65
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Models\\QuoteRequest::where, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Http/Controllers/Admin/DashboardController.php",
+                "member": "App\\Models\\QuoteRequest::where",
+                "lines": [
+                    1,
+                    65
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Models\\Testimonial::count, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Http/Controllers/Admin/DashboardController.php",
+                "member": "App\\Models\\Testimonial::count",
+                "lines": [
+                    1,
+                    65
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Models\\Testimonial::where, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Http/Controllers/Admin/DashboardController.php",
+                "member": "App\\Models\\Testimonial::where",
+                "lines": [
+                    1,
+                    65
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Models\\Timeline::count, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Http/Controllers/Admin/DashboardController.php",
+                "member": "App\\Models\\Timeline::count",
+                "lines": [
+                    1,
+                    65
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Models\\User::count, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Http/Controllers/Admin/DashboardController.php",
+                "member": "App\\Models\\User::count",
+                "lines": [
+                    1,
+                    65
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Branch::count, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Branch.php",
+                "member": "casts",
+                "lines": [
+                    26,
+                    28
+                ]
+            },
+            "payload": "    protected $casts = [\n        'show_in_footer' => 'boolean',\n    ];",
+            "tokens": 18
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Branch::count, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Branch.php",
+                "member": "fillable",
+                "lines": [
+                    9,
+                    24
+                ]
+            },
+            "payload": "    protected $fillable = [\n        'name_ar',\n        'name_en',\n        'city',\n        'location_ar',\n        'location_en',\n        'phone',\n        'whatsapp_number',\n        'opening_time',\n        'closing_time',\n        'google_maps_url',\n        'image_path',\n        'image_url',\n        'order',\n        'show_in_footer',\n    ];",
+            "tokens": 85
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Category::count, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Category.php",
+                "member": "dishes",
+                "lines": [
+                    17,
+                    20
+                ]
+            },
+            "payload": "    public function dishes(): HasMany\n    {\n        return $this->hasMany(Dish::class);\n    }",
+            "tokens": 24
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Category::count, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Category.php",
+                "member": "fillable",
+                "lines": [
+                    10,
+                    15
+                ]
+            },
+            "payload": "    protected $fillable = [\n        'name_ar',\n        'name_en',\n        'slug',\n        'order',\n    ];",
+            "tokens": 27
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\CateringPackage::count, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/CateringPackage.php",
+                "member": "casts",
+                "lines": [
+                    23,
+                    26
+                ]
+            },
+            "payload": "    protected $casts = [\n        'is_featured' => 'boolean',\n        'price_starting_from' => 'decimal:2',\n    ];",
+            "tokens": 29
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\CateringPackage::count, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/CateringPackage.php",
+                "member": "features",
+                "lines": [
+                    28,
+                    31
+                ]
+            },
+            "payload": "    public function features(): HasMany\n    {\n        return $this->hasMany(CateringPackageFeature::class, 'package_id');\n    }",
+            "tokens": 32
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\CateringPackage::count, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/CateringPackage.php",
+                "member": "fillable",
+                "lines": [
+                    10,
+                    21
+                ]
+            },
+            "payload": "    protected $fillable = [\n        'name_ar',\n        'name_en',\n        'description_ar',\n        'description_en',\n        'tag_en',\n        'price_starting_from',\n        'is_featured',\n        'image_path',\n        'image_url',\n        'order',\n    ];",
+            "tokens": 64
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\DeliveryApp::count, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/DeliveryApp.php",
+                "member": "casts",
+                "lines": [
+                    19,
+                    21
+                ]
+            },
+            "payload": "    protected $casts = [\n        'is_active' => 'boolean',\n    ];",
+            "tokens": 17
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\DeliveryApp::count, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/DeliveryApp.php",
+                "member": "fillable",
+                "lines": [
+                    9,
+                    17
+                ]
+            },
+            "payload": "    protected $fillable = [\n        'name_ar',\n        'name_en',\n        'order_url',\n        'logo_path',\n        'logo_url',\n        'is_active',\n        'order',\n    ];",
+            "tokens": 43
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Dish::count, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Dish.php",
+                "member": "casts",
+                "lines": [
+                    24,
+                    28
+                ]
+            },
+            "payload": "    protected $casts = [\n        'price' => 'decimal:2',\n        'is_featured' => 'boolean',\n        'is_signature' => 'boolean',\n    ];",
+            "tokens": 34
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Dish::count, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Dish.php",
+                "member": "category",
+                "lines": [
+                    30,
+                    33
+                ]
+            },
+            "payload": "    public function category(): BelongsTo\n    {\n        return $this->belongsTo(Category::class);\n    }",
+            "tokens": 26
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Dish::count, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Dish.php",
+                "member": "fillable",
+                "lines": [
+                    10,
+                    22
+                ]
+            },
+            "payload": "    protected $fillable = [\n        'category_id',\n        'name_ar',\n        'name_en',\n        'description_ar',\n        'description_en',\n        'price',\n        'is_featured',\n        'is_signature',\n        'image_path',\n        'image_url',\n        'order',\n    ];",
+            "tokens": 68
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\QuoteRequest::count, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/QuoteRequest.php",
+                "member": "casts",
+                "lines": [
+                    25,
+                    30
+                ]
+            },
+            "payload": "    protected $casts = [\n        'status' => QuoteRequestStatusEnum::class,\n        'event_type' => EventTypeEnum::class,\n        'budget_range' => BudgetRangeEnum::class,\n        'event_date' => 'date',\n    ];",
+            "tokens": 53
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\QuoteRequest::count, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/QuoteRequest.php",
+                "member": "fillable",
+                "lines": [
+                    12,
+                    23
+                ]
+            },
+            "payload": "    protected $fillable = [\n        'name',\n        'phone',\n        'email',\n        'event_date',\n        'guests_count',\n        'branch',\n        'event_type',\n        'budget_range',\n        'notes',\n        'status',\n    ];",
+            "tokens": 58
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Testimonial::count, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Testimonial.php",
+                "member": "casts",
+                "lines": [
+                    17,
+                    19
+                ]
+            },
+            "payload": "    protected $casts = [\n        'is_active' => 'boolean',\n    ];",
+            "tokens": 17
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Testimonial::count, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Testimonial.php",
+                "member": "fillable",
+                "lines": [
+                    9,
+                    15
+                ]
+            },
+            "payload": "    protected $fillable = [\n        'name',\n        'quote_ar',\n        'quote_en',\n        'is_active',\n        'order',\n    ];",
+            "tokens": 32
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Timeline::count, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Timeline.php",
+                "member": "fillable",
+                "lines": [
+                    9,
+                    17
+                ]
+            },
+            "payload": "    protected $fillable = [\n        'year',\n        'location_en',\n        'title_ar',\n        'title_en',\n        'description_ar',\n        'description_en',\n        'order',\n    ];",
+            "tokens": 46
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\User::count, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/User.php",
+                "member": "casts",
+                "lines": [
+                    40,
+                    51
+                ]
+            },
+            "payload": "    /**\n     * Get the attributes that should be cast.\n     *\n     * @return array<string, string>\n     */\n    protected function casts(): array\n    {\n        return [\n            'email_verified_at' => 'datetime',\n            'password' => 'hashed',\n        ];\n    }",
+            "tokens": 67
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\User::count, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/User.php",
+                "member": "fillable",
+                "lines": [
+                    18,
+                    28
+                ]
+            },
+            "payload": "    /**\n     * The attributes that are mass assignable.\n     *\n     * @var list<string>\n     */\n    protected $fillable = [\n        'name',\n        'email',\n        'password',\n        'role',\n    ];",
+            "tokens": 50
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\User::count, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/User.php",
+                "member": "hidden",
+                "lines": [
+                    30,
+                    38
+                ]
+            },
+            "payload": "    /**\n     * The attributes that should be hidden for serialization.\n     *\n     * @var list<string>\n     */\n    protected $hidden = [\n        'password',\n        'remember_token',\n    ];",
+            "tokens": 48
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\QuoteRequestRepository::create, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/QuoteRequestRepository.php",
+                "member": "create",
+                "lines": [
+                    34,
+                    37
+                ]
+            },
+            "payload": "    public function create(array $data): QuoteRequest\n    {\n        return QuoteRequest::create($data);\n    }",
+            "tokens": 28
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\QuoteRequestRepository::updateStatus, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/QuoteRequestRepository.php",
+                "member": "updateStatus",
+                "lines": [
+                    39,
+                    45
+                ]
+            },
+            "payload": "    public function updateStatus(int $id, string $status): QuoteRequest\n    {\n        $quoteRequest = QuoteRequest::findOrFail($id);\n        $quoteRequest->update(['status' => $status]);\n\n        return $quoteRequest;\n    }",
+            "tokens": 56
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\UserRepository::create, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/UserRepository.php",
+                "member": "create",
+                "lines": [
+                    21,
+                    29
+                ]
+            },
+            "payload": "    public function create(array $data, string $role): User\n    {\n        return DB::transaction(function () use ($data, $role) {\n            $user = User::create($data);\n            $user->assignRole($role);\n\n            return $user;\n        });\n    }",
+            "tokens": 64
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Models\\User::where, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "tests/Feature/DashboardStatsTest.php",
+                "member": "App\\Models\\User::where",
+                "lines": [
+                    1,
+                    60
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        }
+    ],
+    "dropped": []
+}

@@ -1,0 +1,28 @@
+diff --git a/.github/workflows/deploy.yml b/.github/workflows/deploy.yml
+index 85811f7..c01ff85 100644
+--- a/.github/workflows/deploy.yml
++++ b/.github/workflows/deploy.yml
+@@ -5,7 +5,7 @@ on:
+     branches: [main]
+ 
+ jobs:
+-  build-and-test:
++  build:
+     runs-on: ubuntu-latest
+     steps:
+       - uses: actions/checkout@v4
+@@ -16,13 +16,9 @@ jobs:
+           extensions: mbstring, bcmath, pdo, tokenizer, xml, ctype, json
+       - name: Install dependencies
+         run: composer install --prefer-dist --no-progress
+-      - name: Prepare env
+-        run: cp .env.example .env && php artisan key:generate
+-      - name: Run tests
+-        run: php artisan test
+ 
+   deploy:
+-    needs: build-and-test
++    needs: build
+     runs-on: ubuntu-latest
+     steps:
+       - name: Deploy over SSH

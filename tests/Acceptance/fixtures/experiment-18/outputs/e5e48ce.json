@@ -1,0 +1,788 @@
+{
+    "bundle_version": 1,
+    "budget_tokens": 8000,
+    "used_tokens": 4123,
+    "items": [
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Actions\\Branch\\GetBranchesAction, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Actions/Branch/GetBranchesAction.php",
+                "member": "__construct",
+                "lines": [
+                    11,
+                    13
+                ]
+            },
+            "payload": "    public function __construct(\n        private readonly BranchRepository $repository,\n    ) {}",
+            "tokens": 24
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Actions\\Branch\\GetBranchesAction, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Actions/Branch/GetBranchesAction.php",
+                "member": "execute",
+                "lines": [
+                    15,
+                    27
+                ]
+            },
+            "payload": "    public function execute(?bool $showInFooter = null): Collection\n    {\n        $locale = app()->getLocale();\n        $filter = $showInFooter === null ? 'all' : var_export($showInFooter, true);\n        $key = \"branches_{$locale}_{$filter}\";\n\n        return CacheGroup::remember(\n            'branches',\n            $key,\n            now()->addHour(),\n            fn () => $this->repository->getAll($showInFooter)\n        );\n    }",
+            "tokens": 108
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Actions\\Catering\\GetPackagesAction, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Actions/Catering/GetPackagesAction.php",
+                "member": "__construct",
+                "lines": [
+                    11,
+                    13
+                ]
+            },
+            "payload": "    public function __construct(\n        private readonly CateringPackageRepository $repository,\n    ) {}",
+            "tokens": 27
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Actions\\Catering\\GetPackagesAction, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Actions/Catering/GetPackagesAction.php",
+                "member": "execute",
+                "lines": [
+                    15,
+                    26
+                ]
+            },
+            "payload": "    public function execute(): Collection\n    {\n        $locale = app()->getLocale();\n        $key = \"catering_packages_{$locale}\";\n\n        return CacheGroup::remember(\n            'catering_packages',\n            $key,\n            now()->addHour(),\n            fn () => $this->repository->getAll()\n        );\n    }",
+            "tokens": 79
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Actions\\Catering\\GetSampleMenusAction, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Actions/Catering/GetSampleMenusAction.php",
+                "member": "__construct",
+                "lines": [
+                    11,
+                    13
+                ]
+            },
+            "payload": "    public function __construct(\n        private readonly SampleMenuRepository $repository,\n    ) {}",
+            "tokens": 25
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Actions\\Catering\\GetSampleMenusAction, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Actions/Catering/GetSampleMenusAction.php",
+                "member": "execute",
+                "lines": [
+                    15,
+                    26
+                ]
+            },
+            "payload": "    public function execute(): Collection\n    {\n        $locale = app()->getLocale();\n        $key = \"sample_menus_{$locale}\";\n\n        return CacheGroup::remember(\n            'sample_menus',\n            $key,\n            now()->addHour(),\n            fn () => $this->repository->getAll()\n        );\n    }",
+            "tokens": 77
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Actions\\Catering\\SubmitQuoteRequestAction, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Actions/Catering/SubmitQuoteRequestAction.php",
+                "member": "__construct",
+                "lines": [
+                    12,
+                    14
+                ]
+            },
+            "payload": "    public function __construct(\n        private readonly QuoteRequestRepository $repository,\n    ) {}",
+            "tokens": 26
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Actions\\Catering\\SubmitQuoteRequestAction, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Actions/Catering/SubmitQuoteRequestAction.php",
+                "member": "execute",
+                "lines": [
+                    16,
+                    34
+                ]
+            },
+            "payload": "    public function execute(SubmitQuoteRequestDTO $dto): QuoteRequest\n    {\n        $quoteRequest = $this->repository->create([\n            'name' => $dto->name,\n            'phone' => $dto->phone,\n            'email' => $dto->email,\n            'event_date' => $dto->event_date,\n            'guests_count' => $dto->guests_count,\n            'branch' => $dto->branch,\n            'event_type' => $dto->event_type,\n            'budget_range' => $dto->budget_range,\n            'notes' => $dto->notes,\n            'status' => 'pending',\n        ]);\n\n        Cache::forget('dashboard_stats');\n\n        return $quoteRequest;\n    }",
+            "tokens": 157
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Actions\\DeliveryApp\\GetDeliveryAppsAction, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Actions/DeliveryApp/GetDeliveryAppsAction.php",
+                "member": "__construct",
+                "lines": [
+                    11,
+                    13
+                ]
+            },
+            "payload": "    public function __construct(\n        private readonly DeliveryAppRepository $repository,\n    ) {}",
+            "tokens": 26
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Actions\\DeliveryApp\\GetDeliveryAppsAction, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Actions/DeliveryApp/GetDeliveryAppsAction.php",
+                "member": "execute",
+                "lines": [
+                    15,
+                    26
+                ]
+            },
+            "payload": "    public function execute(bool $activeOnly = true): Collection\n    {\n        $locale = app()->getLocale();\n        $key = \"delivery_apps_{$locale}_\".($activeOnly ? 'active' : 'all');\n\n        return CacheGroup::remember(\n            'delivery_apps',\n            $key,\n            now()->addHour(),\n            fn () => $this->repository->getAll($activeOnly)\n        );\n    }",
+            "tokens": 94
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Actions\\Dish\\GetDishAction, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Actions/Dish/GetDishAction.php",
+                "member": "__construct",
+                "lines": [
+                    10,
+                    12
+                ]
+            },
+            "payload": "    public function __construct(\n        private readonly DishRepository $repository,\n    ) {}",
+            "tokens": 24
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Actions\\Dish\\GetDishAction, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Actions/Dish/GetDishAction.php",
+                "member": "execute",
+                "lines": [
+                    14,
+                    17
+                ]
+            },
+            "payload": "    public function execute(int $id): Dish\n    {\n        return $this->repository->getById($id);\n    }",
+            "tokens": 26
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Actions\\Dish\\GetDishesAction, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Actions/Dish/GetDishesAction.php",
+                "member": "__construct",
+                "lines": [
+                    11,
+                    13
+                ]
+            },
+            "payload": "    public function __construct(\n        private readonly DishRepository $repository,\n    ) {}",
+            "tokens": 24
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Actions\\Dish\\GetDishesAction, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Actions/Dish/GetDishesAction.php",
+                "member": "execute",
+                "lines": [
+                    15,
+                    32
+                ]
+            },
+            "payload": "    public function execute(array $filters = []): LengthAwarePaginator\n    {\n        $locale = app()->getLocale();\n        $categoryId = $filters['category_id'] ?? 'all';\n        $featured = array_key_exists('featured', $filters) ? var_export($filters['featured'], true) : 'all';\n        $signature = array_key_exists('signature', $filters) ? var_export($filters['signature'], true) : 'all';\n        $perPage = $filters['per_page'] ?? 'default';\n        $page = request()->integer('page', 1);\n\n        $key = \"dishes_{$locale}_{$categoryId}_{$featured}_{$signature}_{$perPage}_{$page}\";\n\n        return CacheGroup::remember(\n            'dishes',\n            $key,\n            now()->addHour(),\n            fn () => $this->repository->getAll($filters)\n        );\n    }",
+            "tokens": 192
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Actions\\MediaItem\\GetMediaItemsAction, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Actions/MediaItem/GetMediaItemsAction.php",
+                "member": "__construct",
+                "lines": [
+                    11,
+                    13
+                ]
+            },
+            "payload": "    public function __construct(\n        private readonly MediaItemRepository $repository,\n    ) {}",
+            "tokens": 25
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Actions\\MediaItem\\GetMediaItemsAction, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Actions/MediaItem/GetMediaItemsAction.php",
+                "member": "execute",
+                "lines": [
+                    15,
+                    25
+                ]
+            },
+            "payload": "    public function execute(?string $page = null, ?string $section = null): Collection\n    {\n        $key = 'media_items_'.($page ?? 'all').'_'.($section ?? 'all');\n\n        return CacheGroup::remember(\n            'media_items',\n            $key,\n            now()->addDay(),\n            fn () => $this->repository->getByPage($page, $section)\n        );\n    }",
+            "tokens": 90
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Actions\\PageContent\\GetPageContentAction, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Actions/PageContent/GetPageContentAction.php",
+                "member": "__construct",
+                "lines": [
+                    11,
+                    13
+                ]
+            },
+            "payload": "    public function __construct(\n        private readonly PageContentRepository $repository,\n    ) {}",
+            "tokens": 26
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Actions\\PageContent\\GetPageContentAction, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Actions/PageContent/GetPageContentAction.php",
+                "member": "execute",
+                "lines": [
+                    15,
+                    26
+                ]
+            },
+            "payload": "    public function execute(string $page, ?string $section = null): Collection\n    {\n        $locale = app()->getLocale();\n        $key = \"page_contents_{$page}_{$section}_{$locale}\";\n\n        return CacheGroup::remember(\n            'page_contents',\n            $key,\n            now()->addDay(),\n            fn () => $this->repository->getByPage($page, $section)\n        );\n    }",
+            "tokens": 96
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Actions\\Setting\\GetSettingsAction, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Actions/Setting/GetSettingsAction.php",
+                "member": "__construct",
+                "lines": [
+                    11,
+                    13
+                ]
+            },
+            "payload": "    public function __construct(\n        private readonly SettingRepository $repository,\n    ) {}",
+            "tokens": 25
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Actions\\Setting\\GetSettingsAction, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Actions/Setting/GetSettingsAction.php",
+                "member": "execute",
+                "lines": [
+                    15,
+                    25
+                ]
+            },
+            "payload": "    public function execute(?string $group = null): Collection\n    {\n        $key = \"settings_{$group}\";\n\n        return CacheGroup::remember(\n            'settings',\n            $key,\n            now()->addDay(),\n            fn () => $this->repository->getAll($group)\n        );\n    }",
+            "tokens": 72
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Actions\\Testimonial\\GetTestimonialsAction, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Actions/Testimonial/GetTestimonialsAction.php",
+                "member": "__construct",
+                "lines": [
+                    11,
+                    13
+                ]
+            },
+            "payload": "    public function __construct(\n        private readonly TestimonialRepository $repository,\n    ) {}",
+            "tokens": 26
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Actions\\Testimonial\\GetTestimonialsAction, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Actions/Testimonial/GetTestimonialsAction.php",
+                "member": "execute",
+                "lines": [
+                    15,
+                    26
+                ]
+            },
+            "payload": "    public function execute(bool $activeOnly = true): Collection\n    {\n        $locale = app()->getLocale();\n        $key = \"testimonials_{$locale}_\".($activeOnly ? 'active' : 'all');\n\n        return CacheGroup::remember(\n            'testimonials',\n            $key,\n            now()->addHour(),\n            fn () => $this->repository->getAll($activeOnly)\n        );\n    }",
+            "tokens": 94
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Actions\\Timeline\\GetTimelineAction, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Actions/Timeline/GetTimelineAction.php",
+                "member": "__construct",
+                "lines": [
+                    11,
+                    13
+                ]
+            },
+            "payload": "    public function __construct(\n        private readonly TimelineRepository $repository,\n    ) {}",
+            "tokens": 25
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Actions\\Timeline\\GetTimelineAction, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Actions/Timeline/GetTimelineAction.php",
+                "member": "execute",
+                "lines": [
+                    15,
+                    26
+                ]
+            },
+            "payload": "    public function execute(): Collection\n    {\n        $locale = app()->getLocale();\n        $key = \"timeline_{$locale}\";\n\n        return CacheGroup::remember(\n            'timeline',\n            $key,\n            now()->addDay(),\n            fn () => $this->repository->getAll()\n        );\n    }",
+            "tokens": 75
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\DTOs\\Catering\\SubmitQuoteRequestDTO::fromRequest, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/DTOs/Catering/SubmitQuoteRequestDTO.php",
+                "member": "fromRequest",
+                "lines": [
+                    21,
+                    34
+                ]
+            },
+            "payload": "    public static function fromRequest(Request $request): self\n    {\n        return new self(\n            name: $request->string('name')->toString(),\n            phone: $request->string('phone')->toString(),\n            email: $request->filled('email') ? $request->string('email')->toString() : null,\n            event_date: $request->string('event_date')->toString(),\n            guests_count: (int) $request->input('guests_count'),\n            branch: $request->string('branch')->toString(),\n            event_type: $request->string('event_type')->toString(),\n            budget_range: $request->filled('budget_range') ? $request->string('budget_range')->toString() : null,\n            notes: $request->filled('notes') ? $request->string('notes')->toString() : null,\n        );\n    }",
+            "tokens": 197
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Http\\Resources\\Branch\\BranchResource::collection, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Http/Controllers/Public/BranchController.php",
+                "member": "App\\Http\\Resources\\Branch\\BranchResource::collection",
+                "lines": [
+                    1,
+                    18
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Http\\Resources\\Category\\CategoryResource::collection, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Http/Controllers/Public/CategoryController.php",
+                "member": "App\\Http\\Resources\\Category\\CategoryResource::collection",
+                "lines": [
+                    1,
+                    18
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Http\\Resources\\Catering\\PackageResource::collection, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Http/Controllers/Public/Catering/CateringPackageController.php",
+                "member": "App\\Http\\Resources\\Catering\\PackageResource::collection",
+                "lines": [
+                    1,
+                    18
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Http\\Resources\\Catering\\SampleMenuResource::collection, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Http/Controllers/Public/Catering/SampleMenuController.php",
+                "member": "App\\Http\\Resources\\Catering\\SampleMenuResource::collection",
+                "lines": [
+                    1,
+                    18
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Http\\Resources\\DeliveryApp\\DeliveryAppResource::collection, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Http/Controllers/Public/DeliveryAppController.php",
+                "member": "App\\Http\\Resources\\DeliveryApp\\DeliveryAppResource::collection",
+                "lines": [
+                    1,
+                    18
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Http\\Resources\\Dish\\DishResource::collection, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Http/Controllers/Public/DishController.php",
+                "member": "App\\Http\\Resources\\Dish\\DishResource::collection",
+                "lines": [
+                    1,
+                    32
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Http\\Resources\\Testimonial\\TestimonialResource::collection, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Http/Controllers/Public/TestimonialController.php",
+                "member": "App\\Http\\Resources\\Testimonial\\TestimonialResource::collection",
+                "lines": [
+                    1,
+                    18
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Http\\Resources\\Timeline\\TimelineResource::collection, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Http/Controllers/Public/TimelineController.php",
+                "member": "App\\Http\\Resources\\Timeline\\TimelineResource::collection",
+                "lines": [
+                    1,
+                    18
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Http\\Requests\\Catering\\StoreQuoteRequestRequest, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Http/Requests/Catering/StoreQuoteRequestRequest.php",
+                "member": "authorize",
+                "lines": [
+                    13,
+                    16
+                ]
+            },
+            "payload": "    public function authorize(): bool\n    {\n        return true;\n    }",
+            "tokens": 18
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Http\\Requests\\Catering\\StoreQuoteRequestRequest, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Http/Requests/Catering/StoreQuoteRequestRequest.php",
+                "member": "rules",
+                "lines": [
+                    18,
+                    31
+                ]
+            },
+            "payload": "    public function rules(): array\n    {\n        return [\n            'name' => ['required', 'string', 'max:200'],\n            'phone' => ['required', 'string', 'max:20'],\n            'email' => ['nullable', 'email', 'max:255'],\n            'event_date' => ['required', 'date', 'after:today'],\n            'guests_count' => ['required', 'integer', 'min:1', 'max:10000'],\n            'branch' => ['required', 'string', Rule::in(BranchLocationEnum::values())],\n            'event_type' => ['required', 'string', Rule::in(EventTypeEnum::values())],\n            'budget_range' => ['nullable', 'string', Rule::in(BudgetRangeEnum::values())],\n            'notes' => ['nullable', 'string', 'max:1000'],\n        ];\n    }",
+            "tokens": 178
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Http\\Resources\\Branch\\BranchResource::collection, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Http/Resources/Branch/BranchResource.php",
+                "member": "toArray",
+                "lines": [
+                    13,
+                    34
+                ]
+            },
+            "payload": "    public function toArray(Request $request): array\n    {\n        return [\n            'id' => $this->id,\n            'name' => $this->resolveLocale($this->name_ar, $this->name_en),\n            'name_ar' => $this->name_ar,\n            'name_en' => $this->name_en,\n            'location' => $this->resolveLocale($this->location_ar, $this->location_en),\n            'location_ar' => $this->location_ar,\n            'location_en' => $this->location_en,\n            'city' => $this->city,\n            'phone' => $this->phone,\n            'whatsapp_number' => $this->whatsapp_number ?? $this->phone,\n            'opening_time' => $this->opening_time,\n            'closing_time' => $this->closing_time,\n            'google_maps_url' => $this->google_maps_url,\n            'image_url' => $this->image_url,\n            'order' => $this->order,\n            'show_in_footer' => $this->show_in_footer,\n            'locale' => app()->getLocale(),\n        ];\n    }",
+            "tokens": 238
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Http\\Resources\\Category\\CategoryResource::collection, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Http/Resources/Category/CategoryResource.php",
+                "member": "toArray",
+                "lines": [
+                    13,
+                    24
+                ]
+            },
+            "payload": "    public function toArray(Request $request): array\n    {\n        return [\n            'id' => $this->id,\n            'name' => $this->resolveLocale($this->name_ar, $this->name_en),\n            'name_ar' => $this->name_ar,\n            'name_en' => $this->name_en,\n            'slug' => $this->slug,\n            'order' => $this->order,\n            'locale' => app()->getLocale(),\n        ];\n    }",
+            "tokens": 100
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Http\\Resources\\Catering\\PackageResource::collection, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Http/Resources/Catering/PackageResource.php",
+                "member": "toArray",
+                "lines": [
+                    13,
+                    35
+                ]
+            },
+            "payload": "    public function toArray(Request $request): array\n    {\n        return [\n            'id' => $this->id,\n            'name' => $this->resolveLocale($this->name_ar, $this->name_en),\n            'name_ar' => $this->name_ar,\n            'name_en' => $this->name_en,\n            'description' => $this->resolveLocale($this->description_ar, $this->description_en),\n            'description_ar' => $this->description_ar,\n            'description_en' => $this->description_en,\n            'tag_en' => $this->tag_en,\n            'price_starting_from' => $this->price_starting_from,\n            'is_featured' => $this->is_featured,\n            'features' => $this->whenLoaded('features', fn () => $this->features->map(fn ($feature) => [\n                'feature_ar' => $feature->feature_ar,\n                'feature_en' => $feature->feature_en,\n                'order' => $feature->order,\n            ])),\n            'image_url' => $this->image_url,\n            'order' => $this->order,\n            'locale' => app()->getLocale(),\n        ];\n    }",
+            "tokens": 261
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Http\\Resources\\Catering\\QuoteRequestResource, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Http/Resources/Catering/QuoteRequestResource.php",
+                "member": "toArray",
+                "lines": [
+                    10,
+                    29
+                ]
+            },
+            "payload": "    public function toArray(Request $request): array\n    {\n        return [\n            'id' => $this->id,\n            'name' => $this->name,\n            'phone' => $this->phone,\n            'email' => $this->email,\n            'event_date' => $this->event_date?->toDateString(),\n            'guests_count' => $this->guests_count,\n            'branch' => $this->branch,\n            'event_type' => $this->event_type->value,\n            'budget_range' => $this->budget_range?->value,\n            'notes' => $this->notes,\n            'status' => [\n                'value' => $this->status->value,\n                'label' => $this->status->label(),\n            ],\n            'created_at' => $this->created_at?->toIso8601String(),\n        ];\n    }",
+            "tokens": 186
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Http\\Resources\\Catering\\SampleMenuResource::collection, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Http/Resources/Catering/SampleMenuResource.php",
+                "member": "toArray",
+                "lines": [
+                    13,
+                    31
+                ]
+            },
+            "payload": "    public function toArray(Request $request): array\n    {\n        return [\n            'id' => $this->id,\n            'name' => $this->resolveLocale($this->name_ar, $this->name_en),\n            'name_ar' => $this->name_ar,\n            'name_en' => $this->name_en,\n            'tag_en' => $this->tag_en,\n            'is_featured' => $this->is_featured,\n            'dishes' => $this->whenLoaded('dishes', fn () => $this->dishes->map(fn ($dish) => [\n                'dish_name_ar' => $dish->dish_name_ar,\n                'dish_name_en' => $dish->dish_name_en,\n                'order' => $dish->order,\n            ])),\n            'image_url' => $this->image_url,\n            'order' => $this->order,\n            'locale' => app()->getLocale(),\n        ];\n    }",
+            "tokens": 190
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Http\\Resources\\DeliveryApp\\DeliveryAppResource::collection, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Http/Resources/DeliveryApp/DeliveryAppResource.php",
+                "member": "toArray",
+                "lines": [
+                    13,
+                    26
+                ]
+            },
+            "payload": "    public function toArray(Request $request): array\n    {\n        return [\n            'id' => $this->id,\n            'name' => $this->resolveLocale($this->name_ar, $this->name_en),\n            'name_ar' => $this->name_ar,\n            'name_en' => $this->name_en,\n            'order_url' => $this->order_url,\n            'logo_url' => $this->logo_url,\n            'is_active' => $this->is_active,\n            'order' => $this->order,\n            'locale' => app()->getLocale(),\n        ];\n    }",
+            "tokens": 124
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Http\\Resources\\Dish\\DishResource, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Http/Resources/Dish/DishResource.php",
+                "member": "toArray",
+                "lines": [
+                    14,
+                    32
+                ]
+            },
+            "payload": "    public function toArray(Request $request): array\n    {\n        return [\n            'id' => $this->id,\n            'name' => $this->resolveLocale($this->name_ar, $this->name_en),\n            'name_ar' => $this->name_ar,\n            'name_en' => $this->name_en,\n            'description' => $this->resolveLocale($this->description_ar, $this->description_en),\n            'description_ar' => $this->description_ar,\n            'description_en' => $this->description_en,\n            'price' => $this->price,\n            'category' => new CategoryResource($this->whenLoaded('category')),\n            'is_featured' => $this->is_featured,\n            'is_signature' => $this->is_signature,\n            'image_url' => $this->image_url,\n            'order' => $this->order,\n            'locale' => app()->getLocale(),\n        ];\n    }",
+            "tokens": 208
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Http\\Resources\\MediaItem\\MediaItemResource, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Http/Resources/MediaItem/MediaItemResource.php",
+                "member": "toArray",
+                "lines": [
+                    13,
+                    26
+                ]
+            },
+            "payload": "    public function toArray(Request $request): array\n    {\n        return [\n            'id' => $this->id,\n            'page' => $this->page,\n            'section' => $this->section,\n            'key' => $this->key,\n            'url' => $this->url,\n            'alt' => $this->resolveLocale($this->alt_ar, $this->alt_en),\n            'alt_ar' => $this->alt_ar,\n            'alt_en' => $this->alt_en,\n            'locale' => app()->getLocale(),\n        ];\n    }",
+            "tokens": 115
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Http\\Resources\\PageContent\\PageContentResource, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Http/Resources/PageContent/PageContentResource.php",
+                "member": "toArray",
+                "lines": [
+                    13,
+                    27
+                ]
+            },
+            "payload": "    public function toArray(Request $request): array\n    {\n        return [\n            'id' => $this->id,\n            'page' => $this->page,\n            'section' => $this->section,\n            'key' => $this->key,\n            'value' => $this->resolveLocale($this->value_ar, $this->value_en),\n            'value_ar' => $this->value_ar,\n            'value_en' => $this->value_en,\n            'type' => $this->type,\n            'order' => $this->order,\n            'locale' => app()->getLocale(),\n        ];\n    }",
+            "tokens": 129
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Http\\Resources\\Setting\\SettingResource, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Http/Resources/Setting/SettingResource.php",
+                "member": "toArray",
+                "lines": [
+                    13,
+                    26
+                ]
+            },
+            "payload": "    public function toArray(Request $request): array\n    {\n        return [\n            'id' => $this->id,\n            'key' => $this->key,\n            'value' => $this->type === 'boolean' ? (bool) $this->value : $this->value,\n            'type' => $this->type,\n            'group' => $this->group,\n            'label' => $this->resolveLocale($this->label_ar, $this->label_en),\n            'label_ar' => $this->label_ar,\n            'label_en' => $this->label_en,\n            'locale' => app()->getLocale(),\n        ];\n    }",
+            "tokens": 131
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Http\\Resources\\Testimonial\\TestimonialResource::collection, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Http/Resources/Testimonial/TestimonialResource.php",
+                "member": "toArray",
+                "lines": [
+                    13,
+                    25
+                ]
+            },
+            "payload": "    public function toArray(Request $request): array\n    {\n        return [\n            'id' => $this->id,\n            'name' => $this->name,\n            'quote' => $this->resolveLocale($this->quote_ar, $this->quote_en),\n            'quote_ar' => $this->quote_ar,\n            'quote_en' => $this->quote_en,\n            'is_active' => $this->is_active,\n            'order' => $this->order,\n            'locale' => app()->getLocale(),\n        ];\n    }",
+            "tokens": 113
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Http\\Resources\\Timeline\\TimelineResource::collection, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Http/Resources/Timeline/TimelineResource.php",
+                "member": "toArray",
+                "lines": [
+                    13,
+                    28
+                ]
+            },
+            "payload": "    public function toArray(Request $request): array\n    {\n        return [\n            'id' => $this->id,\n            'year' => $this->year,\n            'location_en' => $this->location_en,\n            'title' => $this->resolveLocale($this->title_ar, $this->title_en),\n            'title_ar' => $this->title_ar,\n            'title_en' => $this->title_en,\n            'description' => $this->resolveLocale($this->description_ar, $this->description_en),\n            'description_ar' => $this->description_ar,\n            'description_en' => $this->description_en,\n            'order' => $this->order,\n            'locale' => app()->getLocale(),\n        ];\n    }",
+            "tokens": 165
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\CategoryRepository, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/CategoryRepository.php",
+                "member": "create",
+                "lines": [
+                    20,
+                    23
+                ]
+            },
+            "payload": "    public function create(array $data): Category\n    {\n        return Category::create($data);\n    }",
+            "tokens": 26
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\CategoryRepository, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/CategoryRepository.php",
+                "member": "delete",
+                "lines": [
+                    33,
+                    36
+                ]
+            },
+            "payload": "    public function delete(int $id): void\n    {\n        Category::findOrFail($id)->delete();\n    }",
+            "tokens": 25
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\CategoryRepository, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/CategoryRepository.php",
+                "member": "getAll",
+                "lines": [
+                    10,
+                    13
+                ]
+            },
+            "payload": "    public function getAll(): Collection\n    {\n        return Category::orderBy('order')->get();\n    }",
+            "tokens": 26
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\CategoryRepository, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/CategoryRepository.php",
+                "member": "getById",
+                "lines": [
+                    15,
+                    18
+                ]
+            },
+            "payload": "    public function getById(int $id): Category\n    {\n        return Category::findOrFail($id);\n    }",
+            "tokens": 25
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\CategoryRepository, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/CategoryRepository.php",
+                "member": "update",
+                "lines": [
+                    25,
+                    31
+                ]
+            },
+            "payload": "    public function update(int $id, array $data): Category\n    {\n        $category = Category::findOrFail($id);\n        $category->update($data);\n\n        return $category;\n    }",
+            "tokens": 45
+        }
+    ],
+    "dropped": []
+}

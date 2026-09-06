@@ -1,0 +1,289 @@
+{
+    "bundle_version": 1,
+    "budget_tokens": 8000,
+    "used_tokens": 1098,
+    "items": [
+        {
+            "lever": "fetched",
+            "reason": "the region uses PersonalitySeeder, which the file's use block does not import",
+            "assertion_kind": "same_file_symbol_absence",
+            "provenance": {
+                "path": "database/seeders/DatabaseSeeder.php",
+                "lines": [
+                    5,
+                    6
+                ]
+            },
+            "payload": "use Illuminate\\Database\\Console\\Seeds\\WithoutModelEvents;\nuse Illuminate\\Database\\Seeder;",
+            "tokens": 23
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region uses PersonalitySeeder, which the file's use block does not import",
+            "assertion_kind": "same_file_symbol_absence",
+            "provenance": {
+                "path": "database/seeders/DatabaseSeeder.php",
+                "member": "run",
+                "lines": [
+                    12,
+                    34
+                ]
+            },
+            "payload": "    /**\n     * Seed the application's database.\n     */\n    public function run(): void\n    {\n        $this->call([\n            UserSeeder::class,\n            CategorySeeder::class,\n            DishSeeder::class,\n            BranchSeeder::class,\n            CateringPackageSeeder::class,\n            SampleMenuSeeder::class,\n            TestimonialSeeder::class,\n            TimelineSeeder::class,\n            PersonalitySeeder::class,\n            DeliveryAppSeeder::class,\n            PageContentSeeder::class,\n            SettingSeeder::class,\n            MediaItemSeeder::class,\n            SeoSettingSeeder::class,\n            TrackingSettingSeeder::class,\n        ]);\n    }",
+            "tokens": 170
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region calls the sibling member apiKey, whose contract the diff does not show",
+            "assertion_kind": "same_file_reference",
+            "provenance": {
+                "path": "tests/Feature/PublicApiTest.php",
+                "member": "apiKey",
+                "lines": [
+                    20,
+                    23
+                ]
+            },
+            "payload": "    private function apiKey(): string\n    {\n        return config('services.website_api_key');\n    }",
+            "tokens": 25
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Http\\Resources\\Personality\\PersonalityResource::collection, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Http/Controllers/Admin/PersonalityController.php",
+                "member": "App\\Http\\Resources\\Personality\\PersonalityResource::collection",
+                "lines": [
+                    1,
+                    44
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Http\\Resources\\Personality\\PersonalityResource::collection, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Http/Controllers/Public/PersonalityController.php",
+                "member": "App\\Http\\Resources\\Personality\\PersonalityResource::collection",
+                "lines": [
+                    1,
+                    18
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Models\\Personality::create, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/PersonalityRepository.php",
+                "member": "App\\Models\\Personality::create",
+                "lines": [
+                    1,
+                    43
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Models\\Personality::findOrFail, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/PersonalityRepository.php",
+                "member": "App\\Models\\Personality::findOrFail",
+                "lines": [
+                    1,
+                    43
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Models\\Personality::orderBy, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/PersonalityRepository.php",
+                "member": "App\\Models\\Personality::orderBy",
+                "lines": [
+                    1,
+                    43
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Services\\ImageService, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Services/ImageService.php",
+                "member": "ALLOWED_MIMES",
+                "lines": [
+                    18,
+                    18
+                ]
+            },
+            "payload": "    private const ALLOWED_MIMES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];",
+            "tokens": 23
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Services\\ImageService, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Services/ImageService.php",
+                "member": "MAX_SIZE_BYTES",
+                "lines": [
+                    14,
+                    14
+                ]
+            },
+            "payload": "    private const MAX_SIZE_BYTES = 5 * 1024 * 1024;",
+            "tokens": 13
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Services\\ImageService, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Services/ImageService.php",
+                "member": "MAX_WIDTH",
+                "lines": [
+                    16,
+                    16
+                ]
+            },
+            "payload": "    private const MAX_WIDTH = 1920;",
+            "tokens": 9
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Services\\ImageService, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Services/ImageService.php",
+                "member": "delete",
+                "lines": [
+                    53,
+                    58
+                ]
+            },
+            "payload": "    public function delete(string $path): void\n    {\n        if (Storage::disk('public')->exists($path)) {\n            Storage::disk('public')->delete($path);\n        }\n    }",
+            "tokens": 44
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Services\\ImageService::delete, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Services/ImageService.php",
+                "member": "delete",
+                "lines": [
+                    53,
+                    58
+                ]
+            },
+            "payload": "    public function delete(string $path): void\n    {\n        if (Storage::disk('public')->exists($path)) {\n            Storage::disk('public')->delete($path);\n        }\n    }",
+            "tokens": 44
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Services\\ImageService::store, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Services/ImageService.php",
+                "member": "store",
+                "lines": [
+                    20,
+                    51
+                ]
+            },
+            "payload": "    public function store(UploadedFile $file, string $folder): array\n    {\n        if ($file->getSize() > self::MAX_SIZE_BYTES) {\n            throw new InvalidArgumentException('Image exceeds the maximum allowed size of 5MB.');\n        }\n\n        if (! in_array($file->getMimeType(), self::ALLOWED_MIMES, true)) {\n            throw new InvalidArgumentException('Unsupported image type. Allowed: jpg, jpeg, png, webp.');\n        }\n\n        $image = Image::decodeSplFileInfo($file);\n\n        if ($image->width() > self::MAX_WIDTH) {\n            $image->scale(width: self::MAX_WIDTH);\n        }\n\n        $encoded = $image->encode(new WebpEncoder(quality: 85));\n\n        $filename = Str::uuid()->toString().'.webp';\n        $path = trim($folder, '/').'/'.$filename;\n\n        Storage::disk('public')->put($path, (string) $encoded);\n\n        return [\n            'path' => $path,\n            'url' => Storage::disk('public')->url($path),\n            'width' => $image->width(),\n            'height' => $image->height(),\n            'size_bytes' => Storage::disk('public')->size($path),\n            'mime_type' => 'image/webp',\n        ];\n    }",
+            "tokens": 285
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Services\\ImageService, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Services/ImageService.php",
+                "member": "store",
+                "lines": [
+                    20,
+                    51
+                ]
+            },
+            "payload": "    public function store(UploadedFile $file, string $folder): array\n    {\n        if ($file->getSize() > self::MAX_SIZE_BYTES) {\n            throw new InvalidArgumentException('Image exceeds the maximum allowed size of 5MB.');\n        }\n\n        if (! in_array($file->getMimeType(), self::ALLOWED_MIMES, true)) {\n            throw new InvalidArgumentException('Unsupported image type. Allowed: jpg, jpeg, png, webp.');\n        }\n\n        $image = Image::decodeSplFileInfo($file);\n\n        if ($image->width() > self::MAX_WIDTH) {\n            $image->scale(width: self::MAX_WIDTH);\n        }\n\n        $encoded = $image->encode(new WebpEncoder(quality: 85));\n\n        $filename = Str::uuid()->toString().'.webp';\n        $path = trim($folder, '/').'/'.$filename;\n\n        Storage::disk('public')->put($path, (string) $encoded);\n\n        return [\n            'path' => $path,\n            'url' => Storage::disk('public')->url($path),\n            'width' => $image->width(),\n            'height' => $image->height(),\n            'size_bytes' => Storage::disk('public')->size($path),\n            'mime_type' => 'image/webp',\n        ];\n    }",
+            "tokens": 285
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Models\\Personality::updateOrCreate, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "database/seeders/PersonalitySeeder.php",
+                "member": "App\\Models\\Personality::updateOrCreate",
+                "lines": [
+                    1,
+                    27
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region performs several persistence writes; whether a transaction wraps them is decided by the caller, which the diff does not show",
+            "assertion_kind": "unverifiable_premise",
+            "provenance": {
+                "path": "app/Actions/Personality/DeletePersonalityAction.php",
+                "lines": [
+                    1,
+                    28
+                ]
+            },
+            "payload": "ASSUMPTION: this code assumes a surrounding transaction; caller not checked",
+            "tokens": 19
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region performs several persistence writes; whether a transaction wraps them is decided by the caller, which the diff does not show",
+            "assertion_kind": "unverifiable_premise",
+            "provenance": {
+                "path": "app/Actions/Personality/UpdatePersonalityAction.php",
+                "lines": [
+                    1,
+                    46
+                ]
+            },
+            "payload": "ASSUMPTION: this code assumes a surrounding transaction; caller not checked",
+            "tokens": 19
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region performs several persistence writes; whether a transaction wraps them is decided by the caller, which the diff does not show",
+            "assertion_kind": "unverifiable_premise",
+            "provenance": {
+                "path": "app/Repositories/PersonalityRepository.php",
+                "lines": [
+                    1,
+                    43
+                ]
+            },
+            "payload": "ASSUMPTION: this code assumes a surrounding transaction; caller not checked",
+            "tokens": 19
+        }
+    ],
+    "dropped": []
+}

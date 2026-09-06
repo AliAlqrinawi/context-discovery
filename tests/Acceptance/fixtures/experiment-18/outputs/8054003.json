@@ -1,0 +1,2319 @@
+{
+    "bundle_version": 1,
+    "budget_tokens": 8000,
+    "used_tokens": 6483,
+    "items": [
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Enums\\QuoteRequestStatusEnum::from, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/DTOs/Catering/UpdateQuoteRequestStatusDTO.php",
+                "member": "App\\Enums\\QuoteRequestStatusEnum::from",
+                "lines": [
+                    1,
+                    20
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Enums\\QuoteRequestStatusEnum, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Enums/QuoteRequestStatusEnum.php",
+                "member": "Closed",
+                "lines": [
+                    10,
+                    10
+                ]
+            },
+            "payload": "    case Closed = 'closed';",
+            "tokens": 7
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Enums\\QuoteRequestStatusEnum, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Enums/QuoteRequestStatusEnum.php",
+                "member": "Contacted",
+                "lines": [
+                    9,
+                    9
+                ]
+            },
+            "payload": "    case Contacted = 'contacted';",
+            "tokens": 9
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Enums\\QuoteRequestStatusEnum, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Enums/QuoteRequestStatusEnum.php",
+                "member": "Pending",
+                "lines": [
+                    7,
+                    7
+                ]
+            },
+            "payload": "    case Pending = 'pending';",
+            "tokens": 8
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Enums\\QuoteRequestStatusEnum, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Enums/QuoteRequestStatusEnum.php",
+                "member": "Reviewed",
+                "lines": [
+                    8,
+                    8
+                ]
+            },
+            "payload": "    case Reviewed = 'reviewed';",
+            "tokens": 8
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Enums\\QuoteRequestStatusEnum, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Enums/QuoteRequestStatusEnum.php",
+                "member": "label",
+                "lines": [
+                    12,
+                    20
+                ]
+            },
+            "payload": "    public function label(): string\n    {\n        return match ($this) {\n            self::Pending => 'قيد الانتظار',\n            self::Reviewed => 'تمت المراجعة',\n            self::Contacted => 'تم التواصل',\n            self::Closed => 'مغلق',\n        };\n    }",
+            "tokens": 74
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Enums\\QuoteRequestStatusEnum, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Enums/QuoteRequestStatusEnum.php",
+                "member": "values",
+                "lines": [
+                    22,
+                    25
+                ]
+            },
+            "payload": "    public static function values(): array\n    {\n        return array_column(self::cases(), 'value');\n    }",
+            "tokens": 27
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Branch, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Branch.php",
+                "member": "casts",
+                "lines": [
+                    26,
+                    28
+                ]
+            },
+            "payload": "    protected $casts = [\n        'show_in_footer' => 'boolean',\n    ];",
+            "tokens": 18
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Branch, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Branch.php",
+                "member": "fillable",
+                "lines": [
+                    9,
+                    24
+                ]
+            },
+            "payload": "    protected $fillable = [\n        'name_ar',\n        'name_en',\n        'city',\n        'location_ar',\n        'location_en',\n        'phone',\n        'whatsapp_number',\n        'opening_time',\n        'closing_time',\n        'google_maps_url',\n        'image_path',\n        'image_url',\n        'order',\n        'show_in_footer',\n    ];",
+            "tokens": 85
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Category::where, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Category.php",
+                "member": "dishes",
+                "lines": [
+                    17,
+                    20
+                ]
+            },
+            "payload": "    public function dishes(): HasMany\n    {\n        return $this->hasMany(Dish::class);\n    }",
+            "tokens": 24
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Category::where, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Category.php",
+                "member": "fillable",
+                "lines": [
+                    10,
+                    15
+                ]
+            },
+            "payload": "    protected $fillable = [\n        'name_ar',\n        'name_en',\n        'slug',\n        'order',\n    ];",
+            "tokens": 27
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\CateringPackage, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/CateringPackage.php",
+                "member": "casts",
+                "lines": [
+                    23,
+                    26
+                ]
+            },
+            "payload": "    protected $casts = [\n        'is_featured' => 'boolean',\n        'price_starting_from' => 'decimal:2',\n    ];",
+            "tokens": 29
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\CateringPackage, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/CateringPackage.php",
+                "member": "features",
+                "lines": [
+                    28,
+                    31
+                ]
+            },
+            "payload": "    public function features(): HasMany\n    {\n        return $this->hasMany(CateringPackageFeature::class, 'package_id');\n    }",
+            "tokens": 32
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\CateringPackage, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/CateringPackage.php",
+                "member": "fillable",
+                "lines": [
+                    10,
+                    21
+                ]
+            },
+            "payload": "    protected $fillable = [\n        'name_ar',\n        'name_en',\n        'description_ar',\n        'description_en',\n        'tag_en',\n        'price_starting_from',\n        'is_featured',\n        'image_path',\n        'image_url',\n        'order',\n    ];",
+            "tokens": 64
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\DeliveryApp, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/DeliveryApp.php",
+                "member": "casts",
+                "lines": [
+                    19,
+                    21
+                ]
+            },
+            "payload": "    protected $casts = [\n        'is_active' => 'boolean',\n    ];",
+            "tokens": 17
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\DeliveryApp, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/DeliveryApp.php",
+                "member": "fillable",
+                "lines": [
+                    9,
+                    17
+                ]
+            },
+            "payload": "    protected $fillable = [\n        'name_ar',\n        'name_en',\n        'order_url',\n        'logo_path',\n        'logo_url',\n        'is_active',\n        'order',\n    ];",
+            "tokens": 43
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Dish, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Dish.php",
+                "member": "casts",
+                "lines": [
+                    24,
+                    28
+                ]
+            },
+            "payload": "    protected $casts = [\n        'price' => 'decimal:2',\n        'is_featured' => 'boolean',\n        'is_signature' => 'boolean',\n    ];",
+            "tokens": 34
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Dish, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Dish.php",
+                "member": "category",
+                "lines": [
+                    30,
+                    33
+                ]
+            },
+            "payload": "    public function category(): BelongsTo\n    {\n        return $this->belongsTo(Category::class);\n    }",
+            "tokens": 26
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Dish, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Dish.php",
+                "member": "fillable",
+                "lines": [
+                    10,
+                    22
+                ]
+            },
+            "payload": "    protected $fillable = [\n        'category_id',\n        'name_ar',\n        'name_en',\n        'description_ar',\n        'description_en',\n        'price',\n        'is_featured',\n        'is_signature',\n        'image_path',\n        'image_url',\n        'order',\n    ];",
+            "tokens": 68
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\MediaItem, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/MediaItem.php",
+                "member": "fillable",
+                "lines": [
+                    10,
+                    22
+                ]
+            },
+            "payload": "    protected $fillable = [\n        'page',\n        'section',\n        'key',\n        'path',\n        'url',\n        'alt_ar',\n        'alt_en',\n        'mime_type',\n        'size_bytes',\n        'width',\n        'height',\n    ];",
+            "tokens": 58
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\MediaItem, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/MediaItem.php",
+                "member": "scopeForPage",
+                "lines": [
+                    24,
+                    35
+                ]
+            },
+            "payload": "    public function scopeForPage(Builder $query, ?string $page = null, ?string $section = null): Builder\n    {\n        if ($page !== null) {\n            $query->where('page', $page);\n        }\n\n        if ($section !== null) {\n            $query->where('section', $section);\n        }\n\n        return $query;\n    }",
+            "tokens": 79
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\PageContent, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/PageContent.php",
+                "member": "fillable",
+                "lines": [
+                    10,
+                    18
+                ]
+            },
+            "payload": "    protected $fillable = [\n        'page',\n        'section',\n        'key',\n        'value_ar',\n        'value_en',\n        'type',\n        'order',\n    ];",
+            "tokens": 40
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\PageContent, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/PageContent.php",
+                "member": "scopeForPage",
+                "lines": [
+                    20,
+                    29
+                ]
+            },
+            "payload": "    public function scopeForPage(Builder $query, string $page, ?string $section = null): Builder\n    {\n        $query->where('page', $page);\n\n        if ($section !== null) {\n            $query->where('section', $section);\n        }\n\n        return $query;\n    }",
+            "tokens": 66
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\QuoteRequest, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/QuoteRequest.php",
+                "member": "casts",
+                "lines": [
+                    25,
+                    30
+                ]
+            },
+            "payload": "    protected $casts = [\n        'status' => QuoteRequestStatusEnum::class,\n        'event_type' => EventTypeEnum::class,\n        'budget_range' => BudgetRangeEnum::class,\n        'event_date' => 'date',\n    ];",
+            "tokens": 53
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\QuoteRequest, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/QuoteRequest.php",
+                "member": "fillable",
+                "lines": [
+                    12,
+                    23
+                ]
+            },
+            "payload": "    protected $fillable = [\n        'name',\n        'phone',\n        'email',\n        'event_date',\n        'guests_count',\n        'branch',\n        'event_type',\n        'budget_range',\n        'notes',\n        'status',\n    ];",
+            "tokens": 58
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\SampleMenu, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/SampleMenu.php",
+                "member": "casts",
+                "lines": [
+                    20,
+                    22
+                ]
+            },
+            "payload": "    protected $casts = [\n        'is_featured' => 'boolean',\n    ];",
+            "tokens": 17
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\SampleMenu, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/SampleMenu.php",
+                "member": "dishes",
+                "lines": [
+                    24,
+                    27
+                ]
+            },
+            "payload": "    public function dishes(): HasMany\n    {\n        return $this->hasMany(SampleMenuDish::class);\n    }",
+            "tokens": 26
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\SampleMenu, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/SampleMenu.php",
+                "member": "fillable",
+                "lines": [
+                    10,
+                    18
+                ]
+            },
+            "payload": "    protected $fillable = [\n        'name_ar',\n        'name_en',\n        'tag_en',\n        'is_featured',\n        'image_path',\n        'image_url',\n        'order',\n    ];",
+            "tokens": 44
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Testimonial, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Testimonial.php",
+                "member": "casts",
+                "lines": [
+                    17,
+                    19
+                ]
+            },
+            "payload": "    protected $casts = [\n        'is_active' => 'boolean',\n    ];",
+            "tokens": 17
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Testimonial, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Testimonial.php",
+                "member": "fillable",
+                "lines": [
+                    9,
+                    15
+                ]
+            },
+            "payload": "    protected $fillable = [\n        'name',\n        'quote_ar',\n        'quote_en',\n        'is_active',\n        'order',\n    ];",
+            "tokens": 32
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Timeline, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Timeline.php",
+                "member": "fillable",
+                "lines": [
+                    9,
+                    17
+                ]
+            },
+            "payload": "    protected $fillable = [\n        'year',\n        'location_en',\n        'title_ar',\n        'title_en',\n        'description_ar',\n        'description_en',\n        'order',\n    ];",
+            "tokens": 46
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\User, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/User.php",
+                "member": "casts",
+                "lines": [
+                    40,
+                    51
+                ]
+            },
+            "payload": "    /**\n     * Get the attributes that should be cast.\n     *\n     * @return array<string, string>\n     */\n    protected function casts(): array\n    {\n        return [\n            'email_verified_at' => 'datetime',\n            'password' => 'hashed',\n        ];\n    }",
+            "tokens": 67
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\User, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/User.php",
+                "member": "fillable",
+                "lines": [
+                    18,
+                    28
+                ]
+            },
+            "payload": "    /**\n     * The attributes that are mass assignable.\n     *\n     * @var list<string>\n     */\n    protected $fillable = [\n        'name',\n        'email',\n        'password',\n        'role',\n    ];",
+            "tokens": 50
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\User, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/User.php",
+                "member": "hidden",
+                "lines": [
+                    30,
+                    38
+                ]
+            },
+            "payload": "    /**\n     * The attributes that should be hidden for serialization.\n     *\n     * @var list<string>\n     */\n    protected $hidden = [\n        'password',\n        'remember_token',\n    ];",
+            "tokens": 48
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\BranchRepository::create, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/BranchRepository.php",
+                "member": "create",
+                "lines": [
+                    26,
+                    29
+                ]
+            },
+            "payload": "    public function create(array $data): Branch\n    {\n        return Branch::create($data);\n    }",
+            "tokens": 25
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\BranchRepository, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/BranchRepository.php",
+                "member": "create",
+                "lines": [
+                    26,
+                    29
+                ]
+            },
+            "payload": "    public function create(array $data): Branch\n    {\n        return Branch::create($data);\n    }",
+            "tokens": 25
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\BranchRepository, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/BranchRepository.php",
+                "member": "delete",
+                "lines": [
+                    39,
+                    42
+                ]
+            },
+            "payload": "    public function delete(int $id): void\n    {\n        Branch::findOrFail($id)->delete();\n    }",
+            "tokens": 24
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\BranchRepository::delete, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/BranchRepository.php",
+                "member": "delete",
+                "lines": [
+                    39,
+                    42
+                ]
+            },
+            "payload": "    public function delete(int $id): void\n    {\n        Branch::findOrFail($id)->delete();\n    }",
+            "tokens": 24
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\BranchRepository, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/BranchRepository.php",
+                "member": "getAll",
+                "lines": [
+                    10,
+                    19
+                ]
+            },
+            "payload": "    public function getAll(?bool $showInFooter = null): Collection\n    {\n        $query = Branch::orderBy('order');\n\n        if ($showInFooter !== null) {\n            $query->where('show_in_footer', $showInFooter);\n        }\n\n        return $query->get();\n    }",
+            "tokens": 66
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\BranchRepository::getAll, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/BranchRepository.php",
+                "member": "getAll",
+                "lines": [
+                    10,
+                    19
+                ]
+            },
+            "payload": "    public function getAll(?bool $showInFooter = null): Collection\n    {\n        $query = Branch::orderBy('order');\n\n        if ($showInFooter !== null) {\n            $query->where('show_in_footer', $showInFooter);\n        }\n\n        return $query->get();\n    }",
+            "tokens": 66
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\BranchRepository, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/BranchRepository.php",
+                "member": "getById",
+                "lines": [
+                    21,
+                    24
+                ]
+            },
+            "payload": "    public function getById(int $id): Branch\n    {\n        return Branch::findOrFail($id);\n    }",
+            "tokens": 24
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\BranchRepository::getById, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/BranchRepository.php",
+                "member": "getById",
+                "lines": [
+                    21,
+                    24
+                ]
+            },
+            "payload": "    public function getById(int $id): Branch\n    {\n        return Branch::findOrFail($id);\n    }",
+            "tokens": 24
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\BranchRepository, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/BranchRepository.php",
+                "member": "update",
+                "lines": [
+                    31,
+                    37
+                ]
+            },
+            "payload": "    public function update(int $id, array $data): Branch\n    {\n        $branch = Branch::findOrFail($id);\n        $branch->update($data);\n\n        return $branch;\n    }",
+            "tokens": 42
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\BranchRepository::update, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/BranchRepository.php",
+                "member": "update",
+                "lines": [
+                    31,
+                    37
+                ]
+            },
+            "payload": "    public function update(int $id, array $data): Branch\n    {\n        $branch = Branch::findOrFail($id);\n        $branch->update($data);\n\n        return $branch;\n    }",
+            "tokens": 42
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\CateringPackageRepository::create, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/CateringPackageRepository.php",
+                "member": "create",
+                "lines": [
+                    24,
+                    32
+                ]
+            },
+            "payload": "    public function create(array $data, array $features = []): CateringPackage\n    {\n        return DB::transaction(function () use ($data, $features) {\n            $package = CateringPackage::create($data);\n            $package->features()->createMany($features);\n\n            return $package->fresh('features');\n        });\n    }",
+            "tokens": 83
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\CateringPackageRepository, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/CateringPackageRepository.php",
+                "member": "create",
+                "lines": [
+                    24,
+                    32
+                ]
+            },
+            "payload": "    public function create(array $data, array $features = []): CateringPackage\n    {\n        return DB::transaction(function () use ($data, $features) {\n            $package = CateringPackage::create($data);\n            $package->features()->createMany($features);\n\n            return $package->fresh('features');\n        });\n    }",
+            "tokens": 83
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\CateringPackageRepository, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/CateringPackageRepository.php",
+                "member": "delete",
+                "lines": [
+                    47,
+                    50
+                ]
+            },
+            "payload": "    public function delete(int $id): void\n    {\n        CateringPackage::findOrFail($id)->delete();\n    }",
+            "tokens": 27
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\CateringPackageRepository::delete, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/CateringPackageRepository.php",
+                "member": "delete",
+                "lines": [
+                    47,
+                    50
+                ]
+            },
+            "payload": "    public function delete(int $id): void\n    {\n        CateringPackage::findOrFail($id)->delete();\n    }",
+            "tokens": 27
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\CateringPackageRepository, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/CateringPackageRepository.php",
+                "member": "getAll",
+                "lines": [
+                    11,
+                    16
+                ]
+            },
+            "payload": "    public function getAll(): Collection\n    {\n        return CateringPackage::with(['features' => fn ($query) => $query->orderBy('order')])\n            ->orderBy('order')\n            ->get();\n    }",
+            "tokens": 50
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\CateringPackageRepository::getAll, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/CateringPackageRepository.php",
+                "member": "getAll",
+                "lines": [
+                    11,
+                    16
+                ]
+            },
+            "payload": "    public function getAll(): Collection\n    {\n        return CateringPackage::with(['features' => fn ($query) => $query->orderBy('order')])\n            ->orderBy('order')\n            ->get();\n    }",
+            "tokens": 50
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\CateringPackageRepository, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/CateringPackageRepository.php",
+                "member": "getById",
+                "lines": [
+                    18,
+                    22
+                ]
+            },
+            "payload": "    public function getById(int $id): CateringPackage\n    {\n        return CateringPackage::with(['features' => fn ($query) => $query->orderBy('order')])\n            ->findOrFail($id);\n    }",
+            "tokens": 48
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\CateringPackageRepository::getById, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/CateringPackageRepository.php",
+                "member": "getById",
+                "lines": [
+                    18,
+                    22
+                ]
+            },
+            "payload": "    public function getById(int $id): CateringPackage\n    {\n        return CateringPackage::with(['features' => fn ($query) => $query->orderBy('order')])\n            ->findOrFail($id);\n    }",
+            "tokens": 48
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\CateringPackageRepository, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/CateringPackageRepository.php",
+                "member": "update",
+                "lines": [
+                    34,
+                    45
+                ]
+            },
+            "payload": "    public function update(int $id, array $data, array $features = []): CateringPackage\n    {\n        return DB::transaction(function () use ($id, $data, $features) {\n            $package = CateringPackage::findOrFail($id);\n            $package->update($data);\n\n            $package->features()->delete();\n            $package->features()->createMany($features);\n\n            return $package->fresh('features');\n        });\n    }",
+            "tokens": 108
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\CateringPackageRepository::update, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/CateringPackageRepository.php",
+                "member": "update",
+                "lines": [
+                    34,
+                    45
+                ]
+            },
+            "payload": "    public function update(int $id, array $data, array $features = []): CateringPackage\n    {\n        return DB::transaction(function () use ($id, $data, $features) {\n            $package = CateringPackage::findOrFail($id);\n            $package->update($data);\n\n            $package->features()->delete();\n            $package->features()->createMany($features);\n\n            return $package->fresh('features');\n        });\n    }",
+            "tokens": 108
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\DeliveryAppRepository::create, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/DeliveryAppRepository.php",
+                "member": "create",
+                "lines": [
+                    26,
+                    29
+                ]
+            },
+            "payload": "    public function create(array $data): DeliveryApp\n    {\n        return DeliveryApp::create($data);\n    }",
+            "tokens": 27
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\DeliveryAppRepository, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/DeliveryAppRepository.php",
+                "member": "create",
+                "lines": [
+                    26,
+                    29
+                ]
+            },
+            "payload": "    public function create(array $data): DeliveryApp\n    {\n        return DeliveryApp::create($data);\n    }",
+            "tokens": 27
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\DeliveryAppRepository, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/DeliveryAppRepository.php",
+                "member": "delete",
+                "lines": [
+                    39,
+                    42
+                ]
+            },
+            "payload": "    public function delete(int $id): void\n    {\n        DeliveryApp::findOrFail($id)->delete();\n    }",
+            "tokens": 26
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\DeliveryAppRepository::delete, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/DeliveryAppRepository.php",
+                "member": "delete",
+                "lines": [
+                    39,
+                    42
+                ]
+            },
+            "payload": "    public function delete(int $id): void\n    {\n        DeliveryApp::findOrFail($id)->delete();\n    }",
+            "tokens": 26
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\DeliveryAppRepository, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/DeliveryAppRepository.php",
+                "member": "getAll",
+                "lines": [
+                    10,
+                    19
+                ]
+            },
+            "payload": "    public function getAll(bool $activeOnly = true): Collection\n    {\n        $query = DeliveryApp::orderBy('order');\n\n        if ($activeOnly) {\n            $query->where('is_active', true);\n        }\n\n        return $query->get();\n    }",
+            "tokens": 60
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\DeliveryAppRepository::getAll, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/DeliveryAppRepository.php",
+                "member": "getAll",
+                "lines": [
+                    10,
+                    19
+                ]
+            },
+            "payload": "    public function getAll(bool $activeOnly = true): Collection\n    {\n        $query = DeliveryApp::orderBy('order');\n\n        if ($activeOnly) {\n            $query->where('is_active', true);\n        }\n\n        return $query->get();\n    }",
+            "tokens": 60
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\DeliveryAppRepository, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/DeliveryAppRepository.php",
+                "member": "getById",
+                "lines": [
+                    21,
+                    24
+                ]
+            },
+            "payload": "    public function getById(int $id): DeliveryApp\n    {\n        return DeliveryApp::findOrFail($id);\n    }",
+            "tokens": 27
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\DeliveryAppRepository::getById, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/DeliveryAppRepository.php",
+                "member": "getById",
+                "lines": [
+                    21,
+                    24
+                ]
+            },
+            "payload": "    public function getById(int $id): DeliveryApp\n    {\n        return DeliveryApp::findOrFail($id);\n    }",
+            "tokens": 27
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\DeliveryAppRepository, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/DeliveryAppRepository.php",
+                "member": "update",
+                "lines": [
+                    31,
+                    37
+                ]
+            },
+            "payload": "    public function update(int $id, array $data): DeliveryApp\n    {\n        $deliveryApp = DeliveryApp::findOrFail($id);\n        $deliveryApp->update($data);\n\n        return $deliveryApp;\n    }",
+            "tokens": 49
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\DeliveryAppRepository::update, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/DeliveryAppRepository.php",
+                "member": "update",
+                "lines": [
+                    31,
+                    37
+                ]
+            },
+            "payload": "    public function update(int $id, array $data): DeliveryApp\n    {\n        $deliveryApp = DeliveryApp::findOrFail($id);\n        $deliveryApp->update($data);\n\n        return $deliveryApp;\n    }",
+            "tokens": 49
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\DishRepository::create, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/DishRepository.php",
+                "member": "create",
+                "lines": [
+                    34,
+                    37
+                ]
+            },
+            "payload": "    public function create(array $data): Dish\n    {\n        return Dish::create($data);\n    }",
+            "tokens": 24
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\DishRepository, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/DishRepository.php",
+                "member": "create",
+                "lines": [
+                    34,
+                    37
+                ]
+            },
+            "payload": "    public function create(array $data): Dish\n    {\n        return Dish::create($data);\n    }",
+            "tokens": 24
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\DishRepository, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/DishRepository.php",
+                "member": "delete",
+                "lines": [
+                    47,
+                    50
+                ]
+            },
+            "payload": "    public function delete(int $id): void\n    {\n        Dish::findOrFail($id)->delete();\n    }",
+            "tokens": 24
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\DishRepository::delete, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/DishRepository.php",
+                "member": "delete",
+                "lines": [
+                    47,
+                    50
+                ]
+            },
+            "payload": "    public function delete(int $id): void\n    {\n        Dish::findOrFail($id)->delete();\n    }",
+            "tokens": 24
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\DishRepository, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/DishRepository.php",
+                "member": "getAll",
+                "lines": [
+                    10,
+                    27
+                ]
+            },
+            "payload": "    public function getAll(array $filters = []): LengthAwarePaginator\n    {\n        $query = Dish::with('category')->orderBy('order');\n\n        if (! empty($filters['category_id'])) {\n            $query->where('category_id', $filters['category_id']);\n        }\n\n        if (array_key_exists('featured', $filters) && $filters['featured'] !== null) {\n            $query->where('is_featured', $filters['featured']);\n        }\n\n        if (array_key_exists('signature', $filters) && $filters['signature'] !== null) {\n            $query->where('is_signature', $filters['signature']);\n        }\n\n        return $query->paginate($filters['per_page'] ?? 10);\n    }",
+            "tokens": 164
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\DishRepository::getAll, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/DishRepository.php",
+                "member": "getAll",
+                "lines": [
+                    10,
+                    27
+                ]
+            },
+            "payload": "    public function getAll(array $filters = []): LengthAwarePaginator\n    {\n        $query = Dish::with('category')->orderBy('order');\n\n        if (! empty($filters['category_id'])) {\n            $query->where('category_id', $filters['category_id']);\n        }\n\n        if (array_key_exists('featured', $filters) && $filters['featured'] !== null) {\n            $query->where('is_featured', $filters['featured']);\n        }\n\n        if (array_key_exists('signature', $filters) && $filters['signature'] !== null) {\n            $query->where('is_signature', $filters['signature']);\n        }\n\n        return $query->paginate($filters['per_page'] ?? 10);\n    }",
+            "tokens": 164
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\DishRepository, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/DishRepository.php",
+                "member": "getById",
+                "lines": [
+                    29,
+                    32
+                ]
+            },
+            "payload": "    public function getById(int $id): Dish\n    {\n        return Dish::with('category')->findOrFail($id);\n    }",
+            "tokens": 28
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\DishRepository::getById, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/DishRepository.php",
+                "member": "getById",
+                "lines": [
+                    29,
+                    32
+                ]
+            },
+            "payload": "    public function getById(int $id): Dish\n    {\n        return Dish::with('category')->findOrFail($id);\n    }",
+            "tokens": 28
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\DishRepository, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/DishRepository.php",
+                "member": "update",
+                "lines": [
+                    39,
+                    45
+                ]
+            },
+            "payload": "    public function update(int $id, array $data): Dish\n    {\n        $dish = Dish::findOrFail($id);\n        $dish->update($data);\n\n        return $dish;\n    }",
+            "tokens": 40
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\DishRepository::update, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/DishRepository.php",
+                "member": "update",
+                "lines": [
+                    39,
+                    45
+                ]
+            },
+            "payload": "    public function update(int $id, array $data): Dish\n    {\n        $dish = Dish::findOrFail($id);\n        $dish->update($data);\n\n        return $dish;\n    }",
+            "tokens": 40
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Models\\MediaItem::where, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/MediaItemRepository.php",
+                "member": "App\\Models\\MediaItem::where",
+                "lines": [
+                    20,
+                    33
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\MediaItemRepository, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/MediaItemRepository.php",
+                "member": "create",
+                "lines": [
+                    31,
+                    34
+                ]
+            },
+            "payload": "    public function create(array $data): MediaItem\n    {\n        return MediaItem::create($data);\n    }",
+            "tokens": 26
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\MediaItemRepository::create, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/MediaItemRepository.php",
+                "member": "create",
+                "lines": [
+                    31,
+                    34
+                ]
+            },
+            "payload": "    public function create(array $data): MediaItem\n    {\n        return MediaItem::create($data);\n    }",
+            "tokens": 26
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\MediaItemRepository::delete, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/MediaItemRepository.php",
+                "member": "delete",
+                "lines": [
+                    44,
+                    47
+                ]
+            },
+            "payload": "    public function delete(int $id): void\n    {\n        MediaItem::findOrFail($id)->delete();\n    }",
+            "tokens": 25
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\MediaItemRepository, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/MediaItemRepository.php",
+                "member": "delete",
+                "lines": [
+                    44,
+                    47
+                ]
+            },
+            "payload": "    public function delete(int $id): void\n    {\n        MediaItem::findOrFail($id)->delete();\n    }",
+            "tokens": 25
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\MediaItemRepository::getById, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/MediaItemRepository.php",
+                "member": "getById",
+                "lines": [
+                    18,
+                    21
+                ]
+            },
+            "payload": "    public function getById(int $id): MediaItem\n    {\n        return MediaItem::findOrFail($id);\n    }",
+            "tokens": 26
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\MediaItemRepository, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/MediaItemRepository.php",
+                "member": "getById",
+                "lines": [
+                    18,
+                    21
+                ]
+            },
+            "payload": "    public function getById(int $id): MediaItem\n    {\n        return MediaItem::findOrFail($id);\n    }",
+            "tokens": 26
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\MediaItemRepository, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/MediaItemRepository.php",
+                "member": "getByPage",
+                "lines": [
+                    10,
+                    16
+                ]
+            },
+            "payload": "    public function getByPage(?string $page = null, ?string $section = null): Collection\n    {\n        return MediaItem::forPage($page, $section)\n            ->get()\n            ->groupBy('section')\n            ->map(fn (Collection $items) => $items->keyBy('key'));\n    }",
+            "tokens": 68
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\MediaItemRepository::getByPage, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/MediaItemRepository.php",
+                "member": "getByPage",
+                "lines": [
+                    10,
+                    16
+                ]
+            },
+            "payload": "    public function getByPage(?string $page = null, ?string $section = null): Collection\n    {\n        return MediaItem::forPage($page, $section)\n            ->get()\n            ->groupBy('section')\n            ->map(fn (Collection $items) => $items->keyBy('key'));\n    }",
+            "tokens": 68
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\MediaItemRepository, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/MediaItemRepository.php",
+                "member": "update",
+                "lines": [
+                    36,
+                    42
+                ]
+            },
+            "payload": "    public function update(int $id, array $data): MediaItem\n    {\n        $mediaItem = MediaItem::findOrFail($id);\n        $mediaItem->update($data);\n\n        return $mediaItem;\n    }",
+            "tokens": 46
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\MediaItemRepository::update, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/MediaItemRepository.php",
+                "member": "update",
+                "lines": [
+                    36,
+                    42
+                ]
+            },
+            "payload": "    public function update(int $id, array $data): MediaItem\n    {\n        $mediaItem = MediaItem::findOrFail($id);\n        $mediaItem->update($data);\n\n        return $mediaItem;\n    }",
+            "tokens": 46
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\PageContentRepository::bulkUpdate, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/PageContentRepository.php",
+                "member": "bulkUpdate",
+                "lines": [
+                    34,
+                    42
+                ]
+            },
+            "payload": "    public function bulkUpdate(array $items): void\n    {\n        DB::transaction(function () use ($items) {\n            foreach ($items as $item) {\n                PageContent::findOrFail($item['id'])\n                    ->update(Arr::only($item, ['value_ar', 'value_en']));\n            }\n        });\n    }",
+            "tokens": 77
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\PageContentRepository, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/PageContentRepository.php",
+                "member": "bulkUpdate",
+                "lines": [
+                    34,
+                    42
+                ]
+            },
+            "payload": "    public function bulkUpdate(array $items): void\n    {\n        DB::transaction(function () use ($items) {\n            foreach ($items as $item) {\n                PageContent::findOrFail($item['id'])\n                    ->update(Arr::only($item, ['value_ar', 'value_en']));\n            }\n        });\n    }",
+            "tokens": 77
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\PageContentRepository, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/PageContentRepository.php",
+                "member": "getById",
+                "lines": [
+                    21,
+                    24
+                ]
+            },
+            "payload": "    public function getById(int $id): PageContent\n    {\n        return PageContent::findOrFail($id);\n    }",
+            "tokens": 27
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\PageContentRepository, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/PageContentRepository.php",
+                "member": "getByPage",
+                "lines": [
+                    12,
+                    19
+                ]
+            },
+            "payload": "    public function getByPage(string $page, ?string $section = null): Collection\n    {\n        return PageContent::forPage($page, $section)\n            ->orderBy('order')\n            ->get()\n            ->groupBy('section')\n            ->map(fn (Collection $items) => $items->keyBy('key'));\n    }",
+            "tokens": 74
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\PageContentRepository::getByPage, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/PageContentRepository.php",
+                "member": "getByPage",
+                "lines": [
+                    12,
+                    19
+                ]
+            },
+            "payload": "    public function getByPage(string $page, ?string $section = null): Collection\n    {\n        return PageContent::forPage($page, $section)\n            ->orderBy('order')\n            ->get()\n            ->groupBy('section')\n            ->map(fn (Collection $items) => $items->keyBy('key'));\n    }",
+            "tokens": 74
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\PageContentRepository, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/PageContentRepository.php",
+                "member": "update",
+                "lines": [
+                    26,
+                    32
+                ]
+            },
+            "payload": "    public function update(int $id, array $data): PageContent\n    {\n        $pageContent = PageContent::findOrFail($id);\n        $pageContent->update(Arr::only($data, ['value_ar', 'value_en']));\n\n        return $pageContent;\n    }",
+            "tokens": 58
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\PageContentRepository::update, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/PageContentRepository.php",
+                "member": "update",
+                "lines": [
+                    26,
+                    32
+                ]
+            },
+            "payload": "    public function update(int $id, array $data): PageContent\n    {\n        $pageContent = PageContent::findOrFail($id);\n        $pageContent->update(Arr::only($data, ['value_ar', 'value_en']));\n\n        return $pageContent;\n    }",
+            "tokens": 58
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\QuoteRequestRepository::create, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/QuoteRequestRepository.php",
+                "member": "create",
+                "lines": [
+                    34,
+                    37
+                ]
+            },
+            "payload": "    public function create(array $data): QuoteRequest\n    {\n        return QuoteRequest::create($data);\n    }",
+            "tokens": 28
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\QuoteRequestRepository, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/QuoteRequestRepository.php",
+                "member": "create",
+                "lines": [
+                    34,
+                    37
+                ]
+            },
+            "payload": "    public function create(array $data): QuoteRequest\n    {\n        return QuoteRequest::create($data);\n    }",
+            "tokens": 28
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\QuoteRequestRepository, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/QuoteRequestRepository.php",
+                "member": "getAll",
+                "lines": [
+                    10,
+                    27
+                ]
+            },
+            "payload": "    public function getAll(array $filters = []): LengthAwarePaginator\n    {\n        $query = QuoteRequest::orderByDesc('created_at');\n\n        if (! empty($filters['status'])) {\n            $query->where('status', $filters['status']);\n        }\n\n        if (! empty($filters['event_type'])) {\n            $query->where('event_type', $filters['event_type']);\n        }\n\n        if (! empty($filters['branch'])) {\n            $query->where('branch', $filters['branch']);\n        }\n\n        return $query->paginate(10);\n    }",
+            "tokens": 131
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\QuoteRequestRepository, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/QuoteRequestRepository.php",
+                "member": "getById",
+                "lines": [
+                    29,
+                    32
+                ]
+            },
+            "payload": "    public function getById(int $id): QuoteRequest\n    {\n        return QuoteRequest::findOrFail($id);\n    }",
+            "tokens": 27
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\QuoteRequestRepository, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/QuoteRequestRepository.php",
+                "member": "updateStatus",
+                "lines": [
+                    39,
+                    45
+                ]
+            },
+            "payload": "    public function updateStatus(int $id, string $status): QuoteRequest\n    {\n        $quoteRequest = QuoteRequest::findOrFail($id);\n        $quoteRequest->update(['status' => $status]);\n\n        return $quoteRequest;\n    }",
+            "tokens": 56
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\QuoteRequestRepository::updateStatus, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/QuoteRequestRepository.php",
+                "member": "updateStatus",
+                "lines": [
+                    39,
+                    45
+                ]
+            },
+            "payload": "    public function updateStatus(int $id, string $status): QuoteRequest\n    {\n        $quoteRequest = QuoteRequest::findOrFail($id);\n        $quoteRequest->update(['status' => $status]);\n\n        return $quoteRequest;\n    }",
+            "tokens": 56
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\SampleMenuRepository::create, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/SampleMenuRepository.php",
+                "member": "create",
+                "lines": [
+                    24,
+                    32
+                ]
+            },
+            "payload": "    public function create(array $data, array $dishes = []): SampleMenu\n    {\n        return DB::transaction(function () use ($data, $dishes) {\n            $menu = SampleMenu::create($data);\n            $menu->dishes()->createMany($dishes);\n\n            return $menu->fresh('dishes');\n        });\n    }",
+            "tokens": 76
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\SampleMenuRepository, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/SampleMenuRepository.php",
+                "member": "create",
+                "lines": [
+                    24,
+                    32
+                ]
+            },
+            "payload": "    public function create(array $data, array $dishes = []): SampleMenu\n    {\n        return DB::transaction(function () use ($data, $dishes) {\n            $menu = SampleMenu::create($data);\n            $menu->dishes()->createMany($dishes);\n\n            return $menu->fresh('dishes');\n        });\n    }",
+            "tokens": 76
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\SampleMenuRepository, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/SampleMenuRepository.php",
+                "member": "delete",
+                "lines": [
+                    47,
+                    50
+                ]
+            },
+            "payload": "    public function delete(int $id): void\n    {\n        SampleMenu::findOrFail($id)->delete();\n    }",
+            "tokens": 25
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\SampleMenuRepository::delete, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/SampleMenuRepository.php",
+                "member": "delete",
+                "lines": [
+                    47,
+                    50
+                ]
+            },
+            "payload": "    public function delete(int $id): void\n    {\n        SampleMenu::findOrFail($id)->delete();\n    }",
+            "tokens": 25
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\SampleMenuRepository, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/SampleMenuRepository.php",
+                "member": "getAll",
+                "lines": [
+                    11,
+                    16
+                ]
+            },
+            "payload": "    public function getAll(): Collection\n    {\n        return SampleMenu::with(['dishes' => fn ($query) => $query->orderBy('order')])\n            ->orderBy('order')\n            ->get();\n    }",
+            "tokens": 48
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\SampleMenuRepository::getAll, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/SampleMenuRepository.php",
+                "member": "getAll",
+                "lines": [
+                    11,
+                    16
+                ]
+            },
+            "payload": "    public function getAll(): Collection\n    {\n        return SampleMenu::with(['dishes' => fn ($query) => $query->orderBy('order')])\n            ->orderBy('order')\n            ->get();\n    }",
+            "tokens": 48
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\SampleMenuRepository, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/SampleMenuRepository.php",
+                "member": "getById",
+                "lines": [
+                    18,
+                    22
+                ]
+            },
+            "payload": "    public function getById(int $id): SampleMenu\n    {\n        return SampleMenu::with(['dishes' => fn ($query) => $query->orderBy('order')])\n            ->findOrFail($id);\n    }",
+            "tokens": 45
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\SampleMenuRepository::getById, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/SampleMenuRepository.php",
+                "member": "getById",
+                "lines": [
+                    18,
+                    22
+                ]
+            },
+            "payload": "    public function getById(int $id): SampleMenu\n    {\n        return SampleMenu::with(['dishes' => fn ($query) => $query->orderBy('order')])\n            ->findOrFail($id);\n    }",
+            "tokens": 45
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\SampleMenuRepository, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/SampleMenuRepository.php",
+                "member": "update",
+                "lines": [
+                    34,
+                    45
+                ]
+            },
+            "payload": "    public function update(int $id, array $data, array $dishes = []): SampleMenu\n    {\n        return DB::transaction(function () use ($id, $data, $dishes) {\n            $menu = SampleMenu::findOrFail($id);\n            $menu->update($data);\n\n            $menu->dishes()->delete();\n            $menu->dishes()->createMany($dishes);\n\n            return $menu->fresh('dishes');\n        });\n    }",
+            "tokens": 98
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\SampleMenuRepository::update, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/SampleMenuRepository.php",
+                "member": "update",
+                "lines": [
+                    34,
+                    45
+                ]
+            },
+            "payload": "    public function update(int $id, array $data, array $dishes = []): SampleMenu\n    {\n        return DB::transaction(function () use ($id, $data, $dishes) {\n            $menu = SampleMenu::findOrFail($id);\n            $menu->update($data);\n\n            $menu->dishes()->delete();\n            $menu->dishes()->createMany($dishes);\n\n            return $menu->fresh('dishes');\n        });\n    }",
+            "tokens": 98
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\SettingRepository, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/SettingRepository.php",
+                "member": "bulkUpdate",
+                "lines": [
+                    16,
+                    23
+                ]
+            },
+            "payload": "    public function bulkUpdate(array $data): void\n    {\n        DB::transaction(function () use ($data) {\n            foreach ($data as $key => $value) {\n                Setting::where('key', $key)->update(['value' => $value]);\n            }\n        });\n    }",
+            "tokens": 65
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\SettingRepository::bulkUpdate, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/SettingRepository.php",
+                "member": "bulkUpdate",
+                "lines": [
+                    16,
+                    23
+                ]
+            },
+            "payload": "    public function bulkUpdate(array $data): void\n    {\n        DB::transaction(function () use ($data) {\n            foreach ($data as $key => $value) {\n                Setting::where('key', $key)->update(['value' => $value]);\n            }\n        });\n    }",
+            "tokens": 65
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\SettingRepository::getAll, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/SettingRepository.php",
+                "member": "getAll",
+                "lines": [
+                    11,
+                    14
+                ]
+            },
+            "payload": "    public function getAll(?string $group = null): Collection\n    {\n        return Setting::forGroup($group)->get()->keyBy('key');\n    }",
+            "tokens": 34
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\SettingRepository, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/SettingRepository.php",
+                "member": "getAll",
+                "lines": [
+                    11,
+                    14
+                ]
+            },
+            "payload": "    public function getAll(?string $group = null): Collection\n    {\n        return Setting::forGroup($group)->get()->keyBy('key');\n    }",
+            "tokens": 34
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\TestimonialRepository::create, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/TestimonialRepository.php",
+                "member": "create",
+                "lines": [
+                    26,
+                    29
+                ]
+            },
+            "payload": "    public function create(array $data): Testimonial\n    {\n        return Testimonial::create($data);\n    }",
+            "tokens": 27
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\TestimonialRepository, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/TestimonialRepository.php",
+                "member": "create",
+                "lines": [
+                    26,
+                    29
+                ]
+            },
+            "payload": "    public function create(array $data): Testimonial\n    {\n        return Testimonial::create($data);\n    }",
+            "tokens": 27
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\TestimonialRepository, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/TestimonialRepository.php",
+                "member": "delete",
+                "lines": [
+                    39,
+                    42
+                ]
+            },
+            "payload": "    public function delete(int $id): void\n    {\n        Testimonial::findOrFail($id)->delete();\n    }",
+            "tokens": 26
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\TestimonialRepository::delete, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/TestimonialRepository.php",
+                "member": "delete",
+                "lines": [
+                    39,
+                    42
+                ]
+            },
+            "payload": "    public function delete(int $id): void\n    {\n        Testimonial::findOrFail($id)->delete();\n    }",
+            "tokens": 26
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\TestimonialRepository, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/TestimonialRepository.php",
+                "member": "getAll",
+                "lines": [
+                    10,
+                    19
+                ]
+            },
+            "payload": "    public function getAll(bool $activeOnly = true): Collection\n    {\n        $query = Testimonial::orderBy('order');\n\n        if ($activeOnly) {\n            $query->where('is_active', true);\n        }\n\n        return $query->get();\n    }",
+            "tokens": 60
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\TestimonialRepository::getAll, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/TestimonialRepository.php",
+                "member": "getAll",
+                "lines": [
+                    10,
+                    19
+                ]
+            },
+            "payload": "    public function getAll(bool $activeOnly = true): Collection\n    {\n        $query = Testimonial::orderBy('order');\n\n        if ($activeOnly) {\n            $query->where('is_active', true);\n        }\n\n        return $query->get();\n    }",
+            "tokens": 60
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\TestimonialRepository, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/TestimonialRepository.php",
+                "member": "getById",
+                "lines": [
+                    21,
+                    24
+                ]
+            },
+            "payload": "    public function getById(int $id): Testimonial\n    {\n        return Testimonial::findOrFail($id);\n    }",
+            "tokens": 27
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\TestimonialRepository, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/TestimonialRepository.php",
+                "member": "update",
+                "lines": [
+                    31,
+                    37
+                ]
+            },
+            "payload": "    public function update(int $id, array $data): Testimonial\n    {\n        $testimonial = Testimonial::findOrFail($id);\n        $testimonial->update($data);\n\n        return $testimonial;\n    }",
+            "tokens": 49
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\TestimonialRepository::update, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/TestimonialRepository.php",
+                "member": "update",
+                "lines": [
+                    31,
+                    37
+                ]
+            },
+            "payload": "    public function update(int $id, array $data): Testimonial\n    {\n        $testimonial = Testimonial::findOrFail($id);\n        $testimonial->update($data);\n\n        return $testimonial;\n    }",
+            "tokens": 49
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\TimelineRepository::create, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/TimelineRepository.php",
+                "member": "create",
+                "lines": [
+                    20,
+                    23
+                ]
+            },
+            "payload": "    public function create(array $data): Timeline\n    {\n        return Timeline::create($data);\n    }",
+            "tokens": 26
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\TimelineRepository, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/TimelineRepository.php",
+                "member": "create",
+                "lines": [
+                    20,
+                    23
+                ]
+            },
+            "payload": "    public function create(array $data): Timeline\n    {\n        return Timeline::create($data);\n    }",
+            "tokens": 26
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\TimelineRepository, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/TimelineRepository.php",
+                "member": "delete",
+                "lines": [
+                    33,
+                    36
+                ]
+            },
+            "payload": "    public function delete(int $id): void\n    {\n        Timeline::findOrFail($id)->delete();\n    }",
+            "tokens": 25
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\TimelineRepository::delete, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/TimelineRepository.php",
+                "member": "delete",
+                "lines": [
+                    33,
+                    36
+                ]
+            },
+            "payload": "    public function delete(int $id): void\n    {\n        Timeline::findOrFail($id)->delete();\n    }",
+            "tokens": 25
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\TimelineRepository, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/TimelineRepository.php",
+                "member": "getAll",
+                "lines": [
+                    10,
+                    13
+                ]
+            },
+            "payload": "    public function getAll(): Collection\n    {\n        return Timeline::orderBy('order')->get();\n    }",
+            "tokens": 26
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\TimelineRepository::getAll, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/TimelineRepository.php",
+                "member": "getAll",
+                "lines": [
+                    10,
+                    13
+                ]
+            },
+            "payload": "    public function getAll(): Collection\n    {\n        return Timeline::orderBy('order')->get();\n    }",
+            "tokens": 26
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\TimelineRepository, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/TimelineRepository.php",
+                "member": "getById",
+                "lines": [
+                    15,
+                    18
+                ]
+            },
+            "payload": "    public function getById(int $id): Timeline\n    {\n        return Timeline::findOrFail($id);\n    }",
+            "tokens": 25
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\TimelineRepository, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/TimelineRepository.php",
+                "member": "update",
+                "lines": [
+                    25,
+                    31
+                ]
+            },
+            "payload": "    public function update(int $id, array $data): Timeline\n    {\n        $timeline = Timeline::findOrFail($id);\n        $timeline->update($data);\n\n        return $timeline;\n    }",
+            "tokens": 45
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\TimelineRepository::update, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/TimelineRepository.php",
+                "member": "update",
+                "lines": [
+                    25,
+                    31
+                ]
+            },
+            "payload": "    public function update(int $id, array $data): Timeline\n    {\n        $timeline = Timeline::findOrFail($id);\n        $timeline->update($data);\n\n        return $timeline;\n    }",
+            "tokens": 45
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\UserRepository::create, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/UserRepository.php",
+                "member": "create",
+                "lines": [
+                    21,
+                    29
+                ]
+            },
+            "payload": "    public function create(array $data, string $role): User\n    {\n        return DB::transaction(function () use ($data, $role) {\n            $user = User::create($data);\n            $user->assignRole($role);\n\n            return $user;\n        });\n    }",
+            "tokens": 64
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\UserRepository, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/UserRepository.php",
+                "member": "create",
+                "lines": [
+                    21,
+                    29
+                ]
+            },
+            "payload": "    public function create(array $data, string $role): User\n    {\n        return DB::transaction(function () use ($data, $role) {\n            $user = User::create($data);\n            $user->assignRole($role);\n\n            return $user;\n        });\n    }",
+            "tokens": 64
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\UserRepository, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/UserRepository.php",
+                "member": "delete",
+                "lines": [
+                    39,
+                    42
+                ]
+            },
+            "payload": "    public function delete(int $id): void\n    {\n        User::findOrFail($id)->delete();\n    }",
+            "tokens": 24
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\UserRepository::delete, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/UserRepository.php",
+                "member": "delete",
+                "lines": [
+                    39,
+                    42
+                ]
+            },
+            "payload": "    public function delete(int $id): void\n    {\n        User::findOrFail($id)->delete();\n    }",
+            "tokens": 24
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\UserRepository, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/UserRepository.php",
+                "member": "getAll",
+                "lines": [
+                    11,
+                    14
+                ]
+            },
+            "payload": "    public function getAll(): LengthAwarePaginator\n    {\n        return User::with('roles')->paginate(10);\n    }",
+            "tokens": 28
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\UserRepository::getAll, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/UserRepository.php",
+                "member": "getAll",
+                "lines": [
+                    11,
+                    14
+                ]
+            },
+            "payload": "    public function getAll(): LengthAwarePaginator\n    {\n        return User::with('roles')->paginate(10);\n    }",
+            "tokens": 28
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\UserRepository, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/UserRepository.php",
+                "member": "getById",
+                "lines": [
+                    16,
+                    19
+                ]
+            },
+            "payload": "    public function getById(int $id): User\n    {\n        return User::with('roles')->findOrFail($id);\n    }",
+            "tokens": 27
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\UserRepository, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/UserRepository.php",
+                "member": "update",
+                "lines": [
+                    31,
+                    37
+                ]
+            },
+            "payload": "    public function update(int $id, array $data): User\n    {\n        $user = User::findOrFail($id);\n        $user->update($data);\n\n        return $user;\n    }",
+            "tokens": 40
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Repositories\\UserRepository::update, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Repositories/UserRepository.php",
+                "member": "update",
+                "lines": [
+                    31,
+                    37
+                ]
+            },
+            "payload": "    public function update(int $id, array $data): User\n    {\n        $user = User::findOrFail($id);\n        $user->update($data);\n\n        return $user;\n    }",
+            "tokens": 40
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on InvalidArgumentException, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Services/ImageService.php",
+                "member": "InvalidArgumentException",
+                "lines": [
+                    1,
+                    59
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Models\\Category::where, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "tests/Feature/Actions/GetDishesActionTest.php",
+                "member": "App\\Models\\Category::where",
+                "lines": [
+                    1,
+                    42
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region performs several persistence writes; whether a transaction wraps them is decided by the caller, which the diff does not show",
+            "assertion_kind": "unverifiable_premise",
+            "provenance": {
+                "path": "app/Actions/Branch/DeleteBranchAction.php",
+                "lines": [
+                    1,
+                    28
+                ]
+            },
+            "payload": "ASSUMPTION: this code assumes a surrounding transaction; caller not checked",
+            "tokens": 19
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region performs several persistence writes; whether a transaction wraps them is decided by the caller, which the diff does not show",
+            "assertion_kind": "unverifiable_premise",
+            "provenance": {
+                "path": "app/Actions/Branch/UpdateBranchAction.php",
+                "lines": [
+                    1,
+                    52
+                ]
+            },
+            "payload": "ASSUMPTION: this code assumes a surrounding transaction; caller not checked",
+            "tokens": 19
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region performs several persistence writes; whether a transaction wraps them is decided by the caller, which the diff does not show",
+            "assertion_kind": "unverifiable_premise",
+            "provenance": {
+                "path": "app/Actions/Catering/DeletePackageAction.php",
+                "lines": [
+                    1,
+                    28
+                ]
+            },
+            "payload": "ASSUMPTION: this code assumes a surrounding transaction; caller not checked",
+            "tokens": 19
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region performs several persistence writes; whether a transaction wraps them is decided by the caller, which the diff does not show",
+            "assertion_kind": "unverifiable_premise",
+            "provenance": {
+                "path": "app/Actions/Catering/DeleteSampleMenuAction.php",
+                "lines": [
+                    1,
+                    28
+                ]
+            },
+            "payload": "ASSUMPTION: this code assumes a surrounding transaction; caller not checked",
+            "tokens": 19
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region performs several persistence writes; whether a transaction wraps them is decided by the caller, which the diff does not show",
+            "assertion_kind": "unverifiable_premise",
+            "provenance": {
+                "path": "app/Actions/Catering/UpdatePackageAction.php",
+                "lines": [
+                    1,
+                    50
+                ]
+            },
+            "payload": "ASSUMPTION: this code assumes a surrounding transaction; caller not checked",
+            "tokens": 19
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region performs several persistence writes; whether a transaction wraps them is decided by the caller, which the diff does not show",
+            "assertion_kind": "unverifiable_premise",
+            "provenance": {
+                "path": "app/Actions/Catering/UpdateSampleMenuAction.php",
+                "lines": [
+                    1,
+                    46
+                ]
+            },
+            "payload": "ASSUMPTION: this code assumes a surrounding transaction; caller not checked",
+            "tokens": 19
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region performs several persistence writes; whether a transaction wraps them is decided by the caller, which the diff does not show",
+            "assertion_kind": "unverifiable_premise",
+            "provenance": {
+                "path": "app/Actions/DeliveryApp/DeleteDeliveryAppAction.php",
+                "lines": [
+                    1,
+                    28
+                ]
+            },
+            "payload": "ASSUMPTION: this code assumes a surrounding transaction; caller not checked",
+            "tokens": 19
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region performs several persistence writes; whether a transaction wraps them is decided by the caller, which the diff does not show",
+            "assertion_kind": "unverifiable_premise",
+            "provenance": {
+                "path": "app/Actions/DeliveryApp/UpdateDeliveryAppAction.php",
+                "lines": [
+                    1,
+                    46
+                ]
+            },
+            "payload": "ASSUMPTION: this code assumes a surrounding transaction; caller not checked",
+            "tokens": 19
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region performs several persistence writes; whether a transaction wraps them is decided by the caller, which the diff does not show",
+            "assertion_kind": "unverifiable_premise",
+            "provenance": {
+                "path": "app/Actions/Dish/DeleteDishAction.php",
+                "lines": [
+                    1,
+                    28
+                ]
+            },
+            "payload": "ASSUMPTION: this code assumes a surrounding transaction; caller not checked",
+            "tokens": 19
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region performs several persistence writes; whether a transaction wraps them is decided by the caller, which the diff does not show",
+            "assertion_kind": "unverifiable_premise",
+            "provenance": {
+                "path": "app/Actions/Dish/UpdateDishAction.php",
+                "lines": [
+                    1,
+                    51
+                ]
+            },
+            "payload": "ASSUMPTION: this code assumes a surrounding transaction; caller not checked",
+            "tokens": 19
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region performs several persistence writes; whether a transaction wraps them is decided by the caller, which the diff does not show",
+            "assertion_kind": "unverifiable_premise",
+            "provenance": {
+                "path": "app/Actions/MediaItem/DeleteMediaAction.php",
+                "lines": [
+                    1,
+                    28
+                ]
+            },
+            "payload": "ASSUMPTION: this code assumes a surrounding transaction; caller not checked",
+            "tokens": 19
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region performs several persistence writes; whether a transaction wraps them is decided by the caller, which the diff does not show",
+            "assertion_kind": "unverifiable_premise",
+            "provenance": {
+                "path": "app/Actions/MediaItem/UploadMediaAction.php",
+                "lines": [
+                    1,
+                    45
+                ]
+            },
+            "payload": "ASSUMPTION: this code assumes a surrounding transaction; caller not checked",
+            "tokens": 19
+        },
+        {
+            "lever": "flagged",
+            "reason": "the change removes a trait from a class body; how pre-existing rows behave after it depends on production data state",
+            "assertion_kind": "unverifiable_premise",
+            "provenance": {
+                "path": "app/Models/User.php",
+                "lines": [
+                    7,
+                    19
+                ]
+            },
+            "payload": "ASSUMPTION: behaviour depends on whether pre-existing rows are affected in production; no backfill migration present",
+            "tokens": 29
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region performs several persistence writes; whether a transaction wraps them is decided by the caller, which the diff does not show",
+            "assertion_kind": "unverifiable_premise",
+            "provenance": {
+                "path": "tests/Feature/Services/ImageServiceTest.php",
+                "lines": [
+                    1,
+                    64
+                ]
+            },
+            "payload": "ASSUMPTION: this code assumes a surrounding transaction; caller not checked",
+            "tokens": 19
+        }
+    ],
+    "dropped": []
+}

@@ -1,0 +1,204 @@
+new file: app/Actions/Auth/LoginAction.php — own-file context is in the diff, not fetched
+new file: app/Actions/Auth/LogoutAction.php — own-file context is in the diff, not fetched
+new file: app/Actions/Branch/CreateBranchAction.php — own-file context is in the diff, not fetched
+new file: app/Actions/Branch/DeleteBranchAction.php — own-file context is in the diff, not fetched
+new file: app/Actions/Branch/GetBranchesAction.php — own-file context is in the diff, not fetched
+new file: app/Actions/Branch/UpdateBranchAction.php — own-file context is in the diff, not fetched
+new file: app/Actions/Catering/CreatePackageAction.php — own-file context is in the diff, not fetched
+new file: app/Actions/Catering/CreateSampleMenuAction.php — own-file context is in the diff, not fetched
+new file: app/Actions/Catering/DeletePackageAction.php — own-file context is in the diff, not fetched
+new file: app/Actions/Catering/DeleteSampleMenuAction.php — own-file context is in the diff, not fetched
+new file: app/Actions/Catering/GetPackagesAction.php — own-file context is in the diff, not fetched
+new file: app/Actions/Catering/GetSampleMenusAction.php — own-file context is in the diff, not fetched
+new file: app/Actions/Catering/SubmitQuoteRequestAction.php — own-file context is in the diff, not fetched
+new file: app/Actions/Catering/UpdatePackageAction.php — own-file context is in the diff, not fetched
+new file: app/Actions/Catering/UpdateQuoteRequestStatusAction.php — own-file context is in the diff, not fetched
+new file: app/Actions/Catering/UpdateSampleMenuAction.php — own-file context is in the diff, not fetched
+new file: app/Actions/DeliveryApp/CreateDeliveryAppAction.php — own-file context is in the diff, not fetched
+new file: app/Actions/DeliveryApp/DeleteDeliveryAppAction.php — own-file context is in the diff, not fetched
+new file: app/Actions/DeliveryApp/GetDeliveryAppsAction.php — own-file context is in the diff, not fetched
+new file: app/Actions/DeliveryApp/UpdateDeliveryAppAction.php — own-file context is in the diff, not fetched
+new file: app/Actions/Dish/CreateDishAction.php — own-file context is in the diff, not fetched
+new file: app/Actions/Dish/DeleteDishAction.php — own-file context is in the diff, not fetched
+new file: app/Actions/Dish/GetDishAction.php — own-file context is in the diff, not fetched
+new file: app/Actions/Dish/GetDishesAction.php — own-file context is in the diff, not fetched
+new file: app/Actions/Dish/UpdateDishAction.php — own-file context is in the diff, not fetched
+new file: app/Actions/MediaItem/DeleteMediaAction.php — own-file context is in the diff, not fetched
+new file: app/Actions/MediaItem/GetMediaItemsAction.php — own-file context is in the diff, not fetched
+new file: app/Actions/MediaItem/UploadMediaAction.php — own-file context is in the diff, not fetched
+new file: app/Actions/PageContent/BulkUpdatePageContentAction.php — own-file context is in the diff, not fetched
+new file: app/Actions/PageContent/GetPageContentAction.php — own-file context is in the diff, not fetched
+new file: app/Actions/PageContent/UpdatePageContentAction.php — own-file context is in the diff, not fetched
+new file: app/Actions/Setting/GetSettingsAction.php — own-file context is in the diff, not fetched
+new file: app/Actions/Setting/UpdateSettingsAction.php — own-file context is in the diff, not fetched
+new file: app/Actions/Testimonial/CreateTestimonialAction.php — own-file context is in the diff, not fetched
+new file: app/Actions/Testimonial/DeleteTestimonialAction.php — own-file context is in the diff, not fetched
+new file: app/Actions/Testimonial/GetTestimonialsAction.php — own-file context is in the diff, not fetched
+new file: app/Actions/Testimonial/UpdateTestimonialAction.php — own-file context is in the diff, not fetched
+new file: app/Actions/Timeline/CreateTimelineAction.php — own-file context is in the diff, not fetched
+new file: app/Actions/Timeline/DeleteTimelineAction.php — own-file context is in the diff, not fetched
+new file: app/Actions/Timeline/GetTimelineAction.php — own-file context is in the diff, not fetched
+new file: app/Actions/Timeline/UpdateTimelineAction.php — own-file context is in the diff, not fetched
+new file: app/Actions/User/CreateUserAction.php — own-file context is in the diff, not fetched
+new file: app/Actions/User/DeleteUserAction.php — own-file context is in the diff, not fetched
+new file: app/Actions/User/GetUsersAction.php — own-file context is in the diff, not fetched
+new file: app/Actions/User/UpdateUserAction.php — own-file context is in the diff, not fetched
+new file: app/DTOs/Auth/LoginDTO.php — own-file context is in the diff, not fetched
+new file: app/DTOs/Branch/CreateBranchDTO.php — own-file context is in the diff, not fetched
+new file: app/DTOs/Branch/UpdateBranchDTO.php — own-file context is in the diff, not fetched
+new file: app/DTOs/Catering/CreatePackageDTO.php — own-file context is in the diff, not fetched
+new file: app/DTOs/Catering/CreateSampleMenuDTO.php — own-file context is in the diff, not fetched
+new file: app/DTOs/Catering/SubmitQuoteRequestDTO.php — own-file context is in the diff, not fetched
+new file: app/DTOs/Catering/UpdatePackageDTO.php — own-file context is in the diff, not fetched
+new file: app/DTOs/Catering/UpdateQuoteRequestStatusDTO.php — own-file context is in the diff, not fetched
+new file: app/DTOs/DeliveryApp/CreateDeliveryAppDTO.php — own-file context is in the diff, not fetched
+new file: app/DTOs/Dish/CreateDishDTO.php — own-file context is in the diff, not fetched
+new file: app/DTOs/Dish/UpdateDishDTO.php — own-file context is in the diff, not fetched
+new file: app/DTOs/MediaItem/UploadMediaDTO.php — own-file context is in the diff, not fetched
+new file: app/DTOs/PageContent/BulkUpdatePageContentDTO.php — own-file context is in the diff, not fetched
+new file: app/DTOs/PageContent/UpdatePageContentDTO.php — own-file context is in the diff, not fetched
+new file: app/DTOs/Setting/UpdateSettingDTO.php — own-file context is in the diff, not fetched
+new file: app/DTOs/Testimonial/CreateTestimonialDTO.php — own-file context is in the diff, not fetched
+new file: app/DTOs/Timeline/CreateTimelineDTO.php — own-file context is in the diff, not fetched
+new file: app/DTOs/User/CreateUserDTO.php — own-file context is in the diff, not fetched
+new file: app/DTOs/User/UpdateUserDTO.php — own-file context is in the diff, not fetched
+new file: app/Services/ImageService.php — own-file context is in the diff, not fetched
+new file: tests/Feature/Actions/GetDishesActionTest.php — own-file context is in the diff, not fetched
+new file: tests/Feature/Actions/LoginActionTest.php — own-file context is in the diff, not fetched
+new file: tests/Feature/Actions/SubmitQuoteRequestActionTest.php — own-file context is in the diff, not fetched
+new file: tests/Feature/Services/ImageServiceTest.php — own-file context is in the diff, not fetched
+framework reference: Illuminate\Support\Facades\Auth::attempt declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Auth.php:32 (@method static bool attempt(array $credentials = [], bool $remember = false))
+framework reference: Illuminate\Support\Facades\Auth::user declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Auth.php:27 (@method static \Illuminate\Contracts\Auth\Authenticatable|null user())
+already in the diff: App\DTOs\Auth\LoginDTO declared in app/DTOs/Auth/LoginDTO.php; not fetched again
+dependency class: Illuminate\Auth\AuthenticationException provided by vendor/laravel/framework/src/Illuminate/Auth/AuthenticationException.php; surface not fetched
+framework reference: Illuminate\Support\Facades\Cache::tags declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Cache.php:50 (@method static \Illuminate\Cache\TaggedCache tags(mixed $names))
+already in the diff: App\Services\ImageService::store declared in app/Services/ImageService.php; not fetched again
+already in the diff: App\Services\ImageService declared in app/Services/ImageService.php; not fetched again
+already in the diff: App\DTOs\Branch\CreateBranchDTO declared in app/DTOs/Branch/CreateBranchDTO.php; not fetched again
+framework reference: Illuminate\Support\Facades\Cache::tags declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Cache.php:50 (@method static \Illuminate\Cache\TaggedCache tags(mixed $names))
+already in the diff: App\Services\ImageService::delete declared in app/Services/ImageService.php; not fetched again
+already in the diff: App\Services\ImageService declared in app/Services/ImageService.php; not fetched again
+dependency class: Illuminate\Database\Eloquent\Collection provided by vendor/laravel/framework/src/Illuminate/Database/Eloquent/Collection.php; surface not fetched
+dependency member: Illuminate\Support\Arr::whereNotNull declared at vendor/laravel/framework/src/Illuminate/Collections/Arr.php:1284; source not fetched
+already in the diff: App\Services\ImageService::delete declared in app/Services/ImageService.php; not fetched again
+already in the diff: App\Services\ImageService::store declared in app/Services/ImageService.php; not fetched again
+already in the diff: App\Services\ImageService declared in app/Services/ImageService.php; not fetched again
+already in the diff: App\DTOs\Branch\UpdateBranchDTO declared in app/DTOs/Branch/UpdateBranchDTO.php; not fetched again
+already in the diff: App\Services\ImageService::store declared in app/Services/ImageService.php; not fetched again
+already in the diff: App\Services\ImageService declared in app/Services/ImageService.php; not fetched again
+already in the diff: App\DTOs\Catering\CreatePackageDTO declared in app/DTOs/Catering/CreatePackageDTO.php; not fetched again
+already in the diff: App\Services\ImageService::store declared in app/Services/ImageService.php; not fetched again
+already in the diff: App\Services\ImageService declared in app/Services/ImageService.php; not fetched again
+already in the diff: App\DTOs\Catering\CreateSampleMenuDTO declared in app/DTOs/Catering/CreateSampleMenuDTO.php; not fetched again
+already in the diff: App\Services\ImageService::delete declared in app/Services/ImageService.php; not fetched again
+already in the diff: App\Services\ImageService declared in app/Services/ImageService.php; not fetched again
+already in the diff: App\Services\ImageService::delete declared in app/Services/ImageService.php; not fetched again
+already in the diff: App\Services\ImageService declared in app/Services/ImageService.php; not fetched again
+dependency class: Illuminate\Database\Eloquent\Collection provided by vendor/laravel/framework/src/Illuminate/Database/Eloquent/Collection.php; surface not fetched
+dependency class: Illuminate\Database\Eloquent\Collection provided by vendor/laravel/framework/src/Illuminate/Database/Eloquent/Collection.php; surface not fetched
+already in the diff: App\DTOs\Catering\SubmitQuoteRequestDTO declared in app/DTOs/Catering/SubmitQuoteRequestDTO.php; not fetched again
+dependency member: Illuminate\Support\Arr::whereNotNull declared at vendor/laravel/framework/src/Illuminate/Collections/Arr.php:1284; source not fetched
+already in the diff: App\Services\ImageService::delete declared in app/Services/ImageService.php; not fetched again
+already in the diff: App\Services\ImageService::store declared in app/Services/ImageService.php; not fetched again
+already in the diff: App\Services\ImageService declared in app/Services/ImageService.php; not fetched again
+already in the diff: App\DTOs\Catering\UpdatePackageDTO declared in app/DTOs/Catering/UpdatePackageDTO.php; not fetched again
+already in the diff: App\DTOs\Catering\UpdateQuoteRequestStatusDTO declared in app/DTOs/Catering/UpdateQuoteRequestStatusDTO.php; not fetched again
+already in the diff: App\Services\ImageService::delete declared in app/Services/ImageService.php; not fetched again
+already in the diff: App\Services\ImageService::store declared in app/Services/ImageService.php; not fetched again
+already in the diff: App\Services\ImageService declared in app/Services/ImageService.php; not fetched again
+already in the diff: App\DTOs\Catering\CreateSampleMenuDTO declared in app/DTOs/Catering/CreateSampleMenuDTO.php; not fetched again
+already in the diff: App\Services\ImageService::store declared in app/Services/ImageService.php; not fetched again
+already in the diff: App\Services\ImageService declared in app/Services/ImageService.php; not fetched again
+already in the diff: App\DTOs\DeliveryApp\CreateDeliveryAppDTO declared in app/DTOs/DeliveryApp/CreateDeliveryAppDTO.php; not fetched again
+already in the diff: App\Services\ImageService::delete declared in app/Services/ImageService.php; not fetched again
+already in the diff: App\Services\ImageService declared in app/Services/ImageService.php; not fetched again
+dependency class: Illuminate\Database\Eloquent\Collection provided by vendor/laravel/framework/src/Illuminate/Database/Eloquent/Collection.php; surface not fetched
+already in the diff: App\Services\ImageService::delete declared in app/Services/ImageService.php; not fetched again
+already in the diff: App\Services\ImageService::store declared in app/Services/ImageService.php; not fetched again
+already in the diff: App\Services\ImageService declared in app/Services/ImageService.php; not fetched again
+already in the diff: App\DTOs\DeliveryApp\CreateDeliveryAppDTO declared in app/DTOs/DeliveryApp/CreateDeliveryAppDTO.php; not fetched again
+framework reference: Illuminate\Support\Facades\Cache::tags declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Cache.php:50 (@method static \Illuminate\Cache\TaggedCache tags(mixed $names))
+already in the diff: App\Services\ImageService::store declared in app/Services/ImageService.php; not fetched again
+already in the diff: App\Services\ImageService declared in app/Services/ImageService.php; not fetched again
+already in the diff: App\DTOs\Dish\CreateDishDTO declared in app/DTOs/Dish/CreateDishDTO.php; not fetched again
+framework reference: Illuminate\Support\Facades\Cache::tags declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Cache.php:50 (@method static \Illuminate\Cache\TaggedCache tags(mixed $names))
+already in the diff: App\Services\ImageService::delete declared in app/Services/ImageService.php; not fetched again
+already in the diff: App\Services\ImageService declared in app/Services/ImageService.php; not fetched again
+dependency class: Illuminate\Pagination\LengthAwarePaginator provided by vendor/laravel/framework/src/Illuminate/Pagination/LengthAwarePaginator.php; surface not fetched
+dependency member: Illuminate\Support\Arr::whereNotNull declared at vendor/laravel/framework/src/Illuminate/Collections/Arr.php:1284; source not fetched
+framework reference: Illuminate\Support\Facades\Cache::tags declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Cache.php:50 (@method static \Illuminate\Cache\TaggedCache tags(mixed $names))
+already in the diff: App\Services\ImageService::delete declared in app/Services/ImageService.php; not fetched again
+already in the diff: App\Services\ImageService::store declared in app/Services/ImageService.php; not fetched again
+already in the diff: App\Services\ImageService declared in app/Services/ImageService.php; not fetched again
+already in the diff: App\DTOs\Dish\UpdateDishDTO declared in app/DTOs/Dish/UpdateDishDTO.php; not fetched again
+already in the diff: App\Services\ImageService::delete declared in app/Services/ImageService.php; not fetched again
+already in the diff: App\Services\ImageService declared in app/Services/ImageService.php; not fetched again
+dependency class: Illuminate\Support\Collection provided by vendor/laravel/framework/src/Illuminate/Collections/Collection.php; surface not fetched
+already in the diff: App\Repositories\MediaItemRepository::findBySlot declared in app/Repositories/MediaItemRepository.php; not fetched again
+already in the diff: App\Services\ImageService::delete declared in app/Services/ImageService.php; not fetched again
+already in the diff: App\Services\ImageService::store declared in app/Services/ImageService.php; not fetched again
+already in the diff: App\Services\ImageService declared in app/Services/ImageService.php; not fetched again
+already in the diff: App\DTOs\MediaItem\UploadMediaDTO declared in app/DTOs/MediaItem/UploadMediaDTO.php; not fetched again
+already in the diff: App\DTOs\PageContent\BulkUpdatePageContentDTO declared in app/DTOs/PageContent/BulkUpdatePageContentDTO.php; not fetched again
+dependency class: Illuminate\Support\Collection provided by vendor/laravel/framework/src/Illuminate/Collections/Collection.php; surface not fetched
+already in the diff: App\DTOs\PageContent\UpdatePageContentDTO declared in app/DTOs/PageContent/UpdatePageContentDTO.php; not fetched again
+dependency class: Illuminate\Support\Collection provided by vendor/laravel/framework/src/Illuminate/Collections/Collection.php; surface not fetched
+already in the diff: App\DTOs\Setting\UpdateSettingDTO declared in app/DTOs/Setting/UpdateSettingDTO.php; not fetched again
+framework reference: Illuminate\Support\Facades\Cache::tags declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Cache.php:50 (@method static \Illuminate\Cache\TaggedCache tags(mixed $names))
+already in the diff: App\DTOs\Testimonial\CreateTestimonialDTO declared in app/DTOs/Testimonial/CreateTestimonialDTO.php; not fetched again
+framework reference: Illuminate\Support\Facades\Cache::tags declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Cache.php:50 (@method static \Illuminate\Cache\TaggedCache tags(mixed $names))
+dependency class: Illuminate\Database\Eloquent\Collection provided by vendor/laravel/framework/src/Illuminate/Database/Eloquent/Collection.php; surface not fetched
+already in the diff: App\DTOs\Testimonial\CreateTestimonialDTO declared in app/DTOs/Testimonial/CreateTestimonialDTO.php; not fetched again
+already in the diff: App\DTOs\Timeline\CreateTimelineDTO declared in app/DTOs/Timeline/CreateTimelineDTO.php; not fetched again
+dependency class: Illuminate\Database\Eloquent\Collection provided by vendor/laravel/framework/src/Illuminate/Database/Eloquent/Collection.php; surface not fetched
+already in the diff: App\DTOs\Timeline\CreateTimelineDTO declared in app/DTOs/Timeline/CreateTimelineDTO.php; not fetched again
+framework reference: Illuminate\Support\Facades\Hash::make declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Hash.php:10 (@method static string make(string $value, array $options = []))
+already in the diff: App\DTOs\User\CreateUserDTO declared in app/DTOs/User/CreateUserDTO.php; not fetched again
+dependency class: Illuminate\Pagination\LengthAwarePaginator provided by vendor/laravel/framework/src/Illuminate/Pagination/LengthAwarePaginator.php; surface not fetched
+dependency member: Illuminate\Support\Arr::whereNotNull declared at vendor/laravel/framework/src/Illuminate/Collections/Arr.php:1284; source not fetched
+framework reference: Illuminate\Support\Facades\Hash::make declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Hash.php:10 (@method static string make(string $value, array $options = []))
+already in the diff: App\DTOs\User\UpdateUserDTO declared in app/DTOs/User/UpdateUserDTO.php; not fetched again
+dependency class: Illuminate\Http\Request provided by vendor/laravel/framework/src/Illuminate/Http/Request.php; surface not fetched
+dependency class: Illuminate\Http\UploadedFile provided by vendor/laravel/framework/src/Illuminate/Http/UploadedFile.php; surface not fetched
+dependency class: Illuminate\Http\Request provided by vendor/laravel/framework/src/Illuminate/Http/Request.php; surface not fetched
+dependency class: Illuminate\Http\UploadedFile provided by vendor/laravel/framework/src/Illuminate/Http/UploadedFile.php; surface not fetched
+dependency class: Illuminate\Http\Request provided by vendor/laravel/framework/src/Illuminate/Http/Request.php; surface not fetched
+dependency class: Illuminate\Http\UploadedFile provided by vendor/laravel/framework/src/Illuminate/Http/UploadedFile.php; surface not fetched
+dependency class: Illuminate\Http\Request provided by vendor/laravel/framework/src/Illuminate/Http/Request.php; surface not fetched
+dependency class: Illuminate\Http\UploadedFile provided by vendor/laravel/framework/src/Illuminate/Http/UploadedFile.php; surface not fetched
+dependency class: Illuminate\Http\Request provided by vendor/laravel/framework/src/Illuminate/Http/Request.php; surface not fetched
+dependency class: Illuminate\Http\Request provided by vendor/laravel/framework/src/Illuminate/Http/Request.php; surface not fetched
+dependency class: Illuminate\Http\UploadedFile provided by vendor/laravel/framework/src/Illuminate/Http/UploadedFile.php; surface not fetched
+dependency class: Illuminate\Http\Request provided by vendor/laravel/framework/src/Illuminate/Http/Request.php; surface not fetched
+unresolved named_reference: App\Enums\QuoteRequestStatusEnum::from in app/DTOs/Catering/UpdateQuoteRequestStatusDTO.php
+dependency class: Illuminate\Http\Request provided by vendor/laravel/framework/src/Illuminate/Http/Request.php; surface not fetched
+dependency class: Illuminate\Http\UploadedFile provided by vendor/laravel/framework/src/Illuminate/Http/UploadedFile.php; surface not fetched
+dependency class: Illuminate\Http\Request provided by vendor/laravel/framework/src/Illuminate/Http/Request.php; surface not fetched
+dependency class: Illuminate\Http\UploadedFile provided by vendor/laravel/framework/src/Illuminate/Http/UploadedFile.php; surface not fetched
+dependency class: Illuminate\Http\Request provided by vendor/laravel/framework/src/Illuminate/Http/Request.php; surface not fetched
+dependency class: Illuminate\Http\UploadedFile provided by vendor/laravel/framework/src/Illuminate/Http/UploadedFile.php; surface not fetched
+dependency class: Illuminate\Http\Request provided by vendor/laravel/framework/src/Illuminate/Http/Request.php; surface not fetched
+dependency class: Illuminate\Http\UploadedFile provided by vendor/laravel/framework/src/Illuminate/Http/UploadedFile.php; surface not fetched
+dependency class: Illuminate\Http\Request provided by vendor/laravel/framework/src/Illuminate/Http/Request.php; surface not fetched
+dependency class: Illuminate\Http\Request provided by vendor/laravel/framework/src/Illuminate/Http/Request.php; surface not fetched
+dependency class: Illuminate\Http\Request provided by vendor/laravel/framework/src/Illuminate/Http/Request.php; surface not fetched
+dependency class: Illuminate\Http\Request provided by vendor/laravel/framework/src/Illuminate/Http/Request.php; surface not fetched
+dependency class: Illuminate\Http\Request provided by vendor/laravel/framework/src/Illuminate/Http/Request.php; surface not fetched
+dependency class: Illuminate\Http\Request provided by vendor/laravel/framework/src/Illuminate/Http/Request.php; surface not fetched
+dependency class: Illuminate\Http\Request provided by vendor/laravel/framework/src/Illuminate/Http/Request.php; surface not fetched
+dependency class: Illuminate\Http\Request provided by vendor/laravel/framework/src/Illuminate/Http/Request.php; surface not fetched
+unresolved named_reference: App\Models\MediaItem::where in app/Repositories/MediaItemRepository.php
+framework reference: Intervention\Image\Laravel\Facades\Image::decodeSplFileInfo declared at vendor/intervention/image-laravel/src/Facades/Image.php:20 (@method static ImageInterface decodeSplFileInfo(SplFileInfo $splFileInfo))
+dependency member: Illuminate\Support\Str::uuid declared at vendor/laravel/framework/src/Illuminate/Support/Str.php:1918; source not fetched
+framework reference: Illuminate\Support\Facades\Storage::disk declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Storage.php:11 (@method static \Illuminate\Contracts\Filesystem\Filesystem disk(\UnitEnum|string|null $name = null))
+dependency class: Illuminate\Http\UploadedFile provided by vendor/laravel/framework/src/Illuminate/Http/UploadedFile.php; surface not fetched
+missing PSR-4 entry: InvalidArgumentException named in app/Services/ImageService.php
+dependency class: Intervention\Image\Encoders\WebpEncoder provided by vendor/intervention/image/src/Encoders/WebpEncoder.php; surface not fetched
+unresolved named_reference: App\Models\Category::where in tests/Feature/Actions/GetDishesActionTest.php
+already in the diff: App\Actions\Auth\LoginAction declared in app/Actions/Auth/LoginAction.php; not fetched again
+already in the diff: App\DTOs\Auth\LoginDTO declared in app/DTOs/Auth/LoginDTO.php; not fetched again
+already in the diff: App\DTOs\Catering\SubmitQuoteRequestDTO declared in app/DTOs/Catering/SubmitQuoteRequestDTO.php; not fetched again
+dependency member: Illuminate\Support\Facades\Storage::fake declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Storage.php:94; source not fetched
+dependency member: Illuminate\Http\UploadedFile::fake declared at vendor/laravel/framework/src/Illuminate/Http/UploadedFile.php:17; source not fetched
+framework reference: Illuminate\Support\Facades\Storage::disk declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Storage.php:11 (@method static \Illuminate\Contracts\Filesystem\Filesystem disk(\UnitEnum|string|null $name = null))
+already in the diff: App\Services\ImageService declared in app/Services/ImageService.php; not fetched again

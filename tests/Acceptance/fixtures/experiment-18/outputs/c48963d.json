@@ -1,0 +1,53 @@
+{
+    "bundle_version": 1,
+    "budget_tokens": 8000,
+    "used_tokens": 60,
+    "items": [
+        {
+            "lever": "flagged",
+            "reason": "the region depends on Closure, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Http/Middleware/CheckApiKey.php",
+                "member": "Closure",
+                "lines": [
+                    1,
+                    25
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on Closure, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Http/Middleware/SetLocale.php",
+                "member": "Closure",
+                "lines": [
+                    1,
+                    32
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on Pdo\\Mysql::ATTR_SSL_CA, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "config/database.php",
+                "member": "Pdo\\Mysql::ATTR_SSL_CA",
+                "lines": [
+                    1,
+                    184
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        }
+    ],
+    "dropped": []
+}

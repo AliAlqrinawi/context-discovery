@@ -1,0 +1,43 @@
+diff --git a/database/seeders/PageContentSeeder.php b/database/seeders/PageContentSeeder.php
+index 6ea55a5..71e9b8a 100644
+--- a/database/seeders/PageContentSeeder.php
++++ b/database/seeders/PageContentSeeder.php
+@@ -10,6 +10,9 @@ class PageContentSeeder extends Seeder
+     public function run(): void
+     {
+         $contents = [
++            // ── GLOBAL (site-wide, not tied to a single page) ─────────
++            ['page' => 'global', 'section' => 'footer', 'key' => 'tagline', 'type' => 'text', 'value_ar' => 'أبو السيد — حكاية مصرية، نكهة أصيلة.', 'value_en' => 'Abou El Sid — An Egyptian Tale, an Authentic Flavor.'],
++
+             // ── HOME PAGE ────────────────────────────────────────────
+             ['page' => 'home', 'section' => 'hero', 'key' => 'badge', 'value_ar' => 'من القاهرة القديمة · EST. OLD CAIRO', 'value_en' => 'From Old Cairo · EST. 1995'],
+             ['page' => 'home', 'section' => 'hero', 'key' => 'title', 'value_ar' => 'أبو السيد', 'value_en' => 'Abou El Sid'],
+@@ -67,6 +70,7 @@ public function run(): void
+             ['page' => 'menu', 'section' => 'hero', 'key' => 'subtitle', 'value_ar' => 'Most-loved dishes from old Cairo', 'value_en' => 'Most-loved dishes from old Cairo'],
+             ['page' => 'menu', 'section' => 'hero', 'key' => 'pdf_cta', 'value_ar' => 'حمّل القائمة PDF', 'value_en' => 'Download Menu PDF'],
+             ['page' => 'menu', 'section' => 'signature_banner', 'key' => 'badge', 'type' => 'text', 'value_ar' => 'طبق الملوك', 'value_en' => 'Dish of Kings'],
++            ['page' => 'menu', 'section' => 'signature_banner', 'key' => 'order_cta', 'type' => 'text', 'value_ar' => 'اطلبه الآن', 'value_en' => 'Order Now'],
+             ['page' => 'menu', 'section' => 'cta', 'key' => 'title', 'value_ar' => 'جربنا في فروعنا — أو وصّلنا لباب بيتك', 'value_en' => 'Try Us at Our Branches — or We Deliver to Your Door'],
+             ['page' => 'menu', 'section' => 'cta', 'key' => 'subtitle', 'value_ar' => 'أبواب أبو السيد مفتوحة من 12 ظهراً حتى 1 صباحاً.', 'value_en' => 'Abou El Sid doors are open from 12 noon until 1 AM.'],
+             ['page' => 'menu', 'section' => 'cta', 'key' => 'cta_primary', 'value_ar' => 'اطلب أونلاين', 'value_en' => 'Order Online'],
+@@ -82,6 +86,7 @@ public function run(): void
+             ['page' => 'order', 'section' => 'apps', 'key' => 'title', 'value_ar' => 'تطبيقات التوصيل', 'value_en' => 'Delivery Apps'],
+             ['page' => 'order', 'section' => 'apps', 'key' => 'subtitle', 'value_ar' => 'اختر التطبيق الذي تفضّله — كلهم يوصلونك أبو السيد سريعاً.', 'value_en' => 'Choose the app you prefer — they all deliver Abou El Sid quickly.'],
+             ['page' => 'order', 'section' => 'apps', 'key' => 'btn_prefix', 'value_ar' => 'اطلب الآن من', 'value_en' => 'Order Now from'],
++            ['page' => 'order', 'section' => 'apps', 'key' => 'fast_delivery', 'type' => 'text', 'value_ar' => 'توصيل سريع', 'value_en' => 'Fast delivery'],
+             ['page' => 'order', 'section' => 'whatsapp', 'key' => 'badge', 'value_ar' => 'WHATSAPP DIRECT ORDER', 'value_en' => 'WHATSAPP DIRECT ORDER'],
+             ['page' => 'order', 'section' => 'whatsapp', 'key' => 'title', 'value_ar' => 'اطلب مباشرة عبر واتساب', 'value_en' => 'Order Directly via WhatsApp'],
+             ['page' => 'order', 'section' => 'whatsapp', 'key' => 'description', 'value_ar' => 'تحدث مع فريق المطعم مباشرة — طلب سريع، تخصيص حسب رغبتك، وتجربة شخصية كأنك تطلب من بيت أبو السيد.', 'value_en' => 'Speak directly with the restaurant team — fast order, customized to your preference, a personal experience as if ordering from Abou El Sid\'s home.'],
+@@ -93,6 +98,12 @@ public function run(): void
+             ['page' => 'catering', 'section' => 'hero', 'key' => 'subtitle', 'value_ar' => 'من العزائم العائلية إلى المناسبات الكبرى.', 'value_en' => 'From family gatherings to grand events.'],
+             ['page' => 'catering', 'section' => 'packages', 'key' => 'title', 'value_ar' => 'باقاتنا', 'value_en' => 'Our Packages'],
+             ['page' => 'catering', 'section' => 'packages', 'key' => 'subtitle', 'value_ar' => 'اختر الباقة التي تناسب مناسبتكم.', 'value_en' => 'Choose the package that suits your occasion.'],
++            ['page' => 'catering', 'section' => 'packages', 'key' => 'popular_badge', 'type' => 'text', 'value_ar' => 'الأكثر طلباً', 'value_en' => 'Most Popular'],
++            ['page' => 'catering', 'section' => 'packages', 'key' => 'book_cta', 'type' => 'text', 'value_ar' => 'احجز باقتك', 'value_en' => 'Book Your Package'],
++            ['page' => 'catering', 'section' => 'event_types', 'key' => 'type_1', 'type' => 'text', 'value_ar' => 'الأعراس', 'value_en' => 'Weddings'],
++            ['page' => 'catering', 'section' => 'event_types', 'key' => 'type_2', 'type' => 'text', 'value_ar' => 'مناسبات الشركات', 'value_en' => 'Corporate Events'],
++            ['page' => 'catering', 'section' => 'event_types', 'key' => 'type_3', 'type' => 'text', 'value_ar' => 'أعياد الميلاد', 'value_en' => 'Birthdays'],
++            ['page' => 'catering', 'section' => 'event_types', 'key' => 'type_4', 'type' => 'text', 'value_ar' => 'التجمعات العائلية', 'value_en' => 'Family Gatherings'],
+             ['page' => 'catering', 'section' => 'sample_menus', 'key' => 'badge', 'value_ar' => 'Sample Menus', 'value_en' => 'Sample Menus'],
+             ['page' => 'catering', 'section' => 'sample_menus', 'key' => 'title', 'value_ar' => 'نماذج من قوائمنا', 'value_en' => 'Sample Menus'],
+             ['page' => 'catering', 'section' => 'sample_menus', 'key' => 'subtitle', 'value_ar' => 'Choose Your Feast', 'value_en' => 'Choose Your Feast'],

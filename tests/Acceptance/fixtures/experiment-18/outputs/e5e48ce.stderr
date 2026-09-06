@@ -1,0 +1,63 @@
+new file: app/Http/Controllers/Admin/Auth/AuthController.php — own-file context is in the diff, not fetched
+new file: app/Http/Controllers/Admin/BranchController.php — own-file context is in the diff, not fetched
+new file: app/Http/Controllers/Admin/CategoryController.php — own-file context is in the diff, not fetched
+new file: app/Http/Controllers/Admin/Catering/CateringPackageController.php — own-file context is in the diff, not fetched
+new file: app/Http/Controllers/Admin/Catering/QuoteRequestController.php — own-file context is in the diff, not fetched
+new file: app/Http/Controllers/Admin/Catering/SampleMenuController.php — own-file context is in the diff, not fetched
+new file: app/Http/Controllers/Admin/DeliveryAppController.php — own-file context is in the diff, not fetched
+new file: app/Http/Controllers/Admin/DishController.php — own-file context is in the diff, not fetched
+new file: app/Http/Controllers/Admin/MediaItemController.php — own-file context is in the diff, not fetched
+new file: app/Http/Controllers/Admin/PageContentController.php — own-file context is in the diff, not fetched
+new file: app/Http/Controllers/Admin/SettingController.php — own-file context is in the diff, not fetched
+new file: app/Http/Controllers/Admin/TestimonialController.php — own-file context is in the diff, not fetched
+new file: app/Http/Controllers/Admin/TimelineController.php — own-file context is in the diff, not fetched
+new file: app/Http/Controllers/Admin/UserController.php — own-file context is in the diff, not fetched
+unreadable path: app/Http/Controllers/BranchController.php (no assertions extracted)
+new file: app/Http/Controllers/Public/BranchController.php — own-file context is in the diff, not fetched
+new file: app/Http/Controllers/Public/CategoryController.php — own-file context is in the diff, not fetched
+new file: app/Http/Controllers/Public/Catering/CateringPackageController.php — own-file context is in the diff, not fetched
+new file: app/Http/Controllers/Public/Catering/QuoteRequestController.php — own-file context is in the diff, not fetched
+new file: app/Http/Controllers/Public/Catering/SampleMenuController.php — own-file context is in the diff, not fetched
+new file: app/Http/Controllers/Public/DeliveryAppController.php — own-file context is in the diff, not fetched
+new file: app/Http/Controllers/Public/DishController.php — own-file context is in the diff, not fetched
+new file: app/Http/Controllers/Public/MediaItemController.php — own-file context is in the diff, not fetched
+new file: app/Http/Controllers/Public/PageContentController.php — own-file context is in the diff, not fetched
+new file: app/Http/Controllers/Public/SettingController.php — own-file context is in the diff, not fetched
+new file: app/Http/Controllers/Public/TestimonialController.php — own-file context is in the diff, not fetched
+new file: app/Http/Controllers/Public/TimelineController.php — own-file context is in the diff, not fetched
+new file: routes/admin.php — own-file context is in the diff, not fetched
+unresolved named_reference: App\Http\Resources\Branch\BranchResource::collection in app/Http/Controllers/Public/BranchController.php
+dependency class: Illuminate\Http\JsonResponse provided by vendor/laravel/framework/src/Illuminate/Http/JsonResponse.php; surface not fetched
+unresolved named_reference: App\Http\Resources\Category\CategoryResource::collection in app/Http/Controllers/Public/CategoryController.php
+dependency class: Illuminate\Http\JsonResponse provided by vendor/laravel/framework/src/Illuminate/Http/JsonResponse.php; surface not fetched
+unresolved named_reference: App\Http\Resources\Catering\PackageResource::collection in app/Http/Controllers/Public/Catering/CateringPackageController.php
+dependency class: Illuminate\Http\JsonResponse provided by vendor/laravel/framework/src/Illuminate/Http/JsonResponse.php; surface not fetched
+dependency class: Illuminate\Http\JsonResponse provided by vendor/laravel/framework/src/Illuminate/Http/JsonResponse.php; surface not fetched
+unresolved named_reference: App\Http\Resources\Catering\SampleMenuResource::collection in app/Http/Controllers/Public/Catering/SampleMenuController.php
+dependency class: Illuminate\Http\JsonResponse provided by vendor/laravel/framework/src/Illuminate/Http/JsonResponse.php; surface not fetched
+unresolved named_reference: App\Http\Resources\DeliveryApp\DeliveryAppResource::collection in app/Http/Controllers/Public/DeliveryAppController.php
+dependency class: Illuminate\Http\JsonResponse provided by vendor/laravel/framework/src/Illuminate/Http/JsonResponse.php; surface not fetched
+unresolved named_reference: App\Http\Resources\Dish\DishResource::collection in app/Http/Controllers/Public/DishController.php
+dependency class: Illuminate\Http\Request provided by vendor/laravel/framework/src/Illuminate/Http/Request.php; surface not fetched
+dependency class: Illuminate\Http\JsonResponse provided by vendor/laravel/framework/src/Illuminate/Http/JsonResponse.php; surface not fetched
+dependency class: Illuminate\Http\Request provided by vendor/laravel/framework/src/Illuminate/Http/Request.php; surface not fetched
+dependency class: Illuminate\Http\JsonResponse provided by vendor/laravel/framework/src/Illuminate/Http/JsonResponse.php; surface not fetched
+dependency class: Illuminate\Http\Request provided by vendor/laravel/framework/src/Illuminate/Http/Request.php; surface not fetched
+dependency class: Illuminate\Http\JsonResponse provided by vendor/laravel/framework/src/Illuminate/Http/JsonResponse.php; surface not fetched
+dependency class: Illuminate\Http\Request provided by vendor/laravel/framework/src/Illuminate/Http/Request.php; surface not fetched
+dependency class: Illuminate\Http\JsonResponse provided by vendor/laravel/framework/src/Illuminate/Http/JsonResponse.php; surface not fetched
+unresolved named_reference: App\Http\Resources\Testimonial\TestimonialResource::collection in app/Http/Controllers/Public/TestimonialController.php
+dependency class: Illuminate\Http\JsonResponse provided by vendor/laravel/framework/src/Illuminate/Http/JsonResponse.php; surface not fetched
+unresolved named_reference: App\Http\Resources\Timeline\TimelineResource::collection in app/Http/Controllers/Public/TimelineController.php
+dependency class: Illuminate\Http\JsonResponse provided by vendor/laravel/framework/src/Illuminate/Http/JsonResponse.php; surface not fetched
+framework reference: Illuminate\Support\Facades\Route::middleware declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Route.php:96 (@method static \Illuminate\Routing\RouteRegistrar middleware(array|string|null $middleware))
+framework reference: Illuminate\Support\Facades\Route::prefix declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Route.php:100 (@method static \Illuminate\Routing\RouteRegistrar prefix(string $prefix))
+framework reference: Illuminate\Support\Facades\Route::post declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Route.php:7 (@method static \Illuminate\Routing\Route post(string $uri, array|string|callable|null $action = null))
+framework reference: Illuminate\Support\Facades\Route::middleware declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Route.php:96 (@method static \Illuminate\Routing\RouteRegistrar middleware(array|string|null $middleware))
+framework reference: Illuminate\Support\Facades\Route::get declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Route.php:6 (@method static \Illuminate\Routing\Route get(string $uri, array|string|callable|null $action = null))
+framework reference: Illuminate\Support\Facades\Route::put declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Route.php:8 (@method static \Illuminate\Routing\Route put(string $uri, array|string|callable|null $action = null))
+framework reference: Illuminate\Support\Facades\Route::delete declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Route.php:10 (@method static \Illuminate\Routing\Route delete(string $uri, array|string|callable|null $action = null))
+framework reference: Illuminate\Support\Facades\Route::patch declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Route.php:9 (@method static \Illuminate\Routing\Route patch(string $uri, array|string|callable|null $action = null))
+framework reference: Illuminate\Support\Facades\Route::prefix declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Route.php:100 (@method static \Illuminate\Routing\RouteRegistrar prefix(string $prefix))
+framework reference: Illuminate\Support\Facades\Route::get declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Route.php:6 (@method static \Illuminate\Routing\Route get(string $uri, array|string|callable|null $action = null))
+framework reference: Illuminate\Support\Facades\Route::post declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Route.php:7 (@method static \Illuminate\Routing\Route post(string $uri, array|string|callable|null $action = null))

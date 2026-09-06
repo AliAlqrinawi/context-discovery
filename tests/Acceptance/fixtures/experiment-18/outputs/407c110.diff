@@ -1,0 +1,497 @@
+diff --git a/database/migrations/0001_01_01_000000_create_users_table.php b/database/migrations/0001_01_01_000000_create_users_table.php
+index 05fb5d9..ca13860 100644
+--- a/database/migrations/0001_01_01_000000_create_users_table.php
++++ b/database/migrations/0001_01_01_000000_create_users_table.php
+@@ -17,6 +17,7 @@ public function up(): void
+             $table->string('email')->unique();
+             $table->timestamp('email_verified_at')->nullable();
+             $table->string('password');
++            $table->string('role', 20)->default('admin');
+             $table->rememberToken();
+             $table->timestamps();
+         });
+diff --git a/database/migrations/2026_07_16_000001_create_categories_table.php b/database/migrations/2026_07_16_000001_create_categories_table.php
+new file mode 100644
+index 0000000..4cbae1f
+--- /dev/null
++++ b/database/migrations/2026_07_16_000001_create_categories_table.php
+@@ -0,0 +1,25 @@
++<?php
++
++use Illuminate\Database\Migrations\Migration;
++use Illuminate\Database\Schema\Blueprint;
++use Illuminate\Support\Facades\Schema;
++
++return new class extends Migration
++{
++    public function up(): void
++    {
++        Schema::create('categories', function (Blueprint $table) {
++            $table->id();
++            $table->string('name_ar', 200);
++            $table->string('name_en', 200);
++            $table->string('slug', 100)->unique();
++            $table->integer('order')->default(0);
++            $table->timestamps();
++        });
++    }
++
++    public function down(): void
++    {
++        Schema::dropIfExists('categories');
++    }
++};
+diff --git a/database/migrations/2026_07_16_000002_create_dishes_table.php b/database/migrations/2026_07_16_000002_create_dishes_table.php
+new file mode 100644
+index 0000000..35da5e7
+--- /dev/null
++++ b/database/migrations/2026_07_16_000002_create_dishes_table.php
+@@ -0,0 +1,32 @@
++<?php
++
++use Illuminate\Database\Migrations\Migration;
++use Illuminate\Database\Schema\Blueprint;
++use Illuminate\Support\Facades\Schema;
++
++return new class extends Migration
++{
++    public function up(): void
++    {
++        Schema::create('dishes', function (Blueprint $table) {
++            $table->id();
++            $table->foreignId('category_id')->constrained('categories')->cascadeOnDelete();
++            $table->string('name_ar', 200);
++            $table->string('name_en', 200);
++            $table->text('description_ar');
++            $table->text('description_en');
++            $table->decimal('price', 10, 2);
++            $table->boolean('is_featured')->default(false);
++            $table->boolean('is_signature')->default(false);
++            $table->string('image_path', 500)->nullable();
++            $table->string('image_url', 500)->nullable();
++            $table->integer('order')->default(0);
++            $table->timestamps();
++        });
++    }
++
++    public function down(): void
++    {
++        Schema::dropIfExists('dishes');
++    }
++};
+diff --git a/database/migrations/2026_07_16_000003_create_branches_table.php b/database/migrations/2026_07_16_000003_create_branches_table.php
+new file mode 100644
+index 0000000..7d14b1c
+--- /dev/null
++++ b/database/migrations/2026_07_16_000003_create_branches_table.php
+@@ -0,0 +1,33 @@
++<?php
++
++use Illuminate\Database\Migrations\Migration;
++use Illuminate\Database\Schema\Blueprint;
++use Illuminate\Support\Facades\Schema;
++
++return new class extends Migration
++{
++    public function up(): void
++    {
++        Schema::create('branches', function (Blueprint $table) {
++            $table->id();
++            $table->string('name_ar', 200);
++            $table->string('name_en', 200);
++            $table->string('city', 50);
++            $table->string('location_ar', 500);
++            $table->string('location_en', 500);
++            $table->string('phone', 20);
++            $table->string('opening_time', 10);
++            $table->string('closing_time', 10);
++            $table->text('google_maps_url')->nullable();
++            $table->string('image_path', 500)->nullable();
++            $table->string('image_url', 500)->nullable();
++            $table->integer('order')->default(0);
++            $table->timestamps();
++        });
++    }
++
++    public function down(): void
++    {
++        Schema::dropIfExists('branches');
++    }
++};
+diff --git a/database/migrations/2026_07_16_000004_create_catering_packages_table.php b/database/migrations/2026_07_16_000004_create_catering_packages_table.php
+new file mode 100644
+index 0000000..738f47f
+--- /dev/null
++++ b/database/migrations/2026_07_16_000004_create_catering_packages_table.php
+@@ -0,0 +1,31 @@
++<?php
++
++use Illuminate\Database\Migrations\Migration;
++use Illuminate\Database\Schema\Blueprint;
++use Illuminate\Support\Facades\Schema;
++
++return new class extends Migration
++{
++    public function up(): void
++    {
++        Schema::create('catering_packages', function (Blueprint $table) {
++            $table->id();
++            $table->string('name_ar', 200);
++            $table->string('name_en', 200);
++            $table->text('description_ar');
++            $table->text('description_en');
++            $table->string('tag_en', 100)->nullable();
++            $table->decimal('price_starting_from', 10, 2)->nullable();
++            $table->boolean('is_featured')->default(false);
++            $table->string('image_path', 500)->nullable();
++            $table->string('image_url', 500)->nullable();
++            $table->integer('order')->default(0);
++            $table->timestamps();
++        });
++    }
++
++    public function down(): void
++    {
++        Schema::dropIfExists('catering_packages');
++    }
++};
+diff --git a/database/migrations/2026_07_16_000005_create_catering_package_features_table.php b/database/migrations/2026_07_16_000005_create_catering_package_features_table.php
+new file mode 100644
+index 0000000..c5aedda
+--- /dev/null
++++ b/database/migrations/2026_07_16_000005_create_catering_package_features_table.php
+@@ -0,0 +1,24 @@
++<?php
++
++use Illuminate\Database\Migrations\Migration;
++use Illuminate\Database\Schema\Blueprint;
++use Illuminate\Support\Facades\Schema;
++
++return new class extends Migration
++{
++    public function up(): void
++    {
++        Schema::create('catering_package_features', function (Blueprint $table) {
++            $table->id();
++            $table->foreignId('package_id')->constrained('catering_packages')->cascadeOnDelete();
++            $table->string('feature_ar', 255);
++            $table->string('feature_en', 255);
++            $table->integer('order')->default(0);
++        });
++    }
++
++    public function down(): void
++    {
++        Schema::dropIfExists('catering_package_features');
++    }
++};
+diff --git a/database/migrations/2026_07_16_000006_create_sample_menus_table.php b/database/migrations/2026_07_16_000006_create_sample_menus_table.php
+new file mode 100644
+index 0000000..bb195ea
+--- /dev/null
++++ b/database/migrations/2026_07_16_000006_create_sample_menus_table.php
+@@ -0,0 +1,28 @@
++<?php
++
++use Illuminate\Database\Migrations\Migration;
++use Illuminate\Database\Schema\Blueprint;
++use Illuminate\Support\Facades\Schema;
++
++return new class extends Migration
++{
++    public function up(): void
++    {
++        Schema::create('sample_menus', function (Blueprint $table) {
++            $table->id();
++            $table->string('name_ar', 200);
++            $table->string('name_en', 200);
++            $table->string('tag_en', 100)->nullable();
++            $table->boolean('is_featured')->default(false);
++            $table->string('image_path', 500)->nullable();
++            $table->string('image_url', 500)->nullable();
++            $table->integer('order')->default(0);
++            $table->timestamps();
++        });
++    }
++
++    public function down(): void
++    {
++        Schema::dropIfExists('sample_menus');
++    }
++};
+diff --git a/database/migrations/2026_07_16_000007_create_sample_menu_dishes_table.php b/database/migrations/2026_07_16_000007_create_sample_menu_dishes_table.php
+new file mode 100644
+index 0000000..9d145b3
+--- /dev/null
++++ b/database/migrations/2026_07_16_000007_create_sample_menu_dishes_table.php
+@@ -0,0 +1,24 @@
++<?php
++
++use Illuminate\Database\Migrations\Migration;
++use Illuminate\Database\Schema\Blueprint;
++use Illuminate\Support\Facades\Schema;
++
++return new class extends Migration
++{
++    public function up(): void
++    {
++        Schema::create('sample_menu_dishes', function (Blueprint $table) {
++            $table->id();
++            $table->foreignId('sample_menu_id')->constrained('sample_menus')->cascadeOnDelete();
++            $table->string('dish_name_ar', 255);
++            $table->string('dish_name_en', 255);
++            $table->integer('order')->default(0);
++        });
++    }
++
++    public function down(): void
++    {
++        Schema::dropIfExists('sample_menu_dishes');
++    }
++};
+diff --git a/database/migrations/2026_07_16_000008_create_quote_requests_table.php b/database/migrations/2026_07_16_000008_create_quote_requests_table.php
+new file mode 100644
+index 0000000..ce23932
+--- /dev/null
++++ b/database/migrations/2026_07_16_000008_create_quote_requests_table.php
+@@ -0,0 +1,31 @@
++<?php
++
++use Illuminate\Database\Migrations\Migration;
++use Illuminate\Database\Schema\Blueprint;
++use Illuminate\Support\Facades\Schema;
++
++return new class extends Migration
++{
++    public function up(): void
++    {
++        Schema::create('quote_requests', function (Blueprint $table) {
++            $table->id();
++            $table->string('name', 200);
++            $table->string('phone', 20);
++            $table->string('email', 255)->nullable();
++            $table->date('event_date');
++            $table->integer('guests_count');
++            $table->string('branch', 50);
++            $table->string('event_type', 50);
++            $table->string('budget_range', 50)->nullable();
++            $table->text('notes')->nullable();
++            $table->string('status', 20)->default('pending');
++            $table->timestamps();
++        });
++    }
++
++    public function down(): void
++    {
++        Schema::dropIfExists('quote_requests');
++    }
++};
+diff --git a/database/migrations/2026_07_16_000009_create_testimonials_table.php b/database/migrations/2026_07_16_000009_create_testimonials_table.php
+new file mode 100644
+index 0000000..05e4f09
+--- /dev/null
++++ b/database/migrations/2026_07_16_000009_create_testimonials_table.php
+@@ -0,0 +1,26 @@
++<?php
++
++use Illuminate\Database\Migrations\Migration;
++use Illuminate\Database\Schema\Blueprint;
++use Illuminate\Support\Facades\Schema;
++
++return new class extends Migration
++{
++    public function up(): void
++    {
++        Schema::create('testimonials', function (Blueprint $table) {
++            $table->id();
++            $table->string('name', 200);
++            $table->text('quote_ar');
++            $table->text('quote_en');
++            $table->boolean('is_active')->default(true);
++            $table->integer('order')->default(0);
++            $table->timestamps();
++        });
++    }
++
++    public function down(): void
++    {
++        Schema::dropIfExists('testimonials');
++    }
++};
+diff --git a/database/migrations/2026_07_16_000010_create_timelines_table.php b/database/migrations/2026_07_16_000010_create_timelines_table.php
+new file mode 100644
+index 0000000..6607f32
+--- /dev/null
++++ b/database/migrations/2026_07_16_000010_create_timelines_table.php
+@@ -0,0 +1,28 @@
++<?php
++
++use Illuminate\Database\Migrations\Migration;
++use Illuminate\Database\Schema\Blueprint;
++use Illuminate\Support\Facades\Schema;
++
++return new class extends Migration
++{
++    public function up(): void
++    {
++        Schema::create('timelines', function (Blueprint $table) {
++            $table->id();
++            $table->string('year', 20);
++            $table->string('location_en', 200)->nullable();
++            $table->string('title_ar', 300);
++            $table->string('title_en', 300);
++            $table->text('description_ar');
++            $table->text('description_en');
++            $table->integer('order')->default(0);
++            $table->timestamps();
++        });
++    }
++
++    public function down(): void
++    {
++        Schema::dropIfExists('timelines');
++    }
++};
+diff --git a/database/migrations/2026_07_16_000011_create_delivery_apps_table.php b/database/migrations/2026_07_16_000011_create_delivery_apps_table.php
+new file mode 100644
+index 0000000..df37ebc
+--- /dev/null
++++ b/database/migrations/2026_07_16_000011_create_delivery_apps_table.php
+@@ -0,0 +1,28 @@
++<?php
++
++use Illuminate\Database\Migrations\Migration;
++use Illuminate\Database\Schema\Blueprint;
++use Illuminate\Support\Facades\Schema;
++
++return new class extends Migration
++{
++    public function up(): void
++    {
++        Schema::create('delivery_apps', function (Blueprint $table) {
++            $table->id();
++            $table->string('name_ar', 100);
++            $table->string('name_en', 100);
++            $table->text('order_url');
++            $table->string('logo_path', 500)->nullable();
++            $table->string('logo_url', 500)->nullable();
++            $table->boolean('is_active')->default(true);
++            $table->integer('order')->default(0);
++            $table->timestamps();
++        });
++    }
++
++    public function down(): void
++    {
++        Schema::dropIfExists('delivery_apps');
++    }
++};
+diff --git a/database/migrations/2026_07_16_000012_create_page_contents_table.php b/database/migrations/2026_07_16_000012_create_page_contents_table.php
+new file mode 100644
+index 0000000..6a02879
+--- /dev/null
++++ b/database/migrations/2026_07_16_000012_create_page_contents_table.php
+@@ -0,0 +1,30 @@
++<?php
++
++use Illuminate\Database\Migrations\Migration;
++use Illuminate\Database\Schema\Blueprint;
++use Illuminate\Support\Facades\Schema;
++
++return new class extends Migration
++{
++    public function up(): void
++    {
++        Schema::create('page_contents', function (Blueprint $table) {
++            $table->id();
++            $table->string('page', 50);
++            $table->string('section', 100);
++            $table->string('key', 100);
++            $table->text('value_ar');
++            $table->text('value_en');
++            $table->string('type', 20)->default('text');
++            $table->integer('order')->default(0);
++            $table->timestamps();
++
++            $table->unique(['page', 'section', 'key']);
++        });
++    }
++
++    public function down(): void
++    {
++        Schema::dropIfExists('page_contents');
++    }
++};
+diff --git a/database/migrations/2026_07_16_000013_create_media_items_table.php b/database/migrations/2026_07_16_000013_create_media_items_table.php
+new file mode 100644
+index 0000000..50e4698
+--- /dev/null
++++ b/database/migrations/2026_07_16_000013_create_media_items_table.php
+@@ -0,0 +1,34 @@
++<?php
++
++use Illuminate\Database\Migrations\Migration;
++use Illuminate\Database\Schema\Blueprint;
++use Illuminate\Support\Facades\Schema;
++
++return new class extends Migration
++{
++    public function up(): void
++    {
++        Schema::create('media_items', function (Blueprint $table) {
++            $table->id();
++            $table->string('page', 50);
++            $table->string('section', 100);
++            $table->string('key', 100);
++            $table->string('path', 500)->nullable();
++            $table->string('url', 500)->nullable();
++            $table->string('alt_ar', 255);
++            $table->string('alt_en', 255);
++            $table->string('mime_type', 50)->nullable();
++            $table->integer('size_bytes')->nullable();
++            $table->integer('width')->nullable();
++            $table->integer('height')->nullable();
++            $table->timestamps();
++
++            $table->unique(['page', 'section', 'key']);
++        });
++    }
++
++    public function down(): void
++    {
++        Schema::dropIfExists('media_items');
++    }
++};
+diff --git a/database/migrations/2026_07_16_000014_create_settings_table.php b/database/migrations/2026_07_16_000014_create_settings_table.php
+new file mode 100644
+index 0000000..a51f8a5
+--- /dev/null
++++ b/database/migrations/2026_07_16_000014_create_settings_table.php
+@@ -0,0 +1,27 @@
++<?php
++
++use Illuminate\Database\Migrations\Migration;
++use Illuminate\Database\Schema\Blueprint;
++use Illuminate\Support\Facades\Schema;
++
++return new class extends Migration
++{
++    public function up(): void
++    {
++        Schema::create('settings', function (Blueprint $table) {
++            $table->id();
++            $table->string('key', 100)->unique();
++            $table->text('value');
++            $table->string('type', 20)->default('text');
++            $table->string('group', 50);
++            $table->string('label_ar', 255);
++            $table->string('label_en', 255);
++            $table->timestamps();
++        });
++    }
++
++    public function down(): void
++    {
++        Schema::dropIfExists('settings');
++    }
++};

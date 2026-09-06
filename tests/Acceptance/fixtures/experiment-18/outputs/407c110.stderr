@@ -1,0 +1,56 @@
+new file: database/migrations/2026_07_16_000001_create_categories_table.php — own-file context is in the diff, not fetched
+new file: database/migrations/2026_07_16_000002_create_dishes_table.php — own-file context is in the diff, not fetched
+new file: database/migrations/2026_07_16_000003_create_branches_table.php — own-file context is in the diff, not fetched
+new file: database/migrations/2026_07_16_000004_create_catering_packages_table.php — own-file context is in the diff, not fetched
+new file: database/migrations/2026_07_16_000005_create_catering_package_features_table.php — own-file context is in the diff, not fetched
+new file: database/migrations/2026_07_16_000006_create_sample_menus_table.php — own-file context is in the diff, not fetched
+new file: database/migrations/2026_07_16_000007_create_sample_menu_dishes_table.php — own-file context is in the diff, not fetched
+new file: database/migrations/2026_07_16_000008_create_quote_requests_table.php — own-file context is in the diff, not fetched
+new file: database/migrations/2026_07_16_000009_create_testimonials_table.php — own-file context is in the diff, not fetched
+new file: database/migrations/2026_07_16_000010_create_timelines_table.php — own-file context is in the diff, not fetched
+new file: database/migrations/2026_07_16_000011_create_delivery_apps_table.php — own-file context is in the diff, not fetched
+new file: database/migrations/2026_07_16_000012_create_page_contents_table.php — own-file context is in the diff, not fetched
+new file: database/migrations/2026_07_16_000013_create_media_items_table.php — own-file context is in the diff, not fetched
+new file: database/migrations/2026_07_16_000014_create_settings_table.php — own-file context is in the diff, not fetched
+framework reference: Illuminate\Support\Facades\Schema::create declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Schema.php:34 (@method static void create(string $table, \Closure $callback))
+framework reference: Illuminate\Support\Facades\Schema::dropIfExists declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Schema.php:36 (@method static void dropIfExists(string $table))
+dependency class: Illuminate\Database\Schema\Blueprint provided by vendor/laravel/framework/src/Illuminate/Database/Schema/Blueprint.php; surface not fetched
+framework reference: Illuminate\Support\Facades\Schema::create declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Schema.php:34 (@method static void create(string $table, \Closure $callback))
+framework reference: Illuminate\Support\Facades\Schema::dropIfExists declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Schema.php:36 (@method static void dropIfExists(string $table))
+dependency class: Illuminate\Database\Schema\Blueprint provided by vendor/laravel/framework/src/Illuminate/Database/Schema/Blueprint.php; surface not fetched
+framework reference: Illuminate\Support\Facades\Schema::create declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Schema.php:34 (@method static void create(string $table, \Closure $callback))
+framework reference: Illuminate\Support\Facades\Schema::dropIfExists declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Schema.php:36 (@method static void dropIfExists(string $table))
+dependency class: Illuminate\Database\Schema\Blueprint provided by vendor/laravel/framework/src/Illuminate/Database/Schema/Blueprint.php; surface not fetched
+framework reference: Illuminate\Support\Facades\Schema::create declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Schema.php:34 (@method static void create(string $table, \Closure $callback))
+framework reference: Illuminate\Support\Facades\Schema::dropIfExists declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Schema.php:36 (@method static void dropIfExists(string $table))
+dependency class: Illuminate\Database\Schema\Blueprint provided by vendor/laravel/framework/src/Illuminate/Database/Schema/Blueprint.php; surface not fetched
+framework reference: Illuminate\Support\Facades\Schema::create declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Schema.php:34 (@method static void create(string $table, \Closure $callback))
+framework reference: Illuminate\Support\Facades\Schema::dropIfExists declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Schema.php:36 (@method static void dropIfExists(string $table))
+dependency class: Illuminate\Database\Schema\Blueprint provided by vendor/laravel/framework/src/Illuminate/Database/Schema/Blueprint.php; surface not fetched
+framework reference: Illuminate\Support\Facades\Schema::create declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Schema.php:34 (@method static void create(string $table, \Closure $callback))
+framework reference: Illuminate\Support\Facades\Schema::dropIfExists declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Schema.php:36 (@method static void dropIfExists(string $table))
+dependency class: Illuminate\Database\Schema\Blueprint provided by vendor/laravel/framework/src/Illuminate/Database/Schema/Blueprint.php; surface not fetched
+framework reference: Illuminate\Support\Facades\Schema::create declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Schema.php:34 (@method static void create(string $table, \Closure $callback))
+framework reference: Illuminate\Support\Facades\Schema::dropIfExists declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Schema.php:36 (@method static void dropIfExists(string $table))
+dependency class: Illuminate\Database\Schema\Blueprint provided by vendor/laravel/framework/src/Illuminate/Database/Schema/Blueprint.php; surface not fetched
+framework reference: Illuminate\Support\Facades\Schema::create declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Schema.php:34 (@method static void create(string $table, \Closure $callback))
+framework reference: Illuminate\Support\Facades\Schema::dropIfExists declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Schema.php:36 (@method static void dropIfExists(string $table))
+dependency class: Illuminate\Database\Schema\Blueprint provided by vendor/laravel/framework/src/Illuminate/Database/Schema/Blueprint.php; surface not fetched
+framework reference: Illuminate\Support\Facades\Schema::create declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Schema.php:34 (@method static void create(string $table, \Closure $callback))
+framework reference: Illuminate\Support\Facades\Schema::dropIfExists declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Schema.php:36 (@method static void dropIfExists(string $table))
+dependency class: Illuminate\Database\Schema\Blueprint provided by vendor/laravel/framework/src/Illuminate/Database/Schema/Blueprint.php; surface not fetched
+framework reference: Illuminate\Support\Facades\Schema::create declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Schema.php:34 (@method static void create(string $table, \Closure $callback))
+framework reference: Illuminate\Support\Facades\Schema::dropIfExists declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Schema.php:36 (@method static void dropIfExists(string $table))
+dependency class: Illuminate\Database\Schema\Blueprint provided by vendor/laravel/framework/src/Illuminate/Database/Schema/Blueprint.php; surface not fetched
+framework reference: Illuminate\Support\Facades\Schema::create declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Schema.php:34 (@method static void create(string $table, \Closure $callback))
+framework reference: Illuminate\Support\Facades\Schema::dropIfExists declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Schema.php:36 (@method static void dropIfExists(string $table))
+dependency class: Illuminate\Database\Schema\Blueprint provided by vendor/laravel/framework/src/Illuminate/Database/Schema/Blueprint.php; surface not fetched
+framework reference: Illuminate\Support\Facades\Schema::create declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Schema.php:34 (@method static void create(string $table, \Closure $callback))
+framework reference: Illuminate\Support\Facades\Schema::dropIfExists declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Schema.php:36 (@method static void dropIfExists(string $table))
+dependency class: Illuminate\Database\Schema\Blueprint provided by vendor/laravel/framework/src/Illuminate/Database/Schema/Blueprint.php; surface not fetched
+framework reference: Illuminate\Support\Facades\Schema::create declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Schema.php:34 (@method static void create(string $table, \Closure $callback))
+framework reference: Illuminate\Support\Facades\Schema::dropIfExists declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Schema.php:36 (@method static void dropIfExists(string $table))
+dependency class: Illuminate\Database\Schema\Blueprint provided by vendor/laravel/framework/src/Illuminate/Database/Schema/Blueprint.php; surface not fetched
+framework reference: Illuminate\Support\Facades\Schema::create declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Schema.php:34 (@method static void create(string $table, \Closure $callback))
+framework reference: Illuminate\Support\Facades\Schema::dropIfExists declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Schema.php:36 (@method static void dropIfExists(string $table))
+dependency class: Illuminate\Database\Schema\Blueprint provided by vendor/laravel/framework/src/Illuminate/Database/Schema/Blueprint.php; surface not fetched

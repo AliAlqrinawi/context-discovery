@@ -1,0 +1,36 @@
+diff --git a/database/seeders/MediaItemSeeder.php b/database/seeders/MediaItemSeeder.php
+index 30902e1..94c21f7 100644
+--- a/database/seeders/MediaItemSeeder.php
++++ b/database/seeders/MediaItemSeeder.php
+@@ -13,13 +13,9 @@ public function run(): void
+             ['page' => 'global', 'section' => 'brand', 'key' => 'logo_dark', 'alt_ar' => 'لوجو أبو السيد (داكن)', 'alt_en' => 'Abou El Sid Logo (Dark)'],
+             ['page' => 'global', 'section' => 'brand', 'key' => 'logo_white', 'alt_ar' => 'لوجو أبو السيد (أبيض)', 'alt_en' => 'Abou El Sid Logo (White)'],
+             ['page' => 'home', 'section' => 'hero', 'key' => 'portrait', 'alt_ar' => 'شخصية أبو السيد', 'alt_en' => 'Abou El Sid Portrait'],
+-            ['page' => 'home', 'section' => 'hero', 'key' => 'background', 'alt_ar' => 'خلفية الهيرو', 'alt_en' => 'Hero Background'],
+             ['page' => 'home', 'section' => 'story_teaser', 'key' => 'image', 'alt_ar' => 'صورة قسم الحكاية', 'alt_en' => 'Story Section Image'],
+             ['page' => 'story', 'section' => 'hero', 'key' => 'portrait', 'alt_ar' => 'بورتريه الحكاية', 'alt_en' => 'Story Portrait'],
+             ['page' => 'catering', 'section' => 'quote_form', 'key' => 'image', 'alt_ar' => 'صورة فورم الكاترينج', 'alt_en' => 'Catering Form Image'],
+-            ['page' => 'global', 'section' => 'textures', 'key' => 'green', 'alt_ar' => 'تكستشر أخضر', 'alt_en' => 'Green Texture'],
+-            ['page' => 'global', 'section' => 'textures', 'key' => 'gold', 'alt_ar' => 'تكستشر ذهبي', 'alt_en' => 'Gold Texture'],
+-            ['page' => 'global', 'section' => 'textures', 'key' => 'red', 'alt_ar' => 'تكستشر أحمر', 'alt_en' => 'Red Texture'],
+         ];
+ 
+         foreach ($mediaItems as $item) {
+diff --git a/tests/Feature/RepositoriesTest.php b/tests/Feature/RepositoriesTest.php
+index 40687c7..0b1c4a6 100644
+--- a/tests/Feature/RepositoriesTest.php
++++ b/tests/Feature/RepositoriesTest.php
+@@ -85,10 +85,10 @@ public function test_media_item_repository_get_by_page_groups_by_section_and_key
+     {
+         $repo = new MediaItemRepository;
+ 
+-        $result = $repo->getByPage('global', 'textures');
++        $result = $repo->getByPage('global', 'brand');
+ 
+-        $this->assertTrue($result->has('textures'));
+-        $this->assertTrue($result->get('textures')->has('green'));
++        $this->assertTrue($result->has('brand'));
++        $this->assertTrue($result->get('brand')->has('logo_dark'));
+     }
+ 
+     public function test_media_item_repository_crud(): void

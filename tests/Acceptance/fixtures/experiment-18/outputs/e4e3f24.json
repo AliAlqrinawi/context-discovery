@@ -1,0 +1,172 @@
+{
+    "bundle_version": 1,
+    "budget_tokens": 8000,
+    "used_tokens": 334,
+    "items": [
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\User, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/User.php",
+                "member": "casts",
+                "lines": [
+                    40,
+                    51
+                ]
+            },
+            "payload": "    /**\n     * Get the attributes that should be cast.\n     *\n     * @return array<string, string>\n     */\n    protected function casts(): array\n    {\n        return [\n            'email_verified_at' => 'datetime',\n            'password' => 'hashed',\n        ];\n    }",
+            "tokens": 67
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\User, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/User.php",
+                "member": "fillable",
+                "lines": [
+                    18,
+                    28
+                ]
+            },
+            "payload": "    /**\n     * The attributes that are mass assignable.\n     *\n     * @var list<string>\n     */\n    protected $fillable = [\n        'name',\n        'email',\n        'password',\n        'role',\n    ];",
+            "tokens": 50
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\User, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/User.php",
+                "member": "hidden",
+                "lines": [
+                    30,
+                    38
+                ]
+            },
+            "payload": "    /**\n     * The attributes that should be hidden for serialization.\n     *\n     * @var list<string>\n     */\n    protected $hidden = [\n        'password',\n        'remember_token',\n    ];",
+            "tokens": 48
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Enums\\BranchLocationEnum::cases, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "tests/Unit/EnumsTest.php",
+                "member": "App\\Enums\\BranchLocationEnum::cases",
+                "lines": [
+                    1,
+                    99
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Enums\\BudgetRangeEnum::cases, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "tests/Unit/EnumsTest.php",
+                "member": "App\\Enums\\BudgetRangeEnum::cases",
+                "lines": [
+                    1,
+                    99
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Enums\\EventTypeEnum::cases, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "tests/Unit/EnumsTest.php",
+                "member": "App\\Enums\\EventTypeEnum::cases",
+                "lines": [
+                    1,
+                    99
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Enums\\MediaTypeEnum::cases, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "tests/Unit/EnumsTest.php",
+                "member": "App\\Enums\\MediaTypeEnum::cases",
+                "lines": [
+                    1,
+                    99
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Enums\\PageEnum::cases, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "tests/Unit/EnumsTest.php",
+                "member": "App\\Enums\\PageEnum::cases",
+                "lines": [
+                    1,
+                    99
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Enums\\QuoteRequestStatusEnum::cases, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "tests/Unit/EnumsTest.php",
+                "member": "App\\Enums\\QuoteRequestStatusEnum::cases",
+                "lines": [
+                    1,
+                    99
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Enums\\UserRoleEnum::cases, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "tests/Unit/EnumsTest.php",
+                "member": "App\\Enums\\UserRoleEnum::cases",
+                "lines": [
+                    1,
+                    99
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the change removes a trait from a class body; how pre-existing rows behave after it depends on production data state",
+            "assertion_kind": "unverifiable_premise",
+            "provenance": {
+                "path": "app/Models/User.php",
+                "lines": [
+                    7,
+                    18
+                ]
+            },
+            "payload": "ASSUMPTION: behaviour depends on whether pre-existing rows are affected in production; no backfill migration present",
+            "tokens": 29
+        }
+    ],
+    "dropped": []
+}

@@ -1,0 +1,76 @@
+diff --git a/.dockerignore b/.dockerignore
+new file mode 100644
+index 0000000..621e604
+--- /dev/null
++++ b/.dockerignore
+@@ -0,0 +1,5 @@
++vendor
++node_modules
++.env
++.git
++storage/logs/*
+diff --git a/.github/workflows/deploy.yml b/.github/workflows/deploy.yml
+index fecd5ee..04be0e7 100644
+--- a/.github/workflows/deploy.yml
++++ b/.github/workflows/deploy.yml
+@@ -17,6 +17,31 @@ jobs:
+       - name: Install dependencies
+         run: composer install --prefer-dist --no-progress
+ 
++  docker:
++    needs: build
++    runs-on: ubuntu-latest
++    steps:
++      - uses: actions/checkout@v4
++
++      - name: Set image tag from commit SHA
++        id: meta
++        run: echo "tag=${GITHUB_SHA::7}" >> "$GITHUB_OUTPUT"
++
++      - name: Log in to Docker Hub
++        uses: docker/login-action@v3
++        with:
++          username: ${{ secrets.DOCKERHUB_USERNAME }}
++          password: ${{ secrets.DOCKERHUB_TOKEN }}
++
++      - name: Build and push
++        uses: docker/build-push-action@v6
++        with:
++          context: .
++          push: true
++          tags: |
++            ${{ secrets.DOCKERHUB_USERNAME }}/abouelsid-backend:latest
++            ${{ secrets.DOCKERHUB_USERNAME }}/abouelsid-backend:${{ steps.meta.outputs.tag }}
++
+   deploy:
+     needs: build
+     runs-on: ubuntu-latest
+diff --git a/Dockerfile b/Dockerfile
+new file mode 100644
+index 0000000..b9fa30f
+--- /dev/null
++++ b/Dockerfile
+@@ -0,0 +1,23 @@
++FROM php:8.4-apache
++
++# System deps and PHP extensions Laravel commonly needs
++RUN apt-get update && apt-get install -y \
++    git unzip libpng-dev libonig-dev libxml2-dev libzip-dev \
++    && docker-php-ext-install pdo_mysql mbstring bcmath xml zip gd
++
++# Composer
++COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
++
++# Apache: point docroot at Laravel's public/ and allow .htaccess
++ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
++RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf \
++    && sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf \
++    && a2enmod rewrite
++
++WORKDIR /var/www/html
++COPY . .
++
++RUN composer install --no-dev --optimize-autoloader \
++    && chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
++
++EXPOSE 80

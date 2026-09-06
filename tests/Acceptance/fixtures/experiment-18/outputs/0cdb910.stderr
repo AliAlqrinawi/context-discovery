@@ -1,0 +1,4 @@
+dependency member: Dedoc\Scramble\Scramble::configure declared at vendor/dedoc/scramble/src/Scramble.php:60; source not fetched
+dependency member: Dedoc\Scramble\Support\Generator\SecurityScheme::apiKey declared at vendor/dedoc/scramble/src/Support/Generator/SecurityScheme.php:25; source not fetched
+dependency member: Dedoc\Scramble\Support\Generator\SecurityScheme::http declared at vendor/dedoc/scramble/src/Support/Generator/SecurityScheme.php:30; source not fetched
+dependency class: Dedoc\Scramble\Support\Generator\OpenApi provided by vendor/dedoc/scramble/src/Support/Generator/OpenApi.php; surface not fetched

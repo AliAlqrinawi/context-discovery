@@ -1,0 +1,57 @@
+new file: app/Services/CacheGroup.php — own-file context is in the diff, not fetched
+new file: tests/Feature/Actions/CacheGroupTest.php — own-file context is in the diff, not fetched
+already in the diff: App\Services\CacheGroup::flush declared in app/Services/CacheGroup.php; not fetched again
+already in the diff: App\Services\CacheGroup::flush declared in app/Services/CacheGroup.php; not fetched again
+already in the diff: App\Services\CacheGroup::remember declared in app/Services/CacheGroup.php; not fetched again
+already in the diff: App\Services\CacheGroup::flush declared in app/Services/CacheGroup.php; not fetched again
+already in the diff: App\Services\CacheGroup::flush declared in app/Services/CacheGroup.php; not fetched again
+already in the diff: App\Services\CacheGroup::flush declared in app/Services/CacheGroup.php; not fetched again
+already in the diff: App\Services\CacheGroup::flush declared in app/Services/CacheGroup.php; not fetched again
+already in the diff: App\Services\CacheGroup::flush declared in app/Services/CacheGroup.php; not fetched again
+already in the diff: App\Services\CacheGroup::remember declared in app/Services/CacheGroup.php; not fetched again
+already in the diff: App\Services\CacheGroup::remember declared in app/Services/CacheGroup.php; not fetched again
+already in the diff: App\Services\CacheGroup::flush declared in app/Services/CacheGroup.php; not fetched again
+already in the diff: App\Services\CacheGroup::flush declared in app/Services/CacheGroup.php; not fetched again
+already in the diff: App\Services\CacheGroup::flush declared in app/Services/CacheGroup.php; not fetched again
+already in the diff: App\Services\CacheGroup::flush declared in app/Services/CacheGroup.php; not fetched again
+already in the diff: App\Services\CacheGroup::remember declared in app/Services/CacheGroup.php; not fetched again
+already in the diff: App\Services\CacheGroup::flush declared in app/Services/CacheGroup.php; not fetched again
+already in the diff: App\Services\CacheGroup::flush declared in app/Services/CacheGroup.php; not fetched again
+already in the diff: App\Services\CacheGroup::flush declared in app/Services/CacheGroup.php; not fetched again
+already in the diff: App\Services\CacheGroup::remember declared in app/Services/CacheGroup.php; not fetched again
+already in the diff: App\Services\CacheGroup::flush declared in app/Services/CacheGroup.php; not fetched again
+already in the diff: App\Services\CacheGroup::flush declared in app/Services/CacheGroup.php; not fetched again
+already in the diff: App\Services\CacheGroup::remember declared in app/Services/CacheGroup.php; not fetched again
+already in the diff: App\Services\CacheGroup::flush declared in app/Services/CacheGroup.php; not fetched again
+already in the diff: App\Services\CacheGroup::flush declared in app/Services/CacheGroup.php; not fetched again
+already in the diff: App\Services\CacheGroup::remember declared in app/Services/CacheGroup.php; not fetched again
+already in the diff: App\Services\CacheGroup::flush declared in app/Services/CacheGroup.php; not fetched again
+already in the diff: App\Services\CacheGroup::flush declared in app/Services/CacheGroup.php; not fetched again
+already in the diff: App\Services\CacheGroup::flush declared in app/Services/CacheGroup.php; not fetched again
+already in the diff: App\Services\CacheGroup::remember declared in app/Services/CacheGroup.php; not fetched again
+already in the diff: App\Services\CacheGroup::flush declared in app/Services/CacheGroup.php; not fetched again
+already in the diff: App\Services\CacheGroup::flush declared in app/Services/CacheGroup.php; not fetched again
+already in the diff: App\Services\CacheGroup::remember declared in app/Services/CacheGroup.php; not fetched again
+already in the diff: App\Services\CacheGroup::flush declared in app/Services/CacheGroup.php; not fetched again
+already in the diff: App\Services\CacheGroup::flush declared in app/Services/CacheGroup.php; not fetched again
+already in the diff: App\Services\CacheGroup::remember declared in app/Services/CacheGroup.php; not fetched again
+already in the diff: App\Services\CacheGroup::flush declared in app/Services/CacheGroup.php; not fetched again
+already in the diff: App\Services\CacheGroup::flush declared in app/Services/CacheGroup.php; not fetched again
+already in the diff: App\Services\CacheGroup::flush declared in app/Services/CacheGroup.php; not fetched again
+already in the diff: App\Services\CacheGroup::remember declared in app/Services/CacheGroup.php; not fetched again
+already in the diff: App\Services\CacheGroup::flush declared in app/Services/CacheGroup.php; not fetched again
+already in the diff: App\Services\CacheGroup::flush declared in app/Services/CacheGroup.php; not fetched again
+already in the diff: App\Services\CacheGroup::flush declared in app/Services/CacheGroup.php; not fetched again
+already in the diff: App\Services\CacheGroup::remember declared in app/Services/CacheGroup.php; not fetched again
+already in the diff: App\Services\CacheGroup::flush declared in app/Services/CacheGroup.php; not fetched again
+framework reference: Illuminate\Support\Facades\Cache::remember declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Cache.php:40 (@method static mixed remember(\UnitEnum|string $key, \Closure|\DateTimeInterface|\DateInterval|int|null $ttl, \Closure $callback))
+framework reference: Illuminate\Support\Facades\Cache::forget declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Cache.php:46 (@method static bool forget(\UnitEnum|array|string $key))
+framework reference: Illuminate\Support\Facades\Cache::get declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Cache.php:23 (@method static mixed get(\UnitEnum|array|string $key, mixed $default = null))
+framework reference: Illuminate\Support\Facades\Cache::put declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Cache.php:32 (@method static bool put(\UnitEnum|array|string $key, mixed $value, \DateTimeInterface|\DateInterval|int|null $ttl = null))
+missing PSR-4 entry: DateTimeInterface named in app/Services/CacheGroup.php
+missing PSR-4 entry: Closure named in app/Services/CacheGroup.php
+framework reference: Illuminate\Support\Facades\Cache::flush declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Cache.php:64 (@method static bool flush())
+framework reference: Illuminate\Support\Facades\Cache::has declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Cache.php:21 (@method static bool has(\UnitEnum|array|string $key))
+unresolved named_reference: App\Models\Category::where in tests/Feature/Actions/CacheGroupTest.php
+already in the diff: App\Services\CacheGroup::keys declared in app/Services/CacheGroup.php; not fetched again
+unresolved named_reference: App\Models\Dish::first in tests/Feature/Actions/CacheGroupTest.php

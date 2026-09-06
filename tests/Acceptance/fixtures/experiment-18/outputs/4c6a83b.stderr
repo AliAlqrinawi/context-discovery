@@ -1,0 +1,88 @@
+unreadable path: app/Http/Controllers/Auth/AuthController.php (no assertions extracted)
+unreadable path: app/Http/Controllers/BranchController.php (no assertions extracted)
+unreadable path: app/Http/Controllers/CategoryController.php (no assertions extracted)
+unreadable path: app/Http/Controllers/Catering/CateringPackageController.php (no assertions extracted)
+unreadable path: app/Http/Controllers/Catering/QuoteRequestController.php (no assertions extracted)
+unreadable path: app/Http/Controllers/Catering/SampleMenuController.php (no assertions extracted)
+unreadable path: app/Http/Controllers/DeliveryAppController.php (no assertions extracted)
+unreadable path: app/Http/Controllers/DishController.php (no assertions extracted)
+unreadable path: app/Http/Controllers/MediaItemController.php (no assertions extracted)
+unreadable path: app/Http/Controllers/PageContentController.php (no assertions extracted)
+unreadable path: app/Http/Controllers/SettingController.php (no assertions extracted)
+unreadable path: app/Http/Controllers/TestimonialController.php (no assertions extracted)
+unreadable path: app/Http/Controllers/TimelineController.php (no assertions extracted)
+unreadable path: app/Http/Controllers/UserController.php (no assertions extracted)
+new file: app/Http/Requests/Auth/LoginRequest.php — own-file context is in the diff, not fetched
+new file: app/Http/Requests/BaseFormRequest.php — own-file context is in the diff, not fetched
+new file: app/Http/Requests/Branch/StoreBranchRequest.php — own-file context is in the diff, not fetched
+new file: app/Http/Requests/Branch/UpdateBranchRequest.php — own-file context is in the diff, not fetched
+new file: app/Http/Requests/Catering/StorePackageRequest.php — own-file context is in the diff, not fetched
+new file: app/Http/Requests/Catering/StoreQuoteRequestRequest.php — own-file context is in the diff, not fetched
+new file: app/Http/Requests/Catering/StoreSampleMenuRequest.php — own-file context is in the diff, not fetched
+new file: app/Http/Requests/Catering/UpdatePackageRequest.php — own-file context is in the diff, not fetched
+new file: app/Http/Requests/Catering/UpdateQuoteRequestStatusRequest.php — own-file context is in the diff, not fetched
+new file: app/Http/Requests/DeliveryApp/StoreDeliveryAppRequest.php — own-file context is in the diff, not fetched
+new file: app/Http/Requests/Dish/StoreDishRequest.php — own-file context is in the diff, not fetched
+new file: app/Http/Requests/Dish/UpdateDishRequest.php — own-file context is in the diff, not fetched
+new file: app/Http/Requests/MediaItem/UploadMediaRequest.php — own-file context is in the diff, not fetched
+new file: app/Http/Requests/PageContent/BulkUpdatePageContentRequest.php — own-file context is in the diff, not fetched
+new file: app/Http/Requests/PageContent/UpdatePageContentRequest.php — own-file context is in the diff, not fetched
+new file: app/Http/Requests/Setting/UpdateSettingRequest.php — own-file context is in the diff, not fetched
+new file: app/Http/Requests/Testimonial/StoreTestimonialRequest.php — own-file context is in the diff, not fetched
+new file: app/Http/Requests/Timeline/StoreTimelineRequest.php — own-file context is in the diff, not fetched
+new file: app/Http/Requests/User/StoreUserRequest.php — own-file context is in the diff, not fetched
+new file: app/Http/Requests/User/UpdateUserRequest.php — own-file context is in the diff, not fetched
+new file: app/Http/Resources/Auth/AuthResource.php — own-file context is in the diff, not fetched
+new file: app/Http/Resources/Branch/BranchResource.php — own-file context is in the diff, not fetched
+new file: app/Http/Resources/Category/CategoryResource.php — own-file context is in the diff, not fetched
+new file: app/Http/Resources/Catering/PackageResource.php — own-file context is in the diff, not fetched
+new file: app/Http/Resources/Catering/QuoteRequestResource.php — own-file context is in the diff, not fetched
+new file: app/Http/Resources/Catering/SampleMenuResource.php — own-file context is in the diff, not fetched
+new file: app/Http/Resources/Concerns/ResolvesLocale.php — own-file context is in the diff, not fetched
+new file: app/Http/Resources/DeliveryApp/DeliveryAppResource.php — own-file context is in the diff, not fetched
+unreadable path: app/Http/Resources/Dish/DishCollection.php (no assertions extracted)
+new file: app/Http/Resources/Dish/DishResource.php — own-file context is in the diff, not fetched
+new file: app/Http/Resources/MediaItem/MediaItemResource.php — own-file context is in the diff, not fetched
+new file: app/Http/Resources/PageContent/PageContentResource.php — own-file context is in the diff, not fetched
+new file: app/Http/Resources/Setting/SettingResource.php — own-file context is in the diff, not fetched
+new file: app/Http/Resources/Testimonial/TestimonialResource.php — own-file context is in the diff, not fetched
+new file: app/Http/Resources/Timeline/TimelineResource.php — own-file context is in the diff, not fetched
+new file: app/Http/Resources/User/UserResource.php — own-file context is in the diff, not fetched
+new file: lang/ar/validation.php — own-file context is in the diff, not fetched
+new file: tests/Feature/AdminApiTest.php — own-file context is in the diff, not fetched
+new file: tests/Feature/PublicApiTest.php — own-file context is in the diff, not fetched
+dependency class: Illuminate\Contracts\Validation\Validator provided by vendor/laravel/framework/src/Illuminate/Contracts/Validation/Validator.php; surface not fetched
+dependency class: Illuminate\Http\Exceptions\HttpResponseException provided by vendor/laravel/framework/src/Illuminate/Http/Exceptions/HttpResponseException.php; surface not fetched
+dependency member: Illuminate\Validation\Rule::in declared at vendor/laravel/framework/src/Illuminate/Validation/Rule.php:118; source not fetched
+dependency member: Illuminate\Validation\Rule::in declared at vendor/laravel/framework/src/Illuminate/Validation/Rule.php:118; source not fetched
+unresolved named_reference: App\Models\Setting::pluck in app/Http/Requests/Setting/UpdateSettingRequest.php
+dependency class: Illuminate\Contracts\Validation\Validator provided by vendor/laravel/framework/src/Illuminate/Contracts/Validation/Validator.php; surface not fetched
+dependency member: Illuminate\Validation\Rule::unique declared at vendor/laravel/framework/src/Illuminate/Validation/Rule.php:94; source not fetched
+dependency class: Illuminate\Http\Request provided by vendor/laravel/framework/src/Illuminate/Http/Request.php; surface not fetched
+dependency class: Illuminate\Http\Request provided by vendor/laravel/framework/src/Illuminate/Http/Request.php; surface not fetched
+dependency class: Illuminate\Http\Request provided by vendor/laravel/framework/src/Illuminate/Http/Request.php; surface not fetched
+dependency class: Illuminate\Http\Request provided by vendor/laravel/framework/src/Illuminate/Http/Request.php; surface not fetched
+dependency class: Illuminate\Http\Request provided by vendor/laravel/framework/src/Illuminate/Http/Request.php; surface not fetched
+dependency class: Illuminate\Http\Request provided by vendor/laravel/framework/src/Illuminate/Http/Request.php; surface not fetched
+dependency class: Illuminate\Http\Request provided by vendor/laravel/framework/src/Illuminate/Http/Request.php; surface not fetched
+dependency class: Illuminate\Http\Request provided by vendor/laravel/framework/src/Illuminate/Http/Request.php; surface not fetched
+already in the diff: App\Http\Resources\Category\CategoryResource declared in app/Http/Resources/Category/CategoryResource.php; not fetched again
+dependency class: Illuminate\Http\Request provided by vendor/laravel/framework/src/Illuminate/Http/Request.php; surface not fetched
+dependency class: Illuminate\Http\Request provided by vendor/laravel/framework/src/Illuminate/Http/Request.php; surface not fetched
+dependency class: Illuminate\Http\Request provided by vendor/laravel/framework/src/Illuminate/Http/Request.php; surface not fetched
+dependency class: Illuminate\Http\Request provided by vendor/laravel/framework/src/Illuminate/Http/Request.php; surface not fetched
+dependency class: Illuminate\Http\Request provided by vendor/laravel/framework/src/Illuminate/Http/Request.php; surface not fetched
+dependency class: Illuminate\Http\Request provided by vendor/laravel/framework/src/Illuminate/Http/Request.php; surface not fetched
+dependency class: Illuminate\Auth\AuthenticationException provided by vendor/laravel/framework/src/Illuminate/Auth/AuthenticationException.php; surface not fetched
+dependency class: Illuminate\Http\Request provided by vendor/laravel/framework/src/Illuminate/Http/Request.php; surface not fetched
+dependency class: Illuminate\Database\Eloquent\ModelNotFoundException provided by vendor/laravel/framework/src/Illuminate/Database/Eloquent/ModelNotFoundException.php; surface not fetched
+dependency class: Illuminate\Validation\ValidationException provided by vendor/laravel/framework/src/Illuminate/Validation/ValidationException.php; surface not fetched
+framework reference: Illuminate\Support\Facades\Route::prefix declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Route.php:100 (@method static \Illuminate\Routing\RouteRegistrar prefix(string $prefix))
+framework reference: Illuminate\Support\Facades\Route::middleware declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Route.php:96 (@method static \Illuminate\Routing\RouteRegistrar middleware(array|string|null $middleware))
+framework reference: Illuminate\Support\Facades\Route::get declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Route.php:6 (@method static \Illuminate\Routing\Route get(string $uri, array|string|callable|null $action = null))
+framework reference: Illuminate\Support\Facades\Route::post declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Route.php:7 (@method static \Illuminate\Routing\Route post(string $uri, array|string|callable|null $action = null))
+framework reference: Illuminate\Support\Facades\Route::put declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Route.php:8 (@method static \Illuminate\Routing\Route put(string $uri, array|string|callable|null $action = null))
+framework reference: Illuminate\Support\Facades\Route::delete declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Route.php:10 (@method static \Illuminate\Routing\Route delete(string $uri, array|string|callable|null $action = null))
+framework reference: Illuminate\Support\Facades\Route::patch declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Route.php:9 (@method static \Illuminate\Routing\Route patch(string $uri, array|string|callable|null $action = null))
+unresolved named_reference: App\Models\User::where in tests/Feature/AdminApiTest.php
+unresolved named_reference: App\Models\Category::where in tests/Feature/PublicApiTest.php

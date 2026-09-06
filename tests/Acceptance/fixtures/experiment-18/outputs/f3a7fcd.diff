@@ -1,0 +1,26 @@
+diff --git a/database/seeders/SettingSeeder.php b/database/seeders/SettingSeeder.php
+index b9b23e0..85d0338 100644
+--- a/database/seeders/SettingSeeder.php
++++ b/database/seeders/SettingSeeder.php
+@@ -10,6 +10,8 @@ class SettingSeeder extends Seeder
+     public function run(): void
+     {
+         $settings = [
++            ['key' => 'restaurant_name_ar', 'value' => 'أبو السيد', 'type' => 'text', 'group' => 'general', 'label_ar' => 'اسم المطعم (عربي)', 'label_en' => 'Restaurant Name (Arabic)'],
++            ['key' => 'restaurant_name_en', 'value' => 'Abou El Sid', 'type' => 'text', 'group' => 'general', 'label_ar' => 'اسم المطعم (إنجليزي)', 'label_en' => 'Restaurant Name (English)'],
+             ['key' => 'whatsapp_number', 'value' => '+966551718800', 'type' => 'phone', 'group' => 'contact', 'label_ar' => 'رقم واتساب', 'label_en' => 'WhatsApp Number'],
+             ['key' => 'phone_jeddah', 'value' => '0551718800', 'type' => 'phone', 'group' => 'contact', 'label_ar' => 'هاتف جدة', 'label_en' => 'Jeddah Phone'],
+             ['key' => 'phone_riyadh', 'value' => '0581041912', 'type' => 'phone', 'group' => 'contact', 'label_ar' => 'هاتف الرياض', 'label_en' => 'Riyadh Phone'],
+diff --git a/tests/Feature/RepositoriesTest.php b/tests/Feature/RepositoriesTest.php
+index ab0f9e2..ab89f4a 100644
+--- a/tests/Feature/RepositoriesTest.php
++++ b/tests/Feature/RepositoriesTest.php
+@@ -114,7 +114,7 @@ public function test_setting_repository_get_all_keyed_by_key(): void
+ 
+         $result = $repo->getAll();
+ 
+-        $this->assertCount(17, $result);
++        $this->assertCount(19, $result);
+         $this->assertTrue($result->has('whatsapp_number'));
+     }
+ 

@@ -1,0 +1,246 @@
+{
+    "bundle_version": 1,
+    "budget_tokens": 8000,
+    "used_tokens": 874,
+    "items": [
+        {
+            "lever": "fetched",
+            "reason": "the region uses AuthController, which the file's use block does not import",
+            "assertion_kind": "same_file_symbol_absence",
+            "provenance": {
+                "path": "routes/api.php",
+                "lines": [
+                    3,
+                    17
+                ]
+            },
+            "payload": "use App\\Http\\Controllers\\Public\\BranchController;\nuse App\\Http\\Controllers\\Public\\CategoryController;\nuse App\\Http\\Controllers\\Public\\DeliveryAppController;\nuse App\\Http\\Controllers\\Public\\DishController;\nuse App\\Http\\Controllers\\Public\\MediaItemController;\nuse App\\Http\\Controllers\\Public\\PageContentController;\nuse App\\Http\\Controllers\\Public\\PersonalityController;\nuse App\\Http\\Controllers\\Public\\SeoController;\nuse App\\Http\\Controllers\\Public\\SettingController;\nuse App\\Http\\Controllers\\Public\\TestimonialController;\nuse App\\Http\\Controllers\\Public\\TimelineController;\nuse App\\Http\\Controllers\\Public\\Catering\\CateringPackageController;\nuse App\\Http\\Controllers\\Public\\Catering\\QuoteRequestController;\nuse App\\Http\\Controllers\\Public\\Catering\\SampleMenuController;\nuse Illuminate\\Support\\Facades\\Route;",
+            "tokens": 202
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region uses UserController, which the file's use block does not import",
+            "assertion_kind": "same_file_symbol_absence",
+            "provenance": {
+                "path": "routes/api.php",
+                "lines": [
+                    3,
+                    17
+                ]
+            },
+            "payload": "use App\\Http\\Controllers\\Public\\BranchController;\nuse App\\Http\\Controllers\\Public\\CategoryController;\nuse App\\Http\\Controllers\\Public\\DeliveryAppController;\nuse App\\Http\\Controllers\\Public\\DishController;\nuse App\\Http\\Controllers\\Public\\MediaItemController;\nuse App\\Http\\Controllers\\Public\\PageContentController;\nuse App\\Http\\Controllers\\Public\\PersonalityController;\nuse App\\Http\\Controllers\\Public\\SeoController;\nuse App\\Http\\Controllers\\Public\\SettingController;\nuse App\\Http\\Controllers\\Public\\TestimonialController;\nuse App\\Http\\Controllers\\Public\\TimelineController;\nuse App\\Http\\Controllers\\Public\\Catering\\CateringPackageController;\nuse App\\Http\\Controllers\\Public\\Catering\\QuoteRequestController;\nuse App\\Http\\Controllers\\Public\\Catering\\SampleMenuController;\nuse Illuminate\\Support\\Facades\\Route;",
+            "tokens": 202
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Enums\\BranchLocationEnum::values, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Enums/BranchLocationEnum.php",
+                "member": "values",
+                "lines": [
+                    24,
+                    27
+                ]
+            },
+            "payload": "    public static function values(): array\n    {\n        return array_column(self::cases(), 'value');\n    }",
+            "tokens": 27
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Enums\\BudgetRangeEnum::values, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Enums/BudgetRangeEnum.php",
+                "member": "values",
+                "lines": [
+                    24,
+                    27
+                ]
+            },
+            "payload": "    public static function values(): array\n    {\n        return array_column(self::cases(), 'value');\n    }",
+            "tokens": 27
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Enums\\EventTypeEnum::values, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Enums/EventTypeEnum.php",
+                "member": "values",
+                "lines": [
+                    28,
+                    31
+                ]
+            },
+            "payload": "    public static function values(): array\n    {\n        return array_column(self::cases(), 'value');\n    }",
+            "tokens": 27
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Enums\\QuoteRequestStatusEnum::values, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Enums/QuoteRequestStatusEnum.php",
+                "member": "values",
+                "lines": [
+                    22,
+                    25
+                ]
+            },
+            "payload": "    public static function values(): array\n    {\n        return array_column(self::cases(), 'value');\n    }",
+            "tokens": 27
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Models\\Setting::pluck, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Http/Requests/Setting/UpdateSettingRequest.php",
+                "member": "App\\Models\\Setting::pluck",
+                "lines": [
+                    1,
+                    41
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Category::where, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Category.php",
+                "member": "dishes",
+                "lines": [
+                    17,
+                    20
+                ]
+            },
+            "payload": "    public function dishes(): HasMany\n    {\n        return $this->hasMany(Dish::class);\n    }",
+            "tokens": 24
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Category::where, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Category.php",
+                "member": "fillable",
+                "lines": [
+                    10,
+                    15
+                ]
+            },
+            "payload": "    protected $fillable = [\n        'name_ar',\n        'name_en',\n        'slug',\n        'order',\n    ];",
+            "tokens": 27
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Setting::pluck, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Setting.php",
+                "member": "fillable",
+                "lines": [
+                    10,
+                    17
+                ]
+            },
+            "payload": "    protected $fillable = [\n        'key',\n        'value',\n        'type',\n        'group',\n        'label_ar',\n        'label_en',\n    ];",
+            "tokens": 35
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\Setting::pluck, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/Setting.php",
+                "member": "scopeForGroup",
+                "lines": [
+                    19,
+                    26
+                ]
+            },
+            "payload": "    public function scopeForGroup(Builder $query, ?string $group = null): Builder\n    {\n        if ($group !== null) {\n            $query->where('group', $group);\n        }\n\n        return $query;\n    }",
+            "tokens": 51
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\User::where, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/User.php",
+                "member": "casts",
+                "lines": [
+                    40,
+                    51
+                ]
+            },
+            "payload": "    /**\n     * Get the attributes that should be cast.\n     *\n     * @return array<string, string>\n     */\n    protected function casts(): array\n    {\n        return [\n            'email_verified_at' => 'datetime',\n            'password' => 'hashed',\n        ];\n    }",
+            "tokens": 67
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\User::where, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/User.php",
+                "member": "fillable",
+                "lines": [
+                    18,
+                    28
+                ]
+            },
+            "payload": "    /**\n     * The attributes that are mass assignable.\n     *\n     * @var list<string>\n     */\n    protected $fillable = [\n        'name',\n        'email',\n        'password',\n        'role',\n    ];",
+            "tokens": 50
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\User::where, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/User.php",
+                "member": "hidden",
+                "lines": [
+                    30,
+                    38
+                ]
+            },
+            "payload": "    /**\n     * The attributes that should be hidden for serialization.\n     *\n     * @var list<string>\n     */\n    protected $hidden = [\n        'password',\n        'remember_token',\n    ];",
+            "tokens": 48
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Models\\User::where, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "tests/Feature/AdminApiTest.php",
+                "member": "App\\Models\\User::where",
+                "lines": [
+                    1,
+                    63
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Models\\Category::where, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "tests/Feature/PublicApiTest.php",
+                "member": "App\\Models\\Category::where",
+                "lines": [
+                    1,
+                    122
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        }
+    ],
+    "dropped": []
+}

@@ -1,0 +1,12 @@
+new file: database/migrations/2026_07_25_132951_add_show_in_footer_to_branches_table.php — own-file context is in the diff, not fetched
+already in the diff: App\Repositories\BranchRepository::getAll declared in app/Repositories/BranchRepository.php; not fetched again
+dependency class: Illuminate\Database\Eloquent\Collection provided by vendor/laravel/framework/src/Illuminate/Database/Eloquent/Collection.php; surface not fetched
+call sites truncated at 20 for execute under app/
+dependency class: Illuminate\Http\Request provided by vendor/laravel/framework/src/Illuminate/Http/Request.php; surface not fetched
+dependency class: Illuminate\Http\JsonResponse provided by vendor/laravel/framework/src/Illuminate/Http/JsonResponse.php; surface not fetched
+call sites truncated at 20 for index under app/
+unresolved named_reference: App\Models\Branch::orderBy in app/Repositories/BranchRepository.php
+dependency class: Illuminate\Database\Eloquent\Collection provided by vendor/laravel/framework/src/Illuminate/Database/Eloquent/Collection.php; surface not fetched
+call sites truncated at 20 for getAll under app/
+framework reference: Illuminate\Support\Facades\Schema::table declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Schema.php:33 (@method static void table(string $table, \Closure $callback))
+dependency class: Illuminate\Database\Schema\Blueprint provided by vendor/laravel/framework/src/Illuminate/Database/Schema/Blueprint.php; surface not fetched

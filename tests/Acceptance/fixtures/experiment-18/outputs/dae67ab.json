@@ -1,0 +1,53 @@
+{
+    "bundle_version": 1,
+    "budget_tokens": 8000,
+    "used_tokens": 126,
+    "items": [
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\PageContent::updateOrCreate, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/PageContent.php",
+                "member": "fillable",
+                "lines": [
+                    10,
+                    18
+                ]
+            },
+            "payload": "    protected $fillable = [\n        'page',\n        'section',\n        'key',\n        'value_ar',\n        'value_en',\n        'type',\n        'order',\n    ];",
+            "tokens": 40
+        },
+        {
+            "lever": "fetched",
+            "reason": "the region depends on App\\Models\\PageContent::updateOrCreate, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "app/Models/PageContent.php",
+                "member": "scopeForPage",
+                "lines": [
+                    20,
+                    29
+                ]
+            },
+            "payload": "    public function scopeForPage(Builder $query, string $page, ?string $section = null): Builder\n    {\n        $query->where('page', $page);\n\n        if ($section !== null) {\n            $query->where('section', $section);\n        }\n\n        return $query;\n    }",
+            "tokens": 66
+        },
+        {
+            "lever": "flagged",
+            "reason": "the region depends on App\\Models\\PageContent::updateOrCreate, whose contract is defined in another file",
+            "assertion_kind": "named_reference",
+            "provenance": {
+                "path": "database/seeders/PageContentSeeder.php",
+                "member": "App\\Models\\PageContent::updateOrCreate",
+                "lines": [
+                    117,
+                    126
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        }
+    ],
+    "dropped": []
+}

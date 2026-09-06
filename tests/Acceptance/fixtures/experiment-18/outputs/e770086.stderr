@@ -1,0 +1,4 @@
+dependency class: Illuminate\Support\Collection provided by vendor/laravel/framework/src/Illuminate/Collections/Collection.php; surface not fetched
+call sites truncated at 20 for execute under app/
+dependency class: Illuminate\Database\Eloquent\Builder provided by vendor/laravel/framework/src/Illuminate/Database/Eloquent/Builder.php; surface not fetched
+dependency class: Illuminate\Support\Collection provided by vendor/laravel/framework/src/Illuminate/Collections/Collection.php; surface not fetched

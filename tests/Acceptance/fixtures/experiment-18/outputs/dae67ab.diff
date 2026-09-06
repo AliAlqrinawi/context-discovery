@@ -1,0 +1,26 @@
+diff --git a/database/seeders/PageContentSeeder.php b/database/seeders/PageContentSeeder.php
+index 6de1f82..8d6e245 100644
+--- a/database/seeders/PageContentSeeder.php
++++ b/database/seeders/PageContentSeeder.php
+@@ -52,6 +52,9 @@ public function run(): void
+             ['page' => 'story', 'section' => 'hero', 'key' => 'badge', 'value_ar' => 'حكايتنا · OUR STORY', 'value_en' => 'Our Story · OUR STORY'],
+             ['page' => 'story', 'section' => 'hero', 'key' => 'title', 'value_ar' => 'من بيت في القاهرة القديمة إلى موائدكم اليوم', 'value_en' => 'From a House in Old Cairo to Your Tables Today'],
+             ['page' => 'story', 'section' => 'hero', 'key' => 'description', 'value_ar' => 'في أزقة القاهرة القديمة، كان رجلٌ كريم اسمه «أبو السيد» يفتح بيته للضيوف، ويُطعمهم من طبخه بقلب.', 'value_en' => 'In the alleys of Old Cairo, a generous man named Abou El Sid opened his home to guests and fed them from his heart.'],
++            ['page' => 'story', 'section' => 'hero', 'key' => 'quote', 'type' => 'text', 'value_ar' => 'في أزقّة القاهرة القديمة، عاش رجلٌ اسمه أبو السيد، عُرف بكرمٍ لا حدّ له.', 'value_en' => 'In the alleys of Old Cairo, there lived a man named Abou El Sid, known for his boundless generosity.'],
++            ['page' => 'story', 'section' => 'hero', 'key' => 'body', 'type' => 'richtext', 'value_ar' => "كانت داره مفتوحة لكل عابر سبيل، ومائدته لا تخلو من ضيف. لم يكن يسأل القادم عن اسمه، بل يجلسه ويطعمه كأنه من الأهل. ومع الوقت صار اسمه يُقال حين يُذكر الكرم، وصارت أطباقه علامة على الدفء المصري الأصيل.\n\nنحمل اليوم هذه الروح إلى المملكة — إلى جدة والرياض — بالوصفات ذاتها التي تُطهى على مهل، وبالنكهة التي تعرفها القلوب قبل الألسنة. كل طبق نقدّمه هو دعوة إلى مائدة أبو السيد، حيث لا يبقى غريبٌ غريباً.", 'value_en' => "His home was open to every passerby, and his table was never without a guest. He never asked a newcomer their name — he simply sat them down and fed them like family. In time, his name became synonymous with generosity, and his dishes a mark of authentic Egyptian warmth.\n\nToday we carry that same spirit to the Kingdom — to Jeddah and Riyadh — with the same recipes cooked unhurried, and the same flavor hearts recognize before tongues do. Every dish we serve is an invitation to Abou El Sid's table, where no stranger remains a stranger."],
++            ['page' => 'story', 'section' => 'hero', 'key' => 'signature', 'type' => 'text', 'value_ar' => 'حكاية مصرية، نكهة أصيلة', 'value_en' => 'An Egyptian Story, an Authentic Flavor'],
+             ['page' => 'story', 'section' => 'journey', 'key' => 'badge', 'value_ar' => 'رحلتنا · OUR JOURNEY', 'value_en' => 'Our Journey · OUR JOURNEY'],
+             ['page' => 'story', 'section' => 'journey', 'key' => 'title', 'value_ar' => 'رحلتنا', 'value_en' => 'Our Journey'],
+             ['page' => 'story', 'section' => 'journey', 'key' => 'subtitle', 'value_ar' => 'من القاهرة القديمة، إلى ساحل البحر الأحمر، إلى قلب الرياض.', 'value_en' => 'From Old Cairo, to the Red Sea coast, to the heart of Riyadh.'],
+@@ -114,7 +117,10 @@ public function run(): void
+         ];
+ 
+         foreach ($contents as $content) {
+-            PageContent::create($content);
++            PageContent::updateOrCreate(
++                ['page' => $content['page'], 'section' => $content['section'], 'key' => $content['key']],
++                $content
++            );
+         }
+     }
+ }
