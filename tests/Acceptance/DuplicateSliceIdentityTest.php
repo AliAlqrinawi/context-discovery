@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ContextDiscovery\Tests\Acceptance;
 
+use ContextDiscovery\Tests\Support\ReadsBundles;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -15,6 +16,8 @@ use PHPUnit\Framework\TestCase;
  */
 final class DuplicateSliceIdentityTest extends TestCase
 {
+    use ReadsBundles;
+
     private const BUDGET = 8000;
 
     /**
@@ -74,6 +77,7 @@ final class DuplicateSliceIdentityTest extends TestCase
         // R6, and richer than the key predicted: `ControllerA::helper` arrives as a symbol absence,
         // as a same-file reference, and as a named reference from another file — same path, member,
         // span and text, three different kinds, two different ItemPriority bands.
+        $bundle = self::bundle();
         $helper = array_filter(
             $this->fetchedFrom('app/Http/ControllerA.php'),
             static fn (array $item): bool => ($item['provenance']['member'] ?? null) === 'helper'
@@ -82,7 +86,7 @@ final class DuplicateSliceIdentityTest extends TestCase
         self::assertCount(3, $helper);
         self::assertSame(
             ['named_reference', 'same_file_reference', 'same_file_symbol_absence'],
-            $this->sorted(array_map(static fn (array $i): string => $i['assertion_kind'], $helper)),
+            $this->sorted(array_map(fn (array $i): string => $this->kindOfItem($bundle, $i), $helper)),
         );
     }
 
@@ -141,9 +145,11 @@ final class DuplicateSliceIdentityTest extends TestCase
     public function testTheM14ShapeIsUnchanged(): void
     {
         // R10 · two flags for two origins, one model surface. M14 and M15 both depend on this.
+        $bundle = self::bundle();
         $flags = array_filter(
-            self::bundle()['items'],
-            static fn (array $i): bool => $i['lever'] === 'flagged' && str_contains($i['reason'], 'Order::create')
+            $bundle['items'],
+            fn (array $i): bool => $i['lever'] === 'flagged'
+                && str_contains($this->reasonOfItem($bundle, $i), 'Order::create')
         );
 
         self::assertCount(2, $flags, 'a flag names its origin, so two origins are two items');
@@ -156,15 +162,18 @@ final class DuplicateSliceIdentityTest extends TestCase
     {
         $bundle = self::bundle();
 
-        self::assertSame(1, $bundle['bundle_version']);
-        self::assertSame(['bundle_version', 'budget_tokens', 'used_tokens', 'items', 'dropped'], array_keys($bundle));
+        self::assertSame(2, $bundle['bundle_version']);
+        self::assertSame(
+            ['bundle_version', 'run', 'used_tokens', 'assertions', 'items', 'diagnostics', 'dropped'],
+            array_keys($bundle)
+        );
 
         $tokens = array_sum(array_map(static fn (array $i): int => $i['tokens'], $bundle['items']));
 
         self::assertSame($tokens, $bundle['used_tokens'], 'the total counts what is in the bundle');
 
         foreach ($bundle['items'] as $item) {
-            self::assertSame(['lever', 'reason', 'assertion_kind', 'provenance', 'payload', 'tokens'], array_keys($item));
+            self::assertSame(['assertion_id', 'lever', 'provenance', 'payload', 'tokens'], array_keys($item));
         }
     }
 

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ContextDiscovery\Tests\Acceptance;
 
+use ContextDiscovery\Tests\Support\ReadsBundles;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -21,6 +22,8 @@ use PHPUnit\Framework\TestCase;
  */
 final class ProjectSurfaceFallbackAcceptanceTest extends TestCase
 {
+    use ReadsBundles;
+
     private const BUDGET = 8000;
 
     /**
@@ -175,17 +178,19 @@ final class ProjectSurfaceFallbackAcceptanceTest extends TestCase
     {
         $bundle = self::bundle();
 
-        self::assertSame(1, $bundle['bundle_version']);
+        self::assertSame(2, $bundle['bundle_version']);
         self::assertSame(
-            ['bundle_version', 'budget_tokens', 'used_tokens', 'items', 'dropped'],
+            ['bundle_version', 'run', 'used_tokens', 'assertions', 'items', 'diagnostics', 'dropped'],
             array_keys($bundle),
             'no field was added for this'
         );
 
         foreach ($bundle['items'] as $item) {
-            self::assertSame(['lever', 'reason', 'assertion_kind', 'provenance', 'payload', 'tokens'], array_keys($item));
+            self::assertSame(['assertion_id', 'lever', 'provenance', 'payload', 'tokens'], array_keys($item));
             self::assertContains($item['lever'], ['fetched', 'flagged']);
-            self::assertNotSame('', $item['reason'], 'P5: no item without a reason');
+            // P5 in v2: the item names a claim, and that claim has a reason (ADR-A024).
+            self::assertNotSame('', $item['assertion_id'], 'P5: no item without an assertion');
+            self::assertNotSame('', $this->reasonOfItem($bundle, $item), 'P5: and that assertion has a reason');
         }
     }
 
@@ -206,13 +211,14 @@ final class ProjectSurfaceFallbackAcceptanceTest extends TestCase
     private function flaggedSubjects(): array
     {
         $subjects = [];
+        $bundle = self::bundle();
 
-        foreach (self::bundle()['items'] as $item) {
+        foreach ($bundle['items'] as $item) {
             if ($item['lever'] !== 'flagged') {
                 continue;
             }
 
-            if (preg_match('/depends on (\S+),/', $item['reason'], $match) === 1) {
+            if (preg_match('/depends on (\S+),/', $this->reasonOfItem($bundle, $item), $match) === 1) {
                 $subjects[] = $match[1];
             }
         }

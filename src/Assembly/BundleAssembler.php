@@ -4,20 +4,25 @@ declare(strict_types=1);
 
 namespace ContextDiscovery\Assembly;
 
+use ContextDiscovery\Domain\Assertion\Assertion;
 use ContextDiscovery\Domain\Assertion\AssertionKind;
 use ContextDiscovery\Domain\Assertion\ResolvedAssertion;
 use ContextDiscovery\Domain\Bundle\Bundle;
+use ContextDiscovery\Domain\Bundle\BundleAssertion;
 use ContextDiscovery\Domain\Bundle\BundleItem;
+use ContextDiscovery\Domain\Bundle\Diagnostic;
 use ContextDiscovery\Domain\Bundle\Lever;
 use ContextDiscovery\Domain\Bundle\Provenance;
+use ContextDiscovery\Domain\Bundle\RunMetadata;
 use ContextDiscovery\Domain\Source\SourceSlice;
 use InvalidArgumentException;
 
 /**
- * Resolved assertions become bundle items, each carrying its reason, lever and provenance.
+ * Resolved assertions become the bundle's claims and the evidence for them.
  *
- * No item enters without a reason — the invariant lives in BundleItem and is left to raise here,
- * because an item with no reason is a defect and not a warning (P5).
+ * In v2 the claim is emitted once, as a `BundleAssertion` carrying kind, subject and reason, and
+ * every item points back at it by id. Nothing about *what is discovered* changed: the same items
+ * are produced, collapsed and ordered exactly as before (ADR-A024).
  *
  * Order is decided here, once, so the JSON and the Markdown are two renderings of one ordering
  * (03-interfaces.md §2). Budget enforcement is not this class's job: the bundle leaves here with
@@ -44,31 +49,54 @@ final class BundleAssembler
     }
 
     /**
-     * @param list<ResolvedAssertion> $resolved
+     * The stable identity of an assertion, and the id it is published under.
+     *
+     * Derived from the same tuple `AssertionExtractor` already de-duplicates on — kind, subject,
+     * origin path, first line — so two runs over the same input publish the same ids (P8) and no
+     * counter or clock is involved.
      */
-    public function assemble(array $resolved, int $budgetTokens): Bundle
+    public static function idFor(Assertion $assertion): string
     {
+        return 'a' . substr(sha1(sprintf(
+            '%s|%s|%s|%d',
+            $assertion->kind->value,
+            $assertion->subject,
+            $assertion->originPath,
+            $assertion->originRegion->firstLine,
+        )), 0, 12);
+    }
+
+    /**
+     * @param list<ResolvedAssertion> $resolved
+     * @param list<Diagnostic>        $diagnostics
+     */
+    public function assemble(array $resolved, RunMetadata $run, array $diagnostics = []): Bundle
+    {
+        $assertions = [];
         $items = [];
         $seen = [];
 
         foreach ($resolved as $resolvedAssertion) {
-            foreach ($this->itemsFor($resolvedAssertion) as $item) {
-                $identity = self::identityOf($item);
+            $claim = $this->assertionFor($resolvedAssertion->assertion);
+            $assertions[$claim->id] ??= $claim;
+
+            foreach ($this->itemsFor($resolvedAssertion, $claim) as $item) {
+                $identity = self::identityOf($item, $claim);
 
                 if (isset($seen[$identity])) {
                     // ADR-A021. One member named from two files resolves twice, and the second
-                    // item is identical in every field a reviewer can see — including `reason`,
+                    // item is identical in every field a reviewer can see — including the reason,
                     // because a *fetched* item's provenance is the DECLARING site, never the
                     // requesting one. So the copy is not a second fact; it is the same bytes
                     // printed again, and ADR-A005 spends tokens only where they buy something.
                     //
-                    // Nothing is omitted and nothing is recorded: the surviving item is
-                    // byte-identical to the one skipped, so every reason, provenance and byte
-                    // still reaches the reviewer. That is what separates this from a budget drop,
-                    // which loses an item and must therefore say so (P10).
+                    // Identity is still computed from what a reviewer sees, never from the
+                    // assertion id: two assertions can be different claims yet produce one
+                    // indistinguishable item, and v2 must collapse exactly what v1 collapsed.
                     //
-                    // Flags need no special case. Their provenance IS the origin, so two origins
-                    // give two identities and both survive — the behaviour M15 keyed as row T2.
+                    // Nothing is omitted and nothing is recorded: the surviving item is
+                    // byte-identical to the one skipped. That is what separates this from a budget
+                    // drop, which loses an item and must therefore say so (P10).
                     continue;
                 }
 
@@ -80,24 +108,46 @@ final class BundleAssembler
         // usort is stable, so items with equal keys keep the order they were resolved in (P8).
         // The collapse above runs first, so which copy survives is a function of resolution order
         // alone rather than of the sort's tie-breaking.
-        usort($items, $this->compare(...));
+        $byId = $assertions;
+        usort($items, fn (BundleItem $a, BundleItem $b): int => $this->compare($a, $b, $byId));
 
         return new Bundle(
+            assertions: array_values($assertions),
             items: $items,
+            diagnostics: $diagnostics,
             dropped: [],
-            budgetTokens: $budgetTokens,
+            run: $run,
             usedTokens: array_sum(array_map(static fn (BundleItem $item): int => $item->tokens, $items)),
         );
     }
 
     /**
+     * The claim itself: kind, subject and reason, stated once.
+     *
+     * `subject` is the extractor's own datum, carried untouched from `Assertion`. Origin is a path
+     * and a span; an assertion has no origin member, so none is invented (ADR-A024).
+     */
+    private function assertionFor(Assertion $assertion): BundleAssertion
+    {
+        return new BundleAssertion(
+            id: self::idFor($assertion),
+            kind: $assertion->kind,
+            subject: $assertion->subject,
+            reason: $assertion->claim,
+            originPath: $assertion->originPath,
+            originFirstLine: $assertion->originRegion->firstLine,
+            originLastLine: $assertion->originRegion->lastLine,
+        );
+    }
+
+    /**
      * One item per slice: the bundle schema gives each item a single path, member and line span,
-     * so two slices cannot share one provenance. They share the reason instead — each is
-     * separately justified by the same assertion.
+     * so two slices cannot share one provenance. They share the assertion instead — each is
+     * separately gathered evidence for the same claim.
      *
      * @return list<BundleItem>
      */
-    private function itemsFor(ResolvedAssertion $resolved): array
+    private function itemsFor(ResolvedAssertion $resolved, BundleAssertion $claim): array
     {
         $assertion = $resolved->assertion;
 
@@ -107,8 +157,7 @@ final class BundleAssembler
             return [
                 new BundleItem(
                     lever: Lever::Flagged,
-                    reason: $assertion->claim,
-                    assertionKind: $assertion->kind,
+                    assertionId: $claim->id,
                     // A flag carries its origin path and line span always, and a member only when
                     // the failing assertion already names one — a premise names a premise, not a
                     // member, and nothing here derives one (ADR-A009, freeze review 04).
@@ -140,8 +189,7 @@ final class BundleAssembler
         return array_map(
             fn (SourceSlice $slice): BundleItem => new BundleItem(
                 lever: Lever::Fetched,
-                reason: $assertion->claim,
-                assertionKind: $assertion->kind,
+                assertionId: $claim->id,
                 provenance: new Provenance(
                     $slice->path,
                     $slice->member,
@@ -167,27 +215,36 @@ final class BundleAssembler
      * and as a named reference from another file. Those answer three different questions and sit in
      * two different `ItemPriority` bands, so collapsing them would change what survives a budget.
      *
+     * Kind and reason come from the assertion now; they are still the fields being compared, so v2
+     * collapses exactly the set v1 collapsed.
+     *
      * A separator that cannot occur inside a path, a member name or an assertion kind keeps the
      * concatenation unambiguous for the two fields that could contain anything — reason and
      * payload — by putting them last and by encoding the null member distinctly from an empty one.
      */
-    private static function identityOf(BundleItem $item): string
+    private static function identityOf(BundleItem $item, BundleAssertion $claim): string
     {
         return implode("\0", [
             $item->lever->value,
-            $item->assertionKind->value,
+            $claim->kind->value,
             $item->provenance->path,
             $item->provenance->member ?? "\1",
             (string) $item->provenance->firstLine,
             (string) $item->provenance->lastLine,
-            $item->reason,
+            $claim->reason,
             $item->payload,
         ]);
     }
 
-    private function compare(BundleItem $a, BundleItem $b): int
+    /**
+     * @param array<string, BundleAssertion> $byId
+     */
+    private function compare(BundleItem $a, BundleItem $b, array $byId): int
     {
-        return self::KIND_ORDER[$a->assertionKind->value] <=> self::KIND_ORDER[$b->assertionKind->value]
+        $kindA = $byId[$a->assertionId]->kind->value;
+        $kindB = $byId[$b->assertionId]->kind->value;
+
+        return self::KIND_ORDER[$kindA] <=> self::KIND_ORDER[$kindB]
             ?: strcmp($a->provenance->path, $b->provenance->path)
             ?: strcmp($a->provenance->member ?? '', $b->provenance->member ?? '');
     }

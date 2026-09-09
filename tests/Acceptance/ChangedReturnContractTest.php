@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ContextDiscovery\Tests\Acceptance;
 
+use ContextDiscovery\Tests\Support\ReadsBundles;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -18,6 +19,8 @@ use PHPUnit\Framework\TestCase;
  */
 final class ChangedReturnContractTest extends TestCase
 {
+    use ReadsBundles;
+
     private string $repo = '';
 
     protected function setUp(): void
@@ -101,14 +104,11 @@ final class ChangedReturnContractTest extends TestCase
 
         $bundle = $this->invoke($this->cardinalityDiff());
 
-        $kinds = array_column($bundle['items'], 'assertion_kind');
+        $kinds = $this->itemKinds($bundle);
 
         self::assertContains('changed_return_contract', $kinds, 'the assertion is raised');
 
-        $callSites = array_values(array_filter(
-            $bundle['items'],
-            static fn (array $i): bool => $i['assertion_kind'] === 'changed_return_contract'
-        ));
+        $callSites = $this->itemsOfKind($bundle, 'changed_return_contract');
 
         self::assertNotSame([], $callSites, 'and it reached CallerResolver rather than stopping at extraction');
 
@@ -123,7 +123,7 @@ final class ChangedReturnContractTest extends TestCase
 
         self::assertStringContainsString(
             'getAll',
-            $callSites[0]['reason'],
+            $this->reasonOfItem($bundle, $callSites[0]),
             'the reason names the member whose contract moved'
         );
     }
@@ -136,7 +136,7 @@ final class ChangedReturnContractTest extends TestCase
 
         self::assertNotContains(
             'changed_return_contract',
-            array_column($bundle['items'], 'assertion_kind'),
+            $this->itemKinds($bundle),
             'renaming a helper call is not a contract change and must not trigger a caller search'
         );
     }

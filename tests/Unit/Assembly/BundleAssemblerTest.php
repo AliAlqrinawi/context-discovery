@@ -13,12 +13,15 @@ use ContextDiscovery\Domain\Bundle\Lever;
 use ContextDiscovery\Domain\Diff\ChangedRegion;
 use ContextDiscovery\Domain\Source\SourceSlice;
 use InvalidArgumentException;
+use ContextDiscovery\Tests\Support\BuildsBundles;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass(BundleAssembler::class)]
 final class BundleAssemblerTest extends TestCase
 {
+    use BuildsBundles;
+
     private BundleAssembler $assembler;
 
     protected function setUp(): void
@@ -39,14 +42,14 @@ final class BundleAssemblerTest extends TestCase
             'ASSUMPTION: this code assumes a surrounding transaction; caller not checked',
         );
 
-        $bundle = $this->assembler->assemble([$resolved], 8000);
+        $bundle = $this->assembler->assemble([$resolved], $this->runMetadata(8000));
 
         self::assertCount(1, $bundle->items);
 
         $item = $bundle->items[0];
 
         self::assertSame(Lever::Flagged, $item->lever);
-        self::assertSame(AssertionKind::UnverifiablePremise, $item->assertionKind);
+        self::assertSame(AssertionKind::UnverifiablePremise, $bundle->assertions[0]->kind);
         self::assertSame('app/Services/Plaid/PlaidAccountService.php', $item->provenance->path);
         self::assertSame(120, $item->provenance->firstLine);
         self::assertSame(168, $item->provenance->lastLine);
@@ -61,7 +64,7 @@ final class BundleAssemblerTest extends TestCase
                 $this->assertion(AssertionKind::UnverifiablePremise, 'atomic-lock-store', 'app/One.php'),
                 'ASSUMPTION: lock store',
             ),
-        ], 8000);
+        ], $this->runMetadata(8000));
 
         self::assertNull($bundle->items[0]->provenance->member);
     }
@@ -75,7 +78,7 @@ final class BundleAssemblerTest extends TestCase
                 $this->assertion(AssertionKind::NamedReference, 'PlaidAccount', 'app/One.php'),
                 'ASSUMPTION: named reference could not be resolved on disk; contract unverified',
             ),
-        ], 8000);
+        ], $this->runMetadata(8000));
 
         self::assertSame('PlaidAccount', $bundle->items[0]->provenance->member);
         self::assertSame('app/One.php', $bundle->items[0]->provenance->path);
@@ -91,7 +94,7 @@ final class BundleAssemblerTest extends TestCase
             ],
         );
 
-        $bundle = $this->assembler->assemble([$resolved], 8000);
+        $bundle = $this->assembler->assemble([$resolved], $this->runMetadata(8000));
 
         self::assertCount(2, $bundle->items);
         self::assertSame('fillable', $bundle->items[0]->provenance->member);
@@ -101,8 +104,13 @@ final class BundleAssemblerTest extends TestCase
             self::assertSame(Lever::Fetched, $item->lever);
             self::assertSame(
                 'the change depends on PlaidAccount',
-                $item->reason,
+                $this->reasonOf($bundle, $item),
                 'both items are justified by the same assertion'
+            );
+            self::assertSame(
+                $bundle->items[0]->assertionId,
+                $item->assertionId,
+                'and they name that one assertion, stated once'
             );
         }
     }
@@ -137,7 +145,7 @@ final class BundleAssemblerTest extends TestCase
                     new SourceSlice('app/Alpha.php', 'first', 1, 2, 'a'),
                 ],
             ),
-        ], 8000);
+        ], $this->runMetadata(8000));
 
         self::assertSame(
             [
@@ -150,12 +158,17 @@ final class BundleAssemblerTest extends TestCase
                 'unverifiable_premise:app/One.php:',
             ],
             array_map(
-                static fn ($item): string => sprintf(
-                    '%s:%s:%s',
-                    $item->assertionKind->value,
-                    $item->provenance->path,
-                    $item->provenance->member ?? ''
-                ),
+                function ($item) use ($bundle): string {
+                    $kind = '';
+
+                    foreach ($bundle->assertions as $assertion) {
+                        if ($assertion->id === $item->assertionId) {
+                            $kind = $assertion->kind->value;
+                        }
+                    }
+
+                    return sprintf('%s:%s:%s', $kind, $item->provenance->path, $item->provenance->member ?? '');
+                },
                 $bundle->items
             )
         );
@@ -173,7 +186,7 @@ final class BundleAssemblerTest extends TestCase
                 $this->assertion(AssertionKind::NamedReference, 'X', 'app/One.php'),
                 $slices,
             ),
-        ], 8000);
+        ], $this->runMetadata(8000));
 
         self::assertSame('first resolved', $bundle->items[0]->payload);
         self::assertSame('second resolved', $bundle->items[1]->payload);
@@ -190,14 +203,14 @@ final class BundleAssemblerTest extends TestCase
                 $this->assertion(AssertionKind::UnverifiablePremise, 'p', 'app/One.php'),
                 str_repeat('y', 20),
             ),
-        ], 8000);
+        ], $this->runMetadata(8000));
 
         self::assertSame(15, $bundle->usedTokens);
         self::assertSame(
             $bundle->usedTokens,
             array_sum(array_map(static fn ($item): int => $item->tokens, $bundle->items))
         );
-        self::assertSame(8000, $bundle->budgetTokens);
+        self::assertSame(8000, $bundle->budgetTokens());
     }
 
     public function testTheAssemblerDropsNothingBecauseThatIsNotItsJob(): void
@@ -207,20 +220,20 @@ final class BundleAssemblerTest extends TestCase
                 $this->assertion(AssertionKind::NamedReference, 'X', 'app/One.php'),
                 [new SourceSlice('app/Alpha.php', 'a', 1, 2, str_repeat('x', 4000))],
             ),
-        ], 10);
+        ], $this->runMetadata(10));
 
         self::assertSame([], $bundle->dropped);
-        self::assertGreaterThan($bundle->budgetTokens, $bundle->usedTokens);
+        self::assertGreaterThan($bundle->budgetTokens(), $bundle->usedTokens);
     }
 
     public function testNoResolvedAssertionsGivesAnEmptyButValidBundle(): void
     {
-        $bundle = $this->assembler->assemble([], 8000);
+        $bundle = $this->assembler->assemble([], $this->runMetadata(8000));
 
         self::assertSame([], $bundle->items);
         self::assertSame([], $bundle->dropped);
         self::assertSame(0, $bundle->usedTokens);
-        self::assertSame(8000, $bundle->budgetTokens);
+        self::assertSame(8000, $bundle->budgetTokens());
     }
 
     public function testAnAssertionWithNoClaimIsRejectedRatherThanAdmittedWithoutAReason(): void
@@ -239,7 +252,7 @@ final class BundleAssemblerTest extends TestCase
                 ),
                 [new SourceSlice('app/Alpha.php', 'a', 1, 2, 'text')],
             ),
-        ], 8000);
+        ], $this->runMetadata(8000));
     }
 
     public function testAFetchedAssertionThatResolvedToNothingIsRejectedRatherThanVanishing(): void
@@ -252,7 +265,7 @@ final class BundleAssemblerTest extends TestCase
                 $this->assertion(AssertionKind::NamedReference, 'Missing', 'app/One.php'),
                 [],
             ),
-        ], 8000);
+        ], $this->runMetadata(8000));
     }
 
     private function assertion(

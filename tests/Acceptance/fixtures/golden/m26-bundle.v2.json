@@ -1,0 +1,342 @@
+{
+    "bundle_version": 2,
+    "run": {
+        "engine_version": "0.2.0",
+        "policy_version": "2",
+        "framework_table_version": "5bfb119e1a00",
+        "budget_tokens": 8000,
+        "diff_sha": "6070b2d17713",
+        "repo_sha": null
+    },
+    "used_tokens": 562,
+    "assertions": [
+        {
+            "id": "acb6ef0148d7f",
+            "kind": "named_reference",
+            "subject": "App\\Http\\Resources\\Branch\\BranchResource",
+            "reason": "the region depends on App\\Http\\Resources\\Branch\\BranchResource, whose contract is defined in another file",
+            "origin": {
+                "path": "app/Http/Controllers/Admin/BranchController.php",
+                "lines": [
+                    19,
+                    26
+                ]
+            }
+        },
+        {
+            "id": "aaa29b6a14619",
+            "kind": "changed_return_contract",
+            "subject": "getAll",
+            "reason": "the body of getAll now returns a single value or null where it returned a collection; its declared signature is unchanged, so its call sites are not shown by the diff",
+            "origin": {
+                "path": "app/Repositories/BranchRepository.php",
+                "lines": [
+                    15,
+                    21
+                ]
+            }
+        }
+    ],
+    "items": [
+        {
+            "assertion_id": "aaa29b6a14619",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Actions/Branch/GetBranchesAction.php",
+                "lines": [
+                    25,
+                    25
+                ]
+            },
+            "payload": "            fn () => $this->repository->getAll($showInFooter)",
+            "tokens": 16
+        },
+        {
+            "assertion_id": "aaa29b6a14619",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Actions/Catering/GetPackagesAction.php",
+                "lines": [
+                    24,
+                    24
+                ]
+            },
+            "payload": "            fn () => $this->repository->getAll()",
+            "tokens": 12
+        },
+        {
+            "assertion_id": "aaa29b6a14619",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Actions/Catering/GetSampleMenusAction.php",
+                "lines": [
+                    24,
+                    24
+                ]
+            },
+            "payload": "            fn () => $this->repository->getAll()",
+            "tokens": 12
+        },
+        {
+            "assertion_id": "aaa29b6a14619",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Actions/DeliveryApp/GetDeliveryAppsAction.php",
+                "lines": [
+                    24,
+                    24
+                ]
+            },
+            "payload": "            fn () => $this->repository->getAll($activeOnly)",
+            "tokens": 15
+        },
+        {
+            "assertion_id": "aaa29b6a14619",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Actions/Dish/GetDishesAction.php",
+                "lines": [
+                    30,
+                    30
+                ]
+            },
+            "payload": "            fn () => $this->repository->getAll($filters)",
+            "tokens": 14
+        },
+        {
+            "assertion_id": "aaa29b6a14619",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Actions/Personality/GetPersonalitiesAction.php",
+                "lines": [
+                    24,
+                    24
+                ]
+            },
+            "payload": "            fn () => $this->repository->getAll($activeOnly)",
+            "tokens": 15
+        },
+        {
+            "assertion_id": "aaa29b6a14619",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Actions/Setting/GetSettingsAction.php",
+                "lines": [
+                    23,
+                    23
+                ]
+            },
+            "payload": "            fn () => $this->repository->getAll($group)",
+            "tokens": 14
+        },
+        {
+            "assertion_id": "aaa29b6a14619",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Actions/Testimonial/GetTestimonialsAction.php",
+                "lines": [
+                    24,
+                    24
+                ]
+            },
+            "payload": "            fn () => $this->repository->getAll($activeOnly)",
+            "tokens": 15
+        },
+        {
+            "assertion_id": "aaa29b6a14619",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Actions/Timeline/GetTimelineAction.php",
+                "lines": [
+                    24,
+                    24
+                ]
+            },
+            "payload": "            fn () => $this->repository->getAll()",
+            "tokens": 12
+        },
+        {
+            "assertion_id": "aaa29b6a14619",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Actions/User/GetUsersAction.php",
+                "lines": [
+                    16,
+                    16
+                ]
+            },
+            "payload": "        return $this->repository->getAll();",
+            "tokens": 11
+        },
+        {
+            "assertion_id": "aaa29b6a14619",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Http/Controllers/Admin/CategoryController.php",
+                "lines": [
+                    19,
+                    19
+                ]
+            },
+            "payload": "        return $this->success(CategoryResource::collection($this->repository->getAll()), __('messages.fetched'));",
+            "tokens": 29
+        },
+        {
+            "assertion_id": "aaa29b6a14619",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Http/Controllers/Admin/Catering/QuoteRequestController.php",
+                "lines": [
+                    24,
+                    24
+                ]
+            },
+            "payload": "        $result = $repository->getAll($filters);",
+            "tokens": 12
+        },
+        {
+            "assertion_id": "aaa29b6a14619",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Http/Controllers/Admin/SeoSettingController.php",
+                "lines": [
+                    20,
+                    20
+                ]
+            },
+            "payload": "        return $this->success(SeoSettingResource::collection($repository->getAll()), __('messages.fetched'));",
+            "tokens": 28
+        },
+        {
+            "assertion_id": "aaa29b6a14619",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Http/Controllers/Public/CategoryController.php",
+                "lines": [
+                    14,
+                    14
+                ]
+            },
+            "payload": "        $categories = $repository->getAll();",
+            "tokens": 11
+        },
+        {
+            "assertion_id": "aaa29b6a14619",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Repositories/BranchRepository.php",
+                "lines": [
+                    10,
+                    10
+                ]
+            },
+            "payload": "    public function getAll(?bool $showInFooter = null): Collection",
+            "tokens": 17
+        },
+        {
+            "assertion_id": "aaa29b6a14619",
+            "lever": "flagged",
+            "provenance": {
+                "path": "app/Repositories/BranchRepository.php",
+                "member": "getAll",
+                "lines": [
+                    15,
+                    21
+                ]
+            },
+            "payload": "ASSUMPTION: additional call sites exist beyond the search bound; not all verified",
+            "tokens": 21
+        },
+        {
+            "assertion_id": "aaa29b6a14619",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Repositories/CategoryRepository.php",
+                "lines": [
+                    10,
+                    10
+                ]
+            },
+            "payload": "    public function getAll(): Collection",
+            "tokens": 10
+        },
+        {
+            "assertion_id": "aaa29b6a14619",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Repositories/CateringPackageRepository.php",
+                "lines": [
+                    11,
+                    11
+                ]
+            },
+            "payload": "    public function getAll(): Collection",
+            "tokens": 10
+        },
+        {
+            "assertion_id": "aaa29b6a14619",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Repositories/DeliveryAppRepository.php",
+                "lines": [
+                    10,
+                    10
+                ]
+            },
+            "payload": "    public function getAll(bool $activeOnly = true): Collection",
+            "tokens": 16
+        },
+        {
+            "assertion_id": "aaa29b6a14619",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Repositories/DishRepository.php",
+                "lines": [
+                    10,
+                    10
+                ]
+            },
+            "payload": "    public function getAll(array $filters = []): LengthAwarePaginator",
+            "tokens": 18
+        },
+        {
+            "assertion_id": "aaa29b6a14619",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Repositories/PersonalityRepository.php",
+                "lines": [
+                    10,
+                    10
+                ]
+            },
+            "payload": "    public function getAll(bool $activeOnly = true): Collection",
+            "tokens": 16
+        },
+        {
+            "assertion_id": "acb6ef0148d7f",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Http/Resources/Branch/BranchResource.php",
+                "member": "toArray",
+                "lines": [
+                    13,
+                    34
+                ]
+            },
+            "payload": "    public function toArray(Request $request): array\n    {\n        return [\n            'id' => $this->id,\n            'name' => $this->resolveLocale($this->name_ar, $this->name_en),\n            'name_ar' => $this->name_ar,\n            'name_en' => $this->name_en,\n            'location' => $this->resolveLocale($this->location_ar, $this->location_en),\n            'location_ar' => $this->location_ar,\n            'location_en' => $this->location_en,\n            'city' => $this->city,\n            'phone' => $this->phone,\n            'whatsapp_number' => $this->whatsapp_number ?? $this->phone,\n            'opening_time' => $this->opening_time,\n            'closing_time' => $this->closing_time,\n            'google_maps_url' => $this->google_maps_url,\n            'image_url' => $this->image_url,\n            'order' => $this->order,\n            'show_in_footer' => $this->show_in_footer,\n            'locale' => app()->getLocale(),\n        ];\n    }",
+            "tokens": 238
+        }
+    ],
+    "diagnostics": [
+        {
+            "type": "call_sites_truncated",
+            "assertion_id": "aaa29b6a14619",
+            "detail": {
+                "limit": 20,
+                "subject": "getAll",
+                "scope": "app/"
+            }
+        }
+    ],
+    "dropped": []
+}

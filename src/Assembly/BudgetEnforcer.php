@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace ContextDiscovery\Assembly;
 
 use ContextDiscovery\Domain\Bundle\Bundle;
+use ContextDiscovery\Domain\Bundle\BundleAssertion;
 use ContextDiscovery\Domain\Bundle\BundleItem;
 use ContextDiscovery\Domain\Bundle\DroppedItem;
 
@@ -38,8 +39,16 @@ final class BudgetEnforcer
         $dropped = $bundle->dropped;
         $used = $this->sum($items);
 
-        while ($used > $bundle->budgetTokens) {
-            $index = $this->nextToDrop($items);
+        // The reason recorded against a drop belongs to the assertion the item was evidence for,
+        // so a drop still says why the item was included in the first place (P7).
+        $byId = [];
+
+        foreach ($bundle->assertions as $assertion) {
+            $byId[$assertion->id] = $assertion;
+        }
+
+        while ($used > $bundle->run->budgetTokens) {
+            $index = $this->nextToDrop($items, $byId);
 
             if ($index === null) {
                 // Only never-dropped items remain. Stop, and let the bundle say so (D4).
@@ -47,7 +56,7 @@ final class BudgetEnforcer
             }
 
             $item = $items[$index];
-            $dropped[] = new DroppedItem($item->reason, self::DROP_NOTE, $item->tokens);
+            $dropped[] = new DroppedItem($byId[$item->assertionId]->reason, self::DROP_NOTE, $item->tokens);
 
             unset($items[$index]);
             $items = array_values($items);
@@ -55,9 +64,11 @@ final class BudgetEnforcer
         }
 
         return new Bundle(
+            assertions: $bundle->assertions,
             items: $items,
+            diagnostics: $bundle->diagnostics,
             dropped: $dropped,
-            budgetTokens: $bundle->budgetTokens,
+            run: $bundle->run,
             usedTokens: $used,
         );
     }
@@ -68,16 +79,17 @@ final class BudgetEnforcer
      *
      * Ties are broken toward the later item, so the same bundle always sheds the same items (P8).
      *
-     * @param list<BundleItem> $items
+     * @param list<BundleItem>               $items
+     * @param array<string, BundleAssertion>  $byId
      */
-    private function nextToDrop(array $items): ?int
+    private function nextToDrop(array $items, array $byId): ?int
     {
         $dropIndex = null;
         $dropBand = 0;
         $dropTokens = -1;
 
         foreach ($items as $index => $item) {
-            $band = $this->priority->of($item);
+            $band = $this->priority->of($item, $byId[$item->assertionId]);
 
             if ($band === ItemPriority::NEVER_DROPPED) {
                 continue;

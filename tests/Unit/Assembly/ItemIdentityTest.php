@@ -11,6 +11,7 @@ use ContextDiscovery\Domain\Assertion\AssertionKind;
 use ContextDiscovery\Domain\Assertion\ResolvedAssertion;
 use ContextDiscovery\Domain\Diff\ChangedRegion;
 use ContextDiscovery\Domain\Source\SourceSlice;
+use ContextDiscovery\Tests\Support\BuildsBundles;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -27,6 +28,8 @@ use PHPUnit\Framework\TestCase;
  */
 final class ItemIdentityTest extends TestCase
 {
+    use BuildsBundles;
+
     // ---------------------------------------------------------------- the collapse
 
     public function testTwoIdenticalFetchedItemsBecomeOne(): void
@@ -100,7 +103,8 @@ final class ItemIdentityTest extends TestCase
         ]);
 
         self::assertCount(2, $bundle->items);
-        self::assertNotSame($bundle->items[0]->assertionKind, $bundle->items[1]->assertionKind);
+        self::assertNotSame($bundle->items[0]->assertionId, $bundle->items[1]->assertionId,
+            'they answer different questions and sit in different drop bands');
     }
 
     public function testIdenticalTextInTwoClassesStaysTwoItems(): void
@@ -209,7 +213,7 @@ final class ItemIdentityTest extends TestCase
      */
     private function assemble(array $resolved): \ContextDiscovery\Domain\Bundle\Bundle
     {
-        return (new BundleAssembler(new TokenEstimate()))->assemble($resolved, 8000);
+        return (new BundleAssembler(new TokenEstimate()))->assemble($resolved, $this->runMetadata(8000));
     }
 
     private function fetched(

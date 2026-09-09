@@ -28,6 +28,7 @@ use ContextDiscovery\Pipeline\DiscoverContext;
 use ContextDiscovery\Ports\BundleWriter;
 use ContextDiscovery\Tests\Fakes\FakeClassLocator;
 use ContextDiscovery\Tests\Fakes\FakeSourceRepository;
+use ContextDiscovery\Tests\Support\BuildsBundles;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
@@ -35,6 +36,8 @@ use PHPUnit\Framework\TestCase;
 #[CoversClass(ExitCode::class)]
 final class DiscoverCommandTest extends TestCase
 {
+    use BuildsBundles;
+
     private const PATH = 'app/Services/Thing.php';
 
     private ?FakeClassLocator $locator = null;
@@ -53,7 +56,7 @@ final class DiscoverCommandTest extends TestCase
 
     public function testTheBundleGoesToStdoutAndTheRunSucceeds(): void
     {
-        $exit = $this->command()->run($this->diff(), 8000);
+        $exit = $this->command()->run($this->diff());
 
         self::assertSame(ExitCode::Success, $exit);
         self::assertSame(0, $exit->value);
@@ -61,14 +64,15 @@ final class DiscoverCommandTest extends TestCase
         $decoded = json_decode($this->read($this->stdout), true);
 
         self::assertIsArray($decoded);
-        self::assertSame(1, $decoded['bundle_version']);
-        self::assertSame(8000, $decoded['budget_tokens']);
+        self::assertSame(2, $decoded['bundle_version']);
+        self::assertSame(8000, $decoded['run']['budget_tokens']);
+        self::assertNotSame([], $decoded['assertions']);
         self::assertNotSame([], $decoded['items']);
     }
 
     public function testStdoutCarriesNoDiagnosticsSoItIsAlwaysParseable(): void
     {
-        $this->command()->run($this->diffOfAMissingFile(), 8000);
+        $this->command()->run($this->diffOfAMissingFile());
 
         $stdout = $this->read($this->stdout);
 
@@ -80,7 +84,7 @@ final class DiscoverCommandTest extends TestCase
     public function testAnEmptyBundleStillSucceeds(): void
     {
         // Experiment 2's correct answer exits 0. Emptiness is a result, not a failure.
-        $exit = $this->command()->run('', 8000);
+        $exit = $this->command()->run('');
 
         self::assertSame(ExitCode::Success, $exit);
         self::assertSame([], json_decode($this->read($this->stdout), true)['items']);
@@ -90,14 +94,14 @@ final class DiscoverCommandTest extends TestCase
     {
         // Approved decision D4: flagged items are never dropped, so a tiny budget produces an
         // honest over-budget bundle plus a diagnostic — and still exits 0.
-        $exit = $this->command()->run($this->diffOfAnUnimportedSymbolOnly(), 1);
+        $exit = $this->command(budget: 1)->run($this->diffOfAnUnimportedSymbolOnly());
 
         $decoded = json_decode($this->read($this->stdout), true);
         $stderr = $this->read($this->stderr);
 
         self::assertSame(ExitCode::Success, $exit, 'an honest over-budget bundle is still a success');
 
-        if ($decoded['used_tokens'] > $decoded['budget_tokens']) {
+        if ($decoded['used_tokens'] > $decoded['run']['budget_tokens']) {
             self::assertStringContainsString('over budget', $stderr);
             self::assertStringContainsString('never dropped', $stderr);
         } else {
@@ -107,7 +111,7 @@ final class DiscoverCommandTest extends TestCase
 
     public function testTheMarkdownWriterProducesThePasteAlongsideArtifact(): void
     {
-        $this->command(new MarkdownBundleWriter())->run($this->diff(), 8000);
+        $this->command(new MarkdownBundleWriter())->run($this->diff());
 
         $stdout = $this->read($this->stdout);
 
@@ -117,16 +121,16 @@ final class DiscoverCommandTest extends TestCase
 
     public function testTwoRunsWriteTheSameBytes(): void
     {
-        $this->command()->run($this->diff(), 8000);
+        $this->command()->run($this->diff());
         $first = $this->read($this->stdout);
 
         $this->setUp();
-        $this->command()->run($this->diff(), 8000);
+        $this->command()->run($this->diff());
 
         self::assertSame($first, $this->read($this->stdout));
     }
 
-    private function command(?BundleWriter $writer = null): DiscoverCommand
+    private function command(?BundleWriter $writer = null, int $budget = 8000): DiscoverCommand
     {
         $source = new FakeSourceRepository([self::PATH => $this->source()]);
         $slicer = new TokenizerMemberSlicer();
@@ -150,7 +154,13 @@ final class DiscoverCommandTest extends TestCase
             new BudgetEnforcer(new ItemPriority()),
         );
 
-        return new DiscoverCommand($context, $writer ?? new JsonBundleWriter(), $this->stdout, $this->stderr);
+        return new DiscoverCommand(
+            $context,
+            $writer ?? new JsonBundleWriter(),
+            $this->runMetadata($budget),
+            $this->stdout,
+            $this->stderr,
+        );
     }
 
     /**

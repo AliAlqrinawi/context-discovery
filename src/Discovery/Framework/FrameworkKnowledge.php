@@ -65,4 +65,14 @@ interface FrameworkKnowledge
      * finisher produces no assertion rather than a guess (ADR-A003).
      */
     public function returnCardinalityOf(string $member): ?string;
+
+    /**
+     * A digest of the naming facts this framework supplies.
+     *
+     * Derived from the table's own content, not declared: the rules are pure data, so a content
+     * hash is both honest and stable under an edit that changes only prose. Two bundles carrying
+     * the same value were produced against the same framework knowledge, which is what makes a
+     * scored comparison across runs meaningful (ADR-A024).
+     */
+    public function tableVersion(): string;
 }

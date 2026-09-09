@@ -106,6 +106,28 @@ final class LaravelFrameworkKnowledge implements FrameworkKnowledge
         return self::CARDINALITY[$member] ?? null;
     }
 
+    /**
+     * The digest of every naming fact this class supplies: the cardinality table, the facade base
+     * and the scope prefix.
+     *
+     * Sorted before hashing so the value depends on the rules and not on the order they happen to
+     * be written in (P8). Adding, removing or reclassifying a name changes it; reformatting the
+     * file does not.
+     */
+    public function tableVersion(): string
+    {
+        $table = self::CARDINALITY;
+        ksort($table);
+
+        $facts = [self::FACADE_BASE, self::SCOPE_PREFIX];
+
+        foreach ($table as $member => $class) {
+            $facts[] = $member . '=' . $class;
+        }
+
+        return substr(sha1(implode("\n", $facts)), 0, 12);
+    }
+
     public function declarationOf(string $member, string $classFileText): ?FrameworkDeclaration
     {
         if ($member === '' || !$this->extendsFacade($classFileText)) {

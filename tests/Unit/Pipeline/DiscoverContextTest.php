@@ -27,6 +27,7 @@ use ContextDiscovery\Domain\Bundle\BundleItem;
 use ContextDiscovery\Pipeline\DiscoverContext;
 use ContextDiscovery\Tests\Fakes\FakeClassLocator;
 use ContextDiscovery\Tests\Fakes\FakeSourceRepository;
+use ContextDiscovery\Tests\Support\BuildsBundles;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
@@ -37,6 +38,8 @@ use PHPUnit\Framework\TestCase;
 #[CoversClass(DiscoverContext::class)]
 final class DiscoverContextTest extends TestCase
 {
+    use BuildsBundles;
+
     private const PATH = 'app/Services/Plaid/PlaidAccountService.php';
 
     private ?FakeClassLocator $locator = null;
@@ -64,8 +67,8 @@ final class DiscoverContextTest extends TestCase
                 ['same_file_reference', 'fetched', 'upsertFromPlaid'],
             ],
             array_map(
-                static fn (BundleItem $item): array => [
-                    $item->assertionKind->value,
+                fn (BundleItem $item): array => [
+                    $this->kindOf($bundle, $item),
                     $item->lever->value,
                     $item->provenance->member,
                 ],
@@ -74,14 +77,19 @@ final class DiscoverContextTest extends TestCase
         );
 
         self::assertSame([], $bundle->dropped);
-        self::assertSame(8000, $bundle->budgetTokens);
+        self::assertSame(8000, $bundle->budgetTokens());
         self::assertGreaterThan(0, $bundle->usedTokens);
     }
 
     public function testEveryItemCarriesAReasonAndALever(): void
     {
-        foreach ($this->discover($this->diff(), 8000)->items as $item) {
-            self::assertNotSame('', trim($item->reason));
+        // v2 states the reason once, on the assertion; the item names it. P5 is satisfied when
+        // every item resolves to a claim that has one, which is what this walks (ADR-A024).
+        $bundle = $this->discover($this->diff(), 8000);
+
+        foreach ($bundle->items as $item) {
+            self::assertNotSame('', trim($this->reasonOf($bundle, $item)));
+            self::assertNotSame('', $item->lever->value);
         }
     }
 
@@ -114,7 +122,7 @@ final class DiscoverContextTest extends TestCase
         $bundle = $this->discover($this->diff(), 12);
 
         self::assertNotSame([], $bundle->dropped);
-        self::assertLessThanOrEqual($bundle->budgetTokens, $bundle->usedTokens);
+        self::assertLessThanOrEqual($bundle->budgetTokens(), $bundle->usedTokens);
 
         foreach ($bundle->dropped as $dropped) {
             self::assertSame('below budget priority', $dropped->note);
@@ -169,7 +177,7 @@ final class DiscoverContextTest extends TestCase
 
         $named = array_values(array_filter(
             $bundle->items,
-            static fn (BundleItem $item): bool => $item->assertionKind->value === 'named_reference'
+            fn (BundleItem $item): bool => $this->kindOf($bundle, $item) === 'named_reference'
         ));
 
         self::assertCount(1, $named);
@@ -186,7 +194,7 @@ final class DiscoverContextTest extends TestCase
 
         $named = array_values(array_filter(
             $bundle->items,
-            static fn (BundleItem $item): bool => $item->assertionKind->value === 'named_reference'
+            fn (BundleItem $item): bool => $this->kindOf($bundle, $item) === 'named_reference'
         ));
 
         self::assertCount(1, $named);
@@ -215,7 +223,7 @@ final class DiscoverContextTest extends TestCase
         self::assertNotSame([], $bundle->dropped);
 
         foreach ($bundle->items as $item) {
-            self::assertNotSame('named_reference', $item->assertionKind->value);
+            self::assertNotSame('named_reference', $this->kindOf($bundle, $item));
         }
     }
 
@@ -341,7 +349,7 @@ final class DiscoverContextTest extends TestCase
     {
         return array_values(array_filter(
             $bundle->items,
-            static fn (BundleItem $item): bool => $item->assertionKind->value === $kind
+            fn (BundleItem $item): bool => $this->kindOf($bundle, $item) === $kind
         ));
     }
 
@@ -381,7 +389,7 @@ final class DiscoverContextTest extends TestCase
 
         $premises = array_values(array_filter(
             $bundle->items,
-            static fn (BundleItem $item): bool => $item->assertionKind->value === 'unverifiable_premise'
+            fn (BundleItem $item): bool => $this->kindOf($bundle, $item) === 'unverifiable_premise'
         ));
 
         self::assertCount(2, $premises);
@@ -419,15 +427,17 @@ final class DiscoverContextTest extends TestCase
 
         self::assertSame(
             ['unverifiable_premise'],
-            array_map(static fn (BundleItem $item): string => $item->assertionKind->value, $bundle->items)
+            array_map(fn (BundleItem $item): string => $this->kindOf($bundle, $item), $bundle->items)
         );
-        self::assertGreaterThan($bundle->budgetTokens, $bundle->usedTokens, 'D4: the flag survives');
+        self::assertGreaterThan($bundle->budgetTokens(), $bundle->usedTokens, 'D4: the flag survives');
     }
 
     public function testADiffWithNoTriggerRaisesNoPremise(): void
     {
-        foreach ($this->discover($this->diff(), 8000)->items as $item) {
-            self::assertNotSame('unverifiable_premise', $item->assertionKind->value);
+        $bundle = $this->discover($this->diff(), 8000);
+
+        foreach ($bundle->items as $item) {
+            self::assertNotSame('unverifiable_premise', $this->kindOf($bundle, $item));
         }
     }
 
@@ -471,7 +481,7 @@ final class DiscoverContextTest extends TestCase
 
         return $context->run(
             $diffText,
-            $budget,
+            $this->runMetadata($budget),
             function (string $line): void {
                 $this->diagnostics[] = $line;
             },

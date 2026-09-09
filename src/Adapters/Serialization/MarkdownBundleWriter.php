@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace ContextDiscovery\Adapters\Serialization;
 
 use ContextDiscovery\Domain\Bundle\Bundle;
+use ContextDiscovery\Domain\Bundle\BundleAssertion;
+use ContextDiscovery\Domain\Bundle\ContractVersion;
 use ContextDiscovery\Domain\Bundle\BundleItem;
 use ContextDiscovery\Domain\Bundle\Lever;
 use ContextDiscovery\Ports\BundleWriter;
@@ -18,8 +20,6 @@ use ContextDiscovery\Ports\BundleWriter;
  */
 final class MarkdownBundleWriter implements BundleWriter
 {
-    private const BUNDLE_VERSION = 1;
-
     public function write(Bundle $bundle): string
     {
         $lines = [
@@ -27,15 +27,21 @@ final class MarkdownBundleWriter implements BundleWriter
             '',
             sprintf(
                 'bundle_version %d · budget %d / used %d tokens',
-                self::BUNDLE_VERSION,
-                $bundle->budgetTokens,
+                ContractVersion::BUNDLE,
+                $bundle->run->budgetTokens,
                 $bundle->usedTokens,
             ),
         ];
 
+        $byId = [];
+
+        foreach ($bundle->assertions as $assertion) {
+            $byId[$assertion->id] = $assertion;
+        }
+
         foreach ($bundle->items as $item) {
             $lines[] = '';
-            array_push($lines, ...$this->item($item));
+            array_push($lines, ...$this->item($item, $byId[$item->assertionId]));
         }
 
         $lines[] = '';
@@ -61,12 +67,16 @@ final class MarkdownBundleWriter implements BundleWriter
     /**
      * @return list<string>
      */
-    private function item(BundleItem $item): array
+    private function item(BundleItem $item, BundleAssertion $claim): array
     {
         $lines = [
-            sprintf('## %s · %s', $item->lever->value, $item->assertionKind->value),
+            sprintf('## %s · %s', $item->lever->value, $claim->kind->value),
             '',
-            sprintf('**Reason:** %s', $item->reason),
+            // v2 made the subject first-class, and it is the first thing a reviewer wants: which
+            // member, class or premise is this about. It was previously recoverable only from the
+            // reason's prose (ADR-A024).
+            sprintf('**Subject:** %s', $claim->subject),
+            sprintf('**Reason:** %s', $claim->reason),
             sprintf('**Source:** %s', $this->provenance($item)),
             sprintf('**Tokens:** %d', $item->tokens),
             '',

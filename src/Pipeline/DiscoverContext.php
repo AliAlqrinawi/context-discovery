@@ -19,6 +19,8 @@ use ContextDiscovery\Domain\Assertion\Assertion;
 use ContextDiscovery\Domain\Assertion\AssertionKind;
 use ContextDiscovery\Domain\Assertion\ResolvedAssertion;
 use ContextDiscovery\Domain\Bundle\Bundle;
+use ContextDiscovery\Domain\Bundle\Diagnostic;
+use ContextDiscovery\Domain\Bundle\RunMetadata;
 use ContextDiscovery\Domain\Bundle\Lever;
 use ContextDiscovery\Ports\ClassLocator;
 use ContextDiscovery\Ports\SourceRepository;
@@ -58,10 +60,19 @@ final class DiscoverContext
 
     /**
      * @param callable(string): void $diagnostic Receives one line per unreadable path or
-     *                                           unresolved reference. Never merged into the bundle.
+     *                                           unresolved reference. Still the authoritative
+     *                                           stream: v2 **mirrors** structured copies of some
+     *                                           of these into the bundle without changing, adding
+     *                                           to, or reordering a single byte written here
+     *                                           (freeze review 05, ADR-A024).
      */
-    public function run(string $diffText, int $budgetTokens, callable $diagnostic): Bundle
+    public function run(string $diffText, RunMetadata $run, callable $diagnostic): Bundle
     {
+        $budgetTokens = $run->budgetTokens;
+
+        /** @var list<Diagnostic> $diagnostics */
+        $diagnostics = [];
+
         // 1 · Parse the diff into changed files, regions and member signatures.
         $diff = $this->parser->parse($diffText);
 
@@ -253,6 +264,18 @@ final class DiscoverContext
                     $this->callerResolver->scope(),
                 ));
 
+                // The same fact, as values rather than prose, for a consumer that should not have
+                // to parse English. The stderr line above is unchanged and remains authoritative.
+                $diagnostics[] = new Diagnostic(
+                    type: 'call_sites_truncated',
+                    assertionId: BundleAssembler::idFor($assertion),
+                    detail: [
+                        'limit' => $this->callerResolver->bound(),
+                        'subject' => $assertion->subject,
+                        'scope' => $this->callerResolver->scope(),
+                    ],
+                );
+
                 $resolved[] = ResolvedAssertion::flagged(
                     $assertion,
                     $this->assumptionWriter->statementForPremise(PremiseCatalogue::CallSitesTruncated),
@@ -262,8 +285,8 @@ final class DiscoverContext
             $resolved[] = ResolvedAssertion::fetched($assertion, $slices);
         }
 
-        // 6 · Assemble, attaching reason, lever and provenance to every item.
-        $bundle = $this->assembler->assemble($resolved, $budgetTokens);
+        // 6 · Assemble: the claims once, the evidence pointing back at them.
+        $bundle = $this->assembler->assemble($resolved, $run, $diagnostics);
 
         // 7 · Enforce the budget, recording every drop.
         return $this->budgetEnforcer->enforce($bundle);

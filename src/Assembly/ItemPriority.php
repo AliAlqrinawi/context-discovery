@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace ContextDiscovery\Assembly;
 
 use ContextDiscovery\Domain\Assertion\AssertionKind;
+use ContextDiscovery\Domain\Bundle\BundleAssertion;
 use ContextDiscovery\Domain\Bundle\BundleItem;
 use ContextDiscovery\Domain\Bundle\Lever;
 
@@ -15,9 +16,10 @@ use ContextDiscovery\Domain\Bundle\Lever;
  * engine assigns no severity, no score and no ranking (P6, X4). A lower band survives longer; it
  * does not mean an item matters more to a reviewer.
  *
- * Every band is a function of `assertionKind` and `lever` — two fields a BundleItem already
- * carries — so the enforcer never needs to know which resolver produced an item (freeze review
- * 04). Before the kinds partitioned the moves one-to-one, this was not computable.
+ * Every band is a function of the assertion's `kind` and the item's `lever` — so the enforcer
+ * never needs to know which resolver produced an item (freeze review 04). Before the kinds
+ * partitioned the moves one-to-one, this was not computable. In v2 the kind moved onto the
+ * assertion, so it is passed in beside the item; the rule itself is unchanged (ADR-A024).
  *
  * The order is stated in 01-architecture.md §3.4 and is reproduced, not invented, here.
  */
@@ -31,13 +33,13 @@ final class ItemPriority
 
     public const DROPPED_FIRST = 4;
 
-    public function of(BundleItem $item): int
+    public function of(BundleItem $item, BundleAssertion $claim): int
     {
         if ($item->lever === Lever::Flagged) {
             return self::NEVER_DROPPED;
         }
 
-        return match ($item->assertionKind) {
+        return match ($claim->kind) {
             // Free on disk, and the substrate every other move builds on (R1, Exp 1).
             AssertionKind::SameFileSymbolAbsence,
             AssertionKind::SameFileReference => 2,

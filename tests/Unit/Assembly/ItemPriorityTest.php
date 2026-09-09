@@ -9,6 +9,7 @@ use ContextDiscovery\Domain\Assertion\AssertionKind;
 use ContextDiscovery\Domain\Bundle\BundleItem;
 use ContextDiscovery\Domain\Bundle\Lever;
 use ContextDiscovery\Domain\Bundle\Provenance;
+use ContextDiscovery\Tests\Support\BuildsBundles;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
@@ -20,6 +21,8 @@ use PHPUnit\Framework\TestCase;
 #[CoversClass(ItemPriority::class)]
 final class ItemPriorityTest extends TestCase
 {
+    use BuildsBundles;
+
     private ItemPriority $priority;
 
     protected function setUp(): void
@@ -30,7 +33,7 @@ final class ItemPriorityTest extends TestCase
     #[DataProvider('fetchedKindsAndBands')]
     public function testAFetchedItemIsBandedByItsKind(AssertionKind $kind, int $expected): void
     {
-        self::assertSame($expected, $this->priority->of($this->item(Lever::Fetched, $kind)));
+        self::assertSame($expected, $this->band(Lever::Fetched, $kind));
     }
 
     /**
@@ -41,6 +44,7 @@ final class ItemPriorityTest extends TestCase
         yield 'a missing import is own-file substrate' => [AssertionKind::SameFileSymbolAbsence, 2];
         yield 'a same-file sibling is own-file substrate' => [AssertionKind::SameFileReference, 2];
         yield 'call sites are the sharpest differential' => [AssertionKind::ChangedSignature, 3];
+        yield 'a changed return contract asks the same question' => [AssertionKind::ChangedReturnContract, 3];
         yield 'a cross-file reference is dropped first' => [AssertionKind::NamedReference, 4];
     }
 
@@ -49,7 +53,7 @@ final class ItemPriorityTest extends TestCase
     {
         self::assertSame(
             ItemPriority::NEVER_DROPPED,
-            $this->priority->of($this->item(Lever::Flagged, $kind))
+            $this->band(Lever::Flagged, $kind)
         );
     }
 
@@ -63,28 +67,30 @@ final class ItemPriorityTest extends TestCase
         }
     }
 
-    public function testBandingUsesOnlyTheTwoFieldsABundleItemCarries(): void
+    public function testBandingUsesOnlyTheKindAndTheLever(): void
     {
         // The same kind and lever must band identically regardless of provenance or payload —
-        // the enforcer never learns which resolver produced an item (freeze review 04).
+        // the enforcer never learns which resolver produced an item (freeze review 04). In v2 the
+        // kind arrives on the assertion rather than the item; the rule is unchanged.
+        $first = $this->claim(AssertionKind::SameFileReference, 'a');
+        $second = $this->claim(AssertionKind::SameFileReference, 'b');
+
         $one = new BundleItem(
             Lever::Fetched,
-            'a',
-            AssertionKind::SameFileReference,
+            $first->id,
             new Provenance('app/One.php', 'upsertFromPlaid', 70, 90),
             'x',
             10,
         );
         $other = new BundleItem(
             Lever::Fetched,
-            'b',
-            AssertionKind::SameFileReference,
+            $second->id,
             new Provenance('app/Totally/Different.php'),
             'y',
             9999,
         );
 
-        self::assertSame($this->priority->of($one), $this->priority->of($other));
+        self::assertSame($this->priority->of($one, $first), $this->priority->of($other, $second));
     }
 
     public function testTheOwnFileBandOutranksTheCrossFileBand(): void
@@ -92,13 +98,18 @@ final class ItemPriorityTest extends TestCase
         // This is the distinction ACP-01 existed to make possible: Exp 1's `upsertFromPlaid`
         // sibling must survive longer than the `PlaidAccount` model surface.
         self::assertLessThan(
-            $this->priority->of($this->item(Lever::Fetched, AssertionKind::NamedReference)),
-            $this->priority->of($this->item(Lever::Fetched, AssertionKind::SameFileReference))
+            $this->band(Lever::Fetched, AssertionKind::NamedReference),
+            $this->band(Lever::Fetched, AssertionKind::SameFileReference)
         );
     }
 
-    private function item(Lever $lever, AssertionKind $kind): BundleItem
+    private function band(Lever $lever, AssertionKind $kind): int
     {
-        return new BundleItem($lever, 'a reason', $kind, new Provenance('app/One.php'), 'payload', 10);
+        $claim = $this->claim($kind, 'a reason');
+
+        return $this->priority->of(
+            new BundleItem($lever, $claim->id, new Provenance('app/One.php'), 'payload', 10),
+            $claim,
+        );
     }
 }

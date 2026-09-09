@@ -17,7 +17,7 @@ for what lands next (M1 domain types and ports, M2 diff parsing, …).
 
 ```
 context-discover --diff <path|-> --repo <path> --budget <int>
-                 [--format json|markdown]
+                 [--format json|markdown] [--repo-sha <sha>]
                  [--caller-scope <prefix>] [--max-call-sites <int>]
 ```
 

@@ -11,12 +11,15 @@ use ContextDiscovery\Domain\Bundle\Bundle;
 use ContextDiscovery\Domain\Bundle\BundleItem;
 use ContextDiscovery\Domain\Bundle\Lever;
 use ContextDiscovery\Domain\Bundle\Provenance;
+use ContextDiscovery\Tests\Support\BuildsBundles;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass(BudgetEnforcer::class)]
 final class BudgetEnforcerTest extends TestCase
 {
+    use BuildsBundles;
+
     private BudgetEnforcer $enforcer;
 
     protected function setUp(): void
@@ -36,7 +39,7 @@ final class BudgetEnforcerTest extends TestCase
         self::assertCount(2, $enforced->items);
         self::assertSame([], $enforced->dropped);
         self::assertSame(120, $enforced->usedTokens);
-        self::assertSame(500, $enforced->budgetTokens);
+        self::assertSame(500, $enforced->budgetTokens());
     }
 
     public function testDropsFollowTheBandOrderLowestPriorityFirst(): void
@@ -121,7 +124,7 @@ final class BudgetEnforcerTest extends TestCase
         self::assertSame([], $enforced->dropped);
         self::assertSame(60, $enforced->usedTokens);
         self::assertGreaterThan(
-            $enforced->budgetTokens,
+            $enforced->budgetTokens(),
             $enforced->usedTokens,
             'the overage is visible in the bundle, and the CLI reports it on stderr'
         );
@@ -194,25 +197,25 @@ final class BudgetEnforcerTest extends TestCase
      */
     private function bundle(int $budget, array $items): Bundle
     {
-        return new Bundle(
-            items: $items,
-            dropped: [],
-            budgetTokens: $budget,
-            usedTokens: array_sum(array_map(static fn (BundleItem $item): int => $item->tokens, $items)),
-        );
+        return $this->bundleOf($budget, $items);
     }
 
     private function fetched(AssertionKind $kind, string $reason, int $tokens): BundleItem
     {
-        return new BundleItem(Lever::Fetched, $reason, $kind, new Provenance('app/One.php'), 'payload', $tokens);
+        return new BundleItem(
+            Lever::Fetched,
+            $this->claim($kind, $reason)->id,
+            new Provenance('app/One.php'),
+            'payload',
+            $tokens,
+        );
     }
 
     private function flagged(string $reason, int $tokens): BundleItem
     {
         return new BundleItem(
             Lever::Flagged,
-            $reason,
-            AssertionKind::UnverifiablePremise,
+            $this->claim(AssertionKind::UnverifiablePremise, $reason)->id,
             new Provenance('app/One.php'),
             'ASSUMPTION: ...',
             $tokens,
@@ -239,6 +242,6 @@ final class BudgetEnforcerTest extends TestCase
      */
     private function items(Bundle $bundle): array
     {
-        return array_map(static fn (BundleItem $item): array => ['reason' => $item->reason], $bundle->items);
+        return array_map(fn (BundleItem $item): array => ['reason' => $this->reasonOf($bundle, $item)], $bundle->items);
     }
 }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ContextDiscovery\Tests\Acceptance;
 
+use ContextDiscovery\Tests\Support\ReadsBundles;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -27,6 +28,8 @@ use PHPUnit\Framework\TestCase;
  */
 final class ChangedReturnContractHunkOffsetTest extends TestCase
 {
+    use ReadsBundles;
+
     private string $repo = '';
 
     protected function setUp(): void
@@ -148,10 +151,7 @@ final class ChangedReturnContractHunkOffsetTest extends TestCase
      */
     private function assertNamesBeta(array $bundle): void
     {
-        $items = array_values(array_filter(
-            $bundle['items'],
-            static fn (array $i): bool => $i['assertion_kind'] === 'changed_return_contract'
-        ));
+        $items = $this->itemsOfKind($bundle, 'changed_return_contract');
 
         // Not zero: the between-members hunk used to produce nothing at all.
         self::assertNotSame([], $items, 'the assertion is raised');
@@ -159,10 +159,10 @@ final class ChangedReturnContractHunkOffsetTest extends TestCase
         // One subject, whatever the call-site count: `CallerResolver` legitimately returns several
         // sites per assertion, but every one of them must belong to the member that changed.
         foreach ($items as $item) {
-            self::assertStringContainsString('the body of beta ', $item['reason'], 'the subject is beta');
+            self::assertStringContainsString('the body of beta ', $this->reasonOfItem($bundle, $item), 'the subject is beta');
             self::assertStringNotContainsString(
                 'the body of alpha ',
-                $item['reason'],
+                $this->reasonOfItem($bundle, $item),
                 'and never the neighbouring member the hunk happens to start in'
             );
         }

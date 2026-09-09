@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ContextDiscovery\Tests\Acceptance;
 
+use ContextDiscovery\Tests\Support\ReadsBundles;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -33,6 +34,8 @@ use PHPUnit\Framework\TestCase;
  */
 final class ChangedReturnContractClosureScopeTest extends TestCase
 {
+    use ReadsBundles;
+
     private string $repo = '';
 
     protected function setUp(): void
@@ -99,12 +102,13 @@ final class ChangedReturnContractClosureScopeTest extends TestCase
 
         $this->rewrite('return $this->query->get();', 'return $this->query->first();');
 
-        $items = $this->returnContractItems($this->invoke($this->gitDiff()));
+        $bundle = $this->invoke($this->gitDiff());
+        $items = $this->returnContractItems($bundle);
 
         self::assertNotSame([], $items, 'a method changing its own return is still caught');
 
         foreach ($items as $item) {
-            self::assertStringContainsString('the body of direct ', $item['reason']);
+            self::assertStringContainsString('the body of direct ', $this->reasonOfItem($bundle, $item));
         }
     }
 
@@ -191,13 +195,14 @@ final class ChangedReturnContractClosureScopeTest extends TestCase
 
         $this->rewrite('return $this->query->get();', 'return $this->query->first();');
 
-        $items = $this->returnContractItems($this->invoke($this->gitDiff()));
+        $bundle = $this->invoke($this->gitDiff());
+        $items = $this->returnContractItems($bundle);
 
         self::assertNotSame([], $items, 'the method that did change its own return is caught');
 
         foreach ($items as $item) {
-            self::assertStringContainsString('the body of direct ', $item['reason'], 'named for direct');
-            self::assertStringNotContainsString('the body of outer ', $item['reason'], 'never for outer');
+            self::assertStringContainsString('the body of direct ', $this->reasonOfItem($bundle, $item), 'named for direct');
+            self::assertStringNotContainsString('the body of outer ', $this->reasonOfItem($bundle, $item), 'never for outer');
         }
 
         $paths = array_column(array_column($items, 'provenance'), 'path');
@@ -252,10 +257,7 @@ final class ChangedReturnContractClosureScopeTest extends TestCase
      */
     private function returnContractItems(array $bundle): array
     {
-        return array_values(array_filter(
-            $bundle['items'],
-            static fn (array $i): bool => $i['assertion_kind'] === 'changed_return_contract'
-        ));
+        return $this->itemsOfKind($bundle, 'changed_return_contract');
     }
 
     private function git(string $arguments): string

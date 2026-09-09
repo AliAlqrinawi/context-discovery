@@ -24,28 +24,46 @@ final class JsonBundleWriterTest extends TestCase
     {
         $decoded = $this->decode(BundleFixture::full());
 
-        self::assertSame(1, $decoded['bundle_version']);
-        self::assertSame(8000, $decoded['budget_tokens']);
+        self::assertSame(
+            ['bundle_version', 'run', 'used_tokens', 'assertions', 'items', 'diagnostics', 'dropped'],
+            array_keys($decoded)
+        );
+
+        self::assertSame(2, $decoded['bundle_version']);
+        self::assertSame(8000, $decoded['run']['budget_tokens']);
         self::assertSame(236, $decoded['used_tokens']);
+        self::assertCount(3, $decoded['assertions']);
         self::assertCount(3, $decoded['items']);
+        self::assertCount(1, $decoded['diagnostics']);
         self::assertCount(2, $decoded['dropped']);
+
+        // repo_sha is null rather than absent, so "not supplied" is stated (ADR-A024).
+        self::assertArrayHasKey('repo_sha', $decoded['run']);
+        self::assertNull($decoded['run']['repo_sha']);
     }
 
-    public function testAnItemCarriesLeverReasonKindProvenancePayloadAndTokens(): void
+    public function testAnItemNamesItsAssertionAndCarriesOnlyEvidence(): void
     {
-        $item = $this->decode(BundleFixture::full())['items'][0];
+        $decoded = $this->decode(BundleFixture::full());
+        $item = $decoded['items'][0];
+        $claim = $decoded['assertions'][0];
 
         self::assertSame(
-            ['lever', 'reason', 'assertion_kind', 'provenance', 'payload', 'tokens'],
-            array_keys($item)
+            ['assertion_id', 'lever', 'provenance', 'payload', 'tokens'],
+            array_keys($item),
+            'the reason and the kind live on the assertion now, not on every item'
         );
+
+        self::assertSame(['id', 'kind', 'subject', 'reason', 'origin'], array_keys($claim));
+        self::assertSame($claim['id'], $item['assertion_id']);
 
         self::assertSame('fetched', $item['lever']);
         self::assertSame(
             'changed call site depends on PlaidAccount::forItem() and official_name',
-            $item['reason']
+            $claim['reason']
         );
-        self::assertSame('named_reference', $item['assertion_kind']);
+        self::assertSame('named_reference', $claim['kind']);
+        self::assertSame('App\Models\PlaidAccount::forItem', $claim['subject'], 'structured, not parsed from prose');
         self::assertSame('app/Models/PlaidAccount.php', $item['provenance']['path']);
         self::assertSame('forItem', $item['provenance']['member']);
         self::assertSame([41, 58], $item['provenance']['lines']);
@@ -75,7 +93,9 @@ final class JsonBundleWriterTest extends TestCase
 
     public function testItemOrderIsPreservedExactlyAsTheBundleHoldsIt(): void
     {
-        $kinds = array_column($this->decode(BundleFixture::full())['items'], 'assertion_kind');
+        $decoded = $this->decode(BundleFixture::full());
+        $byId = array_column($decoded['assertions'], 'kind', 'id');
+        $kinds = array_map(static fn (array $i): string => $byId[$i['assertion_id']], $decoded['items']);
 
         self::assertSame(['named_reference', 'unverifiable_premise', 'same_file_symbol_absence'], $kinds);
     }
@@ -85,16 +105,32 @@ final class JsonBundleWriterTest extends TestCase
         $json = $this->writer->write(BundleFixture::empty());
         $decoded = $this->decode(BundleFixture::empty());
 
+        self::assertSame([], $decoded['assertions']);
         self::assertSame([], $decoded['items']);
+        self::assertSame([], $decoded['diagnostics']);
         self::assertSame([], $decoded['dropped']);
         self::assertStringContainsString('"items": []', $json);
         self::assertStringContainsString('"dropped": []', $json, 'the drop list is never omitted (P7)');
     }
 
-    public function testDiagnosticsNeverAppearInTheBundle(): void
+    public function testDiagnosticsAreMirroredWithoutCostingTokens(): void
     {
-        // stderr carries them; every one also has a flag item (freeze review L2, ADR-A009).
-        self::assertArrayNotHasKey('diagnostics', $this->decode(BundleFixture::full()));
+        // v2 reversed freeze review L2's exclusion, but only on its own terms: stderr still carries
+        // every line, and the mirror is free. The objection was that the artifact would outgrow the
+        // number describing it, so used_tokens still sums the items alone (ADR-A024).
+        $decoded = $this->decode(BundleFixture::full());
+
+        self::assertSame(
+            [['type' => 'call_sites_truncated', 'assertion_id' => BundleFixture::NAMED_REFERENCE_ID,
+              'detail' => ['limit' => 20, 'subject' => 'forItem', 'scope' => 'app/']]],
+            $decoded['diagnostics']
+        );
+
+        self::assertSame(
+            array_sum(array_column($decoded['items'], 'tokens')),
+            $decoded['used_tokens'],
+            'the diagnostic costs nothing'
+        );
     }
 
     public function testPathsAreNotEscapedSoProvenanceStaysReadable(): void

@@ -31,6 +31,7 @@ use ContextDiscovery\Adapters\Search\ScopedGrepCallSiteSearch;
 use ContextDiscovery\Pipeline\DiscoverContext;
 use ContextDiscovery\Tests\Fakes\FakeClassLocator;
 use ContextDiscovery\Tests\Fakes\FakeSourceRepository;
+use ContextDiscovery\Tests\Support\BuildsBundles;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -54,6 +55,8 @@ use PHPUnit\Framework\TestCase;
  */
 final class FrameworkKnownResolutionTest extends TestCase
 {
+    use BuildsBundles;
+
     private const FACADE = 'vendor/illuminate/Support/Facades/Log.php';
 
     private const MODEL = 'app/Models/Package.php';
@@ -168,6 +171,13 @@ final class FrameworkKnownResolutionTest extends TestCase
                 // Not part of this test's question: the return-contract table is read during
                 // extraction, never during named-reference resolution.
                 return null;
+            }
+
+            public function tableVersion(): string
+            {
+                // A stub supplies no naming facts, so it declares a fixed digest rather than one
+                // derived from a table it does not have.
+                return 'stub';
             }
         };
 
@@ -365,7 +375,7 @@ final class FrameworkKnownResolutionTest extends TestCase
             new BudgetEnforcer(new ItemPriority()),
         );
 
-        return $context->run($diffText, 20000, function (string $line): void {
+        return $context->run($diffText, $this->runMetadata(20000), function (string $line): void {
             $this->diagnostics[] = $line;
         });
     }

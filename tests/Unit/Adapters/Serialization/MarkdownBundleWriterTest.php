@@ -23,7 +23,7 @@ final class MarkdownBundleWriterTest extends TestCase
     public function testTheHeaderCarriesTheBudgetLine(): void
     {
         self::assertStringContainsString(
-            'bundle_version 1 · budget 8000 / used 236 tokens',
+            'bundle_version 2 · budget 8000 / used 236 tokens',
             $this->writer->write(BundleFixture::full())
         );
     }
@@ -145,6 +145,14 @@ final class MarkdownBundleWriterTest extends TestCase
         self::assertIsArray($decoded);
 
         foreach ($this->scalars($decoded) as $path => $value) {
+            // The Markdown is the human projection, so it renders the facts a reader acts on and
+            // not the machine plumbing v2 added: identifiers exist to join items to assertions,
+            // run digests describe the run rather than the code, and diagnostics are a mirror of
+            // stderr the reader has already seen (03-interfaces.md §2, ADR-A024).
+            if ($this->isMachinePlumbing($path)) {
+                continue;
+            }
+
             self::assertStringContainsString(
                 (string) $value,
                 $markdown,
@@ -180,6 +188,24 @@ final class MarkdownBundleWriterTest extends TestCase
 
     /**
      * @param array<array-key, mixed> $data
+     *
+     * @return array<string, scalar>
+     */
+    private function isMachinePlumbing(string $path): bool
+    {
+        return $path === 'bundle_version'
+            || str_starts_with($path, 'run.')
+            || str_starts_with($path, 'diagnostics.')
+            || str_ends_with($path, '.id')
+            || str_ends_with($path, '.assertion_id')
+            // An assertion's origin is where the *claim* arose in the diff; the reader is looking
+            // at that diff. What the Markdown renders per item is the evidence's provenance, and
+            // repeating the origin under twenty call sites is the duplication v2 removed.
+            || str_contains($path, '.origin.');
+    }
+
+    /**
+     * @param array<string, mixed> $data
      *
      * @return array<string, scalar>
      */

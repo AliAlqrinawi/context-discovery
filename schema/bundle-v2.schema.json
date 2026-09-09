@@ -1,0 +1,185 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/alialqrinawi/context-discovery/schema/bundle-v2.schema.json",
+  "title": "Context bundle, version 2",
+  "description": "The published output contract. This file is the single source: the closed sets below are asserted against the code by BundleSchemaConformanceTest, so a kind, a lever or a diagnostic type added in one place and not the other fails the build. See ADR-A024 for the compatibility policy.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["bundle_version", "run", "used_tokens", "assertions", "items", "diagnostics", "dropped"],
+  "properties": {
+    "bundle_version": {
+      "const": 2,
+      "description": "Bumped only for a breaking change: a removal, a rename, or a change of nesting. Adding a field, an assertion kind or a diagnostic type is additive and does not bump it (ADR-A024)."
+    },
+    "run": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["engine_version", "policy_version", "framework_table_version", "budget_tokens", "diff_sha", "repo_sha"],
+      "description": "What produced this bundle, so two bundles can be compared knowingly. Nothing here is observed from the environment: no clock, no hostname, no process (P8, P9).",
+      "properties": {
+        "engine_version": { "type": "string", "minLength": 1, "description": "Declared constant, bumped with the release." },
+        "policy_version": { "type": "string", "minLength": 1, "description": "Declared constant covering LeverPolicy, ItemPriority and PremiseCatalogue. Guarded: a test hashes those classes and fails when they move without this value moving." },
+        "framework_table_version": { "type": "string", "minLength": 1, "description": "Derived from the framework naming table's own content, not declared." },
+        "budget_tokens": { "type": "integer", "minimum": 1, "description": "Echoes --budget. Moved here from the root in v2." },
+        "diff_sha": { "type": ["string", "null"], "description": "Digest of the diff bytes handed in." },
+        "repo_sha": {
+          "type": ["string", "null"],
+          "description": "Supplied by the caller through --repo-sha; null when it was not given. The tool cannot read it: git rev-parse needs a subprocess (P9), and .git is a file rather than a directory in the detached worktree ADR-A022's harness uses. Null is emitted explicitly rather than the key omitted."
+        }
+      }
+    },
+    "used_tokens": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "The sum of items[].tokens, and of nothing else. Diagnostics are excluded by design (freeze review L2)."
+    },
+    "assertions": {
+      "type": "array",
+      "description": "Every claim the diff makes, stated once. The reason lives here, not on each item (P5, ADR-A024).",
+      "items": { "$ref": "#/$defs/assertion" }
+    },
+    "items": {
+      "type": "array",
+      "description": "The evidence gathered, in the fixed order at $defs/kindOrder, then by provenance.path, then by provenance.member. Every item names an assertion this bundle carries; an orphan is rejected before serialisation.",
+      "items": { "$ref": "#/$defs/item" }
+    },
+    "diagnostics": {
+      "type": "array",
+      "description": "A machine-readable MIRROR of stderr, never a relocation: stderr still carries every line byte for byte, because a harness uses it to tell 'searched, found none' from 'never searched' (freeze review 05). Empty rather than absent. Carries no tokens.",
+      "items": { "$ref": "#/$defs/diagnostic" }
+    },
+    "dropped": {
+      "type": "array",
+      "description": "Every budget drop, with the reason the item was included. Empty rather than absent when nothing was dropped (P7).",
+      "items": { "$ref": "#/$defs/dropped" }
+    }
+  },
+  "$defs": {
+    "kindOrder": {
+      "description": "The fixed item ordering. Asserted equal to BundleAssembler::KIND_ORDER by the conformance test — this array is the source, the constant is the copy.",
+      "const": [
+        "same_file_symbol_absence",
+        "same_file_reference",
+        "changed_signature",
+        "changed_return_contract",
+        "named_reference",
+        "unverifiable_premise"
+      ]
+    },
+    "assertion": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "kind", "subject", "reason", "origin"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^a[0-9a-f]{12}$",
+          "description": "Derived from kind, subject, origin path and first line — the same tuple extraction de-duplicates on — so it is stable across runs (P8)."
+        },
+        "kind": {
+          "description": "Closed set. Asserted equal to AssertionKind's cases by the conformance test.",
+          "enum": [
+            "same_file_symbol_absence",
+            "same_file_reference",
+            "named_reference",
+            "changed_signature",
+            "changed_return_contract",
+            "unverifiable_premise"
+          ]
+        },
+        "subject": {
+          "type": "string",
+          "minLength": 1,
+          "description": "The extractor's own structured datum, never parsed from the reason. Its meaning is fixed per kind: a member name for changed_signature and changed_return_contract; a fully-qualified class or member for named_reference; a symbol for same_file_symbol_absence and same_file_reference; a catalogue identifier for unverifiable_premise."
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Required. An assertion without one does not enter the bundle (P5)."
+        },
+        "origin": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["path"],
+          "description": "Where in the diff the claim arose. A path and a span only: an assertion has no origin member, so none is claimed.",
+          "properties": {
+            "path": { "type": "string", "minLength": 1 },
+            "lines": { "$ref": "#/$defs/lines" }
+          }
+        }
+      }
+    },
+    "item": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["assertion_id", "lever", "provenance", "payload", "tokens"],
+      "properties": {
+        "assertion_id": {
+          "type": "string",
+          "pattern": "^a[0-9a-f]{12}$",
+          "description": "Must match an id in assertions[]. Enforced in the domain, not merely documented."
+        },
+        "lever": {
+          "description": "Closed set. Asserted equal to Lever's cases by the conformance test.",
+          "enum": ["fetched", "flagged"]
+        },
+        "provenance": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["path"],
+          "properties": {
+            "path": { "type": "string", "minLength": 1 },
+            "member": {
+              "type": "string",
+              "minLength": 1,
+              "description": "OPTIONAL, and absent rather than null when it does not apply. Present when the slice is a member: the enclosing member, a named reference's declaration, a model or enum surface, and a flagged item whose assertion names a member. Absent for a file's use block, which has no member name, for a flagged premise, which names a premise rather than a member (ADR-A009), and for every reverse-caller call site, because a call site is a line and not a member."
+            },
+            "lines": { "$ref": "#/$defs/lines" }
+          }
+        },
+        "payload": {
+          "type": "string",
+          "description": "Fetched: the minimal source slice (ADR-A005). Flagged: the assumption sentence and nothing else."
+        },
+        "tokens": { "type": "integer", "minimum": 0, "description": "Estimated, not counted (ADR-A007)." }
+      }
+    },
+    "diagnostic": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "assertion_id", "detail"],
+      "properties": {
+        "type": {
+          "description": "Closed set. Adding a mirrored diagnostic is additive and requires editing this enum — that edit is the point.",
+          "enum": ["call_sites_truncated"]
+        },
+        "assertion_id": {
+          "type": "string",
+          "description": "The assertion this concerns, or an empty string when it belongs to the run rather than to any one claim."
+        },
+        "detail": {
+          "type": "object",
+          "description": "The facts the stderr line renders as prose, as values.",
+          "additionalProperties": { "type": ["string", "integer"] }
+        }
+      }
+    },
+    "dropped": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["reason", "note", "tokens"],
+      "properties": {
+        "reason": { "type": "string", "minLength": 1, "description": "The reason the item was included in the first place, taken from its assertion." },
+        "note": { "type": "string", "minLength": 1 },
+        "tokens": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "lines": {
+      "type": "array",
+      "description": "A [first, last] span, 1-indexed and inclusive.",
+      "items": { "type": "integer", "minimum": 1 },
+      "minItems": 2,
+      "maxItems": 2
+    }
+  }
+}

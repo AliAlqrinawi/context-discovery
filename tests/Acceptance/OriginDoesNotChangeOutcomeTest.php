@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ContextDiscovery\Tests\Acceptance;
 
+use ContextDiscovery\Tests\Support\ReadsBundles;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -32,6 +33,8 @@ use PHPUnit\Framework\TestCase;
  */
 final class OriginDoesNotChangeOutcomeTest extends TestCase
 {
+    use ReadsBundles;
+
     private const BUDGET = 8000;
 
     /**
@@ -167,9 +170,11 @@ final class OriginDoesNotChangeOutcomeTest extends TestCase
     private function flaggedSubjects(): array
     {
         $subjects = [];
+        $bundle = self::bundle();
 
-        foreach (self::bundle()['items'] as $item) {
-            if ($item['lever'] === 'flagged' && preg_match('/depends on (\S+),/', $item['reason'], $m) === 1) {
+        foreach ($bundle['items'] as $item) {
+            if ($item['lever'] === 'flagged'
+                && preg_match('/depends on (\S+),/', $this->reasonOfItem($bundle, $item), $m) === 1) {
                 $subjects[] = $m[1];
             }
         }
@@ -179,8 +184,11 @@ final class OriginDoesNotChangeOutcomeTest extends TestCase
 
     private function originOf(string $subject): ?string
     {
-        foreach (self::bundle()['items'] as $item) {
-            if ($item['lever'] === 'flagged' && str_contains($item['reason'], 'depends on ' . $subject . ',')) {
+        $bundle = self::bundle();
+
+        foreach ($bundle['items'] as $item) {
+            if ($item['lever'] === 'flagged'
+                && str_contains($this->reasonOfItem($bundle, $item), 'depends on ' . $subject . ',')) {
                 return $item['provenance']['path'];
             }
         }

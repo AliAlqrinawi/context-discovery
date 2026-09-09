@@ -27,6 +27,8 @@ use ContextDiscovery\Discovery\Parsing\UnifiedDiffParser;
 use ContextDiscovery\Discovery\Resolution\CallerResolver;
 use ContextDiscovery\Discovery\Resolution\NamedReferenceResolver;
 use ContextDiscovery\Discovery\Resolution\OwnFileResolver;
+use ContextDiscovery\Domain\Bundle\ContractVersion;
+use ContextDiscovery\Domain\Bundle\RunMetadata;
 use ContextDiscovery\Pipeline\DiscoverContext;
 use ContextDiscovery\Ports\BundleWriter;
 use RuntimeException;
@@ -89,7 +91,18 @@ final class Wiring
             new BudgetEnforcer(new ItemPriority()),
         );
 
-        return new DiscoverCommand($context, $this->writerFor($options->format), $stdout, $stderr);
+        // What produced this bundle. Two versions are declared and one is derived from the
+        // framework table's own content; none is observed from the environment (P8, ADR-A024).
+        $run = new RunMetadata(
+            engineVersion: ContractVersion::ENGINE,
+            policyVersion: ContractVersion::POLICY,
+            frameworkTableVersion: $framework->tableVersion(),
+            budgetTokens: $options->budgetTokens,
+            diffSha: null,
+            repoSha: $options->repositorySha,
+        );
+
+        return new DiscoverCommand($context, $this->writerFor($options->format), $run, $stdout, $stderr);
     }
 
     private function writerFor(string $format): BundleWriter

@@ -6,6 +6,7 @@ namespace ContextDiscovery\Tests\Acceptance;
 
 use ContextDiscovery\Discovery\Flagging\AssumptionWriter;
 use ContextDiscovery\Discovery\Lever\PremiseCatalogue;
+use ContextDiscovery\Tests\Support\ReadsBundles;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
@@ -28,10 +29,17 @@ use PHPUnit\Framework\TestCase;
  */
 final class ExperimentKeyTest extends TestCase
 {
+    use ReadsBundles;
+
     private const MISSING_FIXTURE = 'fixture diff absent — acceptance not run';
 
     /**
-     * The fixed item order from 03-interfaces.md §2.
+     * The fixed item order.
+     *
+     * This is a *copy*, and it was allowed to go stale for a whole commit once. It is now checked
+     * against `schema/bundle-v2.schema.json` — the single source — by
+     * `BundleSchemaConformanceTest::testTheSchemaAndTheAssemblerAgreeOnTheItemOrder`, so a
+     * divergence fails the build rather than waiting for a fixture to arrive (ADR-A024).
      *
      * @var list<string>
      */
@@ -195,24 +203,41 @@ final class ExperimentKeyTest extends TestCase
      */
     private function assertBundleStructure(string $experiment, array $bundle, int $budget): void
     {
-        self::assertSame(1, $bundle['bundle_version'], $experiment);
-        self::assertSame($budget, $bundle['budget_tokens'], $experiment);
+        self::assertSame(2, $bundle['bundle_version'], $experiment);
+        self::assertSame($budget, $bundle['run']['budget_tokens'], $experiment);
+        self::assertIsArray($bundle['assertions'], $experiment);
         self::assertIsInt($bundle['used_tokens'], $experiment);
         self::assertIsArray($bundle['items'], $experiment);
-        self::assertIsArray($bundle['dropped'], $experiment, );
-        self::assertArrayNotHasKey('diagnostics', $bundle, $experiment . ': diagnostics belong on stderr');
+        self::assertIsArray($bundle['dropped'], $experiment);
+
+        // v2 mirrors diagnostics into the bundle, and stderr still carries every line byte for
+        // byte, so this harness's stderr comparisons are unaffected (freeze review 05, ADR-A024).
+        self::assertIsArray($bundle['diagnostics'], $experiment);
+
+        foreach ($bundle['assertions'] as $index => $assertion) {
+            $where = sprintf('%s assertion %d', $experiment, $index);
+
+            self::assertSame(['id', 'kind', 'subject', 'reason', 'origin'], array_keys($assertion), $where);
+            self::assertContains($assertion['kind'], self::KIND_ORDER, $where);
+            self::assertNotSame('', trim($assertion['reason']), $where . ': every claim is self-justifying (P5)');
+            self::assertNotSame('', trim($assertion['subject']), $where . ': the subject is structured, not prose');
+        }
 
         foreach ($bundle['items'] as $index => $item) {
             $where = sprintf('%s item %d', $experiment, $index);
 
             self::assertSame(
-                ['lever', 'reason', 'assertion_kind', 'provenance', 'payload', 'tokens'],
+                ['assertion_id', 'lever', 'provenance', 'payload', 'tokens'],
                 array_keys($item),
                 $where
             );
             self::assertContains($item['lever'], ['fetched', 'flagged'], $where);
-            self::assertNotSame('', trim($item['reason']), $where . ': every item is self-justifying (P5)');
-            self::assertContains($item['assertion_kind'], self::KIND_ORDER, $where);
+            self::assertNotSame(
+                '',
+                $this->reasonOfItem($bundle, $item),
+                $where . ': every item resolves to a claim that has a reason (P5)'
+            );
+            self::assertContains($this->kindOfItem($bundle, $item), self::KIND_ORDER, $where);
             self::assertArrayHasKey('path', $item['provenance'], $where);
             self::assertIsInt($item['tokens'], $where);
 
@@ -233,7 +258,7 @@ final class ExperimentKeyTest extends TestCase
     {
         $keys = array_map(
             fn (array $item): array => [
-                array_search($item['assertion_kind'], self::KIND_ORDER, true),
+                array_search($this->kindOfItem($bundle, $item), self::KIND_ORDER, true),
                 $item['provenance']['path'],
                 $item['provenance']['member'] ?? '',
             ],
@@ -277,7 +302,7 @@ final class ExperimentKeyTest extends TestCase
      */
     private function assertExperimentChecks(string $experiment, array $bundle, string $stderr): void
     {
-        $kinds = array_column($bundle['items'], 'assertion_kind');
+        $kinds = $this->itemKinds($bundle);
 
         match ($experiment) {
             'experiment-01' => $this->assertExperimentOne($bundle, $kinds, $stderr),
@@ -358,7 +383,7 @@ final class ExperimentKeyTest extends TestCase
         self::assertContains('changed_signature', $kinds, 'the reverse-caller item is present');
 
         foreach ($bundle['items'] as $item) {
-            if ($item['assertion_kind'] !== 'changed_signature' || $item['lever'] !== 'fetched') {
+            if ($this->kindOfItem($bundle, $item) !== 'changed_signature' || $item['lever'] !== 'fetched') {
                 continue;
             }
 
@@ -420,7 +445,7 @@ final class ExperimentKeyTest extends TestCase
         $wantFlagged = $row['mark'] === 'flag-satisfied';
 
         foreach ($bundle['items'] as $item) {
-            if ($item['assertion_kind'] !== $row['kind']) {
+            if ($this->kindOfItem($bundle, $item) !== $row['kind']) {
                 continue;
             }
 

@@ -28,7 +28,7 @@ final class Options
 
     private const USAGE = <<<'USAGE'
     context-discover --diff <path|-> --repo <path> --budget <int>
-                     [--format json|markdown]
+                     [--format json|markdown] [--repo-sha <sha>]
                      [--caller-scope <prefix>] [--max-call-sites <int>]
     USAGE;
 
@@ -39,6 +39,7 @@ final class Options
         public readonly string $format,
         public readonly string $callerScope,
         public readonly int $maxCallSites,
+        public readonly ?string $repositorySha = null,
     ) {
     }
 
@@ -79,6 +80,9 @@ final class Options
             maxCallSites: isset($values['max-call-sites'])
                 ? self::positiveInt($values['max-call-sites'], 'max-call-sites')
                 : self::DEFAULT_MAX_CALL_SITES,
+            // Supplied, never read: the tool spawns no process (P9) and a detached worktree has no
+            // readable `.git` directory, so the caller is the only honest source (ADR-A024).
+            repositorySha: $values['repo-sha'] ?? null,
         );
     }
 
@@ -126,7 +130,7 @@ final class Options
                 );
             }
 
-            if (!in_array($name, ['diff', 'repo', 'budget', 'format', 'caller-scope', 'max-call-sites'], true)) {
+            if (!in_array($name, ['diff', 'repo', 'budget', 'format', 'caller-scope', 'max-call-sites', 'repo-sha'], true)) {
                 throw new InvalidArgumentException(
                     sprintf('Unknown option --%s.%s%s', $name, "\n\n", self::USAGE)
                 );

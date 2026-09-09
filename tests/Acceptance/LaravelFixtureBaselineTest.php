@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ContextDiscovery\Tests\Acceptance;
 
+use ContextDiscovery\Tests\Support\ReadsBundles;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
@@ -48,6 +49,8 @@ use PHPUnit\Framework\TestCase;
  */
 final class LaravelFixtureBaselineTest extends TestCase
 {
+    use ReadsBundles;
+
     private const BUDGET = 20000;
 
     private const VARIANTS = ['repo-a-app-map', 'repo-b-vendor-map', 'repo-c-vendor-installed'];
@@ -538,7 +541,8 @@ final class LaravelFixtureBaselineTest extends TestCase
         $kinds = [];
 
         foreach ($bundle['items'] as $item) {
-            $kinds[$item['assertion_kind']] = ($kinds[$item['assertion_kind']] ?? 0) + 1;
+            $kind = $this->kindOfItem($bundle, $item);
+            $kinds[$kind] = ($kinds[$kind] ?? 0) + 1;
 
             if ($item['lever'] === 'fetched') {
                 $path = $item['provenance']['path'];
@@ -547,8 +551,12 @@ final class LaravelFixtureBaselineTest extends TestCase
                 continue;
             }
 
-            preg_match('/depends on (\S+),/', $item['reason'], $match);
-            $flagged[] = $match[1] ?? $item['reason'];
+            // v2 states the reason once, on the assertion the item names (ADR-A024). The recorded
+            // baseline is unchanged: the same subjects, derived from the same sentence.
+            $reason = $this->reasonOfItem($bundle, $item);
+
+            preg_match('/depends on (\S+),/', $reason, $match);
+            $flagged[] = $match[1] ?? $reason;
         }
 
         ksort($byPath);
