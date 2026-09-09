@@ -39,6 +39,7 @@ final class ExperimentKeyTest extends TestCase
         'same_file_symbol_absence',
         'same_file_reference',
         'changed_signature',
+        'changed_return_contract',
         'named_reference',
         'unverifiable_premise',
     ];

@@ -17,7 +17,7 @@ use ContextDiscovery\Domain\Bundle\Lever;
  *
  * Every band is a function of `assertionKind` and `lever` — two fields a BundleItem already
  * carries — so the enforcer never needs to know which resolver produced an item (freeze review
- * 04). Before the five kinds partitioned the five moves one-to-one, this was not computable.
+ * 04). Before the kinds partitioned the moves one-to-one, this was not computable.
  *
  * The order is stated in 01-architecture.md §3.4 and is reproduced, not invented, here.
  */
