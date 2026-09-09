@@ -131,6 +131,11 @@ final class NamedReferenceResolverTest extends TestCase
             {
                 return $this->inner->enclosingMemberName($fileText, $line);
             }
+
+            public function memberOwningLine(string $fileText, int $line): ?string
+            {
+                return $this->inner->memberOwningLine($fileText, $line);
+            }
         };
 
         $resolver = new NamedReferenceResolver($this->locator(), $this->source(), $spy, new LaravelFrameworkKnowledge());

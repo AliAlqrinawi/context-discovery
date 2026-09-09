@@ -45,6 +45,67 @@ final class LaravelFrameworkKnowledge implements FrameworkKnowledge
 
     private const SCOPE_PREFIX = 'scope';
 
+    /**
+     * The cardinality each name carries in the Eloquent / Collection **finisher position** this move
+     * reads — the last call in a `return`.
+     *
+     * `many`   — a Collection or paginator
+     * `one`    — a single model or null
+     * `scalar` — a number or boolean
+     *
+     * The table is keyed on the member name and nothing else — no receiver type, no argument shape,
+     * because neither is among the available facts (ADR-A016). Four names were removed for turning
+     * on exactly those, each checked against Laravel's source:
+     *
+     * - `find` — Laravel declares the conditional return `($id is array ? Collection : TModel|null)`,
+     *   so the class is the argument's, not the name's;
+     * - `findOrFail` — the same conditional return, and its body delegates to `find($id, $columns)`
+     *   on its first line. It was removed for the same reason as `find`, and keeping one without the
+     *   other was the inconsistency the final review caught: `findOrFail($ids)` on an array already
+     *   returns a Collection, so `findOrFail(...)` → `get()` claimed a shape change that never
+     *   happened;
+     * - `chunk` — `BuildsQueries::chunk()` returns `bool` and takes a callback, `Collection::chunk()`
+     *   returns a Collection of chunks;
+     * - `toArray` — many rows on a Collection, one model's attributes on a Model.
+     *
+     * **This is not a claim that every remaining entry is safe under any receiver, and ADR-A023 says
+     * so in the open.** One is known not to meet that stricter standard: `Collection::get($key)`
+     * returns a single element and `Cache::get($key)` a single value. `get` stays because it is the
+     * finisher the move exists for, and because firing needs *both* sides table-known and in
+     * different classes. Widening the table, or inferring a receiver, needs its own ADR.
+     *
+     * Unknown names return null and never produce an assertion: guessing is the inference ADR-A003
+     * forbids, and losing a detection is the conservative direction — silence, not a wrong subject.
+     */
+    private const CARDINALITY = [
+        'get' => 'many',        'all' => 'many',         'paginate' => 'many',
+        'simplePaginate' => 'many', 'cursor' => 'many',  'pluck' => 'many',
+
+        'first' => 'one',       'firstOrFail' => 'one',  'sole' => 'one',
+        'firstWhere' => 'one',  'last' => 'one',
+
+        'count' => 'scalar',    'exists' => 'scalar',    'doesntExist' => 'scalar',
+        'sum' => 'scalar',      'avg' => 'scalar',       'max' => 'scalar',
+        'min' => 'scalar',      'value' => 'scalar',
+    ];
+
+
+    /**
+     * The cardinality class of an Eloquent/Collection finisher, or null when the name is unknown.
+     *
+     * A **closed table**, in the same spirit as the facade and `scope<Name>` rules above: the
+     * framework supplies the naming fact, the extractor supplies none. Every entry is a documented
+     * Eloquent or Collection terminal whose return cardinality is not in dispute.
+     *
+     * Unknown names return null, and an unknown name must never produce an assertion — a project's
+     * own `->fetchThings()` says nothing about cardinality, and guessing would be the inference
+     * ADR-A003 forbids.
+     */
+    public function returnCardinalityOf(string $member): ?string
+    {
+        return self::CARDINALITY[$member] ?? null;
+    }
+
     public function declarationOf(string $member, string $classFileText): ?FrameworkDeclaration
     {
         if ($member === '' || !$this->extendsFacade($classFileText)) {

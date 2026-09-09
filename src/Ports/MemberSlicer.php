@@ -9,8 +9,8 @@ use ContextDiscovery\Domain\Source\SourceSlice;
 /**
  * PHP file text to minimal member spans.
  *
- * One responsibility — where members and the `use` block begin and end — expressed as four
- * methods, all four consumed.
+ * One responsibility — where members and the `use` block begin and end — expressed as five
+ * methods, all five consumed.
  *
  * A member that cannot be found returns null; the assertion is then flagged, not silently
  * skipped (P10, ADR-A004).
@@ -34,5 +34,22 @@ interface MemberSlicer
      */
     public function memberNames(string $fileText): array;
 
+    /**
+     * The member whose span contains this line, closures included — "which member am I reading?".
+     */
     public function enclosingMemberName(string $fileText, int $line): ?string;
+
+    /**
+     * The member whose **own body** contains this line — null when the line sits inside a function
+     * scope declared within that member: a closure passed to `map()`, a `DB::transaction()`
+     * callback, a method of an anonymous class.
+     *
+     * A different question from `enclosingMemberName()`, and both are needed. Fetching a member as
+     * context wants the member a line is *inside*; attributing a statement *to* a member wants the
+     * member the statement belongs to. A `return` in a `map()` callback is inside `outer()` but is
+     * not `outer()`'s return, and only this method can say so.
+     *
+     * Null when the scope cannot be established, so an ambiguous file claims nothing (P10).
+     */
+    public function memberOwningLine(string $fileText, int $line): ?string;
 }

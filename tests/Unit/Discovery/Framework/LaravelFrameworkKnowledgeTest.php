@@ -240,6 +240,73 @@ final class LaravelFrameworkKnowledgeTest extends TestCase
 
     // ---------------------------------------------------------------- helpers
 
+    // ---------------------------------------------------------------- return cardinality
+
+    #[DataProvider('finishersWithAKnownCardinality')]
+    public function testAKnownFinisherDeclaresItsCardinality(string $member, string $expected): void
+    {
+        self::assertSame($expected, $this->knowledge()->returnCardinalityOf($member));
+    }
+
+    /**
+     * @return iterable<string, array{string, string}>
+     */
+    public static function finishersWithAKnownCardinality(): iterable
+    {
+        yield 'get' => ['get', 'many'];
+        yield 'paginate' => ['paginate', 'many'];
+        yield 'first' => ['first', 'one'];
+        yield 'firstOrFail' => ['firstOrFail', 'one'];
+        yield 'sole' => ['sole', 'one'];
+        yield 'count' => ['count', 'scalar'];
+    }
+
+    /**
+     * The table is keyed on the member name alone — no receiver, no argument shape, neither being an
+     * available fact (ADR-A016). A name whose cardinality turns on either is **not in the table**,
+     * and must answer null so the extractor passes it over instead of guessing.
+     *
+     * These are not oversights to be filled in later. Each was removed, or kept out, on evidence
+     * from Laravel's own source, and re-adding one would put back a false claim (ADR-A023).
+     */
+    #[DataProvider('namesTheTableRefusesToClassify')]
+    public function testAReceiverDependentNameIsUnknownRatherThanGuessed(string $member, string $why): void
+    {
+        self::assertNull($this->knowledge()->returnCardinalityOf($member), $why);
+    }
+
+    /**
+     * @return iterable<string, array{string, string}>
+     */
+    public static function namesTheTableRefusesToClassify(): iterable
+    {
+        yield 'find' => [
+            'find',
+            'Laravel declares `($id is array ? Collection : TModel|null)`: the class is the argument\'s',
+        ];
+
+        yield 'findOrFail' => [
+            'findOrFail',
+            'the same conditional return as `find`, which it delegates to on its first line — so '
+            . '`findOrFail($ids)` on an array already returns a Collection',
+        ];
+
+        yield 'chunk' => [
+            'chunk',
+            '`BuildsQueries::chunk()` returns bool and takes a callback; `Collection::chunk()` returns a Collection',
+        ];
+
+        yield 'toArray' => [
+            'toArray',
+            'many rows on a Collection, one model\'s attributes on a Model',
+        ];
+
+        yield 'a project method the framework knows nothing about' => [
+            'fetchThings',
+            'an unknown name says nothing about cardinality',
+        ];
+    }
+
     private function knowledge(): LaravelFrameworkKnowledge
     {
         return new LaravelFrameworkKnowledge();

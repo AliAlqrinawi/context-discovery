@@ -54,4 +54,15 @@ interface FrameworkKnowledge
      * @param string $classFileText the full text of the one file the `ClassLocator` placed
      */
     public function sameFileMemberFor(string $member, string $classFileText): ?string;
+
+    /**
+     * The *cardinality class* a framework finisher returns — or null when the name is not one.
+     *
+     * `get()` yields many, `first()` yields one-or-null, `count()` yields a scalar. Two names in
+     * different classes mean a return contract changed even though no signature did.
+     *
+     * Null for every name the table does not list, which is the conservative answer: an unknown
+     * finisher produces no assertion rather than a guess (ADR-A003).
+     */
+    public function returnCardinalityOf(string $member): ?string;
 }

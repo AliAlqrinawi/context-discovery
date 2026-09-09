@@ -32,8 +32,11 @@ final class BundleAssembler
         AssertionKind::SameFileSymbolAbsence->value => 0,
         AssertionKind::SameFileReference->value => 1,
         AssertionKind::ChangedSignature->value => 2,
-        AssertionKind::NamedReference->value => 3,
-        AssertionKind::UnverifiablePremise->value => 4,
+        // Beside the signature change: the same question about the same member, so a reader meets
+        // them together. Inserting here keeps every pre-existing kind's relative order unchanged.
+        AssertionKind::ChangedReturnContract->value => 3,
+        AssertionKind::NamedReference->value => 4,
+        AssertionKind::UnverifiablePremise->value => 5,
     ];
 
     public function __construct(private readonly TokenEstimate $tokenEstimate)

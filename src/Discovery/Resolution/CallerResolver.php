@@ -14,10 +14,12 @@ use ContextDiscovery\Ports\SourceRepository;
 /**
  * Call sites of a changed method, found by a bounded grep within one scope.
  *
- * Used for `ChangedSignature` assertions and nothing else. A caller question that is *not* a
- * signature change — Experiment 1's "is this wrapped in a transaction?" — is flagged, never
- * searched: `fetch-vs-flag.md` names it the canonical flag case, and searching it would be exactly
- * the reverse-graph machinery the two-lever model exists to avoid (P2, ADR-A006).
+ * Used for `ChangedSignature` and `ChangedReturnContract` assertions and nothing else. Both ask the
+ * one question a bounded grep can answer — *who calls this member?* — one because the parameter list
+ * moved, the other because the returned cardinality did. A caller question that is *not* either —
+ * Experiment 1's "is this wrapped in a transaction?" — is flagged, never searched: `fetch-vs-flag.md`
+ * names it the canonical flag case, and searching it would be exactly the reverse-graph machinery
+ * the two-lever model exists to avoid (P2, ADR-A006).
  *
  * Bounded and non-recursive: one search, one scope, one bound, no following of what the call sites
  * themselves call.
@@ -49,7 +51,7 @@ final class CallerResolver implements AssertionResolver
      */
     public function lookupRan(Assertion $assertion): bool
     {
-        return $assertion->kind === AssertionKind::ChangedSignature
+        return $this->serves($assertion)
             && $this->source->filesUnder($this->scopePrefix, 'php') !== [];
     }
 
@@ -73,7 +75,7 @@ final class CallerResolver implements AssertionResolver
      */
     public function resolve(Assertion $assertion): array
     {
-        if ($assertion->kind !== AssertionKind::ChangedSignature) {
+        if (!$this->serves($assertion)) {
             return [];
         }
 
@@ -87,5 +89,18 @@ final class CallerResolver implements AssertionResolver
             ),
             $this->search->callSites($assertion->subject, $this->scopePrefix, $this->maxCallSites + 1),
         );
+    }
+
+    /**
+     * The two kinds whose question is "who calls this member?".
+     *
+     * `ChangedSignature` asks it because the parameter list moved; `ChangedReturnContract` because
+     * the returned value's shape did. The search is the same either way — one grep, one scope, one
+     * bound — so it is served here rather than duplicated.
+     */
+    private function serves(Assertion $assertion): bool
+    {
+        return $assertion->kind === AssertionKind::ChangedSignature
+            || $assertion->kind === AssertionKind::ChangedReturnContract;
     }
 }

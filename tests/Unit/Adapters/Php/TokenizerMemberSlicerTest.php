@@ -220,6 +220,91 @@ final class TokenizerMemberSlicerTest extends TestCase
         yield 'past the end of the file' => [999, null];
     }
 
+    // ---------------------------------------------------------------- owning member
+
+    /**
+     * `memberOwningLine` answers a different question from `enclosingMemberName`: not *which member
+     * am I reading?* but *whose statement is this?*. The two part company inside a closure, which is
+     * exactly where attributing a `return` to the surrounding method states something false.
+     */
+    #[DataProvider('linesAndTheirOwningMembers')]
+    public function testMemberOwningLine(int $line, ?string $expected): void
+    {
+        self::assertSame($expected, $this->slicer->memberOwningLine($this->service(), $line));
+    }
+
+    /**
+     * @return iterable<string, array{int, string|null}>
+     */
+    public static function linesAndTheirOwningMembers(): iterable
+    {
+        // The fixture's closure occupies lines 24-26 inside `withBraces`.
+        yield 'a statement inside a closure belongs to no member' => [25, null];
+        yield 'the line the closure opens on is not the member\'s own either' => [24, null];
+
+        // Everything below is the member's own, and must be unaffected.
+        yield 'the attribute above a method' => [21, 'withBraces'];
+        yield 'a heredoc line deep in the body, past the closure' => [31, 'withBraces'];
+        yield 'a match arm holding a brace in a string' => [35, 'withBraces'];
+        yield 'the closing brace of a method' => [38, 'withBraces'];
+        yield 'a property declaration' => [17, 'fillable'];
+        yield 'the constructor parameter list, default value `}`' => [41, '__construct'];
+        yield 'the namespace line is in no member' => [5, null];
+        yield 'past the end of the file' => [999, null];
+    }
+
+    public function testAClosureInsideAClosureIsStillNotTheMembersOwn(): void
+    {
+        $text = <<<'PHP'
+        <?php
+
+        class C
+        {
+            public function outer(): Collection
+            {
+                return $this->items->map(function ($b) {
+                    return collect()->each(function ($c) {
+                        return $c->rel->get();
+                    });
+                });
+            }
+        }
+        PHP;
+
+        self::assertSame('outer', $this->slicer->enclosingMemberName($text, 9), 'the line is read inside outer');
+        self::assertNull($this->slicer->memberOwningLine($text, 9), 'but it is two closures deep, so it is not outer\'s');
+    }
+
+    public function testAMethodOfAnAnonymousClassIsNotTheSurroundingMembersOwn(): void
+    {
+        $text = <<<'PHP'
+        <?php
+
+        class C
+        {
+            public function outer(): object
+            {
+                return new class {
+                    public function inner(): Collection
+                    {
+                        return $this->q->get();
+                    }
+                };
+            }
+        }
+        PHP;
+
+        self::assertNull($this->slicer->memberOwningLine($text, 10));
+    }
+
+    public function testAnUnbalancedFileOwnsNoLine(): void
+    {
+        // The scope cannot be established, so nothing is claimed rather than guessed (P10).
+        $truncated = "<?php\n\nclass Broken\n{\n    public function go(): void\n    {\n        return \$q->get();\n";
+
+        self::assertNull($this->slicer->memberOwningLine($truncated, 7));
+    }
+
     // ---------------------------------------------------------------- fixtures
 
     /**

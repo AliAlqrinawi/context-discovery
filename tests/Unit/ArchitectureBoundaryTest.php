@@ -335,9 +335,13 @@ final class ArchitectureBoundaryTest extends TestCase
 
     public function testTheMoveSetIsClosed(): void
     {
-        // ADR-A003: four extractors, three resolvers. Adding one needs an experiment, a
+        // ADR-A003: five extractors, three resolvers. Adding one needs an experiment, a
         // requirement entry, an ADR and a Wiring change — in that order.
-        self::assertCount(4, $this->implementationsOf('RegionAssertionExtractor'));
+        //
+        // The fifth extractor is `ChangedReturnContractAssertionExtractor` (ADR-A023). The resolver count is
+        // deliberately unchanged: it raises a new *kind*, but the question it asks — who calls this
+        // member? — is one `CallerResolver` already answers, so no new resolution move was added.
+        self::assertCount(5, $this->implementationsOf('RegionAssertionExtractor'));
         self::assertCount(3, $this->implementationsOf('AssertionResolver'));
     }
 
@@ -352,7 +356,7 @@ final class ArchitectureBoundaryTest extends TestCase
      */
     public static function closedEnumerations(): iterable
     {
-        yield 'five assertion kinds, one per move' => ['src/Domain/Assertion/AssertionKind.php', 5];
+        yield 'six assertion kinds, one per move' => ['src/Domain/Assertion/AssertionKind.php', 6];
         yield 'seven premises' => ['src/Discovery/Lever/PremiseCatalogue.php', 7];
         yield 'two levers' => ['src/Domain/Bundle/Lever.php', 2];
         yield 'three exit codes' => ['src/Cli/ExitCode.php', 3];

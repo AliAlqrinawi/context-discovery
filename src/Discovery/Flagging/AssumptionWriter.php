@@ -76,7 +76,8 @@ final class AssumptionWriter
             return PremiseCatalogue::UnresolvedReference;
         }
 
-        if ($assertion->kind === AssertionKind::ChangedSignature) {
+        if ($assertion->kind === AssertionKind::ChangedSignature
+            || $assertion->kind === AssertionKind::ChangedReturnContract) {
             return PremiseCatalogue::CallerSearchFailed;
         }
 

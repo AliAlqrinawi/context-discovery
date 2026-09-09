@@ -162,6 +162,13 @@ final class FrameworkKnownResolutionTest extends TestCase
 
                 return null;
             }
+
+            public function returnCardinalityOf(string $member): ?string
+            {
+                // Not part of this test's question: the return-contract table is read during
+                // extraction, never during named-reference resolution.
+                return null;
+            }
         };
 
         $resolver = new NamedReferenceResolver(

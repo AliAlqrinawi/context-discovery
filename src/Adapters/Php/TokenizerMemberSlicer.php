@@ -120,6 +120,127 @@ final class TokenizerMemberSlicer implements MemberSlicer
         return null;
     }
 
+    public function memberOwningLine(string $fileText, int $line): ?string
+    {
+        $tokens = $this->tokenize($fileText);
+        $nested = $this->nestedFunctionLines($tokens);
+
+        if ($nested === null) {
+            return null; // a body that will not close: the scope cannot be told, so nothing is said.
+        }
+
+        foreach ($nested as $span) {
+            if ($line >= $span['firstLine'] && $line <= $span['lastLine']) {
+                return null; // the line belongs to a closure, not to the member around it.
+            }
+        }
+
+        return $this->enclosingMemberName($fileText, $line);
+    }
+
+    /**
+     * The line span of every function body that opens *inside* another function body — the closure
+     * passed to `map()`, the `DB::transaction()` callback, a method of an anonymous class declared
+     * inside a member.
+     *
+     * The rule is positional and needs no list of framework callbacks: the first function body met
+     * is a declaration's own, and every function keyword encountered before that body closes is
+     * nested within it. Nesting deeper than one level needs no extra work, because the outermost
+     * body's span already covers it.
+     *
+     * Depth is read from the token stream, never from the raw text, so a brace inside a string, a
+     * comment or a heredoc cannot open or close a scope — the reason `token_get_all()` is used here
+     * rather than counting characters (ADR-A004).
+     *
+     * @param list<array{id:int|null,text:string,line:int}> $tokens
+     *
+     * @return list<array{firstLine:int,lastLine:int}>|null Null when a body cannot be closed, which
+     *                                                      the caller must read as "cannot tell".
+     */
+    private function nestedFunctionLines(array $tokens): ?array
+    {
+        $spans = [];
+        $outermostEnd = null;
+
+        for ($i = 0, $total = count($tokens); $i < $total; $i++) {
+            if ($tokens[$i]['id'] !== T_FUNCTION) {
+                continue;
+            }
+
+            $open = $this->functionBodyOpen($tokens, $i);
+
+            if ($open === null) {
+                continue; // an abstract or interface declaration has no body to be inside.
+            }
+
+            $close = $this->matchBrace($tokens, $open);
+
+            if ($close === null) {
+                return null;
+            }
+
+            if ($outermostEnd !== null && $i < $outermostEnd) {
+                $spans[] = ['firstLine' => $tokens[$open]['line'], 'lastLine' => $tokens[$close]['line']];
+
+                continue;
+            }
+
+            $outermostEnd = $close;
+        }
+
+        return $spans;
+    }
+
+    /**
+     * The index of the `{` opening this function's body, or null when it declares none.
+     *
+     * Parentheses and brackets are counted so a closure's `use (...)` clause, a default value and an
+     * attribute cannot be mistaken for the body.
+     *
+     * @param list<array{id:int|null,text:string,line:int}> $tokens
+     */
+    private function functionBodyOpen(array $tokens, int $from): ?int
+    {
+        $paren = 0;
+        $bracket = 0;
+
+        for ($i = $from, $total = count($tokens); $i < $total; $i++) {
+            $id = $tokens[$i]['id'];
+            $text = $tokens[$i]['text'];
+
+            if ($id === T_ATTRIBUTE) {
+                $bracket++;
+                continue;
+            }
+
+            if ($id !== null) {
+                continue;
+            }
+
+            match (true) {
+                $text === '(' => $paren++,
+                $text === ')' => $paren--,
+                $text === '[' => $bracket++,
+                $text === ']' => $bracket--,
+                default => null,
+            };
+
+            if ($paren !== 0 || $bracket !== 0) {
+                continue;
+            }
+
+            if ($text === ';') {
+                return null;
+            }
+
+            if ($text === '{') {
+                return $i;
+            }
+        }
+
+        return null;
+    }
+
     /**
      * Every named declaration at member level, in source order.
      *

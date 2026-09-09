@@ -43,7 +43,8 @@ final class ItemPriority
             AssertionKind::SameFileReference => 2,
 
             // The recurring high-severity move and the sharpest A-vs-C differential (R3, Exp 1, 4).
-            AssertionKind::ChangedSignature => 3,
+            AssertionKind::ChangedSignature,
+            AssertionKind::ChangedReturnContract => 3,
 
             // Valuable and cheap, but the move Exp 2 shows must never be pulled speculatively.
             AssertionKind::NamedReference => self::DROPPED_FIRST,

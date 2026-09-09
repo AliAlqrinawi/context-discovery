@@ -31,7 +31,10 @@ final class LeverPolicy
 
             // A bounded grep over one scope — the cheap side of reverse-caller. The expensive
             // "is there a transaction somewhere up the stack?" question is a premise, not a search.
-            AssertionKind::ChangedSignature => Lever::Fetched,
+            AssertionKind::ChangedSignature,
+            // Same bounded grep, same scope, same bound. The question is identical — who calls
+            // this? — only the evidence that raised it differs.
+            AssertionKind::ChangedReturnContract => Lever::Fetched,
 
             // Depth-one and named, but only if the PSR-4 map can place it. If it cannot, the
             // contract is unverified and that is stated rather than hunted (P10).

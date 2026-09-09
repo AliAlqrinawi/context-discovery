@@ -240,7 +240,8 @@ final class DiscoverContext
             // asks for one more than it may keep, so an overflow is certain rather than inferred
             // (P10, ADR-A006).
             if (
-                $assertion->kind === AssertionKind::ChangedSignature
+                ($assertion->kind === AssertionKind::ChangedSignature
+                    || $assertion->kind === AssertionKind::ChangedReturnContract)
                 && count($slices) > $this->callerResolver->bound()
             ) {
                 $slices = array_slice($slices, 0, $this->callerResolver->bound());
@@ -279,7 +280,8 @@ final class DiscoverContext
             AssertionKind::SameFileSymbolAbsence,
             AssertionKind::SameFileReference => $this->ownFileResolver->lookupRan($assertion),
             AssertionKind::NamedReference => $this->namedReferenceResolver->lookupRan($assertion),
-            AssertionKind::ChangedSignature => $this->callerResolver->lookupRan($assertion),
+            AssertionKind::ChangedSignature,
+            AssertionKind::ChangedReturnContract => $this->callerResolver->lookupRan($assertion),
             // A premise is always flagged, so it never reaches a resolver at all.
             AssertionKind::UnverifiablePremise => false,
         };
@@ -363,7 +365,8 @@ final class DiscoverContext
 
             AssertionKind::NamedReference => $this->namedReferenceResolver,
 
-            AssertionKind::ChangedSignature => $this->callerResolver,
+            AssertionKind::ChangedSignature,
+            AssertionKind::ChangedReturnContract => $this->callerResolver,
 
             // A premise is stated, never resolved: LeverPolicy flags every one of them.
             AssertionKind::UnverifiablePremise => throw new LogicException(

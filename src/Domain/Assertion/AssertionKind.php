@@ -33,6 +33,17 @@ enum AssertionKind: string
     /** A member whose arity or parameter shape the diff changed — Exp 4's `reactivate`. */
     case ChangedSignature = 'changed_signature';
 
+    /**
+     * A member whose declared signature is untouched but whose body now returns a different
+     * *kind* of value — a collection where a single model or null now comes back.
+     *
+     * A separate kind rather than a widening of `ChangedSignature`, because the evidence differs:
+     * that one reads the parameter list, this one reads the return expression against a closed
+     * framework table. Both ask the same downstream question, so both resolve through
+     * `CallerResolver`; keeping them apart is what lets precision be measured per move (ADR-A023).
+     */
+    case ChangedReturnContract = 'changed_return_contract';
+
     /** A premise from the closed catalogue that no file can settle (ADR-A009). */
     case UnverifiablePremise = 'unverifiable_premise';
 }

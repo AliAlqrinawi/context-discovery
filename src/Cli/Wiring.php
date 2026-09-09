@@ -15,6 +15,7 @@ use ContextDiscovery\Assembly\BundleAssembler;
 use ContextDiscovery\Assembly\ItemPriority;
 use ContextDiscovery\Assembly\TokenEstimate;
 use ContextDiscovery\Discovery\Extraction\AssertionExtractor;
+use ContextDiscovery\Discovery\Extraction\ChangedReturnContractAssertionExtractor;
 use ContextDiscovery\Discovery\Extraction\ChangedSignatureAssertionExtractor;
 use ContextDiscovery\Discovery\Extraction\NamedReferenceAssertionExtractor;
 use ContextDiscovery\Discovery\Extraction\OwnFileAssertionExtractor;
@@ -54,6 +55,12 @@ final class Wiring
         $slicer = new TokenizerMemberSlicer();
         $locator = new ComposerPsr4ClassLocator($source);
 
+        // The one place a framework is chosen. Every other class in Discovery names the
+        // `FrameworkKnowledge` interface and no framework symbol; another framework changes this
+        // line and nothing else. The return-contract extractor and the named reference resolver
+        // read the same knowledge, so they share one instance.
+        $framework = new LaravelFrameworkKnowledge();
+
         $context = new DiscoverContext(
             new UnifiedDiffParser(),
             $source,
@@ -61,18 +68,16 @@ final class Wiring
                 new OwnFileAssertionExtractor($slicer),
                 new NamedReferenceAssertionExtractor($slicer),
                 new ChangedSignatureAssertionExtractor(),
+                new ChangedReturnContractAssertionExtractor($slicer, $framework),
                 new UnverifiablePremiseAssertionExtractor($slicer),
-                // Four extractors, one per assertion kind the diff can raise. The set is closed:
+                // Five extractors, one per assertion kind the diff can raise. The set is closed:
                 // adding one needs an experiment, a requirement entry, an ADR and a line here —
                 // in that order (ADR-A003). There is no registry and no discovery.
             ]),
             new LeverPolicy(),
             $locator,
             new OwnFileResolver($source, $slicer),
-            // The one place a framework is chosen. Every other class in Discovery names the
-            // `FrameworkKnowledge` interface and no framework symbol; another framework changes
-            // this line and nothing else.
-            new NamedReferenceResolver($locator, $source, $slicer, new LaravelFrameworkKnowledge()),
+            new NamedReferenceResolver($locator, $source, $slicer, $framework),
             new CallerResolver(
                 new ScopedGrepCallSiteSearch($source),
                 $source,
