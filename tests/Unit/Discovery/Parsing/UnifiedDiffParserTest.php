@@ -59,6 +59,35 @@ final class UnifiedDiffParserTest extends TestCase
         self::assertCount(1, $result->files[1]->regions);
     }
 
+    public function testEachAddedAndRemovedLineCarriesItsPostImagePosition(): void
+    {
+        // The same three hunks as above. An added line's position is its own number in the new
+        // file; a removed line's is the number of the line that now stands where it was — the
+        // fact a same-member check needs and the current tree cannot supply (ADR-A023, M28).
+        $result = $this->parser->parse($this->diff([
+            'diff --git a/a.php b/a.php',
+            '--- a/a.php',
+            '+++ b/a.php',
+            '@@ -10,3 +10,4 @@',
+            ' $first = 1;',
+            '-$removed = 2;',
+            '+$added = 2;',
+            '+$alsoAdded = 3;',
+            ' $last = 4;',
+            '@@ -40,2 +41,2 @@',
+            '-$old = 5;',
+            '+$new = 5;',
+            ' $tail = 6;',
+        ]));
+
+        [$first, $second] = $result->files[0]->regions;
+
+        self::assertSame([11, 12], $first->addedAt);
+        self::assertSame([11], $first->removedAt, 'removed before what is now line 11');
+        self::assertSame([41], $second->addedAt);
+        self::assertSame([41], $second->removedAt);
+    }
+
     public function testRegionSpanComesFromTheHunkHeadersNewSide(): void
     {
         $diff = $this->diff([

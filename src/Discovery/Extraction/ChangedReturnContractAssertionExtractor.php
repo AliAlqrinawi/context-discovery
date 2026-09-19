@@ -20,7 +20,7 @@ use ContextDiscovery\Ports\MemberSlicer;
  * is silent by design — and every caller that treats the result as a collection is now wrong, off
  * screen, with no type error to catch it.
  *
- * **Deliberately narrow.** Four conditions must all hold, and any one of them failing yields
+ * **Deliberately narrow.** Five conditions must all hold, and any one of them failing yields
  * nothing rather than a guess (ADR-A003):
  *
  * 1. the region both **removes and adds a `return`** — an assignment or a renamed helper call is
@@ -31,7 +31,11 @@ use ContextDiscovery\Ports\MemberSlicer;
  *    says nothing about the contract;
  * 4. the **added return itself** is the member's own — inside a member the slicer can name, and
  *    not inside a closure declared within it, so the assertion has a subject the caller search can
- *    look for and a claim that is true of that subject.
+ *    look for and a claim that is true of that subject;
+ * 5. every recognised **removed return left that same member**. One hunk can take a `return` out
+ *    of one method and put one into the next; without this the claim *"B now returns X where it
+ *    returned Y"* would be made about a B that never returned Y. The removed line is not in the
+ *    current tree, so its member is read from the position the parser recorded (M28).
  *
  * The cardinality table itself lives in `FrameworkKnowledge`, beside the facade and `scope<Name>`
  * rules (ADR-A011): the framework supplies the naming fact, this extractor supplies none.
@@ -69,6 +73,11 @@ final class ChangedReturnContractAssertionExtractor implements RegionAssertionEx
         $member = $this->memberOfChangedReturn($region, $fileText);
 
         if ($member === null) {
+            return [];
+        }
+
+        // Condition 5. And the return that went away must have been that member's too.
+        if (!$this->removedReturnsLeft($member, $region, $fileText)) {
             return [];
         }
 
@@ -131,6 +140,35 @@ final class ChangedReturnContractAssertionExtractor implements RegionAssertionEx
         }
 
         return null;
+    }
+
+    /**
+     * Whether every recognised removed return was taken out of `$member`.
+     *
+     * A removed line is not in the current tree, so `uniqueLineOf()` cannot place it. The parser
+     * records the post-image line each removed line was removed *before* — for a `return` at the
+     * end of a body that is the closing brace, still inside the member — and `memberOwningLine()`
+     * names the member there. A region carrying no positions was built by hand rather than parsed;
+     * nothing is claimed for it, because the question cannot be answered.
+     *
+     * "Every", not "any": a hunk that changes one member's return and also removes another's says
+     * nothing, which is over-rejection in the safe direction (ADR-A023, limitations).
+     */
+    private function removedReturnsLeft(string $member, ChangedRegion $region, string $fileText): bool
+    {
+        foreach ($region->removedLines as $index => $removed) {
+            if ($this->classOf($removed) === null) {
+                continue;
+            }
+
+            $position = $region->removedAt[$index] ?? null;
+
+            if ($position === null || $this->slicer->memberOwningLine($fileText, $position) !== $member) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**

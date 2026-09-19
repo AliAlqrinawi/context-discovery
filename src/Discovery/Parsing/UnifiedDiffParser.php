@@ -167,7 +167,7 @@ final class UnifiedDiffParser
     }
 
     /**
-     * @return array{newStart:int,newCount:int,remainingOld:int,remainingNew:int,added:list<string>,removed:list<string>}
+     * @return array{newStart:int,newCount:int,remainingOld:int,remainingNew:int,added:list<string>,removed:list<string>,addedAt:list<int>,removedAt:list<int>}
      */
     private function parseHunkHeader(string $line): array
     {
@@ -184,11 +184,13 @@ final class UnifiedDiffParser
             'remainingNew' => ($m[4] ?? '') === '' ? 1 : (int) $m[4],
             'added' => [],
             'removed' => [],
+            'addedAt' => [],
+            'removedAt' => [],
         ];
     }
 
     /**
-     * @param array{newStart:int,newCount:int,remainingOld:int,remainingNew:int,added:list<string>,removed:list<string>} $hunk
+     * @param array{newStart:int,newCount:int,remainingOld:int,remainingNew:int,added:list<string>,removed:list<string>,addedAt:list<int>,removedAt:list<int>} $hunk
      */
     private function consumeHunkLine(array &$hunk, string $line): void
     {
@@ -196,13 +198,19 @@ final class UnifiedDiffParser
         // stripped in transit. Treating it as anything else would desynchronise the counts.
         $marker = $line === '' ? ' ' : $line[0];
 
+        // The post-image line the cursor stands on: an added or context line occupies it, a removed
+        // line was taken out just before it. Known for free from the header and what is consumed.
+        $position = $hunk['newStart'] + $hunk['newCount'] - $hunk['remainingNew'];
+
         switch ($marker) {
             case '+':
                 $hunk['added'][] = substr($line, 1);
+                $hunk['addedAt'][] = $position;
                 $hunk['remainingNew']--;
                 break;
             case '-':
                 $hunk['removed'][] = substr($line, 1);
+                $hunk['removedAt'][] = $position;
                 $hunk['remainingOld']--;
                 break;
             case ' ':
@@ -226,7 +234,7 @@ final class UnifiedDiffParser
     }
 
     /**
-     * @param array{newStart:int,newCount:int,remainingOld:int,remainingNew:int,added:list<string>,removed:list<string>} $hunk
+     * @param array{newStart:int,newCount:int,remainingOld:int,remainingNew:int,added:list<string>,removed:list<string>,addedAt:list<int>,removedAt:list<int>} $hunk
      */
     private function toRegion(array $hunk): ChangedRegion
     {
@@ -237,6 +245,8 @@ final class UnifiedDiffParser
             $hunk['newStart'] + $hunk['newCount'] - 1,
             $hunk['added'],
             $hunk['removed'],
+            $hunk['addedAt'],
+            $hunk['removedAt'],
         );
     }
 

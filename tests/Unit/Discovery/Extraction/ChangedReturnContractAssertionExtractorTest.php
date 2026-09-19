@@ -21,7 +21,7 @@ use PHPUnit\Framework\TestCase;
  * result. Nothing in the diff shows those callers.
  *
  * Most of this file is negative controls, because the danger here is noise: a rule that fired on
- * any body change would ask "who calls this?" of every ordinary refactor. Four conditions must hold
+ * any body change would ask "who calls this?" of every ordinary refactor. Five conditions must hold
  * together, and each test below removes exactly one of them.
  */
 final class ChangedReturnContractAssertionExtractorTest extends TestCase
@@ -159,6 +159,33 @@ final class ChangedReturnContractAssertionExtractorTest extends TestCase
         self::assertSame([], $this->extractor()->forRegion($file, $region, implode("\n", $lines)));
     }
 
+    public function testARemovedReturnThatLeftAnotherMemberYieldsNothing(): void
+    {
+        // The added return is getAll's (line 11); the removed one was taken out of `untouched()`,
+        // whose body is line 16. "getAll now returns X where it returned Y" would be false of
+        // getAll, so condition 5 says nothing (M28).
+        $added = ['        return $query->first();'];
+        $removed = ['        return $query->get();'];
+
+        $region = new ChangedRegion(9, 17, $added, $removed, [11], [16]);
+        $file = new ChangedFile('app/Repositories/BranchRepository.php', [$region], []);
+
+        self::assertSame([], $this->extractor()->forRegion($file, $region, $this->fileWith($added)));
+    }
+
+    public function testARegionWithoutPositionsClaimsNothing(): void
+    {
+        // A hand-built region carries no removedAt. The question "did the removed return leave
+        // this member?" cannot be answered, so it is not answered.
+        $added = ['        return $query->first();'];
+        $removed = ['        return $query->get();'];
+
+        $region = new ChangedRegion(9, 12, $added, $removed);
+        $file = new ChangedFile('app/Repositories/BranchRepository.php', [$region], []);
+
+        self::assertSame([], $this->extractor()->forRegion($file, $region, $this->fileWith($added)));
+    }
+
     public function testAnAddedReturnTheSpanDoesNotContainYieldsNothing(): void
     {
         // The span is real but the added line is nowhere inside it — the tree is not the post-image
@@ -182,7 +209,16 @@ final class ChangedReturnContractAssertionExtractorTest extends TestCase
     {
         // 9..12 is the span git gives a one-line change with its usual context — it opens *above*
         // the changed line, which is precisely the offset the extractor must not mistake for it.
-        $region = new ChangedRegion(9, 12, $added, $removed);
+        // Positions as the parser would record them: the return stands at line 11, and the removed
+        // return was taken out just before it (condition 5 reads `removedAt`).
+        $region = new ChangedRegion(
+            9,
+            12,
+            $added,
+            $removed,
+            array_fill(0, count($added), 11),
+            array_fill(0, count($removed), 11),
+        );
         $file = new ChangedFile('app/Repositories/BranchRepository.php', [$region], []);
 
         return $this->extractor()->forRegion($file, $region, $this->fileWith($added));

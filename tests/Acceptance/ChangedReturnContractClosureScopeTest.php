@@ -173,6 +173,43 @@ final class ChangedReturnContractClosureScopeTest extends TestCase
     }
 
     /**
+     * One hunk, two members: `alpha` loses its `return`, `beta` gains one. Before M28 this produced
+     * *"the body of beta now returns a single value or null where it returned a collection"* —
+     * false, because beta never returned a collection; alpha did. The removed return's member is a
+     * fact the post-image tree cannot supply, so the parser now records where each removed line
+     * sat and the extractor requires every recognised removed return to have left the member the
+     * added one belongs to. It did not, so nothing is claimed (ADR-A023 limitations, M28).
+     */
+    public function testAReturnThatLeftAnotherMemberIsNotThisMembersChange(): void
+    {
+        $this->commit(<<<'PHP'
+                public function outer(): Collection
+                {
+                    $this->log();
+
+                    return $this->query->get();
+                }
+
+                public function direct(): mixed
+                {
+                    $this->log();
+                }
+            PHP);
+
+        // alpha loses its return; beta gains one — five lines apart, one hunk at default context.
+        $this->rewrite("        \$this->log();\n\n        return \$this->query->get();\n", "        \$this->log();\n");
+        $this->rewrite("        \$this->log();\n    }\n}", "        \$this->log();\n\n        return \$this->query->first();\n    }\n}");
+
+        $diff = $this->gitDiff();
+
+        self::assertSame(1, substr_count($diff, "\n@@ "), 'the two members fall in one hunk');
+        self::assertStringContainsString('-        return $this->query->get();', $diff);
+        self::assertStringContainsString('+        return $this->query->first();', $diff);
+
+        self::assertSame([], $this->returnContractItems($this->invoke($diff)), 'no false claim about direct()');
+    }
+
+    /**
      * A file holding both shapes: the changed return is `direct()`'s own, while `outer()` sitting
      * above it contains a callback whose text is nearly identical. Attribution must land on
      * `direct()` and fetch its caller, not `outer()`'s.
