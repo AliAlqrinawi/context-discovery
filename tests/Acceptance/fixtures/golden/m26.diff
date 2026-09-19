@@ -1,0 +1,40 @@
+diff --git a/app/Http/Controllers/Admin/BranchController.php b/app/Http/Controllers/Admin/BranchController.php
+index 7a18f7a..816acee 100644
+--- a/app/Http/Controllers/Admin/BranchController.php
++++ b/app/Http/Controllers/Admin/BranchController.php
+@@ -19,7 +19,8 @@ class BranchController extends Controller
+ {
+     public function index(GetBranchesAction $action): JsonResponse
+     {
+-        return $this->success(BranchResource::collection($action->execute()), __('messages.fetched'));
++        // shfdsfdsnfndsjkfn;dsf
++        return $this->success(new BranchResource($action->execute()), __('messages.fetched1'));
+     }
+ 
+     public function show(int $id, BranchRepository $repository): JsonResponse
+diff --git a/app/Models/Branch.php b/app/Models/Branch.php
+index f152fcf..4ad567b 100644
+--- a/app/Models/Branch.php
++++ b/app/Models/Branch.php
+@@ -4,7 +4,7 @@
+ 
+ use Illuminate\Database\Eloquent\Model;
+ 
+-class Branch extends Model
++class Branch 
+ {
+     protected $fillable = [
+         'name_ar',
+diff --git a/app/Repositories/BranchRepository.php b/app/Repositories/BranchRepository.php
+index 3259176..0357f29 100644
+--- a/app/Repositories/BranchRepository.php
++++ b/app/Repositories/BranchRepository.php
+@@ -15,7 +15,7 @@ public function getAll(?bool $showInFooter = null): Collection
+             $query->where('show_in_footer', $showInFooter);
+         }
+ 
+-        return $query->get();
++        return $query->first();
+     }
+ 
+     public function getById(int $id): Branch
