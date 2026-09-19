@@ -167,8 +167,16 @@ changing returns in two members can merge both cardinality classes into one memb
 One limit deserves emphasis because it is invisible in output: **the post-image tree is assumed,
 never enforced.** `LocalSourceRepository` validates only that `--repo` is a readable directory; the
 tool shells out to nothing and reads no git object database. Pointed at a pre-image tree, the added
-line is simply not found, and the run yields a quietly smaller bundle — no warning, no diagnostic, no
-non-zero exit. The contract is stated in `03-interfaces.md` §1; nothing checks it.
+line is simply not found, and this move stays silent — no warning, no diagnostic, no non-zero exit.
+
+**Correction (M28): "quietly smaller" was wrong.** It described this extractor and not the tool. A
+pre-image tree can **inflate** the bundle: `OwnFileAssertionExtractor` reads the file's `use` block,
+so an import the diff adds is not seen and the symbol it imports is claimed as a
+`same_file_symbol_absence` — a false positive the post-image tree would never produce. The premise
+extractor and the own-file resolver scan post-image line numbers too and can name the wrong member.
+The contract is stated in `03-interfaces.md` §1; since M28 the tool checks it as a count — none of
+the added lines present in any changed file — and says so on stderr and in `diagnostics[]`, never
+as a flag and never on a partial count.
 
 ## 7 · Regression and determinism
 

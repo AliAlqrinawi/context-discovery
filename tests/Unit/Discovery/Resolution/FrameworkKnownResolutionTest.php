@@ -301,12 +301,27 @@ final class FrameworkKnownResolutionTest extends TestCase
         ]);
     }
 
+    /**
+     * The lines the current diff adds inside `handle()`. `--repo` is the post-image tree
+     * (03-interfaces.md §1), so the repository text must already hold them; `diffAdding()` records
+     * them and `repositoryText()` splices them in. Overwritten by the next diffAdding().
+     *
+     * @var list<string>
+     */
+    private array $addedInsideHandle = [];
+
     private function repositoryText(): string
     {
+        $body = '';
+
+        foreach ($this->addedInsideHandle as $line) {
+            $body .= $line . "\n";
+        }
+
         return "<?php\n\nnamespace App\Repositories;\n\n"
             . "use App\Contracts\MissingGateway;\nuse App\Models\Package;\nuse Illuminate\Support\Facades\Log;\n\n"
             . "class PackageRepository\n{\n"
-            . "    public function handle(): void\n    {\n    }\n}\n";
+            . "    public function handle(): void\n    {\n" . $body . "    }\n}\n";
     }
 
     /**
@@ -314,6 +329,8 @@ final class FrameworkKnownResolutionTest extends TestCase
      */
     private function diffAdding(string ...$added): string
     {
+        $this->addedInsideHandle = array_values($added);
+
         $lines = [
             'diff --git a/app/Repositories/PackageRepository.php b/app/Repositories/PackageRepository.php',
             '--- a/app/Repositories/PackageRepository.php',
@@ -352,6 +369,8 @@ final class FrameworkKnownResolutionTest extends TestCase
     {
         $this->diagnostics = [];
 
+        // Not cleared here: a test may build one diff and run it twice to prove determinism, and
+        // both runs must see the same post-image text. The next diffAdding() overwrites it.
         $source = $this->source();
         $slicer = new TokenizerMemberSlicer();
         $locator = $this->locator();

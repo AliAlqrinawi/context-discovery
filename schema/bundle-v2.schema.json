@@ -5,7 +5,15 @@
   "description": "The published output contract. This file is the single source: the closed sets below are asserted against the code by BundleSchemaConformanceTest, so a kind, a lever or a diagnostic type added in one place and not the other fails the build. See ADR-A024 for the compatibility policy.",
   "type": "object",
   "additionalProperties": false,
-  "required": ["bundle_version", "run", "used_tokens", "assertions", "items", "diagnostics", "dropped"],
+  "required": [
+    "bundle_version",
+    "run",
+    "used_tokens",
+    "assertions",
+    "items",
+    "diagnostics",
+    "dropped"
+  ],
   "properties": {
     "bundle_version": {
       "const": 2,
@@ -14,16 +22,48 @@
     "run": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["engine_version", "policy_version", "framework_table_version", "budget_tokens", "diff_sha", "repo_sha"],
+      "required": [
+        "engine_version",
+        "policy_version",
+        "framework_table_version",
+        "budget_tokens",
+        "diff_sha",
+        "repo_sha"
+      ],
       "description": "What produced this bundle, so two bundles can be compared knowingly. Nothing here is observed from the environment: no clock, no hostname, no process (P8, P9).",
       "properties": {
-        "engine_version": { "type": "string", "minLength": 1, "description": "Declared constant, bumped with the release." },
-        "policy_version": { "type": "string", "minLength": 1, "description": "Declared constant covering LeverPolicy, ItemPriority and PremiseCatalogue. Guarded: a test hashes those classes and fails when they move without this value moving." },
-        "framework_table_version": { "type": "string", "minLength": 1, "description": "Derived from the framework naming table's own content, not declared." },
-        "budget_tokens": { "type": "integer", "minimum": 1, "description": "Echoes --budget. Moved here from the root in v2." },
-        "diff_sha": { "type": ["string", "null"], "description": "Digest of the diff bytes handed in." },
+        "engine_version": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Declared constant, bumped with the release."
+        },
+        "policy_version": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Declared constant covering LeverPolicy, ItemPriority and PremiseCatalogue. Guarded: a test hashes those classes and fails when they move without this value moving."
+        },
+        "framework_table_version": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Derived from the framework naming table's own content, not declared."
+        },
+        "budget_tokens": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Echoes --budget. Moved here from the root in v2."
+        },
+        "diff_sha": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Digest of the diff bytes handed in."
+        },
         "repo_sha": {
-          "type": ["string", "null"],
+          "type": [
+            "string",
+            "null"
+          ],
           "description": "Supplied by the caller through --repo-sha; null when it was not given. The tool cannot read it: git rev-parse needs a subprocess (P9), and .git is a file rather than a directory in the detached worktree ADR-A022's harness uses. Null is emitted explicitly rather than the key omitted."
         }
       }
@@ -36,22 +76,30 @@
     "assertions": {
       "type": "array",
       "description": "Every claim the diff makes, stated once. The reason lives here, not on each item (P5, ADR-A024).",
-      "items": { "$ref": "#/$defs/assertion" }
+      "items": {
+        "$ref": "#/$defs/assertion"
+      }
     },
     "items": {
       "type": "array",
       "description": "The evidence gathered, in the fixed order at $defs/kindOrder, then by provenance.path, then by provenance.member. Every item names an assertion this bundle carries; an orphan is rejected before serialisation.",
-      "items": { "$ref": "#/$defs/item" }
+      "items": {
+        "$ref": "#/$defs/item"
+      }
     },
     "diagnostics": {
       "type": "array",
       "description": "A machine-readable MIRROR of stderr, never a relocation: stderr still carries every line byte for byte, because a harness uses it to tell 'searched, found none' from 'never searched' (freeze review 05). Empty rather than absent. Carries no tokens.",
-      "items": { "$ref": "#/$defs/diagnostic" }
+      "items": {
+        "$ref": "#/$defs/diagnostic"
+      }
     },
     "dropped": {
       "type": "array",
       "description": "Every budget drop, with the reason the item was included. Empty rather than absent when nothing was dropped (P7).",
-      "items": { "$ref": "#/$defs/dropped" }
+      "items": {
+        "$ref": "#/$defs/dropped"
+      }
     }
   },
   "$defs": {
@@ -69,7 +117,13 @@
     "assertion": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["id", "kind", "subject", "reason", "origin"],
+      "required": [
+        "id",
+        "kind",
+        "subject",
+        "reason",
+        "origin"
+      ],
       "properties": {
         "id": {
           "type": "string",
@@ -100,11 +154,18 @@
         "origin": {
           "type": "object",
           "additionalProperties": false,
-          "required": ["path"],
+          "required": [
+            "path"
+          ],
           "description": "Where in the diff the claim arose. A path and a span only: an assertion has no origin member, so none is claimed.",
           "properties": {
-            "path": { "type": "string", "minLength": 1 },
-            "lines": { "$ref": "#/$defs/lines" }
+            "path": {
+              "type": "string",
+              "minLength": 1
+            },
+            "lines": {
+              "$ref": "#/$defs/lines"
+            }
           }
         }
       }
@@ -112,7 +173,13 @@
     "item": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["assertion_id", "lever", "provenance", "payload", "tokens"],
+      "required": [
+        "assertion_id",
+        "lever",
+        "provenance",
+        "payload",
+        "tokens"
+      ],
       "properties": {
         "assertion_id": {
           "type": "string",
@@ -121,37 +188,58 @@
         },
         "lever": {
           "description": "Closed set. Asserted equal to Lever's cases by the conformance test.",
-          "enum": ["fetched", "flagged"]
+          "enum": [
+            "fetched",
+            "flagged"
+          ]
         },
         "provenance": {
           "type": "object",
           "additionalProperties": false,
-          "required": ["path"],
+          "required": [
+            "path"
+          ],
           "properties": {
-            "path": { "type": "string", "minLength": 1 },
+            "path": {
+              "type": "string",
+              "minLength": 1
+            },
             "member": {
               "type": "string",
               "minLength": 1,
               "description": "OPTIONAL, and absent rather than null when it does not apply. Present when the slice is a member: the enclosing member, a named reference's declaration, a model or enum surface, and a flagged item whose assertion names a member. Absent for a file's use block, which has no member name, for a flagged premise, which names a premise rather than a member (ADR-A009), and for every reverse-caller call site, because a call site is a line and not a member."
             },
-            "lines": { "$ref": "#/$defs/lines" }
+            "lines": {
+              "$ref": "#/$defs/lines"
+            }
           }
         },
         "payload": {
           "type": "string",
           "description": "Fetched: the minimal source slice (ADR-A005). Flagged: the assumption sentence and nothing else."
         },
-        "tokens": { "type": "integer", "minimum": 0, "description": "Estimated, not counted (ADR-A007)." }
+        "tokens": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Estimated, not counted (ADR-A007)."
+        }
       }
     },
     "diagnostic": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["type", "assertion_id", "detail"],
+      "required": [
+        "type",
+        "assertion_id",
+        "detail"
+      ],
       "properties": {
         "type": {
-          "description": "Closed set. Adding a mirrored diagnostic is additive and requires editing this enum — that edit is the point.",
-          "enum": ["call_sites_truncated"]
+          "description": "Closed set. Adding a mirrored diagnostic is additive and requires editing this enum — that edit is the point. `call_sites_truncated`: a caller search hit --max-call-sites (detail: limit, subject, scope). `post_image_contract_violated`: none of the non-blank lines the diff adds is present in any changed file, so --repo is not the tree the diff leaves (03-interfaces.md §1); assertion_id is empty because it concerns the run (detail: found=0, expected, files). Stated only in the categorical 0-of-N case — a partial count would be a judgement.",
+          "enum": [
+            "call_sites_truncated",
+            "post_image_contract_violated"
+          ]
         },
         "assertion_id": {
           "type": "string",
@@ -160,24 +248,46 @@
         "detail": {
           "type": "object",
           "description": "The facts the stderr line renders as prose, as values.",
-          "additionalProperties": { "type": ["string", "integer"] }
+          "additionalProperties": {
+            "type": [
+              "string",
+              "integer"
+            ]
+          }
         }
       }
     },
     "dropped": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["reason", "note", "tokens"],
+      "required": [
+        "reason",
+        "note",
+        "tokens"
+      ],
       "properties": {
-        "reason": { "type": "string", "minLength": 1, "description": "The reason the item was included in the first place, taken from its assertion." },
-        "note": { "type": "string", "minLength": 1 },
-        "tokens": { "type": "integer", "minimum": 0 }
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "description": "The reason the item was included in the first place, taken from its assertion."
+        },
+        "note": {
+          "type": "string",
+          "minLength": 1
+        },
+        "tokens": {
+          "type": "integer",
+          "minimum": 0
+        }
       }
     },
     "lines": {
       "type": "array",
       "description": "A [first, last] span, 1-indexed and inclusive.",
-      "items": { "type": "integer", "minimum": 1 },
+      "items": {
+        "type": "integer",
+        "minimum": 1
+      },
       "minItems": 2,
       "maxItems": 2
     }

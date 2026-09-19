@@ -51,9 +51,18 @@ final class DiscoverContextTest extends TestCase
     /** @var list<string> */
     private array $diagnostics = [];
 
+    /**
+     * The line the current `diffNaming()` diff adds inside `syncFromResponse()`. `--repo` is the
+     * post-image tree (03-interfaces.md §1), so `source()` splices it in. Argument evaluation is
+     * left to right, so `discover($this->diffNaming(…), …, new FakeSourceRepository([… $this->source()]))`
+     * records the line before the repository is built.
+     */
+    private ?string $naming = null;
+
     protected function setUp(): void
     {
         $this->diagnostics = [];
+        $this->naming = null;
     }
 
     public function testADiffBecomesABundleOfOwnFileSlices(): void
@@ -441,8 +450,89 @@ final class DiscoverContextTest extends TestCase
         }
     }
 
+    // ---------------------------------------------------------------- the post-image contract
+
+    public function testAPreImageTreeIsReportedAsAContractViolationNotAsAResult(): void
+    {
+        // The diff adds a line; the tree handed in does not contain it. That is not "nothing
+        // changed": it is `--repo` violating 03-interfaces.md §1, and left unsaid it reads as low
+        // recall — or, through a stale use block, as a false absence — charged to the engine.
+        $diff = $this->diffNaming('$account = PlaidAccount::forItem($item);');
+
+        $bundle = $this->discover($diff, 8000, new FakeSourceRepository([self::PATH => $this->preImageSource()]));
+
+        $reported = $this->contractViolations();
+
+        self::assertCount(1, $reported, 'said once, on stderr');
+        self::assertStringContainsString('0 of 1 added lines found in 1 changed file(s)', $reported[0]);
+        self::assertStringContainsString('03-interfaces.md §1', $reported[0], 'names the contract, draws no conclusion');
+
+        $mirrored = array_values(array_filter(
+            $bundle->diagnostics,
+            static fn ($d): bool => $d->type === 'post_image_contract_violated'
+        ));
+
+        self::assertCount(1, $mirrored, 'and mirrored once into the bundle');
+        self::assertSame('', $mirrored[0]->assertionId, 'it concerns the run, not a claim');
+        self::assertSame(['found' => 0, 'expected' => 1, 'files' => 1], $mirrored[0]->detail);
+
+        // A diagnostic, never a flag: no item is added and no token is spent on it.
+        self::assertSame(
+            array_sum(array_map(static fn (BundleItem $i): int => $i->tokens, $bundle->items)),
+            $bundle->usedTokens
+        );
+        self::assertNotContains('unverifiable_premise', array_map(fn (BundleItem $i): string => $this->kindOf($bundle, $i), $bundle->items));
+    }
+
+    public function testAPartiallyPresentTreeIsNotJudged(): void
+    {
+        // Two lines added, one present. Any threshold here would be an inference; only the
+        // categorical case — none found — is stated (P6).
+        $diff = implode("\n", [
+            '--- a/' . self::PATH,
+            '+++ b/' . self::PATH,
+            '@@ -12,2 +12,4 @@',
+            '     public function syncFromResponse(PlaidItem $item, array $accounts): void',
+            '     {',
+            '+        $present = 1;',
+            '+        $absent = 2;',
+        ]) . "\n";
+
+        $text = str_replace(
+            "    public function syncFromResponse(PlaidItem \$item, array \$accounts): void\n    {\n",
+            "    public function syncFromResponse(PlaidItem \$item, array \$accounts): void\n    {\n        \$present = 1;\n",
+            $this->preImageSource(),
+        );
+
+        $this->discover($diff, 8000, new FakeSourceRepository([self::PATH => $text]));
+
+        self::assertSame([], $this->contractViolations(), 'one of two lines present is not a violation the tool may state');
+    }
+
+    public function testAPostImageTreeSaysNothingAboutTheContract(): void
+    {
+        $this->discover($this->diffNaming('$account = PlaidAccount::forItem($item);'), 8000);
+
+        self::assertSame([], $this->contractViolations());
+    }
+
+    /**
+     * @return list<string>
+     */
+    private function contractViolations(): array
+    {
+        return array_values(array_filter(
+            $this->diagnostics,
+            static fn (string $line): bool => str_starts_with($line, 'post-image contract violated')
+        ));
+    }
+
+    // ---------------------------------------------------------------- fixtures
+
     private function diffNaming(string $addedLine): string
     {
+        $this->naming = $addedLine;
+
         return implode("\n", [
             '--- a/' . self::PATH,
             '+++ b/' . self::PATH,
@@ -503,6 +593,26 @@ final class DiscoverContextTest extends TestCase
     }
 
     private function source(): string
+    {
+        $text = $this->preImageSource();
+
+        if ($this->naming === null) {
+            return $text;
+        }
+
+        // The post-image of a `diffNaming()` hunk: the added line sits first inside the method.
+        return str_replace(
+            "    public function syncFromResponse(PlaidItem \$item, array \$accounts): void\n    {\n",
+            "    public function syncFromResponse(PlaidItem \$item, array \$accounts): void\n    {\n        " . $this->naming . "\n",
+            $text,
+        );
+    }
+
+    /**
+     * The file as it stands before any `diffNaming()` line is added — deliberately *not* the
+     * post-image of such a diff, which is what the contract-violation tests need.
+     */
+    private function preImageSource(): string
     {
         return <<<'PHP'
 <?php

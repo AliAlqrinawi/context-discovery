@@ -20,6 +20,7 @@ use ContextDiscovery\Domain\Assertion\AssertionKind;
 use ContextDiscovery\Domain\Assertion\ResolvedAssertion;
 use ContextDiscovery\Domain\Bundle\Bundle;
 use ContextDiscovery\Domain\Bundle\Diagnostic;
+use ContextDiscovery\Domain\Diff\ChangedFile;
 use ContextDiscovery\Domain\Bundle\RunMetadata;
 use ContextDiscovery\Domain\Bundle\Lever;
 use ContextDiscovery\Ports\ClassLocator;
@@ -78,8 +79,14 @@ final class DiscoverContext
 
         // 2 · Load the full current text of each changed file. It is an analysis input; only
         //     slices that settle an assertion ever become payload (ADR-A005).
+        $expectedLines = 0;
+        $foundLines = 0;
+        $checkedFiles = 0;
+
         foreach ($diff->files as $file) {
-            if ($this->source->text($file->path) === null) {
+            $text = $this->source->text($file->path);
+
+            if ($text === null) {
                 $diagnostic(sprintf('unreadable path: %s (no assertions extracted)', $file->path));
 
                 continue;
@@ -93,7 +100,40 @@ final class DiscoverContext
                     'new file: %s — own-file context is in the diff, not fetched',
                     $file->path,
                 ));
+
+                continue; // a created file that is readable is, by that fact, post-image.
             }
+
+            [$expected, $found] = $this->addedLinesPresentIn($file, $text);
+
+            if ($expected > 0) {
+                $expectedLines += $expected;
+                $foundLines += $found;
+                $checkedFiles++;
+            }
+        }
+
+        // 2b · The post-image contract (03-interfaces.md §1), checked as a count and never as a
+        //      threshold. `--repo` must hold the tree as the diff leaves it; every extractor reads
+        //      post-image line numbers and the current `use` block against these files, so a
+        //      pre-image tree does not merely shrink the bundle — it can inflate it with false
+        //      absence claims (ADR-A023). Only the categorical case is stated: none of the lines
+        //      the diff adds is anywhere in the files it says it changed. Any partial count would
+        //      be a judgement (P6). This is an input-contract violation, not a lookup failing, so
+        //      it is a diagnostic and never a flag — the precedent is `unreadable path`.
+        if ($expectedLines > 0 && $foundLines === 0) {
+            $diagnostic(sprintf(
+                'post-image contract violated: 0 of %d added lines found in %d changed file(s); '
+                . '--repo must hold the tree as the diff leaves it (03-interfaces.md §1)',
+                $expectedLines,
+                $checkedFiles,
+            ));
+
+            $diagnostics[] = new Diagnostic(
+                type: 'post_image_contract_violated',
+                assertionId: '',
+                detail: ['found' => 0, 'expected' => $expectedLines, 'files' => $checkedFiles],
+            );
         }
 
         // 3 · Extract what the diff asserts but cannot prove.
@@ -290,6 +330,41 @@ final class DiscoverContext
 
         // 7 · Enforce the budget, recording every drop.
         return $this->budgetEnforcer->enforce($bundle);
+    }
+
+    /**
+     * How many of the non-blank lines the diff adds to this file are present in it, as whole lines.
+     *
+     * Exact line equality, carriage returns trimmed, so a short added line cannot match inside a
+     * longer one. Blank additions are not counted: a blank line is present in almost any file and
+     * would say nothing either way.
+     *
+     * @return array{int, int} [expected, found]
+     */
+    private function addedLinesPresentIn(ChangedFile $file, string $text): array
+    {
+        $expected = 0;
+        $found = 0;
+        $lines = null;
+
+        foreach ($file->regions as $region) {
+            foreach ($region->addedLines as $added) {
+                $needle = rtrim($added, "\r");
+
+                if (trim($needle) === '') {
+                    continue;
+                }
+
+                $lines ??= array_map(static fn (string $line): string => rtrim($line, "\r"), explode("\n", $text));
+                $expected++;
+
+                if (in_array($needle, $lines, true)) {
+                    $found++;
+                }
+            }
+        }
+
+        return [$expected, $found];
     }
 
     /**
