@@ -1,0 +1,54 @@
+#!/bin/sh
+# tag-release — create the release tag FROM the declared engine version.
+#
+# `ContractVersion::ENGINE` is declared rather than discovered, because the tool spawns no process
+# and so cannot read a git tag from inside itself (P9, ADR-A024). That leaves two statements of one
+# fact — the constant and the tag — with nothing forcing agreement, which is how `KIND_ORDER` went
+# stale in three places. The repository's answer there was one source and a copy held to it; this
+# is the same answer. The constant is the source. The tag is the copy, and this script is the only
+# thing that makes it, so the two cannot disagree.
+#
+# It refuses, and creates nothing, when:
+#   - the working tree is dirty — a tag names a commit, and uncommitted work is in no commit;
+#   - the tag already exists — a released version is never moved, so the constant must be bumped;
+#   - the suite fails.
+#
+# The cheap refusals come first, so a version that was never bumped is reported in a second rather
+# than after the whole suite has run.
+#
+# A maintainer's script, not part of the tool: it lives outside src/, is not a Composer `bin`, and
+# spawning git here is no breach of P9, which binds the tool and not the way it is released.
+# Nothing is pushed.
+#
+#   bin/tag-release
+
+set -e
+
+ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+cd "$ROOT"
+
+refuse() {
+    echo "tag-release: $1" >&2
+    exit 1
+}
+
+[ -f vendor/autoload.php ] || refuse "dependencies are not installed. Run: composer install"
+
+VERSION="$(php -r 'require "vendor/autoload.php"; echo ContextDiscovery\Domain\Bundle\ContractVersion::ENGINE;')"
+[ -n "$VERSION" ] || refuse "could not read ContractVersion::ENGINE."
+
+TAG="v$VERSION"
+
+# Untracked files count as dirty: the suite would run against them, and the tag would not hold them.
+[ -z "$(git status --porcelain)" ] \
+    || refuse "the working tree is dirty. Commit or remove the changes; a tag names a commit."
+
+if git rev-parse --quiet --verify "refs/tags/$TAG" >/dev/null; then
+    refuse "$TAG already exists, at $(git rev-parse --short "$TAG^{commit}"). A released version is never moved: bump ContractVersion::ENGINE."
+fi
+
+vendor/bin/phpunit || refuse "the suite is failing. $TAG was not created."
+
+git tag --annotate "$TAG" --message "$TAG"
+
+echo "tag-release: created $TAG at $(git rev-parse --short HEAD). Not pushed: git push origin $TAG"
