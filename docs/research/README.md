@@ -1,11 +1,11 @@
 # Context Discovery · Research
 
 Research milestones for the CLI, kept separate from
-[`docs/architecture/`](../architecture/) (the frozen Phase 1 architecture) and from the upstream
+[`docs/architecture/`](../../../context-discovery-architecture/architecture/) (the frozen Phase 1 architecture) and from the upstream
 research repository, which remains the source of truth for Phase 0 and Phase 1.
 
 A document here **proposes**. It changes no ADR, no interface, no contract, and no code. Anything it
-recommends still has to pass [ADR-A003](../architecture/decisions/ADR-A003-closed-move-set.md)'s
+recommends still has to pass [ADR-A003](../../../context-discovery-architecture/architecture/decisions/ADR-A003-closed-move-set.md)'s
 four-step gate — experiment, requirement, ADR, `Wiring` — in that order.
 
 | Milestone | Document | Question it answers | Status |

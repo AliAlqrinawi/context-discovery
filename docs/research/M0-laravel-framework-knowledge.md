@@ -106,7 +106,7 @@ PSR-4 map and slicing the named member out of that class's file
 (`01-architecture.md` §3.3; `src/Discovery/Resolution/NamedReferenceResolver.php`). Where that
 lookup fails, P10 requires the concern be stated rather than dropped, so the pipeline emits the
 `unresolved-reference` premise — *"ASSUMPTION: named reference could not be resolved on disk;
-contract unverified"* ([ADR-A009](../architecture/decisions/ADR-A009-premise-catalogue.md)).
+contract unverified"* ([ADR-A009](../../../context-discovery-architecture/architecture/decisions/ADR-A009-premise-catalogue.md)).
 
 That mechanism is correct for its designed case: a reference whose contract genuinely cannot be
 checked. It is **wrong** for a reference whose contract is defined by the framework rather than by
