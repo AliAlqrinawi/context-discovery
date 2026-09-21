@@ -11,7 +11,9 @@
 # It refuses, and creates nothing, when:
 #   - the working tree is dirty — a tag names a commit, and uncommitted work is in no commit;
 #   - the tag already exists — a released version is never moved, so the constant must be bumped;
-#   - the suite fails.
+#   - the suite fails, or skips a test. A fresh clone skips the 47 `LaravelFixtureBaselineTest`
+#     variants that need the framework source, which is not committed, and PHPUnit still exits 0.
+#     A release is not tagged from a checkout that could not run the whole suite.
 #
 # The cheap refusals come first, so a version that was never bumped is reported in a second rather
 # than after the whole suite has run.
@@ -47,7 +49,8 @@ if git rev-parse --quiet --verify "refs/tags/$TAG" >/dev/null; then
     refuse "$TAG already exists, at $(git rev-parse --short "$TAG^{commit}"). A released version is never moved: bump ContractVersion::ENGINE."
 fi
 
-vendor/bin/phpunit || refuse "the suite is failing. $TAG was not created."
+vendor/bin/phpunit --fail-on-skipped \
+    || refuse "the suite is failing, or skipped a test. $TAG was not created."
 
 git tag --annotate "$TAG" --message "$TAG"
 
