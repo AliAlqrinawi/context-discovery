@@ -10,6 +10,14 @@
 # Production behaviour is untouched; only where the harness points the tool changes.
 #
 #   bundle-at-commit.sh <corpus-repo> <sha> <cli-root> <out-prefix> [budget]
+#
+# The corpus repository of M18–M22 and M26 is abouelsid-backend: 47 commits, no merges, root
+# `4eb427c`, measured at HEAD `450d91f`.
+#   remote    https://github.com/AliAlqrinawi/abouelsid-backend.git
+#   measured  /Users/alialqrinqwi/Projects laravel/nzrh/abouelsid/abouelsid-backend
+# The local path is one machine's and is recorded because no milestone wrote it down: it had to be
+# recovered by searching the disk for commit `ec92403`. It needs `composer install` run in it —
+# vendor/ is not committed, and the copy below has nothing to copy without it.
 
 set -e
 REPO="$1"; SHA="$2"; CLI="$3"; OUT="$4"; BUDGET="${5:-8000}"
@@ -22,7 +30,13 @@ trap 'git -C "$REPO" worktree remove --force "$WT" >/dev/null 2>&1 || true' EXIT
 # Composer's generated map is location metadata (ADR-A014) and the tool never executes it, so the
 # historical tree borrows the one on disk. Recorded as a caveat rather than hidden: a commit whose
 # dependency set differed from today's would resolve framework classes against today's vendor.
-if [ -d "$REPO/vendor" ] && [ ! -e "$WT/vendor" ]; then ln -s "$REPO/vendor" "$WT/vendor"; fi
+#
+# It is a COPY, never a symlink. `LocalSourceRepository` resolves every read through realpath() and
+# refuses one that lands outside --repo, so a symlinked vendor/ is refused whole: the tool behaves
+# exactly as if no dependency were installed, and says so nowhere. This line was `ln -s` until
+# 2026-09-21, and a run through it is byte-identical — bundle and stderr — to a run with no vendor/
+# at all. `worktree remove --force` on exit takes the copy with it.
+if [ -d "$REPO/vendor" ] && [ ! -e "$WT/vendor" ]; then cp -R "$REPO/vendor" "$WT/vendor"; fi
 
 git -C "$REPO" diff "$SHA^" "$SHA" > "$OUT.diff"
 
