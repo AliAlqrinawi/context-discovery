@@ -50,9 +50,10 @@ composer test
 | [context-discovery-architecture](https://github.com/AliAlqrinawi/context-discovery-architecture) | The frozen implementation contract |
 | this repository | The implementation |
 
-A copy of the frozen contract lives in [`docs/architecture/`](docs/architecture/) for offline
-reading. **The origin repository is authoritative** — if the copy and the origin disagree, the copy
-is stale.
+The frozen contract is read in the
+[architecture repository](https://github.com/AliAlqrinawi/context-discovery-architecture), which is
+authoritative. No copy is kept here: the one that was drifted, and a stale contract is worse than a
+link.
 
 ## What this tool will never do
 
@@ -61,4 +62,5 @@ graph — reverse-caller is a grep. No dedicated config/migration resolver — t
 path. No severity, score, or ranking. No LLM call. No network, no subprocess, no state between runs.
 
 Each of those is an exclusion the research earned, not a simplification. See
-[`docs/architecture/05-traceability.md`](docs/architecture/05-traceability.md) §5.
+[`05-traceability.md`](https://github.com/AliAlqrinawi/context-discovery-architecture/blob/main/architecture/05-traceability.md) §5
+in the architecture repository.

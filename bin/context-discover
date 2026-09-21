@@ -6,7 +6,7 @@ declare(strict_types=1);
 /*
  * context-discover — diff in, context bundle out.
  *
- * Contract: docs/architecture/03-interfaces.md §1. The bundle goes to stdout, diagnostics to
+ * Contract: 03-interfaces.md §1 in the context-discovery-architecture repository. The bundle goes to stdout, diagnostics to
  * stderr, and the exit code says which of the three outcomes happened. There is no --out: shell
  * redirection already covers it.
  *
