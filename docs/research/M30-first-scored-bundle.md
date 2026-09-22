@@ -185,3 +185,16 @@ ADR-B002 there; this document is the measurement.
    diff before the key is frozen is cheap and has been recommended since M19.
 3. **The run-to-run diff** waits for a second engine commit.
 4. **E5.4** stays open as a capability gap until a held-out key says whether it recurs.
+
+---
+
+## Addendum · 2026-09-24 · the held-out companion
+
+**Source:** [M31](M31-held-out-scored-bundle.md). The text above is unaltered.
+
+The in-sample number above now has a held-out one beside it: `ee5a2e6`, key written from the
+diff alone and locked before any run, assertion precision 50.0% with `vendor/` and 16.7%
+without, key recall 3/7. §5.2's E5.4 (`ApiResponse::success`) is missed there too - the
+capability gap is confirmed on an independent commit. §5.1's `Route` gap is closed by that
+key's H.15: eleven assertions, all caught. No direction is claimed between the two numbers;
+they are different keys by different rows.
