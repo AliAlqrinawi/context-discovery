@@ -1,0 +1,411 @@
+{
+    "bundle_version": 2,
+    "run": {
+        "engine_version": "0.2.0",
+        "policy_version": "2",
+        "framework_table_version": "5bfb119e1a00",
+        "budget_tokens": 8000,
+        "diff_sha": "bb3899af79a5",
+        "repo_sha": null
+    },
+    "used_tokens": 606,
+    "assertions": [
+        {
+            "id": "a805df6a9353a",
+            "kind": "named_reference",
+            "subject": "App\\Models\\Setting::updateOrCreate",
+            "reason": "the region depends on App\\Models\\Setting::updateOrCreate, whose contract is defined in another file",
+            "origin": {
+                "path": "app/Http/Controllers/Admin/MenuPdfController.php",
+                "lines": [
+                    1,
+                    85
+                ]
+            }
+        },
+        {
+            "id": "a4506a9d80232",
+            "kind": "named_reference",
+            "subject": "App\\Models\\Setting::where",
+            "reason": "the region depends on App\\Models\\Setting::where, whose contract is defined in another file",
+            "origin": {
+                "path": "app/Http/Controllers/Admin/MenuPdfController.php",
+                "lines": [
+                    1,
+                    85
+                ]
+            }
+        },
+        {
+            "id": "a030eb01ab156",
+            "kind": "unverifiable_premise",
+            "subject": "surrounding-transaction",
+            "reason": "the region performs several persistence writes; whether a transaction wraps them is decided by the caller, which the diff does not show",
+            "origin": {
+                "path": "app/Http/Controllers/Admin/MenuPdfController.php",
+                "lines": [
+                    1,
+                    85
+                ]
+            }
+        },
+        {
+            "id": "a307e9953cd57",
+            "kind": "named_reference",
+            "subject": "App\\Models\\MediaItem::where",
+            "reason": "the region depends on App\\Models\\MediaItem::where, whose contract is defined in another file",
+            "origin": {
+                "path": "app/Services/MenuQrService.php",
+                "lines": [
+                    1,
+                    51
+                ]
+            }
+        },
+        {
+            "id": "aef66f9a5d464",
+            "kind": "named_reference",
+            "subject": "App\\Models\\Setting::updateOrCreate",
+            "reason": "the region depends on App\\Models\\Setting::updateOrCreate, whose contract is defined in another file",
+            "origin": {
+                "path": "database/seeders/SettingSeeder.php",
+                "lines": [
+                    29,
+                    39
+                ]
+            }
+        },
+        {
+            "id": "a79271a62bec2",
+            "kind": "named_reference",
+            "subject": "App\\Models\\Setting::where",
+            "reason": "the region depends on App\\Models\\Setting::where, whose contract is defined in another file",
+            "origin": {
+                "path": "routes/web.php",
+                "lines": [
+                    1,
+                    45
+                ]
+            }
+        },
+        {
+            "id": "ad56e0d612827",
+            "kind": "named_reference",
+            "subject": "App\\Models\\Setting::create",
+            "reason": "the region depends on App\\Models\\Setting::create, whose contract is defined in another file",
+            "origin": {
+                "path": "tests/Feature/MenuPdfTest.php",
+                "lines": [
+                    1,
+                    154
+                ]
+            }
+        },
+        {
+            "id": "aae1f51d3033a",
+            "kind": "named_reference",
+            "subject": "App\\Models\\User::create",
+            "reason": "the region depends on App\\Models\\User::create, whose contract is defined in another file",
+            "origin": {
+                "path": "tests/Feature/MenuPdfTest.php",
+                "lines": [
+                    1,
+                    154
+                ]
+            }
+        },
+        {
+            "id": "a6f3c184d214d",
+            "kind": "named_reference",
+            "subject": "App\\Models\\Setting::where",
+            "reason": "the region depends on App\\Models\\Setting::where, whose contract is defined in another file",
+            "origin": {
+                "path": "tests/Feature/MenuPdfTest.php",
+                "lines": [
+                    1,
+                    154
+                ]
+            }
+        },
+        {
+            "id": "ac7440595851e",
+            "kind": "named_reference",
+            "subject": "App\\Models\\MediaItem::create",
+            "reason": "the region depends on App\\Models\\MediaItem::create, whose contract is defined in another file",
+            "origin": {
+                "path": "tests/Feature/MenuPdfTest.php",
+                "lines": [
+                    1,
+                    154
+                ]
+            }
+        },
+        {
+            "id": "a3d9ba06c37b1",
+            "kind": "unverifiable_premise",
+            "subject": "surrounding-transaction",
+            "reason": "the region performs several persistence writes; whether a transaction wraps them is decided by the caller, which the diff does not show",
+            "origin": {
+                "path": "tests/Feature/MenuPdfTest.php",
+                "lines": [
+                    1,
+                    154
+                ]
+            }
+        }
+    ],
+    "items": [
+        {
+            "assertion_id": "a805df6a9353a",
+            "lever": "flagged",
+            "provenance": {
+                "path": "app/Http/Controllers/Admin/MenuPdfController.php",
+                "member": "App\\Models\\Setting::updateOrCreate",
+                "lines": [
+                    1,
+                    85
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "assertion_id": "a4506a9d80232",
+            "lever": "flagged",
+            "provenance": {
+                "path": "app/Http/Controllers/Admin/MenuPdfController.php",
+                "member": "App\\Models\\Setting::where",
+                "lines": [
+                    1,
+                    85
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "assertion_id": "a307e9953cd57",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Models/MediaItem.php",
+                "member": "fillable",
+                "lines": [
+                    10,
+                    22
+                ]
+            },
+            "payload": "    protected $fillable = [\n        'page',\n        'section',\n        'key',\n        'path',\n        'url',\n        'alt_ar',\n        'alt_en',\n        'mime_type',\n        'size_bytes',\n        'width',\n        'height',\n    ];",
+            "tokens": 58
+        },
+        {
+            "assertion_id": "a307e9953cd57",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Models/MediaItem.php",
+                "member": "scopeForPage",
+                "lines": [
+                    24,
+                    35
+                ]
+            },
+            "payload": "    public function scopeForPage(Builder $query, ?string $page = null, ?string $section = null): Builder\n    {\n        if ($page !== null) {\n            $query->where('page', $page);\n        }\n\n        if ($section !== null) {\n            $query->where('section', $section);\n        }\n\n        return $query;\n    }",
+            "tokens": 79
+        },
+        {
+            "assertion_id": "a805df6a9353a",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Models/Setting.php",
+                "member": "fillable",
+                "lines": [
+                    10,
+                    17
+                ]
+            },
+            "payload": "    protected $fillable = [\n        'key',\n        'value',\n        'type',\n        'group',\n        'label_ar',\n        'label_en',\n    ];",
+            "tokens": 35
+        },
+        {
+            "assertion_id": "a805df6a9353a",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Models/Setting.php",
+                "member": "scopeForGroup",
+                "lines": [
+                    19,
+                    26
+                ]
+            },
+            "payload": "    public function scopeForGroup(Builder $query, ?string $group = null): Builder\n    {\n        if ($group !== null) {\n            $query->where('group', $group);\n        }\n\n        return $query;\n    }",
+            "tokens": 51
+        },
+        {
+            "assertion_id": "aae1f51d3033a",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Models/User.php",
+                "member": "casts",
+                "lines": [
+                    40,
+                    51
+                ]
+            },
+            "payload": "    /**\n     * Get the attributes that should be cast.\n     *\n     * @return array<string, string>\n     */\n    protected function casts(): array\n    {\n        return [\n            'email_verified_at' => 'datetime',\n            'password' => 'hashed',\n        ];\n    }",
+            "tokens": 67
+        },
+        {
+            "assertion_id": "aae1f51d3033a",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Models/User.php",
+                "member": "fillable",
+                "lines": [
+                    18,
+                    28
+                ]
+            },
+            "payload": "    /**\n     * The attributes that are mass assignable.\n     *\n     * @var list<string>\n     */\n    protected $fillable = [\n        'name',\n        'email',\n        'password',\n        'role',\n    ];",
+            "tokens": 50
+        },
+        {
+            "assertion_id": "aae1f51d3033a",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Models/User.php",
+                "member": "hidden",
+                "lines": [
+                    30,
+                    38
+                ]
+            },
+            "payload": "    /**\n     * The attributes that should be hidden for serialization.\n     *\n     * @var list<string>\n     */\n    protected $hidden = [\n        'password',\n        'remember_token',\n    ];",
+            "tokens": 48
+        },
+        {
+            "assertion_id": "a307e9953cd57",
+            "lever": "flagged",
+            "provenance": {
+                "path": "app/Services/MenuQrService.php",
+                "member": "App\\Models\\MediaItem::where",
+                "lines": [
+                    1,
+                    51
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "assertion_id": "aef66f9a5d464",
+            "lever": "flagged",
+            "provenance": {
+                "path": "database/seeders/SettingSeeder.php",
+                "member": "App\\Models\\Setting::updateOrCreate",
+                "lines": [
+                    29,
+                    39
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "assertion_id": "a79271a62bec2",
+            "lever": "flagged",
+            "provenance": {
+                "path": "routes/web.php",
+                "member": "App\\Models\\Setting::where",
+                "lines": [
+                    1,
+                    45
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "assertion_id": "ac7440595851e",
+            "lever": "flagged",
+            "provenance": {
+                "path": "tests/Feature/MenuPdfTest.php",
+                "member": "App\\Models\\MediaItem::create",
+                "lines": [
+                    1,
+                    154
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "assertion_id": "ad56e0d612827",
+            "lever": "flagged",
+            "provenance": {
+                "path": "tests/Feature/MenuPdfTest.php",
+                "member": "App\\Models\\Setting::create",
+                "lines": [
+                    1,
+                    154
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "assertion_id": "a6f3c184d214d",
+            "lever": "flagged",
+            "provenance": {
+                "path": "tests/Feature/MenuPdfTest.php",
+                "member": "App\\Models\\Setting::where",
+                "lines": [
+                    1,
+                    154
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "assertion_id": "aae1f51d3033a",
+            "lever": "flagged",
+            "provenance": {
+                "path": "tests/Feature/MenuPdfTest.php",
+                "member": "App\\Models\\User::create",
+                "lines": [
+                    1,
+                    154
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "assertion_id": "a030eb01ab156",
+            "lever": "flagged",
+            "provenance": {
+                "path": "app/Http/Controllers/Admin/MenuPdfController.php",
+                "lines": [
+                    1,
+                    85
+                ]
+            },
+            "payload": "ASSUMPTION: this code assumes a surrounding transaction; caller not checked",
+            "tokens": 19
+        },
+        {
+            "assertion_id": "a3d9ba06c37b1",
+            "lever": "flagged",
+            "provenance": {
+                "path": "tests/Feature/MenuPdfTest.php",
+                "lines": [
+                    1,
+                    154
+                ]
+            },
+            "payload": "ASSUMPTION: this code assumes a surrounding transaction; caller not checked",
+            "tokens": 19
+        }
+    ],
+    "diagnostics": [],
+    "dropped": []
+}

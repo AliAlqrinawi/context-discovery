@@ -1,0 +1,63 @@
+new file: app/Http/Controllers/Admin/Auth/AuthController.php — own-file context is in the diff, not fetched
+new file: app/Http/Controllers/Admin/BranchController.php — own-file context is in the diff, not fetched
+new file: app/Http/Controllers/Admin/CategoryController.php — own-file context is in the diff, not fetched
+new file: app/Http/Controllers/Admin/Catering/CateringPackageController.php — own-file context is in the diff, not fetched
+new file: app/Http/Controllers/Admin/Catering/QuoteRequestController.php — own-file context is in the diff, not fetched
+new file: app/Http/Controllers/Admin/Catering/SampleMenuController.php — own-file context is in the diff, not fetched
+new file: app/Http/Controllers/Admin/DeliveryAppController.php — own-file context is in the diff, not fetched
+new file: app/Http/Controllers/Admin/DishController.php — own-file context is in the diff, not fetched
+new file: app/Http/Controllers/Admin/MediaItemController.php — own-file context is in the diff, not fetched
+new file: app/Http/Controllers/Admin/PageContentController.php — own-file context is in the diff, not fetched
+new file: app/Http/Controllers/Admin/SettingController.php — own-file context is in the diff, not fetched
+new file: app/Http/Controllers/Admin/TestimonialController.php — own-file context is in the diff, not fetched
+new file: app/Http/Controllers/Admin/TimelineController.php — own-file context is in the diff, not fetched
+new file: app/Http/Controllers/Admin/UserController.php — own-file context is in the diff, not fetched
+new file: app/Http/Controllers/Public/BranchController.php — own-file context is in the diff, not fetched
+new file: app/Http/Controllers/Public/CategoryController.php — own-file context is in the diff, not fetched
+new file: app/Http/Controllers/Public/Catering/CateringPackageController.php — own-file context is in the diff, not fetched
+new file: app/Http/Controllers/Public/Catering/QuoteRequestController.php — own-file context is in the diff, not fetched
+new file: app/Http/Controllers/Public/Catering/SampleMenuController.php — own-file context is in the diff, not fetched
+new file: app/Http/Controllers/Public/DeliveryAppController.php — own-file context is in the diff, not fetched
+new file: app/Http/Controllers/Public/DishController.php — own-file context is in the diff, not fetched
+new file: app/Http/Controllers/Public/MediaItemController.php — own-file context is in the diff, not fetched
+new file: app/Http/Controllers/Public/PageContentController.php — own-file context is in the diff, not fetched
+new file: app/Http/Controllers/Public/SettingController.php — own-file context is in the diff, not fetched
+new file: app/Http/Controllers/Public/TestimonialController.php — own-file context is in the diff, not fetched
+new file: app/Http/Controllers/Public/TimelineController.php — own-file context is in the diff, not fetched
+new file: routes/admin.php — own-file context is in the diff, not fetched
+missing PSR-4 entry: Illuminate\Http\JsonResponse named in app/Http/Controllers/BranchController.php
+unresolved named_reference: App\Http\Resources\Branch\BranchResource::collection in app/Http/Controllers/Public/BranchController.php
+missing PSR-4 entry: Illuminate\Http\JsonResponse named in app/Http/Controllers/Public/BranchController.php
+unresolved named_reference: App\Http\Resources\Category\CategoryResource::collection in app/Http/Controllers/Public/CategoryController.php
+missing PSR-4 entry: Illuminate\Http\JsonResponse named in app/Http/Controllers/Public/CategoryController.php
+unresolved named_reference: App\Http\Resources\Catering\PackageResource::collection in app/Http/Controllers/Public/Catering/CateringPackageController.php
+missing PSR-4 entry: Illuminate\Http\JsonResponse named in app/Http/Controllers/Public/Catering/CateringPackageController.php
+missing PSR-4 entry: Illuminate\Http\JsonResponse named in app/Http/Controllers/Public/Catering/QuoteRequestController.php
+unresolved named_reference: App\Http\Resources\Catering\SampleMenuResource::collection in app/Http/Controllers/Public/Catering/SampleMenuController.php
+missing PSR-4 entry: Illuminate\Http\JsonResponse named in app/Http/Controllers/Public/Catering/SampleMenuController.php
+unresolved named_reference: App\Http\Resources\DeliveryApp\DeliveryAppResource::collection in app/Http/Controllers/Public/DeliveryAppController.php
+missing PSR-4 entry: Illuminate\Http\JsonResponse named in app/Http/Controllers/Public/DeliveryAppController.php
+unresolved named_reference: App\Http\Resources\Dish\DishResource::collection in app/Http/Controllers/Public/DishController.php
+missing PSR-4 entry: Illuminate\Http\Request named in app/Http/Controllers/Public/DishController.php
+missing PSR-4 entry: Illuminate\Http\JsonResponse named in app/Http/Controllers/Public/DishController.php
+missing PSR-4 entry: Illuminate\Http\Request named in app/Http/Controllers/Public/MediaItemController.php
+missing PSR-4 entry: Illuminate\Http\JsonResponse named in app/Http/Controllers/Public/MediaItemController.php
+missing PSR-4 entry: Illuminate\Http\Request named in app/Http/Controllers/Public/PageContentController.php
+missing PSR-4 entry: Illuminate\Http\JsonResponse named in app/Http/Controllers/Public/PageContentController.php
+missing PSR-4 entry: Illuminate\Http\Request named in app/Http/Controllers/Public/SettingController.php
+missing PSR-4 entry: Illuminate\Http\JsonResponse named in app/Http/Controllers/Public/SettingController.php
+unresolved named_reference: App\Http\Resources\Testimonial\TestimonialResource::collection in app/Http/Controllers/Public/TestimonialController.php
+missing PSR-4 entry: Illuminate\Http\JsonResponse named in app/Http/Controllers/Public/TestimonialController.php
+unresolved named_reference: App\Http\Resources\Timeline\TimelineResource::collection in app/Http/Controllers/Public/TimelineController.php
+missing PSR-4 entry: Illuminate\Http\JsonResponse named in app/Http/Controllers/Public/TimelineController.php
+missing PSR-4 entry: Illuminate\Support\Facades\Route::middleware named in bootstrap/app.php
+missing PSR-4 entry: Illuminate\Support\Facades\Route::prefix named in routes/admin.php
+missing PSR-4 entry: Illuminate\Support\Facades\Route::post named in routes/admin.php
+missing PSR-4 entry: Illuminate\Support\Facades\Route::middleware named in routes/admin.php
+missing PSR-4 entry: Illuminate\Support\Facades\Route::get named in routes/admin.php
+missing PSR-4 entry: Illuminate\Support\Facades\Route::put named in routes/admin.php
+missing PSR-4 entry: Illuminate\Support\Facades\Route::delete named in routes/admin.php
+missing PSR-4 entry: Illuminate\Support\Facades\Route::patch named in routes/admin.php
+missing PSR-4 entry: Illuminate\Support\Facades\Route::prefix named in routes/api.php
+missing PSR-4 entry: Illuminate\Support\Facades\Route::get named in routes/api.php
+missing PSR-4 entry: Illuminate\Support\Facades\Route::post named in routes/api.php

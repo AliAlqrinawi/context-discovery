@@ -1,0 +1,72 @@
+{
+    "bundle_version": 2,
+    "run": {
+        "engine_version": "0.2.0",
+        "policy_version": "2",
+        "framework_table_version": "5bfb119e1a00",
+        "budget_tokens": 8000,
+        "diff_sha": "589bb7bd67ed",
+        "repo_sha": null
+    },
+    "used_tokens": 40,
+    "assertions": [
+        {
+            "id": "a67c76191be2d",
+            "kind": "named_reference",
+            "subject": "Illuminate\\Support\\Facades\\Schema::table",
+            "reason": "the region depends on Illuminate\\Support\\Facades\\Schema::table, whose contract is defined in another file",
+            "origin": {
+                "path": "database/migrations/2026_08_11_091844_make_dish_descriptions_nullable.php",
+                "lines": [
+                    1,
+                    30
+                ]
+            }
+        },
+        {
+            "id": "a7ddc56c9ae7c",
+            "kind": "named_reference",
+            "subject": "Illuminate\\Database\\Schema\\Blueprint",
+            "reason": "the region depends on Illuminate\\Database\\Schema\\Blueprint, whose contract is defined in another file",
+            "origin": {
+                "path": "database/migrations/2026_08_11_091844_make_dish_descriptions_nullable.php",
+                "lines": [
+                    1,
+                    30
+                ]
+            }
+        }
+    ],
+    "items": [
+        {
+            "assertion_id": "a7ddc56c9ae7c",
+            "lever": "flagged",
+            "provenance": {
+                "path": "database/migrations/2026_08_11_091844_make_dish_descriptions_nullable.php",
+                "member": "Illuminate\\Database\\Schema\\Blueprint",
+                "lines": [
+                    1,
+                    30
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "assertion_id": "a67c76191be2d",
+            "lever": "flagged",
+            "provenance": {
+                "path": "database/migrations/2026_08_11_091844_make_dish_descriptions_nullable.php",
+                "member": "Illuminate\\Support\\Facades\\Schema::table",
+                "lines": [
+                    1,
+                    30
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        }
+    ],
+    "diagnostics": [],
+    "dropped": []
+}

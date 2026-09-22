@@ -186,3 +186,18 @@ modified file, no worktree behind.
    research decision, and the evidence for continuing on this axis is weaker after M23 than before it.
 
 Stopping at M23 as instructed.
+
+---
+
+## Erratum · 2026-09-22 · the harness's `vendor/` was never read
+
+**Source:** ADR-A026 (architecture repository) · [M29](M29-vendor-symlink-correction.md). The text
+above is unaltered. halaw was **not re-run**; figures below are heuristic estimates.
+
+| Claim | Verdict |
+|---|---|
+| §2 **R1** "PHP/Laravel with `vendor/` installed" | **Falsified in effect.** The harness symlinked `vendor/` and the tool refuses a symlink whole; the criterion selected for nothing any halaw bundle could see |
+| §3 C5 satisfies **S4** (non-empty bundle); §9 "the smallest (C5, 2 items / 40 tokens)" | **Weakened.** C5's two items are both spurious flags on `Blueprint` and `Schema::table`; with a readable vendor the bundle is estimated **empty**. C5 was already CONTESTED and the primary measure already void |
+| §9 "2–40 items, 40–1719 tokens; mean 22 items / 1231 tokens" | **Falsified as figures**, lightly: D5 ≈ 12 · 314 (recorded 21 · 494), D1 ≈ 3 · 84, D2–D4 and C6 −2 to −4 items; C1–C4 unaffected |
+| §12 "`vendor/` borrowed from the main checkout (ADR-A022's caveat)" | **Falsified.** Nothing was borrowed |
+| §6 the controls are not controls; classification **C**; §5 keyed detection 0/5 both arms; §8 abstentions 3 → 0, no K03 analogue; §7 reviewer discoveries | **Stands** — none is a claim about bundle size, and every verification was against the source |

@@ -39,3 +39,15 @@ result is a **floor effect**, not a finding that the bundle is useless.
 Bundle-only quotes (verified absent from the diff): **D2-B, D4-B, C1-B, C2-B**. Of those four, only
 **C1-B** accompanies a correct answer — and C1 is a *control with no defect*, so it measures
 "correctly concluding nothing is wrong", not detection.
+
+---
+
+## Erratum · 2026-09-22 · the harness's `vendor/` was never read
+
+**Source:** ADR-A026 (architecture repository) · [M29](../../../../../docs/research/M29-vendor-symlink-correction.md).
+The text above is unaltered; no cell was re-scored.
+
+| Claim | Verdict |
+|---|---|
+| "Bundle-only quotes (verified absent from the diff): **D2-B**, D4-B, C1-B, C2-B" | **D2-B falsified as evidence.** Its Q5 is *"ASSUMPTION: named reference could not be resolved on disk; contract unverified"* — a spurious flag produced because the harness's symlinked `vendor/` was refused. It was absent from the diff; it was also false. D2's entire bundle was two such flags. D4-B, C1-B and C2-B are fetched slices and **stand** |
+| Every decision, detection and confidence score | **Stands** as recorded — none is computed from bundle contents |

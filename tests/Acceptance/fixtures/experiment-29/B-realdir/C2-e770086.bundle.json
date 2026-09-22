@@ -1,0 +1,419 @@
+{
+    "bundle_version": 2,
+    "run": {
+        "engine_version": "0.2.0",
+        "policy_version": "2",
+        "framework_table_version": "5bfb119e1a00",
+        "budget_tokens": 8000,
+        "diff_sha": "9c7aa47190ed",
+        "repo_sha": null
+    },
+    "used_tokens": 444,
+    "assertions": [
+        {
+            "id": "a6bb9e42673b4",
+            "kind": "changed_signature",
+            "subject": "execute",
+            "reason": "the signature of execute changed; its call sites are not shown by the diff",
+            "origin": {
+                "path": "app/Actions/MediaItem/GetMediaItemsAction.php",
+                "lines": [
+                    12,
+                    20
+                ]
+            }
+        },
+        {
+            "id": "a175bc4f9e6e8",
+            "kind": "changed_signature",
+            "subject": "scopeForPage",
+            "reason": "the signature of scopeForPage changed; its call sites are not shown by the diff",
+            "origin": {
+                "path": "app/Models/MediaItem.php",
+                "lines": [
+                    21,
+                    31
+                ]
+            }
+        },
+        {
+            "id": "a08ada7ee011a",
+            "kind": "changed_signature",
+            "subject": "getByPage",
+            "reason": "the signature of getByPage changed; its call sites are not shown by the diff",
+            "origin": {
+                "path": "app/Repositories/MediaItemRepository.php",
+                "lines": [
+                    7,
+                    13
+                ]
+            }
+        }
+    ],
+    "items": [
+        {
+            "assertion_id": "a6bb9e42673b4",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Actions/Auth/LoginAction.php",
+                "lines": [
+                    12,
+                    12
+                ]
+            },
+            "payload": "    public function execute(LoginDTO $dto): array",
+            "tokens": 13
+        },
+        {
+            "assertion_id": "a6bb9e42673b4",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Actions/Auth/LogoutAction.php",
+                "lines": [
+                    9,
+                    9
+                ]
+            },
+            "payload": "    public function execute(User $user): void",
+            "tokens": 12
+        },
+        {
+            "assertion_id": "a6bb9e42673b4",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Actions/Branch/CreateBranchAction.php",
+                "lines": [
+                    18,
+                    18
+                ]
+            },
+            "payload": "    public function execute(CreateBranchDTO $dto): Branch",
+            "tokens": 15
+        },
+        {
+            "assertion_id": "a6bb9e42673b4",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Actions/Branch/DeleteBranchAction.php",
+                "lines": [
+                    16,
+                    16
+                ]
+            },
+            "payload": "    public function execute(int $id): void",
+            "tokens": 11
+        },
+        {
+            "assertion_id": "a6bb9e42673b4",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Actions/Branch/GetBranchesAction.php",
+                "lines": [
+                    15,
+                    15
+                ]
+            },
+            "payload": "    public function execute(): Collection",
+            "tokens": 11
+        },
+        {
+            "assertion_id": "a6bb9e42673b4",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Actions/Branch/UpdateBranchAction.php",
+                "lines": [
+                    19,
+                    19
+                ]
+            },
+            "payload": "    public function execute(int $id, UpdateBranchDTO $dto): Branch",
+            "tokens": 17
+        },
+        {
+            "assertion_id": "a6bb9e42673b4",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Actions/Catering/CreatePackageAction.php",
+                "lines": [
+                    18,
+                    18
+                ]
+            },
+            "payload": "    public function execute(CreatePackageDTO $dto): CateringPackage",
+            "tokens": 17
+        },
+        {
+            "assertion_id": "a6bb9e42673b4",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Actions/Catering/CreateSampleMenuAction.php",
+                "lines": [
+                    18,
+                    18
+                ]
+            },
+            "payload": "    public function execute(CreateSampleMenuDTO $dto): SampleMenu",
+            "tokens": 17
+        },
+        {
+            "assertion_id": "a6bb9e42673b4",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Actions/Catering/DeletePackageAction.php",
+                "lines": [
+                    16,
+                    16
+                ]
+            },
+            "payload": "    public function execute(int $id): void",
+            "tokens": 11
+        },
+        {
+            "assertion_id": "a6bb9e42673b4",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Actions/Catering/DeleteSampleMenuAction.php",
+                "lines": [
+                    16,
+                    16
+                ]
+            },
+            "payload": "    public function execute(int $id): void",
+            "tokens": 11
+        },
+        {
+            "assertion_id": "a6bb9e42673b4",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Actions/Catering/GetPackagesAction.php",
+                "lines": [
+                    15,
+                    15
+                ]
+            },
+            "payload": "    public function execute(): Collection",
+            "tokens": 11
+        },
+        {
+            "assertion_id": "a6bb9e42673b4",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Actions/Catering/GetSampleMenusAction.php",
+                "lines": [
+                    15,
+                    15
+                ]
+            },
+            "payload": "    public function execute(): Collection",
+            "tokens": 11
+        },
+        {
+            "assertion_id": "a6bb9e42673b4",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Actions/Catering/SubmitQuoteRequestAction.php",
+                "lines": [
+                    16,
+                    16
+                ]
+            },
+            "payload": "    public function execute(SubmitQuoteRequestDTO $dto): QuoteRequest",
+            "tokens": 18
+        },
+        {
+            "assertion_id": "a6bb9e42673b4",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Actions/Catering/UpdatePackageAction.php",
+                "lines": [
+                    19,
+                    19
+                ]
+            },
+            "payload": "    public function execute(int $id, UpdatePackageDTO $dto): CateringPackage",
+            "tokens": 19
+        },
+        {
+            "assertion_id": "a6bb9e42673b4",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Actions/Catering/UpdateQuoteRequestStatusAction.php",
+                "lines": [
+                    16,
+                    16
+                ]
+            },
+            "payload": "    public function execute(int $id, UpdateQuoteRequestStatusDTO $dto): QuoteRequest",
+            "tokens": 21
+        },
+        {
+            "assertion_id": "a6bb9e42673b4",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Actions/Catering/UpdateSampleMenuAction.php",
+                "lines": [
+                    18,
+                    18
+                ]
+            },
+            "payload": "    public function execute(int $id, CreateSampleMenuDTO $dto): SampleMenu",
+            "tokens": 19
+        },
+        {
+            "assertion_id": "a6bb9e42673b4",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Actions/DeliveryApp/CreateDeliveryAppAction.php",
+                "lines": [
+                    18,
+                    18
+                ]
+            },
+            "payload": "    public function execute(CreateDeliveryAppDTO $dto): DeliveryApp",
+            "tokens": 17
+        },
+        {
+            "assertion_id": "a6bb9e42673b4",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Actions/DeliveryApp/DeleteDeliveryAppAction.php",
+                "lines": [
+                    16,
+                    16
+                ]
+            },
+            "payload": "    public function execute(int $id): void",
+            "tokens": 11
+        },
+        {
+            "assertion_id": "a6bb9e42673b4",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Actions/DeliveryApp/GetDeliveryAppsAction.php",
+                "lines": [
+                    15,
+                    15
+                ]
+            },
+            "payload": "    public function execute(bool $activeOnly = true): Collection",
+            "tokens": 16
+        },
+        {
+            "assertion_id": "a6bb9e42673b4",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Actions/DeliveryApp/UpdateDeliveryAppAction.php",
+                "lines": [
+                    18,
+                    18
+                ]
+            },
+            "payload": "    public function execute(int $id, CreateDeliveryAppDTO $dto): DeliveryApp",
+            "tokens": 19
+        },
+        {
+            "assertion_id": "a08ada7ee011a",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Actions/MediaItem/GetMediaItemsAction.php",
+                "lines": [
+                    22,
+                    22
+                ]
+            },
+            "payload": "            fn () => $this->repository->getByPage($page, $section)",
+            "tokens": 17
+        },
+        {
+            "assertion_id": "a6bb9e42673b4",
+            "lever": "flagged",
+            "provenance": {
+                "path": "app/Actions/MediaItem/GetMediaItemsAction.php",
+                "member": "execute",
+                "lines": [
+                    12,
+                    20
+                ]
+            },
+            "payload": "ASSUMPTION: additional call sites exist beyond the search bound; not all verified",
+            "tokens": 21
+        },
+        {
+            "assertion_id": "a08ada7ee011a",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Actions/PageContent/GetPageContentAction.php",
+                "lines": [
+                    23,
+                    23
+                ]
+            },
+            "payload": "            fn () => $this->repository->getByPage($page, $section)",
+            "tokens": 17
+        },
+        {
+            "assertion_id": "a175bc4f9e6e8",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Models/MediaItem.php",
+                "lines": [
+                    24,
+                    24
+                ]
+            },
+            "payload": "    public function scopeForPage(Builder $query, ?string $page = null, ?string $section = null): Builder",
+            "tokens": 26
+        },
+        {
+            "assertion_id": "a175bc4f9e6e8",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Models/PageContent.php",
+                "lines": [
+                    20,
+                    20
+                ]
+            },
+            "payload": "    public function scopeForPage(Builder $query, string $page, ?string $section = null): Builder",
+            "tokens": 24
+        },
+        {
+            "assertion_id": "a08ada7ee011a",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Repositories/MediaItemRepository.php",
+                "lines": [
+                    10,
+                    10
+                ]
+            },
+            "payload": "    public function getByPage(?string $page = null, ?string $section = null): Collection",
+            "tokens": 22
+        },
+        {
+            "assertion_id": "a08ada7ee011a",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Repositories/PageContentRepository.php",
+                "lines": [
+                    12,
+                    12
+                ]
+            },
+            "payload": "    public function getByPage(string $page, ?string $section = null): Collection",
+            "tokens": 20
+        }
+    ],
+    "diagnostics": [
+        {
+            "type": "call_sites_truncated",
+            "assertion_id": "a6bb9e42673b4",
+            "detail": {
+                "limit": 20,
+                "subject": "execute",
+                "scope": "app/"
+            }
+        }
+    ],
+    "dropped": []
+}

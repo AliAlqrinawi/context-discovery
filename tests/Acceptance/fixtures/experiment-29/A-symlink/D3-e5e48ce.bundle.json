@@ -1,0 +1,1962 @@
+{
+    "bundle_version": 2,
+    "run": {
+        "engine_version": "0.2.0",
+        "policy_version": "2",
+        "framework_table_version": "5bfb119e1a00",
+        "budget_tokens": 8000,
+        "diff_sha": "3088d762a4f3",
+        "repo_sha": null
+    },
+    "used_tokens": 4694,
+    "assertions": [
+        {
+            "id": "ac72f2326b14d",
+            "kind": "named_reference",
+            "subject": "App\\Repositories\\BranchRepository",
+            "reason": "the region depends on App\\Repositories\\BranchRepository, whose contract is defined in another file",
+            "origin": {
+                "path": "app/Http/Controllers/BranchController.php",
+                "lines": [
+                    21,
+                    31
+                ]
+            }
+        },
+        {
+            "id": "a6a5eeed72bd9",
+            "kind": "named_reference",
+            "subject": "Illuminate\\Http\\JsonResponse",
+            "reason": "the region depends on Illuminate\\Http\\JsonResponse, whose contract is defined in another file",
+            "origin": {
+                "path": "app/Http/Controllers/BranchController.php",
+                "lines": [
+                    21,
+                    31
+                ]
+            }
+        },
+        {
+            "id": "a5295a5e0819d",
+            "kind": "named_reference",
+            "subject": "App\\Http\\Resources\\Branch\\BranchResource",
+            "reason": "the region depends on App\\Http\\Resources\\Branch\\BranchResource, whose contract is defined in another file",
+            "origin": {
+                "path": "app/Http/Controllers/BranchController.php",
+                "lines": [
+                    21,
+                    31
+                ]
+            }
+        },
+        {
+            "id": "a044179a6e287",
+            "kind": "named_reference",
+            "subject": "App\\Http\\Resources\\Branch\\BranchResource::collection",
+            "reason": "the region depends on App\\Http\\Resources\\Branch\\BranchResource::collection, whose contract is defined in another file",
+            "origin": {
+                "path": "app/Http/Controllers/Public/BranchController.php",
+                "lines": [
+                    1,
+                    18
+                ]
+            }
+        },
+        {
+            "id": "a9cc7a80ca853",
+            "kind": "named_reference",
+            "subject": "App\\Actions\\Branch\\GetBranchesAction",
+            "reason": "the region depends on App\\Actions\\Branch\\GetBranchesAction, whose contract is defined in another file",
+            "origin": {
+                "path": "app/Http/Controllers/Public/BranchController.php",
+                "lines": [
+                    1,
+                    18
+                ]
+            }
+        },
+        {
+            "id": "a44ed2e5fe9f5",
+            "kind": "named_reference",
+            "subject": "Illuminate\\Http\\JsonResponse",
+            "reason": "the region depends on Illuminate\\Http\\JsonResponse, whose contract is defined in another file",
+            "origin": {
+                "path": "app/Http/Controllers/Public/BranchController.php",
+                "lines": [
+                    1,
+                    18
+                ]
+            }
+        },
+        {
+            "id": "adaf516ef5064",
+            "kind": "named_reference",
+            "subject": "App\\Http\\Resources\\Category\\CategoryResource::collection",
+            "reason": "the region depends on App\\Http\\Resources\\Category\\CategoryResource::collection, whose contract is defined in another file",
+            "origin": {
+                "path": "app/Http/Controllers/Public/CategoryController.php",
+                "lines": [
+                    1,
+                    18
+                ]
+            }
+        },
+        {
+            "id": "ab0f576909a52",
+            "kind": "named_reference",
+            "subject": "App\\Repositories\\CategoryRepository",
+            "reason": "the region depends on App\\Repositories\\CategoryRepository, whose contract is defined in another file",
+            "origin": {
+                "path": "app/Http/Controllers/Public/CategoryController.php",
+                "lines": [
+                    1,
+                    18
+                ]
+            }
+        },
+        {
+            "id": "ae85bd885d1eb",
+            "kind": "named_reference",
+            "subject": "Illuminate\\Http\\JsonResponse",
+            "reason": "the region depends on Illuminate\\Http\\JsonResponse, whose contract is defined in another file",
+            "origin": {
+                "path": "app/Http/Controllers/Public/CategoryController.php",
+                "lines": [
+                    1,
+                    18
+                ]
+            }
+        },
+        {
+            "id": "a6f768e0e95d8",
+            "kind": "named_reference",
+            "subject": "App\\Http\\Resources\\Catering\\PackageResource::collection",
+            "reason": "the region depends on App\\Http\\Resources\\Catering\\PackageResource::collection, whose contract is defined in another file",
+            "origin": {
+                "path": "app/Http/Controllers/Public/Catering/CateringPackageController.php",
+                "lines": [
+                    1,
+                    18
+                ]
+            }
+        },
+        {
+            "id": "afb6056e05f22",
+            "kind": "named_reference",
+            "subject": "App\\Actions\\Catering\\GetPackagesAction",
+            "reason": "the region depends on App\\Actions\\Catering\\GetPackagesAction, whose contract is defined in another file",
+            "origin": {
+                "path": "app/Http/Controllers/Public/Catering/CateringPackageController.php",
+                "lines": [
+                    1,
+                    18
+                ]
+            }
+        },
+        {
+            "id": "a4ade5921c595",
+            "kind": "named_reference",
+            "subject": "Illuminate\\Http\\JsonResponse",
+            "reason": "the region depends on Illuminate\\Http\\JsonResponse, whose contract is defined in another file",
+            "origin": {
+                "path": "app/Http/Controllers/Public/Catering/CateringPackageController.php",
+                "lines": [
+                    1,
+                    18
+                ]
+            }
+        },
+        {
+            "id": "a8fe1b9d16d09",
+            "kind": "named_reference",
+            "subject": "App\\DTOs\\Catering\\SubmitQuoteRequestDTO::fromRequest",
+            "reason": "the region depends on App\\DTOs\\Catering\\SubmitQuoteRequestDTO::fromRequest, whose contract is defined in another file",
+            "origin": {
+                "path": "app/Http/Controllers/Public/Catering/QuoteRequestController.php",
+                "lines": [
+                    1,
+                    21
+                ]
+            }
+        },
+        {
+            "id": "a24dc2927c796",
+            "kind": "named_reference",
+            "subject": "App\\Http\\Requests\\Catering\\StoreQuoteRequestRequest",
+            "reason": "the region depends on App\\Http\\Requests\\Catering\\StoreQuoteRequestRequest, whose contract is defined in another file",
+            "origin": {
+                "path": "app/Http/Controllers/Public/Catering/QuoteRequestController.php",
+                "lines": [
+                    1,
+                    21
+                ]
+            }
+        },
+        {
+            "id": "a467f53fc4f0f",
+            "kind": "named_reference",
+            "subject": "App\\Actions\\Catering\\SubmitQuoteRequestAction",
+            "reason": "the region depends on App\\Actions\\Catering\\SubmitQuoteRequestAction, whose contract is defined in another file",
+            "origin": {
+                "path": "app/Http/Controllers/Public/Catering/QuoteRequestController.php",
+                "lines": [
+                    1,
+                    21
+                ]
+            }
+        },
+        {
+            "id": "a8ad04be83d27",
+            "kind": "named_reference",
+            "subject": "Illuminate\\Http\\JsonResponse",
+            "reason": "the region depends on Illuminate\\Http\\JsonResponse, whose contract is defined in another file",
+            "origin": {
+                "path": "app/Http/Controllers/Public/Catering/QuoteRequestController.php",
+                "lines": [
+                    1,
+                    21
+                ]
+            }
+        },
+        {
+            "id": "abf82b90e8a84",
+            "kind": "named_reference",
+            "subject": "App\\Http\\Resources\\Catering\\QuoteRequestResource",
+            "reason": "the region depends on App\\Http\\Resources\\Catering\\QuoteRequestResource, whose contract is defined in another file",
+            "origin": {
+                "path": "app/Http/Controllers/Public/Catering/QuoteRequestController.php",
+                "lines": [
+                    1,
+                    21
+                ]
+            }
+        },
+        {
+            "id": "a571089bf1dbe",
+            "kind": "named_reference",
+            "subject": "App\\Http\\Resources\\Catering\\SampleMenuResource::collection",
+            "reason": "the region depends on App\\Http\\Resources\\Catering\\SampleMenuResource::collection, whose contract is defined in another file",
+            "origin": {
+                "path": "app/Http/Controllers/Public/Catering/SampleMenuController.php",
+                "lines": [
+                    1,
+                    18
+                ]
+            }
+        },
+        {
+            "id": "ab78cd27a55ca",
+            "kind": "named_reference",
+            "subject": "App\\Actions\\Catering\\GetSampleMenusAction",
+            "reason": "the region depends on App\\Actions\\Catering\\GetSampleMenusAction, whose contract is defined in another file",
+            "origin": {
+                "path": "app/Http/Controllers/Public/Catering/SampleMenuController.php",
+                "lines": [
+                    1,
+                    18
+                ]
+            }
+        },
+        {
+            "id": "ae7945c17c9db",
+            "kind": "named_reference",
+            "subject": "Illuminate\\Http\\JsonResponse",
+            "reason": "the region depends on Illuminate\\Http\\JsonResponse, whose contract is defined in another file",
+            "origin": {
+                "path": "app/Http/Controllers/Public/Catering/SampleMenuController.php",
+                "lines": [
+                    1,
+                    18
+                ]
+            }
+        },
+        {
+            "id": "aa37a6235f2ac",
+            "kind": "named_reference",
+            "subject": "App\\Http\\Resources\\DeliveryApp\\DeliveryAppResource::collection",
+            "reason": "the region depends on App\\Http\\Resources\\DeliveryApp\\DeliveryAppResource::collection, whose contract is defined in another file",
+            "origin": {
+                "path": "app/Http/Controllers/Public/DeliveryAppController.php",
+                "lines": [
+                    1,
+                    18
+                ]
+            }
+        },
+        {
+            "id": "abb85910a4426",
+            "kind": "named_reference",
+            "subject": "App\\Actions\\DeliveryApp\\GetDeliveryAppsAction",
+            "reason": "the region depends on App\\Actions\\DeliveryApp\\GetDeliveryAppsAction, whose contract is defined in another file",
+            "origin": {
+                "path": "app/Http/Controllers/Public/DeliveryAppController.php",
+                "lines": [
+                    1,
+                    18
+                ]
+            }
+        },
+        {
+            "id": "a7b0706c70f54",
+            "kind": "named_reference",
+            "subject": "Illuminate\\Http\\JsonResponse",
+            "reason": "the region depends on Illuminate\\Http\\JsonResponse, whose contract is defined in another file",
+            "origin": {
+                "path": "app/Http/Controllers/Public/DeliveryAppController.php",
+                "lines": [
+                    1,
+                    18
+                ]
+            }
+        },
+        {
+            "id": "a350c900be934",
+            "kind": "named_reference",
+            "subject": "App\\Http\\Resources\\Dish\\DishResource::collection",
+            "reason": "the region depends on App\\Http\\Resources\\Dish\\DishResource::collection, whose contract is defined in another file",
+            "origin": {
+                "path": "app/Http/Controllers/Public/DishController.php",
+                "lines": [
+                    1,
+                    32
+                ]
+            }
+        },
+        {
+            "id": "a7e61ce6d67d2",
+            "kind": "named_reference",
+            "subject": "Illuminate\\Http\\Request",
+            "reason": "the region depends on Illuminate\\Http\\Request, whose contract is defined in another file",
+            "origin": {
+                "path": "app/Http/Controllers/Public/DishController.php",
+                "lines": [
+                    1,
+                    32
+                ]
+            }
+        },
+        {
+            "id": "ad1cdb1ba8cf7",
+            "kind": "named_reference",
+            "subject": "App\\Actions\\Dish\\GetDishesAction",
+            "reason": "the region depends on App\\Actions\\Dish\\GetDishesAction, whose contract is defined in another file",
+            "origin": {
+                "path": "app/Http/Controllers/Public/DishController.php",
+                "lines": [
+                    1,
+                    32
+                ]
+            }
+        },
+        {
+            "id": "abab8716a87a1",
+            "kind": "named_reference",
+            "subject": "Illuminate\\Http\\JsonResponse",
+            "reason": "the region depends on Illuminate\\Http\\JsonResponse, whose contract is defined in another file",
+            "origin": {
+                "path": "app/Http/Controllers/Public/DishController.php",
+                "lines": [
+                    1,
+                    32
+                ]
+            }
+        },
+        {
+            "id": "aa54fe253554d",
+            "kind": "named_reference",
+            "subject": "App\\Actions\\Dish\\GetDishAction",
+            "reason": "the region depends on App\\Actions\\Dish\\GetDishAction, whose contract is defined in another file",
+            "origin": {
+                "path": "app/Http/Controllers/Public/DishController.php",
+                "lines": [
+                    1,
+                    32
+                ]
+            }
+        },
+        {
+            "id": "a11415b502215",
+            "kind": "named_reference",
+            "subject": "App\\Http\\Resources\\Dish\\DishResource",
+            "reason": "the region depends on App\\Http\\Resources\\Dish\\DishResource, whose contract is defined in another file",
+            "origin": {
+                "path": "app/Http/Controllers/Public/DishController.php",
+                "lines": [
+                    1,
+                    32
+                ]
+            }
+        },
+        {
+            "id": "a0087ee1fc51f",
+            "kind": "named_reference",
+            "subject": "Illuminate\\Http\\Request",
+            "reason": "the region depends on Illuminate\\Http\\Request, whose contract is defined in another file",
+            "origin": {
+                "path": "app/Http/Controllers/Public/MediaItemController.php",
+                "lines": [
+                    1,
+                    25
+                ]
+            }
+        },
+        {
+            "id": "a9d169fcf2f0e",
+            "kind": "named_reference",
+            "subject": "App\\Actions\\MediaItem\\GetMediaItemsAction",
+            "reason": "the region depends on App\\Actions\\MediaItem\\GetMediaItemsAction, whose contract is defined in another file",
+            "origin": {
+                "path": "app/Http/Controllers/Public/MediaItemController.php",
+                "lines": [
+                    1,
+                    25
+                ]
+            }
+        },
+        {
+            "id": "abbc9d8c99750",
+            "kind": "named_reference",
+            "subject": "Illuminate\\Http\\JsonResponse",
+            "reason": "the region depends on Illuminate\\Http\\JsonResponse, whose contract is defined in another file",
+            "origin": {
+                "path": "app/Http/Controllers/Public/MediaItemController.php",
+                "lines": [
+                    1,
+                    25
+                ]
+            }
+        },
+        {
+            "id": "ac501206da3e0",
+            "kind": "named_reference",
+            "subject": "App\\Http\\Resources\\MediaItem\\MediaItemResource",
+            "reason": "the region depends on App\\Http\\Resources\\MediaItem\\MediaItemResource, whose contract is defined in another file",
+            "origin": {
+                "path": "app/Http/Controllers/Public/MediaItemController.php",
+                "lines": [
+                    1,
+                    25
+                ]
+            }
+        },
+        {
+            "id": "a0572d80c8ef4",
+            "kind": "named_reference",
+            "subject": "Illuminate\\Http\\Request",
+            "reason": "the region depends on Illuminate\\Http\\Request, whose contract is defined in another file",
+            "origin": {
+                "path": "app/Http/Controllers/Public/PageContentController.php",
+                "lines": [
+                    1,
+                    25
+                ]
+            }
+        },
+        {
+            "id": "a50c3413981db",
+            "kind": "named_reference",
+            "subject": "App\\Actions\\PageContent\\GetPageContentAction",
+            "reason": "the region depends on App\\Actions\\PageContent\\GetPageContentAction, whose contract is defined in another file",
+            "origin": {
+                "path": "app/Http/Controllers/Public/PageContentController.php",
+                "lines": [
+                    1,
+                    25
+                ]
+            }
+        },
+        {
+            "id": "a2b55693bd707",
+            "kind": "named_reference",
+            "subject": "Illuminate\\Http\\JsonResponse",
+            "reason": "the region depends on Illuminate\\Http\\JsonResponse, whose contract is defined in another file",
+            "origin": {
+                "path": "app/Http/Controllers/Public/PageContentController.php",
+                "lines": [
+                    1,
+                    25
+                ]
+            }
+        },
+        {
+            "id": "a4919ea8de35d",
+            "kind": "named_reference",
+            "subject": "App\\Http\\Resources\\PageContent\\PageContentResource",
+            "reason": "the region depends on App\\Http\\Resources\\PageContent\\PageContentResource, whose contract is defined in another file",
+            "origin": {
+                "path": "app/Http/Controllers/Public/PageContentController.php",
+                "lines": [
+                    1,
+                    25
+                ]
+            }
+        },
+        {
+            "id": "aa0f0aef0b5b0",
+            "kind": "named_reference",
+            "subject": "Illuminate\\Http\\Request",
+            "reason": "the region depends on Illuminate\\Http\\Request, whose contract is defined in another file",
+            "origin": {
+                "path": "app/Http/Controllers/Public/SettingController.php",
+                "lines": [
+                    1,
+                    21
+                ]
+            }
+        },
+        {
+            "id": "a46bd52dce075",
+            "kind": "named_reference",
+            "subject": "App\\Actions\\Setting\\GetSettingsAction",
+            "reason": "the region depends on App\\Actions\\Setting\\GetSettingsAction, whose contract is defined in another file",
+            "origin": {
+                "path": "app/Http/Controllers/Public/SettingController.php",
+                "lines": [
+                    1,
+                    21
+                ]
+            }
+        },
+        {
+            "id": "adb11eca4c2cd",
+            "kind": "named_reference",
+            "subject": "Illuminate\\Http\\JsonResponse",
+            "reason": "the region depends on Illuminate\\Http\\JsonResponse, whose contract is defined in another file",
+            "origin": {
+                "path": "app/Http/Controllers/Public/SettingController.php",
+                "lines": [
+                    1,
+                    21
+                ]
+            }
+        },
+        {
+            "id": "ab52370cfc93d",
+            "kind": "named_reference",
+            "subject": "App\\Http\\Resources\\Setting\\SettingResource",
+            "reason": "the region depends on App\\Http\\Resources\\Setting\\SettingResource, whose contract is defined in another file",
+            "origin": {
+                "path": "app/Http/Controllers/Public/SettingController.php",
+                "lines": [
+                    1,
+                    21
+                ]
+            }
+        },
+        {
+            "id": "a37f1dd6db7fc",
+            "kind": "named_reference",
+            "subject": "App\\Http\\Resources\\Testimonial\\TestimonialResource::collection",
+            "reason": "the region depends on App\\Http\\Resources\\Testimonial\\TestimonialResource::collection, whose contract is defined in another file",
+            "origin": {
+                "path": "app/Http/Controllers/Public/TestimonialController.php",
+                "lines": [
+                    1,
+                    18
+                ]
+            }
+        },
+        {
+            "id": "aadd5465ff6ee",
+            "kind": "named_reference",
+            "subject": "App\\Actions\\Testimonial\\GetTestimonialsAction",
+            "reason": "the region depends on App\\Actions\\Testimonial\\GetTestimonialsAction, whose contract is defined in another file",
+            "origin": {
+                "path": "app/Http/Controllers/Public/TestimonialController.php",
+                "lines": [
+                    1,
+                    18
+                ]
+            }
+        },
+        {
+            "id": "a5f6e0ae07c82",
+            "kind": "named_reference",
+            "subject": "Illuminate\\Http\\JsonResponse",
+            "reason": "the region depends on Illuminate\\Http\\JsonResponse, whose contract is defined in another file",
+            "origin": {
+                "path": "app/Http/Controllers/Public/TestimonialController.php",
+                "lines": [
+                    1,
+                    18
+                ]
+            }
+        },
+        {
+            "id": "aa975b7f248e8",
+            "kind": "named_reference",
+            "subject": "App\\Http\\Resources\\Timeline\\TimelineResource::collection",
+            "reason": "the region depends on App\\Http\\Resources\\Timeline\\TimelineResource::collection, whose contract is defined in another file",
+            "origin": {
+                "path": "app/Http/Controllers/Public/TimelineController.php",
+                "lines": [
+                    1,
+                    18
+                ]
+            }
+        },
+        {
+            "id": "adf218d4ef141",
+            "kind": "named_reference",
+            "subject": "App\\Actions\\Timeline\\GetTimelineAction",
+            "reason": "the region depends on App\\Actions\\Timeline\\GetTimelineAction, whose contract is defined in another file",
+            "origin": {
+                "path": "app/Http/Controllers/Public/TimelineController.php",
+                "lines": [
+                    1,
+                    18
+                ]
+            }
+        },
+        {
+            "id": "a7f26f0cee460",
+            "kind": "named_reference",
+            "subject": "Illuminate\\Http\\JsonResponse",
+            "reason": "the region depends on Illuminate\\Http\\JsonResponse, whose contract is defined in another file",
+            "origin": {
+                "path": "app/Http/Controllers/Public/TimelineController.php",
+                "lines": [
+                    1,
+                    18
+                ]
+            }
+        },
+        {
+            "id": "a15ec8714f140",
+            "kind": "named_reference",
+            "subject": "Illuminate\\Support\\Facades\\Route::middleware",
+            "reason": "the region depends on Illuminate\\Support\\Facades\\Route::middleware, whose contract is defined in another file",
+            "origin": {
+                "path": "bootstrap/app.php",
+                "lines": [
+                    8,
+                    25
+                ]
+            }
+        },
+        {
+            "id": "a54231cc97a9b",
+            "kind": "named_reference",
+            "subject": "Illuminate\\Support\\Facades\\Route::prefix",
+            "reason": "the region depends on Illuminate\\Support\\Facades\\Route::prefix, whose contract is defined in another file",
+            "origin": {
+                "path": "routes/admin.php",
+                "lines": [
+                    1,
+                    132
+                ]
+            }
+        },
+        {
+            "id": "a636a6d736f95",
+            "kind": "named_reference",
+            "subject": "Illuminate\\Support\\Facades\\Route::post",
+            "reason": "the region depends on Illuminate\\Support\\Facades\\Route::post, whose contract is defined in another file",
+            "origin": {
+                "path": "routes/admin.php",
+                "lines": [
+                    1,
+                    132
+                ]
+            }
+        },
+        {
+            "id": "ad260532aa1b4",
+            "kind": "named_reference",
+            "subject": "Illuminate\\Support\\Facades\\Route::middleware",
+            "reason": "the region depends on Illuminate\\Support\\Facades\\Route::middleware, whose contract is defined in another file",
+            "origin": {
+                "path": "routes/admin.php",
+                "lines": [
+                    1,
+                    132
+                ]
+            }
+        },
+        {
+            "id": "af6da34cd3db2",
+            "kind": "named_reference",
+            "subject": "Illuminate\\Support\\Facades\\Route::get",
+            "reason": "the region depends on Illuminate\\Support\\Facades\\Route::get, whose contract is defined in another file",
+            "origin": {
+                "path": "routes/admin.php",
+                "lines": [
+                    1,
+                    132
+                ]
+            }
+        },
+        {
+            "id": "af143ab58f482",
+            "kind": "named_reference",
+            "subject": "Illuminate\\Support\\Facades\\Route::put",
+            "reason": "the region depends on Illuminate\\Support\\Facades\\Route::put, whose contract is defined in another file",
+            "origin": {
+                "path": "routes/admin.php",
+                "lines": [
+                    1,
+                    132
+                ]
+            }
+        },
+        {
+            "id": "aad7fa8b942f3",
+            "kind": "named_reference",
+            "subject": "Illuminate\\Support\\Facades\\Route::delete",
+            "reason": "the region depends on Illuminate\\Support\\Facades\\Route::delete, whose contract is defined in another file",
+            "origin": {
+                "path": "routes/admin.php",
+                "lines": [
+                    1,
+                    132
+                ]
+            }
+        },
+        {
+            "id": "a9993986f5ce7",
+            "kind": "named_reference",
+            "subject": "Illuminate\\Support\\Facades\\Route::patch",
+            "reason": "the region depends on Illuminate\\Support\\Facades\\Route::patch, whose contract is defined in another file",
+            "origin": {
+                "path": "routes/admin.php",
+                "lines": [
+                    1,
+                    132
+                ]
+            }
+        },
+        {
+            "id": "a039cea78ada3",
+            "kind": "named_reference",
+            "subject": "Illuminate\\Support\\Facades\\Route::prefix",
+            "reason": "the region depends on Illuminate\\Support\\Facades\\Route::prefix, whose contract is defined in another file",
+            "origin": {
+                "path": "routes/api.php",
+                "lines": [
+                    1,
+                    87
+                ]
+            }
+        },
+        {
+            "id": "af53480a0b65e",
+            "kind": "named_reference",
+            "subject": "Illuminate\\Support\\Facades\\Route::get",
+            "reason": "the region depends on Illuminate\\Support\\Facades\\Route::get, whose contract is defined in another file",
+            "origin": {
+                "path": "routes/api.php",
+                "lines": [
+                    1,
+                    87
+                ]
+            }
+        },
+        {
+            "id": "aafbc5550c3e7",
+            "kind": "named_reference",
+            "subject": "Illuminate\\Support\\Facades\\Route::post",
+            "reason": "the region depends on Illuminate\\Support\\Facades\\Route::post, whose contract is defined in another file",
+            "origin": {
+                "path": "routes/api.php",
+                "lines": [
+                    1,
+                    87
+                ]
+            }
+        }
+    ],
+    "items": [
+        {
+            "assertion_id": "a9cc7a80ca853",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Actions/Branch/GetBranchesAction.php",
+                "member": "__construct",
+                "lines": [
+                    11,
+                    13
+                ]
+            },
+            "payload": "    public function __construct(\n        private readonly BranchRepository $repository,\n    ) {}",
+            "tokens": 24
+        },
+        {
+            "assertion_id": "a9cc7a80ca853",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Actions/Branch/GetBranchesAction.php",
+                "member": "execute",
+                "lines": [
+                    15,
+                    25
+                ]
+            },
+            "payload": "    public function execute(): Collection\n    {\n        $locale = app()->getLocale();\n        $key = \"branches_{$locale}\";\n\n        return Cache::tags(['branches'])->remember(\n            $key,\n            now()->addHour(),\n            fn () => $this->repository->getAll()\n        );\n    }",
+            "tokens": 73
+        },
+        {
+            "assertion_id": "afb6056e05f22",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Actions/Catering/GetPackagesAction.php",
+                "member": "__construct",
+                "lines": [
+                    11,
+                    13
+                ]
+            },
+            "payload": "    public function __construct(\n        private readonly CateringPackageRepository $repository,\n    ) {}",
+            "tokens": 27
+        },
+        {
+            "assertion_id": "afb6056e05f22",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Actions/Catering/GetPackagesAction.php",
+                "member": "execute",
+                "lines": [
+                    15,
+                    25
+                ]
+            },
+            "payload": "    public function execute(): Collection\n    {\n        $locale = app()->getLocale();\n        $key = \"catering_packages_{$locale}\";\n\n        return Cache::tags(['catering_packages'])->remember(\n            $key,\n            now()->addHour(),\n            fn () => $this->repository->getAll()\n        );\n    }",
+            "tokens": 77
+        },
+        {
+            "assertion_id": "ab78cd27a55ca",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Actions/Catering/GetSampleMenusAction.php",
+                "member": "__construct",
+                "lines": [
+                    11,
+                    13
+                ]
+            },
+            "payload": "    public function __construct(\n        private readonly SampleMenuRepository $repository,\n    ) {}",
+            "tokens": 25
+        },
+        {
+            "assertion_id": "ab78cd27a55ca",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Actions/Catering/GetSampleMenusAction.php",
+                "member": "execute",
+                "lines": [
+                    15,
+                    25
+                ]
+            },
+            "payload": "    public function execute(): Collection\n    {\n        $locale = app()->getLocale();\n        $key = \"sample_menus_{$locale}\";\n\n        return Cache::tags(['sample_menus'])->remember(\n            $key,\n            now()->addHour(),\n            fn () => $this->repository->getAll()\n        );\n    }",
+            "tokens": 75
+        },
+        {
+            "assertion_id": "a467f53fc4f0f",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Actions/Catering/SubmitQuoteRequestAction.php",
+                "member": "__construct",
+                "lines": [
+                    11,
+                    13
+                ]
+            },
+            "payload": "    public function __construct(\n        private readonly QuoteRequestRepository $repository,\n    ) {}",
+            "tokens": 26
+        },
+        {
+            "assertion_id": "a467f53fc4f0f",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Actions/Catering/SubmitQuoteRequestAction.php",
+                "member": "execute",
+                "lines": [
+                    15,
+                    29
+                ]
+            },
+            "payload": "    public function execute(SubmitQuoteRequestDTO $dto): QuoteRequest\n    {\n        return $this->repository->create([\n            'name' => $dto->name,\n            'phone' => $dto->phone,\n            'email' => $dto->email,\n            'event_date' => $dto->event_date,\n            'guests_count' => $dto->guests_count,\n            'branch' => $dto->branch,\n            'event_type' => $dto->event_type,\n            'budget_range' => $dto->budget_range,\n            'notes' => $dto->notes,\n            'status' => 'pending',\n        ]);\n    }",
+            "tokens": 136
+        },
+        {
+            "assertion_id": "abb85910a4426",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Actions/DeliveryApp/GetDeliveryAppsAction.php",
+                "member": "__construct",
+                "lines": [
+                    11,
+                    13
+                ]
+            },
+            "payload": "    public function __construct(\n        private readonly DeliveryAppRepository $repository,\n    ) {}",
+            "tokens": 26
+        },
+        {
+            "assertion_id": "abb85910a4426",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Actions/DeliveryApp/GetDeliveryAppsAction.php",
+                "member": "execute",
+                "lines": [
+                    15,
+                    25
+                ]
+            },
+            "payload": "    public function execute(bool $activeOnly = true): Collection\n    {\n        $locale = app()->getLocale();\n        $key = \"delivery_apps_{$locale}_\".($activeOnly ? 'active' : 'all');\n\n        return Cache::tags(['delivery_apps'])->remember(\n            $key,\n            now()->addHour(),\n            fn () => $this->repository->getAll($activeOnly)\n        );\n    }",
+            "tokens": 92
+        },
+        {
+            "assertion_id": "aa54fe253554d",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Actions/Dish/GetDishAction.php",
+                "member": "__construct",
+                "lines": [
+                    10,
+                    12
+                ]
+            },
+            "payload": "    public function __construct(\n        private readonly DishRepository $repository,\n    ) {}",
+            "tokens": 24
+        },
+        {
+            "assertion_id": "aa54fe253554d",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Actions/Dish/GetDishAction.php",
+                "member": "execute",
+                "lines": [
+                    14,
+                    17
+                ]
+            },
+            "payload": "    public function execute(int $id): Dish\n    {\n        return $this->repository->getById($id);\n    }",
+            "tokens": 26
+        },
+        {
+            "assertion_id": "ad1cdb1ba8cf7",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Actions/Dish/GetDishesAction.php",
+                "member": "__construct",
+                "lines": [
+                    11,
+                    13
+                ]
+            },
+            "payload": "    public function __construct(\n        private readonly DishRepository $repository,\n    ) {}",
+            "tokens": 24
+        },
+        {
+            "assertion_id": "ad1cdb1ba8cf7",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Actions/Dish/GetDishesAction.php",
+                "member": "execute",
+                "lines": [
+                    15,
+                    31
+                ]
+            },
+            "payload": "    public function execute(array $filters = []): LengthAwarePaginator\n    {\n        $locale = app()->getLocale();\n        $categoryId = $filters['category_id'] ?? 'all';\n        $featured = array_key_exists('featured', $filters) ? var_export($filters['featured'], true) : 'all';\n        $signature = array_key_exists('signature', $filters) ? var_export($filters['signature'], true) : 'all';\n        $perPage = $filters['per_page'] ?? 'default';\n        $page = request()->integer('page', 1);\n\n        $key = \"dishes_{$locale}_{$categoryId}_{$featured}_{$signature}_{$perPage}_{$page}\";\n\n        return Cache::tags(['dishes'])->remember(\n            $key,\n            now()->addHour(),\n            fn () => $this->repository->getAll($filters)\n        );\n    }",
+            "tokens": 190
+        },
+        {
+            "assertion_id": "a9d169fcf2f0e",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Actions/MediaItem/GetMediaItemsAction.php",
+                "member": "__construct",
+                "lines": [
+                    11,
+                    13
+                ]
+            },
+            "payload": "    public function __construct(\n        private readonly MediaItemRepository $repository,\n    ) {}",
+            "tokens": 25
+        },
+        {
+            "assertion_id": "a9d169fcf2f0e",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Actions/MediaItem/GetMediaItemsAction.php",
+                "member": "execute",
+                "lines": [
+                    15,
+                    24
+                ]
+            },
+            "payload": "    public function execute(string $page, ?string $section = null): Collection\n    {\n        $key = \"media_items_{$page}_{$section}\";\n\n        return Cache::tags(['media_items'])->remember(\n            $key,\n            now()->addDay(),\n            fn () => $this->repository->getByPage($page, $section)\n        );\n    }",
+            "tokens": 80
+        },
+        {
+            "assertion_id": "a50c3413981db",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Actions/PageContent/GetPageContentAction.php",
+                "member": "__construct",
+                "lines": [
+                    11,
+                    13
+                ]
+            },
+            "payload": "    public function __construct(\n        private readonly PageContentRepository $repository,\n    ) {}",
+            "tokens": 26
+        },
+        {
+            "assertion_id": "a50c3413981db",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Actions/PageContent/GetPageContentAction.php",
+                "member": "execute",
+                "lines": [
+                    15,
+                    25
+                ]
+            },
+            "payload": "    public function execute(string $page, ?string $section = null): Collection\n    {\n        $locale = app()->getLocale();\n        $key = \"page_contents_{$page}_{$section}_{$locale}\";\n\n        return Cache::tags(['page_contents'])->remember(\n            $key,\n            now()->addDay(),\n            fn () => $this->repository->getByPage($page, $section)\n        );\n    }",
+            "tokens": 93
+        },
+        {
+            "assertion_id": "a46bd52dce075",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Actions/Setting/GetSettingsAction.php",
+                "member": "__construct",
+                "lines": [
+                    11,
+                    13
+                ]
+            },
+            "payload": "    public function __construct(\n        private readonly SettingRepository $repository,\n    ) {}",
+            "tokens": 25
+        },
+        {
+            "assertion_id": "a46bd52dce075",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Actions/Setting/GetSettingsAction.php",
+                "member": "execute",
+                "lines": [
+                    15,
+                    24
+                ]
+            },
+            "payload": "    public function execute(?string $group = null): Collection\n    {\n        $key = \"settings_{$group}\";\n\n        return Cache::tags(['settings'])->remember(\n            $key,\n            now()->addDay(),\n            fn () => $this->repository->getAll($group)\n        );\n    }",
+            "tokens": 69
+        },
+        {
+            "assertion_id": "aadd5465ff6ee",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Actions/Testimonial/GetTestimonialsAction.php",
+                "member": "__construct",
+                "lines": [
+                    11,
+                    13
+                ]
+            },
+            "payload": "    public function __construct(\n        private readonly TestimonialRepository $repository,\n    ) {}",
+            "tokens": 26
+        },
+        {
+            "assertion_id": "aadd5465ff6ee",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Actions/Testimonial/GetTestimonialsAction.php",
+                "member": "execute",
+                "lines": [
+                    15,
+                    25
+                ]
+            },
+            "payload": "    public function execute(bool $activeOnly = true): Collection\n    {\n        $locale = app()->getLocale();\n        $key = \"testimonials_{$locale}_\".($activeOnly ? 'active' : 'all');\n\n        return Cache::tags(['testimonials'])->remember(\n            $key,\n            now()->addHour(),\n            fn () => $this->repository->getAll($activeOnly)\n        );\n    }",
+            "tokens": 92
+        },
+        {
+            "assertion_id": "adf218d4ef141",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Actions/Timeline/GetTimelineAction.php",
+                "member": "__construct",
+                "lines": [
+                    11,
+                    13
+                ]
+            },
+            "payload": "    public function __construct(\n        private readonly TimelineRepository $repository,\n    ) {}",
+            "tokens": 25
+        },
+        {
+            "assertion_id": "adf218d4ef141",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Actions/Timeline/GetTimelineAction.php",
+                "member": "execute",
+                "lines": [
+                    15,
+                    25
+                ]
+            },
+            "payload": "    public function execute(): Collection\n    {\n        $locale = app()->getLocale();\n        $key = \"timeline_{$locale}\";\n\n        return Cache::tags(['timeline'])->remember(\n            $key,\n            now()->addDay(),\n            fn () => $this->repository->getAll()\n        );\n    }",
+            "tokens": 72
+        },
+        {
+            "assertion_id": "a8fe1b9d16d09",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/DTOs/Catering/SubmitQuoteRequestDTO.php",
+                "member": "fromRequest",
+                "lines": [
+                    21,
+                    34
+                ]
+            },
+            "payload": "    public static function fromRequest(Request $request): self\n    {\n        return new self(\n            name: $request->string('name')->toString(),\n            phone: $request->string('phone')->toString(),\n            email: $request->filled('email') ? $request->string('email')->toString() : null,\n            event_date: $request->string('event_date')->toString(),\n            guests_count: (int) $request->input('guests_count'),\n            branch: $request->string('branch')->toString(),\n            event_type: $request->string('event_type')->toString(),\n            budget_range: $request->filled('budget_range') ? $request->string('budget_range')->toString() : null,\n            notes: $request->filled('notes') ? $request->string('notes')->toString() : null,\n        );\n    }",
+            "tokens": 197
+        },
+        {
+            "assertion_id": "a6a5eeed72bd9",
+            "lever": "flagged",
+            "provenance": {
+                "path": "app/Http/Controllers/BranchController.php",
+                "member": "Illuminate\\Http\\JsonResponse",
+                "lines": [
+                    21,
+                    31
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "assertion_id": "a044179a6e287",
+            "lever": "flagged",
+            "provenance": {
+                "path": "app/Http/Controllers/Public/BranchController.php",
+                "member": "App\\Http\\Resources\\Branch\\BranchResource::collection",
+                "lines": [
+                    1,
+                    18
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "assertion_id": "a44ed2e5fe9f5",
+            "lever": "flagged",
+            "provenance": {
+                "path": "app/Http/Controllers/Public/BranchController.php",
+                "member": "Illuminate\\Http\\JsonResponse",
+                "lines": [
+                    1,
+                    18
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "assertion_id": "adaf516ef5064",
+            "lever": "flagged",
+            "provenance": {
+                "path": "app/Http/Controllers/Public/CategoryController.php",
+                "member": "App\\Http\\Resources\\Category\\CategoryResource::collection",
+                "lines": [
+                    1,
+                    18
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "assertion_id": "ae85bd885d1eb",
+            "lever": "flagged",
+            "provenance": {
+                "path": "app/Http/Controllers/Public/CategoryController.php",
+                "member": "Illuminate\\Http\\JsonResponse",
+                "lines": [
+                    1,
+                    18
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "assertion_id": "a6f768e0e95d8",
+            "lever": "flagged",
+            "provenance": {
+                "path": "app/Http/Controllers/Public/Catering/CateringPackageController.php",
+                "member": "App\\Http\\Resources\\Catering\\PackageResource::collection",
+                "lines": [
+                    1,
+                    18
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "assertion_id": "a4ade5921c595",
+            "lever": "flagged",
+            "provenance": {
+                "path": "app/Http/Controllers/Public/Catering/CateringPackageController.php",
+                "member": "Illuminate\\Http\\JsonResponse",
+                "lines": [
+                    1,
+                    18
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "assertion_id": "a8ad04be83d27",
+            "lever": "flagged",
+            "provenance": {
+                "path": "app/Http/Controllers/Public/Catering/QuoteRequestController.php",
+                "member": "Illuminate\\Http\\JsonResponse",
+                "lines": [
+                    1,
+                    21
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "assertion_id": "a571089bf1dbe",
+            "lever": "flagged",
+            "provenance": {
+                "path": "app/Http/Controllers/Public/Catering/SampleMenuController.php",
+                "member": "App\\Http\\Resources\\Catering\\SampleMenuResource::collection",
+                "lines": [
+                    1,
+                    18
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "assertion_id": "ae7945c17c9db",
+            "lever": "flagged",
+            "provenance": {
+                "path": "app/Http/Controllers/Public/Catering/SampleMenuController.php",
+                "member": "Illuminate\\Http\\JsonResponse",
+                "lines": [
+                    1,
+                    18
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "assertion_id": "aa37a6235f2ac",
+            "lever": "flagged",
+            "provenance": {
+                "path": "app/Http/Controllers/Public/DeliveryAppController.php",
+                "member": "App\\Http\\Resources\\DeliveryApp\\DeliveryAppResource::collection",
+                "lines": [
+                    1,
+                    18
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "assertion_id": "a7b0706c70f54",
+            "lever": "flagged",
+            "provenance": {
+                "path": "app/Http/Controllers/Public/DeliveryAppController.php",
+                "member": "Illuminate\\Http\\JsonResponse",
+                "lines": [
+                    1,
+                    18
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "assertion_id": "a350c900be934",
+            "lever": "flagged",
+            "provenance": {
+                "path": "app/Http/Controllers/Public/DishController.php",
+                "member": "App\\Http\\Resources\\Dish\\DishResource::collection",
+                "lines": [
+                    1,
+                    32
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "assertion_id": "abab8716a87a1",
+            "lever": "flagged",
+            "provenance": {
+                "path": "app/Http/Controllers/Public/DishController.php",
+                "member": "Illuminate\\Http\\JsonResponse",
+                "lines": [
+                    1,
+                    32
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "assertion_id": "a7e61ce6d67d2",
+            "lever": "flagged",
+            "provenance": {
+                "path": "app/Http/Controllers/Public/DishController.php",
+                "member": "Illuminate\\Http\\Request",
+                "lines": [
+                    1,
+                    32
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "assertion_id": "abbc9d8c99750",
+            "lever": "flagged",
+            "provenance": {
+                "path": "app/Http/Controllers/Public/MediaItemController.php",
+                "member": "Illuminate\\Http\\JsonResponse",
+                "lines": [
+                    1,
+                    25
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "assertion_id": "a0087ee1fc51f",
+            "lever": "flagged",
+            "provenance": {
+                "path": "app/Http/Controllers/Public/MediaItemController.php",
+                "member": "Illuminate\\Http\\Request",
+                "lines": [
+                    1,
+                    25
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "assertion_id": "a2b55693bd707",
+            "lever": "flagged",
+            "provenance": {
+                "path": "app/Http/Controllers/Public/PageContentController.php",
+                "member": "Illuminate\\Http\\JsonResponse",
+                "lines": [
+                    1,
+                    25
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "assertion_id": "a0572d80c8ef4",
+            "lever": "flagged",
+            "provenance": {
+                "path": "app/Http/Controllers/Public/PageContentController.php",
+                "member": "Illuminate\\Http\\Request",
+                "lines": [
+                    1,
+                    25
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "assertion_id": "adb11eca4c2cd",
+            "lever": "flagged",
+            "provenance": {
+                "path": "app/Http/Controllers/Public/SettingController.php",
+                "member": "Illuminate\\Http\\JsonResponse",
+                "lines": [
+                    1,
+                    21
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "assertion_id": "aa0f0aef0b5b0",
+            "lever": "flagged",
+            "provenance": {
+                "path": "app/Http/Controllers/Public/SettingController.php",
+                "member": "Illuminate\\Http\\Request",
+                "lines": [
+                    1,
+                    21
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "assertion_id": "a37f1dd6db7fc",
+            "lever": "flagged",
+            "provenance": {
+                "path": "app/Http/Controllers/Public/TestimonialController.php",
+                "member": "App\\Http\\Resources\\Testimonial\\TestimonialResource::collection",
+                "lines": [
+                    1,
+                    18
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "assertion_id": "a5f6e0ae07c82",
+            "lever": "flagged",
+            "provenance": {
+                "path": "app/Http/Controllers/Public/TestimonialController.php",
+                "member": "Illuminate\\Http\\JsonResponse",
+                "lines": [
+                    1,
+                    18
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "assertion_id": "aa975b7f248e8",
+            "lever": "flagged",
+            "provenance": {
+                "path": "app/Http/Controllers/Public/TimelineController.php",
+                "member": "App\\Http\\Resources\\Timeline\\TimelineResource::collection",
+                "lines": [
+                    1,
+                    18
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "assertion_id": "a7f26f0cee460",
+            "lever": "flagged",
+            "provenance": {
+                "path": "app/Http/Controllers/Public/TimelineController.php",
+                "member": "Illuminate\\Http\\JsonResponse",
+                "lines": [
+                    1,
+                    18
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "assertion_id": "a24dc2927c796",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Http/Requests/Catering/StoreQuoteRequestRequest.php",
+                "member": "authorize",
+                "lines": [
+                    13,
+                    16
+                ]
+            },
+            "payload": "    public function authorize(): bool\n    {\n        return true;\n    }",
+            "tokens": 18
+        },
+        {
+            "assertion_id": "a24dc2927c796",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Http/Requests/Catering/StoreQuoteRequestRequest.php",
+                "member": "rules",
+                "lines": [
+                    18,
+                    31
+                ]
+            },
+            "payload": "    public function rules(): array\n    {\n        return [\n            'name' => ['required', 'string', 'max:200'],\n            'phone' => ['required', 'string', 'max:20'],\n            'email' => ['nullable', 'email', 'max:255'],\n            'event_date' => ['required', 'date', 'after:today'],\n            'guests_count' => ['required', 'integer', 'min:1', 'max:10000'],\n            'branch' => ['required', 'string', Rule::in(BranchLocationEnum::values())],\n            'event_type' => ['required', 'string', Rule::in(EventTypeEnum::values())],\n            'budget_range' => ['nullable', 'string', Rule::in(BudgetRangeEnum::values())],\n            'notes' => ['nullable', 'string', 'max:1000'],\n        ];\n    }",
+            "tokens": 178
+        },
+        {
+            "assertion_id": "a5295a5e0819d",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Http/Resources/Branch/BranchResource.php",
+                "member": "toArray",
+                "lines": [
+                    13,
+                    32
+                ]
+            },
+            "payload": "    public function toArray(Request $request): array\n    {\n        return [\n            'id' => $this->id,\n            'name' => $this->resolveLocale($this->name_ar, $this->name_en),\n            'name_ar' => $this->name_ar,\n            'name_en' => $this->name_en,\n            'location' => $this->resolveLocale($this->location_ar, $this->location_en),\n            'location_ar' => $this->location_ar,\n            'location_en' => $this->location_en,\n            'city' => $this->city,\n            'phone' => $this->phone,\n            'opening_time' => $this->opening_time,\n            'closing_time' => $this->closing_time,\n            'google_maps_url' => $this->google_maps_url,\n            'image_url' => $this->image_url,\n            'order' => $this->order,\n            'locale' => app()->getLocale(),\n        ];\n    }",
+            "tokens": 206
+        },
+        {
+            "assertion_id": "adaf516ef5064",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Http/Resources/Category/CategoryResource.php",
+                "member": "toArray",
+                "lines": [
+                    13,
+                    24
+                ]
+            },
+            "payload": "    public function toArray(Request $request): array\n    {\n        return [\n            'id' => $this->id,\n            'name' => $this->resolveLocale($this->name_ar, $this->name_en),\n            'name_ar' => $this->name_ar,\n            'name_en' => $this->name_en,\n            'slug' => $this->slug,\n            'order' => $this->order,\n            'locale' => app()->getLocale(),\n        ];\n    }",
+            "tokens": 100
+        },
+        {
+            "assertion_id": "a6f768e0e95d8",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Http/Resources/Catering/PackageResource.php",
+                "member": "toArray",
+                "lines": [
+                    13,
+                    35
+                ]
+            },
+            "payload": "    public function toArray(Request $request): array\n    {\n        return [\n            'id' => $this->id,\n            'name' => $this->resolveLocale($this->name_ar, $this->name_en),\n            'name_ar' => $this->name_ar,\n            'name_en' => $this->name_en,\n            'description' => $this->resolveLocale($this->description_ar, $this->description_en),\n            'description_ar' => $this->description_ar,\n            'description_en' => $this->description_en,\n            'tag_en' => $this->tag_en,\n            'price_starting_from' => $this->price_starting_from,\n            'is_featured' => $this->is_featured,\n            'features' => $this->whenLoaded('features', fn () => $this->features->map(fn ($feature) => [\n                'feature_ar' => $feature->feature_ar,\n                'feature_en' => $feature->feature_en,\n                'order' => $feature->order,\n            ])),\n            'image_url' => $this->image_url,\n            'order' => $this->order,\n            'locale' => app()->getLocale(),\n        ];\n    }",
+            "tokens": 261
+        },
+        {
+            "assertion_id": "abf82b90e8a84",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Http/Resources/Catering/QuoteRequestResource.php",
+                "member": "toArray",
+                "lines": [
+                    10,
+                    29
+                ]
+            },
+            "payload": "    public function toArray(Request $request): array\n    {\n        return [\n            'id' => $this->id,\n            'name' => $this->name,\n            'phone' => $this->phone,\n            'email' => $this->email,\n            'event_date' => $this->event_date?->toDateString(),\n            'guests_count' => $this->guests_count,\n            'branch' => $this->branch,\n            'event_type' => $this->event_type->value,\n            'budget_range' => $this->budget_range?->value,\n            'notes' => $this->notes,\n            'status' => [\n                'value' => $this->status->value,\n                'label' => $this->status->label(),\n            ],\n            'created_at' => $this->created_at?->toIso8601String(),\n        ];\n    }",
+            "tokens": 186
+        },
+        {
+            "assertion_id": "a571089bf1dbe",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Http/Resources/Catering/SampleMenuResource.php",
+                "member": "toArray",
+                "lines": [
+                    13,
+                    31
+                ]
+            },
+            "payload": "    public function toArray(Request $request): array\n    {\n        return [\n            'id' => $this->id,\n            'name' => $this->resolveLocale($this->name_ar, $this->name_en),\n            'name_ar' => $this->name_ar,\n            'name_en' => $this->name_en,\n            'tag_en' => $this->tag_en,\n            'is_featured' => $this->is_featured,\n            'dishes' => $this->whenLoaded('dishes', fn () => $this->dishes->map(fn ($dish) => [\n                'dish_name_ar' => $dish->dish_name_ar,\n                'dish_name_en' => $dish->dish_name_en,\n                'order' => $dish->order,\n            ])),\n            'image_url' => $this->image_url,\n            'order' => $this->order,\n            'locale' => app()->getLocale(),\n        ];\n    }",
+            "tokens": 190
+        },
+        {
+            "assertion_id": "aa37a6235f2ac",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Http/Resources/DeliveryApp/DeliveryAppResource.php",
+                "member": "toArray",
+                "lines": [
+                    13,
+                    26
+                ]
+            },
+            "payload": "    public function toArray(Request $request): array\n    {\n        return [\n            'id' => $this->id,\n            'name' => $this->resolveLocale($this->name_ar, $this->name_en),\n            'name_ar' => $this->name_ar,\n            'name_en' => $this->name_en,\n            'order_url' => $this->order_url,\n            'logo_url' => $this->logo_url,\n            'is_active' => $this->is_active,\n            'order' => $this->order,\n            'locale' => app()->getLocale(),\n        ];\n    }",
+            "tokens": 124
+        },
+        {
+            "assertion_id": "a11415b502215",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Http/Resources/Dish/DishResource.php",
+                "member": "toArray",
+                "lines": [
+                    14,
+                    32
+                ]
+            },
+            "payload": "    public function toArray(Request $request): array\n    {\n        return [\n            'id' => $this->id,\n            'name' => $this->resolveLocale($this->name_ar, $this->name_en),\n            'name_ar' => $this->name_ar,\n            'name_en' => $this->name_en,\n            'description' => $this->resolveLocale($this->description_ar, $this->description_en),\n            'description_ar' => $this->description_ar,\n            'description_en' => $this->description_en,\n            'price' => $this->price,\n            'category' => new CategoryResource($this->whenLoaded('category')),\n            'is_featured' => $this->is_featured,\n            'is_signature' => $this->is_signature,\n            'image_url' => $this->image_url,\n            'order' => $this->order,\n            'locale' => app()->getLocale(),\n        ];\n    }",
+            "tokens": 208
+        },
+        {
+            "assertion_id": "ac501206da3e0",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Http/Resources/MediaItem/MediaItemResource.php",
+                "member": "toArray",
+                "lines": [
+                    13,
+                    26
+                ]
+            },
+            "payload": "    public function toArray(Request $request): array\n    {\n        return [\n            'id' => $this->id,\n            'page' => $this->page,\n            'section' => $this->section,\n            'key' => $this->key,\n            'url' => $this->url,\n            'alt' => $this->resolveLocale($this->alt_ar, $this->alt_en),\n            'alt_ar' => $this->alt_ar,\n            'alt_en' => $this->alt_en,\n            'locale' => app()->getLocale(),\n        ];\n    }",
+            "tokens": 115
+        },
+        {
+            "assertion_id": "a4919ea8de35d",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Http/Resources/PageContent/PageContentResource.php",
+                "member": "toArray",
+                "lines": [
+                    13,
+                    27
+                ]
+            },
+            "payload": "    public function toArray(Request $request): array\n    {\n        return [\n            'id' => $this->id,\n            'page' => $this->page,\n            'section' => $this->section,\n            'key' => $this->key,\n            'value' => $this->resolveLocale($this->value_ar, $this->value_en),\n            'value_ar' => $this->value_ar,\n            'value_en' => $this->value_en,\n            'type' => $this->type,\n            'order' => $this->order,\n            'locale' => app()->getLocale(),\n        ];\n    }",
+            "tokens": 129
+        },
+        {
+            "assertion_id": "ab52370cfc93d",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Http/Resources/Setting/SettingResource.php",
+                "member": "toArray",
+                "lines": [
+                    13,
+                    26
+                ]
+            },
+            "payload": "    public function toArray(Request $request): array\n    {\n        return [\n            'id' => $this->id,\n            'key' => $this->key,\n            'value' => $this->value,\n            'type' => $this->type,\n            'group' => $this->group,\n            'label' => $this->resolveLocale($this->label_ar, $this->label_en),\n            'label_ar' => $this->label_ar,\n            'label_en' => $this->label_en,\n            'locale' => app()->getLocale(),\n        ];\n    }",
+            "tokens": 119
+        },
+        {
+            "assertion_id": "a37f1dd6db7fc",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Http/Resources/Testimonial/TestimonialResource.php",
+                "member": "toArray",
+                "lines": [
+                    13,
+                    25
+                ]
+            },
+            "payload": "    public function toArray(Request $request): array\n    {\n        return [\n            'id' => $this->id,\n            'name' => $this->name,\n            'quote' => $this->resolveLocale($this->quote_ar, $this->quote_en),\n            'quote_ar' => $this->quote_ar,\n            'quote_en' => $this->quote_en,\n            'is_active' => $this->is_active,\n            'order' => $this->order,\n            'locale' => app()->getLocale(),\n        ];\n    }",
+            "tokens": 113
+        },
+        {
+            "assertion_id": "aa975b7f248e8",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Http/Resources/Timeline/TimelineResource.php",
+                "member": "toArray",
+                "lines": [
+                    13,
+                    28
+                ]
+            },
+            "payload": "    public function toArray(Request $request): array\n    {\n        return [\n            'id' => $this->id,\n            'year' => $this->year,\n            'location_en' => $this->location_en,\n            'title' => $this->resolveLocale($this->title_ar, $this->title_en),\n            'title_ar' => $this->title_ar,\n            'title_en' => $this->title_en,\n            'description' => $this->resolveLocale($this->description_ar, $this->description_en),\n            'description_ar' => $this->description_ar,\n            'description_en' => $this->description_en,\n            'order' => $this->order,\n            'locale' => app()->getLocale(),\n        ];\n    }",
+            "tokens": 165
+        },
+        {
+            "assertion_id": "ac72f2326b14d",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Repositories/BranchRepository.php",
+                "member": "create",
+                "lines": [
+                    20,
+                    23
+                ]
+            },
+            "payload": "    public function create(array $data): Branch\n    {\n        return Branch::create($data);\n    }",
+            "tokens": 25
+        },
+        {
+            "assertion_id": "ac72f2326b14d",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Repositories/BranchRepository.php",
+                "member": "delete",
+                "lines": [
+                    33,
+                    36
+                ]
+            },
+            "payload": "    public function delete(int $id): void\n    {\n        Branch::findOrFail($id)->delete();\n    }",
+            "tokens": 24
+        },
+        {
+            "assertion_id": "ac72f2326b14d",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Repositories/BranchRepository.php",
+                "member": "getAll",
+                "lines": [
+                    10,
+                    13
+                ]
+            },
+            "payload": "    public function getAll(): Collection\n    {\n        return Branch::orderBy('order')->get();\n    }",
+            "tokens": 25
+        },
+        {
+            "assertion_id": "ac72f2326b14d",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Repositories/BranchRepository.php",
+                "member": "getById",
+                "lines": [
+                    15,
+                    18
+                ]
+            },
+            "payload": "    public function getById(int $id): Branch\n    {\n        return Branch::findOrFail($id);\n    }",
+            "tokens": 24
+        },
+        {
+            "assertion_id": "ac72f2326b14d",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Repositories/BranchRepository.php",
+                "member": "update",
+                "lines": [
+                    25,
+                    31
+                ]
+            },
+            "payload": "    public function update(int $id, array $data): Branch\n    {\n        $branch = Branch::findOrFail($id);\n        $branch->update($data);\n\n        return $branch;\n    }",
+            "tokens": 42
+        },
+        {
+            "assertion_id": "ab0f576909a52",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Repositories/CategoryRepository.php",
+                "member": "create",
+                "lines": [
+                    20,
+                    23
+                ]
+            },
+            "payload": "    public function create(array $data): Category\n    {\n        return Category::create($data);\n    }",
+            "tokens": 26
+        },
+        {
+            "assertion_id": "ab0f576909a52",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Repositories/CategoryRepository.php",
+                "member": "delete",
+                "lines": [
+                    33,
+                    36
+                ]
+            },
+            "payload": "    public function delete(int $id): void\n    {\n        Category::findOrFail($id)->delete();\n    }",
+            "tokens": 25
+        },
+        {
+            "assertion_id": "ab0f576909a52",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Repositories/CategoryRepository.php",
+                "member": "getAll",
+                "lines": [
+                    10,
+                    13
+                ]
+            },
+            "payload": "    public function getAll(): Collection\n    {\n        return Category::orderBy('order')->get();\n    }",
+            "tokens": 26
+        },
+        {
+            "assertion_id": "ab0f576909a52",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Repositories/CategoryRepository.php",
+                "member": "getById",
+                "lines": [
+                    15,
+                    18
+                ]
+            },
+            "payload": "    public function getById(int $id): Category\n    {\n        return Category::findOrFail($id);\n    }",
+            "tokens": 25
+        },
+        {
+            "assertion_id": "ab0f576909a52",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Repositories/CategoryRepository.php",
+                "member": "update",
+                "lines": [
+                    25,
+                    31
+                ]
+            },
+            "payload": "    public function update(int $id, array $data): Category\n    {\n        $category = Category::findOrFail($id);\n        $category->update($data);\n\n        return $category;\n    }",
+            "tokens": 45
+        },
+        {
+            "assertion_id": "a15ec8714f140",
+            "lever": "flagged",
+            "provenance": {
+                "path": "bootstrap/app.php",
+                "member": "Illuminate\\Support\\Facades\\Route::middleware",
+                "lines": [
+                    8,
+                    25
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "assertion_id": "aad7fa8b942f3",
+            "lever": "flagged",
+            "provenance": {
+                "path": "routes/admin.php",
+                "member": "Illuminate\\Support\\Facades\\Route::delete",
+                "lines": [
+                    1,
+                    132
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "assertion_id": "af6da34cd3db2",
+            "lever": "flagged",
+            "provenance": {
+                "path": "routes/admin.php",
+                "member": "Illuminate\\Support\\Facades\\Route::get",
+                "lines": [
+                    1,
+                    132
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "assertion_id": "ad260532aa1b4",
+            "lever": "flagged",
+            "provenance": {
+                "path": "routes/admin.php",
+                "member": "Illuminate\\Support\\Facades\\Route::middleware",
+                "lines": [
+                    1,
+                    132
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "assertion_id": "a9993986f5ce7",
+            "lever": "flagged",
+            "provenance": {
+                "path": "routes/admin.php",
+                "member": "Illuminate\\Support\\Facades\\Route::patch",
+                "lines": [
+                    1,
+                    132
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "assertion_id": "a636a6d736f95",
+            "lever": "flagged",
+            "provenance": {
+                "path": "routes/admin.php",
+                "member": "Illuminate\\Support\\Facades\\Route::post",
+                "lines": [
+                    1,
+                    132
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "assertion_id": "a54231cc97a9b",
+            "lever": "flagged",
+            "provenance": {
+                "path": "routes/admin.php",
+                "member": "Illuminate\\Support\\Facades\\Route::prefix",
+                "lines": [
+                    1,
+                    132
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "assertion_id": "af143ab58f482",
+            "lever": "flagged",
+            "provenance": {
+                "path": "routes/admin.php",
+                "member": "Illuminate\\Support\\Facades\\Route::put",
+                "lines": [
+                    1,
+                    132
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "assertion_id": "af53480a0b65e",
+            "lever": "flagged",
+            "provenance": {
+                "path": "routes/api.php",
+                "member": "Illuminate\\Support\\Facades\\Route::get",
+                "lines": [
+                    1,
+                    87
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "assertion_id": "aafbc5550c3e7",
+            "lever": "flagged",
+            "provenance": {
+                "path": "routes/api.php",
+                "member": "Illuminate\\Support\\Facades\\Route::post",
+                "lines": [
+                    1,
+                    87
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "assertion_id": "a039cea78ada3",
+            "lever": "flagged",
+            "provenance": {
+                "path": "routes/api.php",
+                "member": "Illuminate\\Support\\Facades\\Route::prefix",
+                "lines": [
+                    1,
+                    87
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        }
+    ],
+    "diagnostics": [],
+    "dropped": []
+}

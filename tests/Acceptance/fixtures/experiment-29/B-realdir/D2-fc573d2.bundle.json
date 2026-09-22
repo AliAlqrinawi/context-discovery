@@ -1,0 +1,16 @@
+{
+    "bundle_version": 2,
+    "run": {
+        "engine_version": "0.2.0",
+        "policy_version": "2",
+        "framework_table_version": "5bfb119e1a00",
+        "budget_tokens": 8000,
+        "diff_sha": "589bb7bd67ed",
+        "repo_sha": null
+    },
+    "used_tokens": 0,
+    "assertions": [],
+    "items": [],
+    "diagnostics": [],
+    "dropped": []
+}

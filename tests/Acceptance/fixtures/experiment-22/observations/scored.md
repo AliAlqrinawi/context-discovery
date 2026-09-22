@@ -49,3 +49,16 @@ So of the five improvements, **two (K03, K09) rest on evidence the diff could no
 
 M19 K3 → M20 C1 → M22 K03: three reviewers, three milestones, one commit, the same abstain → NO
 transition on the same bundle-sourced quotation.
+
+---
+
+## Erratum · 2026-09-22 · the harness's `vendor/` was never read
+
+**Source:** ADR-A026 (architecture repository) · [M29](../../../../../docs/research/M29-vendor-symlink-correction.md).
+The text above is unaltered; no cell was re-scored.
+
+| Claim | Verdict |
+|---|---|
+| "**Bundle-only** (absent from the diff): K03-B … · **K07-B** a flag statement · K09-B …" | **K07-B falsified as evidence.** The flag statement is *"ASSUMPTION: named reference could not be resolved on disk; contract unverified"*, produced because the harness's symlinked `vendor/` was refused; K07's entire bundle was two such flags, and K07 would have failed CT3. K03-B and K09-B are fetched slices and **stand** |
+| "two (K03, K09) rest on evidence the diff could not have supplied" | **Stands** |
+| K07 bundle "2 / 40" in the results table | **Falsified as a figure** — estimated 0 · 0 with a readable vendor. Without K07: correct 1/10 → 6/10, abstentions 8/10 → 3/10, false positives 0/10 |

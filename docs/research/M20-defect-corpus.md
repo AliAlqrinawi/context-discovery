@@ -229,3 +229,29 @@ not exercised here — M18 covers the drop path on the one corpus commit that re
    stated as such before more milestones are spent.
 
 Stopping at M20 as instructed.
+
+---
+
+## Erratum · 2026-09-22 · the harness's `vendor/` was never read
+
+**Source:** ADR-A026 (architecture repository) · [M29](M29-vendor-symlink-correction.md), which holds
+the measurement and the full M19–M23 classification. The text above is unaltered.
+
+`harness/bundle-at-commit.sh` symlinked `vendor/` into the worktree; `LocalSourceRepository` refuses
+a symlink whole, so every bundle in this milestone was generated with **no dependency map**. A
+symlinked run is byte-identical to a run with no `vendor/` at all (7 of 7 commits), and every item
+it has beyond a real-vendor run is a `named_reference / flagged` *"could not be resolved on disk"*
+item on a dependency class. The captures and packets are as they were; they were made in that state.
+
+| Claim | Verdict |
+|---|---|
+| §2 "the corrected harness produces materially larger bundles — `ec92403` moves from 18 items / 606 tokens to 37 / 986" | **Falsified.** With a readable `vendor/` at the commit's tree, `ec92403` is **18 · 606** — M18's figure exactly. The growth is the vendor disappearing, not the tree correction. D2 and C1 likewise return to M18's figures |
+| §2 "M18's and M19's figures are therefore understated, not inflated" | **Falsified.** No direction is claimed for D3, D4, D5, C2, which are confounded by engine changes since M18 |
+| §2 "0a6e7d1: 2 items / 221 tokens → 4 / 449" and the decision to resolve at the commit's tree | **Stands.** 4 · 449 with and without a vendor |
+| §10 cost table (D1 986, D2 40, D3 4694, D4 3386, D5 2700, C1 479, C2 504; mean 1827 / 47.6; median 986 / 37); "C1 cost 479 tokens, the second cheapest" | **Falsified as figures.** Measured with a readable vendor: D1 **606**, D2 **0**, D3 4134, D4 3366, D5 2320, C1 **299**, C2 444. D5 is 47 flags of 78, not 66 of 97. The observation that expense and effect were not aligned survives |
+| §8 D2 "the prediction held"; D2 satisfies **S4**; D2-B among the bundle-only quotes | **Weakened.** The prediction holds. But D2's bundle was two spurious flags and nothing else — it would have failed S4 — and D2-B's Q5 quotation is one of those flags |
+| §6–§7 keyed detection 0/5 and 0/4 in both arms; classification **B** | **Stands** — the DIFF_ONLY arm is independent, and every fetched item survives a real vendor |
+| §8 C1 replication of M19; D1's unused premise; D4's bundle-only evidence; zero false positives | **Stands** |
+| §6 correct decisions 1/7 → 2/7, abstentions 6 → 4; §8 D5 "not a case of misleading bundle content" | **Unknown.** D5's reviewer had 19 spurious flags in front of it and quoted the diff. Whether the flags changed any answer cannot be told from the record; Phase 6 can answer it |
+| §13 "`vendor/` is borrowed from the main checkout … Sound for placement (ADR-A014)" | **Falsified.** Nothing was borrowed |
+| §2 "pinned by `HarnessResolvesAtCommitTreeTest`" | **Overstated.** That test never runs the script; it pins the idea. `HarnessPlacesAReadableVendorTest` now runs the script |

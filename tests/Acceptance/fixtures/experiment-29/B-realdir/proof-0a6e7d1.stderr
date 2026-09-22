@@ -1,0 +1,2 @@
+unreadable path: app/Http/Resources/Dish/DishCollection.php (no assertions extracted)
+unresolved named_reference: App\Http\Resources\Dish\DishResource::collection in app/Http/Controllers/DishController.php

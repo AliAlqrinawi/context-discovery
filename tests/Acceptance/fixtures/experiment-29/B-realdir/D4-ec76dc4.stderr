@@ -1,0 +1,27 @@
+new file: database/seeders/BranchSeeder.php — own-file context is in the diff, not fetched
+new file: database/seeders/CategorySeeder.php — own-file context is in the diff, not fetched
+new file: database/seeders/CateringPackageSeeder.php — own-file context is in the diff, not fetched
+new file: database/seeders/DeliveryAppSeeder.php — own-file context is in the diff, not fetched
+new file: database/seeders/DishSeeder.php — own-file context is in the diff, not fetched
+new file: database/seeders/MediaItemSeeder.php — own-file context is in the diff, not fetched
+new file: database/seeders/PageContentSeeder.php — own-file context is in the diff, not fetched
+new file: database/seeders/SampleMenuSeeder.php — own-file context is in the diff, not fetched
+new file: database/seeders/SettingSeeder.php — own-file context is in the diff, not fetched
+new file: database/seeders/TestimonialSeeder.php — own-file context is in the diff, not fetched
+new file: database/seeders/TimelineSeeder.php — own-file context is in the diff, not fetched
+new file: database/seeders/UserSeeder.php — own-file context is in the diff, not fetched
+unresolved named_reference: App\Models\Branch::create in database/seeders/BranchSeeder.php
+unresolved named_reference: App\Models\Category::create in database/seeders/CategorySeeder.php
+unresolved named_reference: App\Models\CateringPackage::create in database/seeders/CateringPackageSeeder.php
+unresolved named_reference: App\Models\DeliveryApp::create in database/seeders/DeliveryAppSeeder.php
+unresolved named_reference: App\Models\Category::where in database/seeders/DishSeeder.php
+unresolved named_reference: App\Models\Dish::create in database/seeders/DishSeeder.php
+unresolved named_reference: App\Models\MediaItem::create in database/seeders/MediaItemSeeder.php
+unresolved named_reference: App\Models\PageContent::create in database/seeders/PageContentSeeder.php
+unresolved named_reference: App\Models\SampleMenu::create in database/seeders/SampleMenuSeeder.php
+unresolved named_reference: App\Models\Setting::create in database/seeders/SettingSeeder.php
+unresolved named_reference: App\Models\Testimonial::create in database/seeders/TestimonialSeeder.php
+unresolved named_reference: App\Models\Timeline::create in database/seeders/TimelineSeeder.php
+unresolved named_reference: Spatie\Permission\Models\Role::firstOrCreate in database/seeders/UserSeeder.php
+unresolved named_reference: App\Models\User::create in database/seeders/UserSeeder.php
+framework reference: Illuminate\Support\Facades\Hash::make declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Hash.php:10 (@method static string make(string $value, array $options = []))

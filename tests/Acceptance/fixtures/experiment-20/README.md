@@ -47,3 +47,22 @@ selecting; `8054003` and `4c6a83b` were excluded on size despite having real lat
 ## Result
 
 See [`docs/research/M20-defect-corpus.md`](../../../../docs/research/M20-defect-corpus.md).
+
+---
+
+## Erratum · 2026-09-22 · the harness's `vendor/` was never read
+
+**Source:** ADR-A026 (architecture repository) · [M29](../../../../docs/research/M29-vendor-symlink-correction.md)
+· evidence in [`../experiment-29/`](../experiment-29/README.md). The text above is unaltered.
+
+`harness/bundle-at-commit.sh` symlinked `vendor/` into the worktree until `ba14403`; the tool refuses
+a symlink whole, so everything under `captured/` and `packets/` was generated with **no dependency
+map**. It now copies the directory.
+
+| Claim | Verdict |
+|---|---|
+| "the corrected harness produces materially larger bundles than M18/M19 recorded — `ec92403` goes from 18 items / 606 tokens to 37 / 986" | **Falsified.** With a readable `vendor/`, `ec92403` at its own tree is **18 · 606**. The 19 extra items are spurious *"could not be resolved on disk"* flags on `Illuminate\…`, `Endroid\QrCode\…` and `Laravel\Sanctum\…` |
+| "so M18's and M19's figures are understated, not inflated" | **Falsified** |
+| "Pinned by `tests/Acceptance/HarnessResolvesAtCommitTreeTest.php`" | **Overstated.** That test never runs this script. `HarnessPlacesAReadableVendorTest` does |
+| D2 in the corpus (**S4**, non-empty bundle) | **Weakened.** D2's bundle was two spurious flags; it would have failed S4 |
+| The corpus, the ground truth, the 0/4 STRONG result, C1's replication | **Stands** |

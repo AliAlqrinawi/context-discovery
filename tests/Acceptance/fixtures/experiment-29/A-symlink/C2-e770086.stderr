@@ -1,0 +1,4 @@
+missing PSR-4 entry: Illuminate\Support\Collection named in app/Actions/MediaItem/GetMediaItemsAction.php
+call sites truncated at 20 for execute under app/
+missing PSR-4 entry: Illuminate\Database\Eloquent\Builder named in app/Models/MediaItem.php
+missing PSR-4 entry: Illuminate\Support\Collection named in app/Repositories/MediaItemRepository.php

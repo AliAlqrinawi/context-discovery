@@ -1,0 +1,2416 @@
+{
+    "bundle_version": 2,
+    "run": {
+        "engine_version": "0.2.0",
+        "policy_version": "2",
+        "framework_table_version": "5bfb119e1a00",
+        "budget_tokens": 8000,
+        "diff_sha": "88e9bf1642d8",
+        "repo_sha": null
+    },
+    "used_tokens": 2700,
+    "assertions": [
+        {
+            "id": "a6f6f9132ef24",
+            "kind": "named_reference",
+            "subject": "App\\Models\\Branch::orderBy",
+            "reason": "the region depends on App\\Models\\Branch::orderBy, whose contract is defined in another file",
+            "origin": {
+                "path": "app/Repositories/BranchRepository.php",
+                "lines": [
+                    1,
+                    37
+                ]
+            }
+        },
+        {
+            "id": "a7e31263892fb",
+            "kind": "named_reference",
+            "subject": "App\\Models\\Branch::findOrFail",
+            "reason": "the region depends on App\\Models\\Branch::findOrFail, whose contract is defined in another file",
+            "origin": {
+                "path": "app/Repositories/BranchRepository.php",
+                "lines": [
+                    1,
+                    37
+                ]
+            }
+        },
+        {
+            "id": "a2c4e1edde665",
+            "kind": "named_reference",
+            "subject": "App\\Models\\Branch::create",
+            "reason": "the region depends on App\\Models\\Branch::create, whose contract is defined in another file",
+            "origin": {
+                "path": "app/Repositories/BranchRepository.php",
+                "lines": [
+                    1,
+                    37
+                ]
+            }
+        },
+        {
+            "id": "ac24b68478842",
+            "kind": "named_reference",
+            "subject": "Illuminate\\Database\\Eloquent\\Collection",
+            "reason": "the region depends on Illuminate\\Database\\Eloquent\\Collection, whose contract is defined in another file",
+            "origin": {
+                "path": "app/Repositories/BranchRepository.php",
+                "lines": [
+                    1,
+                    37
+                ]
+            }
+        },
+        {
+            "id": "a2520c8165a75",
+            "kind": "named_reference",
+            "subject": "App\\Models\\Branch",
+            "reason": "the region depends on App\\Models\\Branch, whose contract is defined in another file",
+            "origin": {
+                "path": "app/Repositories/BranchRepository.php",
+                "lines": [
+                    1,
+                    37
+                ]
+            }
+        },
+        {
+            "id": "a80904c95cc38",
+            "kind": "unverifiable_premise",
+            "subject": "surrounding-transaction",
+            "reason": "the region performs several persistence writes; whether a transaction wraps them is decided by the caller, which the diff does not show",
+            "origin": {
+                "path": "app/Repositories/BranchRepository.php",
+                "lines": [
+                    1,
+                    37
+                ]
+            }
+        },
+        {
+            "id": "af28ce56d3722",
+            "kind": "named_reference",
+            "subject": "App\\Models\\Category::orderBy",
+            "reason": "the region depends on App\\Models\\Category::orderBy, whose contract is defined in another file",
+            "origin": {
+                "path": "app/Repositories/CategoryRepository.php",
+                "lines": [
+                    1,
+                    37
+                ]
+            }
+        },
+        {
+            "id": "a70ddf42957e7",
+            "kind": "named_reference",
+            "subject": "App\\Models\\Category::findOrFail",
+            "reason": "the region depends on App\\Models\\Category::findOrFail, whose contract is defined in another file",
+            "origin": {
+                "path": "app/Repositories/CategoryRepository.php",
+                "lines": [
+                    1,
+                    37
+                ]
+            }
+        },
+        {
+            "id": "a599c6472e214",
+            "kind": "named_reference",
+            "subject": "App\\Models\\Category::create",
+            "reason": "the region depends on App\\Models\\Category::create, whose contract is defined in another file",
+            "origin": {
+                "path": "app/Repositories/CategoryRepository.php",
+                "lines": [
+                    1,
+                    37
+                ]
+            }
+        },
+        {
+            "id": "a36f83e6a3872",
+            "kind": "named_reference",
+            "subject": "Illuminate\\Database\\Eloquent\\Collection",
+            "reason": "the region depends on Illuminate\\Database\\Eloquent\\Collection, whose contract is defined in another file",
+            "origin": {
+                "path": "app/Repositories/CategoryRepository.php",
+                "lines": [
+                    1,
+                    37
+                ]
+            }
+        },
+        {
+            "id": "ac0f764b44aa0",
+            "kind": "named_reference",
+            "subject": "App\\Models\\Category",
+            "reason": "the region depends on App\\Models\\Category, whose contract is defined in another file",
+            "origin": {
+                "path": "app/Repositories/CategoryRepository.php",
+                "lines": [
+                    1,
+                    37
+                ]
+            }
+        },
+        {
+            "id": "ae49137bfadd0",
+            "kind": "unverifiable_premise",
+            "subject": "surrounding-transaction",
+            "reason": "the region performs several persistence writes; whether a transaction wraps them is decided by the caller, which the diff does not show",
+            "origin": {
+                "path": "app/Repositories/CategoryRepository.php",
+                "lines": [
+                    1,
+                    37
+                ]
+            }
+        },
+        {
+            "id": "a4b3e3502eb32",
+            "kind": "named_reference",
+            "subject": "App\\Models\\CateringPackage::with",
+            "reason": "the region depends on App\\Models\\CateringPackage::with, whose contract is defined in another file",
+            "origin": {
+                "path": "app/Repositories/CateringPackageRepository.php",
+                "lines": [
+                    1,
+                    51
+                ]
+            }
+        },
+        {
+            "id": "ad5421b92323e",
+            "kind": "named_reference",
+            "subject": "Illuminate\\Support\\Facades\\DB::transaction",
+            "reason": "the region depends on Illuminate\\Support\\Facades\\DB::transaction, whose contract is defined in another file",
+            "origin": {
+                "path": "app/Repositories/CateringPackageRepository.php",
+                "lines": [
+                    1,
+                    51
+                ]
+            }
+        },
+        {
+            "id": "ab50e5fc4175d",
+            "kind": "named_reference",
+            "subject": "App\\Models\\CateringPackage::create",
+            "reason": "the region depends on App\\Models\\CateringPackage::create, whose contract is defined in another file",
+            "origin": {
+                "path": "app/Repositories/CateringPackageRepository.php",
+                "lines": [
+                    1,
+                    51
+                ]
+            }
+        },
+        {
+            "id": "aa8ea8e9ebb83",
+            "kind": "named_reference",
+            "subject": "App\\Models\\CateringPackage::findOrFail",
+            "reason": "the region depends on App\\Models\\CateringPackage::findOrFail, whose contract is defined in another file",
+            "origin": {
+                "path": "app/Repositories/CateringPackageRepository.php",
+                "lines": [
+                    1,
+                    51
+                ]
+            }
+        },
+        {
+            "id": "a94e4eb536042",
+            "kind": "named_reference",
+            "subject": "Illuminate\\Database\\Eloquent\\Collection",
+            "reason": "the region depends on Illuminate\\Database\\Eloquent\\Collection, whose contract is defined in another file",
+            "origin": {
+                "path": "app/Repositories/CateringPackageRepository.php",
+                "lines": [
+                    1,
+                    51
+                ]
+            }
+        },
+        {
+            "id": "aab0a0486839c",
+            "kind": "named_reference",
+            "subject": "App\\Models\\CateringPackage",
+            "reason": "the region depends on App\\Models\\CateringPackage, whose contract is defined in another file",
+            "origin": {
+                "path": "app/Repositories/CateringPackageRepository.php",
+                "lines": [
+                    1,
+                    51
+                ]
+            }
+        },
+        {
+            "id": "a517617535bd5",
+            "kind": "unverifiable_premise",
+            "subject": "surrounding-transaction",
+            "reason": "the region performs several persistence writes; whether a transaction wraps them is decided by the caller, which the diff does not show",
+            "origin": {
+                "path": "app/Repositories/CateringPackageRepository.php",
+                "lines": [
+                    1,
+                    51
+                ]
+            }
+        },
+        {
+            "id": "ad2fc501868d0",
+            "kind": "named_reference",
+            "subject": "App\\Models\\DeliveryApp::orderBy",
+            "reason": "the region depends on App\\Models\\DeliveryApp::orderBy, whose contract is defined in another file",
+            "origin": {
+                "path": "app/Repositories/DeliveryAppRepository.php",
+                "lines": [
+                    1,
+                    43
+                ]
+            }
+        },
+        {
+            "id": "a14debef2ab53",
+            "kind": "named_reference",
+            "subject": "App\\Models\\DeliveryApp::findOrFail",
+            "reason": "the region depends on App\\Models\\DeliveryApp::findOrFail, whose contract is defined in another file",
+            "origin": {
+                "path": "app/Repositories/DeliveryAppRepository.php",
+                "lines": [
+                    1,
+                    43
+                ]
+            }
+        },
+        {
+            "id": "adf19fbef5918",
+            "kind": "named_reference",
+            "subject": "App\\Models\\DeliveryApp::create",
+            "reason": "the region depends on App\\Models\\DeliveryApp::create, whose contract is defined in another file",
+            "origin": {
+                "path": "app/Repositories/DeliveryAppRepository.php",
+                "lines": [
+                    1,
+                    43
+                ]
+            }
+        },
+        {
+            "id": "adf87bf9f04cf",
+            "kind": "named_reference",
+            "subject": "Illuminate\\Database\\Eloquent\\Collection",
+            "reason": "the region depends on Illuminate\\Database\\Eloquent\\Collection, whose contract is defined in another file",
+            "origin": {
+                "path": "app/Repositories/DeliveryAppRepository.php",
+                "lines": [
+                    1,
+                    43
+                ]
+            }
+        },
+        {
+            "id": "af1804139aae4",
+            "kind": "named_reference",
+            "subject": "App\\Models\\DeliveryApp",
+            "reason": "the region depends on App\\Models\\DeliveryApp, whose contract is defined in another file",
+            "origin": {
+                "path": "app/Repositories/DeliveryAppRepository.php",
+                "lines": [
+                    1,
+                    43
+                ]
+            }
+        },
+        {
+            "id": "ad00860346784",
+            "kind": "unverifiable_premise",
+            "subject": "surrounding-transaction",
+            "reason": "the region performs several persistence writes; whether a transaction wraps them is decided by the caller, which the diff does not show",
+            "origin": {
+                "path": "app/Repositories/DeliveryAppRepository.php",
+                "lines": [
+                    1,
+                    43
+                ]
+            }
+        },
+        {
+            "id": "a2664c3afcb0c",
+            "kind": "named_reference",
+            "subject": "App\\Models\\Dish::with",
+            "reason": "the region depends on App\\Models\\Dish::with, whose contract is defined in another file",
+            "origin": {
+                "path": "app/Repositories/DishRepository.php",
+                "lines": [
+                    1,
+                    51
+                ]
+            }
+        },
+        {
+            "id": "a68c0f3712728",
+            "kind": "named_reference",
+            "subject": "App\\Models\\Dish::create",
+            "reason": "the region depends on App\\Models\\Dish::create, whose contract is defined in another file",
+            "origin": {
+                "path": "app/Repositories/DishRepository.php",
+                "lines": [
+                    1,
+                    51
+                ]
+            }
+        },
+        {
+            "id": "a7ea905d236fa",
+            "kind": "named_reference",
+            "subject": "App\\Models\\Dish::findOrFail",
+            "reason": "the region depends on App\\Models\\Dish::findOrFail, whose contract is defined in another file",
+            "origin": {
+                "path": "app/Repositories/DishRepository.php",
+                "lines": [
+                    1,
+                    51
+                ]
+            }
+        },
+        {
+            "id": "a8d7489360e45",
+            "kind": "named_reference",
+            "subject": "Illuminate\\Pagination\\LengthAwarePaginator",
+            "reason": "the region depends on Illuminate\\Pagination\\LengthAwarePaginator, whose contract is defined in another file",
+            "origin": {
+                "path": "app/Repositories/DishRepository.php",
+                "lines": [
+                    1,
+                    51
+                ]
+            }
+        },
+        {
+            "id": "ae47485ed4375",
+            "kind": "named_reference",
+            "subject": "App\\Models\\Dish",
+            "reason": "the region depends on App\\Models\\Dish, whose contract is defined in another file",
+            "origin": {
+                "path": "app/Repositories/DishRepository.php",
+                "lines": [
+                    1,
+                    51
+                ]
+            }
+        },
+        {
+            "id": "a93af9e6704d2",
+            "kind": "unverifiable_premise",
+            "subject": "surrounding-transaction",
+            "reason": "the region performs several persistence writes; whether a transaction wraps them is decided by the caller, which the diff does not show",
+            "origin": {
+                "path": "app/Repositories/DishRepository.php",
+                "lines": [
+                    1,
+                    51
+                ]
+            }
+        },
+        {
+            "id": "aa0c508678f57",
+            "kind": "named_reference",
+            "subject": "App\\Models\\MediaItem::forPage",
+            "reason": "the region depends on App\\Models\\MediaItem::forPage, whose contract is defined in another file",
+            "origin": {
+                "path": "app/Repositories/MediaItemRepository.php",
+                "lines": [
+                    1,
+                    40
+                ]
+            }
+        },
+        {
+            "id": "ab7c3ebbaa4f4",
+            "kind": "named_reference",
+            "subject": "App\\Models\\MediaItem::findOrFail",
+            "reason": "the region depends on App\\Models\\MediaItem::findOrFail, whose contract is defined in another file",
+            "origin": {
+                "path": "app/Repositories/MediaItemRepository.php",
+                "lines": [
+                    1,
+                    40
+                ]
+            }
+        },
+        {
+            "id": "a0ad51353dbcc",
+            "kind": "named_reference",
+            "subject": "App\\Models\\MediaItem::create",
+            "reason": "the region depends on App\\Models\\MediaItem::create, whose contract is defined in another file",
+            "origin": {
+                "path": "app/Repositories/MediaItemRepository.php",
+                "lines": [
+                    1,
+                    40
+                ]
+            }
+        },
+        {
+            "id": "a8524c49c2475",
+            "kind": "named_reference",
+            "subject": "Illuminate\\Support\\Collection",
+            "reason": "the region depends on Illuminate\\Support\\Collection, whose contract is defined in another file",
+            "origin": {
+                "path": "app/Repositories/MediaItemRepository.php",
+                "lines": [
+                    1,
+                    40
+                ]
+            }
+        },
+        {
+            "id": "a480db7e63306",
+            "kind": "named_reference",
+            "subject": "App\\Models\\MediaItem",
+            "reason": "the region depends on App\\Models\\MediaItem, whose contract is defined in another file",
+            "origin": {
+                "path": "app/Repositories/MediaItemRepository.php",
+                "lines": [
+                    1,
+                    40
+                ]
+            }
+        },
+        {
+            "id": "a4116443a1b14",
+            "kind": "unverifiable_premise",
+            "subject": "surrounding-transaction",
+            "reason": "the region performs several persistence writes; whether a transaction wraps them is decided by the caller, which the diff does not show",
+            "origin": {
+                "path": "app/Repositories/MediaItemRepository.php",
+                "lines": [
+                    1,
+                    40
+                ]
+            }
+        },
+        {
+            "id": "ac040ccb4b8e0",
+            "kind": "named_reference",
+            "subject": "App\\Models\\PageContent::forPage",
+            "reason": "the region depends on App\\Models\\PageContent::forPage, whose contract is defined in another file",
+            "origin": {
+                "path": "app/Repositories/PageContentRepository.php",
+                "lines": [
+                    1,
+                    43
+                ]
+            }
+        },
+        {
+            "id": "a36cee827a0cf",
+            "kind": "named_reference",
+            "subject": "App\\Models\\PageContent::findOrFail",
+            "reason": "the region depends on App\\Models\\PageContent::findOrFail, whose contract is defined in another file",
+            "origin": {
+                "path": "app/Repositories/PageContentRepository.php",
+                "lines": [
+                    1,
+                    43
+                ]
+            }
+        },
+        {
+            "id": "abc27bf44b36c",
+            "kind": "named_reference",
+            "subject": "Illuminate\\Support\\Arr::only",
+            "reason": "the region depends on Illuminate\\Support\\Arr::only, whose contract is defined in another file",
+            "origin": {
+                "path": "app/Repositories/PageContentRepository.php",
+                "lines": [
+                    1,
+                    43
+                ]
+            }
+        },
+        {
+            "id": "a2939451c4f08",
+            "kind": "named_reference",
+            "subject": "Illuminate\\Support\\Facades\\DB::transaction",
+            "reason": "the region depends on Illuminate\\Support\\Facades\\DB::transaction, whose contract is defined in another file",
+            "origin": {
+                "path": "app/Repositories/PageContentRepository.php",
+                "lines": [
+                    1,
+                    43
+                ]
+            }
+        },
+        {
+            "id": "acfc2a73ee9dc",
+            "kind": "named_reference",
+            "subject": "Illuminate\\Support\\Collection",
+            "reason": "the region depends on Illuminate\\Support\\Collection, whose contract is defined in another file",
+            "origin": {
+                "path": "app/Repositories/PageContentRepository.php",
+                "lines": [
+                    1,
+                    43
+                ]
+            }
+        },
+        {
+            "id": "a04ec2c3d7c28",
+            "kind": "named_reference",
+            "subject": "App\\Models\\PageContent",
+            "reason": "the region depends on App\\Models\\PageContent, whose contract is defined in another file",
+            "origin": {
+                "path": "app/Repositories/PageContentRepository.php",
+                "lines": [
+                    1,
+                    43
+                ]
+            }
+        },
+        {
+            "id": "ac6898bb05163",
+            "kind": "unverifiable_premise",
+            "subject": "surrounding-transaction",
+            "reason": "the region performs several persistence writes; whether a transaction wraps them is decided by the caller, which the diff does not show",
+            "origin": {
+                "path": "app/Repositories/PageContentRepository.php",
+                "lines": [
+                    1,
+                    43
+                ]
+            }
+        },
+        {
+            "id": "acf1306264d92",
+            "kind": "named_reference",
+            "subject": "App\\Models\\QuoteRequest::orderByDesc",
+            "reason": "the region depends on App\\Models\\QuoteRequest::orderByDesc, whose contract is defined in another file",
+            "origin": {
+                "path": "app/Repositories/QuoteRequestRepository.php",
+                "lines": [
+                    1,
+                    46
+                ]
+            }
+        },
+        {
+            "id": "a34deb0af9f4e",
+            "kind": "named_reference",
+            "subject": "App\\Models\\QuoteRequest::findOrFail",
+            "reason": "the region depends on App\\Models\\QuoteRequest::findOrFail, whose contract is defined in another file",
+            "origin": {
+                "path": "app/Repositories/QuoteRequestRepository.php",
+                "lines": [
+                    1,
+                    46
+                ]
+            }
+        },
+        {
+            "id": "ab58817b1e213",
+            "kind": "named_reference",
+            "subject": "App\\Models\\QuoteRequest::create",
+            "reason": "the region depends on App\\Models\\QuoteRequest::create, whose contract is defined in another file",
+            "origin": {
+                "path": "app/Repositories/QuoteRequestRepository.php",
+                "lines": [
+                    1,
+                    46
+                ]
+            }
+        },
+        {
+            "id": "a8823468a3f7a",
+            "kind": "named_reference",
+            "subject": "Illuminate\\Pagination\\LengthAwarePaginator",
+            "reason": "the region depends on Illuminate\\Pagination\\LengthAwarePaginator, whose contract is defined in another file",
+            "origin": {
+                "path": "app/Repositories/QuoteRequestRepository.php",
+                "lines": [
+                    1,
+                    46
+                ]
+            }
+        },
+        {
+            "id": "a79bee31292ba",
+            "kind": "named_reference",
+            "subject": "App\\Models\\QuoteRequest",
+            "reason": "the region depends on App\\Models\\QuoteRequest, whose contract is defined in another file",
+            "origin": {
+                "path": "app/Repositories/QuoteRequestRepository.php",
+                "lines": [
+                    1,
+                    46
+                ]
+            }
+        },
+        {
+            "id": "a3fc2fea9e0b4",
+            "kind": "unverifiable_premise",
+            "subject": "surrounding-transaction",
+            "reason": "the region performs several persistence writes; whether a transaction wraps them is decided by the caller, which the diff does not show",
+            "origin": {
+                "path": "app/Repositories/QuoteRequestRepository.php",
+                "lines": [
+                    1,
+                    46
+                ]
+            }
+        },
+        {
+            "id": "ac527a4b6e64f",
+            "kind": "named_reference",
+            "subject": "App\\Models\\SampleMenu::with",
+            "reason": "the region depends on App\\Models\\SampleMenu::with, whose contract is defined in another file",
+            "origin": {
+                "path": "app/Repositories/SampleMenuRepository.php",
+                "lines": [
+                    1,
+                    51
+                ]
+            }
+        },
+        {
+            "id": "af08c14749d86",
+            "kind": "named_reference",
+            "subject": "Illuminate\\Support\\Facades\\DB::transaction",
+            "reason": "the region depends on Illuminate\\Support\\Facades\\DB::transaction, whose contract is defined in another file",
+            "origin": {
+                "path": "app/Repositories/SampleMenuRepository.php",
+                "lines": [
+                    1,
+                    51
+                ]
+            }
+        },
+        {
+            "id": "a9a21c000713b",
+            "kind": "named_reference",
+            "subject": "App\\Models\\SampleMenu::create",
+            "reason": "the region depends on App\\Models\\SampleMenu::create, whose contract is defined in another file",
+            "origin": {
+                "path": "app/Repositories/SampleMenuRepository.php",
+                "lines": [
+                    1,
+                    51
+                ]
+            }
+        },
+        {
+            "id": "af16180124768",
+            "kind": "named_reference",
+            "subject": "App\\Models\\SampleMenu::findOrFail",
+            "reason": "the region depends on App\\Models\\SampleMenu::findOrFail, whose contract is defined in another file",
+            "origin": {
+                "path": "app/Repositories/SampleMenuRepository.php",
+                "lines": [
+                    1,
+                    51
+                ]
+            }
+        },
+        {
+            "id": "a22c60ee546a2",
+            "kind": "named_reference",
+            "subject": "Illuminate\\Database\\Eloquent\\Collection",
+            "reason": "the region depends on Illuminate\\Database\\Eloquent\\Collection, whose contract is defined in another file",
+            "origin": {
+                "path": "app/Repositories/SampleMenuRepository.php",
+                "lines": [
+                    1,
+                    51
+                ]
+            }
+        },
+        {
+            "id": "a0d6fd472426f",
+            "kind": "named_reference",
+            "subject": "App\\Models\\SampleMenu",
+            "reason": "the region depends on App\\Models\\SampleMenu, whose contract is defined in another file",
+            "origin": {
+                "path": "app/Repositories/SampleMenuRepository.php",
+                "lines": [
+                    1,
+                    51
+                ]
+            }
+        },
+        {
+            "id": "a7cd76108e46e",
+            "kind": "unverifiable_premise",
+            "subject": "surrounding-transaction",
+            "reason": "the region performs several persistence writes; whether a transaction wraps them is decided by the caller, which the diff does not show",
+            "origin": {
+                "path": "app/Repositories/SampleMenuRepository.php",
+                "lines": [
+                    1,
+                    51
+                ]
+            }
+        },
+        {
+            "id": "a7da2762c9095",
+            "kind": "named_reference",
+            "subject": "App\\Models\\Setting::forGroup",
+            "reason": "the region depends on App\\Models\\Setting::forGroup, whose contract is defined in another file",
+            "origin": {
+                "path": "app/Repositories/SettingRepository.php",
+                "lines": [
+                    1,
+                    24
+                ]
+            }
+        },
+        {
+            "id": "aa8a403090278",
+            "kind": "named_reference",
+            "subject": "Illuminate\\Support\\Facades\\DB::transaction",
+            "reason": "the region depends on Illuminate\\Support\\Facades\\DB::transaction, whose contract is defined in another file",
+            "origin": {
+                "path": "app/Repositories/SettingRepository.php",
+                "lines": [
+                    1,
+                    24
+                ]
+            }
+        },
+        {
+            "id": "abac802967acf",
+            "kind": "named_reference",
+            "subject": "App\\Models\\Setting::where",
+            "reason": "the region depends on App\\Models\\Setting::where, whose contract is defined in another file",
+            "origin": {
+                "path": "app/Repositories/SettingRepository.php",
+                "lines": [
+                    1,
+                    24
+                ]
+            }
+        },
+        {
+            "id": "a95bbf8da2589",
+            "kind": "named_reference",
+            "subject": "Illuminate\\Support\\Collection",
+            "reason": "the region depends on Illuminate\\Support\\Collection, whose contract is defined in another file",
+            "origin": {
+                "path": "app/Repositories/SettingRepository.php",
+                "lines": [
+                    1,
+                    24
+                ]
+            }
+        },
+        {
+            "id": "a3e24624a491e",
+            "kind": "named_reference",
+            "subject": "App\\Models\\Testimonial::orderBy",
+            "reason": "the region depends on App\\Models\\Testimonial::orderBy, whose contract is defined in another file",
+            "origin": {
+                "path": "app/Repositories/TestimonialRepository.php",
+                "lines": [
+                    1,
+                    43
+                ]
+            }
+        },
+        {
+            "id": "a689755f08e64",
+            "kind": "named_reference",
+            "subject": "App\\Models\\Testimonial::findOrFail",
+            "reason": "the region depends on App\\Models\\Testimonial::findOrFail, whose contract is defined in another file",
+            "origin": {
+                "path": "app/Repositories/TestimonialRepository.php",
+                "lines": [
+                    1,
+                    43
+                ]
+            }
+        },
+        {
+            "id": "a2db9239b8357",
+            "kind": "named_reference",
+            "subject": "App\\Models\\Testimonial::create",
+            "reason": "the region depends on App\\Models\\Testimonial::create, whose contract is defined in another file",
+            "origin": {
+                "path": "app/Repositories/TestimonialRepository.php",
+                "lines": [
+                    1,
+                    43
+                ]
+            }
+        },
+        {
+            "id": "a11577ecf6435",
+            "kind": "named_reference",
+            "subject": "Illuminate\\Database\\Eloquent\\Collection",
+            "reason": "the region depends on Illuminate\\Database\\Eloquent\\Collection, whose contract is defined in another file",
+            "origin": {
+                "path": "app/Repositories/TestimonialRepository.php",
+                "lines": [
+                    1,
+                    43
+                ]
+            }
+        },
+        {
+            "id": "a514dfa80218a",
+            "kind": "named_reference",
+            "subject": "App\\Models\\Testimonial",
+            "reason": "the region depends on App\\Models\\Testimonial, whose contract is defined in another file",
+            "origin": {
+                "path": "app/Repositories/TestimonialRepository.php",
+                "lines": [
+                    1,
+                    43
+                ]
+            }
+        },
+        {
+            "id": "a80f49d1f4ed7",
+            "kind": "unverifiable_premise",
+            "subject": "surrounding-transaction",
+            "reason": "the region performs several persistence writes; whether a transaction wraps them is decided by the caller, which the diff does not show",
+            "origin": {
+                "path": "app/Repositories/TestimonialRepository.php",
+                "lines": [
+                    1,
+                    43
+                ]
+            }
+        },
+        {
+            "id": "a48608b7a5478",
+            "kind": "named_reference",
+            "subject": "App\\Models\\Timeline::orderBy",
+            "reason": "the region depends on App\\Models\\Timeline::orderBy, whose contract is defined in another file",
+            "origin": {
+                "path": "app/Repositories/TimelineRepository.php",
+                "lines": [
+                    1,
+                    37
+                ]
+            }
+        },
+        {
+            "id": "a5428f95138df",
+            "kind": "named_reference",
+            "subject": "App\\Models\\Timeline::findOrFail",
+            "reason": "the region depends on App\\Models\\Timeline::findOrFail, whose contract is defined in another file",
+            "origin": {
+                "path": "app/Repositories/TimelineRepository.php",
+                "lines": [
+                    1,
+                    37
+                ]
+            }
+        },
+        {
+            "id": "aeb543cfa25ab",
+            "kind": "named_reference",
+            "subject": "App\\Models\\Timeline::create",
+            "reason": "the region depends on App\\Models\\Timeline::create, whose contract is defined in another file",
+            "origin": {
+                "path": "app/Repositories/TimelineRepository.php",
+                "lines": [
+                    1,
+                    37
+                ]
+            }
+        },
+        {
+            "id": "ac097955a27bd",
+            "kind": "named_reference",
+            "subject": "Illuminate\\Database\\Eloquent\\Collection",
+            "reason": "the region depends on Illuminate\\Database\\Eloquent\\Collection, whose contract is defined in another file",
+            "origin": {
+                "path": "app/Repositories/TimelineRepository.php",
+                "lines": [
+                    1,
+                    37
+                ]
+            }
+        },
+        {
+            "id": "a21b6c1160acb",
+            "kind": "named_reference",
+            "subject": "App\\Models\\Timeline",
+            "reason": "the region depends on App\\Models\\Timeline, whose contract is defined in another file",
+            "origin": {
+                "path": "app/Repositories/TimelineRepository.php",
+                "lines": [
+                    1,
+                    37
+                ]
+            }
+        },
+        {
+            "id": "a9b1eb5692ae4",
+            "kind": "unverifiable_premise",
+            "subject": "surrounding-transaction",
+            "reason": "the region performs several persistence writes; whether a transaction wraps them is decided by the caller, which the diff does not show",
+            "origin": {
+                "path": "app/Repositories/TimelineRepository.php",
+                "lines": [
+                    1,
+                    37
+                ]
+            }
+        },
+        {
+            "id": "a0fdaf1a3068f",
+            "kind": "named_reference",
+            "subject": "App\\Models\\User::with",
+            "reason": "the region depends on App\\Models\\User::with, whose contract is defined in another file",
+            "origin": {
+                "path": "app/Repositories/UserRepository.php",
+                "lines": [
+                    1,
+                    43
+                ]
+            }
+        },
+        {
+            "id": "acdc3088b9c11",
+            "kind": "named_reference",
+            "subject": "Illuminate\\Support\\Facades\\DB::transaction",
+            "reason": "the region depends on Illuminate\\Support\\Facades\\DB::transaction, whose contract is defined in another file",
+            "origin": {
+                "path": "app/Repositories/UserRepository.php",
+                "lines": [
+                    1,
+                    43
+                ]
+            }
+        },
+        {
+            "id": "ae75a7da31c3b",
+            "kind": "named_reference",
+            "subject": "App\\Models\\User::create",
+            "reason": "the region depends on App\\Models\\User::create, whose contract is defined in another file",
+            "origin": {
+                "path": "app/Repositories/UserRepository.php",
+                "lines": [
+                    1,
+                    43
+                ]
+            }
+        },
+        {
+            "id": "ae99d50885ef1",
+            "kind": "named_reference",
+            "subject": "App\\Models\\User::findOrFail",
+            "reason": "the region depends on App\\Models\\User::findOrFail, whose contract is defined in another file",
+            "origin": {
+                "path": "app/Repositories/UserRepository.php",
+                "lines": [
+                    1,
+                    43
+                ]
+            }
+        },
+        {
+            "id": "a8e21ffecd8c0",
+            "kind": "named_reference",
+            "subject": "Illuminate\\Pagination\\LengthAwarePaginator",
+            "reason": "the region depends on Illuminate\\Pagination\\LengthAwarePaginator, whose contract is defined in another file",
+            "origin": {
+                "path": "app/Repositories/UserRepository.php",
+                "lines": [
+                    1,
+                    43
+                ]
+            }
+        },
+        {
+            "id": "ac727dc33c154",
+            "kind": "named_reference",
+            "subject": "App\\Models\\User",
+            "reason": "the region depends on App\\Models\\User, whose contract is defined in another file",
+            "origin": {
+                "path": "app/Repositories/UserRepository.php",
+                "lines": [
+                    1,
+                    43
+                ]
+            }
+        },
+        {
+            "id": "aef307ba257b4",
+            "kind": "unverifiable_premise",
+            "subject": "surrounding-transaction",
+            "reason": "the region performs several persistence writes; whether a transaction wraps them is decided by the caller, which the diff does not show",
+            "origin": {
+                "path": "app/Repositories/UserRepository.php",
+                "lines": [
+                    1,
+                    43
+                ]
+            }
+        },
+        {
+            "id": "aa07508f0131d",
+            "kind": "unverifiable_premise",
+            "subject": "surrounding-transaction",
+            "reason": "the region performs several persistence writes; whether a transaction wraps them is decided by the caller, which the diff does not show",
+            "origin": {
+                "path": "tests/Feature/RepositoriesTest.php",
+                "lines": [
+                    1,
+                    387
+                ]
+            }
+        }
+    ],
+    "items": [
+        {
+            "assertion_id": "a2520c8165a75",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Models/Branch.php",
+                "member": "fillable",
+                "lines": [
+                    9,
+                    22
+                ]
+            },
+            "payload": "    protected $fillable = [\n        'name_ar',\n        'name_en',\n        'city',\n        'location_ar',\n        'location_en',\n        'phone',\n        'opening_time',\n        'closing_time',\n        'google_maps_url',\n        'image_path',\n        'image_url',\n        'order',\n    ];",
+            "tokens": 72
+        },
+        {
+            "assertion_id": "ac0f764b44aa0",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Models/Category.php",
+                "member": "dishes",
+                "lines": [
+                    17,
+                    20
+                ]
+            },
+            "payload": "    public function dishes(): HasMany\n    {\n        return $this->hasMany(Dish::class);\n    }",
+            "tokens": 24
+        },
+        {
+            "assertion_id": "ac0f764b44aa0",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Models/Category.php",
+                "member": "fillable",
+                "lines": [
+                    10,
+                    15
+                ]
+            },
+            "payload": "    protected $fillable = [\n        'name_ar',\n        'name_en',\n        'slug',\n        'order',\n    ];",
+            "tokens": 27
+        },
+        {
+            "assertion_id": "aab0a0486839c",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Models/CateringPackage.php",
+                "member": "casts",
+                "lines": [
+                    23,
+                    26
+                ]
+            },
+            "payload": "    protected $casts = [\n        'is_featured' => 'boolean',\n        'price_starting_from' => 'decimal:2',\n    ];",
+            "tokens": 29
+        },
+        {
+            "assertion_id": "aab0a0486839c",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Models/CateringPackage.php",
+                "member": "features",
+                "lines": [
+                    28,
+                    31
+                ]
+            },
+            "payload": "    public function features(): HasMany\n    {\n        return $this->hasMany(CateringPackageFeature::class, 'package_id');\n    }",
+            "tokens": 32
+        },
+        {
+            "assertion_id": "aab0a0486839c",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Models/CateringPackage.php",
+                "member": "fillable",
+                "lines": [
+                    10,
+                    21
+                ]
+            },
+            "payload": "    protected $fillable = [\n        'name_ar',\n        'name_en',\n        'description_ar',\n        'description_en',\n        'tag_en',\n        'price_starting_from',\n        'is_featured',\n        'image_path',\n        'image_url',\n        'order',\n    ];",
+            "tokens": 64
+        },
+        {
+            "assertion_id": "af1804139aae4",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Models/DeliveryApp.php",
+                "member": "casts",
+                "lines": [
+                    19,
+                    21
+                ]
+            },
+            "payload": "    protected $casts = [\n        'is_active' => 'boolean',\n    ];",
+            "tokens": 17
+        },
+        {
+            "assertion_id": "af1804139aae4",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Models/DeliveryApp.php",
+                "member": "fillable",
+                "lines": [
+                    9,
+                    17
+                ]
+            },
+            "payload": "    protected $fillable = [\n        'name_ar',\n        'name_en',\n        'order_url',\n        'logo_path',\n        'logo_url',\n        'is_active',\n        'order',\n    ];",
+            "tokens": 43
+        },
+        {
+            "assertion_id": "ae47485ed4375",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Models/Dish.php",
+                "member": "casts",
+                "lines": [
+                    24,
+                    28
+                ]
+            },
+            "payload": "    protected $casts = [\n        'price' => 'decimal:2',\n        'is_featured' => 'boolean',\n        'is_signature' => 'boolean',\n    ];",
+            "tokens": 34
+        },
+        {
+            "assertion_id": "ae47485ed4375",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Models/Dish.php",
+                "member": "category",
+                "lines": [
+                    30,
+                    33
+                ]
+            },
+            "payload": "    public function category(): BelongsTo\n    {\n        return $this->belongsTo(Category::class);\n    }",
+            "tokens": 26
+        },
+        {
+            "assertion_id": "ae47485ed4375",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Models/Dish.php",
+                "member": "fillable",
+                "lines": [
+                    10,
+                    22
+                ]
+            },
+            "payload": "    protected $fillable = [\n        'category_id',\n        'name_ar',\n        'name_en',\n        'description_ar',\n        'description_en',\n        'price',\n        'is_featured',\n        'is_signature',\n        'image_path',\n        'image_url',\n        'order',\n    ];",
+            "tokens": 68
+        },
+        {
+            "assertion_id": "a480db7e63306",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Models/MediaItem.php",
+                "member": "fillable",
+                "lines": [
+                    10,
+                    22
+                ]
+            },
+            "payload": "    protected $fillable = [\n        'page',\n        'section',\n        'key',\n        'path',\n        'url',\n        'alt_ar',\n        'alt_en',\n        'mime_type',\n        'size_bytes',\n        'width',\n        'height',\n    ];",
+            "tokens": 58
+        },
+        {
+            "assertion_id": "aa0c508678f57",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Models/MediaItem.php",
+                "member": "scopeForPage",
+                "lines": [
+                    24,
+                    33
+                ]
+            },
+            "payload": "    public function scopeForPage(Builder $query, string $page, ?string $section = null): Builder\n    {\n        $query->where('page', $page);\n\n        if ($section !== null) {\n            $query->where('section', $section);\n        }\n\n        return $query;\n    }",
+            "tokens": 66
+        },
+        {
+            "assertion_id": "a480db7e63306",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Models/MediaItem.php",
+                "member": "scopeForPage",
+                "lines": [
+                    24,
+                    33
+                ]
+            },
+            "payload": "    public function scopeForPage(Builder $query, string $page, ?string $section = null): Builder\n    {\n        $query->where('page', $page);\n\n        if ($section !== null) {\n            $query->where('section', $section);\n        }\n\n        return $query;\n    }",
+            "tokens": 66
+        },
+        {
+            "assertion_id": "a04ec2c3d7c28",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Models/PageContent.php",
+                "member": "fillable",
+                "lines": [
+                    10,
+                    18
+                ]
+            },
+            "payload": "    protected $fillable = [\n        'page',\n        'section',\n        'key',\n        'value_ar',\n        'value_en',\n        'type',\n        'order',\n    ];",
+            "tokens": 40
+        },
+        {
+            "assertion_id": "ac040ccb4b8e0",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Models/PageContent.php",
+                "member": "scopeForPage",
+                "lines": [
+                    20,
+                    29
+                ]
+            },
+            "payload": "    public function scopeForPage(Builder $query, string $page, ?string $section = null): Builder\n    {\n        $query->where('page', $page);\n\n        if ($section !== null) {\n            $query->where('section', $section);\n        }\n\n        return $query;\n    }",
+            "tokens": 66
+        },
+        {
+            "assertion_id": "a04ec2c3d7c28",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Models/PageContent.php",
+                "member": "scopeForPage",
+                "lines": [
+                    20,
+                    29
+                ]
+            },
+            "payload": "    public function scopeForPage(Builder $query, string $page, ?string $section = null): Builder\n    {\n        $query->where('page', $page);\n\n        if ($section !== null) {\n            $query->where('section', $section);\n        }\n\n        return $query;\n    }",
+            "tokens": 66
+        },
+        {
+            "assertion_id": "a79bee31292ba",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Models/QuoteRequest.php",
+                "member": "casts",
+                "lines": [
+                    25,
+                    30
+                ]
+            },
+            "payload": "    protected $casts = [\n        'status' => QuoteRequestStatusEnum::class,\n        'event_type' => EventTypeEnum::class,\n        'budget_range' => BudgetRangeEnum::class,\n        'event_date' => 'date',\n    ];",
+            "tokens": 53
+        },
+        {
+            "assertion_id": "a79bee31292ba",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Models/QuoteRequest.php",
+                "member": "fillable",
+                "lines": [
+                    12,
+                    23
+                ]
+            },
+            "payload": "    protected $fillable = [\n        'name',\n        'phone',\n        'email',\n        'event_date',\n        'guests_count',\n        'branch',\n        'event_type',\n        'budget_range',\n        'notes',\n        'status',\n    ];",
+            "tokens": 58
+        },
+        {
+            "assertion_id": "a0d6fd472426f",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Models/SampleMenu.php",
+                "member": "casts",
+                "lines": [
+                    20,
+                    22
+                ]
+            },
+            "payload": "    protected $casts = [\n        'is_featured' => 'boolean',\n    ];",
+            "tokens": 17
+        },
+        {
+            "assertion_id": "a0d6fd472426f",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Models/SampleMenu.php",
+                "member": "dishes",
+                "lines": [
+                    24,
+                    27
+                ]
+            },
+            "payload": "    public function dishes(): HasMany\n    {\n        return $this->hasMany(SampleMenuDish::class);\n    }",
+            "tokens": 26
+        },
+        {
+            "assertion_id": "a0d6fd472426f",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Models/SampleMenu.php",
+                "member": "fillable",
+                "lines": [
+                    10,
+                    18
+                ]
+            },
+            "payload": "    protected $fillable = [\n        'name_ar',\n        'name_en',\n        'tag_en',\n        'is_featured',\n        'image_path',\n        'image_url',\n        'order',\n    ];",
+            "tokens": 44
+        },
+        {
+            "assertion_id": "abac802967acf",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Models/Setting.php",
+                "member": "fillable",
+                "lines": [
+                    10,
+                    17
+                ]
+            },
+            "payload": "    protected $fillable = [\n        'key',\n        'value',\n        'type',\n        'group',\n        'label_ar',\n        'label_en',\n    ];",
+            "tokens": 35
+        },
+        {
+            "assertion_id": "a7da2762c9095",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Models/Setting.php",
+                "member": "scopeForGroup",
+                "lines": [
+                    19,
+                    26
+                ]
+            },
+            "payload": "    public function scopeForGroup(Builder $query, ?string $group = null): Builder\n    {\n        if ($group !== null) {\n            $query->where('group', $group);\n        }\n\n        return $query;\n    }",
+            "tokens": 51
+        },
+        {
+            "assertion_id": "abac802967acf",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Models/Setting.php",
+                "member": "scopeForGroup",
+                "lines": [
+                    19,
+                    26
+                ]
+            },
+            "payload": "    public function scopeForGroup(Builder $query, ?string $group = null): Builder\n    {\n        if ($group !== null) {\n            $query->where('group', $group);\n        }\n\n        return $query;\n    }",
+            "tokens": 51
+        },
+        {
+            "assertion_id": "a514dfa80218a",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Models/Testimonial.php",
+                "member": "casts",
+                "lines": [
+                    17,
+                    19
+                ]
+            },
+            "payload": "    protected $casts = [\n        'is_active' => 'boolean',\n    ];",
+            "tokens": 17
+        },
+        {
+            "assertion_id": "a514dfa80218a",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Models/Testimonial.php",
+                "member": "fillable",
+                "lines": [
+                    9,
+                    15
+                ]
+            },
+            "payload": "    protected $fillable = [\n        'name',\n        'quote_ar',\n        'quote_en',\n        'is_active',\n        'order',\n    ];",
+            "tokens": 32
+        },
+        {
+            "assertion_id": "a21b6c1160acb",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Models/Timeline.php",
+                "member": "fillable",
+                "lines": [
+                    9,
+                    17
+                ]
+            },
+            "payload": "    protected $fillable = [\n        'year',\n        'location_en',\n        'title_ar',\n        'title_en',\n        'description_ar',\n        'description_en',\n        'order',\n    ];",
+            "tokens": 46
+        },
+        {
+            "assertion_id": "ac727dc33c154",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Models/User.php",
+                "member": "casts",
+                "lines": [
+                    39,
+                    50
+                ]
+            },
+            "payload": "    /**\n     * Get the attributes that should be cast.\n     *\n     * @return array<string, string>\n     */\n    protected function casts(): array\n    {\n        return [\n            'email_verified_at' => 'datetime',\n            'password' => 'hashed',\n        ];\n    }",
+            "tokens": 67
+        },
+        {
+            "assertion_id": "ac727dc33c154",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Models/User.php",
+                "member": "fillable",
+                "lines": [
+                    17,
+                    27
+                ]
+            },
+            "payload": "    /**\n     * The attributes that are mass assignable.\n     *\n     * @var list<string>\n     */\n    protected $fillable = [\n        'name',\n        'email',\n        'password',\n        'role',\n    ];",
+            "tokens": 50
+        },
+        {
+            "assertion_id": "ac727dc33c154",
+            "lever": "fetched",
+            "provenance": {
+                "path": "app/Models/User.php",
+                "member": "hidden",
+                "lines": [
+                    29,
+                    37
+                ]
+            },
+            "payload": "    /**\n     * The attributes that should be hidden for serialization.\n     *\n     * @var list<string>\n     */\n    protected $hidden = [\n        'password',\n        'remember_token',\n    ];",
+            "tokens": 48
+        },
+        {
+            "assertion_id": "a2c4e1edde665",
+            "lever": "flagged",
+            "provenance": {
+                "path": "app/Repositories/BranchRepository.php",
+                "member": "App\\Models\\Branch::create",
+                "lines": [
+                    1,
+                    37
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "assertion_id": "a7e31263892fb",
+            "lever": "flagged",
+            "provenance": {
+                "path": "app/Repositories/BranchRepository.php",
+                "member": "App\\Models\\Branch::findOrFail",
+                "lines": [
+                    1,
+                    37
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "assertion_id": "a6f6f9132ef24",
+            "lever": "flagged",
+            "provenance": {
+                "path": "app/Repositories/BranchRepository.php",
+                "member": "App\\Models\\Branch::orderBy",
+                "lines": [
+                    1,
+                    37
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "assertion_id": "ac24b68478842",
+            "lever": "flagged",
+            "provenance": {
+                "path": "app/Repositories/BranchRepository.php",
+                "member": "Illuminate\\Database\\Eloquent\\Collection",
+                "lines": [
+                    1,
+                    37
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "assertion_id": "a599c6472e214",
+            "lever": "flagged",
+            "provenance": {
+                "path": "app/Repositories/CategoryRepository.php",
+                "member": "App\\Models\\Category::create",
+                "lines": [
+                    1,
+                    37
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "assertion_id": "a70ddf42957e7",
+            "lever": "flagged",
+            "provenance": {
+                "path": "app/Repositories/CategoryRepository.php",
+                "member": "App\\Models\\Category::findOrFail",
+                "lines": [
+                    1,
+                    37
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "assertion_id": "af28ce56d3722",
+            "lever": "flagged",
+            "provenance": {
+                "path": "app/Repositories/CategoryRepository.php",
+                "member": "App\\Models\\Category::orderBy",
+                "lines": [
+                    1,
+                    37
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "assertion_id": "a36f83e6a3872",
+            "lever": "flagged",
+            "provenance": {
+                "path": "app/Repositories/CategoryRepository.php",
+                "member": "Illuminate\\Database\\Eloquent\\Collection",
+                "lines": [
+                    1,
+                    37
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "assertion_id": "ab50e5fc4175d",
+            "lever": "flagged",
+            "provenance": {
+                "path": "app/Repositories/CateringPackageRepository.php",
+                "member": "App\\Models\\CateringPackage::create",
+                "lines": [
+                    1,
+                    51
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "assertion_id": "aa8ea8e9ebb83",
+            "lever": "flagged",
+            "provenance": {
+                "path": "app/Repositories/CateringPackageRepository.php",
+                "member": "App\\Models\\CateringPackage::findOrFail",
+                "lines": [
+                    1,
+                    51
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "assertion_id": "a4b3e3502eb32",
+            "lever": "flagged",
+            "provenance": {
+                "path": "app/Repositories/CateringPackageRepository.php",
+                "member": "App\\Models\\CateringPackage::with",
+                "lines": [
+                    1,
+                    51
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "assertion_id": "a94e4eb536042",
+            "lever": "flagged",
+            "provenance": {
+                "path": "app/Repositories/CateringPackageRepository.php",
+                "member": "Illuminate\\Database\\Eloquent\\Collection",
+                "lines": [
+                    1,
+                    51
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "assertion_id": "ad5421b92323e",
+            "lever": "flagged",
+            "provenance": {
+                "path": "app/Repositories/CateringPackageRepository.php",
+                "member": "Illuminate\\Support\\Facades\\DB::transaction",
+                "lines": [
+                    1,
+                    51
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "assertion_id": "adf19fbef5918",
+            "lever": "flagged",
+            "provenance": {
+                "path": "app/Repositories/DeliveryAppRepository.php",
+                "member": "App\\Models\\DeliveryApp::create",
+                "lines": [
+                    1,
+                    43
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "assertion_id": "a14debef2ab53",
+            "lever": "flagged",
+            "provenance": {
+                "path": "app/Repositories/DeliveryAppRepository.php",
+                "member": "App\\Models\\DeliveryApp::findOrFail",
+                "lines": [
+                    1,
+                    43
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "assertion_id": "ad2fc501868d0",
+            "lever": "flagged",
+            "provenance": {
+                "path": "app/Repositories/DeliveryAppRepository.php",
+                "member": "App\\Models\\DeliveryApp::orderBy",
+                "lines": [
+                    1,
+                    43
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "assertion_id": "adf87bf9f04cf",
+            "lever": "flagged",
+            "provenance": {
+                "path": "app/Repositories/DeliveryAppRepository.php",
+                "member": "Illuminate\\Database\\Eloquent\\Collection",
+                "lines": [
+                    1,
+                    43
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "assertion_id": "a68c0f3712728",
+            "lever": "flagged",
+            "provenance": {
+                "path": "app/Repositories/DishRepository.php",
+                "member": "App\\Models\\Dish::create",
+                "lines": [
+                    1,
+                    51
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "assertion_id": "a7ea905d236fa",
+            "lever": "flagged",
+            "provenance": {
+                "path": "app/Repositories/DishRepository.php",
+                "member": "App\\Models\\Dish::findOrFail",
+                "lines": [
+                    1,
+                    51
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "assertion_id": "a2664c3afcb0c",
+            "lever": "flagged",
+            "provenance": {
+                "path": "app/Repositories/DishRepository.php",
+                "member": "App\\Models\\Dish::with",
+                "lines": [
+                    1,
+                    51
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "assertion_id": "a8d7489360e45",
+            "lever": "flagged",
+            "provenance": {
+                "path": "app/Repositories/DishRepository.php",
+                "member": "Illuminate\\Pagination\\LengthAwarePaginator",
+                "lines": [
+                    1,
+                    51
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "assertion_id": "a0ad51353dbcc",
+            "lever": "flagged",
+            "provenance": {
+                "path": "app/Repositories/MediaItemRepository.php",
+                "member": "App\\Models\\MediaItem::create",
+                "lines": [
+                    1,
+                    40
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "assertion_id": "ab7c3ebbaa4f4",
+            "lever": "flagged",
+            "provenance": {
+                "path": "app/Repositories/MediaItemRepository.php",
+                "member": "App\\Models\\MediaItem::findOrFail",
+                "lines": [
+                    1,
+                    40
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "assertion_id": "a8524c49c2475",
+            "lever": "flagged",
+            "provenance": {
+                "path": "app/Repositories/MediaItemRepository.php",
+                "member": "Illuminate\\Support\\Collection",
+                "lines": [
+                    1,
+                    40
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "assertion_id": "a36cee827a0cf",
+            "lever": "flagged",
+            "provenance": {
+                "path": "app/Repositories/PageContentRepository.php",
+                "member": "App\\Models\\PageContent::findOrFail",
+                "lines": [
+                    1,
+                    43
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "assertion_id": "abc27bf44b36c",
+            "lever": "flagged",
+            "provenance": {
+                "path": "app/Repositories/PageContentRepository.php",
+                "member": "Illuminate\\Support\\Arr::only",
+                "lines": [
+                    1,
+                    43
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "assertion_id": "acfc2a73ee9dc",
+            "lever": "flagged",
+            "provenance": {
+                "path": "app/Repositories/PageContentRepository.php",
+                "member": "Illuminate\\Support\\Collection",
+                "lines": [
+                    1,
+                    43
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "assertion_id": "a2939451c4f08",
+            "lever": "flagged",
+            "provenance": {
+                "path": "app/Repositories/PageContentRepository.php",
+                "member": "Illuminate\\Support\\Facades\\DB::transaction",
+                "lines": [
+                    1,
+                    43
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "assertion_id": "ab58817b1e213",
+            "lever": "flagged",
+            "provenance": {
+                "path": "app/Repositories/QuoteRequestRepository.php",
+                "member": "App\\Models\\QuoteRequest::create",
+                "lines": [
+                    1,
+                    46
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "assertion_id": "a34deb0af9f4e",
+            "lever": "flagged",
+            "provenance": {
+                "path": "app/Repositories/QuoteRequestRepository.php",
+                "member": "App\\Models\\QuoteRequest::findOrFail",
+                "lines": [
+                    1,
+                    46
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "assertion_id": "acf1306264d92",
+            "lever": "flagged",
+            "provenance": {
+                "path": "app/Repositories/QuoteRequestRepository.php",
+                "member": "App\\Models\\QuoteRequest::orderByDesc",
+                "lines": [
+                    1,
+                    46
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "assertion_id": "a8823468a3f7a",
+            "lever": "flagged",
+            "provenance": {
+                "path": "app/Repositories/QuoteRequestRepository.php",
+                "member": "Illuminate\\Pagination\\LengthAwarePaginator",
+                "lines": [
+                    1,
+                    46
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "assertion_id": "a9a21c000713b",
+            "lever": "flagged",
+            "provenance": {
+                "path": "app/Repositories/SampleMenuRepository.php",
+                "member": "App\\Models\\SampleMenu::create",
+                "lines": [
+                    1,
+                    51
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "assertion_id": "af16180124768",
+            "lever": "flagged",
+            "provenance": {
+                "path": "app/Repositories/SampleMenuRepository.php",
+                "member": "App\\Models\\SampleMenu::findOrFail",
+                "lines": [
+                    1,
+                    51
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "assertion_id": "ac527a4b6e64f",
+            "lever": "flagged",
+            "provenance": {
+                "path": "app/Repositories/SampleMenuRepository.php",
+                "member": "App\\Models\\SampleMenu::with",
+                "lines": [
+                    1,
+                    51
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "assertion_id": "a22c60ee546a2",
+            "lever": "flagged",
+            "provenance": {
+                "path": "app/Repositories/SampleMenuRepository.php",
+                "member": "Illuminate\\Database\\Eloquent\\Collection",
+                "lines": [
+                    1,
+                    51
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "assertion_id": "af08c14749d86",
+            "lever": "flagged",
+            "provenance": {
+                "path": "app/Repositories/SampleMenuRepository.php",
+                "member": "Illuminate\\Support\\Facades\\DB::transaction",
+                "lines": [
+                    1,
+                    51
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "assertion_id": "abac802967acf",
+            "lever": "flagged",
+            "provenance": {
+                "path": "app/Repositories/SettingRepository.php",
+                "member": "App\\Models\\Setting::where",
+                "lines": [
+                    1,
+                    24
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "assertion_id": "a95bbf8da2589",
+            "lever": "flagged",
+            "provenance": {
+                "path": "app/Repositories/SettingRepository.php",
+                "member": "Illuminate\\Support\\Collection",
+                "lines": [
+                    1,
+                    24
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "assertion_id": "aa8a403090278",
+            "lever": "flagged",
+            "provenance": {
+                "path": "app/Repositories/SettingRepository.php",
+                "member": "Illuminate\\Support\\Facades\\DB::transaction",
+                "lines": [
+                    1,
+                    24
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "assertion_id": "a2db9239b8357",
+            "lever": "flagged",
+            "provenance": {
+                "path": "app/Repositories/TestimonialRepository.php",
+                "member": "App\\Models\\Testimonial::create",
+                "lines": [
+                    1,
+                    43
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "assertion_id": "a689755f08e64",
+            "lever": "flagged",
+            "provenance": {
+                "path": "app/Repositories/TestimonialRepository.php",
+                "member": "App\\Models\\Testimonial::findOrFail",
+                "lines": [
+                    1,
+                    43
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "assertion_id": "a3e24624a491e",
+            "lever": "flagged",
+            "provenance": {
+                "path": "app/Repositories/TestimonialRepository.php",
+                "member": "App\\Models\\Testimonial::orderBy",
+                "lines": [
+                    1,
+                    43
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "assertion_id": "a11577ecf6435",
+            "lever": "flagged",
+            "provenance": {
+                "path": "app/Repositories/TestimonialRepository.php",
+                "member": "Illuminate\\Database\\Eloquent\\Collection",
+                "lines": [
+                    1,
+                    43
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "assertion_id": "aeb543cfa25ab",
+            "lever": "flagged",
+            "provenance": {
+                "path": "app/Repositories/TimelineRepository.php",
+                "member": "App\\Models\\Timeline::create",
+                "lines": [
+                    1,
+                    37
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "assertion_id": "a5428f95138df",
+            "lever": "flagged",
+            "provenance": {
+                "path": "app/Repositories/TimelineRepository.php",
+                "member": "App\\Models\\Timeline::findOrFail",
+                "lines": [
+                    1,
+                    37
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "assertion_id": "a48608b7a5478",
+            "lever": "flagged",
+            "provenance": {
+                "path": "app/Repositories/TimelineRepository.php",
+                "member": "App\\Models\\Timeline::orderBy",
+                "lines": [
+                    1,
+                    37
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "assertion_id": "ac097955a27bd",
+            "lever": "flagged",
+            "provenance": {
+                "path": "app/Repositories/TimelineRepository.php",
+                "member": "Illuminate\\Database\\Eloquent\\Collection",
+                "lines": [
+                    1,
+                    37
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "assertion_id": "ae75a7da31c3b",
+            "lever": "flagged",
+            "provenance": {
+                "path": "app/Repositories/UserRepository.php",
+                "member": "App\\Models\\User::create",
+                "lines": [
+                    1,
+                    43
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "assertion_id": "ae99d50885ef1",
+            "lever": "flagged",
+            "provenance": {
+                "path": "app/Repositories/UserRepository.php",
+                "member": "App\\Models\\User::findOrFail",
+                "lines": [
+                    1,
+                    43
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "assertion_id": "a0fdaf1a3068f",
+            "lever": "flagged",
+            "provenance": {
+                "path": "app/Repositories/UserRepository.php",
+                "member": "App\\Models\\User::with",
+                "lines": [
+                    1,
+                    43
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "assertion_id": "a8e21ffecd8c0",
+            "lever": "flagged",
+            "provenance": {
+                "path": "app/Repositories/UserRepository.php",
+                "member": "Illuminate\\Pagination\\LengthAwarePaginator",
+                "lines": [
+                    1,
+                    43
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "assertion_id": "acdc3088b9c11",
+            "lever": "flagged",
+            "provenance": {
+                "path": "app/Repositories/UserRepository.php",
+                "member": "Illuminate\\Support\\Facades\\DB::transaction",
+                "lines": [
+                    1,
+                    43
+                ]
+            },
+            "payload": "ASSUMPTION: named reference could not be resolved on disk; contract unverified",
+            "tokens": 20
+        },
+        {
+            "assertion_id": "a80904c95cc38",
+            "lever": "flagged",
+            "provenance": {
+                "path": "app/Repositories/BranchRepository.php",
+                "lines": [
+                    1,
+                    37
+                ]
+            },
+            "payload": "ASSUMPTION: this code assumes a surrounding transaction; caller not checked",
+            "tokens": 19
+        },
+        {
+            "assertion_id": "ae49137bfadd0",
+            "lever": "flagged",
+            "provenance": {
+                "path": "app/Repositories/CategoryRepository.php",
+                "lines": [
+                    1,
+                    37
+                ]
+            },
+            "payload": "ASSUMPTION: this code assumes a surrounding transaction; caller not checked",
+            "tokens": 19
+        },
+        {
+            "assertion_id": "a517617535bd5",
+            "lever": "flagged",
+            "provenance": {
+                "path": "app/Repositories/CateringPackageRepository.php",
+                "lines": [
+                    1,
+                    51
+                ]
+            },
+            "payload": "ASSUMPTION: this code assumes a surrounding transaction; caller not checked",
+            "tokens": 19
+        },
+        {
+            "assertion_id": "ad00860346784",
+            "lever": "flagged",
+            "provenance": {
+                "path": "app/Repositories/DeliveryAppRepository.php",
+                "lines": [
+                    1,
+                    43
+                ]
+            },
+            "payload": "ASSUMPTION: this code assumes a surrounding transaction; caller not checked",
+            "tokens": 19
+        },
+        {
+            "assertion_id": "a93af9e6704d2",
+            "lever": "flagged",
+            "provenance": {
+                "path": "app/Repositories/DishRepository.php",
+                "lines": [
+                    1,
+                    51
+                ]
+            },
+            "payload": "ASSUMPTION: this code assumes a surrounding transaction; caller not checked",
+            "tokens": 19
+        },
+        {
+            "assertion_id": "a4116443a1b14",
+            "lever": "flagged",
+            "provenance": {
+                "path": "app/Repositories/MediaItemRepository.php",
+                "lines": [
+                    1,
+                    40
+                ]
+            },
+            "payload": "ASSUMPTION: this code assumes a surrounding transaction; caller not checked",
+            "tokens": 19
+        },
+        {
+            "assertion_id": "ac6898bb05163",
+            "lever": "flagged",
+            "provenance": {
+                "path": "app/Repositories/PageContentRepository.php",
+                "lines": [
+                    1,
+                    43
+                ]
+            },
+            "payload": "ASSUMPTION: this code assumes a surrounding transaction; caller not checked",
+            "tokens": 19
+        },
+        {
+            "assertion_id": "a3fc2fea9e0b4",
+            "lever": "flagged",
+            "provenance": {
+                "path": "app/Repositories/QuoteRequestRepository.php",
+                "lines": [
+                    1,
+                    46
+                ]
+            },
+            "payload": "ASSUMPTION: this code assumes a surrounding transaction; caller not checked",
+            "tokens": 19
+        },
+        {
+            "assertion_id": "a7cd76108e46e",
+            "lever": "flagged",
+            "provenance": {
+                "path": "app/Repositories/SampleMenuRepository.php",
+                "lines": [
+                    1,
+                    51
+                ]
+            },
+            "payload": "ASSUMPTION: this code assumes a surrounding transaction; caller not checked",
+            "tokens": 19
+        },
+        {
+            "assertion_id": "a80f49d1f4ed7",
+            "lever": "flagged",
+            "provenance": {
+                "path": "app/Repositories/TestimonialRepository.php",
+                "lines": [
+                    1,
+                    43
+                ]
+            },
+            "payload": "ASSUMPTION: this code assumes a surrounding transaction; caller not checked",
+            "tokens": 19
+        },
+        {
+            "assertion_id": "a9b1eb5692ae4",
+            "lever": "flagged",
+            "provenance": {
+                "path": "app/Repositories/TimelineRepository.php",
+                "lines": [
+                    1,
+                    37
+                ]
+            },
+            "payload": "ASSUMPTION: this code assumes a surrounding transaction; caller not checked",
+            "tokens": 19
+        },
+        {
+            "assertion_id": "aef307ba257b4",
+            "lever": "flagged",
+            "provenance": {
+                "path": "app/Repositories/UserRepository.php",
+                "lines": [
+                    1,
+                    43
+                ]
+            },
+            "payload": "ASSUMPTION: this code assumes a surrounding transaction; caller not checked",
+            "tokens": 19
+        },
+        {
+            "assertion_id": "aa07508f0131d",
+            "lever": "flagged",
+            "provenance": {
+                "path": "tests/Feature/RepositoriesTest.php",
+                "lines": [
+                    1,
+                    387
+                ]
+            },
+            "payload": "ASSUMPTION: this code assumes a surrounding transaction; caller not checked",
+            "tokens": 19
+        }
+    ],
+    "diagnostics": [],
+    "dropped": []
+}
