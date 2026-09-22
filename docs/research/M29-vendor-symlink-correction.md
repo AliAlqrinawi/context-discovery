@@ -303,3 +303,17 @@ none skipped, the two new tests included.
    fallback) and P10's flag-not-silence rule together, a refused symlink is indistinguishable from
    a bare checkout. Whether a `vendor/` present as a symlink deserves a diagnostic of its own is a
    question for the key-first gate, not for this correction.
+
+---
+
+## Erratum · 2026-09-24 · the classification is now a measurement
+
+**Source:** [M30](M30-first-scored-bundle.md) · backend ADR-B002. The text above is unaltered.
+
+§4's "every extra item is the same item" was a classification by payload and namespace. M30
+scores the same two D1 bundles against experiment-05's key, written 2026-09-05 and independent
+of this correction: the nineteen items are fourteen assertions matching OMIT rows **E5.5, E5.8,
+E5.9, E5.12 by exact subject**, all four rows vacuous with a readable `vendor/`, plus five
+`Route::*` assertions the key never wrote a row for (unkeyed). Assertion precision 8.0% → 18.2%,
+token-weighted item precision 29.5% → 43.1%. §6's heuristic estimates for M22 and M23 are not
+affected and remain estimates.
