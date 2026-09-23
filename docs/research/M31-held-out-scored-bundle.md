@@ -176,3 +176,16 @@ tests, 611 assertions; commits `9d0f767` (the key) and `b9fc126` (file import, `
 4. **A second held-out commit**, by a second author, with §5's two lessons in mind: list the bare
    class beside its members, and write a row for every symbol-absence claim a new `::class` entry
    could raise.
+
+---
+
+## Addendum · 2026-09-23 · the second held-out commit
+
+**Source:** [M32](M32-migrations-only-commit.md). The text above is unaltered.
+
+`407c110`, migrations only, scored the same way: with `vendor/` the bundle is empty at zero
+tokens and seven of nine rows are vacuous; without it, 42 spurious flags. The one review
+question in that diff - `data-state-after-behaviour-change` on an edited CREATE migration - is
+not raised. §5.2's `PersonalitySeeder` false positive did not recur on fourteen anonymous
+migration classes; the shapes differ, and it stays a one-off pending a look on its own shape.
+§4.1's E5.4/H.3 gap is not exercised there: the diff references no project class at all.
