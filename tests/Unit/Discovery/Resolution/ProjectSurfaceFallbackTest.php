@@ -116,6 +116,40 @@ final class ProjectSurfaceFallbackTest extends TestCase
         }
     }
 
+    // ---------------------------------------------------------------- the fourth condition
+
+    public function testTheOriginFileNeverOffersItsOwnSurface(): void
+    {
+        // ADR-A020 addendum (2026-09-24). The same unresolved member, once named from a
+        // collaborator and once from the class's own file. The first is the fallback's whole
+        // purpose; the second would hand back the changed file's own unchanged siblings.
+        $fromCollaborator = new Assertion(AssertionKind::NamedReference, 'App\Models\Package::undeclared', 'app/Consumer.php', $this->region(), 'claim');
+        $fromItself = new Assertion(AssertionKind::NamedReference, 'App\Models\Package::undeclared', 'app/Models/Package.php', $this->region(), 'claim');
+
+        self::assertNotSame([], $this->resolver()->unresolvedMemberSurface($fromCollaborator), 'a collaborator gets the surface');
+        self::assertSame([], $this->resolver()->unresolvedMemberSurface($fromItself), 'the origin file never does');
+    }
+
+    public function testTheExclusionIsThePathAndNotTheClassName(): void
+    {
+        // Path identity, so "no name is special-cased" holds: the same class named from a
+        // different file is unaffected, and a different class named from Package.php is too.
+        $otherClassFromPackage = new Assertion(AssertionKind::NamedReference, 'App\Services\Registry::undeclared', 'app/Models/Package.php', $this->region(), 'claim');
+
+        self::assertNotSame([], $this->resolver()->unresolvedMemberSurface($otherClassFromPackage), 'Registry is not the origin, so it is surfaced');
+    }
+
+    public function testABareReferenceToTheOriginFileFetchesNoSurfaceEither(): void
+    {
+        // The mirror on the bare-class route: a file importing its own name is the one way a
+        // surface could otherwise land on its origin today.
+        $fromCollaborator = new Assertion(AssertionKind::NamedReference, 'App\Models\Package', 'app/Consumer.php', $this->region(), 'claim');
+        $fromItself = new Assertion(AssertionKind::NamedReference, 'App\Models\Package', 'app/Models/Package.php', $this->region(), 'claim');
+
+        self::assertNotSame([], $this->resolver()->resolve($fromCollaborator));
+        self::assertSame([], $this->resolver()->resolve($fromItself));
+    }
+
     public function testADependencyClassIsNotConvertedIntoASurface(): void
     {
         // ADR-A012's whole point. A facade member is settled from its tag and a dependency member

@@ -180,7 +180,10 @@ final class NamedReferenceResolver implements AssertionResolver
      * - **nothing accounts for the member** in that class's own file: not a declaration, not a
      *   framework naming convention, not a framework declaration. Otherwise `Registry::create` —
      *   an ordinary project class that happens to declare a method Eloquent also has — gains a
-     *   surface where the declared member already *is* the minimal slice.
+     *   surface where the declared member already *is* the minimal slice;
+     * - the placed path is **not the assertion's origin file** (ADR-A020 addendum, 2026-09-24).
+     *   Otherwise a reference to the changed file's own class would fetch every unchanged sibling
+     *   of that file. Content-neutral on every recorded bundle; tested synthetically.
      *
      * No name is special-cased. `Registry::create` is excluded because its `create()` resolves,
      * never because `create` is Eloquent's; a class is included because the member did not
@@ -206,6 +209,16 @@ final class NamedReferenceResolver implements AssertionResolver
         $path = $this->locator->pathFor($class);
 
         if ($path === null || !$this->locator->isProjectSource($path)) {
+            return [];
+        }
+
+        // The fourth condition (ADR-A020 addendum): the placed path is not the file the assertion
+        // came from. `surface()` slices every member the file declares; on the origin file that is
+        // the changed file's own unchanged siblings, which the region never called and which the
+        // own-file move already fetches when it does (`same_file_reference`). A created file is
+        // filtered by ADR-A019 anyway; a modified one is not, and this is what keeps its rest out.
+        // Path identity, not a class name: nothing is special-cased on what it is called.
+        if ($path === $assertion->originPath) {
             return [];
         }
 
@@ -260,9 +273,15 @@ final class NamedReferenceResolver implements AssertionResolver
             return [];
         }
 
-        return $member === null
-            ? $this->surface($path, $text)
-            : $this->member($path, $text, $member);
+        if ($member === null) {
+            // A surface is a collaborator's, never the origin file's own: the only way a bare
+            // reference lands on the file it came from is a file importing its own name, and
+            // dumping that file's members back is the duplication ADR-A018/A019 exclude
+            // (ADR-A020 addendum, mirrored from the member fallback below).
+            return $path === $assertion->originPath ? [] : $this->surface($path, $text);
+        }
+
+        return $this->member($path, $text, $member);
     }
 
     /**
