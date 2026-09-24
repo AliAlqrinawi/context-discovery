@@ -7,6 +7,7 @@ namespace ContextDiscovery\Discovery\Flagging;
 use ContextDiscovery\Discovery\Lever\PremiseCatalogue;
 use ContextDiscovery\Domain\Assertion\Assertion;
 use ContextDiscovery\Domain\Assertion\AssertionKind;
+use ContextDiscovery\Domain\Source\AncestorDeclaration;
 use InvalidArgumentException;
 use LogicException;
 
@@ -37,11 +38,57 @@ final class AssumptionWriter
             => 'ASSUMPTION: callers of this signature could not be searched; scope unreadable',
         PremiseCatalogue::CallSitesTruncated->value
             => 'ASSUMPTION: additional call sites exist beyond the search bound; not all verified',
+        // A template, the one exception to "text and nothing else" (ADR-A028 §5, §7): every slot
+        // is a fact the ancestry walk read, so the rendered sentence is deterministic (P8) and
+        // bounded, which is what ADR-A009's ban on composed flags protects.
+        PremiseCatalogue::InheritedMemberDeclared->value
+            => 'ASSUMPTION: {member}() is not declared in {class}{parents}; it is declared in {kind} {declaring} at {path}:{line}{applier}; body not fetched, contract unverified',
     ];
 
     public function statementFor(Assertion $assertion): string
     {
         return $this->statementForPremise($this->premiseFor($assertion));
+    }
+
+    /**
+     * S1 (ADR-A028 §5): the `inherited-member-declared` template filled from the declaration the
+     * walk found. "Or in its parent(s)" appears only when a parent was actually walked and did
+     * not declare the member - the clause that corrects "it is on the parent" - and is never
+     * said of a file the walk did not open.
+     */
+    public function inheritedMemberStatement(AncestorDeclaration $declaration): string
+    {
+        $parents = $declaration->walkedParents === []
+            ? ''
+            : sprintf(
+                ' or in its parent%s %s',
+                count($declaration->walkedParents) === 1 ? '' : 's',
+                implode(', ', $declaration->walkedParents),
+            );
+
+        $applier = '';
+
+        if ($declaration->viaTrait) {
+            $lastParent = $declaration->walkedParents === [] ? null : $declaration->walkedParents[count($declaration->walkedParents) - 1];
+            $applier = match (true) {
+                $declaration->appliedBy === $declaration->callingClass => ', used by the class itself',
+                $declaration->appliedBy === $lastParent => ', used by that parent',
+                default => ', used by ' . $declaration->appliedBy,
+            };
+        }
+
+        $segments = explode('\\', $declaration->callingClass);
+
+        return strtr(self::STATEMENTS[PremiseCatalogue::InheritedMemberDeclared->value], [
+            '{member}' => $declaration->member,
+            '{class}' => (string) end($segments),
+            '{parents}' => $parents,
+            '{kind}' => $declaration->viaTrait ? 'trait' : 'parent',
+            '{declaring}' => $declaration->declaringClass,
+            '{path}' => $declaration->path,
+            '{line}' => (string) $declaration->line,
+            '{applier}' => $applier,
+        ]);
     }
 
     /**

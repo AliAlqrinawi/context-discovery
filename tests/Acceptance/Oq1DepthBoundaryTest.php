@@ -243,10 +243,18 @@ final class Oq1DepthBoundaryTest extends TestCase
         // Comments are stripped first: `NamedReferenceResolver`'s docblock says there is "no
         // worklist here that could hold a pending reference", and a check fooled by prose
         // describing the absence of a thing would be worthless.
+        //
+        // `AncestryResolver` is the one file allowed the word `visited`: ADR-A028 §6 prescribes a
+        // visited-set for its D2 walk by that name. What it may hold is bounded by
+        // `testTheD2WalkHoldsTypeNamesNotReferences` below, which is stricter than this net.
         foreach (['Discovery/Resolution', 'Pipeline'] as $directory) {
             foreach ((array) glob($root . '/' . $directory . '/*.php') as $path) {
+                $words = basename((string) $path) === 'AncestryResolver.php'
+                    ? 'worklist|pending|queue|frontier|toVisit'
+                    : 'worklist|pending|queue|frontier|visited|toVisit';
+
                 self::assertDoesNotMatchRegularExpression(
-                    '/\b(worklist|pending|queue|frontier|visited|toVisit)\b/i',
+                    '/\b(' . $words . ')\b/i',
                     $this->codeWithoutComments((string) file_get_contents((string) $path)),
                     basename((string) $path)
                         . ': no worklist may exist — depth > 1 must stay unreachable, not merely unconfigured'
@@ -314,8 +322,68 @@ final class Oq1DepthBoundaryTest extends TestCase
         }
 
         // And nothing may reach the repository for a path derived from the file's own contents.
+        // The ancestry walk that ADR-A028 admits lives in `AncestryResolver`, not here: this
+        // resolver still fetches only from the located path, and what the walk returns is a
+        // citation it renders, never a path it reads.
         self::assertStringNotContainsString('extends', $this->codeWithoutComments($source), 'no ancestry is read');
         self::assertStringNotContainsString('@mixin', $this->codeWithoutComments($source), 'no annotation is followed');
+    }
+
+    /**
+     * **D2, relaxed for verification only** (ADR-A010 D2, ADR-A028 §6, ADR-A029 §5). The walk
+     * through `extends` / `use <Trait>` reads project files beyond the changed one, and what it
+     * may hold and produce is bounded here, more tightly than the lexical net in
+     * `testD1HoldsStructurally`:
+     *
+     * - its visited-set is keyed by **type names** the language's own rules resolved, never by a
+     *   reference — there is nothing in it to hand back to extraction;
+     * - it constructs no `Assertion`, so D1 is untouched by construction, not by discipline;
+     * - every path it opens came from the class locator (or is the origin file itself), and every
+     *   located path is gated by `isProjectSource` before it is read — `vendor/` stays shut;
+     * - of a member slice it finds it keeps the **line number** and nothing else: the body it
+     *   cites never enters the bundle.
+     */
+    public function testTheD2WalkHoldsTypeNamesNotReferences(): void
+    {
+        $source = $this->codeWithoutComments((string) file_get_contents(
+            dirname(__DIR__, 2) . '/src/Discovery/Resolution/AncestryResolver.php'
+        ));
+
+        self::assertDoesNotMatchRegularExpression('/\bAssertion\b/', $source, 'the walk constructs no assertion');
+        self::assertStringNotContainsString('->extract(', $source, 'the walk never re-enters extraction');
+
+        preg_match_all('/\$visited\[([^\]]+)\]\s*=/', $source, $writes);
+
+        self::assertNotSame([], $writes[1], 'the visited-set is written');
+        self::assertSame(
+            ['$parent', '$trait'],
+            array_values(array_unique($writes[1])),
+            'the visited-set holds resolved type names only — a parent or a trait, never a reference'
+        );
+
+        preg_match_all('/\$this->source->text\(([^)]+)\)/', $source, $reads);
+
+        self::assertSame(
+            ['$originPath', '$path'],
+            array_values(array_unique($reads[1])),
+            'every read is of the origin file or of a path the locator placed'
+        );
+
+        preg_match_all('/\$path\s*=(?!=)\s*(.+?);/', $source, $assignments);
+
+        foreach ($assignments[1] as $expression) {
+            self::assertStringContainsString('$this->locator->pathFor(', $expression, '$path comes only from the class locator');
+        }
+
+        self::assertSame(
+            substr_count($source, '$this->source->text($path)'),
+            substr_count($source, '!$this->locator->isProjectSource($path)'),
+            'every located path is gated as project source before it is read: no dependency file is opened'
+        );
+
+        preg_match_all('/\$slice->(\w+)/', $source, $members);
+
+        self::assertSame(['firstLine'], array_values(array_unique($members[1])), 'of a found slice, only its line is kept');
     }
 
     // ---------------------------------------------------------------- providers and helpers

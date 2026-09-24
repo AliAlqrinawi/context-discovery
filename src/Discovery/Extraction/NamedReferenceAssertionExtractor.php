@@ -13,7 +13,7 @@ use ContextDiscovery\Ports\MemberSlicer;
 /**
  * Cross-file references the region names — a model, a client method, an enum.
  *
- * R2's recall is defined by a closed list of three forms (01-architecture.md §3.3), each earned by
+ * R2's recall is defined by a closed list of four forms (01-architecture.md §3.3), each earned by
  * a finding. Any other form produces **no** assertion: no inference, no guessing (ADR-A003). The
  * list is deliberately short, and widening it is an architecture change, not a bug fix.
  *
@@ -22,11 +22,16 @@ use ContextDiscovery\Ports\MemberSlicer;
  * | `Name::member`             | `PlaidItemStatus::REVOKED`           | Exp 4     |
  * | `$this->prop->method(`     | `$this->plaidClient->createLinkToken(` | Exp 4   |
  * | class name in `new`/type/static-call position | `PlaidAccount`     | Exp 1     |
+ * | `$this->method(` to a member the file does not declare | `$this->success(` | E5.4, H.3; ADR-A029 |
  *
- * Every form resolves **through the file's own `use` block**. A name the block does not import is
- * not a cross-file reference at all — it is the absence case, and belongs to
- * `OwnFileAssertionExtractor`. So do same-file siblings (`$this->method(`): research context type
- * 1, not type 2. The two extractors partition the same scan and never both fire on one reference.
+ * The first three resolve **through the file's own `use` block**. A name the block does not
+ * import is not a cross-file reference at all — it is the absence case, and belongs to
+ * `OwnFileAssertionExtractor`. So does a same-file sibling the file **declares** (`$this->method(`
+ * with a declaration in this file): research context type 1, not type 2. The fourth form is the
+ * complement — the same call to a member this file does **not** declare, whose declaration is
+ * therefore in another file. Its subject is the **calling class**, never the parent: the region
+ * names `$this`, and the parent is a fact resolution reads (ADR-A029 §2). The two extractors
+ * partition the same scan and never both fire on one reference.
  *
  * Depth one: this reads the changed file only. The resolved file's own references are never read
  * (P3, P4), and there is no worklist here that could hold one.
@@ -59,24 +64,28 @@ final class NamedReferenceAssertionExtractor implements RegionAssertionExtractor
         }
 
         $imports = $this->imports($fileText);
-
-        if ($imports === []) {
-            return [];
-        }
-
         $tokens = $this->tokenize(implode("\n", $region->addedLines));
         $subjects = [];
+        $inherited = [];
 
-        foreach ($this->memberAccesses($tokens, $imports) as $subject) {
+        // Form 4 needs no import: a class with no `use` block can still call an inherited member.
+        foreach ($this->inheritedCalls($tokens, $fileText) as $subject) {
             $subjects[] = $subject;
+            $inherited[$subject] = true;
         }
 
-        foreach ($this->propertyCalls($tokens, $imports, $fileText) as $subject) {
-            $subjects[] = $subject;
-        }
+        if ($imports !== []) {
+            foreach ($this->memberAccesses($tokens, $imports) as $subject) {
+                $subjects[] = $subject;
+            }
 
-        foreach ($this->bareClassReferences($tokens, $imports) as $subject) {
-            $subjects[] = $subject;
+            foreach ($this->propertyCalls($tokens, $imports, $fileText) as $subject) {
+                $subjects[] = $subject;
+            }
+
+            foreach ($this->bareClassReferences($tokens, $imports) as $subject) {
+                $subjects[] = $subject;
+            }
         }
 
         $assertions = [];
@@ -88,13 +97,118 @@ final class NamedReferenceAssertionExtractor implements RegionAssertionExtractor
                 $file->path,
                 $region,
                 sprintf(
-                    'the region depends on %s, whose contract is defined in another file',
+                    isset($inherited[$subject])
+                        ? 'the region calls %s, which this file does not declare; its contract is defined in another file'
+                        : 'the region depends on %s, whose contract is defined in another file',
                     $subject,
                 ),
             );
         }
 
         return $assertions;
+    }
+
+    /**
+     * Form 4 — `$this->method(` to a member the file does not declare (ADR-A029 §2).
+     *
+     * The same `$this` `->` name `(` scan the own-file move runs; the complement of its declared
+     * case. The subject is the calling class's fully-qualified name plus the member — namespace
+     * and class name are single-file facts. A file that declares no named type (an anonymous
+     * class, a plain script) has no subject to give and yields nothing, as does a property read,
+     * a dynamic call, and `parent::`/`self::`/`static::`, which are not this form.
+     *
+     * @param list<array{id:int|null,text:string}> $tokens
+     *
+     * @return list<string>
+     */
+    private function inheritedCalls(array $tokens, string $fileText): array
+    {
+        $calls = [];
+        $total = count($tokens);
+
+        for ($i = 0; $i < $total - 3; $i++) {
+            if ($tokens[$i]['id'] !== T_VARIABLE || $tokens[$i]['text'] !== '$this') {
+                continue;
+            }
+
+            $arrow = $this->nextSignificant($tokens, $i + 1);
+
+            if ($arrow === null || $tokens[$arrow]['id'] !== T_OBJECT_OPERATOR) {
+                continue;
+            }
+
+            $name = $this->nextSignificant($tokens, $arrow + 1);
+
+            if ($name === null || $tokens[$name]['id'] !== T_STRING) {
+                continue;
+            }
+
+            $open = $this->nextSignificant($tokens, $name + 1);
+
+            if ($open === null || $tokens[$open]['id'] !== null || $tokens[$open]['text'] !== '(') {
+                continue; // a property read, not a call.
+            }
+
+            if (!in_array($tokens[$name]['text'], $calls, true)) {
+                $calls[] = $tokens[$name]['text'];
+            }
+        }
+
+        if ($calls === []) {
+            return [];
+        }
+
+        $callingClass = $this->callingClassOf($fileText);
+
+        if ($callingClass === null) {
+            return [];
+        }
+
+        $declared = $this->slicer->memberNames($fileText);
+        $subjects = [];
+
+        foreach ($calls as $member) {
+            if (!in_array($member, $declared, true)) {
+                $subjects[] = $callingClass . '::' . $member;
+            }
+        }
+
+        return $subjects;
+    }
+
+    /**
+     * The fully-qualified name of the first named class, trait or enum the file declares, from
+     * its namespace statement and the declaration keyword — or null when there is none.
+     */
+    private function callingClassOf(string $fileText): ?string
+    {
+        $tokens = $this->tokenize($fileText);
+        $namespace = '';
+        $total = count($tokens);
+
+        for ($i = 0; $i < $total; $i++) {
+            if ($tokens[$i]['id'] === T_NAMESPACE) {
+                $next = $this->nextSignificant($tokens, $i + 1);
+
+                if ($next !== null && in_array($tokens[$next]['id'], [T_STRING, T_NAME_QUALIFIED], true)) {
+                    $namespace = $tokens[$next]['text'];
+                }
+
+                continue;
+            }
+
+            if (in_array($tokens[$i]['id'], [T_CLASS, T_TRAIT, T_ENUM], true)) {
+                $next = $this->nextSignificant($tokens, $i + 1);
+
+                if ($next !== null && $tokens[$next]['id'] === T_STRING) {
+                    return ($namespace === '' ? '' : $namespace . '\\') . $tokens[$next]['text'];
+                }
+
+                // `new class` or `Foo::class`: no name here; keep looking for a named type.
+            }
+        }
+
+        return null;
     }
 
     /**

@@ -33,7 +33,7 @@ final class PolicyVersionGuardTest extends TestCase
         'src/Discovery/Lever/PremiseCatalogue.php',
     ];
 
-    private const RECORDED_HASH = '8c43e9cd88c2';
+    private const RECORDED_HASH = '30921b9b9e02';
 
     public function testThePolicyVersionMatchesTheRulesItDescribes(): void
     {

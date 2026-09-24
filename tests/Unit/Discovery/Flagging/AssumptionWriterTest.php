@@ -9,6 +9,7 @@ use ContextDiscovery\Discovery\Lever\PremiseCatalogue;
 use ContextDiscovery\Domain\Assertion\Assertion;
 use ContextDiscovery\Domain\Assertion\AssertionKind;
 use ContextDiscovery\Domain\Diff\ChangedRegion;
+use ContextDiscovery\Domain\Source\AncestorDeclaration;
 use InvalidArgumentException;
 use LogicException;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -137,6 +138,43 @@ final class AssumptionWriterTest extends TestCase
         yield 'a same-file sibling' => [AssertionKind::SameFileReference];
     }
 
+    /**
+     * ADR-A028 §5 — S1 is a template filled only from facts the walk read. The "not in its parent"
+     * clause appears only when a parent was actually walked, so the sentence never asserts anything
+     * about a file that was not opened.
+     */
+    public function testTheInheritedMemberStatementIsRenderedFromTheWalkAlone(): void
+    {
+        $oneHop = new AncestorDeclaration(
+            'App\Http\Resources\PersonalityResource', 'resolveLocale',
+            'App\Http\Resources\Concerns\ResolvesLocale', 'app/Http/Resources/Concerns/ResolvesLocale.php', 7,
+            true, 'App\Http\Resources\PersonalityResource', [],
+        );
+
+        self::assertSame(
+            'ASSUMPTION: resolveLocale() is not declared in PersonalityResource; it is declared in trait App\Http\Resources\Concerns\ResolvesLocale at app/Http/Resources/Concerns/ResolvesLocale.php:7, used by the class itself; body not fetched, contract unverified',
+            $this->writer->inheritedMemberStatement($oneHop)
+        );
+
+        $twoHops = new AncestorDeclaration(
+            'App\Http\Controllers\MenuPdfController', 'success',
+            'App\Traits\ApiResponse', 'app/Traits/ApiResponse.php', 9,
+            true, 'App\Http\Controllers\Controller', ['App\Http\Controllers\Controller'],
+        );
+
+        self::assertSame(
+            'ASSUMPTION: success() is not declared in MenuPdfController or in its parent App\Http\Controllers\Controller; it is declared in trait App\Traits\ApiResponse at app/Traits/ApiResponse.php:9, used by that parent; body not fetched, contract unverified',
+            $this->writer->inheritedMemberStatement($twoHops)
+        );
+
+        $direct = new AncestorDeclaration('App\OneLevel', 'run', 'App\Support\Direct', 'app/Support/Direct.php', 12, false, null, []);
+
+        self::assertSame(
+            'ASSUMPTION: run() is not declared in OneLevel; it is declared in parent App\Support\Direct at app/Support/Direct.php:12; body not fetched, contract unverified',
+            $this->writer->inheritedMemberStatement($direct)
+        );
+    }
+
     public function testTruncationIsNamedByTheCallerRatherThanInferred(): void
     {
         // A search that hit its bound still returns slices, so the assertion alone cannot say it
@@ -147,12 +185,13 @@ final class AssumptionWriterTest extends TestCase
         );
     }
 
-    public function testTheCatalogueIsClosedAtSevenPremises(): void
+    public function testTheCatalogueIsClosedAtEightPremises(): void
     {
         // Four earned by findings, three P10 failure premises — one per lookup that can fail
-        // (freeze review 06). Adding one requires an experiment, a catalogue entry and an
+        // (freeze review 06) — and one earned by E5.4 / H.3 and the reviewer pre-check
+        // (ADR-A027 §6, ADR-A028). Adding one requires an experiment, a catalogue entry and an
         // ADR-A009 edit (ADR-A003).
-        self::assertCount(7, PremiseCatalogue::cases());
+        self::assertCount(8, PremiseCatalogue::cases());
 
         self::assertSame(
             'ASSUMPTION: callers of this signature could not be searched; scope unreadable',

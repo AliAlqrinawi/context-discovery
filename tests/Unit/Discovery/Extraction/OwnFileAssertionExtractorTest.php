@@ -79,7 +79,9 @@ final class OwnFileAssertionExtractorTest extends TestCase
 
     public function testACallToSomethingThatIsNotAMemberOfThisFileYieldsNothing(): void
     {
-        // Inherited or magic; resolving it would need the parent, which is depth two (P3).
+        // Inherited or magic. This extractor stays silent; since ADR-A029 the call is §3.3's
+        // fourth form and belongs to `NamedReferenceAssertionExtractor`, whose subject is the
+        // calling class (see `testFormFourAnUndeclaredThisCallNamesTheCallingClass` there).
         self::assertSame([], $this->extract(['        $this->inheritedFromParent();']));
     }
 

@@ -23,6 +23,8 @@ use ContextDiscovery\Domain\Bundle\Diagnostic;
 use ContextDiscovery\Domain\Diff\ChangedFile;
 use ContextDiscovery\Domain\Bundle\RunMetadata;
 use ContextDiscovery\Domain\Bundle\Lever;
+use ContextDiscovery\Domain\Source\AncestorDeclaration;
+use ContextDiscovery\Domain\Source\AncestryBoundary;
 use ContextDiscovery\Ports\ClassLocator;
 use ContextDiscovery\Ports\SourceRepository;
 use LogicException;
@@ -200,6 +202,48 @@ final class DiscoverContext
                 $diagnostic($this->negativeFor($assertion));
 
                 continue;
+            }
+
+            // 5c-0 · An inherited member (the fourth form, ADR-A029): the calling class does not
+            //        declare it, so the walk says where it is declared - or where it stopped
+            //        (ADR-A028, ADR-A010 D2 verify-only). Found in a project ancestor: S1, a flag
+            //        whose sentence is true, and no surface - the origin file is never one
+            //        (ADR-A020 addendum). Stopped at a boundary: S2, a settled negative on stderr
+            //        and no item - the shape 5 cost that cannot be told apart at extraction is
+            //        kept off the bundle here (ADR-A029 §4). Neither: the existing flag below is
+            //        exactly true, and a typo stays visible (P10).
+            if ($slices === []) {
+                $inherited = $this->namedReferenceResolver->inheritedDeclarationFor($assertion);
+
+                if ($inherited instanceof AncestorDeclaration) {
+                    $diagnostic(sprintf(
+                        'inherited member: %s declared at %s:%d in %s %s; body not fetched',
+                        $assertion->subject,
+                        $inherited->path,
+                        $inherited->line,
+                        $inherited->viaTrait ? 'trait' : 'parent',
+                        $inherited->declaringClass,
+                    ));
+
+                    $resolved[] = ResolvedAssertion::flagged(
+                        $assertion,
+                        $this->assumptionWriter->inheritedMemberStatement($inherited),
+                    );
+
+                    continue;
+                }
+
+                if ($inherited instanceof AncestryBoundary) {
+                    $diagnostic(sprintf(
+                        'inherited member unresolved: %s; walked %s; %s%s',
+                        $assertion->subject,
+                        $inherited->walked === [] ? 'nothing' : implode(', ', $inherited->walked),
+                        $inherited->reason,
+                        $inherited->at === null ? '' : ' (' . $inherited->at . ')',
+                    ));
+
+                    continue;
+                }
             }
 
             // 5c · A lookup that could not run is a *failure*, and failure flags (P10). Never a

@@ -6,6 +6,8 @@ namespace ContextDiscovery\Discovery\Resolution;
 
 use ContextDiscovery\Domain\Assertion\Assertion;
 use ContextDiscovery\Domain\Assertion\AssertionKind;
+use ContextDiscovery\Domain\Source\AncestorDeclaration;
+use ContextDiscovery\Domain\Source\AncestryBoundary;
 use ContextDiscovery\Domain\Source\SourceSlice;
 use ContextDiscovery\Discovery\Framework\FrameworkKnowledge;
 use ContextDiscovery\Ports\ClassLocator;
@@ -36,12 +38,53 @@ use ContextDiscovery\Ports\SourceRepository;
  */
 final class NamedReferenceResolver implements AssertionResolver
 {
+    private readonly AncestryResolver $ancestry;
+
+    /**
+     * The ancestry walk is built from the same locator, source and slicer when none is given:
+     * it reads nothing the resolver does not already read, and every existing construction site
+     * - tests and the experiment-15 simulation among them - stays as written.
+     */
     public function __construct(
         private readonly ClassLocator $locator,
         private readonly SourceRepository $source,
         private readonly MemberSlicer $slicer,
         private readonly FrameworkKnowledge $framework,
+        ?AncestryResolver $ancestry = null,
     ) {
+        $this->ancestry = $ancestry ?? new AncestryResolver($locator, $source, $slicer);
+    }
+
+    /**
+     * Where a member the calling class does not declare is declared, or where the walk stopped -
+     * for the fourth form only (ADR-A029 §2): a `Fqcn::member` subject whose class the locator
+     * places at the assertion's own origin file. That identity is what marks a `$this->member(`
+     * reference, so no kind and no flag on the assertion is needed. Every other named reference
+     * - `Setting::updateOrCreate`, `PersonalityResource::collection` - is outside this walk, and
+     * keeps the resolution ADR-A010 fixed for it.
+     *
+     * Null: not the fourth form, or the ancestry ends inside project code without the member,
+     * or there is none - in which case the existing `unresolved-reference` statement is true.
+     */
+    public function inheritedDeclarationFor(Assertion $assertion): AncestorDeclaration|AncestryBoundary|null
+    {
+        if ($assertion->kind !== AssertionKind::NamedReference) {
+            return null;
+        }
+
+        [$class, $member] = self::split($assertion->subject);
+
+        if ($member === null) {
+            return null;
+        }
+
+        $path = $this->locator->pathFor($class);
+
+        if ($path === null || $path !== $assertion->originPath || !$this->locator->isProjectSource($path)) {
+            return null;
+        }
+
+        return $this->ancestry->declarationOf($class, $path, $member);
     }
 
     /**

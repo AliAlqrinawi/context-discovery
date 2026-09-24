@@ -357,7 +357,7 @@ final class ArchitectureBoundaryTest extends TestCase
     public static function closedEnumerations(): iterable
     {
         yield 'six assertion kinds, one per move' => ['src/Domain/Assertion/AssertionKind.php', 6];
-        yield 'seven premises' => ['src/Discovery/Lever/PremiseCatalogue.php', 7];
+        yield 'eight premises' => ['src/Discovery/Lever/PremiseCatalogue.php', 8];
         yield 'two levers' => ['src/Domain/Bundle/Lever.php', 2];
         yield 'three exit codes' => ['src/Cli/ExitCode.php', 3];
     }

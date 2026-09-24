@@ -150,10 +150,14 @@ final class BundleSchemaConformanceTest extends TestCase
         self::assertSame([], $this->violations($golden, $this->schema()));
 
         // The recorded shape of the M26 reproduction, so a change to it is a visible diff.
+        // Regenerated under POLICY 3 (ADR-A029 §7): the M26 diff's `$this->success(` is the
+        // fourth form, so a third assertion and its S1 flag (62 tokens) joined the 562-token,
+        // 22-item bundle recorded under POLICY 2.
         self::assertSame(2, $golden['bundle_version']);
-        self::assertSame(562, $golden['used_tokens']);
-        self::assertCount(22, $golden['items']);
-        self::assertCount(2, $golden['assertions']);
+        self::assertSame('3', $golden['run']['policy_version']);
+        self::assertSame(624, $golden['used_tokens']);
+        self::assertCount(23, $golden['items']);
+        self::assertCount(3, $golden['assertions']);
         self::assertCount(1, $golden['diagnostics']);
         self::assertSame('call_sites_truncated', $golden['diagnostics'][0]['type']);
     }

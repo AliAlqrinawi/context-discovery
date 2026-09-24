@@ -15,8 +15,9 @@ namespace ContextDiscovery\Discovery\Lever;
  * order. If Experiment 5 raises a premise this list lacks, the bundle shows the gap rather than
  * papering over it.
  *
- * The first four are earned by findings; the last three follow from P10 and are recorded as
- * architectural assumption AA5.
+ * The first four are earned by findings; the next three follow from P10 and are recorded as
+ * architectural assumption AA5; the eighth is earned by E5.4 and H.3 and by seven reviewers
+ * (ADR-A027 §6, ADR-A028).
  *
  * **One P10 premise per lookup that can fail, never a shared one** (freeze review 06). A fixed
  * statement exists so a flag is exactly true; stretching one across two failure modes restores the
@@ -54,4 +55,15 @@ enum PremiseCatalogue: string
 
     /** P10, ADR-A006 — the caller search is bounded, and the bound is visible. */
     case CallSitesTruncated = 'call-sites-truncated';
+
+    /**
+     * ADR-A028 — a member the calling class does not declare is declared by a project ancestor,
+     * found by walking `extends` and `use <Trait>` to a fixed point (ADR-A010 D2, verify-only);
+     * its body is not fetched (ADR-A010 §4) and its contract is therefore unverified. The true
+     * sibling of `unresolved-reference`: same premise, a true location clause.
+     *
+     * The statement is a template filled only from facts the walk read — file, line, the types
+     * walked — and is rendered by `AssumptionWriter::inheritedMemberStatement()`.
+     */
+    case InheritedMemberDeclared = 'inherited-member-declared';
 }

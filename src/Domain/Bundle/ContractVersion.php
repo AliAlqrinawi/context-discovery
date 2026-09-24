@@ -36,6 +36,9 @@ final class ContractVersion
      * The decision rules: `LeverPolicy`, `ItemPriority`, `PremiseCatalogue`. Two runs sharing this
      * value banded, levered and flagged by the same rules, so a scored comparison across them is
      * comparing discovery rather than policy drift.
+     *
+     * `'3'`: the premise catalogue gained `inherited-member-declared` (ADR-A028, ADR-A029). Runs
+     * at `'2'` and `'3'` differ in what an undeclared `$this->m(` yields and are compared knowingly.
      */
-    public const POLICY = '2';
+    public const POLICY = '3';
 }

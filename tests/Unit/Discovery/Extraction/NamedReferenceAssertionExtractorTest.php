@@ -110,6 +110,92 @@ final class NamedReferenceAssertionExtractorTest extends TestCase
         self::assertStringContainsString('defined in another file', $assertions[0]->claim);
     }
 
+    // ------------------------------------------------------------ form four: an undeclared $this->m(
+
+    /**
+     * §3.3's fourth row (ADR-A029): `$this->m(` to a member the changed file does **not** declare.
+     * The subject is the *calling* class — the file's own FQCN — because that is the only fact the
+     * changed file states; where the member lives is the resolver's question (ADR-A028).
+     */
+    public function testFormFourAnUndeclaredThisCallNamesTheCallingClass(): void
+    {
+        $assertions = $this->extract(['        return $this->success($account);']);
+
+        self::assertCount(1, $assertions);
+        self::assertSame(AssertionKind::NamedReference, $assertions[0]->kind);
+        self::assertSame('App\Services\Plaid\PlaidAccountService::success', $assertions[0]->subject);
+        self::assertSame('app/Services/Plaid/PlaidAccountService.php', $assertions[0]->originPath);
+        self::assertStringContainsString('does not declare', $assertions[0]->claim);
+    }
+
+    public function testFormFourIsNotGatedByTheImportBlock(): void
+    {
+        // Forms 1–3 need an import to name a class; form 4 names the file's own class, so a file
+        // with no `use` block still yields it (ADR-A029 §8 narrows the no-imports test to 1–3).
+        $region = new ChangedRegion(20, 21, ['        return $this->success($account);'], []);
+
+        $assertions = $this->extractor->forRegion(
+            $this->file(),
+            $region,
+            "<?php\n\nnamespace App\\Services\\Plaid;\n\nclass Bare\n{\n}\n"
+        );
+
+        self::assertCount(1, $assertions);
+        self::assertSame('App\Services\Plaid\Bare::success', $assertions[0]->subject);
+    }
+
+    public function testFormFourInAGlobalNamespaceClassIsTheBareName(): void
+    {
+        $region = new ChangedRegion(20, 21, ['        return $this->success($account);'], []);
+
+        $assertions = $this->extractor->forRegion($this->file(), $region, "<?php\n\nclass Bare\n{\n}\n");
+
+        self::assertCount(1, $assertions);
+        self::assertSame('Bare::success', $assertions[0]->subject);
+    }
+
+    public function testACallOnATypedPropertyIsFormTwoNotFour(): void
+    {
+        // `$this->prop->m(` names the property's class; the calling class is not the subject.
+        self::assertSame(['App\\Clients\\PlaidClient::success'], $this->subjects(['        $this->plaidClient->success();']));
+    }
+
+    public function testFormFourOnceForRepeatedCallsInOneRegion(): void
+    {
+        self::assertCount(1, $this->extract([
+            '        $this->success($a);',
+            '        $this->success($b);',
+        ]));
+    }
+
+    #[DataProvider('thisCallsThatAreNotFormFour')]
+    public function testFormFourYieldsNothingFor(string $line, string $fileText = ''): void
+    {
+        $region = new ChangedRegion(20, 21, [$line], []);
+
+        self::assertSame([], $this->extractor->forRegion($this->file(), $region, $fileText === '' ? $this->source() : $fileText));
+    }
+
+    /**
+     * @return iterable<string, array{0: string, 1?: string}>
+     */
+    public static function thisCallsThatAreNotFormFour(): iterable
+    {
+        // The declared sibling is the own-file move's (form four is *undeclared* only).
+        yield 'a declared sibling' => ['        $this->upsertFromPlaid($item, $accounts);'];
+        yield 'a property read' => ['        $x = $this->success;'];
+        yield 'a dynamic call' => ['        $this->$method($item);'];
+        // Shape 6 stays out (ADR-A029 §4): the keyword forms name no class the file states.
+        yield 'parent::' => ['        parent::success($account);'];
+        yield 'self::' => ['        self::success($account);'];
+        yield 'static::' => ['        static::success($account);'];
+        // An anonymous class has no FQCN to be the subject.
+        yield 'inside an anonymous class' => [
+            '        return $this->success($account);',
+            "<?php\n\nnamespace App\\Services\\Plaid;\n\n\$x = new class {\n};\n",
+        ];
+    }
+
     // ------------------------------------------------------------ everything else yields nothing
 
     #[DataProvider('formsOutsideTheClosedList')]
@@ -145,8 +231,11 @@ final class NamedReferenceAssertionExtractorTest extends TestCase
         self::assertSame([], $this->extractor->forRegion($this->file(), $region, $this->source()));
     }
 
-    public function testAFileWithNoImportsYieldsNothing(): void
+    public function testAFileWithNoImportsYieldsNothingForFormsOneToThree(): void
     {
+        // Narrowed under ADR-A029 §8: forms 1–3 name a class through the import block, so no
+        // imports means no assertion. Form 4 is not gated here — see
+        // `testFormFourIsNotGatedByTheImportBlock`.
         $region = new ChangedRegion(20, 21, ['        $account = new PlaidAccount();'], []);
 
         self::assertSame(

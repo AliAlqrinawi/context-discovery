@@ -7,7 +7,7 @@ can be re-run from this directory alone.
 | File | What it is |
 |---|---|
 | `m26.diff` | The input: the M26 reproduction diff — `BranchRepository::getAll` changing `get()` to `first()`, plus the two files changed alongside it in the same pull request. Three hunks. Taken from a real Laravel 12 repository (`abouelsid-backend`). |
-| `m26-bundle.v2.json` | The output, as `bundle_version` 2 emits it: 2 assertions, 22 items, 1 diagnostic, 562 tokens. |
+| `m26-bundle.v2.json` | The output, as `bundle_version` 2 emits it under `policy_version` 3: 3 assertions, 23 items, 1 diagnostic, 624 tokens. Under `policy_version` 2 (v0.2.0) it was 2 assertions, 22 items, 562 tokens; the third assertion is the diff's `$this->success(` — §3.3's fourth form (ADR-A029) — and its item is the S1 statement citing `app/Traits/ApiResponse.php:9` (ADR-A028), 62 tokens. |
 
 `BundleSchemaConformanceTest` validates the bundle against `schema/bundle-v2.schema.json` on every
 run and asserts the recorded counts.

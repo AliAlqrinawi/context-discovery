@@ -2,14 +2,27 @@
     "bundle_version": 2,
     "run": {
         "engine_version": "0.2.0",
-        "policy_version": "2",
+        "policy_version": "3",
         "framework_table_version": "5bfb119e1a00",
         "budget_tokens": 8000,
         "diff_sha": "6070b2d17713",
         "repo_sha": null
     },
-    "used_tokens": 562,
+    "used_tokens": 624,
     "assertions": [
+        {
+            "id": "abbe15c47fe12",
+            "kind": "named_reference",
+            "subject": "App\\Http\\Controllers\\Admin\\BranchController::success",
+            "reason": "the region calls App\\Http\\Controllers\\Admin\\BranchController::success, which this file does not declare; its contract is defined in another file",
+            "origin": {
+                "path": "app/Http/Controllers/Admin/BranchController.php",
+                "lines": [
+                    19,
+                    26
+                ]
+            }
+        },
         {
             "id": "acb6ef0148d7f",
             "kind": "named_reference",
@@ -311,6 +324,20 @@
             },
             "payload": "    public function getAll(bool $activeOnly = true): Collection",
             "tokens": 16
+        },
+        {
+            "assertion_id": "abbe15c47fe12",
+            "lever": "flagged",
+            "provenance": {
+                "path": "app/Http/Controllers/Admin/BranchController.php",
+                "member": "App\\Http\\Controllers\\Admin\\BranchController::success",
+                "lines": [
+                    19,
+                    26
+                ]
+            },
+            "payload": "ASSUMPTION: success() is not declared in BranchController or in its parent App\\Http\\Controllers\\Controller; it is declared in trait App\\Traits\\ApiResponse at app/Traits/ApiResponse.php:9, used by that parent; body not fetched, contract unverified",
+            "tokens": 62
         },
         {
             "assertion_id": "acb6ef0148d7f",
