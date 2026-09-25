@@ -285,3 +285,38 @@ helpers. Two consequences, stated before any cell runs and **not compensated for
   and not on the 2- and 5-citation ones - can be tested on T1 (37) against T2 (5), but **not
   against T3 (2)**. That narrows the design's stated comparison, and is recorded as such.
 
+---
+
+## Note · 2026-09-26 · the spread measured; two arm-pair differences beyond the S1 items - stopped at §4 step (4)
+
+**The spread** (option B, `installed`, S1 items / tokens): T1 `9b8f9c6` 37 / 2,319 · T7 `b2eebe7`
+**37** / 2,319 · T5 `2996b89` **37** / 2,317 · T6 `e5e48ce` 14 / 876 · T2 `ee5a2e6` 5 / 315 · T3
+`ec92403` 2 / 124 · T8 `4411454` 2 / 124 · T4 `f3a7fcd` **0** · T0 `e770086` 0. It separates
+37 from 2. Two facts weaken it: T7 is *"refactor: add ApiResponse trait and clean up all
+controllers"* - the commit that introduced the trait, and it produces the same 37 pairs as T1, so
+the 37-citation end has three tasks, not one; and T4's single call is a test helper (S2), so both
+its arms are **empty bundles** - T4 is a second identical-packet pair, not a spread point. §4's
+table row for T4 ("1 call in the diff; S1 count not yet run") resolves to S1 = 0.
+
+The six new runs for T1–T3 reproduce the recorded `stdout_sha256` byte for byte. All eighteen
+packets are cut from stored bytes with provenance (`experiment-30/packets/`, `corpus.tsv`).
+
+**The arm-pair check, and why this stopped.** Every pair's `change.diff` is byte-identical.
+Beyond the S1 items and their own stderr lines, two kinds of difference exist:
+
+1. **T5's budget.** Both arms hit the 8,000-token budget (7,969 / 7,970). Under option B the 37
+   S1 items entered and **20 items present in arm A were dropped** (54 drops vs 34) - among them
+   fetched surfaces of `LoginAction`, `CreateTestimonialAction`, `UpdateTestimonialAction` - and
+   the `## Dropped` sections differ. Arm B is not "arm A plus citations"; it is arm A minus twenty
+   items plus citations. §3's premise does not hold for T5.
+2. **S2 stderr lines.** Arm B's `context-diagnostics.txt` carries `inherited member unresolved:
+   …` lines that arm A's does not: T2 (3), T3 (8), T4 (1), T6 (2 distinct), T8 (6). These are
+   the settled-negative lines for test helpers (ADR-A028 §4), zero tokens, no item - but a
+   reviewer in arm B reads them and a reviewer in arm A does not. §3 described the difference as
+   "the S1 items and their stderr lines", citing M33 §4; M33 §4's table did list the S2 lines,
+   and this note says plainly that they are a difference beyond S1's own.
+
+Per CONTINUE.md step (4) and this ADR's stop conditions, nothing further was done: no mapping
+sealed, no cell material written. What (1) and (2) mean for the corpus and for §3's premise is a
+decision this ADR does not record, and it is put to the user.
+
