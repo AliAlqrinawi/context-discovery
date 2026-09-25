@@ -238,3 +238,50 @@ changed file calls via `$this->` but does not declare?* - because the second aut
 told what a citation is. §6.2 of the protocol reads that field: `citation_relevance = unrelated`
 iff `inherited_member_dependence = NO`.
 
+---
+
+## Note · 2026-09-26 · the second author's keys, locked; three observations before any run
+
+The four objects came back from a fresh session given `handoff/defect-keys-handoff.md` and
+nothing else, and are locked verbatim in `experiment-30/answer-key.json` (engine `67225f2`,
+sha256 `dd650f5e…`) before any engine ran on T4, T5, T6, T7, T8 or T0 and before any packet was
+cut. Nothing in them is edited. Three things are recorded now, so they cannot be shaped by what
+follows.
+
+**1 · Independent convergence on T1.** The second author's T1 defect is the loss of
+`min.array`, `max.array` and ten attribute labels in the `lang/ar/validation.php` rewrite, with
+the fallback path traced further than the context key did (per-key fallback to `en`, where the
+app file also lacks them, so the framework's English answers - or, if that path is not loaded,
+the raw key). The context key `held-out-9b8f9c6`'s K.4 named the same twelve keys and the same
+consequence. The second author had not seen K.4, the context key, or any of this programme. Two
+readers of the diff alone, in different contexts, named the same defect and the same twelve
+keys: the strongest evidence available that the context isolation held. T1's `defect` also
+carries the default-locale flip as a secondary, "either counts".
+
+**2 · Independent divergence on T2.** The second author's primary T2 defect is one the context
+key `held-out-ee5a2e6` did not see: `routes/admin.php` switches four existing update routes and
+the new one from `POST /{id}` to `PUT /{id}`, so existing POST clients get 405, and - since PHP
+does not parse multipart bodies on PUT - a genuine multipart update passes validation on
+all-nullable rules, empties through `Arr::whereNotNull`, and returns 200 having changed nothing.
+The context key's H.7 (`Cache::tags` on a non-tagging store) appears in the second author's key
+only as a hedge. So the two keys for this commit differ in their primary mechanism, and T2's
+Q-harm is measured against the second author's, as locked. Recorded as a divergence, not
+reconciled.
+
+**3 · `inherited_member_dependence` is NO on all four tasks.** Each second-author key says the
+defect (T1, T2) or the question most needed (T4, T5) does not turn on the inherited `$this->`
+helpers. Two consequences, stated before any cell runs and **not compensated for**:
+
+- **Q-ask's population may be thin or empty.** Q-ask is gated on silence-arm cells whose Q3
+  names the ancestor path (§2.1). If the second author's reading is the reviewers' reading, few
+  or no arm-A cells will name it, and Q-ask has no population. That is a result about the
+  corpus - the citation answers a question these commits' reviewers may not ask - and it is
+  reported as one, not redesigned around.
+- **Q-harm becomes load-bearing**, and its population is fixed here: **T1 and T2** carry a
+  `defect_present: YES` with `inherited_member_dependence: NO`. T3 and T6 carry a YES from M20
+  but **no** `inherited_member_dependence` field - the field did not exist when those keys were
+  written, and deriving it now would be writing a key. §2.2's "the key says so, before the run"
+  is therefore satisfied by T1 and T2 only. §2.2's own prediction - harm on the 37-citation task
+  and not on the 2- and 5-citation ones - can be tested on T1 (37) against T2 (5), but **not
+  against T3 (2)**. That narrows the design's stated comparison, and is recorded as such.
+
