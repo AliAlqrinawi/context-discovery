@@ -152,3 +152,48 @@ the exact material, each with `provenance.txt`. `observations/{T}-{A|B}-r{n}.md`
 answers with the model header. `answer-key.json` holds the defect keys, with each key's
 `written` date, author and `citation_relevance`. `classification/` holds §7's files. Every packet
 can be regenerated from the backend by run id, byte for byte.
+
+---
+
+## Note · 2026-09-26 · the name of §6.2's key field
+
+Appended, not edited. The defect keys are written by a second author who is told nothing about
+what is being compared, so their template cannot carry a field called `citation_relevance`. The
+field is named **`inherited_member_dependence`** (YES / NO, with a reason): *does the defect, if
+any, turn on the behaviour or contract of a method the changed file calls via `$this->` but does
+not itself declare?* §6.2's "unrelated to any S1 citation" is read as `inherited_member_dependence:
+NO`. The criterion is unchanged; only its name in the key is.
+
+---
+
+## Note · 2026-09-26 · how the blind classifier records, and how §6.1's classes are derived
+
+Appended, not edited. §6.1's DISPLACED class and the gate on §6.1 (*if the arm-A majority Q3
+names the ancestor path*) refer to the other arm's majority, which a blind classifier cannot
+know. So the classifier does not assign the four classes. It records, per cell and blind, the
+**primitive facts** the classes are built from (`handoff/classifier-handoff.md`):
+`correct_decision`, `defect_identified`, `q5_verbatim`, `q3_names_path` (with the matched term
+from §6.3's closed list), `q5_quotes_assumption` (the S1 sentence shape), and
+`q3_names_cited_member`. After `classes.tsv` is committed and the mapping opened, the four
+classes are **derived mechanically** from those columns and the arm-A majorities:
+
+| Class | Derivation |
+|---|---|
+| SATISFIED | `q3_names_path = NO` and `q5_quotes_assumption = YES` |
+| RE-ASKED | `q3_names_cited_member = YES` |
+| UNCHANGED | `q3_names_path = YES` and `q5_quotes_assumption = NO` |
+| DISPLACED | none of the above, `q3_text` names something the task's arm-A majority Q3 had as `NONE` or already named, and `correct_decision` or `defect_identified` is worse than the arm-A majority's |
+| UNCLASSIFIABLE | none of the above |
+
+The criteria are unchanged; only where the judgement sits is stated. Every judgement that
+requires reading for meaning (`defect_identified`, `q3_names_path`) is made blind; every step
+that uses the arm is mechanical and reproducible from the committed TSV.
+
+## Note · 2026-09-26 · the handoff material
+
+`handoff/defect-keys-handoff.md` (the four diffs and the key template, for the second author),
+`handoff/reviewer-handoff.md` (the five questions, for a reviewer cell) and
+`handoff/classifier-handoff.md` are written for sessions that know nothing of this project. None
+names the tool, the arms, or what is being compared. The second author's material was checked
+to contain nothing from the context keys `held-out-9b8f9c6` and `held-out-ee5a2e6`.
+

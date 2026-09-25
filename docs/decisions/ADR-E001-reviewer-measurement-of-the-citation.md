@@ -195,3 +195,46 @@ says the citation settled the ask on this corpus; it does not say the fetch ban 
 - Backend ADR-B002, ADR-B003.
 - `tests/Acceptance/fixtures/experiment-17/scoring-protocol.md` - the five questions and the
   correctness rules this design keeps unchanged.
+
+---
+
+## Limitation · 2026-09-26 · the second author, the reviewers and the classifier are one model family
+
+Recorded here as a limitation of the design, not as a footnote, so a later reader weighs the
+result correctly.
+
+**Who does what.** The context keys (`held-out-*`) and option B itself were written and built by
+a Claude session. The **second author** of the defect keys (§4, §10) is **a fresh Claude session
+with none of this context**. The **reviewer cells** (§5) are fresh language-model agents of the
+same family. The **blind classifier** (§6) is another session of the same family.
+
+**What that independence buys: independence of context.** The second author will not have seen
+option B, the context keys, the scorer, or the fact that an engine is being measured at all; the
+handoff (`tests/Acceptance/fixtures/experiment-30/handoff/`) reads as *here is a commit; is there
+a defect; what would a reviewer need*, and names no tool. The reviewers see a packet and nothing
+else. The classifier sees opaque cells and the criteria. None of them can be steered by what the
+key author knows, and that is the failure ADR-A027's first decision had - both keys from one
+author's context.
+
+**What it does not buy: independence of training or of reasoning style.** The same family's
+priors about what a Laravel defect looks like, what "context a reviewer needs" means, and how to
+read a diff are shared across all four roles. A defect the family systematically does not see
+will be absent from the defect keys *and* from the reviewers' answers *and* invisible to the
+classifier - and the measurement will read that as agreement. A citation the family finds
+persuasive for reasons of style rather than content will read as SATISFIED. The noise floor (§5)
+measures the family's run-to-run variance; it does not measure its bias.
+
+**Consequences for reading the result.** A supportive outcome under §8 is evidence that *this
+model family*, given a packet, does what the citation was built for; it is not evidence about
+reviewers in general, and it is weaker than the same outcome from an author, a reviewer and a
+classifier of different provenance would be. A negative outcome under §8 is stronger than a
+positive one, for the same reason: a citation that does not help the family that built it is
+unlikely to help anyone. M17 §10's limit - *the result is evidence about a proxy* - applies with
+this addition: the proxy is also the author.
+
+**Field name.** The defect-key template handed to the second author names §2.2's
+`citation_relevance` as **`inherited_member_dependence`** - *does the defect turn on a method the
+changed file calls via `$this->` but does not declare?* - because the second author must not be
+told what a citation is. §6.2 of the protocol reads that field: `citation_relevance = unrelated`
+iff `inherited_member_dependence = NO`.
+
