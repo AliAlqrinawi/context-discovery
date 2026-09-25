@@ -1,0 +1,247 @@
+{
+  "experiment": 30,
+  "written": "2026-09-26",
+  "locked": "2026-09-26, on receipt of the second author's four objects, before any run of any engine on T4, T5, T6, T7, T8 or T0 existed and before any packet was cut. No object below may be edited; an erratum is appended to ADR-E001, never written here.",
+  "protocol": "scoring-protocol.md",
+  "design": "docs/decisions/ADR-E001-reviewer-measurement-of-the-citation.md",
+  "second_author_objects_sha256": "dd650f5e924386c4b0760a0fa7299f14dea13a24122732f3e47b8628ce49d97e",
+  "second_author_note": "T1, T2, T4, T5 are the second author's objects, verbatim as returned - a fresh session given handoff/defect-keys-handoff.md and nothing else. Not reformatted, not corrected. Their `inherited_member_dependence` field is what protocol §6.2 reads.",
+  "reused_keys_note": "T3, T6, T7, T8 and T0 reuse keys written for M20 (experiment-20) and M22 (experiment-22) before any bundle for those commits existed, copied verbatim from those fixtures under `reused` with their source named. They carry no `inherited_member_dependence` field, because that field did not exist when they were written; nothing is derived for them here. Where a task has both an M20 and an M22 key, both are carried and both say the same `defect_present`.",
+  "second_author": [
+  {
+    "id": "T1",
+    "commit": "9b8f9c6",
+    "subject": "feat: add bilingual lang files (ar/en) for validation and messages",
+    "written": "2026-09-26",
+    "author": "second author, fresh session, from the diff alone",
+    "defect_present": "YES",
+    "strength": "MODERATE",
+    "defect": "The rewrite of lang/ar/validation.php deletes translations that existed before and does not restore them in either new file. These are 'min.array', 'max.array' and the attribute names is_active, is_featured, is_signature, label_ar, label_en, feature_ar, feature_en, price_starting_from, logo and settings. The translator falls back per key, from ar to fallback_locale en, where the app file also lacks them and only the framework's English file answers. So for an Arabic request, any failing rule on those fields, or any array min/max failure, now returns an English sentence, or an Arabic sentence with the raw attribute name ('حقل is active ...'). Before this commit these came back as proper Arabic. The same commit flips the default config('app.locale') from 'en' to 'ar'. That makes Arabic the path most clients hit, and it silently changes every response message and every locale-resolved resource field to Arabic for any client that sends no locale. Either counts. The translation loss is the one clearly not intended by a commit that says it adds files.",
+    "visible_in_diff": "PARTLY",
+    "required_context": [
+      "app/Http/Requests/**/*Request.php::rules (which FormRequests validate is_active, is_featured, is_signature, label_*, feature_*, price_starting_from, logo, settings, or apply min/max to arrays; e.g. app/Http/Requests/Catering/StorePackageRequest.php::rules, app/Http/Requests/Dish/StoreDishRequest.php::rules, app/Http/Requests/DeliveryApp/StoreDeliveryAppRequest.php::rules, app/Http/Requests/Setting/UpdateSettingRequest.php::rules)",
+      "app/Http/Middleware/SetLocale.php::handle (what locale it picks when the client sends none, and whether it defers to config('app.locale'))",
+      "bootstrap/app.php (the set.locale alias and which route groups carry it)",
+      ".env / deployment APP_LOCALE (whether it is set explicitly, which would neutralise the default flip)",
+      "tests/Feature/* (assertions on English message strings or on English validation text)",
+      "app/Http/Controllers/Controller.php and its response trait::success/created/deleted/paginated (to confirm the message argument is passed through untransformed)",
+      "database/factories/* (any factory output that assumes en_US Faker data, now ar_SA)"
+    ],
+    "inherited_member_dependence": {
+      "answer": "NO",
+      "why": "The named defect lives in the lang and config files. The inherited $this->success/created/deleted/paginated calls only have their message argument changed from a literal to a __() string, and the defect does not turn on their behaviour."
+    },
+    "hedges": [
+      "I assume Laravel 12's translation loader merges the framework's bundled en/validation.php under the app's lang/en file, so the fallback returns an English sentence and not the raw key. If the framework path is not loaded, the result is the literal key 'validation.min.array', which is worse.",
+      "Whether the dropped attributes and array min/max rules are actually used depends on FormRequests outside the diff. The field names match columns I would expect in this app (dishes, packages, delivery apps, settings), but I cannot see them.",
+      "The default-locale flip to 'ar' may be intended for a Saudi-market site. I treat it as a secondary, possibly deliberate behaviour change, not the primary defect.",
+      "The faker_locale change to ar_SA could break factories or tests that rely on Latin-script output (e.g. slugs or unique emails). This is unverified.",
+      "'nullable' => '' in ar/validation.php is inert because nullable never produces a message. I assume it has no effect.",
+      "tag_en is mapped to 'التصنيف', the same label as category_id. This is cosmetic, not a defect.",
+      "Every messages.* key used by the controllers (fetched, created, updated, deleted, login_success, logout_success, uploaded, quote_submitted) exists in both new messages files. I checked this and found no missing key."
+    ]
+  },
+  {
+    "id": "T2",
+    "commit": "ee5a2e6",
+    "subject": "feat(personalities): add Personality entity for the story page's \"faces\" section",
+    "written": "2026-09-26",
+    "author": "second author, fresh session, from the diff alone",
+    "defect_present": "YES",
+    "strength": "MODERATE",
+    "defect": "routes/admin.php changes four existing update routes (the groups at the hunks near lines 72, 89, 99 and 109) from Route::post('/{id}', 'update') to Route::put('/{id}', 'update'). It also registers the new personalities update as PUT, although UpdatePersonalityRequest/UpdatePersonalityAction accept an 'image' file upload. Two things follow. First, any existing client that updates those four resources with POST /{id} now gets 405 Method Not Allowed; the commit is about adding personalities and does not mention this. Second, PHP does not parse multipart/form-data bodies on PUT, so a genuine multipart PUT reaches Laravel with an empty input bag and no files. Because every update rule is nullable, the request passes validation, the DTO is all nulls, Arr::whereNotNull empties $data, and the endpoint returns 200 having changed nothing: the uploaded image and fields are silently dropped. Only clients that POST with _method=PUT (method spoofing) keep working. The POST /{id} routes were very likely that workaround, which this change removes.",
+    "visible_in_diff": "PARTLY",
+    "required_context": [
+      "routes/admin.php (full file, to identify which four resource groups were switched and whether their update requests take files)",
+      "app/Http/Requests/*/Update*Request.php::rules for those four resources (file/image fields)",
+      "the admin frontend's update calls for those resources (POST with or without _method, multipart or JSON); outside this repository",
+      "tests/Feature/* admin tests that postJson/post to /api/v1/admin/<resource>/{id}",
+      "config/cache.php 'default' and .env CACHE_STORE (Cache::tags throws on file/database stores)",
+      "database/seeders/PageContentSeeder.php::run (bulk insert vs per-row updateOrCreate) and the page_contents migration (whether a 'type' column exists)",
+      "app/Services/ImageService.php::store and ::delete (return shape ['path','url'] and failure behaviour)",
+      "app/Http/Requests/BaseFormRequest.php",
+      "app/Http/Resources/Concerns/ResolvesLocale.php::resolveLocale"
+    ],
+    "inherited_member_dependence": {
+      "answer": "NO",
+      "why": "The defect lives in routes/admin.php and in how PHP parses PUT bodies. The new controllers' inherited $this->success/created/deleted calls are not involved."
+    },
+    "hedges": [
+      "If every client already sends POST with _method=PUT, or sends JSON without files, the 405 and dropped-upload effects do not occur in practice. I cannot see the clients, which is why this is MODERATE rather than STRONG.",
+      "I assume Laravel's HTTP method parameter override is enabled (the framework default), so _method=PUT spoofing remains a working path.",
+      "Second, independent defect: the two new PageContentSeeder rows carry a 'type' => 'text' key that the neighbouring rows lack. If the seeder bulk-inserts the array, the rows have unequal column counts and the insert fails. If the table has no 'type' column, the rows fail or the key is silently discarded. I cannot tell without PageContentSeeder::run and the migration.",
+      "GetPersonalitiesAction and the create/update/delete actions call Cache::tags(['personalities']). This throws BadMethodCallException on non-tagging cache stores (file, database; Laravel 12's default is database). Presumably existing actions use the same pattern, but this is unverified.",
+      "UpdatePersonalityAction deletes the old image before storing the new one. If store() throws, the record keeps a path to a deleted file. This is minor and depends on ImageService.",
+      "UpdatePersonalityDTO maps an explicit is_active:null to false via has()+boolean(). A client sending null would deactivate the record. This is an edge case.",
+      "The cache key includes the locale although the cached value (raw models) is locale-independent. This is harmless redundancy, not a defect.",
+      "The tests assume the seeders run in setUp (5 seeded personalities). I cannot verify that."
+    ]
+  },
+  {
+    "id": "T4",
+    "commit": "f3a7fcd",
+    "subject": "feat: add restaurant name and hours to settings",
+    "written": "2026-09-26",
+    "author": "second author, fresh session, from the diff alone",
+    "defect_present": "NO",
+    "strength": "MODERATE",
+    "defect": "-",
+    "visible_in_diff": "PARTLY",
+    "required_context": [
+      "database/seeders/SettingSeeder.php::run (how $settings is persisted: updateOrCreate on key, create, or insert)",
+      "database/migrations/*_create_settings_table.php (whether 'group' or 'type' are enums or constrained, and whether 'general' and 'text' are allowed values)",
+      "app/Models/Setting.php::$fillable",
+      "app/Http/Requests/Setting/UpdateSettingRequest.php::rules (any whitelist of groups or keys)",
+      "tests/Feature/PublicApiTest.php and other tests asserting a settings count or group count",
+      "app/Repositories/SettingRepository.php::getAll"
+    ],
+    "inherited_member_dependence": {
+      "answer": "NO",
+      "why": "The changed lines are seeder data and a test assertion, with no $this-> calls to inherited members."
+    },
+    "hedges": [
+      "The two new rows introduce a new group 'general' while every visible neighbour is 'contact'. If the settings.group column is a MySQL enum or check-constrained without 'general', seeding fails. That is the one thing I would open first.",
+      "I assume type 'text' is an accepted value like 'phone'. It is not visible.",
+      "Only the one count assertion (17 to 19) is updated. Other tests counting settings, e.g. a public settings endpoint or per-group counts, may now fail. I cannot see them.",
+      "The subject mentions hours but no hours setting is added. This is an incomplete change relative to the message, not a correctness defect in the code as written."
+    ]
+  },
+  {
+    "id": "T5",
+    "commit": "2996b89",
+    "subject": "refactor: clean controller structure — Admin/ and Public/ only",
+    "written": "2026-09-26",
+    "author": "second author, fresh session, from the diff alone",
+    "defect_present": "NO",
+    "strength": "MODERATE",
+    "defect": "-",
+    "visible_in_diff": "NO",
+    "required_context": [
+      "routes/api.php (whether any public route still references a deleted class: App\\Http\\Controllers\\{Branch,Category,DeliveryApp,Dish,MediaItem,PageContent,Setting,Testimonial,Timeline,User}Controller, App\\Http\\Controllers\\Catering\\*, App\\Http\\Controllers\\Auth\\AuthController)",
+      "app/Actions/DeliveryApp/GetDeliveryAppsAction.php::execute (parameter must be named $activeOnly for the new named-argument call)",
+      "app/Actions/Testimonial/GetTestimonialsAction.php::execute (same named-argument dependency)",
+      "app/Http/Controllers/Public/Catering/QuoteRequestController.php::store, or wherever the public quote submission now lives (the deleted base controller carried store; the new Admin copy does not)",
+      "routes/web.php, routes/console.php and any other route files",
+      "tests/** and app/** for references to the deleted classes",
+      "app/Http/Controllers/Controller.php (the helpers the copies now reach directly instead of through the old parent)"
+    ],
+    "inherited_member_dependence": {
+      "answer": "NO",
+      "why": "The question I most needed answered is whether routes/api.php or other code still references the deleted classes, which is not a $this-> call. The $this->success/created/paginated helpers resolve to the same Controller base as before."
+    },
+    "hedges": [
+      "Each new Admin controller is a faithful copy of the deleted base controller it used to extend (method bodies match line for line). routes/admin.php imports all fourteen controllers it uses. From the diff alone the admin side is behaviour-preserving.",
+      "The deleted DeliveryAppController and TestimonialController computed activeOnly from auth('sanctum')->check(). This suggests they were written to serve public, unauthenticated routes too. If routes/api.php still points at them, those public endpoints fail at dispatch with 'Target class does not exist' (500). This is the main reason the answer is not STRONG, and it cannot be seen in the diff.",
+      "Admin\\DeliveryAppController and Admin\\TestimonialController now call execute(activeOnly: false). If the action's parameter has any other name, PHP throws 'Unknown named parameter' at runtime. Behaviourally, false equals the old value under auth:sanctum.",
+      "The deleted Catering\\QuoteRequestController::store (public quote submission) has no counterpart in the diff. If no Public controller already provides it and api.php referenced the old class, quote submission breaks.",
+      "Pre-existing, not introduced here: MediaItemController::update ignores $id and calls UploadMediaAction as if creating a new item, and CategoryController store/update use an unvalidated Request. Both are carried over unchanged, so they do not count against this commit.",
+      "A stale route cache (bootstrap/cache/routes-*.php) in deployment would still reference the old classes until rebuilt. This is operational, not a code defect."
+    ]
+  }
+],
+  "reused": {
+    "T3": [
+      {"source": "experiment-20", "source_id": "D1", "key": {
+              "id": "D1",
+              "commit": "ec92403",
+              "subject": "feat: menu PDF upload with permanent URL and QR code with logo",
+              "defect_present": "YES",
+              "strength": "STRONG",
+              "fixing_commits": [
+                      "04328a5",
+                      "2c2a7b4"
+              ],
+              "defect": "TWO defects, either of which counts as detected. (a) upload() deletes the previously stored file and writes the new one to disk BEFORE the database write, with no transaction and no cleanup, so a failed Setting write leaves an orphaned file and the old file already gone. (b) payload() returns 'permanent_url' => route('menu.pdf'), the API domain, when the URL handed to users must be the frontend domain.",
+              "why_strong": "Both are fixed by later real commits that name the mechanism. 04328a5 'fix: delete orphaned uploaded files when a DB write fails after upload' applies try/catch-and-delete across every upload Action. 2c2a7b4 'fix: menu PDF permanent_url uses frontend domain not API domain' replaces route('menu.pdf') with config('app.frontend_url').'/menu/pdf'.",
+              "visible_in_diff": "PARTLY — the ordering of the file write and the DB write is visible; that no transaction wraps them, and that the URL is the wrong domain, both require knowledge the diff does not carry",
+              "expected_missing_context": [
+                      "the caller of upload(), to know whether a transaction surrounds it",
+                      "app/Models/Setting.php fillable",
+                      "config/app.php frontend_url"
+              ],
+              "bundle_relevant": "PARTLY. The bundle flags the surrounding-transaction premise, which names defect (a)'s mechanism almost exactly. Nothing in it can reach defect (b), which is a configuration fact (X3)."
+      }}
+    ],
+    "T6": [
+      {"source": "experiment-20", "source_id": "D3", "key": {
+              "id": "D3",
+              "commit": "e5e48ce",
+              "subject": "refactor: proper Public/ and Admin/ controller separation with complete routes",
+              "defect_present": "YES",
+              "strength": "STRONG",
+              "fixing_commits": [
+                      "1fa1f66"
+              ],
+              "defect": "Public DishController::index passes the raw 'featured' and 'signature' query parameters straight through $request->only([...]). Query parameters arrive as strings, so 'false' and '0' are truthy when the repository uses them in a where clause — ?featured=false returns featured dishes.",
+              "why_strong": "1fa1f66 'fix: cast featured/signature query params to boolean in public DishController' replaces exactly that line with has()-guarded $request->boolean() calls.",
+              "visible_in_diff": "YES in principle — the offending line is in the diff — but it is one line among 715 across 31 files",
+              "expected_missing_context": [
+                      "app/Repositories/DishRepository.php::getAll — how the filter values are used in the query"
+              ],
+              "bundle_relevant": "UNCERTAIN. The bundle is large (85 items) and may or may not carry the repository's where clause."
+      }}
+    ],
+    "T7": [
+      {"source": "experiment-22", "source_id": "K10", "key": {
+              "id": "K10",
+              "commit": "b2eebe7",
+              "defect_present": "NO",
+              "strength": "WEAK",
+              "items": 27,
+              "tokens": 2423,
+              "why": "Introduces the ApiResponse trait and routes every controller through it. No later commit describes a fix, but it is a wide refactor and later commits touch the same files. WEAK."
+      }}
+    ],
+    "T8": [
+      {"source": "experiment-20", "source_id": "C1", "key": {
+              "id": "C1",
+              "commit": "4411454",
+              "subject": "feat: add profile endpoints (show, update, update password)",
+              "defect_present": "NO",
+              "strength": "MODERATE",
+              "fixing_commits": [],
+              "defect": null,
+              "why": "CONTROL. ProfileController mass-assigns name, email and password through $user->update(); VERIFIED that User::$fillable is ['name','email','password','role'], so all three are writable. updatePassword() verifies the current password with Hash::check before writing. No later commit amends the behaviour.",
+              "visible_in_diff": "NO — the mass-assignment cannot be confirmed without User::$fillable",
+              "expected_missing_context": [
+                      "app/Models/User.php::fillable"
+              ],
+              "bundle_relevant": "YES. M19 measured this exact task: the bundle supplied the User model surface and the DIFF_PLUS_BUNDLE reviewer quoted it. Carried forward under the CORRECTED harness so the two milestones can be compared."
+      }},
+      {"source": "experiment-22", "source_id": "K03", "key": {
+              "id": "K03",
+              "commit": "4411454",
+              "defect_present": "NO",
+              "strength": "MODERATE",
+              "items": 16,
+              "tokens": 479,
+              "why": "User::$fillable verified to contain name, email and password; updatePassword checks the current password with Hash::check. Verified in M19 and M20. No later amendment.",
+              "note": "THE ONE TASK where a bundle effect has already replicated twice (M19 K3, M20 C1): both times DIFF_ONLY abstained and DIFF_PLUS_BUNDLE answered NO quoting the bundle's User::casts slice. A third replication would be the strongest single result in the series."
+      }}
+    ],
+    "T0": [
+      {"source": "experiment-20", "source_id": "C2", "key": {
+              "id": "C2",
+              "commit": "e770086",
+              "subject": "fix: make page filter optional in MediaItemController to return all slots",
+              "defect_present": "NO",
+              "strength": "MODERATE",
+              "fixing_commits": [],
+              "defect": null,
+              "why": "CONTROL. The optional page parameter is threaded coherently through controller, action, model scope and repository. No later commit amends the behaviour.",
+              "visible_in_diff": "YES",
+              "expected_missing_context": [],
+              "bundle_relevant": "NO strong expectation."
+      }},
+      {"source": "experiment-22", "source_id": "K02", "key": {
+              "id": "K02",
+              "commit": "e770086",
+              "defect_present": "NO",
+              "strength": "MODERATE",
+              "items": 30,
+              "tokens": 504,
+              "why": "The optional page parameter is threaded coherently through controller, action, model scope and repository. Verified in M20 and M21. No later amendment."
+      }}
+    ]
+  }
+}
