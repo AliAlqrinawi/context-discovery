@@ -958,7 +958,7 @@ index c2f485c..8100e00 100644
 ===== BEGIN context-bundle.md =====
 # Context bundle
 
-bundle_version 2 · budget 8000 / used 4134 tokens
+bundle_version 2 · budget 8000 / used 5010 tokens
 
 ## fetched · named_reference
 
@@ -1395,6 +1395,28 @@ bundle_version 2 · budget 8000 / used 4134 tokens
 
 ## flagged · named_reference
 
+**Subject:** App\Http\Controllers\BranchController::success
+**Reason:** the region calls App\Http\Controllers\BranchController::success, which this file does not declare; its contract is defined in another file
+**Source:** `app/Http/Controllers/BranchController.php` :: `App\Http\Controllers\BranchController::success` (lines 21-31)
+**Tokens:** 62
+
+```text
+ASSUMPTION: success() is not declared in BranchController or in its parent App\Http\Controllers\Controller; it is declared in trait App\Traits\ApiResponse at app/Traits/ApiResponse.php:9, used by that parent; body not fetched, contract unverified
+```
+
+## flagged · named_reference
+
+**Subject:** App\Http\Controllers\Public\BranchController::success
+**Reason:** the region calls App\Http\Controllers\Public\BranchController::success, which this file does not declare; its contract is defined in another file
+**Source:** `app/Http/Controllers/Public/BranchController.php` :: `App\Http\Controllers\Public\BranchController::success` (lines 1-18)
+**Tokens:** 62
+
+```text
+ASSUMPTION: success() is not declared in BranchController or in its parent App\Http\Controllers\Controller; it is declared in trait App\Traits\ApiResponse at app/Traits/ApiResponse.php:9, used by that parent; body not fetched, contract unverified
+```
+
+## flagged · named_reference
+
 **Subject:** App\Http\Resources\Branch\BranchResource::collection
 **Reason:** the region depends on App\Http\Resources\Branch\BranchResource::collection, whose contract is defined in another file
 **Source:** `app/Http/Controllers/Public/BranchController.php` :: `App\Http\Resources\Branch\BranchResource::collection` (lines 1-18)
@@ -1402,6 +1424,17 @@ bundle_version 2 · budget 8000 / used 4134 tokens
 
 ```text
 ASSUMPTION: named reference could not be resolved on disk; contract unverified
+```
+
+## flagged · named_reference
+
+**Subject:** App\Http\Controllers\Public\CategoryController::success
+**Reason:** the region calls App\Http\Controllers\Public\CategoryController::success, which this file does not declare; its contract is defined in another file
+**Source:** `app/Http/Controllers/Public/CategoryController.php` :: `App\Http\Controllers\Public\CategoryController::success` (lines 1-18)
+**Tokens:** 62
+
+```text
+ASSUMPTION: success() is not declared in CategoryController or in its parent App\Http\Controllers\Controller; it is declared in trait App\Traits\ApiResponse at app/Traits/ApiResponse.php:9, used by that parent; body not fetched, contract unverified
 ```
 
 ## flagged · named_reference
@@ -1417,6 +1450,17 @@ ASSUMPTION: named reference could not be resolved on disk; contract unverified
 
 ## flagged · named_reference
 
+**Subject:** App\Http\Controllers\Public\Catering\CateringPackageController::success
+**Reason:** the region calls App\Http\Controllers\Public\Catering\CateringPackageController::success, which this file does not declare; its contract is defined in another file
+**Source:** `app/Http/Controllers/Public/Catering/CateringPackageController.php` :: `App\Http\Controllers\Public\Catering\CateringPackageController::success` (lines 1-18)
+**Tokens:** 64
+
+```text
+ASSUMPTION: success() is not declared in CateringPackageController or in its parent App\Http\Controllers\Controller; it is declared in trait App\Traits\ApiResponse at app/Traits/ApiResponse.php:9, used by that parent; body not fetched, contract unverified
+```
+
+## flagged · named_reference
+
 **Subject:** App\Http\Resources\Catering\PackageResource::collection
 **Reason:** the region depends on App\Http\Resources\Catering\PackageResource::collection, whose contract is defined in another file
 **Source:** `app/Http/Controllers/Public/Catering/CateringPackageController.php` :: `App\Http\Resources\Catering\PackageResource::collection` (lines 1-18)
@@ -1424,6 +1468,28 @@ ASSUMPTION: named reference could not be resolved on disk; contract unverified
 
 ```text
 ASSUMPTION: named reference could not be resolved on disk; contract unverified
+```
+
+## flagged · named_reference
+
+**Subject:** App\Http\Controllers\Public\Catering\QuoteRequestController::created
+**Reason:** the region calls App\Http\Controllers\Public\Catering\QuoteRequestController::created, which this file does not declare; its contract is defined in another file
+**Source:** `app/Http/Controllers/Public/Catering/QuoteRequestController.php` :: `App\Http\Controllers\Public\Catering\QuoteRequestController::created` (lines 1-21)
+**Tokens:** 64
+
+```text
+ASSUMPTION: created() is not declared in QuoteRequestController or in its parent App\Http\Controllers\Controller; it is declared in trait App\Traits\ApiResponse at app/Traits/ApiResponse.php:21, used by that parent; body not fetched, contract unverified
+```
+
+## flagged · named_reference
+
+**Subject:** App\Http\Controllers\Public\Catering\SampleMenuController::success
+**Reason:** the region calls App\Http\Controllers\Public\Catering\SampleMenuController::success, which this file does not declare; its contract is defined in another file
+**Source:** `app/Http/Controllers/Public/Catering/SampleMenuController.php` :: `App\Http\Controllers\Public\Catering\SampleMenuController::success` (lines 1-18)
+**Tokens:** 63
+
+```text
+ASSUMPTION: success() is not declared in SampleMenuController or in its parent App\Http\Controllers\Controller; it is declared in trait App\Traits\ApiResponse at app/Traits/ApiResponse.php:9, used by that parent; body not fetched, contract unverified
 ```
 
 ## flagged · named_reference
@@ -1439,6 +1505,17 @@ ASSUMPTION: named reference could not be resolved on disk; contract unverified
 
 ## flagged · named_reference
 
+**Subject:** App\Http\Controllers\Public\DeliveryAppController::success
+**Reason:** the region calls App\Http\Controllers\Public\DeliveryAppController::success, which this file does not declare; its contract is defined in another file
+**Source:** `app/Http/Controllers/Public/DeliveryAppController.php` :: `App\Http\Controllers\Public\DeliveryAppController::success` (lines 1-18)
+**Tokens:** 63
+
+```text
+ASSUMPTION: success() is not declared in DeliveryAppController or in its parent App\Http\Controllers\Controller; it is declared in trait App\Traits\ApiResponse at app/Traits/ApiResponse.php:9, used by that parent; body not fetched, contract unverified
+```
+
+## flagged · named_reference
+
 **Subject:** App\Http\Resources\DeliveryApp\DeliveryAppResource::collection
 **Reason:** the region depends on App\Http\Resources\DeliveryApp\DeliveryAppResource::collection, whose contract is defined in another file
 **Source:** `app/Http/Controllers/Public/DeliveryAppController.php` :: `App\Http\Resources\DeliveryApp\DeliveryAppResource::collection` (lines 1-18)
@@ -1446,6 +1523,28 @@ ASSUMPTION: named reference could not be resolved on disk; contract unverified
 
 ```text
 ASSUMPTION: named reference could not be resolved on disk; contract unverified
+```
+
+## flagged · named_reference
+
+**Subject:** App\Http\Controllers\Public\DishController::paginated
+**Reason:** the region calls App\Http\Controllers\Public\DishController::paginated, which this file does not declare; its contract is defined in another file
+**Source:** `app/Http/Controllers/Public/DishController.php` :: `App\Http\Controllers\Public\DishController::paginated` (lines 1-32)
+**Tokens:** 62
+
+```text
+ASSUMPTION: paginated() is not declared in DishController or in its parent App\Http\Controllers\Controller; it is declared in trait App\Traits\ApiResponse at app/Traits/ApiResponse.php:38, used by that parent; body not fetched, contract unverified
+```
+
+## flagged · named_reference
+
+**Subject:** App\Http\Controllers\Public\DishController::success
+**Reason:** the region calls App\Http\Controllers\Public\DishController::success, which this file does not declare; its contract is defined in another file
+**Source:** `app/Http/Controllers/Public/DishController.php` :: `App\Http\Controllers\Public\DishController::success` (lines 1-32)
+**Tokens:** 61
+
+```text
+ASSUMPTION: success() is not declared in DishController or in its parent App\Http\Controllers\Controller; it is declared in trait App\Traits\ApiResponse at app/Traits/ApiResponse.php:9, used by that parent; body not fetched, contract unverified
 ```
 
 ## flagged · named_reference
@@ -1461,6 +1560,50 @@ ASSUMPTION: named reference could not be resolved on disk; contract unverified
 
 ## flagged · named_reference
 
+**Subject:** App\Http\Controllers\Public\MediaItemController::success
+**Reason:** the region calls App\Http\Controllers\Public\MediaItemController::success, which this file does not declare; its contract is defined in another file
+**Source:** `app/Http/Controllers/Public/MediaItemController.php` :: `App\Http\Controllers\Public\MediaItemController::success` (lines 1-25)
+**Tokens:** 63
+
+```text
+ASSUMPTION: success() is not declared in MediaItemController or in its parent App\Http\Controllers\Controller; it is declared in trait App\Traits\ApiResponse at app/Traits/ApiResponse.php:9, used by that parent; body not fetched, contract unverified
+```
+
+## flagged · named_reference
+
+**Subject:** App\Http\Controllers\Public\PageContentController::success
+**Reason:** the region calls App\Http\Controllers\Public\PageContentController::success, which this file does not declare; its contract is defined in another file
+**Source:** `app/Http/Controllers/Public/PageContentController.php` :: `App\Http\Controllers\Public\PageContentController::success` (lines 1-25)
+**Tokens:** 63
+
+```text
+ASSUMPTION: success() is not declared in PageContentController or in its parent App\Http\Controllers\Controller; it is declared in trait App\Traits\ApiResponse at app/Traits/ApiResponse.php:9, used by that parent; body not fetched, contract unverified
+```
+
+## flagged · named_reference
+
+**Subject:** App\Http\Controllers\Public\SettingController::success
+**Reason:** the region calls App\Http\Controllers\Public\SettingController::success, which this file does not declare; its contract is defined in another file
+**Source:** `app/Http/Controllers/Public/SettingController.php` :: `App\Http\Controllers\Public\SettingController::success` (lines 1-21)
+**Tokens:** 62
+
+```text
+ASSUMPTION: success() is not declared in SettingController or in its parent App\Http\Controllers\Controller; it is declared in trait App\Traits\ApiResponse at app/Traits/ApiResponse.php:9, used by that parent; body not fetched, contract unverified
+```
+
+## flagged · named_reference
+
+**Subject:** App\Http\Controllers\Public\TestimonialController::success
+**Reason:** the region calls App\Http\Controllers\Public\TestimonialController::success, which this file does not declare; its contract is defined in another file
+**Source:** `app/Http/Controllers/Public/TestimonialController.php` :: `App\Http\Controllers\Public\TestimonialController::success` (lines 1-18)
+**Tokens:** 63
+
+```text
+ASSUMPTION: success() is not declared in TestimonialController or in its parent App\Http\Controllers\Controller; it is declared in trait App\Traits\ApiResponse at app/Traits/ApiResponse.php:9, used by that parent; body not fetched, contract unverified
+```
+
+## flagged · named_reference
+
 **Subject:** App\Http\Resources\Testimonial\TestimonialResource::collection
 **Reason:** the region depends on App\Http\Resources\Testimonial\TestimonialResource::collection, whose contract is defined in another file
 **Source:** `app/Http/Controllers/Public/TestimonialController.php` :: `App\Http\Resources\Testimonial\TestimonialResource::collection` (lines 1-18)
@@ -1468,6 +1611,17 @@ ASSUMPTION: named reference could not be resolved on disk; contract unverified
 
 ```text
 ASSUMPTION: named reference could not be resolved on disk; contract unverified
+```
+
+## flagged · named_reference
+
+**Subject:** App\Http\Controllers\Public\TimelineController::success
+**Reason:** the region calls App\Http\Controllers\Public\TimelineController::success, which this file does not declare; its contract is defined in another file
+**Source:** `app/Http/Controllers/Public/TimelineController.php` :: `App\Http\Controllers\Public\TimelineController::success` (lines 1-18)
+**Tokens:** 62
+
+```text
+ASSUMPTION: success() is not declared in TimelineController or in its parent App\Http\Controllers\Controller; it is declared in trait App\Traits\ApiResponse at app/Traits/ApiResponse.php:9, used by that parent; body not fetched, contract unverified
 ```
 
 ## flagged · named_reference
@@ -2017,29 +2171,43 @@ new file: app/Http/Controllers/Public/SettingController.php — own-file context
 new file: app/Http/Controllers/Public/TestimonialController.php — own-file context is in the diff, not fetched
 new file: app/Http/Controllers/Public/TimelineController.php — own-file context is in the diff, not fetched
 new file: routes/admin.php — own-file context is in the diff, not fetched
+inherited member: App\Http\Controllers\BranchController::success declared at app/Traits/ApiResponse.php:9 in trait App\Traits\ApiResponse; body not fetched
 dependency class: Illuminate\Http\JsonResponse provided by vendor/laravel/framework/src/Illuminate/Http/JsonResponse.php; surface not fetched
+inherited member: App\Http\Controllers\Public\BranchController::success declared at app/Traits/ApiResponse.php:9 in trait App\Traits\ApiResponse; body not fetched
 unresolved named_reference: App\Http\Resources\Branch\BranchResource::collection in app/Http/Controllers/Public/BranchController.php
 dependency class: Illuminate\Http\JsonResponse provided by vendor/laravel/framework/src/Illuminate/Http/JsonResponse.php; surface not fetched
+inherited member: App\Http\Controllers\Public\CategoryController::success declared at app/Traits/ApiResponse.php:9 in trait App\Traits\ApiResponse; body not fetched
 unresolved named_reference: App\Http\Resources\Category\CategoryResource::collection in app/Http/Controllers/Public/CategoryController.php
 dependency class: Illuminate\Http\JsonResponse provided by vendor/laravel/framework/src/Illuminate/Http/JsonResponse.php; surface not fetched
+inherited member: App\Http\Controllers\Public\Catering\CateringPackageController::success declared at app/Traits/ApiResponse.php:9 in trait App\Traits\ApiResponse; body not fetched
 unresolved named_reference: App\Http\Resources\Catering\PackageResource::collection in app/Http/Controllers/Public/Catering/CateringPackageController.php
 dependency class: Illuminate\Http\JsonResponse provided by vendor/laravel/framework/src/Illuminate/Http/JsonResponse.php; surface not fetched
+inherited member: App\Http\Controllers\Public\Catering\QuoteRequestController::created declared at app/Traits/ApiResponse.php:21 in trait App\Traits\ApiResponse; body not fetched
 dependency class: Illuminate\Http\JsonResponse provided by vendor/laravel/framework/src/Illuminate/Http/JsonResponse.php; surface not fetched
+inherited member: App\Http\Controllers\Public\Catering\SampleMenuController::success declared at app/Traits/ApiResponse.php:9 in trait App\Traits\ApiResponse; body not fetched
 unresolved named_reference: App\Http\Resources\Catering\SampleMenuResource::collection in app/Http/Controllers/Public/Catering/SampleMenuController.php
 dependency class: Illuminate\Http\JsonResponse provided by vendor/laravel/framework/src/Illuminate/Http/JsonResponse.php; surface not fetched
+inherited member: App\Http\Controllers\Public\DeliveryAppController::success declared at app/Traits/ApiResponse.php:9 in trait App\Traits\ApiResponse; body not fetched
 unresolved named_reference: App\Http\Resources\DeliveryApp\DeliveryAppResource::collection in app/Http/Controllers/Public/DeliveryAppController.php
 dependency class: Illuminate\Http\JsonResponse provided by vendor/laravel/framework/src/Illuminate/Http/JsonResponse.php; surface not fetched
+inherited member: App\Http\Controllers\Public\DishController::paginated declared at app/Traits/ApiResponse.php:38 in trait App\Traits\ApiResponse; body not fetched
+inherited member: App\Http\Controllers\Public\DishController::success declared at app/Traits/ApiResponse.php:9 in trait App\Traits\ApiResponse; body not fetched
 unresolved named_reference: App\Http\Resources\Dish\DishResource::collection in app/Http/Controllers/Public/DishController.php
 dependency class: Illuminate\Http\Request provided by vendor/laravel/framework/src/Illuminate/Http/Request.php; surface not fetched
 dependency class: Illuminate\Http\JsonResponse provided by vendor/laravel/framework/src/Illuminate/Http/JsonResponse.php; surface not fetched
+inherited member: App\Http\Controllers\Public\MediaItemController::success declared at app/Traits/ApiResponse.php:9 in trait App\Traits\ApiResponse; body not fetched
 dependency class: Illuminate\Http\Request provided by vendor/laravel/framework/src/Illuminate/Http/Request.php; surface not fetched
 dependency class: Illuminate\Http\JsonResponse provided by vendor/laravel/framework/src/Illuminate/Http/JsonResponse.php; surface not fetched
+inherited member: App\Http\Controllers\Public\PageContentController::success declared at app/Traits/ApiResponse.php:9 in trait App\Traits\ApiResponse; body not fetched
 dependency class: Illuminate\Http\Request provided by vendor/laravel/framework/src/Illuminate/Http/Request.php; surface not fetched
 dependency class: Illuminate\Http\JsonResponse provided by vendor/laravel/framework/src/Illuminate/Http/JsonResponse.php; surface not fetched
+inherited member: App\Http\Controllers\Public\SettingController::success declared at app/Traits/ApiResponse.php:9 in trait App\Traits\ApiResponse; body not fetched
 dependency class: Illuminate\Http\Request provided by vendor/laravel/framework/src/Illuminate/Http/Request.php; surface not fetched
 dependency class: Illuminate\Http\JsonResponse provided by vendor/laravel/framework/src/Illuminate/Http/JsonResponse.php; surface not fetched
+inherited member: App\Http\Controllers\Public\TestimonialController::success declared at app/Traits/ApiResponse.php:9 in trait App\Traits\ApiResponse; body not fetched
 unresolved named_reference: App\Http\Resources\Testimonial\TestimonialResource::collection in app/Http/Controllers/Public/TestimonialController.php
 dependency class: Illuminate\Http\JsonResponse provided by vendor/laravel/framework/src/Illuminate/Http/JsonResponse.php; surface not fetched
+inherited member: App\Http\Controllers\Public\TimelineController::success declared at app/Traits/ApiResponse.php:9 in trait App\Traits\ApiResponse; body not fetched
 unresolved named_reference: App\Http\Resources\Timeline\TimelineResource::collection in app/Http/Controllers/Public/TimelineController.php
 dependency class: Illuminate\Http\JsonResponse provided by vendor/laravel/framework/src/Illuminate/Http/JsonResponse.php; surface not fetched
 framework reference: Illuminate\Support\Facades\Route::middleware declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Route.php:96 (@method static \Illuminate\Routing\RouteRegistrar middleware(array|string|null $middleware))
@@ -2053,4 +2221,8 @@ framework reference: Illuminate\Support\Facades\Route::patch declared at vendor/
 framework reference: Illuminate\Support\Facades\Route::prefix declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Route.php:100 (@method static \Illuminate\Routing\RouteRegistrar prefix(string $prefix))
 framework reference: Illuminate\Support\Facades\Route::get declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Route.php:6 (@method static \Illuminate\Routing\Route get(string $uri, array|string|callable|null $action = null))
 framework reference: Illuminate\Support\Facades\Route::post declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Route.php:7 (@method static \Illuminate\Routing\Route post(string $uri, array|string|callable|null $action = null))
+inherited member unresolved: Tests\Feature\AdminApiTest::postJson; walked nothing; continues into a dependency, which was not walked (Illuminate\Foundation\Testing\RefreshDatabase)
+inherited member unresolved: Tests\Feature\AdminApiTest::postJson; walked nothing; continues into a dependency, which was not walked (Illuminate\Foundation\Testing\RefreshDatabase)
+inherited member unresolved: Tests\Feature\AdminApiTest::getJson; walked nothing; continues into a dependency, which was not walked (Illuminate\Foundation\Testing\RefreshDatabase)
+inherited member unresolved: Tests\Feature\AdminApiTest::getJson; walked nothing; continues into a dependency, which was not walked (Illuminate\Foundation\Testing\RefreshDatabase)
 ===== END context-diagnostics.txt =====

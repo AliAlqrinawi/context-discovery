@@ -47,841 +47,650 @@ Q5: "<exact quotation>" | NONE_VISIBLE
 ---
 
 ===== BEGIN change.diff =====
-diff --git a/app/Http/Controllers/Auth/AuthController.php b/app/Http/Controllers/Auth/AuthController.php
-index e4e6283..028d0a0 100644
---- a/app/Http/Controllers/Auth/AuthController.php
-+++ b/app/Http/Controllers/Auth/AuthController.php
-@@ -18,30 +18,18 @@ public function login(LoginRequest $request, LoginAction $action): JsonResponse
-     {
-         $result = $action->execute(LoginDTO::fromRequest($request));
- 
--        return response()->json([
--            'success' => true,
--            'message' => 'Login successful',
--            'data' => new AuthResource($result),
--        ]);
-+        return $this->success(new AuthResource($result), 'Login successful');
-     }
- 
-     public function logout(Request $request, LogoutAction $action): JsonResponse
-     {
-         $action->execute($request->user());
- 
--        return response()->json([
--            'success' => true,
--            'message' => 'Logout successful',
--            'data' => null,
--        ]);
-+        return $this->success(null, 'Logout successful');
-     }
- 
-     public function me(Request $request): JsonResponse
-     {
--        return response()->json([
--            'success' => true,
--            'message' => 'Authenticated user',
--            'data' => new UserResource($request->user()),
--        ]);
-+        return $this->success(new UserResource($request->user()), 'Authenticated user');
-     }
- }
-diff --git a/app/Http/Controllers/BranchController.php b/app/Http/Controllers/BranchController.php
-index 10aeeb5..a9cb02f 100644
---- a/app/Http/Controllers/BranchController.php
-+++ b/app/Http/Controllers/BranchController.php
-@@ -17,43 +17,27 @@ class BranchController extends Controller
- {
-     public function index(GetBranchesAction $action): JsonResponse
-     {
--        return response()->json([
--            'success' => true,
--            'message' => 'Branches retrieved',
--            'data' => BranchResource::collection($action->execute()),
--        ]);
-+        return $this->success(BranchResource::collection($action->execute()), 'Branches retrieved');
-     }
- 
-     public function store(StoreBranchRequest $request, CreateBranchAction $action): JsonResponse
-     {
-         $branch = $action->execute(CreateBranchDTO::fromRequest($request));
- 
--        return response()->json([
--            'success' => true,
--            'message' => 'Branch created',
--            'data' => new BranchResource($branch),
--        ], 201);
-+        return $this->created(new BranchResource($branch), 'Branch created');
-     }
- 
-     public function update(UpdateBranchRequest $request, int $id, UpdateBranchAction $action): JsonResponse
-     {
-         $branch = $action->execute($id, UpdateBranchDTO::fromRequest($request));
- 
--        return response()->json([
--            'success' => true,
--            'message' => 'Branch updated',
--            'data' => new BranchResource($branch),
--        ]);
-+        return $this->success(new BranchResource($branch), 'Branch updated');
-     }
- 
-     public function destroy(int $id, DeleteBranchAction $action): JsonResponse
-     {
-         $action->execute($id);
- 
--        return response()->json([
--            'success' => true,
--            'message' => 'Branch deleted',
--            'data' => null,
--        ]);
-+        return $this->deleted('Branch deleted');
-     }
- }
-diff --git a/app/Http/Controllers/CategoryController.php b/app/Http/Controllers/CategoryController.php
-index 119e920..2a886d6 100644
---- a/app/Http/Controllers/CategoryController.php
-+++ b/app/Http/Controllers/CategoryController.php
-@@ -15,43 +15,27 @@ public function __construct(
- 
-     public function index(): JsonResponse
-     {
--        return response()->json([
--            'success' => true,
--            'message' => 'Categories retrieved',
--            'data' => CategoryResource::collection($this->repository->getAll()),
--        ]);
-+        return $this->success(CategoryResource::collection($this->repository->getAll()), 'Categories retrieved');
-     }
- 
-     public function store(Request $request): JsonResponse
-     {
-         $category = $this->repository->create($request->only(['name_ar', 'name_en', 'slug', 'order']));
- 
--        return response()->json([
--            'success' => true,
--            'message' => 'Category created',
--            'data' => new CategoryResource($category),
--        ], 201);
-+        return $this->created(new CategoryResource($category), 'Category created');
-     }
- 
-     public function update(Request $request, int $id): JsonResponse
-     {
-         $category = $this->repository->update($id, $request->only(['name_ar', 'name_en', 'slug', 'order']));
- 
--        return response()->json([
--            'success' => true,
--            'message' => 'Category updated',
--            'data' => new CategoryResource($category),
--        ]);
-+        return $this->success(new CategoryResource($category), 'Category updated');
-     }
- 
-     public function destroy(int $id): JsonResponse
-     {
-         $this->repository->delete($id);
- 
--        return response()->json([
--            'success' => true,
--            'message' => 'Category deleted',
--            'data' => null,
--        ]);
-+        return $this->deleted('Category deleted');
-     }
- }
-diff --git a/app/Http/Controllers/Catering/CateringPackageController.php b/app/Http/Controllers/Catering/CateringPackageController.php
-index 413f202..4fdd1b8 100644
---- a/app/Http/Controllers/Catering/CateringPackageController.php
-+++ b/app/Http/Controllers/Catering/CateringPackageController.php
-@@ -18,43 +18,27 @@ class CateringPackageController extends Controller
- {
-     public function index(GetPackagesAction $action): JsonResponse
-     {
--        return response()->json([
--            'success' => true,
--            'message' => 'Catering packages retrieved',
--            'data' => PackageResource::collection($action->execute()),
--        ]);
-+        return $this->success(PackageResource::collection($action->execute()), 'Catering packages retrieved');
-     }
- 
-     public function store(StorePackageRequest $request, CreatePackageAction $action): JsonResponse
-     {
-         $package = $action->execute(CreatePackageDTO::fromRequest($request));
- 
--        return response()->json([
--            'success' => true,
--            'message' => 'Catering package created',
--            'data' => new PackageResource($package),
--        ], 201);
-+        return $this->created(new PackageResource($package), 'Catering package created');
-     }
- 
-     public function update(UpdatePackageRequest $request, int $id, UpdatePackageAction $action): JsonResponse
-     {
-         $package = $action->execute($id, UpdatePackageDTO::fromRequest($request));
- 
--        return response()->json([
--            'success' => true,
--            'message' => 'Catering package updated',
--            'data' => new PackageResource($package),
--        ]);
-+        return $this->success(new PackageResource($package), 'Catering package updated');
-     }
- 
-     public function destroy(int $id, DeletePackageAction $action): JsonResponse
-     {
-         $action->execute($id);
- 
--        return response()->json([
--            'success' => true,
--            'message' => 'Catering package deleted',
--            'data' => null,
--        ]);
-+        return $this->deleted('Catering package deleted');
-     }
- }
-diff --git a/app/Http/Controllers/Catering/QuoteRequestController.php b/app/Http/Controllers/Catering/QuoteRequestController.php
-index 21e4fe8..63ea6c1 100644
---- a/app/Http/Controllers/Catering/QuoteRequestController.php
-+++ b/app/Http/Controllers/Catering/QuoteRequestController.php
-@@ -20,11 +20,7 @@ public function store(StoreQuoteRequestRequest $request, SubmitQuoteRequestActio
-     {
-         $quoteRequest = $action->execute(SubmitQuoteRequestDTO::fromRequest($request));
- 
--        return response()->json([
--            'success' => true,
--            'message' => 'Quote request submitted',
--            'data' => new QuoteRequestResource($quoteRequest),
--        ], 201);
-+        return $this->created(new QuoteRequestResource($quoteRequest), 'Quote request submitted');
-     }
- 
-     public function index(Request $request, QuoteRequestRepository $repository): JsonResponse
-@@ -37,38 +33,18 @@ public function index(Request $request, QuoteRequestRepository $repository): Jso
- 
-         $result = $repository->getAll($filters);
- 
--        return response()->json([
--            'success' => true,
--            'message' => 'Quote requests retrieved',
--            'data' => [
--                'items' => QuoteRequestResource::collection($result),
--                'meta' => [
--                    'current_page' => $result->currentPage(),
--                    'last_page' => $result->lastPage(),
--                    'per_page' => $result->perPage(),
--                    'total' => $result->total(),
--                ],
--            ],
--        ]);
-+        return $this->paginated(QuoteRequestResource::collection($result), $result, 'Quote requests retrieved');
-     }
- 
-     public function show(int $id, QuoteRequestRepository $repository): JsonResponse
-     {
--        return response()->json([
--            'success' => true,
--            'message' => 'Quote request retrieved',
--            'data' => new QuoteRequestResource($repository->getById($id)),
--        ]);
-+        return $this->success(new QuoteRequestResource($repository->getById($id)), 'Quote request retrieved');
-     }
- 
-     public function updateStatus(UpdateQuoteRequestStatusRequest $request, int $id, UpdateQuoteRequestStatusAction $action): JsonResponse
-     {
-         $quoteRequest = $action->execute($id, UpdateQuoteRequestStatusDTO::fromRequest($request));
- 
--        return response()->json([
--            'success' => true,
--            'message' => 'Quote request status updated',
--            'data' => new QuoteRequestResource($quoteRequest),
--        ]);
-+        return $this->success(new QuoteRequestResource($quoteRequest), 'Quote request status updated');
-     }
- }
-diff --git a/app/Http/Controllers/Catering/SampleMenuController.php b/app/Http/Controllers/Catering/SampleMenuController.php
-index 7aa3186..4919e73 100644
---- a/app/Http/Controllers/Catering/SampleMenuController.php
-+++ b/app/Http/Controllers/Catering/SampleMenuController.php
-@@ -16,43 +16,27 @@ class SampleMenuController extends Controller
- {
-     public function index(GetSampleMenusAction $action): JsonResponse
-     {
--        return response()->json([
--            'success' => true,
--            'message' => 'Sample menus retrieved',
--            'data' => SampleMenuResource::collection($action->execute()),
--        ]);
-+        return $this->success(SampleMenuResource::collection($action->execute()), 'Sample menus retrieved');
-     }
- 
-     public function store(StoreSampleMenuRequest $request, CreateSampleMenuAction $action): JsonResponse
-     {
-         $menu = $action->execute(CreateSampleMenuDTO::fromRequest($request));
- 
--        return response()->json([
--            'success' => true,
--            'message' => 'Sample menu created',
--            'data' => new SampleMenuResource($menu),
--        ], 201);
-+        return $this->created(new SampleMenuResource($menu), 'Sample menu created');
-     }
- 
-     public function update(StoreSampleMenuRequest $request, int $id, UpdateSampleMenuAction $action): JsonResponse
-     {
-         $menu = $action->execute($id, CreateSampleMenuDTO::fromRequest($request));
- 
--        return response()->json([
--            'success' => true,
--            'message' => 'Sample menu updated',
--            'data' => new SampleMenuResource($menu),
--        ]);
-+        return $this->success(new SampleMenuResource($menu), 'Sample menu updated');
-     }
- 
-     public function destroy(int $id, DeleteSampleMenuAction $action): JsonResponse
-     {
-         $action->execute($id);
- 
--        return response()->json([
--            'success' => true,
--            'message' => 'Sample menu deleted',
--            'data' => null,
--        ]);
-+        return $this->deleted('Sample menu deleted');
-     }
- }
-diff --git a/app/Http/Controllers/Controller.php b/app/Http/Controllers/Controller.php
-index 8677cd5..f87ab02 100644
---- a/app/Http/Controllers/Controller.php
-+++ b/app/Http/Controllers/Controller.php
-@@ -2,7 +2,9 @@
- 
- namespace App\Http\Controllers;
- 
-+use App\Traits\ApiResponse;
-+
- abstract class Controller
- {
--    //
-+    use ApiResponse;
- }
-diff --git a/app/Http/Controllers/DeliveryAppController.php b/app/Http/Controllers/DeliveryAppController.php
-index adb8717..331269c 100644
---- a/app/Http/Controllers/DeliveryAppController.php
-+++ b/app/Http/Controllers/DeliveryAppController.php
-@@ -17,43 +17,27 @@ public function index(GetDeliveryAppsAction $action): JsonResponse
-     {
-         $activeOnly = ! auth('sanctum')->check();
- 
--        return response()->json([
--            'success' => true,
--            'message' => 'Delivery apps retrieved',
--            'data' => DeliveryAppResource::collection($action->execute($activeOnly)),
--        ]);
-+        return $this->success(DeliveryAppResource::collection($action->execute($activeOnly)), 'Delivery apps retrieved');
-     }
- 
-     public function store(StoreDeliveryAppRequest $request, CreateDeliveryAppAction $action): JsonResponse
-     {
-         $deliveryApp = $action->execute(CreateDeliveryAppDTO::fromRequest($request));
- 
--        return response()->json([
--            'success' => true,
--            'message' => 'Delivery app created',
--            'data' => new DeliveryAppResource($deliveryApp),
--        ], 201);
-+        return $this->created(new DeliveryAppResource($deliveryApp), 'Delivery app created');
-     }
- 
-     public function update(StoreDeliveryAppRequest $request, int $id, UpdateDeliveryAppAction $action): JsonResponse
-     {
-         $deliveryApp = $action->execute($id, CreateDeliveryAppDTO::fromRequest($request));
- 
--        return response()->json([
--            'success' => true,
--            'message' => 'Delivery app updated',
--            'data' => new DeliveryAppResource($deliveryApp),
--        ]);
-+        return $this->success(new DeliveryAppResource($deliveryApp), 'Delivery app updated');
-     }
- 
-     public function destroy(int $id, DeleteDeliveryAppAction $action): JsonResponse
-     {
-         $action->execute($id);
- 
--        return response()->json([
--            'success' => true,
--            'message' => 'Delivery app deleted',
--            'data' => null,
--        ]);
-+        return $this->deleted('Delivery app deleted');
-     }
- }
-diff --git a/app/Http/Controllers/DishController.php b/app/Http/Controllers/DishController.php
-index a8d9a22..3a2c214 100644
---- a/app/Http/Controllers/DishController.php
-+++ b/app/Http/Controllers/DishController.php
-@@ -29,52 +29,32 @@ public function index(Request $request, GetDishesAction $action): JsonResponse
- 
-         $result = $action->execute($filters);
- 
--        return response()->json([
--            'success' => true,
--            'message' => 'Dishes retrieved',
--            'data' => new DishCollection($result),
--        ]);
-+        return $this->success(new DishCollection($result), 'Dishes retrieved');
-     }
- 
-     public function show(int $id, GetDishAction $action): JsonResponse
-     {
--        return response()->json([
--            'success' => true,
--            'message' => 'Dish retrieved',
--            'data' => new DishResource($action->execute($id)),
--        ]);
-+        return $this->success(new DishResource($action->execute($id)), 'Dish retrieved');
-     }
- 
-     public function store(StoreDishRequest $request, CreateDishAction $action): JsonResponse
-     {
-         $dish = $action->execute(CreateDishDTO::fromRequest($request));
- 
--        return response()->json([
--            'success' => true,
--            'message' => 'Dish created',
--            'data' => new DishResource($dish),
--        ], 201);
-+        return $this->created(new DishResource($dish), 'Dish created');
-     }
- 
-     public function update(UpdateDishRequest $request, int $id, UpdateDishAction $action): JsonResponse
-     {
-         $dish = $action->execute($id, UpdateDishDTO::fromRequest($request));
- 
--        return response()->json([
--            'success' => true,
--            'message' => 'Dish updated',
--            'data' => new DishResource($dish),
--        ]);
-+        return $this->success(new DishResource($dish), 'Dish updated');
-     }
- 
-     public function destroy(int $id, DeleteDishAction $action): JsonResponse
-     {
-         $action->execute($id);
- 
--        return response()->json([
--            'success' => true,
--            'message' => 'Dish deleted',
--            'data' => null,
--        ]);
-+        return $this->deleted('Dish deleted');
-     }
- }
-diff --git a/app/Http/Controllers/MediaItemController.php b/app/Http/Controllers/MediaItemController.php
-index b0e6901..6707b12 100644
---- a/app/Http/Controllers/MediaItemController.php
-+++ b/app/Http/Controllers/MediaItemController.php
-@@ -25,52 +25,32 @@ public function index(Request $request, GetMediaItemsAction $action): JsonRespon
-             fn ($section) => $section->map(fn ($item) => new MediaItemResource($item))
-         );
- 
--        return response()->json([
--            'success' => true,
--            'message' => 'Media items retrieved',
--            'data' => $resourced,
--        ]);
-+        return $this->success($resourced, 'Media items retrieved');
-     }
- 
-     public function store(UploadMediaRequest $request, UploadMediaAction $action): JsonResponse
-     {
-         $mediaItem = $action->execute(UploadMediaDTO::fromRequest($request));
- 
--        return response()->json([
--            'success' => true,
--            'message' => 'Media item uploaded',
--            'data' => new MediaItemResource($mediaItem),
--        ], 201);
-+        return $this->created(new MediaItemResource($mediaItem), 'Media item uploaded');
-     }
- 
-     public function show(int $id, MediaItemRepository $repository): JsonResponse
-     {
--        return response()->json([
--            'success' => true,
--            'message' => 'Media item retrieved',
--            'data' => new MediaItemResource($repository->getById($id)),
--        ]);
-+        return $this->success(new MediaItemResource($repository->getById($id)), 'Media item retrieved');
-     }
- 
-     public function update(UploadMediaRequest $request, int $id, UploadMediaAction $action): JsonResponse
-     {
-         $mediaItem = $action->execute(UploadMediaDTO::fromRequest($request));
- 
--        return response()->json([
--            'success' => true,
--            'message' => 'Media item updated',
--            'data' => new MediaItemResource($mediaItem),
--        ]);
-+        return $this->success(new MediaItemResource($mediaItem), 'Media item updated');
-     }
- 
-     public function destroy(int $id, DeleteMediaAction $action): JsonResponse
-     {
-         $action->execute($id);
- 
--        return response()->json([
--            'success' => true,
--            'message' => 'Media item deleted',
--            'data' => null,
--        ]);
-+        return $this->deleted('Media item deleted');
-     }
- }
-diff --git a/app/Http/Controllers/PageContentController.php b/app/Http/Controllers/PageContentController.php
-index f8a17f5..ff4f0ad 100644
---- a/app/Http/Controllers/PageContentController.php
-+++ b/app/Http/Controllers/PageContentController.php
-@@ -27,41 +27,25 @@ public function index(Request $request, GetPageContentAction $action): JsonRespo
-             fn ($section) => $section->map(fn ($item) => new PageContentResource($item))
-         );
- 
--        return response()->json([
--            'success' => true,
--            'message' => 'Page contents retrieved',
--            'data' => $resourced,
--        ]);
-+        return $this->success($resourced, 'Page contents retrieved');
-     }
- 
-     public function show(int $id, PageContentRepository $repository): JsonResponse
-     {
--        return response()->json([
--            'success' => true,
--            'message' => 'Page content retrieved',
--            'data' => new PageContentResource($repository->getById($id)),
--        ]);
-+        return $this->success(new PageContentResource($repository->getById($id)), 'Page content retrieved');
-     }
- 
-     public function update(UpdatePageContentRequest $request, int $id, UpdatePageContentAction $action): JsonResponse
-     {
-         $pageContent = $action->execute($id, UpdatePageContentDTO::fromRequest($request));
- 
--        return response()->json([
--            'success' => true,
--            'message' => 'Page content updated',
--            'data' => new PageContentResource($pageContent),
--        ]);
-+        return $this->success(new PageContentResource($pageContent), 'Page content updated');
-     }
- 
-     public function bulkUpdate(BulkUpdatePageContentRequest $request, BulkUpdatePageContentAction $action): JsonResponse
-     {
-         $action->execute(BulkUpdatePageContentDTO::fromRequest($request));
- 
--        return response()->json([
--            'success' => true,
--            'message' => 'Page contents updated',
--            'data' => null,
--        ]);
-+        return $this->success(null, 'Page contents updated');
-     }
- }
-diff --git a/app/Http/Controllers/SettingController.php b/app/Http/Controllers/SettingController.php
-index 5267a36..25a4fd8 100644
---- a/app/Http/Controllers/SettingController.php
-+++ b/app/Http/Controllers/SettingController.php
-@@ -18,21 +18,13 @@ public function index(Request $request, GetSettingsAction $action): JsonResponse
-             $request->filled('group') ? $request->string('group')->toString() : null,
-         );
- 
--        return response()->json([
--            'success' => true,
--            'message' => 'Settings retrieved',
--            'data' => $result->map(fn ($setting) => new SettingResource($setting)),
--        ]);
-+        return $this->success($result->map(fn ($setting) => new SettingResource($setting)), 'Settings retrieved');
-     }
- 
-     public function bulkUpdate(UpdateSettingRequest $request, UpdateSettingsAction $action): JsonResponse
-     {
-         $action->execute(UpdateSettingDTO::fromRequest($request));
- 
--        return response()->json([
--            'success' => true,
--            'message' => 'Settings updated',
--            'data' => null,
--        ]);
-+        return $this->success(null, 'Settings updated');
-     }
- }
-diff --git a/app/Http/Controllers/TestimonialController.php b/app/Http/Controllers/TestimonialController.php
-index 1eaddb8..0a99885 100644
---- a/app/Http/Controllers/TestimonialController.php
-+++ b/app/Http/Controllers/TestimonialController.php
-@@ -17,43 +17,27 @@ public function index(GetTestimonialsAction $action): JsonResponse
-     {
-         $activeOnly = ! auth('sanctum')->check();
- 
--        return response()->json([
--            'success' => true,
--            'message' => 'Testimonials retrieved',
--            'data' => TestimonialResource::collection($action->execute($activeOnly)),
--        ]);
-+        return $this->success(TestimonialResource::collection($action->execute($activeOnly)), 'Testimonials retrieved');
-     }
- 
-     public function store(StoreTestimonialRequest $request, CreateTestimonialAction $action): JsonResponse
-     {
-         $testimonial = $action->execute(CreateTestimonialDTO::fromRequest($request));
- 
--        return response()->json([
--            'success' => true,
--            'message' => 'Testimonial created',
--            'data' => new TestimonialResource($testimonial),
--        ], 201);
-+        return $this->created(new TestimonialResource($testimonial), 'Testimonial created');
-     }
- 
-     public function update(StoreTestimonialRequest $request, int $id, UpdateTestimonialAction $action): JsonResponse
-     {
-         $testimonial = $action->execute($id, CreateTestimonialDTO::fromRequest($request));
- 
--        return response()->json([
--            'success' => true,
--            'message' => 'Testimonial updated',
--            'data' => new TestimonialResource($testimonial),
--        ]);
-+        return $this->success(new TestimonialResource($testimonial), 'Testimonial updated');
-     }
- 
-     public function destroy(int $id, DeleteTestimonialAction $action): JsonResponse
-     {
-         $action->execute($id);
- 
--        return response()->json([
--            'success' => true,
--            'message' => 'Testimonial deleted',
--            'data' => null,
--        ]);
-+        return $this->deleted('Testimonial deleted');
-     }
- }
-diff --git a/app/Http/Controllers/TimelineController.php b/app/Http/Controllers/TimelineController.php
-index 1d9ad41..a686e45 100644
---- a/app/Http/Controllers/TimelineController.php
-+++ b/app/Http/Controllers/TimelineController.php
-@@ -15,43 +15,27 @@ class TimelineController extends Controller
- {
-     public function index(GetTimelineAction $action): JsonResponse
-     {
--        return response()->json([
--            'success' => true,
--            'message' => 'Timeline retrieved',
--            'data' => TimelineResource::collection($action->execute()),
--        ]);
-+        return $this->success(TimelineResource::collection($action->execute()), 'Timeline retrieved');
-     }
- 
-     public function store(StoreTimelineRequest $request, CreateTimelineAction $action): JsonResponse
-     {
-         $timeline = $action->execute(CreateTimelineDTO::fromRequest($request));
- 
--        return response()->json([
--            'success' => true,
--            'message' => 'Timeline entry created',
--            'data' => new TimelineResource($timeline),
--        ], 201);
-+        return $this->created(new TimelineResource($timeline), 'Timeline entry created');
-     }
- 
-     public function update(StoreTimelineRequest $request, int $id, UpdateTimelineAction $action): JsonResponse
-     {
-         $timeline = $action->execute($id, CreateTimelineDTO::fromRequest($request));
- 
--        return response()->json([
--            'success' => true,
--            'message' => 'Timeline entry updated',
--            'data' => new TimelineResource($timeline),
--        ]);
-+        return $this->success(new TimelineResource($timeline), 'Timeline entry updated');
-     }
- 
-     public function destroy(int $id, DeleteTimelineAction $action): JsonResponse
-     {
-         $action->execute($id);
- 
--        return response()->json([
--            'success' => true,
--            'message' => 'Timeline entry deleted',
--            'data' => null,
--        ]);
-+        return $this->deleted('Timeline entry deleted');
-     }
- }
-diff --git a/app/Http/Controllers/UserController.php b/app/Http/Controllers/UserController.php
-index 204c70b..6261341 100644
---- a/app/Http/Controllers/UserController.php
-+++ b/app/Http/Controllers/UserController.php
-@@ -20,60 +20,32 @@ public function index(GetUsersAction $action): JsonResponse
-     {
-         $result = $action->execute();
- 
--        return response()->json([
--            'success' => true,
--            'message' => 'Users retrieved',
--            'data' => [
--                'items' => UserResource::collection($result),
--                'meta' => [
--                    'current_page' => $result->currentPage(),
--                    'last_page' => $result->lastPage(),
--                    'per_page' => $result->perPage(),
--                    'total' => $result->total(),
--                ],
--            ],
--        ]);
-+        return $this->paginated(UserResource::collection($result), $result, 'Users retrieved');
-     }
- 
-     public function store(StoreUserRequest $request, CreateUserAction $action): JsonResponse
-     {
-         $user = $action->execute(CreateUserDTO::fromRequest($request));
- 
--        return response()->json([
--            'success' => true,
--            'message' => 'User created',
--            'data' => new UserResource($user),
--        ], 201);
-+        return $this->created(new UserResource($user), 'User created');
-     }
- 
-     public function show(int $id, UserRepository $repository): JsonResponse
-     {
--        return response()->json([
--            'success' => true,
--            'message' => 'User retrieved',
--            'data' => new UserResource($repository->getById($id)),
--        ]);
-+        return $this->success(new UserResource($repository->getById($id)), 'User retrieved');
-     }
- 
-     public function update(UpdateUserRequest $request, int $id, UpdateUserAction $action): JsonResponse
-     {
-         $user = $action->execute($id, UpdateUserDTO::fromRequest($request));
- 
--        return response()->json([
--            'success' => true,
--            'message' => 'User updated',
--            'data' => new UserResource($user),
--        ]);
-+        return $this->success(new UserResource($user), 'User updated');
-     }
- 
-     public function destroy(int $id, DeleteUserAction $action): JsonResponse
-     {
-         $action->execute($id);
- 
--        return response()->json([
--            'success' => true,
--            'message' => 'User deleted',
--            'data' => null,
--        ]);
-+        return $this->deleted('User deleted');
-     }
- }
-diff --git a/app/Traits/ApiResponse.php b/app/Traits/ApiResponse.php
+diff --git a/app/Http/Controllers/Admin/MenuPdfController.php b/app/Http/Controllers/Admin/MenuPdfController.php
 new file mode 100644
-index 0000000..4223952
+index 0000000..d3080a2
 --- /dev/null
-+++ b/app/Traits/ApiResponse.php
-@@ -0,0 +1,69 @@
++++ b/app/Http/Controllers/Admin/MenuPdfController.php
+@@ -0,0 +1,85 @@
 +<?php
 +
-+namespace App\Traits;
++namespace App\Http\Controllers\Admin;
 +
++use App\Http\Controllers\Controller;
++use App\Models\Setting;
 +use Illuminate\Http\JsonResponse;
++use Illuminate\Http\Request;
++use Illuminate\Support\Facades\Storage;
 +
-+trait ApiResponse
++class MenuPdfController extends Controller
 +{
-+    protected function success(
-+        mixed $data = null,
-+        string $message = 'Operation completed successfully',
-+        int $status = 200
-+    ): JsonResponse {
-+        return response()->json([
-+            'success' => true,
-+            'message' => $message,
-+            'data'    => $data,
-+        ], $status);
++    private const SETTING_KEY = 'menu_pdf_path';
++
++    private const STORAGE_PATH = 'menu/menu.pdf';
++
++    public function show(): JsonResponse
++    {
++        return $this->success($this->payload(), __('messages.fetched'));
 +    }
 +
-+    protected function created(
-+        mixed $data = null,
-+        string $message = 'Created successfully'
-+    ): JsonResponse {
-+        return $this->success($data, $message, 201);
-+    }
++    public function upload(Request $request): JsonResponse
++    {
++        $request->validate([
++            'pdf' => ['required', 'file', 'mimes:pdf', 'max:20480'],
++        ]);
 +
-+    protected function deleted(
-+        string $message = 'Deleted successfully'
-+    ): JsonResponse {
-+        return response()->json([
-+            'success' => true,
-+            'message' => $message,
-+            'data'    => null,
-+        ], 200);
-+    }
++        $oldPath = $this->storedPath();
 +
-+    protected function paginated(
-+        mixed $collection,
-+        mixed $paginator,
-+        string $message = 'Data fetched successfully'
-+    ): JsonResponse {
-+        return response()->json([
-+            'success' => true,
-+            'message' => $message,
-+            'data'    => [
-+                'items' => $collection,
-+                'meta'  => [
-+                    'current_page' => $paginator->currentPage(),
-+                    'last_page'    => $paginator->lastPage(),
-+                    'per_page'     => $paginator->perPage(),
-+                    'total'        => $paginator->total(),
-+                ],
++        if ($oldPath && $oldPath !== self::STORAGE_PATH && Storage::disk('public')->exists($oldPath)) {
++            Storage::disk('public')->delete($oldPath);
++        }
++
++        // Fixed filename so re-uploads overwrite in place and the public URL never moves.
++        $path = $request->file('pdf')->storeAs('menu', 'menu.pdf', 'public');
++
++        Setting::updateOrCreate(
++            ['key' => self::SETTING_KEY],
++            [
++                'value' => $path,
++                'type' => 'text',
++                'group' => 'general',
++                'label_ar' => 'ملف قائمة الطعام PDF',
++                'label_en' => 'Menu PDF File',
 +            ],
-+        ], 200);
++        );
++
++        return $this->success($this->payload(), __('messages.uploaded'));
 +    }
 +
-+    protected function error(
-+        string $message = 'Something went wrong',
-+        int $status = 400,
-+        array $errors = []
-+    ): JsonResponse {
-+        return response()->json([
-+            'success' => false,
-+            'message' => $message,
-+            'errors'  => $errors,
-+        ], $status);
++    public function destroy(): JsonResponse
++    {
++        $path = $this->storedPath();
++
++        if ($path && Storage::disk('public')->exists($path)) {
++            Storage::disk('public')->delete($path);
++        }
++
++        Setting::updateOrCreate(
++            ['key' => self::SETTING_KEY],
++            ['value' => '', 'type' => 'text', 'group' => 'general'],
++        );
++
++        return $this->deleted(__('messages.deleted'));
++    }
++
++    private function storedPath(): ?string
++    {
++        $path = Setting::where('key', self::SETTING_KEY)->value('value');
++
++        return $path !== '' ? $path : null;
++    }
++
++    private function payload(): array
++    {
++        $path = $this->storedPath();
++
++        return [
++            'has_pdf' => $path !== null && Storage::disk('public')->exists($path),
++            'permanent_url' => route('menu.pdf'),
++            'qr_url' => route('menu.qr'),
++            'qr_download' => route('menu.qr.download'),
++        ];
 +    }
 +}
+diff --git a/app/Services/MenuQrService.php b/app/Services/MenuQrService.php
+new file mode 100644
+index 0000000..9e8964e
+--- /dev/null
++++ b/app/Services/MenuQrService.php
+@@ -0,0 +1,51 @@
++<?php
++
++namespace App\Services;
++
++use App\Models\MediaItem;
++use Endroid\QrCode\Builder\Builder;
++use Endroid\QrCode\Color\Color;
++use Endroid\QrCode\ErrorCorrectionLevel;
++use Endroid\QrCode\Writer\PngWriter;
++use Illuminate\Support\Facades\Storage;
++
++class MenuQrService
++{
++    /** Share of the QR width the logo may cover; beyond ~0.3 the code stops scanning. */
++    private const LOGO_RATIO = 0.25;
++
++    public function png(int $size = 500): string
++    {
++        $arguments = [
++            'writer' => new PngWriter(),
++            'data' => route('menu.pdf'),
++            'errorCorrectionLevel' => ErrorCorrectionLevel::High,
++            'size' => $size,
++            'margin' => 10,
++            'foregroundColor' => new Color(26, 23, 0),
++            'backgroundColor' => new Color(246, 239, 223),
++        ];
++
++        if ($logoPath = $this->logoPath()) {
++            $arguments['logoPath'] = $logoPath;
++            $arguments['logoResizeToWidth'] = (int) round($size * self::LOGO_RATIO);
++            $arguments['logoPunchoutBackground'] = true;
++        }
++
++        return (new Builder(...$arguments))->build()->getString();
++    }
++
++    private function logoPath(): ?string
++    {
++        $logo = MediaItem::where('page', 'global')
++            ->where('section', 'brand')
++            ->where('key', 'logo_dark')
++            ->first();
++
++        if (! $logo?->path || ! Storage::disk('public')->exists($logo->path)) {
++            return null;
++        }
++
++        return Storage::disk('public')->path($logo->path);
++    }
++}
+diff --git a/composer.json b/composer.json
+index 22f512c..e918d6c 100644
+--- a/composer.json
++++ b/composer.json
+@@ -8,6 +8,7 @@
+     "require": {
+         "php": "^8.2",
+         "dedoc/scramble": "^0.13.35",
++        "endroid/qr-code": "^6.1",
+         "intervention/image-laravel": "^4.0",
+         "laravel/framework": "^12.0",
+         "laravel/sanctum": "^4.3",
+diff --git a/composer.lock b/composer.lock
+index 0c7e622..3e15ab9 100644
+--- a/composer.lock
++++ b/composer.lock
+@@ -4,8 +4,63 @@
+         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+         "This file is @generated automatically"
+     ],
+-    "content-hash": "dff99565e3ff109e79a99c0b7f2355c8",
++    "content-hash": "1bfb9fd34baa28b29ca3a908ea004b57",
+     "packages": [
++        {
++            "name": "bacon/bacon-qr-code",
++            "version": "v3.1.1",
++            "source": {
++                "type": "git",
++                "url": "https://github.com/Bacon/BaconQrCode.git",
++                "reference": "4da2233e72eeecd9be3b62e0dc2cc9ed8e2e31c2"
++            },
++            "dist": {
++                "type": "zip",
++                "url": "https://api.github.com/repos/Bacon/BaconQrCode/zipball/4da2233e72eeecd9be3b62e0dc2cc9ed8e2e31c2",
++                "reference": "4da2233e72eeecd9be3b62e0dc2cc9ed8e2e31c2",
++                "shasum": ""
++            },
++            "require": {
++                "dasprid/enum": "^1.0.3",
++                "ext-iconv": "*",
++                "php": "^8.1"
++            },
++            "require-dev": {
++                "phly/keep-a-changelog": "^2.12",
++                "phpunit/phpunit": "^10.5.11 || ^11.0.4",
++                "spatie/phpunit-snapshot-assertions": "^5.1.5",
++                "spatie/pixelmatch-php": "^1.2.0",
++                "squizlabs/php_codesniffer": "^3.9"
++            },
++            "suggest": {
++                "ext-imagick": "to generate QR code images"
++            },
++            "type": "library",
++            "autoload": {
++                "psr-4": {
++                    "BaconQrCode\\": "src/"
++                }
++            },
++            "notification-url": "https://packagist.org/downloads/",
++            "license": [
++                "BSD-2-Clause"
++            ],
++            "authors": [
++                {
++                    "name": "Ben Scholzen 'DASPRiD'",
++                    "email": "mail@dasprids.de",
++                    "homepage": "https://dasprids.de/",
++                    "role": "Developer"
++                }
++            ],
++            "description": "BaconQrCode is a QR code generator for PHP.",
++            "homepage": "https://github.com/Bacon/BaconQrCode",
++            "support": {
++                "issues": "https://github.com/Bacon/BaconQrCode/issues",
++                "source": "https://github.com/Bacon/BaconQrCode/tree/v3.1.1"
++            },
++            "time": "2026-04-05T21:06:35+00:00"
++        },
+         {
+             "name": "brick/math",
+             "version": "0.14.8",
+@@ -135,6 +190,56 @@
+             ],
+             "time": "2024-02-09T16:56:22+00:00"
+         },
++        {
++            "name": "dasprid/enum",
++            "version": "1.0.7",
++            "source": {
++                "type": "git",
++                "url": "https://github.com/DASPRiD/Enum.git",
++                "reference": "b5874fa9ed0043116c72162ec7f4fb50e02e7cce"
++            },
++            "dist": {
++                "type": "zip",
++                "url": "https://api.github.com/repos/DASPRiD/Enum/zipball/b5874fa9ed0043116c72162ec7f4fb50e02e7cce",
++                "reference": "b5874fa9ed0043116c72162ec7f4fb50e02e7cce",
++                "shasum": ""
++            },
++            "require": {
++                "php": ">=7.1 <9.0"
++            },
++            "require-dev": {
++                "phpunit/phpunit": "^7 || ^8 || ^9 || ^10 || ^11",
++                "squizlabs/php_codesniffer": "*"
++            },
++            "type": "library",
++            "autoload": {
++                "psr-4": {
++                    "DASPRiD\\Enum\\": "src/"
++                }
++            },
++            "notification-url": "https://packagist.org/downloads/",
++            "license": [
++                "BSD-2-Clause"
++            ],
++            "authors": [
++                {
++                    "name": "Ben Scholzen 'DASPRiD'",
++                    "email": "mail@dasprids.de",
++                    "homepage": "https://dasprids.de/",
++                    "role": "Developer"
++                }
++            ],
++            "description": "PHP 7.1 enum implementation",
++            "keywords": [
++                "enum",
++                "map"
++            ],
++            "support": {
++                "issues": "https://github.com/DASPRiD/Enum/issues",
++                "source": "https://github.com/DASPRiD/Enum/tree/1.0.7"
++            },
++            "time": "2025-09-16T12:23:56+00:00"
++        },
+         {
+             "name": "dedoc/scramble",
+             "version": "v0.13.35",
+@@ -589,6 +694,78 @@
+             ],
+             "time": "2025-03-06T22:45:56+00:00"
+         },
++        {
++            "name": "endroid/qr-code",
++            "version": "6.1.3",
++            "source": {
++                "type": "git",
++                "url": "https://github.com/endroid/qr-code.git",
++                "reference": "5fa534856ed95649d67c0eab0cabc03ab1d8e0e2"
++            },
++            "dist": {
++                "type": "zip",
++                "url": "https://api.github.com/repos/endroid/qr-code/zipball/5fa534856ed95649d67c0eab0cabc03ab1d8e0e2",
++                "reference": "5fa534856ed95649d67c0eab0cabc03ab1d8e0e2",
++                "shasum": ""
++            },
++            "require": {
++                "bacon/bacon-qr-code": "^3.0",
++                "php": "^8.4"
++            },
++            "require-dev": {
++                "endroid/quality": "dev-main",
++                "ext-gd": "*",
++                "khanamiryan/qrcode-detector-decoder": "^2.0.3",
++                "setasign/fpdf": "^1.8.2"
++            },
++            "suggest": {
++                "ext-gd": "Enables you to write PNG images",
++                "khanamiryan/qrcode-detector-decoder": "Enables you to use the image validator",
++                "roave/security-advisories": "Makes sure package versions with known security issues are not installed",
++                "setasign/fpdf": "Enables you to use the PDF writer"
++            },
++            "type": "library",
++            "extra": {
++                "branch-alias": {
++                    "dev-main": "6.x-dev"
++                }
++            },
++            "autoload": {
++                "psr-4": {
++                    "Endroid\\QrCode\\": "src/"
++                }
++            },
++            "notification-url": "https://packagist.org/downloads/",
++            "license": [
++                "MIT"
++            ],
++            "authors": [
++                {
++                    "name": "Jeroen van den Enden",
++                    "email": "info@endroid.nl"
++                }
++            ],
++            "description": "Endroid QR Code",
++            "homepage": "https://github.com/endroid/qr-code",
++            "keywords": [
++                "code",
++                "endroid",
++                "php",
++                "qr",
++                "qrcode"
++            ],
++            "support": {
++                "issues": "https://github.com/endroid/qr-code/issues",
++                "source": "https://github.com/endroid/qr-code/tree/6.1.3"
++            },
++            "funding": [
++                {
++                    "url": "https://github.com/endroid",
++                    "type": "github"
++                }
++            ],
++            "time": "2026-02-05T07:01:58+00:00"
++        },
+         {
+             "name": "fruitcake/php-cors",
+             "version": "v1.4.0",
+diff --git a/database/seeders/SettingSeeder.php b/database/seeders/SettingSeeder.php
+index 85d0338..f068d73 100644
+--- a/database/seeders/SettingSeeder.php
++++ b/database/seeders/SettingSeeder.php
+@@ -29,10 +29,11 @@ public function run(): void
+             ['key' => 'footer_copyright', 'value' => '© 2026 أبو السيد. جميع الحقوق محفوظة.', 'type' => 'text', 'group' => 'footer', 'label_ar' => 'نص الحقوق', 'label_en' => 'Copyright Text'],
+             ['key' => 'navbar_cta_ar', 'value' => 'اطلب أونلاين', 'type' => 'text', 'group' => 'navbar', 'label_ar' => 'زر الهيدر (عربي)', 'label_en' => 'Navbar CTA (Arabic)'],
+             ['key' => 'navbar_cta_en', 'value' => 'Order Online', 'type' => 'text', 'group' => 'navbar', 'label_ar' => 'زر الهيدر (إنجليزي)', 'label_en' => 'Navbar CTA (English)'],
++            ['key' => 'menu_pdf_path', 'value' => '', 'type' => 'text', 'group' => 'general', 'label_ar' => 'ملف قائمة الطعام PDF', 'label_en' => 'Menu PDF File'],
+         ];
+ 
+         foreach ($settings as $setting) {
+-            Setting::create($setting);
++            Setting::updateOrCreate(['key' => $setting['key']], $setting);
+         }
+     }
+ }
+diff --git a/routes/admin.php b/routes/admin.php
+index d98221f..20f4557 100644
+--- a/routes/admin.php
++++ b/routes/admin.php
+@@ -10,6 +10,7 @@
+ use App\Http\Controllers\Admin\DeliveryAppController;
+ use App\Http\Controllers\Admin\DishController;
+ use App\Http\Controllers\Admin\MediaItemController;
++use App\Http\Controllers\Admin\MenuPdfController;
+ use App\Http\Controllers\Admin\PageContentController;
+ use App\Http\Controllers\Admin\PersonalityController;
+ use App\Http\Controllers\Admin\ProfileController;
+@@ -177,5 +178,12 @@
+             Route::get('/', 'show');
+             Route::put('/', 'update');
+         });
++
++        // ── Menu PDF ──────────────────────────────────────
++        Route::prefix('menu')->controller(MenuPdfController::class)->group(function () {
++            Route::get('pdf',    'show');
++            Route::post('pdf',   'upload');
++            Route::delete('pdf', 'destroy');
++        });
+     });
+ });
+diff --git a/routes/web.php b/routes/web.php
+index 86a06c5..8832b7a 100644
+--- a/routes/web.php
++++ b/routes/web.php
+@@ -1,7 +1,45 @@
+ <?php
+ 
++use App\Models\Setting;
++use App\Services\MenuQrService;
+ use Illuminate\Support\Facades\Route;
++use Illuminate\Support\Facades\Storage;
+ 
+ Route::get('/', function () {
+     return view('welcome');
+ });
++
++// Permanent menu PDF URL — the target the printed QR code points at, so it must
++// keep working across re-uploads. The stored path is looked up per request.
++Route::get('/menu/pdf', function () {
++    $path = Setting::where('key', 'menu_pdf_path')->value('value');
++
++    if (! $path || ! Storage::disk('public')->exists($path)) {
++        abort(404, 'Menu PDF not available yet.');
++    }
++
++    return response()->file(
++        Storage::disk('public')->path($path),
++        [
++            'Content-Type' => 'application/pdf',
++            'Content-Disposition' => 'inline; filename="abouelsid-menu.pdf"',
++        ],
++    );
++})->name('menu.pdf');
++
++// QR code pointing at the permanent PDF URL, rendered on demand so it always
++// reflects the current brand logo.
++Route::get('/menu/qr', function (MenuQrService $qr) {
++    return response($qr->png(500), 200, [
++        'Content-Type' => 'image/png',
++        'Cache-Control' => 'public, max-age=3600',
++    ]);
++})->name('menu.qr');
++
++// High-resolution variant for print.
++Route::get('/menu/qr/download', function (MenuQrService $qr) {
++    return response($qr->png(1000), 200, [
++        'Content-Type' => 'image/png',
++        'Content-Disposition' => 'attachment; filename="abouelsid-menu-qr.png"',
++    ]);
++})->name('menu.qr.download');
+diff --git a/tests/Feature/MenuPdfTest.php b/tests/Feature/MenuPdfTest.php
+new file mode 100644
+index 0000000..48f635c
+--- /dev/null
++++ b/tests/Feature/MenuPdfTest.php
+@@ -0,0 +1,154 @@
++<?php
++
++namespace Tests\Feature;
++
++use App\Models\MediaItem;
++use App\Models\Setting;
++use App\Models\User;
++use Illuminate\Foundation\Testing\RefreshDatabase;
++use Illuminate\Http\UploadedFile;
++use Illuminate\Support\Facades\Storage;
++use Laravel\Sanctum\Sanctum;
++use Tests\TestCase;
++
++class MenuPdfTest extends TestCase
++{
++    use RefreshDatabase;
++
++    protected function setUp(): void
++    {
++        parent::setUp();
++
++        Storage::fake('public');
++
++        Setting::create([
++            'key' => 'menu_pdf_path', 'value' => '', 'type' => 'text', 'group' => 'general',
++            'label_ar' => 'ملف قائمة الطعام PDF', 'label_en' => 'Menu PDF File',
++        ]);
++    }
++
++    private function actingAsAdmin(): void
++    {
++        Sanctum::actingAs(User::create([
++            'name' => 'Admin', 'email' => 'admin@example.com',
++            'password' => 'secret', 'role' => 'super_admin',
++        ]));
++    }
++
++    private function pdf(string $name = 'menu.pdf'): UploadedFile
++    {
++        return UploadedFile::fake()->create($name, 120, 'application/pdf');
++    }
++
++    public function test_permanent_url_returns_404_before_any_upload(): void
++    {
++        $this->get('/menu/pdf')->assertNotFound();
++    }
++
++    public function test_admin_can_upload_and_the_permanent_url_serves_the_pdf(): void
++    {
++        $this->actingAsAdmin();
++
++        $this->postJson('/api/v1/admin/menu/pdf', ['pdf' => $this->pdf()])
++            ->assertOk()
++            ->assertJsonPath('data.has_pdf', true)
++            ->assertJsonPath('data.permanent_url', url('/menu/pdf'));
++
++        Storage::disk('public')->assertExists('menu/menu.pdf');
++
++        $this->get('/menu/pdf')
++            ->assertOk()
++            ->assertHeader('content-type', 'application/pdf');
++    }
++
++    public function test_reupload_keeps_the_same_permanent_url(): void
++    {
++        $this->actingAsAdmin();
++
++        $first = $this->postJson('/api/v1/admin/menu/pdf', ['pdf' => $this->pdf()])
++            ->json('data.permanent_url');
++
++        $second = $this->postJson('/api/v1/admin/menu/pdf', ['pdf' => $this->pdf('updated.pdf')])
++            ->json('data.permanent_url');
++
++        $this->assertSame($first, $second);
++        $this->assertSame('menu/menu.pdf', Setting::where('key', 'menu_pdf_path')->value('value'));
++    }
++
++    public function test_upload_rejects_non_pdf(): void
++    {
++        $this->actingAsAdmin();
++
++        $this->postJson('/api/v1/admin/menu/pdf', ['pdf' => UploadedFile::fake()->image('menu.jpg')])
++            ->assertStatus(422)
++            ->assertJsonValidationErrors('pdf');
++    }
++
++    public function test_upload_requires_authentication(): void
++    {
++        $this->postJson('/api/v1/admin/menu/pdf', ['pdf' => $this->pdf()])->assertUnauthorized();
++    }
++
++    public function test_destroy_removes_the_file_and_the_url_404s_again(): void
++    {
++        $this->actingAsAdmin();
++        $this->postJson('/api/v1/admin/menu/pdf', ['pdf' => $this->pdf()]);
++
++        $this->deleteJson('/api/v1/admin/menu/pdf')->assertOk();
++
++        Storage::disk('public')->assertMissing('menu/menu.pdf');
++        $this->get('/menu/pdf')->assertNotFound();
++    }
++
++    public function test_qr_route_returns_a_png(): void
++    {
++        $response = $this->get('/menu/qr');
++
++        $response->assertOk()->assertHeader('content-type', 'image/png');
++
++        $info = getimagesizefromstring($response->getContent());
++        $this->assertSame('image/png', $info['mime']);
++    }
++
++    public function test_qr_download_is_larger_and_sent_as_attachment(): void
++    {
++        $view = getimagesizefromstring($this->get('/menu/qr')->getContent());
++        $download = $this->get('/menu/qr/download');
++
++        $download->assertOk()
++            ->assertHeader('content-disposition', 'attachment; filename="abouelsid-menu-qr.png"');
++
++        $this->assertGreaterThan($view[0], getimagesizefromstring($download->getContent())[0]);
++    }
++
++    public function test_qr_embeds_the_brand_logo_when_present(): void
++    {
++        $withoutLogo = strlen($this->get('/menu/qr')->getContent());
++
++        Storage::disk('public')->put('media/global/logo.png', file_get_contents(
++            $this->createLogoFixture(),
++        ));
++
++        MediaItem::create([
++            'page' => 'global', 'section' => 'brand', 'key' => 'logo_dark',
++            'path' => 'media/global/logo.png', 'url' => '/storage/media/global/logo.png',
++            'alt_ar' => 'شعار', 'alt_en' => 'Logo',
++        ]);
++
++        $withLogo = strlen($this->get('/menu/qr')->getContent());
++
++        $this->assertNotSame($withoutLogo, $withLogo);
++    }
++
++    private function createLogoFixture(): string
++    {
++        $image = imagecreatetruecolor(225, 225);
++        imagefill($image, 0, 0, imagecolorallocate($image, 200, 40, 40));
++
++        $path = tempnam(sys_get_temp_dir(), 'logo').'.png';
++        imagepng($image, $path);
++        imagedestroy($image);
++
++        return $path;
++    }
++}
+diff --git a/tests/Feature/RepositoriesTest.php b/tests/Feature/RepositoriesTest.php
+index 0b1c4a6..288140c 100644
+--- a/tests/Feature/RepositoriesTest.php
++++ b/tests/Feature/RepositoriesTest.php
+@@ -115,8 +115,9 @@ public function test_setting_repository_get_all_keyed_by_key(): void
+ 
+         $result = $repo->getAll();
+ 
+-        $this->assertCount(19, $result);
++        $this->assertCount(20, $result);
+         $this->assertTrue($result->has('whatsapp_number'));
++        $this->assertTrue($result->has('menu_pdf_path'));
+     }
+ 
+     public function test_setting_repository_get_all_filters_by_group(): void
 ===== END change.diff =====
 
 ===== BEGIN context-bundle.md =====
 # Context bundle
 
-bundle_version 2 · budget 8000 / used 2403 tokens
+bundle_version 2 · budget 8000 / used 606 tokens
 
 ## flagged · named_reference
 
-**Subject:** App\Http\Resources\Branch\BranchResource::collection
-**Reason:** the region depends on App\Http\Resources\Branch\BranchResource::collection, whose contract is defined in another file
-**Source:** `app/Http/Controllers/BranchController.php` :: `App\Http\Resources\Branch\BranchResource::collection` (lines 17-43)
+**Subject:** App\Models\Setting::updateOrCreate
+**Reason:** the region depends on App\Models\Setting::updateOrCreate, whose contract is defined in another file
+**Source:** `app/Http/Controllers/Admin/MenuPdfController.php` :: `App\Models\Setting::updateOrCreate` (lines 1-85)
 **Tokens:** 20
 
 ```text
@@ -890,9 +699,163 @@ ASSUMPTION: named reference could not be resolved on disk; contract unverified
 
 ## flagged · named_reference
 
-**Subject:** App\Http\Resources\Category\CategoryResource::collection
-**Reason:** the region depends on App\Http\Resources\Category\CategoryResource::collection, whose contract is defined in another file
-**Source:** `app/Http/Controllers/CategoryController.php` :: `App\Http\Resources\Category\CategoryResource::collection` (lines 15-41)
+**Subject:** App\Models\Setting::where
+**Reason:** the region depends on App\Models\Setting::where, whose contract is defined in another file
+**Source:** `app/Http/Controllers/Admin/MenuPdfController.php` :: `App\Models\Setting::where` (lines 1-85)
+**Tokens:** 20
+
+```text
+ASSUMPTION: named reference could not be resolved on disk; contract unverified
+```
+
+## fetched · named_reference
+
+**Subject:** App\Models\MediaItem::where
+**Reason:** the region depends on App\Models\MediaItem::where, whose contract is defined in another file
+**Source:** `app/Models/MediaItem.php` :: `fillable` (lines 10-22)
+**Tokens:** 58
+
+```php
+    protected $fillable = [
+        'page',
+        'section',
+        'key',
+        'path',
+        'url',
+        'alt_ar',
+        'alt_en',
+        'mime_type',
+        'size_bytes',
+        'width',
+        'height',
+    ];
+```
+
+## fetched · named_reference
+
+**Subject:** App\Models\MediaItem::where
+**Reason:** the region depends on App\Models\MediaItem::where, whose contract is defined in another file
+**Source:** `app/Models/MediaItem.php` :: `scopeForPage` (lines 24-35)
+**Tokens:** 79
+
+```php
+    public function scopeForPage(Builder $query, ?string $page = null, ?string $section = null): Builder
+    {
+        if ($page !== null) {
+            $query->where('page', $page);
+        }
+
+        if ($section !== null) {
+            $query->where('section', $section);
+        }
+
+        return $query;
+    }
+```
+
+## fetched · named_reference
+
+**Subject:** App\Models\Setting::updateOrCreate
+**Reason:** the region depends on App\Models\Setting::updateOrCreate, whose contract is defined in another file
+**Source:** `app/Models/Setting.php` :: `fillable` (lines 10-17)
+**Tokens:** 35
+
+```php
+    protected $fillable = [
+        'key',
+        'value',
+        'type',
+        'group',
+        'label_ar',
+        'label_en',
+    ];
+```
+
+## fetched · named_reference
+
+**Subject:** App\Models\Setting::updateOrCreate
+**Reason:** the region depends on App\Models\Setting::updateOrCreate, whose contract is defined in another file
+**Source:** `app/Models/Setting.php` :: `scopeForGroup` (lines 19-26)
+**Tokens:** 51
+
+```php
+    public function scopeForGroup(Builder $query, ?string $group = null): Builder
+    {
+        if ($group !== null) {
+            $query->where('group', $group);
+        }
+
+        return $query;
+    }
+```
+
+## fetched · named_reference
+
+**Subject:** App\Models\User::create
+**Reason:** the region depends on App\Models\User::create, whose contract is defined in another file
+**Source:** `app/Models/User.php` :: `casts` (lines 40-51)
+**Tokens:** 67
+
+```php
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'email_verified_at' => 'datetime',
+            'password' => 'hashed',
+        ];
+    }
+```
+
+## fetched · named_reference
+
+**Subject:** App\Models\User::create
+**Reason:** the region depends on App\Models\User::create, whose contract is defined in another file
+**Source:** `app/Models/User.php` :: `fillable` (lines 18-28)
+**Tokens:** 50
+
+```php
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var list<string>
+     */
+    protected $fillable = [
+        'name',
+        'email',
+        'password',
+        'role',
+    ];
+```
+
+## fetched · named_reference
+
+**Subject:** App\Models\User::create
+**Reason:** the region depends on App\Models\User::create, whose contract is defined in another file
+**Source:** `app/Models/User.php` :: `hidden` (lines 30-38)
+**Tokens:** 48
+
+```php
+    /**
+     * The attributes that should be hidden for serialization.
+     *
+     * @var list<string>
+     */
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
+```
+
+## flagged · named_reference
+
+**Subject:** App\Models\MediaItem::where
+**Reason:** the region depends on App\Models\MediaItem::where, whose contract is defined in another file
+**Source:** `app/Services/MenuQrService.php` :: `App\Models\MediaItem::where` (lines 1-51)
 **Tokens:** 20
 
 ```text
@@ -901,9 +864,9 @@ ASSUMPTION: named reference could not be resolved on disk; contract unverified
 
 ## flagged · named_reference
 
-**Subject:** App\Http\Resources\Catering\PackageResource::collection
-**Reason:** the region depends on App\Http\Resources\Catering\PackageResource::collection, whose contract is defined in another file
-**Source:** `app/Http/Controllers/Catering/CateringPackageController.php` :: `App\Http\Resources\Catering\PackageResource::collection` (lines 18-44)
+**Subject:** App\Models\Setting::updateOrCreate
+**Reason:** the region depends on App\Models\Setting::updateOrCreate, whose contract is defined in another file
+**Source:** `database/seeders/SettingSeeder.php` :: `App\Models\Setting::updateOrCreate` (lines 29-39)
 **Tokens:** 20
 
 ```text
@@ -912,9 +875,9 @@ ASSUMPTION: named reference could not be resolved on disk; contract unverified
 
 ## flagged · named_reference
 
-**Subject:** App\Http\Resources\Catering\QuoteRequestResource::collection
-**Reason:** the region depends on App\Http\Resources\Catering\QuoteRequestResource::collection, whose contract is defined in another file
-**Source:** `app/Http/Controllers/Catering/QuoteRequestController.php` :: `App\Http\Resources\Catering\QuoteRequestResource::collection` (lines 33-50)
+**Subject:** App\Models\Setting::where
+**Reason:** the region depends on App\Models\Setting::where, whose contract is defined in another file
+**Source:** `routes/web.php` :: `App\Models\Setting::where` (lines 1-45)
 **Tokens:** 20
 
 ```text
@@ -923,9 +886,9 @@ ASSUMPTION: named reference could not be resolved on disk; contract unverified
 
 ## flagged · named_reference
 
-**Subject:** App\Http\Resources\Catering\SampleMenuResource::collection
-**Reason:** the region depends on App\Http\Resources\Catering\SampleMenuResource::collection, whose contract is defined in another file
-**Source:** `app/Http/Controllers/Catering/SampleMenuController.php` :: `App\Http\Resources\Catering\SampleMenuResource::collection` (lines 16-42)
+**Subject:** App\Models\MediaItem::create
+**Reason:** the region depends on App\Models\MediaItem::create, whose contract is defined in another file
+**Source:** `tests/Feature/MenuPdfTest.php` :: `App\Models\MediaItem::create` (lines 1-154)
 **Tokens:** 20
 
 ```text
@@ -934,9 +897,9 @@ ASSUMPTION: named reference could not be resolved on disk; contract unverified
 
 ## flagged · named_reference
 
-**Subject:** App\Http\Resources\DeliveryApp\DeliveryAppResource::collection
-**Reason:** the region depends on App\Http\Resources\DeliveryApp\DeliveryAppResource::collection, whose contract is defined in another file
-**Source:** `app/Http/Controllers/DeliveryAppController.php` :: `App\Http\Resources\DeliveryApp\DeliveryAppResource::collection` (lines 17-43)
+**Subject:** App\Models\Setting::create
+**Reason:** the region depends on App\Models\Setting::create, whose contract is defined in another file
+**Source:** `tests/Feature/MenuPdfTest.php` :: `App\Models\Setting::create` (lines 1-154)
 **Tokens:** 20
 
 ```text
@@ -945,9 +908,9 @@ ASSUMPTION: named reference could not be resolved on disk; contract unverified
 
 ## flagged · named_reference
 
-**Subject:** App\Http\Resources\Testimonial\TestimonialResource::collection
-**Reason:** the region depends on App\Http\Resources\Testimonial\TestimonialResource::collection, whose contract is defined in another file
-**Source:** `app/Http/Controllers/TestimonialController.php` :: `App\Http\Resources\Testimonial\TestimonialResource::collection` (lines 17-43)
+**Subject:** App\Models\Setting::where
+**Reason:** the region depends on App\Models\Setting::where, whose contract is defined in another file
+**Source:** `tests/Feature/MenuPdfTest.php` :: `App\Models\Setting::where` (lines 1-154)
 **Tokens:** 20
 
 ```text
@@ -956,432 +919,35 @@ ASSUMPTION: named reference could not be resolved on disk; contract unverified
 
 ## flagged · named_reference
 
-**Subject:** App\Http\Resources\Timeline\TimelineResource::collection
-**Reason:** the region depends on App\Http\Resources\Timeline\TimelineResource::collection, whose contract is defined in another file
-**Source:** `app/Http/Controllers/TimelineController.php` :: `App\Http\Resources\Timeline\TimelineResource::collection` (lines 15-41)
+**Subject:** App\Models\User::create
+**Reason:** the region depends on App\Models\User::create, whose contract is defined in another file
+**Source:** `tests/Feature/MenuPdfTest.php` :: `App\Models\User::create` (lines 1-154)
 **Tokens:** 20
 
 ```text
 ASSUMPTION: named reference could not be resolved on disk; contract unverified
 ```
 
-## flagged · named_reference
+## flagged · unverifiable_premise
 
-**Subject:** App\Http\Resources\User\UserResource::collection
-**Reason:** the region depends on App\Http\Resources\User\UserResource::collection, whose contract is defined in another file
-**Source:** `app/Http/Controllers/UserController.php` :: `App\Http\Resources\User\UserResource::collection` (lines 20-51)
-**Tokens:** 20
+**Subject:** surrounding-transaction
+**Reason:** the region performs several persistence writes; whether a transaction wraps them is decided by the caller, which the diff does not show
+**Source:** `app/Http/Controllers/Admin/MenuPdfController.php` (lines 1-85)
+**Tokens:** 19
 
 ```text
-ASSUMPTION: named reference could not be resolved on disk; contract unverified
+ASSUMPTION: this code assumes a surrounding transaction; caller not checked
 ```
 
-## fetched · named_reference
+## flagged · unverifiable_premise
 
-**Subject:** App\Http\Resources\Auth\AuthResource
-**Reason:** the region depends on App\Http\Resources\Auth\AuthResource, whose contract is defined in another file
-**Source:** `app/Http/Resources/Auth/AuthResource.php` :: `toArray` (lines 10-21)
-**Tokens:** 102
+**Subject:** surrounding-transaction
+**Reason:** the region performs several persistence writes; whether a transaction wraps them is decided by the caller, which the diff does not show
+**Source:** `tests/Feature/MenuPdfTest.php` (lines 1-154)
+**Tokens:** 19
 
-```php
-    public function toArray(Request $request): array
-    {
-        return [
-            'token' => $this->resource['token'],
-            'user' => [
-                'id' => $this->resource['user']->id,
-                'name' => $this->resource['user']->name,
-                'email' => $this->resource['user']->email,
-                'role' => $this->resource['user']->role,
-            ],
-        ];
-    }
-```
-
-## fetched · named_reference
-
-**Subject:** App\Http\Resources\Branch\BranchResource
-**Reason:** the region depends on App\Http\Resources\Branch\BranchResource, whose contract is defined in another file
-**Source:** `app/Http/Resources/Branch/BranchResource.php` :: `toArray` (lines 13-32)
-**Tokens:** 206
-
-```php
-    public function toArray(Request $request): array
-    {
-        return [
-            'id' => $this->id,
-            'name' => $this->resolveLocale($this->name_ar, $this->name_en),
-            'name_ar' => $this->name_ar,
-            'name_en' => $this->name_en,
-            'location' => $this->resolveLocale($this->location_ar, $this->location_en),
-            'location_ar' => $this->location_ar,
-            'location_en' => $this->location_en,
-            'city' => $this->city,
-            'phone' => $this->phone,
-            'opening_time' => $this->opening_time,
-            'closing_time' => $this->closing_time,
-            'google_maps_url' => $this->google_maps_url,
-            'image_url' => $this->image_url,
-            'order' => $this->order,
-            'locale' => app()->getLocale(),
-        ];
-    }
-```
-
-## fetched · named_reference
-
-**Subject:** App\Http\Resources\Category\CategoryResource
-**Reason:** the region depends on App\Http\Resources\Category\CategoryResource, whose contract is defined in another file
-**Source:** `app/Http/Resources/Category/CategoryResource.php` :: `toArray` (lines 13-24)
-**Tokens:** 100
-
-```php
-    public function toArray(Request $request): array
-    {
-        return [
-            'id' => $this->id,
-            'name' => $this->resolveLocale($this->name_ar, $this->name_en),
-            'name_ar' => $this->name_ar,
-            'name_en' => $this->name_en,
-            'slug' => $this->slug,
-            'order' => $this->order,
-            'locale' => app()->getLocale(),
-        ];
-    }
-```
-
-## fetched · named_reference
-
-**Subject:** App\Http\Resources\Catering\PackageResource
-**Reason:** the region depends on App\Http\Resources\Catering\PackageResource, whose contract is defined in another file
-**Source:** `app/Http/Resources/Catering/PackageResource.php` :: `toArray` (lines 13-35)
-**Tokens:** 261
-
-```php
-    public function toArray(Request $request): array
-    {
-        return [
-            'id' => $this->id,
-            'name' => $this->resolveLocale($this->name_ar, $this->name_en),
-            'name_ar' => $this->name_ar,
-            'name_en' => $this->name_en,
-            'description' => $this->resolveLocale($this->description_ar, $this->description_en),
-            'description_ar' => $this->description_ar,
-            'description_en' => $this->description_en,
-            'tag_en' => $this->tag_en,
-            'price_starting_from' => $this->price_starting_from,
-            'is_featured' => $this->is_featured,
-            'features' => $this->whenLoaded('features', fn () => $this->features->map(fn ($feature) => [
-                'feature_ar' => $feature->feature_ar,
-                'feature_en' => $feature->feature_en,
-                'order' => $feature->order,
-            ])),
-            'image_url' => $this->image_url,
-            'order' => $this->order,
-            'locale' => app()->getLocale(),
-        ];
-    }
-```
-
-## fetched · named_reference
-
-**Subject:** App\Http\Resources\Catering\QuoteRequestResource
-**Reason:** the region depends on App\Http\Resources\Catering\QuoteRequestResource, whose contract is defined in another file
-**Source:** `app/Http/Resources/Catering/QuoteRequestResource.php` :: `toArray` (lines 10-29)
-**Tokens:** 186
-
-```php
-    public function toArray(Request $request): array
-    {
-        return [
-            'id' => $this->id,
-            'name' => $this->name,
-            'phone' => $this->phone,
-            'email' => $this->email,
-            'event_date' => $this->event_date?->toDateString(),
-            'guests_count' => $this->guests_count,
-            'branch' => $this->branch,
-            'event_type' => $this->event_type->value,
-            'budget_range' => $this->budget_range?->value,
-            'notes' => $this->notes,
-            'status' => [
-                'value' => $this->status->value,
-                'label' => $this->status->label(),
-            ],
-            'created_at' => $this->created_at?->toIso8601String(),
-        ];
-    }
-```
-
-## fetched · named_reference
-
-**Subject:** App\Http\Resources\Catering\SampleMenuResource
-**Reason:** the region depends on App\Http\Resources\Catering\SampleMenuResource, whose contract is defined in another file
-**Source:** `app/Http/Resources/Catering/SampleMenuResource.php` :: `toArray` (lines 13-31)
-**Tokens:** 190
-
-```php
-    public function toArray(Request $request): array
-    {
-        return [
-            'id' => $this->id,
-            'name' => $this->resolveLocale($this->name_ar, $this->name_en),
-            'name_ar' => $this->name_ar,
-            'name_en' => $this->name_en,
-            'tag_en' => $this->tag_en,
-            'is_featured' => $this->is_featured,
-            'dishes' => $this->whenLoaded('dishes', fn () => $this->dishes->map(fn ($dish) => [
-                'dish_name_ar' => $dish->dish_name_ar,
-                'dish_name_en' => $dish->dish_name_en,
-                'order' => $dish->order,
-            ])),
-            'image_url' => $this->image_url,
-            'order' => $this->order,
-            'locale' => app()->getLocale(),
-        ];
-    }
-```
-
-## fetched · named_reference
-
-**Subject:** App\Http\Resources\DeliveryApp\DeliveryAppResource
-**Reason:** the region depends on App\Http\Resources\DeliveryApp\DeliveryAppResource, whose contract is defined in another file
-**Source:** `app/Http/Resources/DeliveryApp/DeliveryAppResource.php` :: `toArray` (lines 13-26)
-**Tokens:** 124
-
-```php
-    public function toArray(Request $request): array
-    {
-        return [
-            'id' => $this->id,
-            'name' => $this->resolveLocale($this->name_ar, $this->name_en),
-            'name_ar' => $this->name_ar,
-            'name_en' => $this->name_en,
-            'order_url' => $this->order_url,
-            'logo_url' => $this->logo_url,
-            'is_active' => $this->is_active,
-            'order' => $this->order,
-            'locale' => app()->getLocale(),
-        ];
-    }
-```
-
-## fetched · named_reference
-
-**Subject:** App\Http\Resources\Dish\DishCollection
-**Reason:** the region depends on App\Http\Resources\Dish\DishCollection, whose contract is defined in another file
-**Source:** `app/Http/Resources/Dish/DishCollection.php` :: `collects` (lines 10-10)
-**Tokens:** 11
-
-```php
-    public $collects = DishResource::class;
-```
-
-## fetched · named_reference
-
-**Subject:** App\Http\Resources\Dish\DishCollection
-**Reason:** the region depends on App\Http\Resources\Dish\DishCollection, whose contract is defined in another file
-**Source:** `app/Http/Resources/Dish/DishCollection.php` :: `toArray` (lines 12-23)
-**Tokens:** 93
-
-```php
-    public function toArray(Request $request): array
-    {
-        return [
-            'items' => $this->collection,
-            'meta' => [
-                'current_page' => $this->currentPage(),
-                'last_page' => $this->lastPage(),
-                'per_page' => $this->perPage(),
-                'total' => $this->total(),
-            ],
-        ];
-    }
-```
-
-## fetched · named_reference
-
-**Subject:** App\Http\Resources\Dish\DishResource
-**Reason:** the region depends on App\Http\Resources\Dish\DishResource, whose contract is defined in another file
-**Source:** `app/Http/Resources/Dish/DishResource.php` :: `toArray` (lines 14-32)
-**Tokens:** 208
-
-```php
-    public function toArray(Request $request): array
-    {
-        return [
-            'id' => $this->id,
-            'name' => $this->resolveLocale($this->name_ar, $this->name_en),
-            'name_ar' => $this->name_ar,
-            'name_en' => $this->name_en,
-            'description' => $this->resolveLocale($this->description_ar, $this->description_en),
-            'description_ar' => $this->description_ar,
-            'description_en' => $this->description_en,
-            'price' => $this->price,
-            'category' => new CategoryResource($this->whenLoaded('category')),
-            'is_featured' => $this->is_featured,
-            'is_signature' => $this->is_signature,
-            'image_url' => $this->image_url,
-            'order' => $this->order,
-            'locale' => app()->getLocale(),
-        ];
-    }
-```
-
-## fetched · named_reference
-
-**Subject:** App\Http\Resources\MediaItem\MediaItemResource
-**Reason:** the region depends on App\Http\Resources\MediaItem\MediaItemResource, whose contract is defined in another file
-**Source:** `app/Http/Resources/MediaItem/MediaItemResource.php` :: `toArray` (lines 13-26)
-**Tokens:** 115
-
-```php
-    public function toArray(Request $request): array
-    {
-        return [
-            'id' => $this->id,
-            'page' => $this->page,
-            'section' => $this->section,
-            'key' => $this->key,
-            'url' => $this->url,
-            'alt' => $this->resolveLocale($this->alt_ar, $this->alt_en),
-            'alt_ar' => $this->alt_ar,
-            'alt_en' => $this->alt_en,
-            'locale' => app()->getLocale(),
-        ];
-    }
-```
-
-## fetched · named_reference
-
-**Subject:** App\Http\Resources\PageContent\PageContentResource
-**Reason:** the region depends on App\Http\Resources\PageContent\PageContentResource, whose contract is defined in another file
-**Source:** `app/Http/Resources/PageContent/PageContentResource.php` :: `toArray` (lines 13-27)
-**Tokens:** 129
-
-```php
-    public function toArray(Request $request): array
-    {
-        return [
-            'id' => $this->id,
-            'page' => $this->page,
-            'section' => $this->section,
-            'key' => $this->key,
-            'value' => $this->resolveLocale($this->value_ar, $this->value_en),
-            'value_ar' => $this->value_ar,
-            'value_en' => $this->value_en,
-            'type' => $this->type,
-            'order' => $this->order,
-            'locale' => app()->getLocale(),
-        ];
-    }
-```
-
-## fetched · named_reference
-
-**Subject:** App\Http\Resources\Setting\SettingResource
-**Reason:** the region depends on App\Http\Resources\Setting\SettingResource, whose contract is defined in another file
-**Source:** `app/Http/Resources/Setting/SettingResource.php` :: `toArray` (lines 13-26)
-**Tokens:** 119
-
-```php
-    public function toArray(Request $request): array
-    {
-        return [
-            'id' => $this->id,
-            'key' => $this->key,
-            'value' => $this->value,
-            'type' => $this->type,
-            'group' => $this->group,
-            'label' => $this->resolveLocale($this->label_ar, $this->label_en),
-            'label_ar' => $this->label_ar,
-            'label_en' => $this->label_en,
-            'locale' => app()->getLocale(),
-        ];
-    }
-```
-
-## fetched · named_reference
-
-**Subject:** App\Http\Resources\Testimonial\TestimonialResource
-**Reason:** the region depends on App\Http\Resources\Testimonial\TestimonialResource, whose contract is defined in another file
-**Source:** `app/Http/Resources/Testimonial/TestimonialResource.php` :: `toArray` (lines 13-25)
-**Tokens:** 113
-
-```php
-    public function toArray(Request $request): array
-    {
-        return [
-            'id' => $this->id,
-            'name' => $this->name,
-            'quote' => $this->resolveLocale($this->quote_ar, $this->quote_en),
-            'quote_ar' => $this->quote_ar,
-            'quote_en' => $this->quote_en,
-            'is_active' => $this->is_active,
-            'order' => $this->order,
-            'locale' => app()->getLocale(),
-        ];
-    }
-```
-
-## fetched · named_reference
-
-**Subject:** App\Http\Resources\Timeline\TimelineResource
-**Reason:** the region depends on App\Http\Resources\Timeline\TimelineResource, whose contract is defined in another file
-**Source:** `app/Http/Resources/Timeline/TimelineResource.php` :: `toArray` (lines 13-28)
-**Tokens:** 165
-
-```php
-    public function toArray(Request $request): array
-    {
-        return [
-            'id' => $this->id,
-            'year' => $this->year,
-            'location_en' => $this->location_en,
-            'title' => $this->resolveLocale($this->title_ar, $this->title_en),
-            'title_ar' => $this->title_ar,
-            'title_en' => $this->title_en,
-            'description' => $this->resolveLocale($this->description_ar, $this->description_en),
-            'description_ar' => $this->description_ar,
-            'description_en' => $this->description_en,
-            'order' => $this->order,
-            'locale' => app()->getLocale(),
-        ];
-    }
-```
-
-## fetched · named_reference
-
-**Subject:** App\Http\Resources\User\UserResource
-**Reason:** the region depends on App\Http\Resources\User\UserResource, whose contract is defined in another file
-**Source:** `app/Http/Resources/User/UserResource.php` :: `toArray` (lines 10-19)
-**Tokens:** 75
-
-```php
-    public function toArray(Request $request): array
-    {
-        return [
-            'id' => $this->id,
-            'name' => $this->name,
-            'email' => $this->email,
-            'role' => $this->role,
-            'created_at' => $this->created_at?->toIso8601String(),
-        ];
-    }
-```
-
-## fetched · named_reference
-
-**Subject:** App\Repositories\CategoryRepository::getAll
-**Reason:** the region depends on App\Repositories\CategoryRepository::getAll, whose contract is defined in another file
-**Source:** `app/Repositories/CategoryRepository.php` :: `getAll` (lines 10-13)
-**Tokens:** 26
-
-```php
-    public function getAll(): Collection
-    {
-        return Category::orderBy('order')->get();
-    }
+```text
+ASSUMPTION: this code assumes a surrounding transaction; caller not checked
 ```
 
 ## Dropped
@@ -1390,15 +956,36 @@ Nothing was dropped.
 ===== END context-bundle.md =====
 
 ===== BEGIN context-diagnostics.txt =====
-new file: app/Traits/ApiResponse.php — own-file context is in the diff, not fetched
-unresolved named_reference: App\Http\Resources\Branch\BranchResource::collection in app/Http/Controllers/BranchController.php
-unresolved named_reference: App\Http\Resources\Category\CategoryResource::collection in app/Http/Controllers/CategoryController.php
-unresolved named_reference: App\Http\Resources\Catering\PackageResource::collection in app/Http/Controllers/Catering/CateringPackageController.php
-unresolved named_reference: App\Http\Resources\Catering\QuoteRequestResource::collection in app/Http/Controllers/Catering/QuoteRequestController.php
-unresolved named_reference: App\Http\Resources\Catering\SampleMenuResource::collection in app/Http/Controllers/Catering/SampleMenuController.php
-unresolved named_reference: App\Http\Resources\DeliveryApp\DeliveryAppResource::collection in app/Http/Controllers/DeliveryAppController.php
-unresolved named_reference: App\Http\Resources\Testimonial\TestimonialResource::collection in app/Http/Controllers/TestimonialController.php
-unresolved named_reference: App\Http\Resources\Timeline\TimelineResource::collection in app/Http/Controllers/TimelineController.php
-unresolved named_reference: App\Http\Resources\User\UserResource::collection in app/Http/Controllers/UserController.php
+new file: app/Http/Controllers/Admin/MenuPdfController.php — own-file context is in the diff, not fetched
+new file: app/Services/MenuQrService.php — own-file context is in the diff, not fetched
+new file: tests/Feature/MenuPdfTest.php — own-file context is in the diff, not fetched
+framework reference: Illuminate\Support\Facades\Storage::disk declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Storage.php:11 (@method static \Illuminate\Contracts\Filesystem\Filesystem disk(\UnitEnum|string|null $name = null))
+unresolved named_reference: App\Models\Setting::updateOrCreate in app/Http/Controllers/Admin/MenuPdfController.php
+unresolved named_reference: App\Models\Setting::where in app/Http/Controllers/Admin/MenuPdfController.php
 dependency class: Illuminate\Http\JsonResponse provided by vendor/laravel/framework/src/Illuminate/Http/JsonResponse.php; surface not fetched
+dependency class: Illuminate\Http\Request provided by vendor/laravel/framework/src/Illuminate/Http/Request.php; surface not fetched
+dependency member: Endroid\QrCode\ErrorCorrectionLevel::High declared at vendor/endroid/qr-code/src/ErrorCorrectionLevel.php:9; source not fetched
+unresolved named_reference: App\Models\MediaItem::where in app/Services/MenuQrService.php
+framework reference: Illuminate\Support\Facades\Storage::disk declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Storage.php:11 (@method static \Illuminate\Contracts\Filesystem\Filesystem disk(\UnitEnum|string|null $name = null))
+dependency class: Endroid\QrCode\Writer\PngWriter provided by vendor/endroid/qr-code/src/Writer/PngWriter.php; surface not fetched
+dependency class: Endroid\QrCode\Color\Color provided by vendor/endroid/qr-code/src/Color/Color.php; surface not fetched
+dependency class: Endroid\QrCode\Builder\Builder provided by vendor/endroid/qr-code/src/Builder/Builder.php; surface not fetched
+unresolved named_reference: App\Models\Setting::updateOrCreate in database/seeders/SettingSeeder.php
+framework reference: Illuminate\Support\Facades\Route::prefix declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Route.php:100 (@method static \Illuminate\Routing\RouteRegistrar prefix(string $prefix))
+framework reference: Illuminate\Support\Facades\Route::get declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Route.php:6 (@method static \Illuminate\Routing\Route get(string $uri, array|string|callable|null $action = null))
+framework reference: Illuminate\Support\Facades\Route::post declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Route.php:7 (@method static \Illuminate\Routing\Route post(string $uri, array|string|callable|null $action = null))
+framework reference: Illuminate\Support\Facades\Route::delete declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Route.php:10 (@method static \Illuminate\Routing\Route delete(string $uri, array|string|callable|null $action = null))
+framework reference: Illuminate\Support\Facades\Route::get declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Route.php:6 (@method static \Illuminate\Routing\Route get(string $uri, array|string|callable|null $action = null))
+unresolved named_reference: App\Models\Setting::where in routes/web.php
+framework reference: Illuminate\Support\Facades\Storage::disk declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Storage.php:11 (@method static \Illuminate\Contracts\Filesystem\Filesystem disk(\UnitEnum|string|null $name = null))
+already in the diff: App\Services\MenuQrService declared in app/Services/MenuQrService.php; not fetched again
+dependency member: Illuminate\Support\Facades\Storage::fake declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Storage.php:94; source not fetched
+unresolved named_reference: App\Models\Setting::create in tests/Feature/MenuPdfTest.php
+dependency member: Laravel\Sanctum\Sanctum::actingAs declared at vendor/laravel/sanctum/src/Sanctum.php:62; source not fetched
+unresolved named_reference: App\Models\User::create in tests/Feature/MenuPdfTest.php
+dependency member: Illuminate\Http\UploadedFile::fake declared at vendor/laravel/framework/src/Illuminate/Http/UploadedFile.php:17; source not fetched
+framework reference: Illuminate\Support\Facades\Storage::disk declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Storage.php:11 (@method static \Illuminate\Contracts\Filesystem\Filesystem disk(\UnitEnum|string|null $name = null))
+unresolved named_reference: App\Models\Setting::where in tests/Feature/MenuPdfTest.php
+unresolved named_reference: App\Models\MediaItem::create in tests/Feature/MenuPdfTest.php
+dependency class: Illuminate\Http\UploadedFile provided by vendor/laravel/framework/src/Illuminate/Http/UploadedFile.php; surface not fetched
 ===== END context-diagnostics.txt =====

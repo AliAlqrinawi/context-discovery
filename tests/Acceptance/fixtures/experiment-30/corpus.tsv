@@ -1,19 +1,19 @@
-task	commit	arm	engine	run_id
-T0	e770086	A	v0.2.0	01m3dev7pffx5dxvcds7gz8yaw
-T0	e770086	B	6a77cdb	01m3dev29aka8v65xkm4t4fe5r
-T1	9b8f9c6	A	v0.2.0	01m3dexf67j8mgkxzpewpct5dd
-T1	9b8f9c6	B	6a77cdb	01m3dex9e0sc814r5qzd7sjxar
-T2	ee5a2e6	A	v0.2.0	01m3dextn08y8ex058yrz6srhn
-T2	ee5a2e6	B	6a77cdb	01m3dexmx0pkxs1kkp8n4ned0k
-T3	ec92403	A	v0.2.0	01m3dey6grnctgp7npy5qck2yb
-T3	ec92403	B	6a77cdb	01m3dey0jc6vs6yqe61vdqwc6b
-T4	f3a7fcd	A	v0.2.0	01m3desf17abqzd3ysb8szner1
-T4	f3a7fcd	B	6a77cdb	01m3derxbhxsbpv6q7cetypxrp
-T5	2996b89	A	v0.2.0	01m3desth99jbx94p71m4c6bpk
-T5	2996b89	B	6a77cdb	01m3desmhjyg4zghwj05waz6pq
-T6	e5e48ce	A	v0.2.0	01m3det6635fjhenkw4j10wmje
-T6	e5e48ce	B	6a77cdb	01m3det06qfx7z96ya58t92rs1
-T7	b2eebe7	A	v0.2.0	01m3dethnb4s54jzbn7vh040ss
-T7	b2eebe7	B	6a77cdb	01m3detbtdpz3kc6kagpbp3802
-T8	4411454	A	v0.2.0	01m3detwqgt09j8j3szgscravb
-T8	4411454	B	6a77cdb	01m3detq6zn3mgvwfekrp6jh4p
+task	commit	arm	engine	run_id	in_corpus
+T0	e770086	A	v0.2.0	01m3dev7pffx5dxvcds7gz8yaw	yes
+T0	e770086	B	6a77cdb	01m3dev29aka8v65xkm4t4fe5r	yes
+T1	9b8f9c6	A	v0.2.0	01m3dexf67j8mgkxzpewpct5dd	yes
+T1	9b8f9c6	B	6a77cdb	01m3dex9e0sc814r5qzd7sjxar	yes
+T2	ee5a2e6	A	v0.2.0	01m3dextn08y8ex058yrz6srhn	yes
+T2	ee5a2e6	B	6a77cdb	01m3dexmx0pkxs1kkp8n4ned0k	yes
+T3	ec92403	A	v0.2.0	01m3dey6grnctgp7npy5qck2yb	yes
+T3	ec92403	B	6a77cdb	01m3dey0jc6vs6yqe61vdqwc6b	yes
+T4	f3a7fcd	A	v0.2.0	01m3desf17abqzd3ysb8szner1	no (dropped 2026-09-26 before any cell; packet kept as evidence)
+T4	f3a7fcd	B	6a77cdb	01m3derxbhxsbpv6q7cetypxrp	no (dropped 2026-09-26 before any cell; packet kept as evidence)
+T5	2996b89	A	v0.2.0	01m3desth99jbx94p71m4c6bpk	yes
+T5	2996b89	B	6a77cdb	01m3desmhjyg4zghwj05waz6pq	yes
+T6	e5e48ce	A	v0.2.0	01m3det6635fjhenkw4j10wmje	yes
+T6	e5e48ce	B	6a77cdb	01m3det06qfx7z96ya58t92rs1	yes
+T7	b2eebe7	A	v0.2.0	01m3dethnb4s54jzbn7vh040ss	no (dropped 2026-09-26 before any cell; packet kept as evidence)
+T7	b2eebe7	B	6a77cdb	01m3detbtdpz3kc6kagpbp3802	no (dropped 2026-09-26 before any cell; packet kept as evidence)
+T8	4411454	A	v0.2.0	01m3detwqgt09j8j3szgscravb	no (dropped 2026-09-26 before any cell; packet kept as evidence)
+T8	4411454	B	6a77cdb	01m3detq6zn3mgvwfekrp6jh4p	no (dropped 2026-09-26 before any cell; packet kept as evidence)

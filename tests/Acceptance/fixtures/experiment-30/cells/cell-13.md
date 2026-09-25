@@ -684,7 +684,29 @@ index 0b1c4a6..288140c 100644
 ===== BEGIN context-bundle.md =====
 # Context bundle
 
-bundle_version 2 · budget 8000 / used 606 tokens
+bundle_version 2 · budget 8000 / used 730 tokens
+
+## flagged · named_reference
+
+**Subject:** App\Http\Controllers\Admin\MenuPdfController::deleted
+**Reason:** the region calls App\Http\Controllers\Admin\MenuPdfController::deleted, which this file does not declare; its contract is defined in another file
+**Source:** `app/Http/Controllers/Admin/MenuPdfController.php` :: `App\Http\Controllers\Admin\MenuPdfController::deleted` (lines 1-85)
+**Tokens:** 62
+
+```text
+ASSUMPTION: deleted() is not declared in MenuPdfController or in its parent App\Http\Controllers\Controller; it is declared in trait App\Traits\ApiResponse at app/Traits/ApiResponse.php:28, used by that parent; body not fetched, contract unverified
+```
+
+## flagged · named_reference
+
+**Subject:** App\Http\Controllers\Admin\MenuPdfController::success
+**Reason:** the region calls App\Http\Controllers\Admin\MenuPdfController::success, which this file does not declare; its contract is defined in another file
+**Source:** `app/Http/Controllers/Admin/MenuPdfController.php` :: `App\Http\Controllers\Admin\MenuPdfController::success` (lines 1-85)
+**Tokens:** 62
+
+```text
+ASSUMPTION: success() is not declared in MenuPdfController or in its parent App\Http\Controllers\Controller; it is declared in trait App\Traits\ApiResponse at app/Traits/ApiResponse.php:9, used by that parent; body not fetched, contract unverified
+```
 
 ## flagged · named_reference
 
@@ -959,6 +981,8 @@ Nothing was dropped.
 new file: app/Http/Controllers/Admin/MenuPdfController.php — own-file context is in the diff, not fetched
 new file: app/Services/MenuQrService.php — own-file context is in the diff, not fetched
 new file: tests/Feature/MenuPdfTest.php — own-file context is in the diff, not fetched
+inherited member: App\Http\Controllers\Admin\MenuPdfController::success declared at app/Traits/ApiResponse.php:9 in trait App\Traits\ApiResponse; body not fetched
+inherited member: App\Http\Controllers\Admin\MenuPdfController::deleted declared at app/Traits/ApiResponse.php:28 in trait App\Traits\ApiResponse; body not fetched
 framework reference: Illuminate\Support\Facades\Storage::disk declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Storage.php:11 (@method static \Illuminate\Contracts\Filesystem\Filesystem disk(\UnitEnum|string|null $name = null))
 unresolved named_reference: App\Models\Setting::updateOrCreate in app/Http/Controllers/Admin/MenuPdfController.php
 unresolved named_reference: App\Models\Setting::where in app/Http/Controllers/Admin/MenuPdfController.php
@@ -979,6 +1003,12 @@ framework reference: Illuminate\Support\Facades\Route::get declared at vendor/la
 unresolved named_reference: App\Models\Setting::where in routes/web.php
 framework reference: Illuminate\Support\Facades\Storage::disk declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Storage.php:11 (@method static \Illuminate\Contracts\Filesystem\Filesystem disk(\UnitEnum|string|null $name = null))
 already in the diff: App\Services\MenuQrService declared in app/Services/MenuQrService.php; not fetched again
+inherited member unresolved: Tests\Feature\MenuPdfTest::get; walked nothing; continues into a dependency, which was not walked (Illuminate\Foundation\Testing\RefreshDatabase)
+inherited member unresolved: Tests\Feature\MenuPdfTest::postJson; walked nothing; continues into a dependency, which was not walked (Illuminate\Foundation\Testing\RefreshDatabase)
+inherited member unresolved: Tests\Feature\MenuPdfTest::assertSame; walked nothing; continues into a dependency, which was not walked (Illuminate\Foundation\Testing\RefreshDatabase)
+inherited member unresolved: Tests\Feature\MenuPdfTest::deleteJson; walked nothing; continues into a dependency, which was not walked (Illuminate\Foundation\Testing\RefreshDatabase)
+inherited member unresolved: Tests\Feature\MenuPdfTest::assertGreaterThan; walked nothing; continues into a dependency, which was not walked (Illuminate\Foundation\Testing\RefreshDatabase)
+inherited member unresolved: Tests\Feature\MenuPdfTest::assertNotSame; walked nothing; continues into a dependency, which was not walked (Illuminate\Foundation\Testing\RefreshDatabase)
 dependency member: Illuminate\Support\Facades\Storage::fake declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Storage.php:94; source not fetched
 unresolved named_reference: App\Models\Setting::create in tests/Feature/MenuPdfTest.php
 dependency member: Laravel\Sanctum\Sanctum::actingAs declared at vendor/laravel/sanctum/src/Sanctum.php:62; source not fetched
@@ -988,4 +1018,6 @@ framework reference: Illuminate\Support\Facades\Storage::disk declared at vendor
 unresolved named_reference: App\Models\Setting::where in tests/Feature/MenuPdfTest.php
 unresolved named_reference: App\Models\MediaItem::create in tests/Feature/MenuPdfTest.php
 dependency class: Illuminate\Http\UploadedFile provided by vendor/laravel/framework/src/Illuminate/Http/UploadedFile.php; surface not fetched
+inherited member unresolved: Tests\Feature\RepositoriesTest::assertCount; walked nothing; continues into a dependency, which was not walked (Illuminate\Foundation\Testing\RefreshDatabase)
+inherited member unresolved: Tests\Feature\RepositoriesTest::assertTrue; walked nothing; continues into a dependency, which was not walked (Illuminate\Foundation\Testing\RefreshDatabase)
 ===== END context-diagnostics.txt =====

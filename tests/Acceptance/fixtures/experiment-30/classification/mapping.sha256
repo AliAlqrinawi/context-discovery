@@ -1,3 +1,3 @@
-770ebcdeb5de7db70008594d878af53af3aeec0b4c344edf6cdf3589b182801f  mapping.sealed
-# sha256 of classification/mapping.sealed (cell -> task, arm, replicate), sealed 2026-09-26 before any cell ran.
-# The plaintext is committed as mapping.txt only after classes.tsv is committed (scoring-protocol.md §7).
+90c4702bc6a4538e5a782023242b5c9d0cffb5e5874f4370fdb41f845590d32f  mapping.sealed
+# sha256 of classification/mapping.sealed (cell -> task, arm, replicate) for the six-task corpus, sealed 2026-09-26 before any cell ran.
+# Replaces the 54-cell seal (770ebcde...), whose cells were discarded unrun. The plaintext is committed as mapping.txt only after classes.tsv is committed (scoring-protocol.md §7).

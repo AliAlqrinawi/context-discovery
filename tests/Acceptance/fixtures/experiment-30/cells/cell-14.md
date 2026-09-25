@@ -47,189 +47,483 @@ Q5: "<exact quotation>" | NONE_VISIBLE
 ---
 
 ===== BEGIN change.diff =====
-diff --git a/app/Http/Controllers/Admin/ProfileController.php b/app/Http/Controllers/Admin/ProfileController.php
+diff --git a/app/Http/Controllers/Admin/MenuPdfController.php b/app/Http/Controllers/Admin/MenuPdfController.php
 new file mode 100644
-index 0000000..8b39355
+index 0000000..d3080a2
 --- /dev/null
-+++ b/app/Http/Controllers/Admin/ProfileController.php
-@@ -0,0 +1,55 @@
++++ b/app/Http/Controllers/Admin/MenuPdfController.php
+@@ -0,0 +1,85 @@
 +<?php
 +
 +namespace App\Http\Controllers\Admin;
 +
 +use App\Http\Controllers\Controller;
-+use App\Http\Requests\Profile\UpdatePasswordRequest;
-+use App\Http\Requests\Profile\UpdateProfileRequest;
-+use App\Http\Resources\User\UserResource;
++use App\Models\Setting;
 +use Illuminate\Http\JsonResponse;
 +use Illuminate\Http\Request;
-+use Illuminate\Support\Facades\Hash;
++use Illuminate\Support\Facades\Storage;
 +
-+class ProfileController extends Controller
++class MenuPdfController extends Controller
 +{
-+    public function show(Request $request): JsonResponse
++    private const SETTING_KEY = 'menu_pdf_path';
++
++    private const STORAGE_PATH = 'menu/menu.pdf';
++
++    public function show(): JsonResponse
 +    {
-+        return $this->success(
-+            new UserResource($request->user()),
-+            __('messages.fetched')
-+        );
++        return $this->success($this->payload(), __('messages.fetched'));
 +    }
 +
-+    public function update(UpdateProfileRequest $request): JsonResponse
++    public function upload(Request $request): JsonResponse
 +    {
-+        $user = $request->user();
-+        $user->update([
-+            'name' => $request->name,
-+            'email' => $request->email,
++        $request->validate([
++            'pdf' => ['required', 'file', 'mimes:pdf', 'max:20480'],
 +        ]);
 +
-+        return $this->success(
-+            new UserResource($user->fresh()),
-+            __('messages.profile_updated')
-+        );
-+    }
++        $oldPath = $this->storedPath();
 +
-+    public function updatePassword(UpdatePasswordRequest $request): JsonResponse
-+    {
-+        $user = $request->user();
-+
-+        if (! Hash::check($request->current_password, $user->password)) {
-+            return $this->error(
-+                __('messages.invalid_current_password'),
-+                422,
-+                ['current_password' => [__('messages.invalid_current_password')]]
-+            );
++        if ($oldPath && $oldPath !== self::STORAGE_PATH && Storage::disk('public')->exists($oldPath)) {
++            Storage::disk('public')->delete($oldPath);
 +        }
 +
-+        $user->update([
-+            'password' => Hash::make($request->password),
-+        ]);
++        // Fixed filename so re-uploads overwrite in place and the public URL never moves.
++        $path = $request->file('pdf')->storeAs('menu', 'menu.pdf', 'public');
 +
-+        return $this->success(null, __('messages.password_updated'));
-+    }
-+}
-diff --git a/app/Http/Requests/Profile/UpdatePasswordRequest.php b/app/Http/Requests/Profile/UpdatePasswordRequest.php
-new file mode 100644
-index 0000000..99a364f
---- /dev/null
-+++ b/app/Http/Requests/Profile/UpdatePasswordRequest.php
-@@ -0,0 +1,22 @@
-+<?php
++        Setting::updateOrCreate(
++            ['key' => self::SETTING_KEY],
++            [
++                'value' => $path,
++                'type' => 'text',
++                'group' => 'general',
++                'label_ar' => 'ملف قائمة الطعام PDF',
++                'label_en' => 'Menu PDF File',
++            ],
++        );
 +
-+namespace App\Http\Requests\Profile;
-+
-+use App\Http\Requests\BaseFormRequest;
-+
-+class UpdatePasswordRequest extends BaseFormRequest
-+{
-+    public function authorize(): bool
-+    {
-+        return true;
++        return $this->success($this->payload(), __('messages.uploaded'));
 +    }
 +
-+    public function rules(): array
++    public function destroy(): JsonResponse
 +    {
++        $path = $this->storedPath();
++
++        if ($path && Storage::disk('public')->exists($path)) {
++            Storage::disk('public')->delete($path);
++        }
++
++        Setting::updateOrCreate(
++            ['key' => self::SETTING_KEY],
++            ['value' => '', 'type' => 'text', 'group' => 'general'],
++        );
++
++        return $this->deleted(__('messages.deleted'));
++    }
++
++    private function storedPath(): ?string
++    {
++        $path = Setting::where('key', self::SETTING_KEY)->value('value');
++
++        return $path !== '' ? $path : null;
++    }
++
++    private function payload(): array
++    {
++        $path = $this->storedPath();
++
 +        return [
-+            'current_password' => ['required', 'string'],
-+            'password' => ['required', 'string', 'min:8', 'confirmed'],
-+            'password_confirmation' => ['required', 'string'],
++            'has_pdf' => $path !== null && Storage::disk('public')->exists($path),
++            'permanent_url' => route('menu.pdf'),
++            'qr_url' => route('menu.qr'),
++            'qr_download' => route('menu.qr.download'),
 +        ];
 +    }
 +}
-diff --git a/app/Http/Requests/Profile/UpdateProfileRequest.php b/app/Http/Requests/Profile/UpdateProfileRequest.php
+diff --git a/app/Services/MenuQrService.php b/app/Services/MenuQrService.php
 new file mode 100644
-index 0000000..ada08fd
+index 0000000..9e8964e
 --- /dev/null
-+++ b/app/Http/Requests/Profile/UpdateProfileRequest.php
-@@ -0,0 +1,22 @@
++++ b/app/Services/MenuQrService.php
+@@ -0,0 +1,51 @@
 +<?php
 +
-+namespace App\Http\Requests\Profile;
++namespace App\Services;
 +
-+use App\Http\Requests\BaseFormRequest;
-+use Illuminate\Validation\Rule;
++use App\Models\MediaItem;
++use Endroid\QrCode\Builder\Builder;
++use Endroid\QrCode\Color\Color;
++use Endroid\QrCode\ErrorCorrectionLevel;
++use Endroid\QrCode\Writer\PngWriter;
++use Illuminate\Support\Facades\Storage;
 +
-+class UpdateProfileRequest extends BaseFormRequest
++class MenuQrService
 +{
-+    public function authorize(): bool
++    /** Share of the QR width the logo may cover; beyond ~0.3 the code stops scanning. */
++    private const LOGO_RATIO = 0.25;
++
++    public function png(int $size = 500): string
 +    {
-+        return true;
++        $arguments = [
++            'writer' => new PngWriter(),
++            'data' => route('menu.pdf'),
++            'errorCorrectionLevel' => ErrorCorrectionLevel::High,
++            'size' => $size,
++            'margin' => 10,
++            'foregroundColor' => new Color(26, 23, 0),
++            'backgroundColor' => new Color(246, 239, 223),
++        ];
++
++        if ($logoPath = $this->logoPath()) {
++            $arguments['logoPath'] = $logoPath;
++            $arguments['logoResizeToWidth'] = (int) round($size * self::LOGO_RATIO);
++            $arguments['logoPunchoutBackground'] = true;
++        }
++
++        return (new Builder(...$arguments))->build()->getString();
 +    }
 +
-+    public function rules(): array
++    private function logoPath(): ?string
 +    {
-+        return [
-+            'name' => ['required', 'string', 'max:200'],
-+            'email' => ['required', 'email', Rule::unique('users', 'email')->ignore($this->user()->id)],
-+        ];
++        $logo = MediaItem::where('page', 'global')
++            ->where('section', 'brand')
++            ->where('key', 'logo_dark')
++            ->first();
++
++        if (! $logo?->path || ! Storage::disk('public')->exists($logo->path)) {
++            return null;
++        }
++
++        return Storage::disk('public')->path($logo->path);
 +    }
 +}
-diff --git a/lang/ar/messages.php b/lang/ar/messages.php
-index cbdaefa..7f3a08a 100644
---- a/lang/ar/messages.php
-+++ b/lang/ar/messages.php
-@@ -14,4 +14,7 @@
-     'something_wrong'   => 'حدث خطأ ما، يرجى المحاولة لاحقاً.',
-     'uploaded'          => 'تم رفع الملف بنجاح.',
-     'quote_submitted'   => 'تم استلام طلبكم، سنتواصل معكم قريباً.',
-+    'invalid_current_password' => 'كلمة المرور الحالية غير صحيحة.',
-+    'password_updated'         => 'تم تحديث كلمة المرور بنجاح.',
-+    'profile_updated'          => 'تم تحديث الملف الشخصي بنجاح.',
- ];
-diff --git a/lang/en/messages.php b/lang/en/messages.php
-index bdd55f2..903d8fa 100644
---- a/lang/en/messages.php
-+++ b/lang/en/messages.php
-@@ -14,4 +14,7 @@
-     'something_wrong'   => 'Something went wrong. Please try again.',
-     'uploaded'          => 'File uploaded successfully.',
-     'quote_submitted'   => 'Your request has been received. We will contact you soon.',
-+    'invalid_current_password' => 'The current password is incorrect.',
-+    'password_updated'         => 'Password updated successfully.',
-+    'profile_updated'          => 'Profile updated successfully.',
- ];
+diff --git a/composer.json b/composer.json
+index 22f512c..e918d6c 100644
+--- a/composer.json
++++ b/composer.json
+@@ -8,6 +8,7 @@
+     "require": {
+         "php": "^8.2",
+         "dedoc/scramble": "^0.13.35",
++        "endroid/qr-code": "^6.1",
+         "intervention/image-laravel": "^4.0",
+         "laravel/framework": "^12.0",
+         "laravel/sanctum": "^4.3",
+diff --git a/composer.lock b/composer.lock
+index 0c7e622..3e15ab9 100644
+--- a/composer.lock
++++ b/composer.lock
+@@ -4,8 +4,63 @@
+         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+         "This file is @generated automatically"
+     ],
+-    "content-hash": "dff99565e3ff109e79a99c0b7f2355c8",
++    "content-hash": "1bfb9fd34baa28b29ca3a908ea004b57",
+     "packages": [
++        {
++            "name": "bacon/bacon-qr-code",
++            "version": "v3.1.1",
++            "source": {
++                "type": "git",
++                "url": "https://github.com/Bacon/BaconQrCode.git",
++                "reference": "4da2233e72eeecd9be3b62e0dc2cc9ed8e2e31c2"
++            },
++            "dist": {
++                "type": "zip",
++                "url": "https://api.github.com/repos/Bacon/BaconQrCode/zipball/4da2233e72eeecd9be3b62e0dc2cc9ed8e2e31c2",
++                "reference": "4da2233e72eeecd9be3b62e0dc2cc9ed8e2e31c2",
++                "shasum": ""
++            },
++            "require": {
++                "dasprid/enum": "^1.0.3",
++                "ext-iconv": "*",
++                "php": "^8.1"
++            },
++            "require-dev": {
++                "phly/keep-a-changelog": "^2.12",
++                "phpunit/phpunit": "^10.5.11 || ^11.0.4",
++                "spatie/phpunit-snapshot-assertions": "^5.1.5",
++                "spatie/pixelmatch-php": "^1.2.0",
++                "squizlabs/php_codesniffer": "^3.9"
++            },
++            "suggest": {
++                "ext-imagick": "to generate QR code images"
++            },
++            "type": "library",
++            "autoload": {
++                "psr-4": {
++                    "BaconQrCode\\": "src/"
++                }
++            },
++            "notification-url": "https://packagist.org/downloads/",
++            "license": [
++                "BSD-2-Clause"
++            ],
++            "authors": [
++                {
++                    "name": "Ben Scholzen 'DASPRiD'",
++                    "email": "mail@dasprids.de",
++                    "homepage": "https://dasprids.de/",
++                    "role": "Developer"
++                }
++            ],
++            "description": "BaconQrCode is a QR code generator for PHP.",
++            "homepage": "https://github.com/Bacon/BaconQrCode",
++            "support": {
++                "issues": "https://github.com/Bacon/BaconQrCode/issues",
++                "source": "https://github.com/Bacon/BaconQrCode/tree/v3.1.1"
++            },
++            "time": "2026-04-05T21:06:35+00:00"
++        },
+         {
+             "name": "brick/math",
+             "version": "0.14.8",
+@@ -135,6 +190,56 @@
+             ],
+             "time": "2024-02-09T16:56:22+00:00"
+         },
++        {
++            "name": "dasprid/enum",
++            "version": "1.0.7",
++            "source": {
++                "type": "git",
++                "url": "https://github.com/DASPRiD/Enum.git",
++                "reference": "b5874fa9ed0043116c72162ec7f4fb50e02e7cce"
++            },
++            "dist": {
++                "type": "zip",
++                "url": "https://api.github.com/repos/DASPRiD/Enum/zipball/b5874fa9ed0043116c72162ec7f4fb50e02e7cce",
++                "reference": "b5874fa9ed0043116c72162ec7f4fb50e02e7cce",
++                "shasum": ""
++            },
++            "require": {
++                "php": ">=7.1 <9.0"
++            },
++            "require-dev": {
++                "phpunit/phpunit": "^7 || ^8 || ^9 || ^10 || ^11",
++                "squizlabs/php_codesniffer": "*"
++            },
++            "type": "library",
++            "autoload": {
++                "psr-4": {
++                    "DASPRiD\\Enum\\": "src/"
++                }
++            },
++            "notification-url": "https://packagist.org/downloads/",
++            "license": [
++                "BSD-2-Clause"
++            ],
++            "authors": [
++                {
++                    "name": "Ben Scholzen 'DASPRiD'",
++                    "email": "mail@dasprids.de",
++                    "homepage": "https://dasprids.de/",
++                    "role": "Developer"
++                }
++            ],
++            "description": "PHP 7.1 enum implementation",
++            "keywords": [
++                "enum",
++                "map"
++            ],
++            "support": {
++                "issues": "https://github.com/DASPRiD/Enum/issues",
++                "source": "https://github.com/DASPRiD/Enum/tree/1.0.7"
++            },
++            "time": "2025-09-16T12:23:56+00:00"
++        },
+         {
+             "name": "dedoc/scramble",
+             "version": "v0.13.35",
+@@ -589,6 +694,78 @@
+             ],
+             "time": "2025-03-06T22:45:56+00:00"
+         },
++        {
++            "name": "endroid/qr-code",
++            "version": "6.1.3",
++            "source": {
++                "type": "git",
++                "url": "https://github.com/endroid/qr-code.git",
++                "reference": "5fa534856ed95649d67c0eab0cabc03ab1d8e0e2"
++            },
++            "dist": {
++                "type": "zip",
++                "url": "https://api.github.com/repos/endroid/qr-code/zipball/5fa534856ed95649d67c0eab0cabc03ab1d8e0e2",
++                "reference": "5fa534856ed95649d67c0eab0cabc03ab1d8e0e2",
++                "shasum": ""
++            },
++            "require": {
++                "bacon/bacon-qr-code": "^3.0",
++                "php": "^8.4"
++            },
++            "require-dev": {
++                "endroid/quality": "dev-main",
++                "ext-gd": "*",
++                "khanamiryan/qrcode-detector-decoder": "^2.0.3",
++                "setasign/fpdf": "^1.8.2"
++            },
++            "suggest": {
++                "ext-gd": "Enables you to write PNG images",
++                "khanamiryan/qrcode-detector-decoder": "Enables you to use the image validator",
++                "roave/security-advisories": "Makes sure package versions with known security issues are not installed",
++                "setasign/fpdf": "Enables you to use the PDF writer"
++            },
++            "type": "library",
++            "extra": {
++                "branch-alias": {
++                    "dev-main": "6.x-dev"
++                }
++            },
++            "autoload": {
++                "psr-4": {
++                    "Endroid\\QrCode\\": "src/"
++                }
++            },
++            "notification-url": "https://packagist.org/downloads/",
++            "license": [
++                "MIT"
++            ],
++            "authors": [
++                {
++                    "name": "Jeroen van den Enden",
++                    "email": "info@endroid.nl"
++                }
++            ],
++            "description": "Endroid QR Code",
++            "homepage": "https://github.com/endroid/qr-code",
++            "keywords": [
++                "code",
++                "endroid",
++                "php",
++                "qr",
++                "qrcode"
++            ],
++            "support": {
++                "issues": "https://github.com/endroid/qr-code/issues",
++                "source": "https://github.com/endroid/qr-code/tree/6.1.3"
++            },
++            "funding": [
++                {
++                    "url": "https://github.com/endroid",
++                    "type": "github"
++                }
++            ],
++            "time": "2026-02-05T07:01:58+00:00"
++        },
+         {
+             "name": "fruitcake/php-cors",
+             "version": "v1.4.0",
+diff --git a/database/seeders/SettingSeeder.php b/database/seeders/SettingSeeder.php
+index 85d0338..f068d73 100644
+--- a/database/seeders/SettingSeeder.php
++++ b/database/seeders/SettingSeeder.php
+@@ -29,10 +29,11 @@ public function run(): void
+             ['key' => 'footer_copyright', 'value' => '© 2026 أبو السيد. جميع الحقوق محفوظة.', 'type' => 'text', 'group' => 'footer', 'label_ar' => 'نص الحقوق', 'label_en' => 'Copyright Text'],
+             ['key' => 'navbar_cta_ar', 'value' => 'اطلب أونلاين', 'type' => 'text', 'group' => 'navbar', 'label_ar' => 'زر الهيدر (عربي)', 'label_en' => 'Navbar CTA (Arabic)'],
+             ['key' => 'navbar_cta_en', 'value' => 'Order Online', 'type' => 'text', 'group' => 'navbar', 'label_ar' => 'زر الهيدر (إنجليزي)', 'label_en' => 'Navbar CTA (English)'],
++            ['key' => 'menu_pdf_path', 'value' => '', 'type' => 'text', 'group' => 'general', 'label_ar' => 'ملف قائمة الطعام PDF', 'label_en' => 'Menu PDF File'],
+         ];
+ 
+         foreach ($settings as $setting) {
+-            Setting::create($setting);
++            Setting::updateOrCreate(['key' => $setting['key']], $setting);
+         }
+     }
+ }
 diff --git a/routes/admin.php b/routes/admin.php
-index 728f0e8..ba67cc1 100644
+index d98221f..20f4557 100644
 --- a/routes/admin.php
 +++ b/routes/admin.php
 @@ -10,6 +10,7 @@
+ use App\Http\Controllers\Admin\DeliveryAppController;
  use App\Http\Controllers\Admin\DishController;
  use App\Http\Controllers\Admin\MediaItemController;
++use App\Http\Controllers\Admin\MenuPdfController;
  use App\Http\Controllers\Admin\PageContentController;
-+use App\Http\Controllers\Admin\ProfileController;
- use App\Http\Controllers\Admin\SettingController;
- use App\Http\Controllers\Admin\TestimonialController;
- use App\Http\Controllers\Admin\TimelineController;
-@@ -31,6 +32,13 @@
-             Route::get('/me',      'me');
+ use App\Http\Controllers\Admin\PersonalityController;
+ use App\Http\Controllers\Admin\ProfileController;
+@@ -177,5 +178,12 @@
+             Route::get('/', 'show');
+             Route::put('/', 'update');
          });
- 
-+        // ── Profile ───────────────────────────────────────
-+        Route::prefix('profile')->controller(ProfileController::class)->group(function () {
-+            Route::get('/', 'show');
-+            Route::put('/', 'update');
-+            Route::put('/password', 'updatePassword');
-+        });
 +
-         // ── Page Contents ─────────────────────────────────
-         Route::prefix('page-contents')->controller(PageContentController::class)->group(function () {
-             Route::get('/',       'index');
-diff --git a/tests/Feature/ProfileTest.php b/tests/Feature/ProfileTest.php
++        // ── Menu PDF ──────────────────────────────────────
++        Route::prefix('menu')->controller(MenuPdfController::class)->group(function () {
++            Route::get('pdf',    'show');
++            Route::post('pdf',   'upload');
++            Route::delete('pdf', 'destroy');
++        });
+     });
+ });
+diff --git a/routes/web.php b/routes/web.php
+index 86a06c5..8832b7a 100644
+--- a/routes/web.php
++++ b/routes/web.php
+@@ -1,7 +1,45 @@
+ <?php
+ 
++use App\Models\Setting;
++use App\Services\MenuQrService;
+ use Illuminate\Support\Facades\Route;
++use Illuminate\Support\Facades\Storage;
+ 
+ Route::get('/', function () {
+     return view('welcome');
+ });
++
++// Permanent menu PDF URL — the target the printed QR code points at, so it must
++// keep working across re-uploads. The stored path is looked up per request.
++Route::get('/menu/pdf', function () {
++    $path = Setting::where('key', 'menu_pdf_path')->value('value');
++
++    if (! $path || ! Storage::disk('public')->exists($path)) {
++        abort(404, 'Menu PDF not available yet.');
++    }
++
++    return response()->file(
++        Storage::disk('public')->path($path),
++        [
++            'Content-Type' => 'application/pdf',
++            'Content-Disposition' => 'inline; filename="abouelsid-menu.pdf"',
++        ],
++    );
++})->name('menu.pdf');
++
++// QR code pointing at the permanent PDF URL, rendered on demand so it always
++// reflects the current brand logo.
++Route::get('/menu/qr', function (MenuQrService $qr) {
++    return response($qr->png(500), 200, [
++        'Content-Type' => 'image/png',
++        'Cache-Control' => 'public, max-age=3600',
++    ]);
++})->name('menu.qr');
++
++// High-resolution variant for print.
++Route::get('/menu/qr/download', function (MenuQrService $qr) {
++    return response($qr->png(1000), 200, [
++        'Content-Type' => 'image/png',
++        'Content-Disposition' => 'attachment; filename="abouelsid-menu-qr.png"',
++    ]);
++})->name('menu.qr.download');
+diff --git a/tests/Feature/MenuPdfTest.php b/tests/Feature/MenuPdfTest.php
 new file mode 100644
-index 0000000..16a2470
+index 0000000..48f635c
 --- /dev/null
-+++ b/tests/Feature/ProfileTest.php
-@@ -0,0 +1,130 @@
++++ b/tests/Feature/MenuPdfTest.php
+@@ -0,0 +1,154 @@
 +<?php
 +
 +namespace Tests\Feature;
 +
++use App\Models\MediaItem;
++use App\Models\Setting;
 +use App\Models\User;
 +use Illuminate\Foundation\Testing\RefreshDatabase;
-+use Illuminate\Support\Facades\Hash;
++use Illuminate\Http\UploadedFile;
++use Illuminate\Support\Facades\Storage;
++use Laravel\Sanctum\Sanctum;
 +use Tests\TestCase;
 +
-+class ProfileTest extends TestCase
++class MenuPdfTest extends TestCase
 +{
 +    use RefreshDatabase;
 +
@@ -237,150 +531,268 @@ index 0000000..16a2470
 +    {
 +        parent::setUp();
 +
-+        $this->seed();
-+    }
++        Storage::fake('public');
 +
-+    private function token(): string
-+    {
-+        $user = User::where('email', 'admin@abouelsid.com')->first();
-+
-+        return $user->createToken('test-token')->plainTextToken;
-+    }
-+
-+    public function test_get_profile_authenticated_returns_200_with_user_data(): void
-+    {
-+        $response = $this->getJson('/api/v1/admin/profile', [
-+            'Authorization' => "Bearer {$this->token()}",
-+        ]);
-+
-+        $response->assertStatus(200)
-+            ->assertJson(['success' => true])
-+            ->assertJsonStructure(['data' => ['id', 'name', 'email', 'role']])
-+            ->assertJsonPath('data.email', 'admin@abouelsid.com');
-+    }
-+
-+    public function test_get_profile_unauthenticated_returns_401(): void
-+    {
-+        $response = $this->getJson('/api/v1/admin/profile');
-+
-+        $response->assertStatus(401)
-+            ->assertJson(['success' => false]);
-+    }
-+
-+    public function test_update_profile_with_valid_data_updates_name_and_email(): void
-+    {
-+        $response = $this->putJson('/api/v1/admin/profile', [
-+            'name' => 'Updated Name',
-+            'email' => 'updated@abouelsid.com',
-+        ], [
-+            'Authorization' => "Bearer {$this->token()}",
-+        ]);
-+
-+        $response->assertStatus(200)
-+            ->assertJson(['success' => true])
-+            ->assertJsonPath('data.name', 'Updated Name')
-+            ->assertJsonPath('data.email', 'updated@abouelsid.com');
-+
-+        $this->assertDatabaseHas('users', [
-+            'email' => 'updated@abouelsid.com',
-+            'name' => 'Updated Name',
++        Setting::create([
++            'key' => 'menu_pdf_path', 'value' => '', 'type' => 'text', 'group' => 'general',
++            'label_ar' => 'ملف قائمة الطعام PDF', 'label_en' => 'Menu PDF File',
 +        ]);
 +    }
 +
-+    public function test_update_profile_with_duplicate_email_returns_422(): void
++    private function actingAsAdmin(): void
 +    {
-+        User::factory()->create(['email' => 'taken@abouelsid.com']);
-+
-+        $response = $this->putJson('/api/v1/admin/profile', [
-+            'name' => 'Admin',
-+            'email' => 'taken@abouelsid.com',
-+        ], [
-+            'Authorization' => "Bearer {$this->token()}",
-+        ]);
-+
-+        $response->assertStatus(422)
-+            ->assertJson(['success' => false])
-+            ->assertJsonValidationErrors(['email']);
++        Sanctum::actingAs(User::create([
++            'name' => 'Admin', 'email' => 'admin@example.com',
++            'password' => 'secret', 'role' => 'super_admin',
++        ]));
 +    }
 +
-+    public function test_update_password_with_correct_current_password_returns_200(): void
++    private function pdf(string $name = 'menu.pdf'): UploadedFile
 +    {
-+        $response = $this->putJson('/api/v1/admin/profile/password', [
-+            'current_password' => 'password',
-+            'password' => 'newpassword123',
-+            'password_confirmation' => 'newpassword123',
-+        ], [
-+            'Authorization' => "Bearer {$this->token()}",
-+        ]);
-+
-+        $response->assertStatus(200)
-+            ->assertJson(['success' => true]);
-+
-+        $user = User::where('email', 'admin@abouelsid.com')->first();
-+        $this->assertTrue(Hash::check('newpassword123', $user->password));
++        return UploadedFile::fake()->create($name, 120, 'application/pdf');
 +    }
 +
-+    public function test_update_password_with_wrong_current_password_returns_422(): void
++    public function test_permanent_url_returns_404_before_any_upload(): void
 +    {
-+        $response = $this->putJson('/api/v1/admin/profile/password', [
-+            'current_password' => 'wrong-password',
-+            'password' => 'newpassword123',
-+            'password_confirmation' => 'newpassword123',
-+        ], [
-+            'Authorization' => "Bearer {$this->token()}",
-+        ]);
-+
-+        $response->assertStatus(422)
-+            ->assertJson(['success' => false])
-+            ->assertJsonValidationErrors(['current_password']);
++        $this->get('/menu/pdf')->assertNotFound();
 +    }
 +
-+    public function test_update_password_with_mismatched_confirmation_returns_422(): void
++    public function test_admin_can_upload_and_the_permanent_url_serves_the_pdf(): void
 +    {
-+        $response = $this->putJson('/api/v1/admin/profile/password', [
-+            'current_password' => 'password',
-+            'password' => 'newpassword123',
-+            'password_confirmation' => 'does-not-match',
-+        ], [
-+            'Authorization' => "Bearer {$this->token()}",
++        $this->actingAsAdmin();
++
++        $this->postJson('/api/v1/admin/menu/pdf', ['pdf' => $this->pdf()])
++            ->assertOk()
++            ->assertJsonPath('data.has_pdf', true)
++            ->assertJsonPath('data.permanent_url', url('/menu/pdf'));
++
++        Storage::disk('public')->assertExists('menu/menu.pdf');
++
++        $this->get('/menu/pdf')
++            ->assertOk()
++            ->assertHeader('content-type', 'application/pdf');
++    }
++
++    public function test_reupload_keeps_the_same_permanent_url(): void
++    {
++        $this->actingAsAdmin();
++
++        $first = $this->postJson('/api/v1/admin/menu/pdf', ['pdf' => $this->pdf()])
++            ->json('data.permanent_url');
++
++        $second = $this->postJson('/api/v1/admin/menu/pdf', ['pdf' => $this->pdf('updated.pdf')])
++            ->json('data.permanent_url');
++
++        $this->assertSame($first, $second);
++        $this->assertSame('menu/menu.pdf', Setting::where('key', 'menu_pdf_path')->value('value'));
++    }
++
++    public function test_upload_rejects_non_pdf(): void
++    {
++        $this->actingAsAdmin();
++
++        $this->postJson('/api/v1/admin/menu/pdf', ['pdf' => UploadedFile::fake()->image('menu.jpg')])
++            ->assertStatus(422)
++            ->assertJsonValidationErrors('pdf');
++    }
++
++    public function test_upload_requires_authentication(): void
++    {
++        $this->postJson('/api/v1/admin/menu/pdf', ['pdf' => $this->pdf()])->assertUnauthorized();
++    }
++
++    public function test_destroy_removes_the_file_and_the_url_404s_again(): void
++    {
++        $this->actingAsAdmin();
++        $this->postJson('/api/v1/admin/menu/pdf', ['pdf' => $this->pdf()]);
++
++        $this->deleteJson('/api/v1/admin/menu/pdf')->assertOk();
++
++        Storage::disk('public')->assertMissing('menu/menu.pdf');
++        $this->get('/menu/pdf')->assertNotFound();
++    }
++
++    public function test_qr_route_returns_a_png(): void
++    {
++        $response = $this->get('/menu/qr');
++
++        $response->assertOk()->assertHeader('content-type', 'image/png');
++
++        $info = getimagesizefromstring($response->getContent());
++        $this->assertSame('image/png', $info['mime']);
++    }
++
++    public function test_qr_download_is_larger_and_sent_as_attachment(): void
++    {
++        $view = getimagesizefromstring($this->get('/menu/qr')->getContent());
++        $download = $this->get('/menu/qr/download');
++
++        $download->assertOk()
++            ->assertHeader('content-disposition', 'attachment; filename="abouelsid-menu-qr.png"');
++
++        $this->assertGreaterThan($view[0], getimagesizefromstring($download->getContent())[0]);
++    }
++
++    public function test_qr_embeds_the_brand_logo_when_present(): void
++    {
++        $withoutLogo = strlen($this->get('/menu/qr')->getContent());
++
++        Storage::disk('public')->put('media/global/logo.png', file_get_contents(
++            $this->createLogoFixture(),
++        ));
++
++        MediaItem::create([
++            'page' => 'global', 'section' => 'brand', 'key' => 'logo_dark',
++            'path' => 'media/global/logo.png', 'url' => '/storage/media/global/logo.png',
++            'alt_ar' => 'شعار', 'alt_en' => 'Logo',
 +        ]);
 +
-+        $response->assertStatus(422)
-+            ->assertJson(['success' => false])
-+            ->assertJsonValidationErrors(['password']);
++        $withLogo = strlen($this->get('/menu/qr')->getContent());
++
++        $this->assertNotSame($withoutLogo, $withLogo);
++    }
++
++    private function createLogoFixture(): string
++    {
++        $image = imagecreatetruecolor(225, 225);
++        imagefill($image, 0, 0, imagecolorallocate($image, 200, 40, 40));
++
++        $path = tempnam(sys_get_temp_dir(), 'logo').'.png';
++        imagepng($image, $path);
++        imagedestroy($image);
++
++        return $path;
 +    }
 +}
+diff --git a/tests/Feature/RepositoriesTest.php b/tests/Feature/RepositoriesTest.php
+index 0b1c4a6..288140c 100644
+--- a/tests/Feature/RepositoriesTest.php
++++ b/tests/Feature/RepositoriesTest.php
+@@ -115,8 +115,9 @@ public function test_setting_repository_get_all_keyed_by_key(): void
+ 
+         $result = $repo->getAll();
+ 
+-        $this->assertCount(19, $result);
++        $this->assertCount(20, $result);
+         $this->assertTrue($result->has('whatsapp_number'));
++        $this->assertTrue($result->has('menu_pdf_path'));
+     }
+ 
+     public function test_setting_repository_get_all_filters_by_group(): void
 ===== END change.diff =====
 
 ===== BEGIN context-bundle.md =====
 # Context bundle
 
-bundle_version 2 · budget 8000 / used 299 tokens
+bundle_version 2 · budget 8000 / used 606 tokens
+
+## flagged · named_reference
+
+**Subject:** App\Models\Setting::updateOrCreate
+**Reason:** the region depends on App\Models\Setting::updateOrCreate, whose contract is defined in another file
+**Source:** `app/Http/Controllers/Admin/MenuPdfController.php` :: `App\Models\Setting::updateOrCreate` (lines 1-85)
+**Tokens:** 20
+
+```text
+ASSUMPTION: named reference could not be resolved on disk; contract unverified
+```
+
+## flagged · named_reference
+
+**Subject:** App\Models\Setting::where
+**Reason:** the region depends on App\Models\Setting::where, whose contract is defined in another file
+**Source:** `app/Http/Controllers/Admin/MenuPdfController.php` :: `App\Models\Setting::where` (lines 1-85)
+**Tokens:** 20
+
+```text
+ASSUMPTION: named reference could not be resolved on disk; contract unverified
+```
 
 ## fetched · named_reference
 
-**Subject:** App\Http\Resources\User\UserResource
-**Reason:** the region depends on App\Http\Resources\User\UserResource, whose contract is defined in another file
-**Source:** `app/Http/Resources/User/UserResource.php` :: `toArray` (lines 10-19)
-**Tokens:** 75
+**Subject:** App\Models\MediaItem::where
+**Reason:** the region depends on App\Models\MediaItem::where, whose contract is defined in another file
+**Source:** `app/Models/MediaItem.php` :: `fillable` (lines 10-22)
+**Tokens:** 58
 
 ```php
-    public function toArray(Request $request): array
+    protected $fillable = [
+        'page',
+        'section',
+        'key',
+        'path',
+        'url',
+        'alt_ar',
+        'alt_en',
+        'mime_type',
+        'size_bytes',
+        'width',
+        'height',
+    ];
+```
+
+## fetched · named_reference
+
+**Subject:** App\Models\MediaItem::where
+**Reason:** the region depends on App\Models\MediaItem::where, whose contract is defined in another file
+**Source:** `app/Models/MediaItem.php` :: `scopeForPage` (lines 24-35)
+**Tokens:** 79
+
+```php
+    public function scopeForPage(Builder $query, ?string $page = null, ?string $section = null): Builder
     {
-        return [
-            'id' => $this->id,
-            'name' => $this->name,
-            'email' => $this->email,
-            'role' => $this->role,
-            'created_at' => $this->created_at?->toIso8601String(),
-        ];
+        if ($page !== null) {
+            $query->where('page', $page);
+        }
+
+        if ($section !== null) {
+            $query->where('section', $section);
+        }
+
+        return $query;
     }
 ```
 
 ## fetched · named_reference
 
-**Subject:** App\Models\User::where
-**Reason:** the region depends on App\Models\User::where, whose contract is defined in another file
+**Subject:** App\Models\Setting::updateOrCreate
+**Reason:** the region depends on App\Models\Setting::updateOrCreate, whose contract is defined in another file
+**Source:** `app/Models/Setting.php` :: `fillable` (lines 10-17)
+**Tokens:** 35
+
+```php
+    protected $fillable = [
+        'key',
+        'value',
+        'type',
+        'group',
+        'label_ar',
+        'label_en',
+    ];
+```
+
+## fetched · named_reference
+
+**Subject:** App\Models\Setting::updateOrCreate
+**Reason:** the region depends on App\Models\Setting::updateOrCreate, whose contract is defined in another file
+**Source:** `app/Models/Setting.php` :: `scopeForGroup` (lines 19-26)
+**Tokens:** 51
+
+```php
+    public function scopeForGroup(Builder $query, ?string $group = null): Builder
+    {
+        if ($group !== null) {
+            $query->where('group', $group);
+        }
+
+        return $query;
+    }
+```
+
+## fetched · named_reference
+
+**Subject:** App\Models\User::create
+**Reason:** the region depends on App\Models\User::create, whose contract is defined in another file
 **Source:** `app/Models/User.php` :: `casts` (lines 40-51)
 **Tokens:** 67
 
@@ -401,8 +813,8 @@ bundle_version 2 · budget 8000 / used 299 tokens
 
 ## fetched · named_reference
 
-**Subject:** App\Models\User::where
-**Reason:** the region depends on App\Models\User::where, whose contract is defined in another file
+**Subject:** App\Models\User::create
+**Reason:** the region depends on App\Models\User::create, whose contract is defined in another file
 **Source:** `app/Models/User.php` :: `fillable` (lines 18-28)
 **Tokens:** 50
 
@@ -422,8 +834,8 @@ bundle_version 2 · budget 8000 / used 299 tokens
 
 ## fetched · named_reference
 
-**Subject:** App\Models\User::where
-**Reason:** the region depends on App\Models\User::where, whose contract is defined in another file
+**Subject:** App\Models\User::create
+**Reason:** the region depends on App\Models\User::create, whose contract is defined in another file
 **Source:** `app/Models/User.php` :: `hidden` (lines 30-38)
 **Tokens:** 48
 
@@ -441,9 +853,9 @@ bundle_version 2 · budget 8000 / used 299 tokens
 
 ## flagged · named_reference
 
-**Subject:** App\Models\User::factory
-**Reason:** the region depends on App\Models\User::factory, whose contract is defined in another file
-**Source:** `tests/Feature/ProfileTest.php` :: `App\Models\User::factory` (lines 1-130)
+**Subject:** App\Models\MediaItem::where
+**Reason:** the region depends on App\Models\MediaItem::where, whose contract is defined in another file
+**Source:** `app/Services/MenuQrService.php` :: `App\Models\MediaItem::where` (lines 1-51)
 **Tokens:** 20
 
 ```text
@@ -452,9 +864,64 @@ ASSUMPTION: named reference could not be resolved on disk; contract unverified
 
 ## flagged · named_reference
 
-**Subject:** App\Models\User::where
-**Reason:** the region depends on App\Models\User::where, whose contract is defined in another file
-**Source:** `tests/Feature/ProfileTest.php` :: `App\Models\User::where` (lines 1-130)
+**Subject:** App\Models\Setting::updateOrCreate
+**Reason:** the region depends on App\Models\Setting::updateOrCreate, whose contract is defined in another file
+**Source:** `database/seeders/SettingSeeder.php` :: `App\Models\Setting::updateOrCreate` (lines 29-39)
+**Tokens:** 20
+
+```text
+ASSUMPTION: named reference could not be resolved on disk; contract unverified
+```
+
+## flagged · named_reference
+
+**Subject:** App\Models\Setting::where
+**Reason:** the region depends on App\Models\Setting::where, whose contract is defined in another file
+**Source:** `routes/web.php` :: `App\Models\Setting::where` (lines 1-45)
+**Tokens:** 20
+
+```text
+ASSUMPTION: named reference could not be resolved on disk; contract unverified
+```
+
+## flagged · named_reference
+
+**Subject:** App\Models\MediaItem::create
+**Reason:** the region depends on App\Models\MediaItem::create, whose contract is defined in another file
+**Source:** `tests/Feature/MenuPdfTest.php` :: `App\Models\MediaItem::create` (lines 1-154)
+**Tokens:** 20
+
+```text
+ASSUMPTION: named reference could not be resolved on disk; contract unverified
+```
+
+## flagged · named_reference
+
+**Subject:** App\Models\Setting::create
+**Reason:** the region depends on App\Models\Setting::create, whose contract is defined in another file
+**Source:** `tests/Feature/MenuPdfTest.php` :: `App\Models\Setting::create` (lines 1-154)
+**Tokens:** 20
+
+```text
+ASSUMPTION: named reference could not be resolved on disk; contract unverified
+```
+
+## flagged · named_reference
+
+**Subject:** App\Models\Setting::where
+**Reason:** the region depends on App\Models\Setting::where, whose contract is defined in another file
+**Source:** `tests/Feature/MenuPdfTest.php` :: `App\Models\Setting::where` (lines 1-154)
+**Tokens:** 20
+
+```text
+ASSUMPTION: named reference could not be resolved on disk; contract unverified
+```
+
+## flagged · named_reference
+
+**Subject:** App\Models\User::create
+**Reason:** the region depends on App\Models\User::create, whose contract is defined in another file
+**Source:** `tests/Feature/MenuPdfTest.php` :: `App\Models\User::create` (lines 1-154)
 **Tokens:** 20
 
 ```text
@@ -465,7 +932,18 @@ ASSUMPTION: named reference could not be resolved on disk; contract unverified
 
 **Subject:** surrounding-transaction
 **Reason:** the region performs several persistence writes; whether a transaction wraps them is decided by the caller, which the diff does not show
-**Source:** `app/Http/Controllers/Admin/ProfileController.php` (lines 1-55)
+**Source:** `app/Http/Controllers/Admin/MenuPdfController.php` (lines 1-85)
+**Tokens:** 19
+
+```text
+ASSUMPTION: this code assumes a surrounding transaction; caller not checked
+```
+
+## flagged · unverifiable_premise
+
+**Subject:** surrounding-transaction
+**Reason:** the region performs several persistence writes; whether a transaction wraps them is decided by the caller, which the diff does not show
+**Source:** `tests/Feature/MenuPdfTest.php` (lines 1-154)
 **Tokens:** 19
 
 ```text
@@ -478,21 +956,36 @@ Nothing was dropped.
 ===== END context-bundle.md =====
 
 ===== BEGIN context-diagnostics.txt =====
-new file: app/Http/Controllers/Admin/ProfileController.php — own-file context is in the diff, not fetched
-new file: app/Http/Requests/Profile/UpdatePasswordRequest.php — own-file context is in the diff, not fetched
-new file: app/Http/Requests/Profile/UpdateProfileRequest.php — own-file context is in the diff, not fetched
-new file: tests/Feature/ProfileTest.php — own-file context is in the diff, not fetched
-framework reference: Illuminate\Support\Facades\Hash::check declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Hash.php:11 (@method static bool check(string $value, string $hashedValue, array $options = []))
-framework reference: Illuminate\Support\Facades\Hash::make declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Hash.php:10 (@method static string make(string $value, array $options = []))
-dependency class: Illuminate\Http\Request provided by vendor/laravel/framework/src/Illuminate/Http/Request.php; surface not fetched
+new file: app/Http/Controllers/Admin/MenuPdfController.php — own-file context is in the diff, not fetched
+new file: app/Services/MenuQrService.php — own-file context is in the diff, not fetched
+new file: tests/Feature/MenuPdfTest.php — own-file context is in the diff, not fetched
+framework reference: Illuminate\Support\Facades\Storage::disk declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Storage.php:11 (@method static \Illuminate\Contracts\Filesystem\Filesystem disk(\UnitEnum|string|null $name = null))
+unresolved named_reference: App\Models\Setting::updateOrCreate in app/Http/Controllers/Admin/MenuPdfController.php
+unresolved named_reference: App\Models\Setting::where in app/Http/Controllers/Admin/MenuPdfController.php
 dependency class: Illuminate\Http\JsonResponse provided by vendor/laravel/framework/src/Illuminate/Http/JsonResponse.php; surface not fetched
-already in the diff: App\Http\Requests\Profile\UpdateProfileRequest declared in app/Http/Requests/Profile/UpdateProfileRequest.php; not fetched again
-already in the diff: App\Http\Requests\Profile\UpdatePasswordRequest declared in app/Http/Requests/Profile/UpdatePasswordRequest.php; not fetched again
-dependency member: Illuminate\Validation\Rule::unique declared at vendor/laravel/framework/src/Illuminate/Validation/Rule.php:94; source not fetched
+dependency class: Illuminate\Http\Request provided by vendor/laravel/framework/src/Illuminate/Http/Request.php; surface not fetched
+dependency member: Endroid\QrCode\ErrorCorrectionLevel::High declared at vendor/endroid/qr-code/src/ErrorCorrectionLevel.php:9; source not fetched
+unresolved named_reference: App\Models\MediaItem::where in app/Services/MenuQrService.php
+framework reference: Illuminate\Support\Facades\Storage::disk declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Storage.php:11 (@method static \Illuminate\Contracts\Filesystem\Filesystem disk(\UnitEnum|string|null $name = null))
+dependency class: Endroid\QrCode\Writer\PngWriter provided by vendor/endroid/qr-code/src/Writer/PngWriter.php; surface not fetched
+dependency class: Endroid\QrCode\Color\Color provided by vendor/endroid/qr-code/src/Color/Color.php; surface not fetched
+dependency class: Endroid\QrCode\Builder\Builder provided by vendor/endroid/qr-code/src/Builder/Builder.php; surface not fetched
+unresolved named_reference: App\Models\Setting::updateOrCreate in database/seeders/SettingSeeder.php
 framework reference: Illuminate\Support\Facades\Route::prefix declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Route.php:100 (@method static \Illuminate\Routing\RouteRegistrar prefix(string $prefix))
 framework reference: Illuminate\Support\Facades\Route::get declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Route.php:6 (@method static \Illuminate\Routing\Route get(string $uri, array|string|callable|null $action = null))
-framework reference: Illuminate\Support\Facades\Route::put declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Route.php:8 (@method static \Illuminate\Routing\Route put(string $uri, array|string|callable|null $action = null))
-unresolved named_reference: App\Models\User::where in tests/Feature/ProfileTest.php
-unresolved named_reference: App\Models\User::factory in tests/Feature/ProfileTest.php
-framework reference: Illuminate\Support\Facades\Hash::check declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Hash.php:11 (@method static bool check(string $value, string $hashedValue, array $options = []))
+framework reference: Illuminate\Support\Facades\Route::post declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Route.php:7 (@method static \Illuminate\Routing\Route post(string $uri, array|string|callable|null $action = null))
+framework reference: Illuminate\Support\Facades\Route::delete declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Route.php:10 (@method static \Illuminate\Routing\Route delete(string $uri, array|string|callable|null $action = null))
+framework reference: Illuminate\Support\Facades\Route::get declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Route.php:6 (@method static \Illuminate\Routing\Route get(string $uri, array|string|callable|null $action = null))
+unresolved named_reference: App\Models\Setting::where in routes/web.php
+framework reference: Illuminate\Support\Facades\Storage::disk declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Storage.php:11 (@method static \Illuminate\Contracts\Filesystem\Filesystem disk(\UnitEnum|string|null $name = null))
+already in the diff: App\Services\MenuQrService declared in app/Services/MenuQrService.php; not fetched again
+dependency member: Illuminate\Support\Facades\Storage::fake declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Storage.php:94; source not fetched
+unresolved named_reference: App\Models\Setting::create in tests/Feature/MenuPdfTest.php
+dependency member: Laravel\Sanctum\Sanctum::actingAs declared at vendor/laravel/sanctum/src/Sanctum.php:62; source not fetched
+unresolved named_reference: App\Models\User::create in tests/Feature/MenuPdfTest.php
+dependency member: Illuminate\Http\UploadedFile::fake declared at vendor/laravel/framework/src/Illuminate/Http/UploadedFile.php:17; source not fetched
+framework reference: Illuminate\Support\Facades\Storage::disk declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Storage.php:11 (@method static \Illuminate\Contracts\Filesystem\Filesystem disk(\UnitEnum|string|null $name = null))
+unresolved named_reference: App\Models\Setting::where in tests/Feature/MenuPdfTest.php
+unresolved named_reference: App\Models\MediaItem::create in tests/Feature/MenuPdfTest.php
+dependency class: Illuminate\Http\UploadedFile provided by vendor/laravel/framework/src/Illuminate/Http/UploadedFile.php; surface not fetched
 ===== END context-diagnostics.txt =====

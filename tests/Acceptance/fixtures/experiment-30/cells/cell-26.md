@@ -47,841 +47,827 @@ Q5: "<exact quotation>" | NONE_VISIBLE
 ---
 
 ===== BEGIN change.diff =====
-diff --git a/app/Http/Controllers/Auth/AuthController.php b/app/Http/Controllers/Auth/AuthController.php
-index e4e6283..028d0a0 100644
---- a/app/Http/Controllers/Auth/AuthController.php
-+++ b/app/Http/Controllers/Auth/AuthController.php
-@@ -18,30 +18,18 @@ public function login(LoginRequest $request, LoginAction $action): JsonResponse
-     {
-         $result = $action->execute(LoginDTO::fromRequest($request));
- 
--        return response()->json([
--            'success' => true,
--            'message' => 'Login successful',
--            'data' => new AuthResource($result),
--        ]);
-+        return $this->success(new AuthResource($result), 'Login successful');
-     }
- 
-     public function logout(Request $request, LogoutAction $action): JsonResponse
-     {
-         $action->execute($request->user());
- 
--        return response()->json([
--            'success' => true,
--            'message' => 'Logout successful',
--            'data' => null,
--        ]);
-+        return $this->success(null, 'Logout successful');
-     }
- 
-     public function me(Request $request): JsonResponse
-     {
--        return response()->json([
--            'success' => true,
--            'message' => 'Authenticated user',
--            'data' => new UserResource($request->user()),
--        ]);
-+        return $this->success(new UserResource($request->user()), 'Authenticated user');
-     }
- }
-diff --git a/app/Http/Controllers/BranchController.php b/app/Http/Controllers/BranchController.php
-index 10aeeb5..a9cb02f 100644
---- a/app/Http/Controllers/BranchController.php
-+++ b/app/Http/Controllers/BranchController.php
-@@ -17,43 +17,27 @@ class BranchController extends Controller
- {
-     public function index(GetBranchesAction $action): JsonResponse
-     {
--        return response()->json([
--            'success' => true,
--            'message' => 'Branches retrieved',
--            'data' => BranchResource::collection($action->execute()),
--        ]);
-+        return $this->success(BranchResource::collection($action->execute()), 'Branches retrieved');
-     }
- 
-     public function store(StoreBranchRequest $request, CreateBranchAction $action): JsonResponse
-     {
-         $branch = $action->execute(CreateBranchDTO::fromRequest($request));
- 
--        return response()->json([
--            'success' => true,
--            'message' => 'Branch created',
--            'data' => new BranchResource($branch),
--        ], 201);
-+        return $this->created(new BranchResource($branch), 'Branch created');
-     }
- 
-     public function update(UpdateBranchRequest $request, int $id, UpdateBranchAction $action): JsonResponse
-     {
-         $branch = $action->execute($id, UpdateBranchDTO::fromRequest($request));
- 
--        return response()->json([
--            'success' => true,
--            'message' => 'Branch updated',
--            'data' => new BranchResource($branch),
--        ]);
-+        return $this->success(new BranchResource($branch), 'Branch updated');
-     }
- 
-     public function destroy(int $id, DeleteBranchAction $action): JsonResponse
-     {
-         $action->execute($id);
- 
--        return response()->json([
--            'success' => true,
--            'message' => 'Branch deleted',
--            'data' => null,
--        ]);
-+        return $this->deleted('Branch deleted');
-     }
- }
-diff --git a/app/Http/Controllers/CategoryController.php b/app/Http/Controllers/CategoryController.php
-index 119e920..2a886d6 100644
---- a/app/Http/Controllers/CategoryController.php
-+++ b/app/Http/Controllers/CategoryController.php
-@@ -15,43 +15,27 @@ public function __construct(
- 
-     public function index(): JsonResponse
-     {
--        return response()->json([
--            'success' => true,
--            'message' => 'Categories retrieved',
--            'data' => CategoryResource::collection($this->repository->getAll()),
--        ]);
-+        return $this->success(CategoryResource::collection($this->repository->getAll()), 'Categories retrieved');
-     }
- 
-     public function store(Request $request): JsonResponse
-     {
-         $category = $this->repository->create($request->only(['name_ar', 'name_en', 'slug', 'order']));
- 
--        return response()->json([
--            'success' => true,
--            'message' => 'Category created',
--            'data' => new CategoryResource($category),
--        ], 201);
-+        return $this->created(new CategoryResource($category), 'Category created');
-     }
- 
-     public function update(Request $request, int $id): JsonResponse
-     {
-         $category = $this->repository->update($id, $request->only(['name_ar', 'name_en', 'slug', 'order']));
- 
--        return response()->json([
--            'success' => true,
--            'message' => 'Category updated',
--            'data' => new CategoryResource($category),
--        ]);
-+        return $this->success(new CategoryResource($category), 'Category updated');
-     }
- 
-     public function destroy(int $id): JsonResponse
-     {
-         $this->repository->delete($id);
- 
--        return response()->json([
--            'success' => true,
--            'message' => 'Category deleted',
--            'data' => null,
--        ]);
-+        return $this->deleted('Category deleted');
-     }
- }
-diff --git a/app/Http/Controllers/Catering/CateringPackageController.php b/app/Http/Controllers/Catering/CateringPackageController.php
-index 413f202..4fdd1b8 100644
---- a/app/Http/Controllers/Catering/CateringPackageController.php
-+++ b/app/Http/Controllers/Catering/CateringPackageController.php
-@@ -18,43 +18,27 @@ class CateringPackageController extends Controller
- {
-     public function index(GetPackagesAction $action): JsonResponse
-     {
--        return response()->json([
--            'success' => true,
--            'message' => 'Catering packages retrieved',
--            'data' => PackageResource::collection($action->execute()),
--        ]);
-+        return $this->success(PackageResource::collection($action->execute()), 'Catering packages retrieved');
-     }
- 
-     public function store(StorePackageRequest $request, CreatePackageAction $action): JsonResponse
-     {
-         $package = $action->execute(CreatePackageDTO::fromRequest($request));
- 
--        return response()->json([
--            'success' => true,
--            'message' => 'Catering package created',
--            'data' => new PackageResource($package),
--        ], 201);
-+        return $this->created(new PackageResource($package), 'Catering package created');
-     }
- 
-     public function update(UpdatePackageRequest $request, int $id, UpdatePackageAction $action): JsonResponse
-     {
-         $package = $action->execute($id, UpdatePackageDTO::fromRequest($request));
- 
--        return response()->json([
--            'success' => true,
--            'message' => 'Catering package updated',
--            'data' => new PackageResource($package),
--        ]);
-+        return $this->success(new PackageResource($package), 'Catering package updated');
-     }
- 
-     public function destroy(int $id, DeletePackageAction $action): JsonResponse
-     {
-         $action->execute($id);
- 
--        return response()->json([
--            'success' => true,
--            'message' => 'Catering package deleted',
--            'data' => null,
--        ]);
-+        return $this->deleted('Catering package deleted');
-     }
- }
-diff --git a/app/Http/Controllers/Catering/QuoteRequestController.php b/app/Http/Controllers/Catering/QuoteRequestController.php
-index 21e4fe8..63ea6c1 100644
---- a/app/Http/Controllers/Catering/QuoteRequestController.php
-+++ b/app/Http/Controllers/Catering/QuoteRequestController.php
-@@ -20,11 +20,7 @@ public function store(StoreQuoteRequestRequest $request, SubmitQuoteRequestActio
-     {
-         $quoteRequest = $action->execute(SubmitQuoteRequestDTO::fromRequest($request));
- 
--        return response()->json([
--            'success' => true,
--            'message' => 'Quote request submitted',
--            'data' => new QuoteRequestResource($quoteRequest),
--        ], 201);
-+        return $this->created(new QuoteRequestResource($quoteRequest), 'Quote request submitted');
-     }
- 
-     public function index(Request $request, QuoteRequestRepository $repository): JsonResponse
-@@ -37,38 +33,18 @@ public function index(Request $request, QuoteRequestRepository $repository): Jso
- 
-         $result = $repository->getAll($filters);
- 
--        return response()->json([
--            'success' => true,
--            'message' => 'Quote requests retrieved',
--            'data' => [
--                'items' => QuoteRequestResource::collection($result),
--                'meta' => [
--                    'current_page' => $result->currentPage(),
--                    'last_page' => $result->lastPage(),
--                    'per_page' => $result->perPage(),
--                    'total' => $result->total(),
--                ],
--            ],
--        ]);
-+        return $this->paginated(QuoteRequestResource::collection($result), $result, 'Quote requests retrieved');
-     }
- 
-     public function show(int $id, QuoteRequestRepository $repository): JsonResponse
-     {
--        return response()->json([
--            'success' => true,
--            'message' => 'Quote request retrieved',
--            'data' => new QuoteRequestResource($repository->getById($id)),
--        ]);
-+        return $this->success(new QuoteRequestResource($repository->getById($id)), 'Quote request retrieved');
-     }
- 
-     public function updateStatus(UpdateQuoteRequestStatusRequest $request, int $id, UpdateQuoteRequestStatusAction $action): JsonResponse
-     {
-         $quoteRequest = $action->execute($id, UpdateQuoteRequestStatusDTO::fromRequest($request));
- 
--        return response()->json([
--            'success' => true,
--            'message' => 'Quote request status updated',
--            'data' => new QuoteRequestResource($quoteRequest),
--        ]);
-+        return $this->success(new QuoteRequestResource($quoteRequest), 'Quote request status updated');
-     }
- }
-diff --git a/app/Http/Controllers/Catering/SampleMenuController.php b/app/Http/Controllers/Catering/SampleMenuController.php
-index 7aa3186..4919e73 100644
---- a/app/Http/Controllers/Catering/SampleMenuController.php
-+++ b/app/Http/Controllers/Catering/SampleMenuController.php
-@@ -16,43 +16,27 @@ class SampleMenuController extends Controller
- {
-     public function index(GetSampleMenusAction $action): JsonResponse
-     {
--        return response()->json([
--            'success' => true,
--            'message' => 'Sample menus retrieved',
--            'data' => SampleMenuResource::collection($action->execute()),
--        ]);
-+        return $this->success(SampleMenuResource::collection($action->execute()), 'Sample menus retrieved');
-     }
- 
-     public function store(StoreSampleMenuRequest $request, CreateSampleMenuAction $action): JsonResponse
-     {
-         $menu = $action->execute(CreateSampleMenuDTO::fromRequest($request));
- 
--        return response()->json([
--            'success' => true,
--            'message' => 'Sample menu created',
--            'data' => new SampleMenuResource($menu),
--        ], 201);
-+        return $this->created(new SampleMenuResource($menu), 'Sample menu created');
-     }
- 
-     public function update(StoreSampleMenuRequest $request, int $id, UpdateSampleMenuAction $action): JsonResponse
-     {
-         $menu = $action->execute($id, CreateSampleMenuDTO::fromRequest($request));
- 
--        return response()->json([
--            'success' => true,
--            'message' => 'Sample menu updated',
--            'data' => new SampleMenuResource($menu),
--        ]);
-+        return $this->success(new SampleMenuResource($menu), 'Sample menu updated');
-     }
- 
-     public function destroy(int $id, DeleteSampleMenuAction $action): JsonResponse
-     {
-         $action->execute($id);
- 
--        return response()->json([
--            'success' => true,
--            'message' => 'Sample menu deleted',
--            'data' => null,
--        ]);
-+        return $this->deleted('Sample menu deleted');
-     }
- }
-diff --git a/app/Http/Controllers/Controller.php b/app/Http/Controllers/Controller.php
-index 8677cd5..f87ab02 100644
---- a/app/Http/Controllers/Controller.php
-+++ b/app/Http/Controllers/Controller.php
-@@ -2,7 +2,9 @@
- 
- namespace App\Http\Controllers;
- 
-+use App\Traits\ApiResponse;
-+
- abstract class Controller
- {
--    //
-+    use ApiResponse;
- }
-diff --git a/app/Http/Controllers/DeliveryAppController.php b/app/Http/Controllers/DeliveryAppController.php
-index adb8717..331269c 100644
---- a/app/Http/Controllers/DeliveryAppController.php
-+++ b/app/Http/Controllers/DeliveryAppController.php
-@@ -17,43 +17,27 @@ public function index(GetDeliveryAppsAction $action): JsonResponse
-     {
-         $activeOnly = ! auth('sanctum')->check();
- 
--        return response()->json([
--            'success' => true,
--            'message' => 'Delivery apps retrieved',
--            'data' => DeliveryAppResource::collection($action->execute($activeOnly)),
--        ]);
-+        return $this->success(DeliveryAppResource::collection($action->execute($activeOnly)), 'Delivery apps retrieved');
-     }
- 
-     public function store(StoreDeliveryAppRequest $request, CreateDeliveryAppAction $action): JsonResponse
-     {
-         $deliveryApp = $action->execute(CreateDeliveryAppDTO::fromRequest($request));
- 
--        return response()->json([
--            'success' => true,
--            'message' => 'Delivery app created',
--            'data' => new DeliveryAppResource($deliveryApp),
--        ], 201);
-+        return $this->created(new DeliveryAppResource($deliveryApp), 'Delivery app created');
-     }
- 
-     public function update(StoreDeliveryAppRequest $request, int $id, UpdateDeliveryAppAction $action): JsonResponse
-     {
-         $deliveryApp = $action->execute($id, CreateDeliveryAppDTO::fromRequest($request));
- 
--        return response()->json([
--            'success' => true,
--            'message' => 'Delivery app updated',
--            'data' => new DeliveryAppResource($deliveryApp),
--        ]);
-+        return $this->success(new DeliveryAppResource($deliveryApp), 'Delivery app updated');
-     }
- 
-     public function destroy(int $id, DeleteDeliveryAppAction $action): JsonResponse
-     {
-         $action->execute($id);
- 
--        return response()->json([
--            'success' => true,
--            'message' => 'Delivery app deleted',
--            'data' => null,
--        ]);
-+        return $this->deleted('Delivery app deleted');
-     }
- }
-diff --git a/app/Http/Controllers/DishController.php b/app/Http/Controllers/DishController.php
-index a8d9a22..3a2c214 100644
---- a/app/Http/Controllers/DishController.php
-+++ b/app/Http/Controllers/DishController.php
-@@ -29,52 +29,32 @@ public function index(Request $request, GetDishesAction $action): JsonResponse
- 
-         $result = $action->execute($filters);
- 
--        return response()->json([
--            'success' => true,
--            'message' => 'Dishes retrieved',
--            'data' => new DishCollection($result),
--        ]);
-+        return $this->success(new DishCollection($result), 'Dishes retrieved');
-     }
- 
-     public function show(int $id, GetDishAction $action): JsonResponse
-     {
--        return response()->json([
--            'success' => true,
--            'message' => 'Dish retrieved',
--            'data' => new DishResource($action->execute($id)),
--        ]);
-+        return $this->success(new DishResource($action->execute($id)), 'Dish retrieved');
-     }
- 
-     public function store(StoreDishRequest $request, CreateDishAction $action): JsonResponse
-     {
-         $dish = $action->execute(CreateDishDTO::fromRequest($request));
- 
--        return response()->json([
--            'success' => true,
--            'message' => 'Dish created',
--            'data' => new DishResource($dish),
--        ], 201);
-+        return $this->created(new DishResource($dish), 'Dish created');
-     }
- 
-     public function update(UpdateDishRequest $request, int $id, UpdateDishAction $action): JsonResponse
-     {
-         $dish = $action->execute($id, UpdateDishDTO::fromRequest($request));
- 
--        return response()->json([
--            'success' => true,
--            'message' => 'Dish updated',
--            'data' => new DishResource($dish),
--        ]);
-+        return $this->success(new DishResource($dish), 'Dish updated');
-     }
- 
-     public function destroy(int $id, DeleteDishAction $action): JsonResponse
-     {
-         $action->execute($id);
- 
--        return response()->json([
--            'success' => true,
--            'message' => 'Dish deleted',
--            'data' => null,
--        ]);
-+        return $this->deleted('Dish deleted');
-     }
- }
-diff --git a/app/Http/Controllers/MediaItemController.php b/app/Http/Controllers/MediaItemController.php
-index b0e6901..6707b12 100644
---- a/app/Http/Controllers/MediaItemController.php
-+++ b/app/Http/Controllers/MediaItemController.php
-@@ -25,52 +25,32 @@ public function index(Request $request, GetMediaItemsAction $action): JsonRespon
-             fn ($section) => $section->map(fn ($item) => new MediaItemResource($item))
-         );
- 
--        return response()->json([
--            'success' => true,
--            'message' => 'Media items retrieved',
--            'data' => $resourced,
--        ]);
-+        return $this->success($resourced, 'Media items retrieved');
-     }
- 
-     public function store(UploadMediaRequest $request, UploadMediaAction $action): JsonResponse
-     {
-         $mediaItem = $action->execute(UploadMediaDTO::fromRequest($request));
- 
--        return response()->json([
--            'success' => true,
--            'message' => 'Media item uploaded',
--            'data' => new MediaItemResource($mediaItem),
--        ], 201);
-+        return $this->created(new MediaItemResource($mediaItem), 'Media item uploaded');
-     }
- 
-     public function show(int $id, MediaItemRepository $repository): JsonResponse
-     {
--        return response()->json([
--            'success' => true,
--            'message' => 'Media item retrieved',
--            'data' => new MediaItemResource($repository->getById($id)),
--        ]);
-+        return $this->success(new MediaItemResource($repository->getById($id)), 'Media item retrieved');
-     }
- 
-     public function update(UploadMediaRequest $request, int $id, UploadMediaAction $action): JsonResponse
-     {
-         $mediaItem = $action->execute(UploadMediaDTO::fromRequest($request));
- 
--        return response()->json([
--            'success' => true,
--            'message' => 'Media item updated',
--            'data' => new MediaItemResource($mediaItem),
--        ]);
-+        return $this->success(new MediaItemResource($mediaItem), 'Media item updated');
-     }
- 
-     public function destroy(int $id, DeleteMediaAction $action): JsonResponse
-     {
-         $action->execute($id);
- 
--        return response()->json([
--            'success' => true,
--            'message' => 'Media item deleted',
--            'data' => null,
--        ]);
-+        return $this->deleted('Media item deleted');
-     }
- }
-diff --git a/app/Http/Controllers/PageContentController.php b/app/Http/Controllers/PageContentController.php
-index f8a17f5..ff4f0ad 100644
---- a/app/Http/Controllers/PageContentController.php
-+++ b/app/Http/Controllers/PageContentController.php
-@@ -27,41 +27,25 @@ public function index(Request $request, GetPageContentAction $action): JsonRespo
-             fn ($section) => $section->map(fn ($item) => new PageContentResource($item))
-         );
- 
--        return response()->json([
--            'success' => true,
--            'message' => 'Page contents retrieved',
--            'data' => $resourced,
--        ]);
-+        return $this->success($resourced, 'Page contents retrieved');
-     }
- 
-     public function show(int $id, PageContentRepository $repository): JsonResponse
-     {
--        return response()->json([
--            'success' => true,
--            'message' => 'Page content retrieved',
--            'data' => new PageContentResource($repository->getById($id)),
--        ]);
-+        return $this->success(new PageContentResource($repository->getById($id)), 'Page content retrieved');
-     }
- 
-     public function update(UpdatePageContentRequest $request, int $id, UpdatePageContentAction $action): JsonResponse
-     {
-         $pageContent = $action->execute($id, UpdatePageContentDTO::fromRequest($request));
- 
--        return response()->json([
--            'success' => true,
--            'message' => 'Page content updated',
--            'data' => new PageContentResource($pageContent),
--        ]);
-+        return $this->success(new PageContentResource($pageContent), 'Page content updated');
-     }
- 
-     public function bulkUpdate(BulkUpdatePageContentRequest $request, BulkUpdatePageContentAction $action): JsonResponse
-     {
-         $action->execute(BulkUpdatePageContentDTO::fromRequest($request));
- 
--        return response()->json([
--            'success' => true,
--            'message' => 'Page contents updated',
--            'data' => null,
--        ]);
-+        return $this->success(null, 'Page contents updated');
-     }
- }
-diff --git a/app/Http/Controllers/SettingController.php b/app/Http/Controllers/SettingController.php
-index 5267a36..25a4fd8 100644
---- a/app/Http/Controllers/SettingController.php
-+++ b/app/Http/Controllers/SettingController.php
-@@ -18,21 +18,13 @@ public function index(Request $request, GetSettingsAction $action): JsonResponse
-             $request->filled('group') ? $request->string('group')->toString() : null,
-         );
- 
--        return response()->json([
--            'success' => true,
--            'message' => 'Settings retrieved',
--            'data' => $result->map(fn ($setting) => new SettingResource($setting)),
--        ]);
-+        return $this->success($result->map(fn ($setting) => new SettingResource($setting)), 'Settings retrieved');
-     }
- 
-     public function bulkUpdate(UpdateSettingRequest $request, UpdateSettingsAction $action): JsonResponse
-     {
-         $action->execute(UpdateSettingDTO::fromRequest($request));
- 
--        return response()->json([
--            'success' => true,
--            'message' => 'Settings updated',
--            'data' => null,
--        ]);
-+        return $this->success(null, 'Settings updated');
-     }
- }
-diff --git a/app/Http/Controllers/TestimonialController.php b/app/Http/Controllers/TestimonialController.php
-index 1eaddb8..0a99885 100644
---- a/app/Http/Controllers/TestimonialController.php
-+++ b/app/Http/Controllers/TestimonialController.php
-@@ -17,43 +17,27 @@ public function index(GetTestimonialsAction $action): JsonResponse
-     {
-         $activeOnly = ! auth('sanctum')->check();
- 
--        return response()->json([
--            'success' => true,
--            'message' => 'Testimonials retrieved',
--            'data' => TestimonialResource::collection($action->execute($activeOnly)),
--        ]);
-+        return $this->success(TestimonialResource::collection($action->execute($activeOnly)), 'Testimonials retrieved');
-     }
- 
-     public function store(StoreTestimonialRequest $request, CreateTestimonialAction $action): JsonResponse
-     {
-         $testimonial = $action->execute(CreateTestimonialDTO::fromRequest($request));
- 
--        return response()->json([
--            'success' => true,
--            'message' => 'Testimonial created',
--            'data' => new TestimonialResource($testimonial),
--        ], 201);
-+        return $this->created(new TestimonialResource($testimonial), 'Testimonial created');
-     }
- 
-     public function update(StoreTestimonialRequest $request, int $id, UpdateTestimonialAction $action): JsonResponse
-     {
-         $testimonial = $action->execute($id, CreateTestimonialDTO::fromRequest($request));
- 
--        return response()->json([
--            'success' => true,
--            'message' => 'Testimonial updated',
--            'data' => new TestimonialResource($testimonial),
--        ]);
-+        return $this->success(new TestimonialResource($testimonial), 'Testimonial updated');
-     }
- 
-     public function destroy(int $id, DeleteTestimonialAction $action): JsonResponse
-     {
-         $action->execute($id);
- 
--        return response()->json([
--            'success' => true,
--            'message' => 'Testimonial deleted',
--            'data' => null,
--        ]);
-+        return $this->deleted('Testimonial deleted');
-     }
- }
-diff --git a/app/Http/Controllers/TimelineController.php b/app/Http/Controllers/TimelineController.php
-index 1d9ad41..a686e45 100644
---- a/app/Http/Controllers/TimelineController.php
-+++ b/app/Http/Controllers/TimelineController.php
-@@ -15,43 +15,27 @@ class TimelineController extends Controller
- {
-     public function index(GetTimelineAction $action): JsonResponse
-     {
--        return response()->json([
--            'success' => true,
--            'message' => 'Timeline retrieved',
--            'data' => TimelineResource::collection($action->execute()),
--        ]);
-+        return $this->success(TimelineResource::collection($action->execute()), 'Timeline retrieved');
-     }
- 
-     public function store(StoreTimelineRequest $request, CreateTimelineAction $action): JsonResponse
-     {
-         $timeline = $action->execute(CreateTimelineDTO::fromRequest($request));
- 
--        return response()->json([
--            'success' => true,
--            'message' => 'Timeline entry created',
--            'data' => new TimelineResource($timeline),
--        ], 201);
-+        return $this->created(new TimelineResource($timeline), 'Timeline entry created');
-     }
- 
-     public function update(StoreTimelineRequest $request, int $id, UpdateTimelineAction $action): JsonResponse
-     {
-         $timeline = $action->execute($id, CreateTimelineDTO::fromRequest($request));
- 
--        return response()->json([
--            'success' => true,
--            'message' => 'Timeline entry updated',
--            'data' => new TimelineResource($timeline),
--        ]);
-+        return $this->success(new TimelineResource($timeline), 'Timeline entry updated');
-     }
- 
-     public function destroy(int $id, DeleteTimelineAction $action): JsonResponse
-     {
-         $action->execute($id);
- 
--        return response()->json([
--            'success' => true,
--            'message' => 'Timeline entry deleted',
--            'data' => null,
--        ]);
-+        return $this->deleted('Timeline entry deleted');
-     }
- }
-diff --git a/app/Http/Controllers/UserController.php b/app/Http/Controllers/UserController.php
-index 204c70b..6261341 100644
---- a/app/Http/Controllers/UserController.php
-+++ b/app/Http/Controllers/UserController.php
-@@ -20,60 +20,32 @@ public function index(GetUsersAction $action): JsonResponse
-     {
-         $result = $action->execute();
- 
--        return response()->json([
--            'success' => true,
--            'message' => 'Users retrieved',
--            'data' => [
--                'items' => UserResource::collection($result),
--                'meta' => [
--                    'current_page' => $result->currentPage(),
--                    'last_page' => $result->lastPage(),
--                    'per_page' => $result->perPage(),
--                    'total' => $result->total(),
--                ],
--            ],
--        ]);
-+        return $this->paginated(UserResource::collection($result), $result, 'Users retrieved');
-     }
- 
-     public function store(StoreUserRequest $request, CreateUserAction $action): JsonResponse
-     {
-         $user = $action->execute(CreateUserDTO::fromRequest($request));
- 
--        return response()->json([
--            'success' => true,
--            'message' => 'User created',
--            'data' => new UserResource($user),
--        ], 201);
-+        return $this->created(new UserResource($user), 'User created');
-     }
- 
-     public function show(int $id, UserRepository $repository): JsonResponse
-     {
--        return response()->json([
--            'success' => true,
--            'message' => 'User retrieved',
--            'data' => new UserResource($repository->getById($id)),
--        ]);
-+        return $this->success(new UserResource($repository->getById($id)), 'User retrieved');
-     }
- 
-     public function update(UpdateUserRequest $request, int $id, UpdateUserAction $action): JsonResponse
-     {
-         $user = $action->execute($id, UpdateUserDTO::fromRequest($request));
- 
--        return response()->json([
--            'success' => true,
--            'message' => 'User updated',
--            'data' => new UserResource($user),
--        ]);
-+        return $this->success(new UserResource($user), 'User updated');
-     }
- 
-     public function destroy(int $id, DeleteUserAction $action): JsonResponse
-     {
-         $action->execute($id);
- 
--        return response()->json([
--            'success' => true,
--            'message' => 'User deleted',
--            'data' => null,
--        ]);
-+        return $this->deleted('User deleted');
-     }
- }
-diff --git a/app/Traits/ApiResponse.php b/app/Traits/ApiResponse.php
+diff --git a/app/Actions/Personality/CreatePersonalityAction.php b/app/Actions/Personality/CreatePersonalityAction.php
 new file mode 100644
-index 0000000..4223952
+index 0000000..5e6b311
 --- /dev/null
-+++ b/app/Traits/ApiResponse.php
-@@ -0,0 +1,69 @@
++++ b/app/Actions/Personality/CreatePersonalityAction.php
+@@ -0,0 +1,39 @@
 +<?php
 +
-+namespace App\Traits;
++namespace App\Actions\Personality;
 +
-+use Illuminate\Http\JsonResponse;
++use App\DTOs\Personality\CreatePersonalityDTO;
++use App\Models\Personality;
++use App\Repositories\PersonalityRepository;
++use App\Services\ImageService;
++use Illuminate\Support\Facades\Cache;
 +
-+trait ApiResponse
++class CreatePersonalityAction
 +{
-+    protected function success(
-+        mixed $data = null,
-+        string $message = 'Operation completed successfully',
-+        int $status = 200
-+    ): JsonResponse {
-+        return response()->json([
-+            'success' => true,
-+            'message' => $message,
-+            'data'    => $data,
-+        ], $status);
-+    }
++    public function __construct(
++        private readonly PersonalityRepository $repository,
++        private readonly ImageService $imageService,
++    ) {}
 +
-+    protected function created(
-+        mixed $data = null,
-+        string $message = 'Created successfully'
-+    ): JsonResponse {
-+        return $this->success($data, $message, 201);
-+    }
++    public function execute(CreatePersonalityDTO $dto): Personality
++    {
++        $data = [
++            'name_ar' => $dto->name_ar,
++            'name_en' => $dto->name_en,
++            'order' => $dto->order,
++            'is_active' => $dto->is_active,
++        ];
 +
-+    protected function deleted(
-+        string $message = 'Deleted successfully'
-+    ): JsonResponse {
-+        return response()->json([
-+            'success' => true,
-+            'message' => $message,
-+            'data'    => null,
-+        ], 200);
-+    }
++        if ($dto->image) {
++            $stored = $this->imageService->store($dto->image, 'personalities');
++            $data['image_path'] = $stored['path'];
++            $data['image_url'] = $stored['url'];
++        }
 +
-+    protected function paginated(
-+        mixed $collection,
-+        mixed $paginator,
-+        string $message = 'Data fetched successfully'
-+    ): JsonResponse {
-+        return response()->json([
-+            'success' => true,
-+            'message' => $message,
-+            'data'    => [
-+                'items' => $collection,
-+                'meta'  => [
-+                    'current_page' => $paginator->currentPage(),
-+                    'last_page'    => $paginator->lastPage(),
-+                    'per_page'     => $paginator->perPage(),
-+                    'total'        => $paginator->total(),
-+                ],
-+            ],
-+        ], 200);
-+    }
++        $personality = $this->repository->create($data);
 +
-+    protected function error(
-+        string $message = 'Something went wrong',
-+        int $status = 400,
-+        array $errors = []
-+    ): JsonResponse {
-+        return response()->json([
-+            'success' => false,
-+            'message' => $message,
-+            'errors'  => $errors,
-+        ], $status);
++        Cache::tags(['personalities'])->flush();
++
++        return $personality;
 +    }
 +}
+diff --git a/app/Actions/Personality/DeletePersonalityAction.php b/app/Actions/Personality/DeletePersonalityAction.php
+new file mode 100644
+index 0000000..8d79b25
+--- /dev/null
++++ b/app/Actions/Personality/DeletePersonalityAction.php
+@@ -0,0 +1,28 @@
++<?php
++
++namespace App\Actions\Personality;
++
++use App\Repositories\PersonalityRepository;
++use App\Services\ImageService;
++use Illuminate\Support\Facades\Cache;
++
++class DeletePersonalityAction
++{
++    public function __construct(
++        private readonly PersonalityRepository $repository,
++        private readonly ImageService $imageService,
++    ) {}
++
++    public function execute(int $id): void
++    {
++        $personality = $this->repository->getById($id);
++
++        if ($personality->image_path) {
++            $this->imageService->delete($personality->image_path);
++        }
++
++        $this->repository->delete($id);
++
++        Cache::tags(['personalities'])->flush();
++    }
++}
+diff --git a/app/Actions/Personality/GetPersonalitiesAction.php b/app/Actions/Personality/GetPersonalitiesAction.php
+new file mode 100644
+index 0000000..105577e
+--- /dev/null
++++ b/app/Actions/Personality/GetPersonalitiesAction.php
+@@ -0,0 +1,26 @@
++<?php
++
++namespace App\Actions\Personality;
++
++use App\Repositories\PersonalityRepository;
++use Illuminate\Database\Eloquent\Collection;
++use Illuminate\Support\Facades\Cache;
++
++class GetPersonalitiesAction
++{
++    public function __construct(
++        private readonly PersonalityRepository $repository,
++    ) {}
++
++    public function execute(bool $activeOnly = true): Collection
++    {
++        $locale = app()->getLocale();
++        $key = "personalities_{$locale}_".($activeOnly ? 'active' : 'all');
++
++        return Cache::tags(['personalities'])->remember(
++            $key,
++            now()->addHour(),
++            fn () => $this->repository->getAll($activeOnly)
++        );
++    }
++}
+diff --git a/app/Actions/Personality/UpdatePersonalityAction.php b/app/Actions/Personality/UpdatePersonalityAction.php
+new file mode 100644
+index 0000000..1bd60eb
+--- /dev/null
++++ b/app/Actions/Personality/UpdatePersonalityAction.php
+@@ -0,0 +1,46 @@
++<?php
++
++namespace App\Actions\Personality;
++
++use App\DTOs\Personality\UpdatePersonalityDTO;
++use App\Models\Personality;
++use App\Repositories\PersonalityRepository;
++use App\Services\ImageService;
++use Illuminate\Support\Arr;
++use Illuminate\Support\Facades\Cache;
++
++class UpdatePersonalityAction
++{
++    public function __construct(
++        private readonly PersonalityRepository $repository,
++        private readonly ImageService $imageService,
++    ) {}
++
++    public function execute(int $id, UpdatePersonalityDTO $dto): Personality
++    {
++        $data = Arr::whereNotNull([
++            'name_ar' => $dto->name_ar,
++            'name_en' => $dto->name_en,
++            'order' => $dto->order,
++            'is_active' => $dto->is_active,
++        ]);
++
++        if ($dto->image) {
++            $existing = $this->repository->getById($id);
++
++            if ($existing->image_path) {
++                $this->imageService->delete($existing->image_path);
++            }
++
++            $stored = $this->imageService->store($dto->image, 'personalities');
++            $data['image_path'] = $stored['path'];
++            $data['image_url'] = $stored['url'];
++        }
++
++        $personality = $this->repository->update($id, $data);
++
++        Cache::tags(['personalities'])->flush();
++
++        return $personality;
++    }
++}
+diff --git a/app/DTOs/Personality/CreatePersonalityDTO.php b/app/DTOs/Personality/CreatePersonalityDTO.php
+new file mode 100644
+index 0000000..4a78112
+--- /dev/null
++++ b/app/DTOs/Personality/CreatePersonalityDTO.php
+@@ -0,0 +1,28 @@
++<?php
++
++namespace App\DTOs\Personality;
++
++use Illuminate\Http\Request;
++use Illuminate\Http\UploadedFile;
++
++class CreatePersonalityDTO
++{
++    public function __construct(
++        public readonly string $name_ar,
++        public readonly string $name_en,
++        public readonly ?UploadedFile $image,
++        public readonly int $order,
++        public readonly bool $is_active,
++    ) {}
++
++    public static function fromRequest(Request $request): self
++    {
++        return new self(
++            name_ar: $request->string('name_ar')->toString(),
++            name_en: $request->string('name_en')->toString(),
++            image: $request->file('image'),
++            order: (int) $request->input('order', 0),
++            is_active: $request->boolean('is_active', true),
++        );
++    }
++}
+diff --git a/app/DTOs/Personality/UpdatePersonalityDTO.php b/app/DTOs/Personality/UpdatePersonalityDTO.php
+new file mode 100644
+index 0000000..93cf3b4
+--- /dev/null
++++ b/app/DTOs/Personality/UpdatePersonalityDTO.php
+@@ -0,0 +1,28 @@
++<?php
++
++namespace App\DTOs\Personality;
++
++use Illuminate\Http\Request;
++use Illuminate\Http\UploadedFile;
++
++class UpdatePersonalityDTO
++{
++    public function __construct(
++        public readonly ?string $name_ar,
++        public readonly ?string $name_en,
++        public readonly ?UploadedFile $image,
++        public readonly ?int $order,
++        public readonly ?bool $is_active,
++    ) {}
++
++    public static function fromRequest(Request $request): self
++    {
++        return new self(
++            name_ar: $request->filled('name_ar') ? $request->string('name_ar')->toString() : null,
++            name_en: $request->filled('name_en') ? $request->string('name_en')->toString() : null,
++            image: $request->file('image'),
++            order: $request->filled('order') ? (int) $request->input('order') : null,
++            is_active: $request->has('is_active') ? $request->boolean('is_active') : null,
++        );
++    }
++}
+diff --git a/app/Http/Controllers/Admin/PersonalityController.php b/app/Http/Controllers/Admin/PersonalityController.php
+new file mode 100644
+index 0000000..2cb0a26
+--- /dev/null
++++ b/app/Http/Controllers/Admin/PersonalityController.php
+@@ -0,0 +1,44 @@
++<?php
++
++namespace App\Http\Controllers\Admin;
++
++use App\Actions\Personality\CreatePersonalityAction;
++use App\Actions\Personality\DeletePersonalityAction;
++use App\Actions\Personality\GetPersonalitiesAction;
++use App\Actions\Personality\UpdatePersonalityAction;
++use App\DTOs\Personality\CreatePersonalityDTO;
++use App\DTOs\Personality\UpdatePersonalityDTO;
++use App\Http\Controllers\Controller;
++use App\Http\Requests\Personality\StorePersonalityRequest;
++use App\Http\Requests\Personality\UpdatePersonalityRequest;
++use App\Http\Resources\Personality\PersonalityResource;
++use Illuminate\Http\JsonResponse;
++
++class PersonalityController extends Controller
++{
++    public function index(GetPersonalitiesAction $action): JsonResponse
++    {
++        return $this->success(PersonalityResource::collection($action->execute(activeOnly: false)), __('messages.fetched'));
++    }
++
++    public function store(StorePersonalityRequest $request, CreatePersonalityAction $action): JsonResponse
++    {
++        $personality = $action->execute(CreatePersonalityDTO::fromRequest($request));
++
++        return $this->created(new PersonalityResource($personality), __('messages.created'));
++    }
++
++    public function update(UpdatePersonalityRequest $request, int $id, UpdatePersonalityAction $action): JsonResponse
++    {
++        $personality = $action->execute($id, UpdatePersonalityDTO::fromRequest($request));
++
++        return $this->success(new PersonalityResource($personality), __('messages.updated'));
++    }
++
++    public function destroy(int $id, DeletePersonalityAction $action): JsonResponse
++    {
++        $action->execute($id);
++
++        return $this->deleted(__('messages.deleted'));
++    }
++}
+diff --git a/app/Http/Controllers/Public/PersonalityController.php b/app/Http/Controllers/Public/PersonalityController.php
+new file mode 100644
+index 0000000..2c480f1
+--- /dev/null
++++ b/app/Http/Controllers/Public/PersonalityController.php
+@@ -0,0 +1,18 @@
++<?php
++
++namespace App\Http\Controllers\Public;
++
++use App\Actions\Personality\GetPersonalitiesAction;
++use App\Http\Controllers\Controller;
++use App\Http\Resources\Personality\PersonalityResource;
++use Illuminate\Http\JsonResponse;
++
++class PersonalityController extends Controller
++{
++    public function index(GetPersonalitiesAction $action): JsonResponse
++    {
++        $personalities = $action->execute(activeOnly: true);
++
++        return $this->success(PersonalityResource::collection($personalities), __('messages.fetched'));
++    }
++}
+diff --git a/app/Http/Requests/Personality/StorePersonalityRequest.php b/app/Http/Requests/Personality/StorePersonalityRequest.php
+new file mode 100644
+index 0000000..6ae16a8
+--- /dev/null
++++ b/app/Http/Requests/Personality/StorePersonalityRequest.php
+@@ -0,0 +1,24 @@
++<?php
++
++namespace App\Http\Requests\Personality;
++
++use App\Http\Requests\BaseFormRequest;
++
++class StorePersonalityRequest extends BaseFormRequest
++{
++    public function authorize(): bool
++    {
++        return true;
++    }
++
++    public function rules(): array
++    {
++        return [
++            'name_ar' => ['required', 'string', 'max:200'],
++            'name_en' => ['required', 'string', 'max:200'],
++            'image' => ['nullable', 'file', 'mimes:jpg,jpeg,png,webp', 'max:5120'],
++            'order' => ['integer', 'min:0'],
++            'is_active' => ['boolean'],
++        ];
++    }
++}
+diff --git a/app/Http/Requests/Personality/UpdatePersonalityRequest.php b/app/Http/Requests/Personality/UpdatePersonalityRequest.php
+new file mode 100644
+index 0000000..7ae130b
+--- /dev/null
++++ b/app/Http/Requests/Personality/UpdatePersonalityRequest.php
+@@ -0,0 +1,24 @@
++<?php
++
++namespace App\Http\Requests\Personality;
++
++use App\Http\Requests\BaseFormRequest;
++
++class UpdatePersonalityRequest extends BaseFormRequest
++{
++    public function authorize(): bool
++    {
++        return true;
++    }
++
++    public function rules(): array
++    {
++        return [
++            'name_ar' => ['nullable', 'string', 'max:200'],
++            'name_en' => ['nullable', 'string', 'max:200'],
++            'image' => ['nullable', 'file', 'mimes:jpg,jpeg,png,webp', 'max:5120'],
++            'order' => ['nullable', 'integer', 'min:0'],
++            'is_active' => ['nullable', 'boolean'],
++        ];
++    }
++}
+diff --git a/app/Http/Resources/Personality/PersonalityResource.php b/app/Http/Resources/Personality/PersonalityResource.php
+new file mode 100644
+index 0000000..a167e12
+--- /dev/null
++++ b/app/Http/Resources/Personality/PersonalityResource.php
+@@ -0,0 +1,26 @@
++<?php
++
++namespace App\Http\Resources\Personality;
++
++use App\Http\Resources\Concerns\ResolvesLocale;
++use Illuminate\Http\Request;
++use Illuminate\Http\Resources\Json\JsonResource;
++
++class PersonalityResource extends JsonResource
++{
++    use ResolvesLocale;
++
++    public function toArray(Request $request): array
++    {
++        return [
++            'id' => $this->id,
++            'name' => $this->resolveLocale($this->name_ar, $this->name_en),
++            'name_ar' => $this->name_ar,
++            'name_en' => $this->name_en,
++            'image_url' => $this->image_url,
++            'order' => $this->order,
++            'is_active' => $this->is_active,
++            'locale' => app()->getLocale(),
++        ];
++    }
++}
+diff --git a/app/Models/Personality.php b/app/Models/Personality.php
+new file mode 100644
+index 0000000..30ead1f
+--- /dev/null
++++ b/app/Models/Personality.php
+@@ -0,0 +1,21 @@
++<?php
++
++namespace App\Models;
++
++use Illuminate\Database\Eloquent\Model;
++
++class Personality extends Model
++{
++    protected $fillable = [
++        'name_ar',
++        'name_en',
++        'image_path',
++        'image_url',
++        'order',
++        'is_active',
++    ];
++
++    protected $casts = [
++        'is_active' => 'boolean',
++    ];
++}
+diff --git a/app/Repositories/PersonalityRepository.php b/app/Repositories/PersonalityRepository.php
+new file mode 100644
+index 0000000..347bedd
+--- /dev/null
++++ b/app/Repositories/PersonalityRepository.php
+@@ -0,0 +1,43 @@
++<?php
++
++namespace App\Repositories;
++
++use App\Models\Personality;
++use Illuminate\Database\Eloquent\Collection;
++
++class PersonalityRepository
++{
++    public function getAll(bool $activeOnly = true): Collection
++    {
++        $query = Personality::orderBy('order');
++
++        if ($activeOnly) {
++            $query->where('is_active', true);
++        }
++
++        return $query->get();
++    }
++
++    public function getById(int $id): Personality
++    {
++        return Personality::findOrFail($id);
++    }
++
++    public function create(array $data): Personality
++    {
++        return Personality::create($data);
++    }
++
++    public function update(int $id, array $data): Personality
++    {
++        $personality = Personality::findOrFail($id);
++        $personality->update($data);
++
++        return $personality;
++    }
++
++    public function delete(int $id): void
++    {
++        Personality::findOrFail($id)->delete();
++    }
++}
+diff --git a/database/migrations/2026_07_25_144324_create_personalities_table.php b/database/migrations/2026_07_25_144324_create_personalities_table.php
+new file mode 100644
+index 0000000..d203555
+--- /dev/null
++++ b/database/migrations/2026_07_25_144324_create_personalities_table.php
+@@ -0,0 +1,33 @@
++<?php
++
++use Illuminate\Database\Migrations\Migration;
++use Illuminate\Database\Schema\Blueprint;
++use Illuminate\Support\Facades\Schema;
++
++return new class extends Migration
++{
++    /**
++     * Run the migrations.
++     */
++    public function up(): void
++    {
++        Schema::create('personalities', function (Blueprint $table) {
++            $table->id();
++            $table->string('name_ar', 200);
++            $table->string('name_en', 200);
++            $table->string('image_path', 500)->nullable();
++            $table->string('image_url', 500)->nullable();
++            $table->integer('order')->default(0);
++            $table->boolean('is_active')->default(true);
++            $table->timestamps();
++        });
++    }
++
++    /**
++     * Reverse the migrations.
++     */
++    public function down(): void
++    {
++        Schema::dropIfExists('personalities');
++    }
++};
+diff --git a/database/seeders/DatabaseSeeder.php b/database/seeders/DatabaseSeeder.php
+index ac67ede..3e74bf0 100644
+--- a/database/seeders/DatabaseSeeder.php
++++ b/database/seeders/DatabaseSeeder.php
+@@ -23,6 +23,7 @@ public function run(): void
+             SampleMenuSeeder::class,
+             TestimonialSeeder::class,
+             TimelineSeeder::class,
++            PersonalitySeeder::class,
+             DeliveryAppSeeder::class,
+             PageContentSeeder::class,
+             SettingSeeder::class,
+diff --git a/database/seeders/PageContentSeeder.php b/database/seeders/PageContentSeeder.php
+index 8d6e245..0b20d4b 100644
+--- a/database/seeders/PageContentSeeder.php
++++ b/database/seeders/PageContentSeeder.php
+@@ -58,6 +58,8 @@ public function run(): void
+             ['page' => 'story', 'section' => 'journey', 'key' => 'badge', 'value_ar' => 'رحلتنا · OUR JOURNEY', 'value_en' => 'Our Journey · OUR JOURNEY'],
+             ['page' => 'story', 'section' => 'journey', 'key' => 'title', 'value_ar' => 'رحلتنا', 'value_en' => 'Our Journey'],
+             ['page' => 'story', 'section' => 'journey', 'key' => 'subtitle', 'value_ar' => 'من القاهرة القديمة، إلى ساحل البحر الأحمر، إلى قلب الرياض.', 'value_en' => 'From Old Cairo, to the Red Sea coast, to the heart of Riyadh.'],
++            ['page' => 'story', 'section' => 'personalities', 'key' => 'badge', 'type' => 'text', 'value_ar' => 'الزمن الجميل · GOLDEN ERA', 'value_en' => 'Golden Era · GOLDEN ERA'],
++            ['page' => 'story', 'section' => 'personalities', 'key' => 'title', 'type' => 'text', 'value_ar' => 'وجوهٌ أحبّت الموائد', 'value_en' => 'Faces Who Loved the Table'],
+ 
+             // ── MENU PAGE ────────────────────────────────────────────
+             ['page' => 'menu', 'section' => 'hero', 'key' => 'badge', 'value_ar' => 'أطباقنا · OUR MENU', 'value_en' => 'Our Menu · OUR MENU'],
+diff --git a/database/seeders/PersonalitySeeder.php b/database/seeders/PersonalitySeeder.php
+new file mode 100644
+index 0000000..d73b322
+--- /dev/null
++++ b/database/seeders/PersonalitySeeder.php
+@@ -0,0 +1,27 @@
++<?php
++
++namespace Database\Seeders;
++
++use App\Models\Personality;
++use Illuminate\Database\Seeder;
++
++class PersonalitySeeder extends Seeder
++{
++    public function run(): void
++    {
++        $personalities = [
++            ['name_ar' => 'أم كلثوم', 'name_en' => 'Umm Kulthum', 'order' => 1],
++            ['name_ar' => 'فاتن حمامة', 'name_en' => 'Faten Hamama', 'order' => 2],
++            ['name_ar' => 'نجيب الريحاني', 'name_en' => 'Naguib El-Rihani', 'order' => 3],
++            ['name_ar' => 'هند رستم', 'name_en' => 'Hind Rostom', 'order' => 4],
++            ['name_ar' => 'لبنى عبد العزيز', 'name_en' => 'Lubna Abdel Aziz', 'order' => 5],
++        ];
++
++        foreach ($personalities as $personality) {
++            Personality::updateOrCreate(
++                ['name_ar' => $personality['name_ar']],
++                $personality
++            );
++        }
++    }
++}
+diff --git a/routes/admin.php b/routes/admin.php
+index 6462b9f..e2f8f8a 100644
+--- a/routes/admin.php
++++ b/routes/admin.php
+@@ -11,6 +11,7 @@
+ use App\Http\Controllers\Admin\DishController;
+ use App\Http\Controllers\Admin\MediaItemController;
+ use App\Http\Controllers\Admin\PageContentController;
++use App\Http\Controllers\Admin\PersonalityController;
+ use App\Http\Controllers\Admin\ProfileController;
+ use App\Http\Controllers\Admin\SettingController;
+ use App\Http\Controllers\Admin\TestimonialController;
+@@ -71,7 +72,7 @@
+             Route::get('/',        'index');
+             Route::post('/',       'store');
+             Route::get('/{id}',    'show');
+-            Route::post('/{id}',   'update');
++            Route::put('/{id}',   'update');
+             Route::delete('/{id}', 'destroy');
+         });
+ 
+@@ -88,7 +89,7 @@
+             Route::get('/',        'index');
+             Route::post('/',       'store');
+             Route::get('/{id}',    'show');
+-            Route::post('/{id}',   'update');
++            Route::put('/{id}',   'update');
+             Route::delete('/{id}', 'destroy');
+         });
+ 
+@@ -98,7 +99,7 @@
+             ->group(function () {
+                 Route::get('/',        'index');
+                 Route::post('/',       'store');
+-                Route::post('/{id}',   'update');
++                Route::put('/{id}',   'update');
+                 Route::delete('/{id}', 'destroy');
+             });
+ 
+@@ -108,7 +109,7 @@
+             ->group(function () {
+                 Route::get('/',        'index');
+                 Route::post('/',       'store');
+-                Route::post('/{id}',   'update');
++                Route::put('/{id}',   'update');
+                 Route::delete('/{id}', 'destroy');
+             });
+ 
+@@ -137,6 +138,14 @@
+             Route::delete('/{id}', 'destroy');
+         });
+ 
++        // ── Personalities ─────────────────────────────────
++        Route::prefix('personalities')->controller(PersonalityController::class)->group(function () {
++            Route::get('/',        'index');
++            Route::post('/',       'store');
++            Route::put('/{id}',    'update');
++            Route::delete('/{id}', 'destroy');
++        });
++
+         // ── Delivery Apps ─────────────────────────────────
+         Route::prefix('delivery-apps')->controller(DeliveryAppController::class)->group(function () {
+             Route::get('/',        'index');
+diff --git a/routes/api.php b/routes/api.php
+index 6dbba22..00b6d86 100644
+--- a/routes/api.php
++++ b/routes/api.php
+@@ -6,6 +6,7 @@
+ use App\Http\Controllers\Public\DishController;
+ use App\Http\Controllers\Public\MediaItemController;
+ use App\Http\Controllers\Public\PageContentController;
++use App\Http\Controllers\Public\PersonalityController;
+ use App\Http\Controllers\Public\SettingController;
+ use App\Http\Controllers\Public\TestimonialController;
+ use App\Http\Controllers\Public\TimelineController;
+@@ -80,6 +81,11 @@
+         Route::get('/', 'index');
+     });
+ 
++    // ── Personalities ─────────────────────────────────────
++    Route::prefix('personalities')->controller(PersonalityController::class)->group(function () {
++        Route::get('/', 'index');
++    });
++
+     // ── Delivery Apps ─────────────────────────────────────
+     Route::prefix('delivery-apps')->controller(DeliveryAppController::class)->group(function () {
+         Route::get('/', 'index');
+diff --git a/tests/Feature/PublicApiTest.php b/tests/Feature/PublicApiTest.php
+index 9e02ff3..054fea5 100644
+--- a/tests/Feature/PublicApiTest.php
++++ b/tests/Feature/PublicApiTest.php
+@@ -109,6 +109,20 @@ public function test_get_testimonials_returns_ten(): void
+             ->assertJsonCount(10, 'data');
+     }
+ 
++    public function test_get_personalities_returns_five_active_only(): void
++    {
++        \App\Models\Personality::first()->update(['is_active' => false]);
++
++        $response = $this->getJson('/api/v1/personalities', ['X-API-Key' => $this->apiKey()]);
++
++        $response->assertStatus(200)
++            ->assertJsonCount(4, 'data');
++
++        foreach ($response->json('data') as $personality) {
++            $this->assertTrue($personality['is_active']);
++        }
++    }
++
+     public function test_submit_quote_request_with_valid_data_returns_201(): void
+     {
+         $response = $this->postJson('/api/v1/catering/quote-requests', [
+diff --git a/tests/Feature/RepositoriesTest.php b/tests/Feature/RepositoriesTest.php
+index ab89f4a..40687c7 100644
+--- a/tests/Feature/RepositoriesTest.php
++++ b/tests/Feature/RepositoriesTest.php
+@@ -9,6 +9,7 @@
+ use App\Repositories\DishRepository;
+ use App\Repositories\MediaItemRepository;
+ use App\Repositories\PageContentRepository;
++use App\Repositories\PersonalityRepository;
+ use App\Repositories\QuoteRequestRepository;
+ use App\Repositories\SampleMenuRepository;
+ use App\Repositories\SettingRepository;
+@@ -332,6 +333,24 @@ public function test_testimonial_repository_get_all_can_include_inactive(): void
+         $this->assertCount(10, $repo->getAll(false));
+     }
+ 
++    // ── PersonalityRepository ────────────────────────────────────
++
++    public function test_personality_repository_get_all_active_only_by_default(): void
++    {
++        $repo = new PersonalityRepository;
++
++        $this->assertCount(5, $repo->getAll());
++    }
++
++    public function test_personality_repository_get_all_can_include_inactive(): void
++    {
++        $repo = new PersonalityRepository;
++        \App\Models\Personality::first()->update(['is_active' => false]);
++
++        $this->assertCount(4, $repo->getAll(true));
++        $this->assertCount(5, $repo->getAll(false));
++    }
++
+     // ── TimelineRepository ────────────────────────────────────────
+ 
+     public function test_timeline_repository_get_all_returns_five(): void
 ===== END change.diff =====
 
 ===== BEGIN context-bundle.md =====
 # Context bundle
 
-bundle_version 2 · budget 8000 / used 2403 tokens
+bundle_version 2 · budget 8000 / used 1393 tokens
+
+## fetched · same_file_symbol_absence
+
+**Subject:** PersonalitySeeder
+**Reason:** the region uses PersonalitySeeder, which the file's use block does not import
+**Source:** `database/seeders/DatabaseSeeder.php` (lines 5-6)
+**Tokens:** 23
+
+```php
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Illuminate\Database\Seeder;
+```
+
+## fetched · same_file_symbol_absence
+
+**Subject:** PersonalitySeeder
+**Reason:** the region uses PersonalitySeeder, which the file's use block does not import
+**Source:** `database/seeders/DatabaseSeeder.php` :: `run` (lines 12-32)
+**Tokens:** 150
+
+```php
+    /**
+     * Seed the application's database.
+     */
+    public function run(): void
+    {
+        $this->call([
+            UserSeeder::class,
+            CategorySeeder::class,
+            DishSeeder::class,
+            BranchSeeder::class,
+            CateringPackageSeeder::class,
+            SampleMenuSeeder::class,
+            TestimonialSeeder::class,
+            TimelineSeeder::class,
+            PersonalitySeeder::class,
+            DeliveryAppSeeder::class,
+            PageContentSeeder::class,
+            SettingSeeder::class,
+            MediaItemSeeder::class,
+        ]);
+    }
+```
+
+## fetched · same_file_reference
+
+**Subject:** apiKey
+**Reason:** the region calls the sibling member apiKey, whose contract the diff does not show
+**Source:** `tests/Feature/PublicApiTest.php` :: `apiKey` (lines 20-23)
+**Tokens:** 25
+
+```php
+    private function apiKey(): string
+    {
+        return config('services.website_api_key');
+    }
+```
 
 ## flagged · named_reference
 
-**Subject:** App\Http\Resources\Branch\BranchResource::collection
-**Reason:** the region depends on App\Http\Resources\Branch\BranchResource::collection, whose contract is defined in another file
-**Source:** `app/Http/Controllers/BranchController.php` :: `App\Http\Resources\Branch\BranchResource::collection` (lines 17-43)
+**Subject:** App\Http\Controllers\Admin\PersonalityController::created
+**Reason:** the region calls App\Http\Controllers\Admin\PersonalityController::created, which this file does not declare; its contract is defined in another file
+**Source:** `app/Http/Controllers/Admin/PersonalityController.php` :: `App\Http\Controllers\Admin\PersonalityController::created` (lines 1-44)
+**Tokens:** 63
+
+```text
+ASSUMPTION: created() is not declared in PersonalityController or in its parent App\Http\Controllers\Controller; it is declared in trait App\Traits\ApiResponse at app/Traits/ApiResponse.php:21, used by that parent; body not fetched, contract unverified
+```
+
+## flagged · named_reference
+
+**Subject:** App\Http\Controllers\Admin\PersonalityController::deleted
+**Reason:** the region calls App\Http\Controllers\Admin\PersonalityController::deleted, which this file does not declare; its contract is defined in another file
+**Source:** `app/Http/Controllers/Admin/PersonalityController.php` :: `App\Http\Controllers\Admin\PersonalityController::deleted` (lines 1-44)
+**Tokens:** 63
+
+```text
+ASSUMPTION: deleted() is not declared in PersonalityController or in its parent App\Http\Controllers\Controller; it is declared in trait App\Traits\ApiResponse at app/Traits/ApiResponse.php:28, used by that parent; body not fetched, contract unverified
+```
+
+## flagged · named_reference
+
+**Subject:** App\Http\Controllers\Admin\PersonalityController::success
+**Reason:** the region calls App\Http\Controllers\Admin\PersonalityController::success, which this file does not declare; its contract is defined in another file
+**Source:** `app/Http/Controllers/Admin/PersonalityController.php` :: `App\Http\Controllers\Admin\PersonalityController::success` (lines 1-44)
+**Tokens:** 63
+
+```text
+ASSUMPTION: success() is not declared in PersonalityController or in its parent App\Http\Controllers\Controller; it is declared in trait App\Traits\ApiResponse at app/Traits/ApiResponse.php:9, used by that parent; body not fetched, contract unverified
+```
+
+## flagged · named_reference
+
+**Subject:** App\Http\Resources\Personality\PersonalityResource::collection
+**Reason:** the region depends on App\Http\Resources\Personality\PersonalityResource::collection, whose contract is defined in another file
+**Source:** `app/Http/Controllers/Admin/PersonalityController.php` :: `App\Http\Resources\Personality\PersonalityResource::collection` (lines 1-44)
 **Tokens:** 20
 
 ```text
@@ -890,9 +876,20 @@ ASSUMPTION: named reference could not be resolved on disk; contract unverified
 
 ## flagged · named_reference
 
-**Subject:** App\Http\Resources\Category\CategoryResource::collection
-**Reason:** the region depends on App\Http\Resources\Category\CategoryResource::collection, whose contract is defined in another file
-**Source:** `app/Http/Controllers/CategoryController.php` :: `App\Http\Resources\Category\CategoryResource::collection` (lines 15-41)
+**Subject:** App\Http\Controllers\Public\PersonalityController::success
+**Reason:** the region calls App\Http\Controllers\Public\PersonalityController::success, which this file does not declare; its contract is defined in another file
+**Source:** `app/Http/Controllers/Public/PersonalityController.php` :: `App\Http\Controllers\Public\PersonalityController::success` (lines 1-18)
+**Tokens:** 63
+
+```text
+ASSUMPTION: success() is not declared in PersonalityController or in its parent App\Http\Controllers\Controller; it is declared in trait App\Traits\ApiResponse at app/Traits/ApiResponse.php:9, used by that parent; body not fetched, contract unverified
+```
+
+## flagged · named_reference
+
+**Subject:** App\Http\Resources\Personality\PersonalityResource::collection
+**Reason:** the region depends on App\Http\Resources\Personality\PersonalityResource::collection, whose contract is defined in another file
+**Source:** `app/Http/Controllers/Public/PersonalityController.php` :: `App\Http\Resources\Personality\PersonalityResource::collection` (lines 1-18)
 **Tokens:** 20
 
 ```text
@@ -901,9 +898,20 @@ ASSUMPTION: named reference could not be resolved on disk; contract unverified
 
 ## flagged · named_reference
 
-**Subject:** App\Http\Resources\Catering\PackageResource::collection
-**Reason:** the region depends on App\Http\Resources\Catering\PackageResource::collection, whose contract is defined in another file
-**Source:** `app/Http/Controllers/Catering/CateringPackageController.php` :: `App\Http\Resources\Catering\PackageResource::collection` (lines 18-44)
+**Subject:** App\Http\Resources\Personality\PersonalityResource::resolveLocale
+**Reason:** the region calls App\Http\Resources\Personality\PersonalityResource::resolveLocale, which this file does not declare; its contract is defined in another file
+**Source:** `app/Http/Resources/Personality/PersonalityResource.php` :: `App\Http\Resources\Personality\PersonalityResource::resolveLocale` (lines 1-26)
+**Tokens:** 63
+
+```text
+ASSUMPTION: resolveLocale() is not declared in PersonalityResource; it is declared in trait App\Http\Resources\Concerns\ResolvesLocale at app/Http/Resources/Concerns/ResolvesLocale.php:7, used by the class itself; body not fetched, contract unverified
+```
+
+## flagged · named_reference
+
+**Subject:** App\Models\Personality::create
+**Reason:** the region depends on App\Models\Personality::create, whose contract is defined in another file
+**Source:** `app/Repositories/PersonalityRepository.php` :: `App\Models\Personality::create` (lines 1-43)
 **Tokens:** 20
 
 ```text
@@ -912,9 +920,9 @@ ASSUMPTION: named reference could not be resolved on disk; contract unverified
 
 ## flagged · named_reference
 
-**Subject:** App\Http\Resources\Catering\QuoteRequestResource::collection
-**Reason:** the region depends on App\Http\Resources\Catering\QuoteRequestResource::collection, whose contract is defined in another file
-**Source:** `app/Http/Controllers/Catering/QuoteRequestController.php` :: `App\Http\Resources\Catering\QuoteRequestResource::collection` (lines 33-50)
+**Subject:** App\Models\Personality::findOrFail
+**Reason:** the region depends on App\Models\Personality::findOrFail, whose contract is defined in another file
+**Source:** `app/Repositories/PersonalityRepository.php` :: `App\Models\Personality::findOrFail` (lines 1-43)
 **Tokens:** 20
 
 ```text
@@ -923,465 +931,206 @@ ASSUMPTION: named reference could not be resolved on disk; contract unverified
 
 ## flagged · named_reference
 
-**Subject:** App\Http\Resources\Catering\SampleMenuResource::collection
-**Reason:** the region depends on App\Http\Resources\Catering\SampleMenuResource::collection, whose contract is defined in another file
-**Source:** `app/Http/Controllers/Catering/SampleMenuController.php` :: `App\Http\Resources\Catering\SampleMenuResource::collection` (lines 16-42)
+**Subject:** App\Models\Personality::orderBy
+**Reason:** the region depends on App\Models\Personality::orderBy, whose contract is defined in another file
+**Source:** `app/Repositories/PersonalityRepository.php` :: `App\Models\Personality::orderBy` (lines 1-43)
 **Tokens:** 20
 
 ```text
 ASSUMPTION: named reference could not be resolved on disk; contract unverified
+```
+
+## fetched · named_reference
+
+**Subject:** App\Services\ImageService
+**Reason:** the region depends on App\Services\ImageService, whose contract is defined in another file
+**Source:** `app/Services/ImageService.php` :: `ALLOWED_MIMES` (lines 18-18)
+**Tokens:** 23
+
+```php
+    private const ALLOWED_MIMES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+```
+
+## fetched · named_reference
+
+**Subject:** App\Services\ImageService
+**Reason:** the region depends on App\Services\ImageService, whose contract is defined in another file
+**Source:** `app/Services/ImageService.php` :: `MAX_SIZE_BYTES` (lines 14-14)
+**Tokens:** 13
+
+```php
+    private const MAX_SIZE_BYTES = 5 * 1024 * 1024;
+```
+
+## fetched · named_reference
+
+**Subject:** App\Services\ImageService
+**Reason:** the region depends on App\Services\ImageService, whose contract is defined in another file
+**Source:** `app/Services/ImageService.php` :: `MAX_WIDTH` (lines 16-16)
+**Tokens:** 9
+
+```php
+    private const MAX_WIDTH = 1920;
+```
+
+## fetched · named_reference
+
+**Subject:** App\Services\ImageService
+**Reason:** the region depends on App\Services\ImageService, whose contract is defined in another file
+**Source:** `app/Services/ImageService.php` :: `delete` (lines 53-58)
+**Tokens:** 44
+
+```php
+    public function delete(string $path): void
+    {
+        if (Storage::disk('public')->exists($path)) {
+            Storage::disk('public')->delete($path);
+        }
+    }
+```
+
+## fetched · named_reference
+
+**Subject:** App\Services\ImageService::delete
+**Reason:** the region depends on App\Services\ImageService::delete, whose contract is defined in another file
+**Source:** `app/Services/ImageService.php` :: `delete` (lines 53-58)
+**Tokens:** 44
+
+```php
+    public function delete(string $path): void
+    {
+        if (Storage::disk('public')->exists($path)) {
+            Storage::disk('public')->delete($path);
+        }
+    }
+```
+
+## fetched · named_reference
+
+**Subject:** App\Services\ImageService::store
+**Reason:** the region depends on App\Services\ImageService::store, whose contract is defined in another file
+**Source:** `app/Services/ImageService.php` :: `store` (lines 20-51)
+**Tokens:** 285
+
+```php
+    public function store(UploadedFile $file, string $folder): array
+    {
+        if ($file->getSize() > self::MAX_SIZE_BYTES) {
+            throw new InvalidArgumentException('Image exceeds the maximum allowed size of 5MB.');
+        }
+
+        if (! in_array($file->getMimeType(), self::ALLOWED_MIMES, true)) {
+            throw new InvalidArgumentException('Unsupported image type. Allowed: jpg, jpeg, png, webp.');
+        }
+
+        $image = Image::decodeSplFileInfo($file);
+
+        if ($image->width() > self::MAX_WIDTH) {
+            $image->scale(width: self::MAX_WIDTH);
+        }
+
+        $encoded = $image->encode(new WebpEncoder(quality: 85));
+
+        $filename = Str::uuid()->toString().'.webp';
+        $path = trim($folder, '/').'/'.$filename;
+
+        Storage::disk('public')->put($path, (string) $encoded);
+
+        return [
+            'path' => $path,
+            'url' => Storage::disk('public')->url($path),
+            'width' => $image->width(),
+            'height' => $image->height(),
+            'size_bytes' => Storage::disk('public')->size($path),
+            'mime_type' => 'image/webp',
+        ];
+    }
+```
+
+## fetched · named_reference
+
+**Subject:** App\Services\ImageService
+**Reason:** the region depends on App\Services\ImageService, whose contract is defined in another file
+**Source:** `app/Services/ImageService.php` :: `store` (lines 20-51)
+**Tokens:** 285
+
+```php
+    public function store(UploadedFile $file, string $folder): array
+    {
+        if ($file->getSize() > self::MAX_SIZE_BYTES) {
+            throw new InvalidArgumentException('Image exceeds the maximum allowed size of 5MB.');
+        }
+
+        if (! in_array($file->getMimeType(), self::ALLOWED_MIMES, true)) {
+            throw new InvalidArgumentException('Unsupported image type. Allowed: jpg, jpeg, png, webp.');
+        }
+
+        $image = Image::decodeSplFileInfo($file);
+
+        if ($image->width() > self::MAX_WIDTH) {
+            $image->scale(width: self::MAX_WIDTH);
+        }
+
+        $encoded = $image->encode(new WebpEncoder(quality: 85));
+
+        $filename = Str::uuid()->toString().'.webp';
+        $path = trim($folder, '/').'/'.$filename;
+
+        Storage::disk('public')->put($path, (string) $encoded);
+
+        return [
+            'path' => $path,
+            'url' => Storage::disk('public')->url($path),
+            'width' => $image->width(),
+            'height' => $image->height(),
+            'size_bytes' => Storage::disk('public')->size($path),
+            'mime_type' => 'image/webp',
+        ];
+    }
 ```
 
 ## flagged · named_reference
 
-**Subject:** App\Http\Resources\DeliveryApp\DeliveryAppResource::collection
-**Reason:** the region depends on App\Http\Resources\DeliveryApp\DeliveryAppResource::collection, whose contract is defined in another file
-**Source:** `app/Http/Controllers/DeliveryAppController.php` :: `App\Http\Resources\DeliveryApp\DeliveryAppResource::collection` (lines 17-43)
+**Subject:** App\Models\Personality::updateOrCreate
+**Reason:** the region depends on App\Models\Personality::updateOrCreate, whose contract is defined in another file
+**Source:** `database/seeders/PersonalitySeeder.php` :: `App\Models\Personality::updateOrCreate` (lines 1-27)
 **Tokens:** 20
 
 ```text
 ASSUMPTION: named reference could not be resolved on disk; contract unverified
 ```
 
-## flagged · named_reference
+## flagged · unverifiable_premise
 
-**Subject:** App\Http\Resources\Testimonial\TestimonialResource::collection
-**Reason:** the region depends on App\Http\Resources\Testimonial\TestimonialResource::collection, whose contract is defined in another file
-**Source:** `app/Http/Controllers/TestimonialController.php` :: `App\Http\Resources\Testimonial\TestimonialResource::collection` (lines 17-43)
-**Tokens:** 20
-
-```text
-ASSUMPTION: named reference could not be resolved on disk; contract unverified
-```
-
-## flagged · named_reference
-
-**Subject:** App\Http\Resources\Timeline\TimelineResource::collection
-**Reason:** the region depends on App\Http\Resources\Timeline\TimelineResource::collection, whose contract is defined in another file
-**Source:** `app/Http/Controllers/TimelineController.php` :: `App\Http\Resources\Timeline\TimelineResource::collection` (lines 15-41)
-**Tokens:** 20
+**Subject:** surrounding-transaction
+**Reason:** the region performs several persistence writes; whether a transaction wraps them is decided by the caller, which the diff does not show
+**Source:** `app/Actions/Personality/DeletePersonalityAction.php` (lines 1-28)
+**Tokens:** 19
 
 ```text
-ASSUMPTION: named reference could not be resolved on disk; contract unverified
+ASSUMPTION: this code assumes a surrounding transaction; caller not checked
 ```
 
-## flagged · named_reference
+## flagged · unverifiable_premise
 
-**Subject:** App\Http\Resources\User\UserResource::collection
-**Reason:** the region depends on App\Http\Resources\User\UserResource::collection, whose contract is defined in another file
-**Source:** `app/Http/Controllers/UserController.php` :: `App\Http\Resources\User\UserResource::collection` (lines 20-51)
-**Tokens:** 20
+**Subject:** surrounding-transaction
+**Reason:** the region performs several persistence writes; whether a transaction wraps them is decided by the caller, which the diff does not show
+**Source:** `app/Actions/Personality/UpdatePersonalityAction.php` (lines 1-46)
+**Tokens:** 19
 
 ```text
-ASSUMPTION: named reference could not be resolved on disk; contract unverified
+ASSUMPTION: this code assumes a surrounding transaction; caller not checked
 ```
 
-## fetched · named_reference
+## flagged · unverifiable_premise
 
-**Subject:** App\Http\Resources\Auth\AuthResource
-**Reason:** the region depends on App\Http\Resources\Auth\AuthResource, whose contract is defined in another file
-**Source:** `app/Http/Resources/Auth/AuthResource.php` :: `toArray` (lines 10-21)
-**Tokens:** 102
+**Subject:** surrounding-transaction
+**Reason:** the region performs several persistence writes; whether a transaction wraps them is decided by the caller, which the diff does not show
+**Source:** `app/Repositories/PersonalityRepository.php` (lines 1-43)
+**Tokens:** 19
 
-```php
-    public function toArray(Request $request): array
-    {
-        return [
-            'token' => $this->resource['token'],
-            'user' => [
-                'id' => $this->resource['user']->id,
-                'name' => $this->resource['user']->name,
-                'email' => $this->resource['user']->email,
-                'role' => $this->resource['user']->role,
-            ],
-        ];
-    }
-```
-
-## fetched · named_reference
-
-**Subject:** App\Http\Resources\Branch\BranchResource
-**Reason:** the region depends on App\Http\Resources\Branch\BranchResource, whose contract is defined in another file
-**Source:** `app/Http/Resources/Branch/BranchResource.php` :: `toArray` (lines 13-32)
-**Tokens:** 206
-
-```php
-    public function toArray(Request $request): array
-    {
-        return [
-            'id' => $this->id,
-            'name' => $this->resolveLocale($this->name_ar, $this->name_en),
-            'name_ar' => $this->name_ar,
-            'name_en' => $this->name_en,
-            'location' => $this->resolveLocale($this->location_ar, $this->location_en),
-            'location_ar' => $this->location_ar,
-            'location_en' => $this->location_en,
-            'city' => $this->city,
-            'phone' => $this->phone,
-            'opening_time' => $this->opening_time,
-            'closing_time' => $this->closing_time,
-            'google_maps_url' => $this->google_maps_url,
-            'image_url' => $this->image_url,
-            'order' => $this->order,
-            'locale' => app()->getLocale(),
-        ];
-    }
-```
-
-## fetched · named_reference
-
-**Subject:** App\Http\Resources\Category\CategoryResource
-**Reason:** the region depends on App\Http\Resources\Category\CategoryResource, whose contract is defined in another file
-**Source:** `app/Http/Resources/Category/CategoryResource.php` :: `toArray` (lines 13-24)
-**Tokens:** 100
-
-```php
-    public function toArray(Request $request): array
-    {
-        return [
-            'id' => $this->id,
-            'name' => $this->resolveLocale($this->name_ar, $this->name_en),
-            'name_ar' => $this->name_ar,
-            'name_en' => $this->name_en,
-            'slug' => $this->slug,
-            'order' => $this->order,
-            'locale' => app()->getLocale(),
-        ];
-    }
-```
-
-## fetched · named_reference
-
-**Subject:** App\Http\Resources\Catering\PackageResource
-**Reason:** the region depends on App\Http\Resources\Catering\PackageResource, whose contract is defined in another file
-**Source:** `app/Http/Resources/Catering/PackageResource.php` :: `toArray` (lines 13-35)
-**Tokens:** 261
-
-```php
-    public function toArray(Request $request): array
-    {
-        return [
-            'id' => $this->id,
-            'name' => $this->resolveLocale($this->name_ar, $this->name_en),
-            'name_ar' => $this->name_ar,
-            'name_en' => $this->name_en,
-            'description' => $this->resolveLocale($this->description_ar, $this->description_en),
-            'description_ar' => $this->description_ar,
-            'description_en' => $this->description_en,
-            'tag_en' => $this->tag_en,
-            'price_starting_from' => $this->price_starting_from,
-            'is_featured' => $this->is_featured,
-            'features' => $this->whenLoaded('features', fn () => $this->features->map(fn ($feature) => [
-                'feature_ar' => $feature->feature_ar,
-                'feature_en' => $feature->feature_en,
-                'order' => $feature->order,
-            ])),
-            'image_url' => $this->image_url,
-            'order' => $this->order,
-            'locale' => app()->getLocale(),
-        ];
-    }
-```
-
-## fetched · named_reference
-
-**Subject:** App\Http\Resources\Catering\QuoteRequestResource
-**Reason:** the region depends on App\Http\Resources\Catering\QuoteRequestResource, whose contract is defined in another file
-**Source:** `app/Http/Resources/Catering/QuoteRequestResource.php` :: `toArray` (lines 10-29)
-**Tokens:** 186
-
-```php
-    public function toArray(Request $request): array
-    {
-        return [
-            'id' => $this->id,
-            'name' => $this->name,
-            'phone' => $this->phone,
-            'email' => $this->email,
-            'event_date' => $this->event_date?->toDateString(),
-            'guests_count' => $this->guests_count,
-            'branch' => $this->branch,
-            'event_type' => $this->event_type->value,
-            'budget_range' => $this->budget_range?->value,
-            'notes' => $this->notes,
-            'status' => [
-                'value' => $this->status->value,
-                'label' => $this->status->label(),
-            ],
-            'created_at' => $this->created_at?->toIso8601String(),
-        ];
-    }
-```
-
-## fetched · named_reference
-
-**Subject:** App\Http\Resources\Catering\SampleMenuResource
-**Reason:** the region depends on App\Http\Resources\Catering\SampleMenuResource, whose contract is defined in another file
-**Source:** `app/Http/Resources/Catering/SampleMenuResource.php` :: `toArray` (lines 13-31)
-**Tokens:** 190
-
-```php
-    public function toArray(Request $request): array
-    {
-        return [
-            'id' => $this->id,
-            'name' => $this->resolveLocale($this->name_ar, $this->name_en),
-            'name_ar' => $this->name_ar,
-            'name_en' => $this->name_en,
-            'tag_en' => $this->tag_en,
-            'is_featured' => $this->is_featured,
-            'dishes' => $this->whenLoaded('dishes', fn () => $this->dishes->map(fn ($dish) => [
-                'dish_name_ar' => $dish->dish_name_ar,
-                'dish_name_en' => $dish->dish_name_en,
-                'order' => $dish->order,
-            ])),
-            'image_url' => $this->image_url,
-            'order' => $this->order,
-            'locale' => app()->getLocale(),
-        ];
-    }
-```
-
-## fetched · named_reference
-
-**Subject:** App\Http\Resources\DeliveryApp\DeliveryAppResource
-**Reason:** the region depends on App\Http\Resources\DeliveryApp\DeliveryAppResource, whose contract is defined in another file
-**Source:** `app/Http/Resources/DeliveryApp/DeliveryAppResource.php` :: `toArray` (lines 13-26)
-**Tokens:** 124
-
-```php
-    public function toArray(Request $request): array
-    {
-        return [
-            'id' => $this->id,
-            'name' => $this->resolveLocale($this->name_ar, $this->name_en),
-            'name_ar' => $this->name_ar,
-            'name_en' => $this->name_en,
-            'order_url' => $this->order_url,
-            'logo_url' => $this->logo_url,
-            'is_active' => $this->is_active,
-            'order' => $this->order,
-            'locale' => app()->getLocale(),
-        ];
-    }
-```
-
-## fetched · named_reference
-
-**Subject:** App\Http\Resources\Dish\DishCollection
-**Reason:** the region depends on App\Http\Resources\Dish\DishCollection, whose contract is defined in another file
-**Source:** `app/Http/Resources/Dish/DishCollection.php` :: `collects` (lines 10-10)
-**Tokens:** 11
-
-```php
-    public $collects = DishResource::class;
-```
-
-## fetched · named_reference
-
-**Subject:** App\Http\Resources\Dish\DishCollection
-**Reason:** the region depends on App\Http\Resources\Dish\DishCollection, whose contract is defined in another file
-**Source:** `app/Http/Resources/Dish/DishCollection.php` :: `toArray` (lines 12-23)
-**Tokens:** 93
-
-```php
-    public function toArray(Request $request): array
-    {
-        return [
-            'items' => $this->collection,
-            'meta' => [
-                'current_page' => $this->currentPage(),
-                'last_page' => $this->lastPage(),
-                'per_page' => $this->perPage(),
-                'total' => $this->total(),
-            ],
-        ];
-    }
-```
-
-## fetched · named_reference
-
-**Subject:** App\Http\Resources\Dish\DishResource
-**Reason:** the region depends on App\Http\Resources\Dish\DishResource, whose contract is defined in another file
-**Source:** `app/Http/Resources/Dish/DishResource.php` :: `toArray` (lines 14-32)
-**Tokens:** 208
-
-```php
-    public function toArray(Request $request): array
-    {
-        return [
-            'id' => $this->id,
-            'name' => $this->resolveLocale($this->name_ar, $this->name_en),
-            'name_ar' => $this->name_ar,
-            'name_en' => $this->name_en,
-            'description' => $this->resolveLocale($this->description_ar, $this->description_en),
-            'description_ar' => $this->description_ar,
-            'description_en' => $this->description_en,
-            'price' => $this->price,
-            'category' => new CategoryResource($this->whenLoaded('category')),
-            'is_featured' => $this->is_featured,
-            'is_signature' => $this->is_signature,
-            'image_url' => $this->image_url,
-            'order' => $this->order,
-            'locale' => app()->getLocale(),
-        ];
-    }
-```
-
-## fetched · named_reference
-
-**Subject:** App\Http\Resources\MediaItem\MediaItemResource
-**Reason:** the region depends on App\Http\Resources\MediaItem\MediaItemResource, whose contract is defined in another file
-**Source:** `app/Http/Resources/MediaItem/MediaItemResource.php` :: `toArray` (lines 13-26)
-**Tokens:** 115
-
-```php
-    public function toArray(Request $request): array
-    {
-        return [
-            'id' => $this->id,
-            'page' => $this->page,
-            'section' => $this->section,
-            'key' => $this->key,
-            'url' => $this->url,
-            'alt' => $this->resolveLocale($this->alt_ar, $this->alt_en),
-            'alt_ar' => $this->alt_ar,
-            'alt_en' => $this->alt_en,
-            'locale' => app()->getLocale(),
-        ];
-    }
-```
-
-## fetched · named_reference
-
-**Subject:** App\Http\Resources\PageContent\PageContentResource
-**Reason:** the region depends on App\Http\Resources\PageContent\PageContentResource, whose contract is defined in another file
-**Source:** `app/Http/Resources/PageContent/PageContentResource.php` :: `toArray` (lines 13-27)
-**Tokens:** 129
-
-```php
-    public function toArray(Request $request): array
-    {
-        return [
-            'id' => $this->id,
-            'page' => $this->page,
-            'section' => $this->section,
-            'key' => $this->key,
-            'value' => $this->resolveLocale($this->value_ar, $this->value_en),
-            'value_ar' => $this->value_ar,
-            'value_en' => $this->value_en,
-            'type' => $this->type,
-            'order' => $this->order,
-            'locale' => app()->getLocale(),
-        ];
-    }
-```
-
-## fetched · named_reference
-
-**Subject:** App\Http\Resources\Setting\SettingResource
-**Reason:** the region depends on App\Http\Resources\Setting\SettingResource, whose contract is defined in another file
-**Source:** `app/Http/Resources/Setting/SettingResource.php` :: `toArray` (lines 13-26)
-**Tokens:** 119
-
-```php
-    public function toArray(Request $request): array
-    {
-        return [
-            'id' => $this->id,
-            'key' => $this->key,
-            'value' => $this->value,
-            'type' => $this->type,
-            'group' => $this->group,
-            'label' => $this->resolveLocale($this->label_ar, $this->label_en),
-            'label_ar' => $this->label_ar,
-            'label_en' => $this->label_en,
-            'locale' => app()->getLocale(),
-        ];
-    }
-```
-
-## fetched · named_reference
-
-**Subject:** App\Http\Resources\Testimonial\TestimonialResource
-**Reason:** the region depends on App\Http\Resources\Testimonial\TestimonialResource, whose contract is defined in another file
-**Source:** `app/Http/Resources/Testimonial/TestimonialResource.php` :: `toArray` (lines 13-25)
-**Tokens:** 113
-
-```php
-    public function toArray(Request $request): array
-    {
-        return [
-            'id' => $this->id,
-            'name' => $this->name,
-            'quote' => $this->resolveLocale($this->quote_ar, $this->quote_en),
-            'quote_ar' => $this->quote_ar,
-            'quote_en' => $this->quote_en,
-            'is_active' => $this->is_active,
-            'order' => $this->order,
-            'locale' => app()->getLocale(),
-        ];
-    }
-```
-
-## fetched · named_reference
-
-**Subject:** App\Http\Resources\Timeline\TimelineResource
-**Reason:** the region depends on App\Http\Resources\Timeline\TimelineResource, whose contract is defined in another file
-**Source:** `app/Http/Resources/Timeline/TimelineResource.php` :: `toArray` (lines 13-28)
-**Tokens:** 165
-
-```php
-    public function toArray(Request $request): array
-    {
-        return [
-            'id' => $this->id,
-            'year' => $this->year,
-            'location_en' => $this->location_en,
-            'title' => $this->resolveLocale($this->title_ar, $this->title_en),
-            'title_ar' => $this->title_ar,
-            'title_en' => $this->title_en,
-            'description' => $this->resolveLocale($this->description_ar, $this->description_en),
-            'description_ar' => $this->description_ar,
-            'description_en' => $this->description_en,
-            'order' => $this->order,
-            'locale' => app()->getLocale(),
-        ];
-    }
-```
-
-## fetched · named_reference
-
-**Subject:** App\Http\Resources\User\UserResource
-**Reason:** the region depends on App\Http\Resources\User\UserResource, whose contract is defined in another file
-**Source:** `app/Http/Resources/User/UserResource.php` :: `toArray` (lines 10-19)
-**Tokens:** 75
-
-```php
-    public function toArray(Request $request): array
-    {
-        return [
-            'id' => $this->id,
-            'name' => $this->name,
-            'email' => $this->email,
-            'role' => $this->role,
-            'created_at' => $this->created_at?->toIso8601String(),
-        ];
-    }
-```
-
-## fetched · named_reference
-
-**Subject:** App\Repositories\CategoryRepository::getAll
-**Reason:** the region depends on App\Repositories\CategoryRepository::getAll, whose contract is defined in another file
-**Source:** `app/Repositories/CategoryRepository.php` :: `getAll` (lines 10-13)
-**Tokens:** 26
-
-```php
-    public function getAll(): Collection
-    {
-        return Category::orderBy('order')->get();
-    }
+```text
+ASSUMPTION: this code assumes a surrounding transaction; caller not checked
 ```
 
 ## Dropped
@@ -1390,15 +1139,87 @@ Nothing was dropped.
 ===== END context-bundle.md =====
 
 ===== BEGIN context-diagnostics.txt =====
-new file: app/Traits/ApiResponse.php — own-file context is in the diff, not fetched
-unresolved named_reference: App\Http\Resources\Branch\BranchResource::collection in app/Http/Controllers/BranchController.php
-unresolved named_reference: App\Http\Resources\Category\CategoryResource::collection in app/Http/Controllers/CategoryController.php
-unresolved named_reference: App\Http\Resources\Catering\PackageResource::collection in app/Http/Controllers/Catering/CateringPackageController.php
-unresolved named_reference: App\Http\Resources\Catering\QuoteRequestResource::collection in app/Http/Controllers/Catering/QuoteRequestController.php
-unresolved named_reference: App\Http\Resources\Catering\SampleMenuResource::collection in app/Http/Controllers/Catering/SampleMenuController.php
-unresolved named_reference: App\Http\Resources\DeliveryApp\DeliveryAppResource::collection in app/Http/Controllers/DeliveryAppController.php
-unresolved named_reference: App\Http\Resources\Testimonial\TestimonialResource::collection in app/Http/Controllers/TestimonialController.php
-unresolved named_reference: App\Http\Resources\Timeline\TimelineResource::collection in app/Http/Controllers/TimelineController.php
-unresolved named_reference: App\Http\Resources\User\UserResource::collection in app/Http/Controllers/UserController.php
+new file: app/Actions/Personality/CreatePersonalityAction.php — own-file context is in the diff, not fetched
+new file: app/Actions/Personality/DeletePersonalityAction.php — own-file context is in the diff, not fetched
+new file: app/Actions/Personality/GetPersonalitiesAction.php — own-file context is in the diff, not fetched
+new file: app/Actions/Personality/UpdatePersonalityAction.php — own-file context is in the diff, not fetched
+new file: app/DTOs/Personality/CreatePersonalityDTO.php — own-file context is in the diff, not fetched
+new file: app/DTOs/Personality/UpdatePersonalityDTO.php — own-file context is in the diff, not fetched
+new file: app/Http/Controllers/Admin/PersonalityController.php — own-file context is in the diff, not fetched
+new file: app/Http/Controllers/Public/PersonalityController.php — own-file context is in the diff, not fetched
+new file: app/Http/Requests/Personality/StorePersonalityRequest.php — own-file context is in the diff, not fetched
+new file: app/Http/Requests/Personality/UpdatePersonalityRequest.php — own-file context is in the diff, not fetched
+new file: app/Http/Resources/Personality/PersonalityResource.php — own-file context is in the diff, not fetched
+new file: app/Models/Personality.php — own-file context is in the diff, not fetched
+new file: app/Repositories/PersonalityRepository.php — own-file context is in the diff, not fetched
+new file: database/migrations/2026_07_25_144324_create_personalities_table.php — own-file context is in the diff, not fetched
+new file: database/seeders/PersonalitySeeder.php — own-file context is in the diff, not fetched
+framework reference: Illuminate\Support\Facades\Cache::tags declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Cache.php:50 (@method static \Illuminate\Cache\TaggedCache tags(mixed $names))
+already in the diff: App\Repositories\PersonalityRepository::create declared in app/Repositories/PersonalityRepository.php; not fetched again
+already in the diff: App\Repositories\PersonalityRepository declared in app/Repositories/PersonalityRepository.php; not fetched again
+already in the diff: App\DTOs\Personality\CreatePersonalityDTO declared in app/DTOs/Personality/CreatePersonalityDTO.php; not fetched again
+already in the diff: App\Models\Personality declared in app/Models/Personality.php; not fetched again
+framework reference: Illuminate\Support\Facades\Cache::tags declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Cache.php:50 (@method static \Illuminate\Cache\TaggedCache tags(mixed $names))
+already in the diff: App\Repositories\PersonalityRepository::getById declared in app/Repositories/PersonalityRepository.php; not fetched again
+already in the diff: App\Repositories\PersonalityRepository::delete declared in app/Repositories/PersonalityRepository.php; not fetched again
+already in the diff: App\Repositories\PersonalityRepository declared in app/Repositories/PersonalityRepository.php; not fetched again
+framework reference: Illuminate\Support\Facades\Cache::tags declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Cache.php:50 (@method static \Illuminate\Cache\TaggedCache tags(mixed $names))
+already in the diff: App\Repositories\PersonalityRepository::getAll declared in app/Repositories/PersonalityRepository.php; not fetched again
+already in the diff: App\Repositories\PersonalityRepository declared in app/Repositories/PersonalityRepository.php; not fetched again
+dependency class: Illuminate\Database\Eloquent\Collection provided by vendor/laravel/framework/src/Illuminate/Database/Eloquent/Collection.php; surface not fetched
+dependency member: Illuminate\Support\Arr::whereNotNull declared at vendor/laravel/framework/src/Illuminate/Collections/Arr.php:1284; source not fetched
+framework reference: Illuminate\Support\Facades\Cache::tags declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Cache.php:50 (@method static \Illuminate\Cache\TaggedCache tags(mixed $names))
+already in the diff: App\Repositories\PersonalityRepository::getById declared in app/Repositories/PersonalityRepository.php; not fetched again
+already in the diff: App\Repositories\PersonalityRepository::update declared in app/Repositories/PersonalityRepository.php; not fetched again
+already in the diff: App\Repositories\PersonalityRepository declared in app/Repositories/PersonalityRepository.php; not fetched again
+already in the diff: App\DTOs\Personality\UpdatePersonalityDTO declared in app/DTOs/Personality/UpdatePersonalityDTO.php; not fetched again
+already in the diff: App\Models\Personality declared in app/Models/Personality.php; not fetched again
+dependency class: Illuminate\Http\UploadedFile provided by vendor/laravel/framework/src/Illuminate/Http/UploadedFile.php; surface not fetched
+dependency class: Illuminate\Http\Request provided by vendor/laravel/framework/src/Illuminate/Http/Request.php; surface not fetched
+dependency class: Illuminate\Http\UploadedFile provided by vendor/laravel/framework/src/Illuminate/Http/UploadedFile.php; surface not fetched
+dependency class: Illuminate\Http\Request provided by vendor/laravel/framework/src/Illuminate/Http/Request.php; surface not fetched
+inherited member: App\Http\Controllers\Admin\PersonalityController::success declared at app/Traits/ApiResponse.php:9 in trait App\Traits\ApiResponse; body not fetched
+inherited member: App\Http\Controllers\Admin\PersonalityController::created declared at app/Traits/ApiResponse.php:21 in trait App\Traits\ApiResponse; body not fetched
+inherited member: App\Http\Controllers\Admin\PersonalityController::deleted declared at app/Traits/ApiResponse.php:28 in trait App\Traits\ApiResponse; body not fetched
+unresolved named_reference: App\Http\Resources\Personality\PersonalityResource::collection in app/Http/Controllers/Admin/PersonalityController.php
+already in the diff: App\DTOs\Personality\CreatePersonalityDTO::fromRequest declared in app/DTOs/Personality/CreatePersonalityDTO.php; not fetched again
+already in the diff: App\DTOs\Personality\UpdatePersonalityDTO::fromRequest declared in app/DTOs/Personality/UpdatePersonalityDTO.php; not fetched again
+already in the diff: App\Actions\Personality\GetPersonalitiesAction declared in app/Actions/Personality/GetPersonalitiesAction.php; not fetched again
 dependency class: Illuminate\Http\JsonResponse provided by vendor/laravel/framework/src/Illuminate/Http/JsonResponse.php; surface not fetched
+already in the diff: App\Http\Requests\Personality\StorePersonalityRequest declared in app/Http/Requests/Personality/StorePersonalityRequest.php; not fetched again
+already in the diff: App\Actions\Personality\CreatePersonalityAction declared in app/Actions/Personality/CreatePersonalityAction.php; not fetched again
+already in the diff: App\Http\Resources\Personality\PersonalityResource declared in app/Http/Resources/Personality/PersonalityResource.php; not fetched again
+already in the diff: App\Http\Requests\Personality\UpdatePersonalityRequest declared in app/Http/Requests/Personality/UpdatePersonalityRequest.php; not fetched again
+already in the diff: App\Actions\Personality\UpdatePersonalityAction declared in app/Actions/Personality/UpdatePersonalityAction.php; not fetched again
+already in the diff: App\Actions\Personality\DeletePersonalityAction declared in app/Actions/Personality/DeletePersonalityAction.php; not fetched again
+inherited member: App\Http\Controllers\Public\PersonalityController::success declared at app/Traits/ApiResponse.php:9 in trait App\Traits\ApiResponse; body not fetched
+unresolved named_reference: App\Http\Resources\Personality\PersonalityResource::collection in app/Http/Controllers/Public/PersonalityController.php
+already in the diff: App\Actions\Personality\GetPersonalitiesAction declared in app/Actions/Personality/GetPersonalitiesAction.php; not fetched again
+dependency class: Illuminate\Http\JsonResponse provided by vendor/laravel/framework/src/Illuminate/Http/JsonResponse.php; surface not fetched
+inherited member: App\Http\Resources\Personality\PersonalityResource::resolveLocale declared at app/Http/Resources/Concerns/ResolvesLocale.php:7 in trait App\Http\Resources\Concerns\ResolvesLocale; body not fetched
+dependency class: Illuminate\Http\Request provided by vendor/laravel/framework/src/Illuminate/Http/Request.php; surface not fetched
+unresolved named_reference: App\Models\Personality::orderBy in app/Repositories/PersonalityRepository.php
+unresolved named_reference: App\Models\Personality::findOrFail in app/Repositories/PersonalityRepository.php
+unresolved named_reference: App\Models\Personality::create in app/Repositories/PersonalityRepository.php
+dependency class: Illuminate\Database\Eloquent\Collection provided by vendor/laravel/framework/src/Illuminate/Database/Eloquent/Collection.php; surface not fetched
+already in the diff: App\Models\Personality declared in app/Models/Personality.php; not fetched again
+framework reference: Illuminate\Support\Facades\Schema::create declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Schema.php:34 (@method static void create(string $table, \Closure $callback))
+framework reference: Illuminate\Support\Facades\Schema::dropIfExists declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Schema.php:36 (@method static void dropIfExists(string $table))
+dependency class: Illuminate\Database\Schema\Blueprint provided by vendor/laravel/framework/src/Illuminate/Database/Schema/Blueprint.php; surface not fetched
+unresolved named_reference: App\Models\Personality::updateOrCreate in database/seeders/PersonalitySeeder.php
+framework reference: Illuminate\Support\Facades\Route::put declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Route.php:8 (@method static \Illuminate\Routing\Route put(string $uri, array|string|callable|null $action = null))
+framework reference: Illuminate\Support\Facades\Route::put declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Route.php:8 (@method static \Illuminate\Routing\Route put(string $uri, array|string|callable|null $action = null))
+framework reference: Illuminate\Support\Facades\Route::put declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Route.php:8 (@method static \Illuminate\Routing\Route put(string $uri, array|string|callable|null $action = null))
+framework reference: Illuminate\Support\Facades\Route::put declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Route.php:8 (@method static \Illuminate\Routing\Route put(string $uri, array|string|callable|null $action = null))
+framework reference: Illuminate\Support\Facades\Route::prefix declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Route.php:100 (@method static \Illuminate\Routing\RouteRegistrar prefix(string $prefix))
+framework reference: Illuminate\Support\Facades\Route::get declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Route.php:6 (@method static \Illuminate\Routing\Route get(string $uri, array|string|callable|null $action = null))
+framework reference: Illuminate\Support\Facades\Route::post declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Route.php:7 (@method static \Illuminate\Routing\Route post(string $uri, array|string|callable|null $action = null))
+framework reference: Illuminate\Support\Facades\Route::put declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Route.php:8 (@method static \Illuminate\Routing\Route put(string $uri, array|string|callable|null $action = null))
+framework reference: Illuminate\Support\Facades\Route::delete declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Route.php:10 (@method static \Illuminate\Routing\Route delete(string $uri, array|string|callable|null $action = null))
+framework reference: Illuminate\Support\Facades\Route::prefix declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Route.php:100 (@method static \Illuminate\Routing\RouteRegistrar prefix(string $prefix))
+framework reference: Illuminate\Support\Facades\Route::get declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Route.php:6 (@method static \Illuminate\Routing\Route get(string $uri, array|string|callable|null $action = null))
+inherited member unresolved: Tests\Feature\PublicApiTest::getJson; walked nothing; continues into a dependency, which was not walked (Illuminate\Foundation\Testing\RefreshDatabase)
+inherited member unresolved: Tests\Feature\PublicApiTest::assertTrue; walked nothing; continues into a dependency, which was not walked (Illuminate\Foundation\Testing\RefreshDatabase)
+inherited member unresolved: Tests\Feature\RepositoriesTest::assertCount; walked nothing; continues into a dependency, which was not walked (Illuminate\Foundation\Testing\RefreshDatabase)
+already in the diff: App\Repositories\PersonalityRepository declared in app/Repositories/PersonalityRepository.php; not fetched again
 ===== END context-diagnostics.txt =====

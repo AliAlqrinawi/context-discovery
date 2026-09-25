@@ -47,881 +47,998 @@ Q5: "<exact quotation>" | NONE_VISIBLE
 ---
 
 ===== BEGIN change.diff =====
-diff --git a/app/Http/Controllers/Admin/MenuPdfController.php b/app/Http/Controllers/Admin/MenuPdfController.php
+diff --git a/app/Actions/Personality/CreatePersonalityAction.php b/app/Actions/Personality/CreatePersonalityAction.php
 new file mode 100644
-index 0000000..d3080a2
+index 0000000..5e6b311
 --- /dev/null
-+++ b/app/Http/Controllers/Admin/MenuPdfController.php
-@@ -0,0 +1,85 @@
++++ b/app/Actions/Personality/CreatePersonalityAction.php
+@@ -0,0 +1,39 @@
++<?php
++
++namespace App\Actions\Personality;
++
++use App\DTOs\Personality\CreatePersonalityDTO;
++use App\Models\Personality;
++use App\Repositories\PersonalityRepository;
++use App\Services\ImageService;
++use Illuminate\Support\Facades\Cache;
++
++class CreatePersonalityAction
++{
++    public function __construct(
++        private readonly PersonalityRepository $repository,
++        private readonly ImageService $imageService,
++    ) {}
++
++    public function execute(CreatePersonalityDTO $dto): Personality
++    {
++        $data = [
++            'name_ar' => $dto->name_ar,
++            'name_en' => $dto->name_en,
++            'order' => $dto->order,
++            'is_active' => $dto->is_active,
++        ];
++
++        if ($dto->image) {
++            $stored = $this->imageService->store($dto->image, 'personalities');
++            $data['image_path'] = $stored['path'];
++            $data['image_url'] = $stored['url'];
++        }
++
++        $personality = $this->repository->create($data);
++
++        Cache::tags(['personalities'])->flush();
++
++        return $personality;
++    }
++}
+diff --git a/app/Actions/Personality/DeletePersonalityAction.php b/app/Actions/Personality/DeletePersonalityAction.php
+new file mode 100644
+index 0000000..8d79b25
+--- /dev/null
++++ b/app/Actions/Personality/DeletePersonalityAction.php
+@@ -0,0 +1,28 @@
++<?php
++
++namespace App\Actions\Personality;
++
++use App\Repositories\PersonalityRepository;
++use App\Services\ImageService;
++use Illuminate\Support\Facades\Cache;
++
++class DeletePersonalityAction
++{
++    public function __construct(
++        private readonly PersonalityRepository $repository,
++        private readonly ImageService $imageService,
++    ) {}
++
++    public function execute(int $id): void
++    {
++        $personality = $this->repository->getById($id);
++
++        if ($personality->image_path) {
++            $this->imageService->delete($personality->image_path);
++        }
++
++        $this->repository->delete($id);
++
++        Cache::tags(['personalities'])->flush();
++    }
++}
+diff --git a/app/Actions/Personality/GetPersonalitiesAction.php b/app/Actions/Personality/GetPersonalitiesAction.php
+new file mode 100644
+index 0000000..105577e
+--- /dev/null
++++ b/app/Actions/Personality/GetPersonalitiesAction.php
+@@ -0,0 +1,26 @@
++<?php
++
++namespace App\Actions\Personality;
++
++use App\Repositories\PersonalityRepository;
++use Illuminate\Database\Eloquent\Collection;
++use Illuminate\Support\Facades\Cache;
++
++class GetPersonalitiesAction
++{
++    public function __construct(
++        private readonly PersonalityRepository $repository,
++    ) {}
++
++    public function execute(bool $activeOnly = true): Collection
++    {
++        $locale = app()->getLocale();
++        $key = "personalities_{$locale}_".($activeOnly ? 'active' : 'all');
++
++        return Cache::tags(['personalities'])->remember(
++            $key,
++            now()->addHour(),
++            fn () => $this->repository->getAll($activeOnly)
++        );
++    }
++}
+diff --git a/app/Actions/Personality/UpdatePersonalityAction.php b/app/Actions/Personality/UpdatePersonalityAction.php
+new file mode 100644
+index 0000000..1bd60eb
+--- /dev/null
++++ b/app/Actions/Personality/UpdatePersonalityAction.php
+@@ -0,0 +1,46 @@
++<?php
++
++namespace App\Actions\Personality;
++
++use App\DTOs\Personality\UpdatePersonalityDTO;
++use App\Models\Personality;
++use App\Repositories\PersonalityRepository;
++use App\Services\ImageService;
++use Illuminate\Support\Arr;
++use Illuminate\Support\Facades\Cache;
++
++class UpdatePersonalityAction
++{
++    public function __construct(
++        private readonly PersonalityRepository $repository,
++        private readonly ImageService $imageService,
++    ) {}
++
++    public function execute(int $id, UpdatePersonalityDTO $dto): Personality
++    {
++        $data = Arr::whereNotNull([
++            'name_ar' => $dto->name_ar,
++            'name_en' => $dto->name_en,
++            'order' => $dto->order,
++            'is_active' => $dto->is_active,
++        ]);
++
++        if ($dto->image) {
++            $existing = $this->repository->getById($id);
++
++            if ($existing->image_path) {
++                $this->imageService->delete($existing->image_path);
++            }
++
++            $stored = $this->imageService->store($dto->image, 'personalities');
++            $data['image_path'] = $stored['path'];
++            $data['image_url'] = $stored['url'];
++        }
++
++        $personality = $this->repository->update($id, $data);
++
++        Cache::tags(['personalities'])->flush();
++
++        return $personality;
++    }
++}
+diff --git a/app/DTOs/Personality/CreatePersonalityDTO.php b/app/DTOs/Personality/CreatePersonalityDTO.php
+new file mode 100644
+index 0000000..4a78112
+--- /dev/null
++++ b/app/DTOs/Personality/CreatePersonalityDTO.php
+@@ -0,0 +1,28 @@
++<?php
++
++namespace App\DTOs\Personality;
++
++use Illuminate\Http\Request;
++use Illuminate\Http\UploadedFile;
++
++class CreatePersonalityDTO
++{
++    public function __construct(
++        public readonly string $name_ar,
++        public readonly string $name_en,
++        public readonly ?UploadedFile $image,
++        public readonly int $order,
++        public readonly bool $is_active,
++    ) {}
++
++    public static function fromRequest(Request $request): self
++    {
++        return new self(
++            name_ar: $request->string('name_ar')->toString(),
++            name_en: $request->string('name_en')->toString(),
++            image: $request->file('image'),
++            order: (int) $request->input('order', 0),
++            is_active: $request->boolean('is_active', true),
++        );
++    }
++}
+diff --git a/app/DTOs/Personality/UpdatePersonalityDTO.php b/app/DTOs/Personality/UpdatePersonalityDTO.php
+new file mode 100644
+index 0000000..93cf3b4
+--- /dev/null
++++ b/app/DTOs/Personality/UpdatePersonalityDTO.php
+@@ -0,0 +1,28 @@
++<?php
++
++namespace App\DTOs\Personality;
++
++use Illuminate\Http\Request;
++use Illuminate\Http\UploadedFile;
++
++class UpdatePersonalityDTO
++{
++    public function __construct(
++        public readonly ?string $name_ar,
++        public readonly ?string $name_en,
++        public readonly ?UploadedFile $image,
++        public readonly ?int $order,
++        public readonly ?bool $is_active,
++    ) {}
++
++    public static function fromRequest(Request $request): self
++    {
++        return new self(
++            name_ar: $request->filled('name_ar') ? $request->string('name_ar')->toString() : null,
++            name_en: $request->filled('name_en') ? $request->string('name_en')->toString() : null,
++            image: $request->file('image'),
++            order: $request->filled('order') ? (int) $request->input('order') : null,
++            is_active: $request->has('is_active') ? $request->boolean('is_active') : null,
++        );
++    }
++}
+diff --git a/app/Http/Controllers/Admin/PersonalityController.php b/app/Http/Controllers/Admin/PersonalityController.php
+new file mode 100644
+index 0000000..2cb0a26
+--- /dev/null
++++ b/app/Http/Controllers/Admin/PersonalityController.php
+@@ -0,0 +1,44 @@
 +<?php
 +
 +namespace App\Http\Controllers\Admin;
 +
++use App\Actions\Personality\CreatePersonalityAction;
++use App\Actions\Personality\DeletePersonalityAction;
++use App\Actions\Personality\GetPersonalitiesAction;
++use App\Actions\Personality\UpdatePersonalityAction;
++use App\DTOs\Personality\CreatePersonalityDTO;
++use App\DTOs\Personality\UpdatePersonalityDTO;
 +use App\Http\Controllers\Controller;
-+use App\Models\Setting;
++use App\Http\Requests\Personality\StorePersonalityRequest;
++use App\Http\Requests\Personality\UpdatePersonalityRequest;
++use App\Http\Resources\Personality\PersonalityResource;
 +use Illuminate\Http\JsonResponse;
-+use Illuminate\Http\Request;
-+use Illuminate\Support\Facades\Storage;
 +
-+class MenuPdfController extends Controller
++class PersonalityController extends Controller
 +{
-+    private const SETTING_KEY = 'menu_pdf_path';
-+
-+    private const STORAGE_PATH = 'menu/menu.pdf';
-+
-+    public function show(): JsonResponse
++    public function index(GetPersonalitiesAction $action): JsonResponse
 +    {
-+        return $this->success($this->payload(), __('messages.fetched'));
++        return $this->success(PersonalityResource::collection($action->execute(activeOnly: false)), __('messages.fetched'));
 +    }
 +
-+    public function upload(Request $request): JsonResponse
++    public function store(StorePersonalityRequest $request, CreatePersonalityAction $action): JsonResponse
 +    {
-+        $request->validate([
-+            'pdf' => ['required', 'file', 'mimes:pdf', 'max:20480'],
-+        ]);
++        $personality = $action->execute(CreatePersonalityDTO::fromRequest($request));
 +
-+        $oldPath = $this->storedPath();
-+
-+        if ($oldPath && $oldPath !== self::STORAGE_PATH && Storage::disk('public')->exists($oldPath)) {
-+            Storage::disk('public')->delete($oldPath);
-+        }
-+
-+        // Fixed filename so re-uploads overwrite in place and the public URL never moves.
-+        $path = $request->file('pdf')->storeAs('menu', 'menu.pdf', 'public');
-+
-+        Setting::updateOrCreate(
-+            ['key' => self::SETTING_KEY],
-+            [
-+                'value' => $path,
-+                'type' => 'text',
-+                'group' => 'general',
-+                'label_ar' => 'ملف قائمة الطعام PDF',
-+                'label_en' => 'Menu PDF File',
-+            ],
-+        );
-+
-+        return $this->success($this->payload(), __('messages.uploaded'));
++        return $this->created(new PersonalityResource($personality), __('messages.created'));
 +    }
 +
-+    public function destroy(): JsonResponse
++    public function update(UpdatePersonalityRequest $request, int $id, UpdatePersonalityAction $action): JsonResponse
 +    {
-+        $path = $this->storedPath();
++        $personality = $action->execute($id, UpdatePersonalityDTO::fromRequest($request));
 +
-+        if ($path && Storage::disk('public')->exists($path)) {
-+            Storage::disk('public')->delete($path);
-+        }
++        return $this->success(new PersonalityResource($personality), __('messages.updated'));
++    }
 +
-+        Setting::updateOrCreate(
-+            ['key' => self::SETTING_KEY],
-+            ['value' => '', 'type' => 'text', 'group' => 'general'],
-+        );
++    public function destroy(int $id, DeletePersonalityAction $action): JsonResponse
++    {
++        $action->execute($id);
 +
 +        return $this->deleted(__('messages.deleted'));
 +    }
-+
-+    private function storedPath(): ?string
-+    {
-+        $path = Setting::where('key', self::SETTING_KEY)->value('value');
-+
-+        return $path !== '' ? $path : null;
-+    }
-+
-+    private function payload(): array
-+    {
-+        $path = $this->storedPath();
-+
-+        return [
-+            'has_pdf' => $path !== null && Storage::disk('public')->exists($path),
-+            'permanent_url' => route('menu.pdf'),
-+            'qr_url' => route('menu.qr'),
-+            'qr_download' => route('menu.qr.download'),
-+        ];
-+    }
 +}
-diff --git a/app/Services/MenuQrService.php b/app/Services/MenuQrService.php
+diff --git a/app/Http/Controllers/Public/PersonalityController.php b/app/Http/Controllers/Public/PersonalityController.php
 new file mode 100644
-index 0000000..9e8964e
+index 0000000..2c480f1
 --- /dev/null
-+++ b/app/Services/MenuQrService.php
-@@ -0,0 +1,51 @@
++++ b/app/Http/Controllers/Public/PersonalityController.php
+@@ -0,0 +1,18 @@
 +<?php
 +
-+namespace App\Services;
++namespace App\Http\Controllers\Public;
 +
-+use App\Models\MediaItem;
-+use Endroid\QrCode\Builder\Builder;
-+use Endroid\QrCode\Color\Color;
-+use Endroid\QrCode\ErrorCorrectionLevel;
-+use Endroid\QrCode\Writer\PngWriter;
-+use Illuminate\Support\Facades\Storage;
++use App\Actions\Personality\GetPersonalitiesAction;
++use App\Http\Controllers\Controller;
++use App\Http\Resources\Personality\PersonalityResource;
++use Illuminate\Http\JsonResponse;
 +
-+class MenuQrService
++class PersonalityController extends Controller
 +{
-+    /** Share of the QR width the logo may cover; beyond ~0.3 the code stops scanning. */
-+    private const LOGO_RATIO = 0.25;
-+
-+    public function png(int $size = 500): string
++    public function index(GetPersonalitiesAction $action): JsonResponse
 +    {
-+        $arguments = [
-+            'writer' => new PngWriter(),
-+            'data' => route('menu.pdf'),
-+            'errorCorrectionLevel' => ErrorCorrectionLevel::High,
-+            'size' => $size,
-+            'margin' => 10,
-+            'foregroundColor' => new Color(26, 23, 0),
-+            'backgroundColor' => new Color(246, 239, 223),
-+        ];
++        $personalities = $action->execute(activeOnly: true);
 +
-+        if ($logoPath = $this->logoPath()) {
-+            $arguments['logoPath'] = $logoPath;
-+            $arguments['logoResizeToWidth'] = (int) round($size * self::LOGO_RATIO);
-+            $arguments['logoPunchoutBackground'] = true;
-+        }
-+
-+        return (new Builder(...$arguments))->build()->getString();
-+    }
-+
-+    private function logoPath(): ?string
-+    {
-+        $logo = MediaItem::where('page', 'global')
-+            ->where('section', 'brand')
-+            ->where('key', 'logo_dark')
-+            ->first();
-+
-+        if (! $logo?->path || ! Storage::disk('public')->exists($logo->path)) {
-+            return null;
-+        }
-+
-+        return Storage::disk('public')->path($logo->path);
++        return $this->success(PersonalityResource::collection($personalities), __('messages.fetched'));
 +    }
 +}
-diff --git a/composer.json b/composer.json
-index 22f512c..e918d6c 100644
---- a/composer.json
-+++ b/composer.json
-@@ -8,6 +8,7 @@
-     "require": {
-         "php": "^8.2",
-         "dedoc/scramble": "^0.13.35",
-+        "endroid/qr-code": "^6.1",
-         "intervention/image-laravel": "^4.0",
-         "laravel/framework": "^12.0",
-         "laravel/sanctum": "^4.3",
-diff --git a/composer.lock b/composer.lock
-index 0c7e622..3e15ab9 100644
---- a/composer.lock
-+++ b/composer.lock
-@@ -4,8 +4,63 @@
-         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
-         "This file is @generated automatically"
-     ],
--    "content-hash": "dff99565e3ff109e79a99c0b7f2355c8",
-+    "content-hash": "1bfb9fd34baa28b29ca3a908ea004b57",
-     "packages": [
-+        {
-+            "name": "bacon/bacon-qr-code",
-+            "version": "v3.1.1",
-+            "source": {
-+                "type": "git",
-+                "url": "https://github.com/Bacon/BaconQrCode.git",
-+                "reference": "4da2233e72eeecd9be3b62e0dc2cc9ed8e2e31c2"
-+            },
-+            "dist": {
-+                "type": "zip",
-+                "url": "https://api.github.com/repos/Bacon/BaconQrCode/zipball/4da2233e72eeecd9be3b62e0dc2cc9ed8e2e31c2",
-+                "reference": "4da2233e72eeecd9be3b62e0dc2cc9ed8e2e31c2",
-+                "shasum": ""
-+            },
-+            "require": {
-+                "dasprid/enum": "^1.0.3",
-+                "ext-iconv": "*",
-+                "php": "^8.1"
-+            },
-+            "require-dev": {
-+                "phly/keep-a-changelog": "^2.12",
-+                "phpunit/phpunit": "^10.5.11 || ^11.0.4",
-+                "spatie/phpunit-snapshot-assertions": "^5.1.5",
-+                "spatie/pixelmatch-php": "^1.2.0",
-+                "squizlabs/php_codesniffer": "^3.9"
-+            },
-+            "suggest": {
-+                "ext-imagick": "to generate QR code images"
-+            },
-+            "type": "library",
-+            "autoload": {
-+                "psr-4": {
-+                    "BaconQrCode\\": "src/"
-+                }
-+            },
-+            "notification-url": "https://packagist.org/downloads/",
-+            "license": [
-+                "BSD-2-Clause"
-+            ],
-+            "authors": [
-+                {
-+                    "name": "Ben Scholzen 'DASPRiD'",
-+                    "email": "mail@dasprids.de",
-+                    "homepage": "https://dasprids.de/",
-+                    "role": "Developer"
-+                }
-+            ],
-+            "description": "BaconQrCode is a QR code generator for PHP.",
-+            "homepage": "https://github.com/Bacon/BaconQrCode",
-+            "support": {
-+                "issues": "https://github.com/Bacon/BaconQrCode/issues",
-+                "source": "https://github.com/Bacon/BaconQrCode/tree/v3.1.1"
-+            },
-+            "time": "2026-04-05T21:06:35+00:00"
-+        },
-         {
-             "name": "brick/math",
-             "version": "0.14.8",
-@@ -135,6 +190,56 @@
-             ],
-             "time": "2024-02-09T16:56:22+00:00"
-         },
-+        {
-+            "name": "dasprid/enum",
-+            "version": "1.0.7",
-+            "source": {
-+                "type": "git",
-+                "url": "https://github.com/DASPRiD/Enum.git",
-+                "reference": "b5874fa9ed0043116c72162ec7f4fb50e02e7cce"
-+            },
-+            "dist": {
-+                "type": "zip",
-+                "url": "https://api.github.com/repos/DASPRiD/Enum/zipball/b5874fa9ed0043116c72162ec7f4fb50e02e7cce",
-+                "reference": "b5874fa9ed0043116c72162ec7f4fb50e02e7cce",
-+                "shasum": ""
-+            },
-+            "require": {
-+                "php": ">=7.1 <9.0"
-+            },
-+            "require-dev": {
-+                "phpunit/phpunit": "^7 || ^8 || ^9 || ^10 || ^11",
-+                "squizlabs/php_codesniffer": "*"
-+            },
-+            "type": "library",
-+            "autoload": {
-+                "psr-4": {
-+                    "DASPRiD\\Enum\\": "src/"
-+                }
-+            },
-+            "notification-url": "https://packagist.org/downloads/",
-+            "license": [
-+                "BSD-2-Clause"
-+            ],
-+            "authors": [
-+                {
-+                    "name": "Ben Scholzen 'DASPRiD'",
-+                    "email": "mail@dasprids.de",
-+                    "homepage": "https://dasprids.de/",
-+                    "role": "Developer"
-+                }
-+            ],
-+            "description": "PHP 7.1 enum implementation",
-+            "keywords": [
-+                "enum",
-+                "map"
-+            ],
-+            "support": {
-+                "issues": "https://github.com/DASPRiD/Enum/issues",
-+                "source": "https://github.com/DASPRiD/Enum/tree/1.0.7"
-+            },
-+            "time": "2025-09-16T12:23:56+00:00"
-+        },
-         {
-             "name": "dedoc/scramble",
-             "version": "v0.13.35",
-@@ -589,6 +694,78 @@
-             ],
-             "time": "2025-03-06T22:45:56+00:00"
-         },
-+        {
-+            "name": "endroid/qr-code",
-+            "version": "6.1.3",
-+            "source": {
-+                "type": "git",
-+                "url": "https://github.com/endroid/qr-code.git",
-+                "reference": "5fa534856ed95649d67c0eab0cabc03ab1d8e0e2"
-+            },
-+            "dist": {
-+                "type": "zip",
-+                "url": "https://api.github.com/repos/endroid/qr-code/zipball/5fa534856ed95649d67c0eab0cabc03ab1d8e0e2",
-+                "reference": "5fa534856ed95649d67c0eab0cabc03ab1d8e0e2",
-+                "shasum": ""
-+            },
-+            "require": {
-+                "bacon/bacon-qr-code": "^3.0",
-+                "php": "^8.4"
-+            },
-+            "require-dev": {
-+                "endroid/quality": "dev-main",
-+                "ext-gd": "*",
-+                "khanamiryan/qrcode-detector-decoder": "^2.0.3",
-+                "setasign/fpdf": "^1.8.2"
-+            },
-+            "suggest": {
-+                "ext-gd": "Enables you to write PNG images",
-+                "khanamiryan/qrcode-detector-decoder": "Enables you to use the image validator",
-+                "roave/security-advisories": "Makes sure package versions with known security issues are not installed",
-+                "setasign/fpdf": "Enables you to use the PDF writer"
-+            },
-+            "type": "library",
-+            "extra": {
-+                "branch-alias": {
-+                    "dev-main": "6.x-dev"
-+                }
-+            },
-+            "autoload": {
-+                "psr-4": {
-+                    "Endroid\\QrCode\\": "src/"
-+                }
-+            },
-+            "notification-url": "https://packagist.org/downloads/",
-+            "license": [
-+                "MIT"
-+            ],
-+            "authors": [
-+                {
-+                    "name": "Jeroen van den Enden",
-+                    "email": "info@endroid.nl"
-+                }
-+            ],
-+            "description": "Endroid QR Code",
-+            "homepage": "https://github.com/endroid/qr-code",
-+            "keywords": [
-+                "code",
-+                "endroid",
-+                "php",
-+                "qr",
-+                "qrcode"
-+            ],
-+            "support": {
-+                "issues": "https://github.com/endroid/qr-code/issues",
-+                "source": "https://github.com/endroid/qr-code/tree/6.1.3"
-+            },
-+            "funding": [
-+                {
-+                    "url": "https://github.com/endroid",
-+                    "type": "github"
-+                }
-+            ],
-+            "time": "2026-02-05T07:01:58+00:00"
-+        },
-         {
-             "name": "fruitcake/php-cors",
-             "version": "v1.4.0",
-diff --git a/database/seeders/SettingSeeder.php b/database/seeders/SettingSeeder.php
-index 85d0338..f068d73 100644
---- a/database/seeders/SettingSeeder.php
-+++ b/database/seeders/SettingSeeder.php
-@@ -29,10 +29,11 @@ public function run(): void
-             ['key' => 'footer_copyright', 'value' => '© 2026 أبو السيد. جميع الحقوق محفوظة.', 'type' => 'text', 'group' => 'footer', 'label_ar' => 'نص الحقوق', 'label_en' => 'Copyright Text'],
-             ['key' => 'navbar_cta_ar', 'value' => 'اطلب أونلاين', 'type' => 'text', 'group' => 'navbar', 'label_ar' => 'زر الهيدر (عربي)', 'label_en' => 'Navbar CTA (Arabic)'],
-             ['key' => 'navbar_cta_en', 'value' => 'Order Online', 'type' => 'text', 'group' => 'navbar', 'label_ar' => 'زر الهيدر (إنجليزي)', 'label_en' => 'Navbar CTA (English)'],
-+            ['key' => 'menu_pdf_path', 'value' => '', 'type' => 'text', 'group' => 'general', 'label_ar' => 'ملف قائمة الطعام PDF', 'label_en' => 'Menu PDF File'],
-         ];
+diff --git a/app/Http/Requests/Personality/StorePersonalityRequest.php b/app/Http/Requests/Personality/StorePersonalityRequest.php
+new file mode 100644
+index 0000000..6ae16a8
+--- /dev/null
++++ b/app/Http/Requests/Personality/StorePersonalityRequest.php
+@@ -0,0 +1,24 @@
++<?php
++
++namespace App\Http\Requests\Personality;
++
++use App\Http\Requests\BaseFormRequest;
++
++class StorePersonalityRequest extends BaseFormRequest
++{
++    public function authorize(): bool
++    {
++        return true;
++    }
++
++    public function rules(): array
++    {
++        return [
++            'name_ar' => ['required', 'string', 'max:200'],
++            'name_en' => ['required', 'string', 'max:200'],
++            'image' => ['nullable', 'file', 'mimes:jpg,jpeg,png,webp', 'max:5120'],
++            'order' => ['integer', 'min:0'],
++            'is_active' => ['boolean'],
++        ];
++    }
++}
+diff --git a/app/Http/Requests/Personality/UpdatePersonalityRequest.php b/app/Http/Requests/Personality/UpdatePersonalityRequest.php
+new file mode 100644
+index 0000000..7ae130b
+--- /dev/null
++++ b/app/Http/Requests/Personality/UpdatePersonalityRequest.php
+@@ -0,0 +1,24 @@
++<?php
++
++namespace App\Http\Requests\Personality;
++
++use App\Http\Requests\BaseFormRequest;
++
++class UpdatePersonalityRequest extends BaseFormRequest
++{
++    public function authorize(): bool
++    {
++        return true;
++    }
++
++    public function rules(): array
++    {
++        return [
++            'name_ar' => ['nullable', 'string', 'max:200'],
++            'name_en' => ['nullable', 'string', 'max:200'],
++            'image' => ['nullable', 'file', 'mimes:jpg,jpeg,png,webp', 'max:5120'],
++            'order' => ['nullable', 'integer', 'min:0'],
++            'is_active' => ['nullable', 'boolean'],
++        ];
++    }
++}
+diff --git a/app/Http/Resources/Personality/PersonalityResource.php b/app/Http/Resources/Personality/PersonalityResource.php
+new file mode 100644
+index 0000000..a167e12
+--- /dev/null
++++ b/app/Http/Resources/Personality/PersonalityResource.php
+@@ -0,0 +1,26 @@
++<?php
++
++namespace App\Http\Resources\Personality;
++
++use App\Http\Resources\Concerns\ResolvesLocale;
++use Illuminate\Http\Request;
++use Illuminate\Http\Resources\Json\JsonResource;
++
++class PersonalityResource extends JsonResource
++{
++    use ResolvesLocale;
++
++    public function toArray(Request $request): array
++    {
++        return [
++            'id' => $this->id,
++            'name' => $this->resolveLocale($this->name_ar, $this->name_en),
++            'name_ar' => $this->name_ar,
++            'name_en' => $this->name_en,
++            'image_url' => $this->image_url,
++            'order' => $this->order,
++            'is_active' => $this->is_active,
++            'locale' => app()->getLocale(),
++        ];
++    }
++}
+diff --git a/app/Models/Personality.php b/app/Models/Personality.php
+new file mode 100644
+index 0000000..30ead1f
+--- /dev/null
++++ b/app/Models/Personality.php
+@@ -0,0 +1,21 @@
++<?php
++
++namespace App\Models;
++
++use Illuminate\Database\Eloquent\Model;
++
++class Personality extends Model
++{
++    protected $fillable = [
++        'name_ar',
++        'name_en',
++        'image_path',
++        'image_url',
++        'order',
++        'is_active',
++    ];
++
++    protected $casts = [
++        'is_active' => 'boolean',
++    ];
++}
+diff --git a/app/Repositories/PersonalityRepository.php b/app/Repositories/PersonalityRepository.php
+new file mode 100644
+index 0000000..347bedd
+--- /dev/null
++++ b/app/Repositories/PersonalityRepository.php
+@@ -0,0 +1,43 @@
++<?php
++
++namespace App\Repositories;
++
++use App\Models\Personality;
++use Illuminate\Database\Eloquent\Collection;
++
++class PersonalityRepository
++{
++    public function getAll(bool $activeOnly = true): Collection
++    {
++        $query = Personality::orderBy('order');
++
++        if ($activeOnly) {
++            $query->where('is_active', true);
++        }
++
++        return $query->get();
++    }
++
++    public function getById(int $id): Personality
++    {
++        return Personality::findOrFail($id);
++    }
++
++    public function create(array $data): Personality
++    {
++        return Personality::create($data);
++    }
++
++    public function update(int $id, array $data): Personality
++    {
++        $personality = Personality::findOrFail($id);
++        $personality->update($data);
++
++        return $personality;
++    }
++
++    public function delete(int $id): void
++    {
++        Personality::findOrFail($id)->delete();
++    }
++}
+diff --git a/database/migrations/2026_07_25_144324_create_personalities_table.php b/database/migrations/2026_07_25_144324_create_personalities_table.php
+new file mode 100644
+index 0000000..d203555
+--- /dev/null
++++ b/database/migrations/2026_07_25_144324_create_personalities_table.php
+@@ -0,0 +1,33 @@
++<?php
++
++use Illuminate\Database\Migrations\Migration;
++use Illuminate\Database\Schema\Blueprint;
++use Illuminate\Support\Facades\Schema;
++
++return new class extends Migration
++{
++    /**
++     * Run the migrations.
++     */
++    public function up(): void
++    {
++        Schema::create('personalities', function (Blueprint $table) {
++            $table->id();
++            $table->string('name_ar', 200);
++            $table->string('name_en', 200);
++            $table->string('image_path', 500)->nullable();
++            $table->string('image_url', 500)->nullable();
++            $table->integer('order')->default(0);
++            $table->boolean('is_active')->default(true);
++            $table->timestamps();
++        });
++    }
++
++    /**
++     * Reverse the migrations.
++     */
++    public function down(): void
++    {
++        Schema::dropIfExists('personalities');
++    }
++};
+diff --git a/database/seeders/DatabaseSeeder.php b/database/seeders/DatabaseSeeder.php
+index ac67ede..3e74bf0 100644
+--- a/database/seeders/DatabaseSeeder.php
++++ b/database/seeders/DatabaseSeeder.php
+@@ -23,6 +23,7 @@ public function run(): void
+             SampleMenuSeeder::class,
+             TestimonialSeeder::class,
+             TimelineSeeder::class,
++            PersonalitySeeder::class,
+             DeliveryAppSeeder::class,
+             PageContentSeeder::class,
+             SettingSeeder::class,
+diff --git a/database/seeders/PageContentSeeder.php b/database/seeders/PageContentSeeder.php
+index 8d6e245..0b20d4b 100644
+--- a/database/seeders/PageContentSeeder.php
++++ b/database/seeders/PageContentSeeder.php
+@@ -58,6 +58,8 @@ public function run(): void
+             ['page' => 'story', 'section' => 'journey', 'key' => 'badge', 'value_ar' => 'رحلتنا · OUR JOURNEY', 'value_en' => 'Our Journey · OUR JOURNEY'],
+             ['page' => 'story', 'section' => 'journey', 'key' => 'title', 'value_ar' => 'رحلتنا', 'value_en' => 'Our Journey'],
+             ['page' => 'story', 'section' => 'journey', 'key' => 'subtitle', 'value_ar' => 'من القاهرة القديمة، إلى ساحل البحر الأحمر، إلى قلب الرياض.', 'value_en' => 'From Old Cairo, to the Red Sea coast, to the heart of Riyadh.'],
++            ['page' => 'story', 'section' => 'personalities', 'key' => 'badge', 'type' => 'text', 'value_ar' => 'الزمن الجميل · GOLDEN ERA', 'value_en' => 'Golden Era · GOLDEN ERA'],
++            ['page' => 'story', 'section' => 'personalities', 'key' => 'title', 'type' => 'text', 'value_ar' => 'وجوهٌ أحبّت الموائد', 'value_en' => 'Faces Who Loved the Table'],
  
-         foreach ($settings as $setting) {
--            Setting::create($setting);
-+            Setting::updateOrCreate(['key' => $setting['key']], $setting);
-         }
-     }
- }
+             // ── MENU PAGE ────────────────────────────────────────────
+             ['page' => 'menu', 'section' => 'hero', 'key' => 'badge', 'value_ar' => 'أطباقنا · OUR MENU', 'value_en' => 'Our Menu · OUR MENU'],
+diff --git a/database/seeders/PersonalitySeeder.php b/database/seeders/PersonalitySeeder.php
+new file mode 100644
+index 0000000..d73b322
+--- /dev/null
++++ b/database/seeders/PersonalitySeeder.php
+@@ -0,0 +1,27 @@
++<?php
++
++namespace Database\Seeders;
++
++use App\Models\Personality;
++use Illuminate\Database\Seeder;
++
++class PersonalitySeeder extends Seeder
++{
++    public function run(): void
++    {
++        $personalities = [
++            ['name_ar' => 'أم كلثوم', 'name_en' => 'Umm Kulthum', 'order' => 1],
++            ['name_ar' => 'فاتن حمامة', 'name_en' => 'Faten Hamama', 'order' => 2],
++            ['name_ar' => 'نجيب الريحاني', 'name_en' => 'Naguib El-Rihani', 'order' => 3],
++            ['name_ar' => 'هند رستم', 'name_en' => 'Hind Rostom', 'order' => 4],
++            ['name_ar' => 'لبنى عبد العزيز', 'name_en' => 'Lubna Abdel Aziz', 'order' => 5],
++        ];
++
++        foreach ($personalities as $personality) {
++            Personality::updateOrCreate(
++                ['name_ar' => $personality['name_ar']],
++                $personality
++            );
++        }
++    }
++}
 diff --git a/routes/admin.php b/routes/admin.php
-index d98221f..20f4557 100644
+index 6462b9f..e2f8f8a 100644
 --- a/routes/admin.php
 +++ b/routes/admin.php
-@@ -10,6 +10,7 @@
- use App\Http\Controllers\Admin\DeliveryAppController;
+@@ -11,6 +11,7 @@
  use App\Http\Controllers\Admin\DishController;
  use App\Http\Controllers\Admin\MediaItemController;
-+use App\Http\Controllers\Admin\MenuPdfController;
  use App\Http\Controllers\Admin\PageContentController;
- use App\Http\Controllers\Admin\PersonalityController;
++use App\Http\Controllers\Admin\PersonalityController;
  use App\Http\Controllers\Admin\ProfileController;
-@@ -177,5 +178,12 @@
-             Route::get('/', 'show');
-             Route::put('/', 'update');
+ use App\Http\Controllers\Admin\SettingController;
+ use App\Http\Controllers\Admin\TestimonialController;
+@@ -71,7 +72,7 @@
+             Route::get('/',        'index');
+             Route::post('/',       'store');
+             Route::get('/{id}',    'show');
+-            Route::post('/{id}',   'update');
++            Route::put('/{id}',   'update');
+             Route::delete('/{id}', 'destroy');
          });
-+
-+        // ── Menu PDF ──────────────────────────────────────
-+        Route::prefix('menu')->controller(MenuPdfController::class)->group(function () {
-+            Route::get('pdf',    'show');
-+            Route::post('pdf',   'upload');
-+            Route::delete('pdf', 'destroy');
+ 
+@@ -88,7 +89,7 @@
+             Route::get('/',        'index');
+             Route::post('/',       'store');
+             Route::get('/{id}',    'show');
+-            Route::post('/{id}',   'update');
++            Route::put('/{id}',   'update');
+             Route::delete('/{id}', 'destroy');
+         });
+ 
+@@ -98,7 +99,7 @@
+             ->group(function () {
+                 Route::get('/',        'index');
+                 Route::post('/',       'store');
+-                Route::post('/{id}',   'update');
++                Route::put('/{id}',   'update');
+                 Route::delete('/{id}', 'destroy');
+             });
+ 
+@@ -108,7 +109,7 @@
+             ->group(function () {
+                 Route::get('/',        'index');
+                 Route::post('/',       'store');
+-                Route::post('/{id}',   'update');
++                Route::put('/{id}',   'update');
+                 Route::delete('/{id}', 'destroy');
+             });
+ 
+@@ -137,6 +138,14 @@
+             Route::delete('/{id}', 'destroy');
+         });
+ 
++        // ── Personalities ─────────────────────────────────
++        Route::prefix('personalities')->controller(PersonalityController::class)->group(function () {
++            Route::get('/',        'index');
++            Route::post('/',       'store');
++            Route::put('/{id}',    'update');
++            Route::delete('/{id}', 'destroy');
 +        });
++
+         // ── Delivery Apps ─────────────────────────────────
+         Route::prefix('delivery-apps')->controller(DeliveryAppController::class)->group(function () {
+             Route::get('/',        'index');
+diff --git a/routes/api.php b/routes/api.php
+index 6dbba22..00b6d86 100644
+--- a/routes/api.php
++++ b/routes/api.php
+@@ -6,6 +6,7 @@
+ use App\Http\Controllers\Public\DishController;
+ use App\Http\Controllers\Public\MediaItemController;
+ use App\Http\Controllers\Public\PageContentController;
++use App\Http\Controllers\Public\PersonalityController;
+ use App\Http\Controllers\Public\SettingController;
+ use App\Http\Controllers\Public\TestimonialController;
+ use App\Http\Controllers\Public\TimelineController;
+@@ -80,6 +81,11 @@
+         Route::get('/', 'index');
      });
- });
-diff --git a/routes/web.php b/routes/web.php
-index 86a06c5..8832b7a 100644
---- a/routes/web.php
-+++ b/routes/web.php
-@@ -1,7 +1,45 @@
- <?php
  
-+use App\Models\Setting;
-+use App\Services\MenuQrService;
- use Illuminate\Support\Facades\Route;
-+use Illuminate\Support\Facades\Storage;
- 
- Route::get('/', function () {
-     return view('welcome');
- });
++    // ── Personalities ─────────────────────────────────────
++    Route::prefix('personalities')->controller(PersonalityController::class)->group(function () {
++        Route::get('/', 'index');
++    });
 +
-+// Permanent menu PDF URL — the target the printed QR code points at, so it must
-+// keep working across re-uploads. The stored path is looked up per request.
-+Route::get('/menu/pdf', function () {
-+    $path = Setting::where('key', 'menu_pdf_path')->value('value');
-+
-+    if (! $path || ! Storage::disk('public')->exists($path)) {
-+        abort(404, 'Menu PDF not available yet.');
-+    }
-+
-+    return response()->file(
-+        Storage::disk('public')->path($path),
-+        [
-+            'Content-Type' => 'application/pdf',
-+            'Content-Disposition' => 'inline; filename="abouelsid-menu.pdf"',
-+        ],
-+    );
-+})->name('menu.pdf');
-+
-+// QR code pointing at the permanent PDF URL, rendered on demand so it always
-+// reflects the current brand logo.
-+Route::get('/menu/qr', function (MenuQrService $qr) {
-+    return response($qr->png(500), 200, [
-+        'Content-Type' => 'image/png',
-+        'Cache-Control' => 'public, max-age=3600',
-+    ]);
-+})->name('menu.qr');
-+
-+// High-resolution variant for print.
-+Route::get('/menu/qr/download', function (MenuQrService $qr) {
-+    return response($qr->png(1000), 200, [
-+        'Content-Type' => 'image/png',
-+        'Content-Disposition' => 'attachment; filename="abouelsid-menu-qr.png"',
-+    ]);
-+})->name('menu.qr.download');
-diff --git a/tests/Feature/MenuPdfTest.php b/tests/Feature/MenuPdfTest.php
-new file mode 100644
-index 0000000..48f635c
---- /dev/null
-+++ b/tests/Feature/MenuPdfTest.php
-@@ -0,0 +1,154 @@
-+<?php
-+
-+namespace Tests\Feature;
-+
-+use App\Models\MediaItem;
-+use App\Models\Setting;
-+use App\Models\User;
-+use Illuminate\Foundation\Testing\RefreshDatabase;
-+use Illuminate\Http\UploadedFile;
-+use Illuminate\Support\Facades\Storage;
-+use Laravel\Sanctum\Sanctum;
-+use Tests\TestCase;
-+
-+class MenuPdfTest extends TestCase
-+{
-+    use RefreshDatabase;
-+
-+    protected function setUp(): void
-+    {
-+        parent::setUp();
-+
-+        Storage::fake('public');
-+
-+        Setting::create([
-+            'key' => 'menu_pdf_path', 'value' => '', 'type' => 'text', 'group' => 'general',
-+            'label_ar' => 'ملف قائمة الطعام PDF', 'label_en' => 'Menu PDF File',
-+        ]);
-+    }
-+
-+    private function actingAsAdmin(): void
-+    {
-+        Sanctum::actingAs(User::create([
-+            'name' => 'Admin', 'email' => 'admin@example.com',
-+            'password' => 'secret', 'role' => 'super_admin',
-+        ]));
-+    }
-+
-+    private function pdf(string $name = 'menu.pdf'): UploadedFile
-+    {
-+        return UploadedFile::fake()->create($name, 120, 'application/pdf');
-+    }
-+
-+    public function test_permanent_url_returns_404_before_any_upload(): void
-+    {
-+        $this->get('/menu/pdf')->assertNotFound();
-+    }
-+
-+    public function test_admin_can_upload_and_the_permanent_url_serves_the_pdf(): void
-+    {
-+        $this->actingAsAdmin();
-+
-+        $this->postJson('/api/v1/admin/menu/pdf', ['pdf' => $this->pdf()])
-+            ->assertOk()
-+            ->assertJsonPath('data.has_pdf', true)
-+            ->assertJsonPath('data.permanent_url', url('/menu/pdf'));
-+
-+        Storage::disk('public')->assertExists('menu/menu.pdf');
-+
-+        $this->get('/menu/pdf')
-+            ->assertOk()
-+            ->assertHeader('content-type', 'application/pdf');
-+    }
-+
-+    public function test_reupload_keeps_the_same_permanent_url(): void
-+    {
-+        $this->actingAsAdmin();
-+
-+        $first = $this->postJson('/api/v1/admin/menu/pdf', ['pdf' => $this->pdf()])
-+            ->json('data.permanent_url');
-+
-+        $second = $this->postJson('/api/v1/admin/menu/pdf', ['pdf' => $this->pdf('updated.pdf')])
-+            ->json('data.permanent_url');
-+
-+        $this->assertSame($first, $second);
-+        $this->assertSame('menu/menu.pdf', Setting::where('key', 'menu_pdf_path')->value('value'));
-+    }
-+
-+    public function test_upload_rejects_non_pdf(): void
-+    {
-+        $this->actingAsAdmin();
-+
-+        $this->postJson('/api/v1/admin/menu/pdf', ['pdf' => UploadedFile::fake()->image('menu.jpg')])
-+            ->assertStatus(422)
-+            ->assertJsonValidationErrors('pdf');
-+    }
-+
-+    public function test_upload_requires_authentication(): void
-+    {
-+        $this->postJson('/api/v1/admin/menu/pdf', ['pdf' => $this->pdf()])->assertUnauthorized();
-+    }
-+
-+    public function test_destroy_removes_the_file_and_the_url_404s_again(): void
-+    {
-+        $this->actingAsAdmin();
-+        $this->postJson('/api/v1/admin/menu/pdf', ['pdf' => $this->pdf()]);
-+
-+        $this->deleteJson('/api/v1/admin/menu/pdf')->assertOk();
-+
-+        Storage::disk('public')->assertMissing('menu/menu.pdf');
-+        $this->get('/menu/pdf')->assertNotFound();
-+    }
-+
-+    public function test_qr_route_returns_a_png(): void
-+    {
-+        $response = $this->get('/menu/qr');
-+
-+        $response->assertOk()->assertHeader('content-type', 'image/png');
-+
-+        $info = getimagesizefromstring($response->getContent());
-+        $this->assertSame('image/png', $info['mime']);
-+    }
-+
-+    public function test_qr_download_is_larger_and_sent_as_attachment(): void
-+    {
-+        $view = getimagesizefromstring($this->get('/menu/qr')->getContent());
-+        $download = $this->get('/menu/qr/download');
-+
-+        $download->assertOk()
-+            ->assertHeader('content-disposition', 'attachment; filename="abouelsid-menu-qr.png"');
-+
-+        $this->assertGreaterThan($view[0], getimagesizefromstring($download->getContent())[0]);
-+    }
-+
-+    public function test_qr_embeds_the_brand_logo_when_present(): void
-+    {
-+        $withoutLogo = strlen($this->get('/menu/qr')->getContent());
-+
-+        Storage::disk('public')->put('media/global/logo.png', file_get_contents(
-+            $this->createLogoFixture(),
-+        ));
-+
-+        MediaItem::create([
-+            'page' => 'global', 'section' => 'brand', 'key' => 'logo_dark',
-+            'path' => 'media/global/logo.png', 'url' => '/storage/media/global/logo.png',
-+            'alt_ar' => 'شعار', 'alt_en' => 'Logo',
-+        ]);
-+
-+        $withLogo = strlen($this->get('/menu/qr')->getContent());
-+
-+        $this->assertNotSame($withoutLogo, $withLogo);
-+    }
-+
-+    private function createLogoFixture(): string
-+    {
-+        $image = imagecreatetruecolor(225, 225);
-+        imagefill($image, 0, 0, imagecolorallocate($image, 200, 40, 40));
-+
-+        $path = tempnam(sys_get_temp_dir(), 'logo').'.png';
-+        imagepng($image, $path);
-+        imagedestroy($image);
-+
-+        return $path;
-+    }
-+}
-diff --git a/tests/Feature/RepositoriesTest.php b/tests/Feature/RepositoriesTest.php
-index 0b1c4a6..288140c 100644
---- a/tests/Feature/RepositoriesTest.php
-+++ b/tests/Feature/RepositoriesTest.php
-@@ -115,8 +115,9 @@ public function test_setting_repository_get_all_keyed_by_key(): void
- 
-         $result = $repo->getAll();
- 
--        $this->assertCount(19, $result);
-+        $this->assertCount(20, $result);
-         $this->assertTrue($result->has('whatsapp_number'));
-+        $this->assertTrue($result->has('menu_pdf_path'));
+     // ── Delivery Apps ─────────────────────────────────────
+     Route::prefix('delivery-apps')->controller(DeliveryAppController::class)->group(function () {
+         Route::get('/', 'index');
+diff --git a/tests/Feature/PublicApiTest.php b/tests/Feature/PublicApiTest.php
+index 9e02ff3..054fea5 100644
+--- a/tests/Feature/PublicApiTest.php
++++ b/tests/Feature/PublicApiTest.php
+@@ -109,6 +109,20 @@ public function test_get_testimonials_returns_ten(): void
+             ->assertJsonCount(10, 'data');
      }
  
-     public function test_setting_repository_get_all_filters_by_group(): void
++    public function test_get_personalities_returns_five_active_only(): void
++    {
++        \App\Models\Personality::first()->update(['is_active' => false]);
++
++        $response = $this->getJson('/api/v1/personalities', ['X-API-Key' => $this->apiKey()]);
++
++        $response->assertStatus(200)
++            ->assertJsonCount(4, 'data');
++
++        foreach ($response->json('data') as $personality) {
++            $this->assertTrue($personality['is_active']);
++        }
++    }
++
+     public function test_submit_quote_request_with_valid_data_returns_201(): void
+     {
+         $response = $this->postJson('/api/v1/catering/quote-requests', [
+diff --git a/tests/Feature/RepositoriesTest.php b/tests/Feature/RepositoriesTest.php
+index ab89f4a..40687c7 100644
+--- a/tests/Feature/RepositoriesTest.php
++++ b/tests/Feature/RepositoriesTest.php
+@@ -9,6 +9,7 @@
+ use App\Repositories\DishRepository;
+ use App\Repositories\MediaItemRepository;
+ use App\Repositories\PageContentRepository;
++use App\Repositories\PersonalityRepository;
+ use App\Repositories\QuoteRequestRepository;
+ use App\Repositories\SampleMenuRepository;
+ use App\Repositories\SettingRepository;
+@@ -332,6 +333,24 @@ public function test_testimonial_repository_get_all_can_include_inactive(): void
+         $this->assertCount(10, $repo->getAll(false));
+     }
+ 
++    // ── PersonalityRepository ────────────────────────────────────
++
++    public function test_personality_repository_get_all_active_only_by_default(): void
++    {
++        $repo = new PersonalityRepository;
++
++        $this->assertCount(5, $repo->getAll());
++    }
++
++    public function test_personality_repository_get_all_can_include_inactive(): void
++    {
++        $repo = new PersonalityRepository;
++        \App\Models\Personality::first()->update(['is_active' => false]);
++
++        $this->assertCount(4, $repo->getAll(true));
++        $this->assertCount(5, $repo->getAll(false));
++    }
++
+     // ── TimelineRepository ────────────────────────────────────────
+ 
+     public function test_timeline_repository_get_all_returns_five(): void
 ===== END change.diff =====
 
 ===== BEGIN context-bundle.md =====
 # Context bundle
 
-bundle_version 2 · budget 8000 / used 606 tokens
+bundle_version 2 · budget 8000 / used 1078 tokens
 
-## flagged · named_reference
+## fetched · same_file_symbol_absence
 
-**Subject:** App\Models\Setting::updateOrCreate
-**Reason:** the region depends on App\Models\Setting::updateOrCreate, whose contract is defined in another file
-**Source:** `app/Http/Controllers/Admin/MenuPdfController.php` :: `App\Models\Setting::updateOrCreate` (lines 1-85)
-**Tokens:** 20
-
-```text
-ASSUMPTION: named reference could not be resolved on disk; contract unverified
-```
-
-## flagged · named_reference
-
-**Subject:** App\Models\Setting::where
-**Reason:** the region depends on App\Models\Setting::where, whose contract is defined in another file
-**Source:** `app/Http/Controllers/Admin/MenuPdfController.php` :: `App\Models\Setting::where` (lines 1-85)
-**Tokens:** 20
-
-```text
-ASSUMPTION: named reference could not be resolved on disk; contract unverified
-```
-
-## fetched · named_reference
-
-**Subject:** App\Models\MediaItem::where
-**Reason:** the region depends on App\Models\MediaItem::where, whose contract is defined in another file
-**Source:** `app/Models/MediaItem.php` :: `fillable` (lines 10-22)
-**Tokens:** 58
+**Subject:** PersonalitySeeder
+**Reason:** the region uses PersonalitySeeder, which the file's use block does not import
+**Source:** `database/seeders/DatabaseSeeder.php` (lines 5-6)
+**Tokens:** 23
 
 ```php
-    protected $fillable = [
-        'page',
-        'section',
-        'key',
-        'path',
-        'url',
-        'alt_ar',
-        'alt_en',
-        'mime_type',
-        'size_bytes',
-        'width',
-        'height',
-    ];
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Illuminate\Database\Seeder;
 ```
 
-## fetched · named_reference
+## fetched · same_file_symbol_absence
 
-**Subject:** App\Models\MediaItem::where
-**Reason:** the region depends on App\Models\MediaItem::where, whose contract is defined in another file
-**Source:** `app/Models/MediaItem.php` :: `scopeForPage` (lines 24-35)
-**Tokens:** 79
-
-```php
-    public function scopeForPage(Builder $query, ?string $page = null, ?string $section = null): Builder
-    {
-        if ($page !== null) {
-            $query->where('page', $page);
-        }
-
-        if ($section !== null) {
-            $query->where('section', $section);
-        }
-
-        return $query;
-    }
-```
-
-## fetched · named_reference
-
-**Subject:** App\Models\Setting::updateOrCreate
-**Reason:** the region depends on App\Models\Setting::updateOrCreate, whose contract is defined in another file
-**Source:** `app/Models/Setting.php` :: `fillable` (lines 10-17)
-**Tokens:** 35
-
-```php
-    protected $fillable = [
-        'key',
-        'value',
-        'type',
-        'group',
-        'label_ar',
-        'label_en',
-    ];
-```
-
-## fetched · named_reference
-
-**Subject:** App\Models\Setting::updateOrCreate
-**Reason:** the region depends on App\Models\Setting::updateOrCreate, whose contract is defined in another file
-**Source:** `app/Models/Setting.php` :: `scopeForGroup` (lines 19-26)
-**Tokens:** 51
-
-```php
-    public function scopeForGroup(Builder $query, ?string $group = null): Builder
-    {
-        if ($group !== null) {
-            $query->where('group', $group);
-        }
-
-        return $query;
-    }
-```
-
-## fetched · named_reference
-
-**Subject:** App\Models\User::create
-**Reason:** the region depends on App\Models\User::create, whose contract is defined in another file
-**Source:** `app/Models/User.php` :: `casts` (lines 40-51)
-**Tokens:** 67
+**Subject:** PersonalitySeeder
+**Reason:** the region uses PersonalitySeeder, which the file's use block does not import
+**Source:** `database/seeders/DatabaseSeeder.php` :: `run` (lines 12-32)
+**Tokens:** 150
 
 ```php
     /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
+     * Seed the application's database.
      */
-    protected function casts(): array
+    public function run(): void
     {
+        $this->call([
+            UserSeeder::class,
+            CategorySeeder::class,
+            DishSeeder::class,
+            BranchSeeder::class,
+            CateringPackageSeeder::class,
+            SampleMenuSeeder::class,
+            TestimonialSeeder::class,
+            TimelineSeeder::class,
+            PersonalitySeeder::class,
+            DeliveryAppSeeder::class,
+            PageContentSeeder::class,
+            SettingSeeder::class,
+            MediaItemSeeder::class,
+        ]);
+    }
+```
+
+## fetched · same_file_reference
+
+**Subject:** apiKey
+**Reason:** the region calls the sibling member apiKey, whose contract the diff does not show
+**Source:** `tests/Feature/PublicApiTest.php` :: `apiKey` (lines 20-23)
+**Tokens:** 25
+
+```php
+    private function apiKey(): string
+    {
+        return config('services.website_api_key');
+    }
+```
+
+## flagged · named_reference
+
+**Subject:** App\Http\Resources\Personality\PersonalityResource::collection
+**Reason:** the region depends on App\Http\Resources\Personality\PersonalityResource::collection, whose contract is defined in another file
+**Source:** `app/Http/Controllers/Admin/PersonalityController.php` :: `App\Http\Resources\Personality\PersonalityResource::collection` (lines 1-44)
+**Tokens:** 20
+
+```text
+ASSUMPTION: named reference could not be resolved on disk; contract unverified
+```
+
+## flagged · named_reference
+
+**Subject:** App\Http\Resources\Personality\PersonalityResource::collection
+**Reason:** the region depends on App\Http\Resources\Personality\PersonalityResource::collection, whose contract is defined in another file
+**Source:** `app/Http/Controllers/Public/PersonalityController.php` :: `App\Http\Resources\Personality\PersonalityResource::collection` (lines 1-18)
+**Tokens:** 20
+
+```text
+ASSUMPTION: named reference could not be resolved on disk; contract unverified
+```
+
+## flagged · named_reference
+
+**Subject:** App\Models\Personality::create
+**Reason:** the region depends on App\Models\Personality::create, whose contract is defined in another file
+**Source:** `app/Repositories/PersonalityRepository.php` :: `App\Models\Personality::create` (lines 1-43)
+**Tokens:** 20
+
+```text
+ASSUMPTION: named reference could not be resolved on disk; contract unverified
+```
+
+## flagged · named_reference
+
+**Subject:** App\Models\Personality::findOrFail
+**Reason:** the region depends on App\Models\Personality::findOrFail, whose contract is defined in another file
+**Source:** `app/Repositories/PersonalityRepository.php` :: `App\Models\Personality::findOrFail` (lines 1-43)
+**Tokens:** 20
+
+```text
+ASSUMPTION: named reference could not be resolved on disk; contract unverified
+```
+
+## flagged · named_reference
+
+**Subject:** App\Models\Personality::orderBy
+**Reason:** the region depends on App\Models\Personality::orderBy, whose contract is defined in another file
+**Source:** `app/Repositories/PersonalityRepository.php` :: `App\Models\Personality::orderBy` (lines 1-43)
+**Tokens:** 20
+
+```text
+ASSUMPTION: named reference could not be resolved on disk; contract unverified
+```
+
+## fetched · named_reference
+
+**Subject:** App\Services\ImageService
+**Reason:** the region depends on App\Services\ImageService, whose contract is defined in another file
+**Source:** `app/Services/ImageService.php` :: `ALLOWED_MIMES` (lines 18-18)
+**Tokens:** 23
+
+```php
+    private const ALLOWED_MIMES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+```
+
+## fetched · named_reference
+
+**Subject:** App\Services\ImageService
+**Reason:** the region depends on App\Services\ImageService, whose contract is defined in another file
+**Source:** `app/Services/ImageService.php` :: `MAX_SIZE_BYTES` (lines 14-14)
+**Tokens:** 13
+
+```php
+    private const MAX_SIZE_BYTES = 5 * 1024 * 1024;
+```
+
+## fetched · named_reference
+
+**Subject:** App\Services\ImageService
+**Reason:** the region depends on App\Services\ImageService, whose contract is defined in another file
+**Source:** `app/Services/ImageService.php` :: `MAX_WIDTH` (lines 16-16)
+**Tokens:** 9
+
+```php
+    private const MAX_WIDTH = 1920;
+```
+
+## fetched · named_reference
+
+**Subject:** App\Services\ImageService
+**Reason:** the region depends on App\Services\ImageService, whose contract is defined in another file
+**Source:** `app/Services/ImageService.php` :: `delete` (lines 53-58)
+**Tokens:** 44
+
+```php
+    public function delete(string $path): void
+    {
+        if (Storage::disk('public')->exists($path)) {
+            Storage::disk('public')->delete($path);
+        }
+    }
+```
+
+## fetched · named_reference
+
+**Subject:** App\Services\ImageService::delete
+**Reason:** the region depends on App\Services\ImageService::delete, whose contract is defined in another file
+**Source:** `app/Services/ImageService.php` :: `delete` (lines 53-58)
+**Tokens:** 44
+
+```php
+    public function delete(string $path): void
+    {
+        if (Storage::disk('public')->exists($path)) {
+            Storage::disk('public')->delete($path);
+        }
+    }
+```
+
+## fetched · named_reference
+
+**Subject:** App\Services\ImageService::store
+**Reason:** the region depends on App\Services\ImageService::store, whose contract is defined in another file
+**Source:** `app/Services/ImageService.php` :: `store` (lines 20-51)
+**Tokens:** 285
+
+```php
+    public function store(UploadedFile $file, string $folder): array
+    {
+        if ($file->getSize() > self::MAX_SIZE_BYTES) {
+            throw new InvalidArgumentException('Image exceeds the maximum allowed size of 5MB.');
+        }
+
+        if (! in_array($file->getMimeType(), self::ALLOWED_MIMES, true)) {
+            throw new InvalidArgumentException('Unsupported image type. Allowed: jpg, jpeg, png, webp.');
+        }
+
+        $image = Image::decodeSplFileInfo($file);
+
+        if ($image->width() > self::MAX_WIDTH) {
+            $image->scale(width: self::MAX_WIDTH);
+        }
+
+        $encoded = $image->encode(new WebpEncoder(quality: 85));
+
+        $filename = Str::uuid()->toString().'.webp';
+        $path = trim($folder, '/').'/'.$filename;
+
+        Storage::disk('public')->put($path, (string) $encoded);
+
         return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
+            'path' => $path,
+            'url' => Storage::disk('public')->url($path),
+            'width' => $image->width(),
+            'height' => $image->height(),
+            'size_bytes' => Storage::disk('public')->size($path),
+            'mime_type' => 'image/webp',
         ];
     }
 ```
 
 ## fetched · named_reference
 
-**Subject:** App\Models\User::create
-**Reason:** the region depends on App\Models\User::create, whose contract is defined in another file
-**Source:** `app/Models/User.php` :: `fillable` (lines 18-28)
-**Tokens:** 50
+**Subject:** App\Services\ImageService
+**Reason:** the region depends on App\Services\ImageService, whose contract is defined in another file
+**Source:** `app/Services/ImageService.php` :: `store` (lines 20-51)
+**Tokens:** 285
 
 ```php
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var list<string>
-     */
-    protected $fillable = [
-        'name',
-        'email',
-        'password',
-        'role',
-    ];
-```
+    public function store(UploadedFile $file, string $folder): array
+    {
+        if ($file->getSize() > self::MAX_SIZE_BYTES) {
+            throw new InvalidArgumentException('Image exceeds the maximum allowed size of 5MB.');
+        }
 
-## fetched · named_reference
+        if (! in_array($file->getMimeType(), self::ALLOWED_MIMES, true)) {
+            throw new InvalidArgumentException('Unsupported image type. Allowed: jpg, jpeg, png, webp.');
+        }
 
-**Subject:** App\Models\User::create
-**Reason:** the region depends on App\Models\User::create, whose contract is defined in another file
-**Source:** `app/Models/User.php` :: `hidden` (lines 30-38)
-**Tokens:** 48
+        $image = Image::decodeSplFileInfo($file);
 
-```php
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var list<string>
-     */
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
-```
+        if ($image->width() > self::MAX_WIDTH) {
+            $image->scale(width: self::MAX_WIDTH);
+        }
 
-## flagged · named_reference
+        $encoded = $image->encode(new WebpEncoder(quality: 85));
 
-**Subject:** App\Models\MediaItem::where
-**Reason:** the region depends on App\Models\MediaItem::where, whose contract is defined in another file
-**Source:** `app/Services/MenuQrService.php` :: `App\Models\MediaItem::where` (lines 1-51)
-**Tokens:** 20
+        $filename = Str::uuid()->toString().'.webp';
+        $path = trim($folder, '/').'/'.$filename;
 
-```text
-ASSUMPTION: named reference could not be resolved on disk; contract unverified
+        Storage::disk('public')->put($path, (string) $encoded);
+
+        return [
+            'path' => $path,
+            'url' => Storage::disk('public')->url($path),
+            'width' => $image->width(),
+            'height' => $image->height(),
+            'size_bytes' => Storage::disk('public')->size($path),
+            'mime_type' => 'image/webp',
+        ];
+    }
 ```
 
 ## flagged · named_reference
 
-**Subject:** App\Models\Setting::updateOrCreate
-**Reason:** the region depends on App\Models\Setting::updateOrCreate, whose contract is defined in another file
-**Source:** `database/seeders/SettingSeeder.php` :: `App\Models\Setting::updateOrCreate` (lines 29-39)
-**Tokens:** 20
-
-```text
-ASSUMPTION: named reference could not be resolved on disk; contract unverified
-```
-
-## flagged · named_reference
-
-**Subject:** App\Models\Setting::where
-**Reason:** the region depends on App\Models\Setting::where, whose contract is defined in another file
-**Source:** `routes/web.php` :: `App\Models\Setting::where` (lines 1-45)
-**Tokens:** 20
-
-```text
-ASSUMPTION: named reference could not be resolved on disk; contract unverified
-```
-
-## flagged · named_reference
-
-**Subject:** App\Models\MediaItem::create
-**Reason:** the region depends on App\Models\MediaItem::create, whose contract is defined in another file
-**Source:** `tests/Feature/MenuPdfTest.php` :: `App\Models\MediaItem::create` (lines 1-154)
-**Tokens:** 20
-
-```text
-ASSUMPTION: named reference could not be resolved on disk; contract unverified
-```
-
-## flagged · named_reference
-
-**Subject:** App\Models\Setting::create
-**Reason:** the region depends on App\Models\Setting::create, whose contract is defined in another file
-**Source:** `tests/Feature/MenuPdfTest.php` :: `App\Models\Setting::create` (lines 1-154)
-**Tokens:** 20
-
-```text
-ASSUMPTION: named reference could not be resolved on disk; contract unverified
-```
-
-## flagged · named_reference
-
-**Subject:** App\Models\Setting::where
-**Reason:** the region depends on App\Models\Setting::where, whose contract is defined in another file
-**Source:** `tests/Feature/MenuPdfTest.php` :: `App\Models\Setting::where` (lines 1-154)
-**Tokens:** 20
-
-```text
-ASSUMPTION: named reference could not be resolved on disk; contract unverified
-```
-
-## flagged · named_reference
-
-**Subject:** App\Models\User::create
-**Reason:** the region depends on App\Models\User::create, whose contract is defined in another file
-**Source:** `tests/Feature/MenuPdfTest.php` :: `App\Models\User::create` (lines 1-154)
+**Subject:** App\Models\Personality::updateOrCreate
+**Reason:** the region depends on App\Models\Personality::updateOrCreate, whose contract is defined in another file
+**Source:** `database/seeders/PersonalitySeeder.php` :: `App\Models\Personality::updateOrCreate` (lines 1-27)
 **Tokens:** 20
 
 ```text
@@ -932,7 +1049,7 @@ ASSUMPTION: named reference could not be resolved on disk; contract unverified
 
 **Subject:** surrounding-transaction
 **Reason:** the region performs several persistence writes; whether a transaction wraps them is decided by the caller, which the diff does not show
-**Source:** `app/Http/Controllers/Admin/MenuPdfController.php` (lines 1-85)
+**Source:** `app/Actions/Personality/DeletePersonalityAction.php` (lines 1-28)
 **Tokens:** 19
 
 ```text
@@ -943,7 +1060,18 @@ ASSUMPTION: this code assumes a surrounding transaction; caller not checked
 
 **Subject:** surrounding-transaction
 **Reason:** the region performs several persistence writes; whether a transaction wraps them is decided by the caller, which the diff does not show
-**Source:** `tests/Feature/MenuPdfTest.php` (lines 1-154)
+**Source:** `app/Actions/Personality/UpdatePersonalityAction.php` (lines 1-46)
+**Tokens:** 19
+
+```text
+ASSUMPTION: this code assumes a surrounding transaction; caller not checked
+```
+
+## flagged · unverifiable_premise
+
+**Subject:** surrounding-transaction
+**Reason:** the region performs several persistence writes; whether a transaction wraps them is decided by the caller, which the diff does not show
+**Source:** `app/Repositories/PersonalityRepository.php` (lines 1-43)
 **Tokens:** 19
 
 ```text
@@ -956,36 +1084,79 @@ Nothing was dropped.
 ===== END context-bundle.md =====
 
 ===== BEGIN context-diagnostics.txt =====
-new file: app/Http/Controllers/Admin/MenuPdfController.php — own-file context is in the diff, not fetched
-new file: app/Services/MenuQrService.php — own-file context is in the diff, not fetched
-new file: tests/Feature/MenuPdfTest.php — own-file context is in the diff, not fetched
-framework reference: Illuminate\Support\Facades\Storage::disk declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Storage.php:11 (@method static \Illuminate\Contracts\Filesystem\Filesystem disk(\UnitEnum|string|null $name = null))
-unresolved named_reference: App\Models\Setting::updateOrCreate in app/Http/Controllers/Admin/MenuPdfController.php
-unresolved named_reference: App\Models\Setting::where in app/Http/Controllers/Admin/MenuPdfController.php
+new file: app/Actions/Personality/CreatePersonalityAction.php — own-file context is in the diff, not fetched
+new file: app/Actions/Personality/DeletePersonalityAction.php — own-file context is in the diff, not fetched
+new file: app/Actions/Personality/GetPersonalitiesAction.php — own-file context is in the diff, not fetched
+new file: app/Actions/Personality/UpdatePersonalityAction.php — own-file context is in the diff, not fetched
+new file: app/DTOs/Personality/CreatePersonalityDTO.php — own-file context is in the diff, not fetched
+new file: app/DTOs/Personality/UpdatePersonalityDTO.php — own-file context is in the diff, not fetched
+new file: app/Http/Controllers/Admin/PersonalityController.php — own-file context is in the diff, not fetched
+new file: app/Http/Controllers/Public/PersonalityController.php — own-file context is in the diff, not fetched
+new file: app/Http/Requests/Personality/StorePersonalityRequest.php — own-file context is in the diff, not fetched
+new file: app/Http/Requests/Personality/UpdatePersonalityRequest.php — own-file context is in the diff, not fetched
+new file: app/Http/Resources/Personality/PersonalityResource.php — own-file context is in the diff, not fetched
+new file: app/Models/Personality.php — own-file context is in the diff, not fetched
+new file: app/Repositories/PersonalityRepository.php — own-file context is in the diff, not fetched
+new file: database/migrations/2026_07_25_144324_create_personalities_table.php — own-file context is in the diff, not fetched
+new file: database/seeders/PersonalitySeeder.php — own-file context is in the diff, not fetched
+framework reference: Illuminate\Support\Facades\Cache::tags declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Cache.php:50 (@method static \Illuminate\Cache\TaggedCache tags(mixed $names))
+already in the diff: App\Repositories\PersonalityRepository::create declared in app/Repositories/PersonalityRepository.php; not fetched again
+already in the diff: App\Repositories\PersonalityRepository declared in app/Repositories/PersonalityRepository.php; not fetched again
+already in the diff: App\DTOs\Personality\CreatePersonalityDTO declared in app/DTOs/Personality/CreatePersonalityDTO.php; not fetched again
+already in the diff: App\Models\Personality declared in app/Models/Personality.php; not fetched again
+framework reference: Illuminate\Support\Facades\Cache::tags declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Cache.php:50 (@method static \Illuminate\Cache\TaggedCache tags(mixed $names))
+already in the diff: App\Repositories\PersonalityRepository::getById declared in app/Repositories/PersonalityRepository.php; not fetched again
+already in the diff: App\Repositories\PersonalityRepository::delete declared in app/Repositories/PersonalityRepository.php; not fetched again
+already in the diff: App\Repositories\PersonalityRepository declared in app/Repositories/PersonalityRepository.php; not fetched again
+framework reference: Illuminate\Support\Facades\Cache::tags declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Cache.php:50 (@method static \Illuminate\Cache\TaggedCache tags(mixed $names))
+already in the diff: App\Repositories\PersonalityRepository::getAll declared in app/Repositories/PersonalityRepository.php; not fetched again
+already in the diff: App\Repositories\PersonalityRepository declared in app/Repositories/PersonalityRepository.php; not fetched again
+dependency class: Illuminate\Database\Eloquent\Collection provided by vendor/laravel/framework/src/Illuminate/Database/Eloquent/Collection.php; surface not fetched
+dependency member: Illuminate\Support\Arr::whereNotNull declared at vendor/laravel/framework/src/Illuminate/Collections/Arr.php:1284; source not fetched
+framework reference: Illuminate\Support\Facades\Cache::tags declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Cache.php:50 (@method static \Illuminate\Cache\TaggedCache tags(mixed $names))
+already in the diff: App\Repositories\PersonalityRepository::getById declared in app/Repositories/PersonalityRepository.php; not fetched again
+already in the diff: App\Repositories\PersonalityRepository::update declared in app/Repositories/PersonalityRepository.php; not fetched again
+already in the diff: App\Repositories\PersonalityRepository declared in app/Repositories/PersonalityRepository.php; not fetched again
+already in the diff: App\DTOs\Personality\UpdatePersonalityDTO declared in app/DTOs/Personality/UpdatePersonalityDTO.php; not fetched again
+already in the diff: App\Models\Personality declared in app/Models/Personality.php; not fetched again
+dependency class: Illuminate\Http\UploadedFile provided by vendor/laravel/framework/src/Illuminate/Http/UploadedFile.php; surface not fetched
+dependency class: Illuminate\Http\Request provided by vendor/laravel/framework/src/Illuminate/Http/Request.php; surface not fetched
+dependency class: Illuminate\Http\UploadedFile provided by vendor/laravel/framework/src/Illuminate/Http/UploadedFile.php; surface not fetched
+dependency class: Illuminate\Http\Request provided by vendor/laravel/framework/src/Illuminate/Http/Request.php; surface not fetched
+unresolved named_reference: App\Http\Resources\Personality\PersonalityResource::collection in app/Http/Controllers/Admin/PersonalityController.php
+already in the diff: App\DTOs\Personality\CreatePersonalityDTO::fromRequest declared in app/DTOs/Personality/CreatePersonalityDTO.php; not fetched again
+already in the diff: App\DTOs\Personality\UpdatePersonalityDTO::fromRequest declared in app/DTOs/Personality/UpdatePersonalityDTO.php; not fetched again
+already in the diff: App\Actions\Personality\GetPersonalitiesAction declared in app/Actions/Personality/GetPersonalitiesAction.php; not fetched again
+dependency class: Illuminate\Http\JsonResponse provided by vendor/laravel/framework/src/Illuminate/Http/JsonResponse.php; surface not fetched
+already in the diff: App\Http\Requests\Personality\StorePersonalityRequest declared in app/Http/Requests/Personality/StorePersonalityRequest.php; not fetched again
+already in the diff: App\Actions\Personality\CreatePersonalityAction declared in app/Actions/Personality/CreatePersonalityAction.php; not fetched again
+already in the diff: App\Http\Resources\Personality\PersonalityResource declared in app/Http/Resources/Personality/PersonalityResource.php; not fetched again
+already in the diff: App\Http\Requests\Personality\UpdatePersonalityRequest declared in app/Http/Requests/Personality/UpdatePersonalityRequest.php; not fetched again
+already in the diff: App\Actions\Personality\UpdatePersonalityAction declared in app/Actions/Personality/UpdatePersonalityAction.php; not fetched again
+already in the diff: App\Actions\Personality\DeletePersonalityAction declared in app/Actions/Personality/DeletePersonalityAction.php; not fetched again
+unresolved named_reference: App\Http\Resources\Personality\PersonalityResource::collection in app/Http/Controllers/Public/PersonalityController.php
+already in the diff: App\Actions\Personality\GetPersonalitiesAction declared in app/Actions/Personality/GetPersonalitiesAction.php; not fetched again
 dependency class: Illuminate\Http\JsonResponse provided by vendor/laravel/framework/src/Illuminate/Http/JsonResponse.php; surface not fetched
 dependency class: Illuminate\Http\Request provided by vendor/laravel/framework/src/Illuminate/Http/Request.php; surface not fetched
-dependency member: Endroid\QrCode\ErrorCorrectionLevel::High declared at vendor/endroid/qr-code/src/ErrorCorrectionLevel.php:9; source not fetched
-unresolved named_reference: App\Models\MediaItem::where in app/Services/MenuQrService.php
-framework reference: Illuminate\Support\Facades\Storage::disk declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Storage.php:11 (@method static \Illuminate\Contracts\Filesystem\Filesystem disk(\UnitEnum|string|null $name = null))
-dependency class: Endroid\QrCode\Writer\PngWriter provided by vendor/endroid/qr-code/src/Writer/PngWriter.php; surface not fetched
-dependency class: Endroid\QrCode\Color\Color provided by vendor/endroid/qr-code/src/Color/Color.php; surface not fetched
-dependency class: Endroid\QrCode\Builder\Builder provided by vendor/endroid/qr-code/src/Builder/Builder.php; surface not fetched
-unresolved named_reference: App\Models\Setting::updateOrCreate in database/seeders/SettingSeeder.php
+unresolved named_reference: App\Models\Personality::orderBy in app/Repositories/PersonalityRepository.php
+unresolved named_reference: App\Models\Personality::findOrFail in app/Repositories/PersonalityRepository.php
+unresolved named_reference: App\Models\Personality::create in app/Repositories/PersonalityRepository.php
+dependency class: Illuminate\Database\Eloquent\Collection provided by vendor/laravel/framework/src/Illuminate/Database/Eloquent/Collection.php; surface not fetched
+already in the diff: App\Models\Personality declared in app/Models/Personality.php; not fetched again
+framework reference: Illuminate\Support\Facades\Schema::create declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Schema.php:34 (@method static void create(string $table, \Closure $callback))
+framework reference: Illuminate\Support\Facades\Schema::dropIfExists declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Schema.php:36 (@method static void dropIfExists(string $table))
+dependency class: Illuminate\Database\Schema\Blueprint provided by vendor/laravel/framework/src/Illuminate/Database/Schema/Blueprint.php; surface not fetched
+unresolved named_reference: App\Models\Personality::updateOrCreate in database/seeders/PersonalitySeeder.php
+framework reference: Illuminate\Support\Facades\Route::put declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Route.php:8 (@method static \Illuminate\Routing\Route put(string $uri, array|string|callable|null $action = null))
+framework reference: Illuminate\Support\Facades\Route::put declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Route.php:8 (@method static \Illuminate\Routing\Route put(string $uri, array|string|callable|null $action = null))
+framework reference: Illuminate\Support\Facades\Route::put declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Route.php:8 (@method static \Illuminate\Routing\Route put(string $uri, array|string|callable|null $action = null))
+framework reference: Illuminate\Support\Facades\Route::put declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Route.php:8 (@method static \Illuminate\Routing\Route put(string $uri, array|string|callable|null $action = null))
 framework reference: Illuminate\Support\Facades\Route::prefix declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Route.php:100 (@method static \Illuminate\Routing\RouteRegistrar prefix(string $prefix))
 framework reference: Illuminate\Support\Facades\Route::get declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Route.php:6 (@method static \Illuminate\Routing\Route get(string $uri, array|string|callable|null $action = null))
 framework reference: Illuminate\Support\Facades\Route::post declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Route.php:7 (@method static \Illuminate\Routing\Route post(string $uri, array|string|callable|null $action = null))
+framework reference: Illuminate\Support\Facades\Route::put declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Route.php:8 (@method static \Illuminate\Routing\Route put(string $uri, array|string|callable|null $action = null))
 framework reference: Illuminate\Support\Facades\Route::delete declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Route.php:10 (@method static \Illuminate\Routing\Route delete(string $uri, array|string|callable|null $action = null))
+framework reference: Illuminate\Support\Facades\Route::prefix declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Route.php:100 (@method static \Illuminate\Routing\RouteRegistrar prefix(string $prefix))
 framework reference: Illuminate\Support\Facades\Route::get declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Route.php:6 (@method static \Illuminate\Routing\Route get(string $uri, array|string|callable|null $action = null))
-unresolved named_reference: App\Models\Setting::where in routes/web.php
-framework reference: Illuminate\Support\Facades\Storage::disk declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Storage.php:11 (@method static \Illuminate\Contracts\Filesystem\Filesystem disk(\UnitEnum|string|null $name = null))
-already in the diff: App\Services\MenuQrService declared in app/Services/MenuQrService.php; not fetched again
-dependency member: Illuminate\Support\Facades\Storage::fake declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Storage.php:94; source not fetched
-unresolved named_reference: App\Models\Setting::create in tests/Feature/MenuPdfTest.php
-dependency member: Laravel\Sanctum\Sanctum::actingAs declared at vendor/laravel/sanctum/src/Sanctum.php:62; source not fetched
-unresolved named_reference: App\Models\User::create in tests/Feature/MenuPdfTest.php
-dependency member: Illuminate\Http\UploadedFile::fake declared at vendor/laravel/framework/src/Illuminate/Http/UploadedFile.php:17; source not fetched
-framework reference: Illuminate\Support\Facades\Storage::disk declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Storage.php:11 (@method static \Illuminate\Contracts\Filesystem\Filesystem disk(\UnitEnum|string|null $name = null))
-unresolved named_reference: App\Models\Setting::where in tests/Feature/MenuPdfTest.php
-unresolved named_reference: App\Models\MediaItem::create in tests/Feature/MenuPdfTest.php
-dependency class: Illuminate\Http\UploadedFile provided by vendor/laravel/framework/src/Illuminate/Http/UploadedFile.php; surface not fetched
+already in the diff: App\Repositories\PersonalityRepository declared in app/Repositories/PersonalityRepository.php; not fetched again
 ===== END context-diagnostics.txt =====

@@ -405,3 +405,36 @@ a positive one is evidence about this family given a packet, not about reviewers
 Nothing else changes. The cells are running from this point; no material, criterion, key or
 mapping may move until all fifty-four observations are in.
 
+---
+
+## Note · 2026-09-26 · the corpus reduced to six tasks - a cost decision taken before any cell ran
+
+By the user, **before any cell ran** - no observation file exists, and the cell files generated
+under the previous seal were discarded unrun. This is a cost decision, not a response to a
+result; there is no result.
+
+**Dropped:** **T7** `b2eebe7` (duplicates T1's 37 with the same four sentences; adds no spread
+point), **T4** `f3a7fcd` (both arms empty - a second control), **T8** `4411454` (two citations,
+the low end's second task).
+
+**Kept, r = 3 on each:** T0 `e770086` (control, 0), T1 `9b8f9c6` (37), T2 `ee5a2e6` (5), T3
+`ec92403` (2), T5 `2996b89` (37, **Q-evict only**, as ruled above), T6 `e5e48ce` (14).
+**36 cells.**
+
+**The spread still separates 37 from 2.** For Q-ask and Q-harm the points are T1 37 · T6 14 ·
+T2 5 · T3 2; T5's 37 stands beside T1 for Q-evict alone.
+
+**What is lost, stated:** T7's **independent replication of the top end** - a second commit
+carrying 37 citations, which would have told whether a 37-citation result on T1 was T1's or the
+count's; and T8's **contribution to the low end** - a second 2-citation task beside T3, and the
+task three diff-only reviewers had named, so a Q-ask cell with a known prior. Both losses narrow
+what a per-task reading can be generalised from; neither changes a criterion, a class, or a
+condition in §8.
+
+**T5 stays, for Q-evict only**, as already recorded. **The control T0 stays** - the noise floor
+is not optional; without it no between-arm difference is readable.
+
+The cell files were regenerated for the six tasks under a **new seal** (`classification/
+mapping.sha256`, plaintext still ignored); the packets for T4, T7 and T8 remain in `packets/` as
+cut evidence with their provenance, marked out of the corpus in `corpus.tsv`, and are not cells.
+

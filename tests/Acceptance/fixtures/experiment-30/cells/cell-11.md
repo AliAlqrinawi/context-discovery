@@ -47,368 +47,1333 @@ Q5: "<exact quotation>" | NONE_VISIBLE
 ---
 
 ===== BEGIN change.diff =====
-diff --git a/app/Actions/MediaItem/GetMediaItemsAction.php b/app/Actions/MediaItem/GetMediaItemsAction.php
-index 513c779..edf298f 100644
---- a/app/Actions/MediaItem/GetMediaItemsAction.php
-+++ b/app/Actions/MediaItem/GetMediaItemsAction.php
-@@ -12,9 +12,9 @@ public function __construct(
-         private readonly MediaItemRepository $repository,
-     ) {}
- 
--    public function execute(string $page, ?string $section = null): Collection
-+    public function execute(?string $page = null, ?string $section = null): Collection
+diff --git a/app/Http/Controllers/Auth/AuthController.php b/app/Http/Controllers/Auth/AuthController.php
+index 028d0a0..563551d 100644
+--- a/app/Http/Controllers/Auth/AuthController.php
++++ b/app/Http/Controllers/Auth/AuthController.php
+@@ -18,18 +18,18 @@ public function login(LoginRequest $request, LoginAction $action): JsonResponse
      {
--        $key = "media_items_{$page}_{$section}";
-+        $key = 'media_items_' . ($page ?? 'all') . '_' . ($section ?? 'all');
+         $result = $action->execute(LoginDTO::fromRequest($request));
  
-         return Cache::tags(['media_items'])->remember(
-             $key,
-diff --git a/app/Http/Controllers/Admin/MediaItemController.php b/app/Http/Controllers/Admin/MediaItemController.php
-index 87a24a5..b2b4574 100644
---- a/app/Http/Controllers/Admin/MediaItemController.php
-+++ b/app/Http/Controllers/Admin/MediaItemController.php
-@@ -18,7 +18,7 @@ class MediaItemController extends Controller
-     public function index(Request $request, GetMediaItemsAction $action): JsonResponse
+-        return $this->success(new AuthResource($result), 'Login successful');
++        return $this->success(new AuthResource($result), __('messages.login_success'));
+     }
+ 
+     public function logout(Request $request, LogoutAction $action): JsonResponse
      {
-         $result = $action->execute(
--            $request->string('page')->toString(),
-+            $request->filled('page') ? $request->string('page')->toString() : null,
-             $request->filled('section') ? $request->string('section')->toString() : null,
+         $action->execute($request->user());
+ 
+-        return $this->success(null, 'Logout successful');
++        return $this->success(null, __('messages.logout_success'));
+     }
+ 
+     public function me(Request $request): JsonResponse
+     {
+-        return $this->success(new UserResource($request->user()), 'Authenticated user');
++        return $this->success(new UserResource($request->user()), __('messages.fetched'));
+     }
+ }
+diff --git a/app/Http/Controllers/BranchController.php b/app/Http/Controllers/BranchController.php
+index a9cb02f..3961a3e 100644
+--- a/app/Http/Controllers/BranchController.php
++++ b/app/Http/Controllers/BranchController.php
+@@ -17,27 +17,27 @@ class BranchController extends Controller
+ {
+     public function index(GetBranchesAction $action): JsonResponse
+     {
+-        return $this->success(BranchResource::collection($action->execute()), 'Branches retrieved');
++        return $this->success(BranchResource::collection($action->execute()), __('messages.fetched'));
+     }
+ 
+     public function store(StoreBranchRequest $request, CreateBranchAction $action): JsonResponse
+     {
+         $branch = $action->execute(CreateBranchDTO::fromRequest($request));
+ 
+-        return $this->created(new BranchResource($branch), 'Branch created');
++        return $this->created(new BranchResource($branch), __('messages.created'));
+     }
+ 
+     public function update(UpdateBranchRequest $request, int $id, UpdateBranchAction $action): JsonResponse
+     {
+         $branch = $action->execute($id, UpdateBranchDTO::fromRequest($request));
+ 
+-        return $this->success(new BranchResource($branch), 'Branch updated');
++        return $this->success(new BranchResource($branch), __('messages.updated'));
+     }
+ 
+     public function destroy(int $id, DeleteBranchAction $action): JsonResponse
+     {
+         $action->execute($id);
+ 
+-        return $this->deleted('Branch deleted');
++        return $this->deleted(__('messages.deleted'));
+     }
+ }
+diff --git a/app/Http/Controllers/CategoryController.php b/app/Http/Controllers/CategoryController.php
+index 2a886d6..bf1c2f7 100644
+--- a/app/Http/Controllers/CategoryController.php
++++ b/app/Http/Controllers/CategoryController.php
+@@ -15,27 +15,27 @@ public function __construct(
+ 
+     public function index(): JsonResponse
+     {
+-        return $this->success(CategoryResource::collection($this->repository->getAll()), 'Categories retrieved');
++        return $this->success(CategoryResource::collection($this->repository->getAll()), __('messages.fetched'));
+     }
+ 
+     public function store(Request $request): JsonResponse
+     {
+         $category = $this->repository->create($request->only(['name_ar', 'name_en', 'slug', 'order']));
+ 
+-        return $this->created(new CategoryResource($category), 'Category created');
++        return $this->created(new CategoryResource($category), __('messages.created'));
+     }
+ 
+     public function update(Request $request, int $id): JsonResponse
+     {
+         $category = $this->repository->update($id, $request->only(['name_ar', 'name_en', 'slug', 'order']));
+ 
+-        return $this->success(new CategoryResource($category), 'Category updated');
++        return $this->success(new CategoryResource($category), __('messages.updated'));
+     }
+ 
+     public function destroy(int $id): JsonResponse
+     {
+         $this->repository->delete($id);
+ 
+-        return $this->deleted('Category deleted');
++        return $this->deleted(__('messages.deleted'));
+     }
+ }
+diff --git a/app/Http/Controllers/Catering/CateringPackageController.php b/app/Http/Controllers/Catering/CateringPackageController.php
+index 4fdd1b8..83dfaca 100644
+--- a/app/Http/Controllers/Catering/CateringPackageController.php
++++ b/app/Http/Controllers/Catering/CateringPackageController.php
+@@ -18,27 +18,27 @@ class CateringPackageController extends Controller
+ {
+     public function index(GetPackagesAction $action): JsonResponse
+     {
+-        return $this->success(PackageResource::collection($action->execute()), 'Catering packages retrieved');
++        return $this->success(PackageResource::collection($action->execute()), __('messages.fetched'));
+     }
+ 
+     public function store(StorePackageRequest $request, CreatePackageAction $action): JsonResponse
+     {
+         $package = $action->execute(CreatePackageDTO::fromRequest($request));
+ 
+-        return $this->created(new PackageResource($package), 'Catering package created');
++        return $this->created(new PackageResource($package), __('messages.created'));
+     }
+ 
+     public function update(UpdatePackageRequest $request, int $id, UpdatePackageAction $action): JsonResponse
+     {
+         $package = $action->execute($id, UpdatePackageDTO::fromRequest($request));
+ 
+-        return $this->success(new PackageResource($package), 'Catering package updated');
++        return $this->success(new PackageResource($package), __('messages.updated'));
+     }
+ 
+     public function destroy(int $id, DeletePackageAction $action): JsonResponse
+     {
+         $action->execute($id);
+ 
+-        return $this->deleted('Catering package deleted');
++        return $this->deleted(__('messages.deleted'));
+     }
+ }
+diff --git a/app/Http/Controllers/Catering/QuoteRequestController.php b/app/Http/Controllers/Catering/QuoteRequestController.php
+index 63ea6c1..e9aa8e2 100644
+--- a/app/Http/Controllers/Catering/QuoteRequestController.php
++++ b/app/Http/Controllers/Catering/QuoteRequestController.php
+@@ -20,7 +20,7 @@ public function store(StoreQuoteRequestRequest $request, SubmitQuoteRequestActio
+     {
+         $quoteRequest = $action->execute(SubmitQuoteRequestDTO::fromRequest($request));
+ 
+-        return $this->created(new QuoteRequestResource($quoteRequest), 'Quote request submitted');
++        return $this->created(new QuoteRequestResource($quoteRequest), __('messages.quote_submitted'));
+     }
+ 
+     public function index(Request $request, QuoteRequestRepository $repository): JsonResponse
+@@ -33,18 +33,18 @@ public function index(Request $request, QuoteRequestRepository $repository): Jso
+ 
+         $result = $repository->getAll($filters);
+ 
+-        return $this->paginated(QuoteRequestResource::collection($result), $result, 'Quote requests retrieved');
++        return $this->paginated(QuoteRequestResource::collection($result), $result, __('messages.fetched'));
+     }
+ 
+     public function show(int $id, QuoteRequestRepository $repository): JsonResponse
+     {
+-        return $this->success(new QuoteRequestResource($repository->getById($id)), 'Quote request retrieved');
++        return $this->success(new QuoteRequestResource($repository->getById($id)), __('messages.fetched'));
+     }
+ 
+     public function updateStatus(UpdateQuoteRequestStatusRequest $request, int $id, UpdateQuoteRequestStatusAction $action): JsonResponse
+     {
+         $quoteRequest = $action->execute($id, UpdateQuoteRequestStatusDTO::fromRequest($request));
+ 
+-        return $this->success(new QuoteRequestResource($quoteRequest), 'Quote request status updated');
++        return $this->success(new QuoteRequestResource($quoteRequest), __('messages.updated'));
+     }
+ }
+diff --git a/app/Http/Controllers/Catering/SampleMenuController.php b/app/Http/Controllers/Catering/SampleMenuController.php
+index 4919e73..f5b1fb0 100644
+--- a/app/Http/Controllers/Catering/SampleMenuController.php
++++ b/app/Http/Controllers/Catering/SampleMenuController.php
+@@ -16,27 +16,27 @@ class SampleMenuController extends Controller
+ {
+     public function index(GetSampleMenusAction $action): JsonResponse
+     {
+-        return $this->success(SampleMenuResource::collection($action->execute()), 'Sample menus retrieved');
++        return $this->success(SampleMenuResource::collection($action->execute()), __('messages.fetched'));
+     }
+ 
+     public function store(StoreSampleMenuRequest $request, CreateSampleMenuAction $action): JsonResponse
+     {
+         $menu = $action->execute(CreateSampleMenuDTO::fromRequest($request));
+ 
+-        return $this->created(new SampleMenuResource($menu), 'Sample menu created');
++        return $this->created(new SampleMenuResource($menu), __('messages.created'));
+     }
+ 
+     public function update(StoreSampleMenuRequest $request, int $id, UpdateSampleMenuAction $action): JsonResponse
+     {
+         $menu = $action->execute($id, CreateSampleMenuDTO::fromRequest($request));
+ 
+-        return $this->success(new SampleMenuResource($menu), 'Sample menu updated');
++        return $this->success(new SampleMenuResource($menu), __('messages.updated'));
+     }
+ 
+     public function destroy(int $id, DeleteSampleMenuAction $action): JsonResponse
+     {
+         $action->execute($id);
+ 
+-        return $this->deleted('Sample menu deleted');
++        return $this->deleted(__('messages.deleted'));
+     }
+ }
+diff --git a/app/Http/Controllers/DeliveryAppController.php b/app/Http/Controllers/DeliveryAppController.php
+index 331269c..c2fca72 100644
+--- a/app/Http/Controllers/DeliveryAppController.php
++++ b/app/Http/Controllers/DeliveryAppController.php
+@@ -17,27 +17,27 @@ public function index(GetDeliveryAppsAction $action): JsonResponse
+     {
+         $activeOnly = ! auth('sanctum')->check();
+ 
+-        return $this->success(DeliveryAppResource::collection($action->execute($activeOnly)), 'Delivery apps retrieved');
++        return $this->success(DeliveryAppResource::collection($action->execute($activeOnly)), __('messages.fetched'));
+     }
+ 
+     public function store(StoreDeliveryAppRequest $request, CreateDeliveryAppAction $action): JsonResponse
+     {
+         $deliveryApp = $action->execute(CreateDeliveryAppDTO::fromRequest($request));
+ 
+-        return $this->created(new DeliveryAppResource($deliveryApp), 'Delivery app created');
++        return $this->created(new DeliveryAppResource($deliveryApp), __('messages.created'));
+     }
+ 
+     public function update(StoreDeliveryAppRequest $request, int $id, UpdateDeliveryAppAction $action): JsonResponse
+     {
+         $deliveryApp = $action->execute($id, CreateDeliveryAppDTO::fromRequest($request));
+ 
+-        return $this->success(new DeliveryAppResource($deliveryApp), 'Delivery app updated');
++        return $this->success(new DeliveryAppResource($deliveryApp), __('messages.updated'));
+     }
+ 
+     public function destroy(int $id, DeleteDeliveryAppAction $action): JsonResponse
+     {
+         $action->execute($id);
+ 
+-        return $this->deleted('Delivery app deleted');
++        return $this->deleted(__('messages.deleted'));
+     }
+ }
+diff --git a/app/Http/Controllers/DishController.php b/app/Http/Controllers/DishController.php
+index 3a2c214..c497398 100644
+--- a/app/Http/Controllers/DishController.php
++++ b/app/Http/Controllers/DishController.php
+@@ -29,32 +29,32 @@ public function index(Request $request, GetDishesAction $action): JsonResponse
+ 
+         $result = $action->execute($filters);
+ 
+-        return $this->success(new DishCollection($result), 'Dishes retrieved');
++        return $this->success(new DishCollection($result), __('messages.fetched'));
+     }
+ 
+     public function show(int $id, GetDishAction $action): JsonResponse
+     {
+-        return $this->success(new DishResource($action->execute($id)), 'Dish retrieved');
++        return $this->success(new DishResource($action->execute($id)), __('messages.fetched'));
+     }
+ 
+     public function store(StoreDishRequest $request, CreateDishAction $action): JsonResponse
+     {
+         $dish = $action->execute(CreateDishDTO::fromRequest($request));
+ 
+-        return $this->created(new DishResource($dish), 'Dish created');
++        return $this->created(new DishResource($dish), __('messages.created'));
+     }
+ 
+     public function update(UpdateDishRequest $request, int $id, UpdateDishAction $action): JsonResponse
+     {
+         $dish = $action->execute($id, UpdateDishDTO::fromRequest($request));
+ 
+-        return $this->success(new DishResource($dish), 'Dish updated');
++        return $this->success(new DishResource($dish), __('messages.updated'));
+     }
+ 
+     public function destroy(int $id, DeleteDishAction $action): JsonResponse
+     {
+         $action->execute($id);
+ 
+-        return $this->deleted('Dish deleted');
++        return $this->deleted(__('messages.deleted'));
+     }
+ }
+diff --git a/app/Http/Controllers/MediaItemController.php b/app/Http/Controllers/MediaItemController.php
+index 6707b12..cf6933f 100644
+--- a/app/Http/Controllers/MediaItemController.php
++++ b/app/Http/Controllers/MediaItemController.php
+@@ -25,32 +25,32 @@ public function index(Request $request, GetMediaItemsAction $action): JsonRespon
+             fn ($section) => $section->map(fn ($item) => new MediaItemResource($item))
          );
  
-diff --git a/app/Models/MediaItem.php b/app/Models/MediaItem.php
-index 1877fbf..8d78596 100644
---- a/app/Models/MediaItem.php
-+++ b/app/Models/MediaItem.php
-@@ -21,9 +21,11 @@ class MediaItem extends Model
-         'height',
-     ];
+-        return $this->success($resourced, 'Media items retrieved');
++        return $this->success($resourced, __('messages.fetched'));
+     }
  
--    public function scopeForPage(Builder $query, string $page, ?string $section = null): Builder
-+    public function scopeForPage(Builder $query, ?string $page = null, ?string $section = null): Builder
+     public function store(UploadMediaRequest $request, UploadMediaAction $action): JsonResponse
      {
--        $query->where('page', $page);
-+        if ($page !== null) {
-+            $query->where('page', $page);
-+        }
+         $mediaItem = $action->execute(UploadMediaDTO::fromRequest($request));
  
-         if ($section !== null) {
-             $query->where('section', $section);
-diff --git a/app/Repositories/MediaItemRepository.php b/app/Repositories/MediaItemRepository.php
-index e52abd0..7dbbde9 100644
---- a/app/Repositories/MediaItemRepository.php
-+++ b/app/Repositories/MediaItemRepository.php
-@@ -7,7 +7,7 @@
+-        return $this->created(new MediaItemResource($mediaItem), 'Media item uploaded');
++        return $this->created(new MediaItemResource($mediaItem), __('messages.uploaded'));
+     }
  
- class MediaItemRepository
+     public function show(int $id, MediaItemRepository $repository): JsonResponse
+     {
+-        return $this->success(new MediaItemResource($repository->getById($id)), 'Media item retrieved');
++        return $this->success(new MediaItemResource($repository->getById($id)), __('messages.fetched'));
+     }
+ 
+     public function update(UploadMediaRequest $request, int $id, UploadMediaAction $action): JsonResponse
+     {
+         $mediaItem = $action->execute(UploadMediaDTO::fromRequest($request));
+ 
+-        return $this->success(new MediaItemResource($mediaItem), 'Media item updated');
++        return $this->success(new MediaItemResource($mediaItem), __('messages.updated'));
+     }
+ 
+     public function destroy(int $id, DeleteMediaAction $action): JsonResponse
+     {
+         $action->execute($id);
+ 
+-        return $this->deleted('Media item deleted');
++        return $this->deleted(__('messages.deleted'));
+     }
+ }
+diff --git a/app/Http/Controllers/PageContentController.php b/app/Http/Controllers/PageContentController.php
+index ff4f0ad..d0fdfc3 100644
+--- a/app/Http/Controllers/PageContentController.php
++++ b/app/Http/Controllers/PageContentController.php
+@@ -27,25 +27,25 @@ public function index(Request $request, GetPageContentAction $action): JsonRespo
+             fn ($section) => $section->map(fn ($item) => new PageContentResource($item))
+         );
+ 
+-        return $this->success($resourced, 'Page contents retrieved');
++        return $this->success($resourced, __('messages.fetched'));
+     }
+ 
+     public function show(int $id, PageContentRepository $repository): JsonResponse
+     {
+-        return $this->success(new PageContentResource($repository->getById($id)), 'Page content retrieved');
++        return $this->success(new PageContentResource($repository->getById($id)), __('messages.fetched'));
+     }
+ 
+     public function update(UpdatePageContentRequest $request, int $id, UpdatePageContentAction $action): JsonResponse
+     {
+         $pageContent = $action->execute($id, UpdatePageContentDTO::fromRequest($request));
+ 
+-        return $this->success(new PageContentResource($pageContent), 'Page content updated');
++        return $this->success(new PageContentResource($pageContent), __('messages.updated'));
+     }
+ 
+     public function bulkUpdate(BulkUpdatePageContentRequest $request, BulkUpdatePageContentAction $action): JsonResponse
+     {
+         $action->execute(BulkUpdatePageContentDTO::fromRequest($request));
+ 
+-        return $this->success(null, 'Page contents updated');
++        return $this->success(null, __('messages.updated'));
+     }
+ }
+diff --git a/app/Http/Controllers/SettingController.php b/app/Http/Controllers/SettingController.php
+index 25a4fd8..76677c5 100644
+--- a/app/Http/Controllers/SettingController.php
++++ b/app/Http/Controllers/SettingController.php
+@@ -18,13 +18,13 @@ public function index(Request $request, GetSettingsAction $action): JsonResponse
+             $request->filled('group') ? $request->string('group')->toString() : null,
+         );
+ 
+-        return $this->success($result->map(fn ($setting) => new SettingResource($setting)), 'Settings retrieved');
++        return $this->success($result->map(fn ($setting) => new SettingResource($setting)), __('messages.fetched'));
+     }
+ 
+     public function bulkUpdate(UpdateSettingRequest $request, UpdateSettingsAction $action): JsonResponse
+     {
+         $action->execute(UpdateSettingDTO::fromRequest($request));
+ 
+-        return $this->success(null, 'Settings updated');
++        return $this->success(null, __('messages.updated'));
+     }
+ }
+diff --git a/app/Http/Controllers/TestimonialController.php b/app/Http/Controllers/TestimonialController.php
+index 0a99885..9eed09a 100644
+--- a/app/Http/Controllers/TestimonialController.php
++++ b/app/Http/Controllers/TestimonialController.php
+@@ -17,27 +17,27 @@ public function index(GetTestimonialsAction $action): JsonResponse
+     {
+         $activeOnly = ! auth('sanctum')->check();
+ 
+-        return $this->success(TestimonialResource::collection($action->execute($activeOnly)), 'Testimonials retrieved');
++        return $this->success(TestimonialResource::collection($action->execute($activeOnly)), __('messages.fetched'));
+     }
+ 
+     public function store(StoreTestimonialRequest $request, CreateTestimonialAction $action): JsonResponse
+     {
+         $testimonial = $action->execute(CreateTestimonialDTO::fromRequest($request));
+ 
+-        return $this->created(new TestimonialResource($testimonial), 'Testimonial created');
++        return $this->created(new TestimonialResource($testimonial), __('messages.created'));
+     }
+ 
+     public function update(StoreTestimonialRequest $request, int $id, UpdateTestimonialAction $action): JsonResponse
+     {
+         $testimonial = $action->execute($id, CreateTestimonialDTO::fromRequest($request));
+ 
+-        return $this->success(new TestimonialResource($testimonial), 'Testimonial updated');
++        return $this->success(new TestimonialResource($testimonial), __('messages.updated'));
+     }
+ 
+     public function destroy(int $id, DeleteTestimonialAction $action): JsonResponse
+     {
+         $action->execute($id);
+ 
+-        return $this->deleted('Testimonial deleted');
++        return $this->deleted(__('messages.deleted'));
+     }
+ }
+diff --git a/app/Http/Controllers/TimelineController.php b/app/Http/Controllers/TimelineController.php
+index a686e45..69cede4 100644
+--- a/app/Http/Controllers/TimelineController.php
++++ b/app/Http/Controllers/TimelineController.php
+@@ -15,27 +15,27 @@ class TimelineController extends Controller
  {
--    public function getByPage(string $page, ?string $section = null): Collection
-+    public function getByPage(?string $page = null, ?string $section = null): Collection
+     public function index(GetTimelineAction $action): JsonResponse
      {
-         return MediaItem::forPage($page, $section)
-             ->get()
+-        return $this->success(TimelineResource::collection($action->execute()), 'Timeline retrieved');
++        return $this->success(TimelineResource::collection($action->execute()), __('messages.fetched'));
+     }
+ 
+     public function store(StoreTimelineRequest $request, CreateTimelineAction $action): JsonResponse
+     {
+         $timeline = $action->execute(CreateTimelineDTO::fromRequest($request));
+ 
+-        return $this->created(new TimelineResource($timeline), 'Timeline entry created');
++        return $this->created(new TimelineResource($timeline), __('messages.created'));
+     }
+ 
+     public function update(StoreTimelineRequest $request, int $id, UpdateTimelineAction $action): JsonResponse
+     {
+         $timeline = $action->execute($id, CreateTimelineDTO::fromRequest($request));
+ 
+-        return $this->success(new TimelineResource($timeline), 'Timeline entry updated');
++        return $this->success(new TimelineResource($timeline), __('messages.updated'));
+     }
+ 
+     public function destroy(int $id, DeleteTimelineAction $action): JsonResponse
+     {
+         $action->execute($id);
+ 
+-        return $this->deleted('Timeline entry deleted');
++        return $this->deleted(__('messages.deleted'));
+     }
+ }
+diff --git a/app/Http/Controllers/UserController.php b/app/Http/Controllers/UserController.php
+index 6261341..bd04933 100644
+--- a/app/Http/Controllers/UserController.php
++++ b/app/Http/Controllers/UserController.php
+@@ -20,32 +20,32 @@ public function index(GetUsersAction $action): JsonResponse
+     {
+         $result = $action->execute();
+ 
+-        return $this->paginated(UserResource::collection($result), $result, 'Users retrieved');
++        return $this->paginated(UserResource::collection($result), $result, __('messages.fetched'));
+     }
+ 
+     public function store(StoreUserRequest $request, CreateUserAction $action): JsonResponse
+     {
+         $user = $action->execute(CreateUserDTO::fromRequest($request));
+ 
+-        return $this->created(new UserResource($user), 'User created');
++        return $this->created(new UserResource($user), __('messages.created'));
+     }
+ 
+     public function show(int $id, UserRepository $repository): JsonResponse
+     {
+-        return $this->success(new UserResource($repository->getById($id)), 'User retrieved');
++        return $this->success(new UserResource($repository->getById($id)), __('messages.fetched'));
+     }
+ 
+     public function update(UpdateUserRequest $request, int $id, UpdateUserAction $action): JsonResponse
+     {
+         $user = $action->execute($id, UpdateUserDTO::fromRequest($request));
+ 
+-        return $this->success(new UserResource($user), 'User updated');
++        return $this->success(new UserResource($user), __('messages.updated'));
+     }
+ 
+     public function destroy(int $id, DeleteUserAction $action): JsonResponse
+     {
+         $action->execute($id);
+ 
+-        return $this->deleted('User deleted');
++        return $this->deleted(__('messages.deleted'));
+     }
+ }
+diff --git a/config/app.php b/config/app.php
+index 423eed5..e045a58 100644
+--- a/config/app.php
++++ b/config/app.php
+@@ -78,11 +78,11 @@
+     |
+     */
+ 
+-    'locale' => env('APP_LOCALE', 'en'),
++    'locale' => env('APP_LOCALE', 'ar'),
+ 
+     'fallback_locale' => env('APP_FALLBACK_LOCALE', 'en'),
+ 
+-    'faker_locale' => env('APP_FAKER_LOCALE', 'en_US'),
++    'faker_locale' => env('APP_FAKER_LOCALE', 'ar_SA'),
+ 
+     /*
+     |--------------------------------------------------------------------------
+diff --git a/lang/ar/messages.php b/lang/ar/messages.php
+new file mode 100644
+index 0000000..cbdaefa
+--- /dev/null
++++ b/lang/ar/messages.php
+@@ -0,0 +1,17 @@
++<?php
++
++return [
++    'created'           => 'تم الإنشاء بنجاح.',
++    'updated'           => 'تم التحديث بنجاح.',
++    'deleted'           => 'تم الحذف بنجاح.',
++    'fetched'           => 'تم جلب البيانات بنجاح.',
++    'login_success'     => 'تم تسجيل الدخول بنجاح.',
++    'logout_success'    => 'تم تسجيل الخروج بنجاح.',
++    'unauthorized'      => 'غير مصرح لك بهذا الإجراء.',
++    'invalid_api_key'   => 'مفتاح API غير صحيح.',
++    'not_found'         => 'العنصر غير موجود.',
++    'validation_failed' => 'فشل التحقق من البيانات.',
++    'something_wrong'   => 'حدث خطأ ما، يرجى المحاولة لاحقاً.',
++    'uploaded'          => 'تم رفع الملف بنجاح.',
++    'quote_submitted'   => 'تم استلام طلبكم، سنتواصل معكم قريباً.',
++];
+diff --git a/lang/ar/validation.php b/lang/ar/validation.php
+index bc54b7f..0cb1356 100644
+--- a/lang/ar/validation.php
++++ b/lang/ar/validation.php
+@@ -1,91 +1,83 @@
+ <?php
+ 
+ return [
+-    'required' => 'حقل :attribute مطلوب.',
+-    'email' => 'حقل :attribute يجب أن يكون بريدًا إلكترونيًا صالحًا.',
+-    'string' => 'حقل :attribute يجب أن يكون نصًا.',
+-    'numeric' => 'حقل :attribute يجب أن يكون رقمًا.',
+-    'integer' => 'حقل :attribute يجب أن يكون عددًا صحيحًا.',
+-    'boolean' => 'حقل :attribute يجب أن يكون صحيحًا أو خاطئًا.',
+-    'array' => 'حقل :attribute يجب أن يكون مصفوفة.',
+-    'url' => 'حقل :attribute يجب أن يكون رابطًا صالحًا.',
+-    'date' => 'حقل :attribute يجب أن يكون تاريخًا صالحًا.',
+-    'confirmed' => 'تأكيد حقل :attribute غير مطابق.',
+-    'file' => 'حقل :attribute يجب أن يكون ملفًا.',
+-
+-    'min' => [
+-        'numeric' => 'يجب ألا تقل قيمة :attribute عن :min.',
+-        'file' => 'يجب ألا يقل حجم :attribute عن :min كيلوبايت.',
+-        'string' => 'يجب ألا يقل عدد أحرف :attribute عن :min.',
+-        'array' => 'يجب أن يحتوي :attribute على :min عناصر على الأقل.',
++    'required'  => 'حقل :attribute مطلوب.',
++    'string'    => 'حقل :attribute يجب أن يكون نصاً.',
++    'email'     => 'حقل :attribute يجب أن يكون بريداً إلكترونياً صحيحاً.',
++    'min'       => [
++        'string'  => 'حقل :attribute يجب أن لا يقل عن :min حروف.',
++        'numeric' => 'حقل :attribute يجب أن لا يقل عن :min.',
++        'file'    => 'حجم :attribute يجب أن لا يقل عن :min كيلوبايت.',
+     ],
+-
+-    'max' => [
+-        'numeric' => 'يجب ألا تزيد قيمة :attribute عن :max.',
+-        'file' => 'يجب ألا يزيد حجم :attribute عن :max كيلوبايت.',
+-        'string' => 'يجب ألا يزيد عدد أحرف :attribute عن :max.',
+-        'array' => 'يجب ألا يحتوي :attribute على أكثر من :max عناصر.',
++    'max'       => [
++        'string'  => 'حقل :attribute يجب أن لا يتجاوز :max حروف.',
++        'numeric' => 'حقل :attribute يجب أن لا يتجاوز :max.',
++        'file'    => 'حجم :attribute يجب أن لا يتجاوز :max كيلوبايت.',
++    ],
++    'unique'    => 'قيمة :attribute مستخدمة مسبقاً.',
++    'exists'    => 'قيمة :attribute غير صحيحة.',
++    'boolean'   => 'حقل :attribute يجب أن يكون صح أو خطأ.',
++    'integer'   => 'حقل :attribute يجب أن يكون رقماً صحيحاً.',
++    'numeric'   => 'حقل :attribute يجب أن يكون رقماً.',
++    'in'        => 'قيمة :attribute غير مقبولة.',
++    'url'       => 'حقل :attribute يجب أن يكون رابطاً صحيحاً.',
++    'date'      => 'حقل :attribute يجب أن يكون تاريخاً صحيحاً.',
++    'after'     => 'حقل :attribute يجب أن يكون تاريخاً بعد :date.',
++    'confirmed' => 'حقل :attribute غير متطابق.',
++    'mimes'     => 'حقل :attribute يجب أن يكون ملفاً من نوع: :values.',
++    'file'      => 'حقل :attribute يجب أن يكون ملفاً.',
++    'nullable'  => '',
++    'array'     => 'حقل :attribute يجب أن يكون قائمة.',
++    'between'   => [
++        'numeric' => 'حقل :attribute يجب أن يكون بين :min و :max.',
++        'file'    => 'حجم :attribute يجب أن يكون بين :min و :max كيلوبايت.',
++        'string'  => 'حقل :attribute يجب أن يكون بين :min و :max حرف.',
+     ],
+-
+-    'exists' => 'القيمة المحددة لحقل :attribute غير موجودة.',
+-    'unique' => 'قيمة حقل :attribute مُستخدمة من قبل.',
+-    'in' => 'القيمة المحددة لحقل :attribute غير صالحة.',
+-    'mimes' => 'يجب أن يكون :attribute ملفًا من نوع: :values.',
+-    'after' => 'يجب أن يكون :attribute تاريخًا بعد :date.',
+-
+     'attributes' => [
+-        'email' => 'البريد الإلكتروني',
+-        'password' => 'كلمة المرور',
+-        'name' => 'الاسم',
+-        'name_ar' => 'الاسم بالعربي',
+-        'name_en' => 'الاسم بالإنجليزي',
+-        'description_ar' => 'الوصف بالعربي',
+-        'description_en' => 'الوصف بالإنجليزي',
+-        'value_ar' => 'القيمة بالعربي',
+-        'value_en' => 'القيمة بالإنجليزي',
+-        'quote_ar' => 'الاقتباس بالعربي',
+-        'quote_en' => 'الاقتباس بالإنجليزي',
+-        'title_ar' => 'العنوان بالعربي',
+-        'title_en' => 'العنوان بالإنجليزي',
+-        'location_ar' => 'الموقع بالعربي',
+-        'location_en' => 'الموقع بالإنجليزي',
+-        'label_ar' => 'التسمية بالعربي',
+-        'label_en' => 'التسمية بالإنجليزي',
+-        'alt_ar' => 'النص البديل بالعربي',
+-        'alt_en' => 'النص البديل بالإنجليزي',
+-        'feature_ar' => 'الميزة بالعربي',
+-        'feature_en' => 'الميزة بالإنجليزي',
+-        'price' => 'السعر',
+-        'price_starting_from' => 'السعر ابتداءً من',
+-        'category_id' => 'التصنيف',
+-        'image' => 'الصورة',
+-        'logo' => 'الشعار',
+-        'order' => 'الترتيب',
+-        'city' => 'المدينة',
+-        'phone' => 'رقم الهاتف',
+-        'opening_time' => 'وقت الفتح',
+-        'closing_time' => 'وقت الإغلاق',
+-        'google_maps_url' => 'رابط خرائط جوجل',
+-        'order_url' => 'رابط الطلب',
+-        'status' => 'الحالة',
+-        'role' => 'الصلاحية',
+-        'event_date' => 'تاريخ المناسبة',
+-        'guests_count' => 'عدد الضيوف',
+-        'branch' => 'الفرع',
+-        'event_type' => 'نوع المناسبة',
+-        'budget_range' => 'نطاق الميزانية',
+-        'notes' => 'ملاحظات',
+-        'is_active' => 'الحالة',
+-        'is_featured' => 'مميز',
+-        'is_signature' => 'طبق مميز',
+-        'settings' => 'الإعدادات',
+-        'items' => 'العناصر',
+-        'features' => 'الميزات',
+-        'dishes' => 'الأطباق',
+-        'page' => 'الصفحة',
+-        'section' => 'القسم',
+-        'key' => 'المفتاح',
+-        'slug' => 'المعرّف',
+-        'year' => 'السنة',
++        'name'              => 'الاسم',
++        'name_ar'           => 'الاسم بالعربية',
++        'name_en'           => 'الاسم بالإنجليزية',
++        'email'             => 'البريد الإلكتروني',
++        'password'          => 'كلمة المرور',
++        'phone'             => 'رقم الجوال',
++        'price'             => 'السعر',
++        'description_ar'    => 'الوصف بالعربية',
++        'description_en'    => 'الوصف بالإنجليزية',
++        'category_id'       => 'التصنيف',
++        'image'             => 'الصورة',
++        'event_date'        => 'تاريخ المناسبة',
++        'guests_count'      => 'عدد الضيوف',
++        'branch'            => 'الفرع',
++        'event_type'        => 'نوع المناسبة',
++        'budget_range'      => 'الميزانية التقريبية',
++        'notes'             => 'ملاحظات',
++        'value_ar'          => 'القيمة بالعربية',
++        'value_en'          => 'القيمة بالإنجليزية',
++        'title_ar'          => 'العنوان بالعربية',
++        'title_en'          => 'العنوان بالإنجليزية',
++        'description'       => 'الوصف',
++        'location_ar'       => 'الموقع بالعربية',
++        'location_en'       => 'الموقع بالإنجليزية',
++        'opening_time'      => 'وقت الفتح',
++        'closing_time'      => 'وقت الإغلاق',
++        'google_maps_url'   => 'رابط الخريطة',
++        'order_url'         => 'رابط الطلب',
++        'quote_ar'          => 'الرأي بالعربية',
++        'quote_en'          => 'الرأي بالإنجليزية',
++        'year'              => 'السنة',
++        'order'             => 'الترتيب',
++        'role'              => 'الدور',
++        'status'            => 'الحالة',
++        'slug'              => 'المعرّف',
++        'tag_en'            => 'التصنيف',
++        'city'              => 'المدينة',
++        'alt_ar'            => 'النص البديل بالعربية',
++        'alt_en'            => 'النص البديل بالإنجليزية',
++        'page'              => 'الصفحة',
++        'section'           => 'القسم',
++        'key'               => 'المفتاح',
++        'features'          => 'المميزات',
++        'dishes'            => 'الأطباق',
++        'items'             => 'العناصر',
+     ],
+ ];
+diff --git a/lang/en/messages.php b/lang/en/messages.php
+new file mode 100644
+index 0000000..bdd55f2
+--- /dev/null
++++ b/lang/en/messages.php
+@@ -0,0 +1,17 @@
++<?php
++
++return [
++    'created'           => 'Created successfully.',
++    'updated'           => 'Updated successfully.',
++    'deleted'           => 'Deleted successfully.',
++    'fetched'           => 'Data fetched successfully.',
++    'login_success'     => 'Login successful.',
++    'logout_success'    => 'Logged out successfully.',
++    'unauthorized'      => 'Unauthorized.',
++    'invalid_api_key'   => 'Invalid API key.',
++    'not_found'         => 'Resource not found.',
++    'validation_failed' => 'Validation failed.',
++    'something_wrong'   => 'Something went wrong. Please try again.',
++    'uploaded'          => 'File uploaded successfully.',
++    'quote_submitted'   => 'Your request has been received. We will contact you soon.',
++];
+diff --git a/lang/en/validation.php b/lang/en/validation.php
+new file mode 100644
+index 0000000..01acf9e
+--- /dev/null
++++ b/lang/en/validation.php
+@@ -0,0 +1,81 @@
++<?php
++
++return [
++    'required'  => 'The :attribute field is required.',
++    'string'    => 'The :attribute field must be a string.',
++    'email'     => 'The :attribute field must be a valid email address.',
++    'min'       => [
++        'string'  => 'The :attribute field must be at least :min characters.',
++        'numeric' => 'The :attribute field must be at least :min.',
++        'file'    => 'The :attribute file must be at least :min kilobytes.',
++    ],
++    'max'       => [
++        'string'  => 'The :attribute field must not exceed :max characters.',
++        'numeric' => 'The :attribute field must not exceed :max.',
++        'file'    => 'The :attribute file must not exceed :max kilobytes.',
++    ],
++    'unique'    => 'The :attribute has already been taken.',
++    'exists'    => 'The selected :attribute is invalid.',
++    'boolean'   => 'The :attribute field must be true or false.',
++    'integer'   => 'The :attribute field must be an integer.',
++    'numeric'   => 'The :attribute field must be a number.',
++    'in'        => 'The selected :attribute is invalid.',
++    'url'       => 'The :attribute field must be a valid URL.',
++    'date'      => 'The :attribute field must be a valid date.',
++    'after'     => 'The :attribute field must be a date after :date.',
++    'confirmed' => 'The :attribute confirmation does not match.',
++    'mimes'     => 'The :attribute must be a file of type: :values.',
++    'file'      => 'The :attribute must be a file.',
++    'array'     => 'The :attribute must be an array.',
++    'between'   => [
++        'numeric' => 'The :attribute must be between :min and :max.',
++        'file'    => 'The :attribute must be between :min and :max kilobytes.',
++        'string'  => 'The :attribute must be between :min and :max characters.',
++    ],
++    'attributes' => [
++        'name'              => 'name',
++        'name_ar'           => 'Arabic name',
++        'name_en'           => 'English name',
++        'email'             => 'email',
++        'password'          => 'password',
++        'phone'             => 'phone number',
++        'price'             => 'price',
++        'description_ar'    => 'Arabic description',
++        'description_en'    => 'English description',
++        'category_id'       => 'category',
++        'image'             => 'image',
++        'event_date'        => 'event date',
++        'guests_count'      => 'number of guests',
++        'branch'            => 'branch',
++        'event_type'        => 'event type',
++        'budget_range'      => 'budget range',
++        'notes'             => 'notes',
++        'value_ar'          => 'Arabic value',
++        'value_en'          => 'English value',
++        'title_ar'          => 'Arabic title',
++        'title_en'          => 'English title',
++        'location_ar'       => 'Arabic location',
++        'location_en'       => 'English location',
++        'opening_time'      => 'opening time',
++        'closing_time'      => 'closing time',
++        'google_maps_url'   => 'Google Maps URL',
++        'order_url'         => 'order URL',
++        'quote_ar'          => 'Arabic quote',
++        'quote_en'          => 'English quote',
++        'year'              => 'year',
++        'order'             => 'order',
++        'role'              => 'role',
++        'status'            => 'status',
++        'slug'              => 'slug',
++        'tag_en'            => 'tag',
++        'city'              => 'city',
++        'alt_ar'            => 'Arabic alt text',
++        'alt_en'            => 'English alt text',
++        'page'              => 'page',
++        'section'           => 'section',
++        'key'               => 'key',
++        'features'          => 'features',
++        'dishes'            => 'dishes',
++        'items'             => 'items',
++    ],
++];
 ===== END change.diff =====
 
 ===== BEGIN context-bundle.md =====
 # Context bundle
 
-bundle_version 2 · budget 8000 / used 444 tokens
+bundle_version 2 · budget 8000 / used 2403 tokens
 
-## fetched · changed_signature
+## flagged · named_reference
 
-**Subject:** execute
-**Reason:** the signature of execute changed; its call sites are not shown by the diff
-**Source:** `app/Actions/Auth/LoginAction.php` (lines 12-12)
-**Tokens:** 13
-
-```php
-    public function execute(LoginDTO $dto): array
-```
-
-## fetched · changed_signature
-
-**Subject:** execute
-**Reason:** the signature of execute changed; its call sites are not shown by the diff
-**Source:** `app/Actions/Auth/LogoutAction.php` (lines 9-9)
-**Tokens:** 12
-
-```php
-    public function execute(User $user): void
-```
-
-## fetched · changed_signature
-
-**Subject:** execute
-**Reason:** the signature of execute changed; its call sites are not shown by the diff
-**Source:** `app/Actions/Branch/CreateBranchAction.php` (lines 18-18)
-**Tokens:** 15
-
-```php
-    public function execute(CreateBranchDTO $dto): Branch
-```
-
-## fetched · changed_signature
-
-**Subject:** execute
-**Reason:** the signature of execute changed; its call sites are not shown by the diff
-**Source:** `app/Actions/Branch/DeleteBranchAction.php` (lines 16-16)
-**Tokens:** 11
-
-```php
-    public function execute(int $id): void
-```
-
-## fetched · changed_signature
-
-**Subject:** execute
-**Reason:** the signature of execute changed; its call sites are not shown by the diff
-**Source:** `app/Actions/Branch/GetBranchesAction.php` (lines 15-15)
-**Tokens:** 11
-
-```php
-    public function execute(): Collection
-```
-
-## fetched · changed_signature
-
-**Subject:** execute
-**Reason:** the signature of execute changed; its call sites are not shown by the diff
-**Source:** `app/Actions/Branch/UpdateBranchAction.php` (lines 19-19)
-**Tokens:** 17
-
-```php
-    public function execute(int $id, UpdateBranchDTO $dto): Branch
-```
-
-## fetched · changed_signature
-
-**Subject:** execute
-**Reason:** the signature of execute changed; its call sites are not shown by the diff
-**Source:** `app/Actions/Catering/CreatePackageAction.php` (lines 18-18)
-**Tokens:** 17
-
-```php
-    public function execute(CreatePackageDTO $dto): CateringPackage
-```
-
-## fetched · changed_signature
-
-**Subject:** execute
-**Reason:** the signature of execute changed; its call sites are not shown by the diff
-**Source:** `app/Actions/Catering/CreateSampleMenuAction.php` (lines 18-18)
-**Tokens:** 17
-
-```php
-    public function execute(CreateSampleMenuDTO $dto): SampleMenu
-```
-
-## fetched · changed_signature
-
-**Subject:** execute
-**Reason:** the signature of execute changed; its call sites are not shown by the diff
-**Source:** `app/Actions/Catering/DeletePackageAction.php` (lines 16-16)
-**Tokens:** 11
-
-```php
-    public function execute(int $id): void
-```
-
-## fetched · changed_signature
-
-**Subject:** execute
-**Reason:** the signature of execute changed; its call sites are not shown by the diff
-**Source:** `app/Actions/Catering/DeleteSampleMenuAction.php` (lines 16-16)
-**Tokens:** 11
-
-```php
-    public function execute(int $id): void
-```
-
-## fetched · changed_signature
-
-**Subject:** execute
-**Reason:** the signature of execute changed; its call sites are not shown by the diff
-**Source:** `app/Actions/Catering/GetPackagesAction.php` (lines 15-15)
-**Tokens:** 11
-
-```php
-    public function execute(): Collection
-```
-
-## fetched · changed_signature
-
-**Subject:** execute
-**Reason:** the signature of execute changed; its call sites are not shown by the diff
-**Source:** `app/Actions/Catering/GetSampleMenusAction.php` (lines 15-15)
-**Tokens:** 11
-
-```php
-    public function execute(): Collection
-```
-
-## fetched · changed_signature
-
-**Subject:** execute
-**Reason:** the signature of execute changed; its call sites are not shown by the diff
-**Source:** `app/Actions/Catering/SubmitQuoteRequestAction.php` (lines 16-16)
-**Tokens:** 18
-
-```php
-    public function execute(SubmitQuoteRequestDTO $dto): QuoteRequest
-```
-
-## fetched · changed_signature
-
-**Subject:** execute
-**Reason:** the signature of execute changed; its call sites are not shown by the diff
-**Source:** `app/Actions/Catering/UpdatePackageAction.php` (lines 19-19)
-**Tokens:** 19
-
-```php
-    public function execute(int $id, UpdatePackageDTO $dto): CateringPackage
-```
-
-## fetched · changed_signature
-
-**Subject:** execute
-**Reason:** the signature of execute changed; its call sites are not shown by the diff
-**Source:** `app/Actions/Catering/UpdateQuoteRequestStatusAction.php` (lines 16-16)
-**Tokens:** 21
-
-```php
-    public function execute(int $id, UpdateQuoteRequestStatusDTO $dto): QuoteRequest
-```
-
-## fetched · changed_signature
-
-**Subject:** execute
-**Reason:** the signature of execute changed; its call sites are not shown by the diff
-**Source:** `app/Actions/Catering/UpdateSampleMenuAction.php` (lines 18-18)
-**Tokens:** 19
-
-```php
-    public function execute(int $id, CreateSampleMenuDTO $dto): SampleMenu
-```
-
-## fetched · changed_signature
-
-**Subject:** execute
-**Reason:** the signature of execute changed; its call sites are not shown by the diff
-**Source:** `app/Actions/DeliveryApp/CreateDeliveryAppAction.php` (lines 18-18)
-**Tokens:** 17
-
-```php
-    public function execute(CreateDeliveryAppDTO $dto): DeliveryApp
-```
-
-## fetched · changed_signature
-
-**Subject:** execute
-**Reason:** the signature of execute changed; its call sites are not shown by the diff
-**Source:** `app/Actions/DeliveryApp/DeleteDeliveryAppAction.php` (lines 16-16)
-**Tokens:** 11
-
-```php
-    public function execute(int $id): void
-```
-
-## fetched · changed_signature
-
-**Subject:** execute
-**Reason:** the signature of execute changed; its call sites are not shown by the diff
-**Source:** `app/Actions/DeliveryApp/GetDeliveryAppsAction.php` (lines 15-15)
-**Tokens:** 16
-
-```php
-    public function execute(bool $activeOnly = true): Collection
-```
-
-## fetched · changed_signature
-
-**Subject:** execute
-**Reason:** the signature of execute changed; its call sites are not shown by the diff
-**Source:** `app/Actions/DeliveryApp/UpdateDeliveryAppAction.php` (lines 18-18)
-**Tokens:** 19
-
-```php
-    public function execute(int $id, CreateDeliveryAppDTO $dto): DeliveryApp
-```
-
-## fetched · changed_signature
-
-**Subject:** getByPage
-**Reason:** the signature of getByPage changed; its call sites are not shown by the diff
-**Source:** `app/Actions/MediaItem/GetMediaItemsAction.php` (lines 22-22)
-**Tokens:** 17
-
-```php
-            fn () => $this->repository->getByPage($page, $section)
-```
-
-## flagged · changed_signature
-
-**Subject:** execute
-**Reason:** the signature of execute changed; its call sites are not shown by the diff
-**Source:** `app/Actions/MediaItem/GetMediaItemsAction.php` :: `execute` (lines 12-20)
-**Tokens:** 21
+**Subject:** App\Http\Resources\Branch\BranchResource::collection
+**Reason:** the region depends on App\Http\Resources\Branch\BranchResource::collection, whose contract is defined in another file
+**Source:** `app/Http/Controllers/BranchController.php` :: `App\Http\Resources\Branch\BranchResource::collection` (lines 17-43)
+**Tokens:** 20
 
 ```text
-ASSUMPTION: additional call sites exist beyond the search bound; not all verified
+ASSUMPTION: named reference could not be resolved on disk; contract unverified
 ```
 
-## fetched · changed_signature
+## flagged · named_reference
 
-**Subject:** getByPage
-**Reason:** the signature of getByPage changed; its call sites are not shown by the diff
-**Source:** `app/Actions/PageContent/GetPageContentAction.php` (lines 23-23)
-**Tokens:** 17
+**Subject:** App\Http\Resources\Category\CategoryResource::collection
+**Reason:** the region depends on App\Http\Resources\Category\CategoryResource::collection, whose contract is defined in another file
+**Source:** `app/Http/Controllers/CategoryController.php` :: `App\Http\Resources\Category\CategoryResource::collection` (lines 15-41)
+**Tokens:** 20
+
+```text
+ASSUMPTION: named reference could not be resolved on disk; contract unverified
+```
+
+## flagged · named_reference
+
+**Subject:** App\Http\Resources\Catering\PackageResource::collection
+**Reason:** the region depends on App\Http\Resources\Catering\PackageResource::collection, whose contract is defined in another file
+**Source:** `app/Http/Controllers/Catering/CateringPackageController.php` :: `App\Http\Resources\Catering\PackageResource::collection` (lines 18-44)
+**Tokens:** 20
+
+```text
+ASSUMPTION: named reference could not be resolved on disk; contract unverified
+```
+
+## flagged · named_reference
+
+**Subject:** App\Http\Resources\Catering\QuoteRequestResource::collection
+**Reason:** the region depends on App\Http\Resources\Catering\QuoteRequestResource::collection, whose contract is defined in another file
+**Source:** `app/Http/Controllers/Catering/QuoteRequestController.php` :: `App\Http\Resources\Catering\QuoteRequestResource::collection` (lines 33-50)
+**Tokens:** 20
+
+```text
+ASSUMPTION: named reference could not be resolved on disk; contract unverified
+```
+
+## flagged · named_reference
+
+**Subject:** App\Http\Resources\Catering\SampleMenuResource::collection
+**Reason:** the region depends on App\Http\Resources\Catering\SampleMenuResource::collection, whose contract is defined in another file
+**Source:** `app/Http/Controllers/Catering/SampleMenuController.php` :: `App\Http\Resources\Catering\SampleMenuResource::collection` (lines 16-42)
+**Tokens:** 20
+
+```text
+ASSUMPTION: named reference could not be resolved on disk; contract unverified
+```
+
+## flagged · named_reference
+
+**Subject:** App\Http\Resources\DeliveryApp\DeliveryAppResource::collection
+**Reason:** the region depends on App\Http\Resources\DeliveryApp\DeliveryAppResource::collection, whose contract is defined in another file
+**Source:** `app/Http/Controllers/DeliveryAppController.php` :: `App\Http\Resources\DeliveryApp\DeliveryAppResource::collection` (lines 17-43)
+**Tokens:** 20
+
+```text
+ASSUMPTION: named reference could not be resolved on disk; contract unverified
+```
+
+## flagged · named_reference
+
+**Subject:** App\Http\Resources\Testimonial\TestimonialResource::collection
+**Reason:** the region depends on App\Http\Resources\Testimonial\TestimonialResource::collection, whose contract is defined in another file
+**Source:** `app/Http/Controllers/TestimonialController.php` :: `App\Http\Resources\Testimonial\TestimonialResource::collection` (lines 17-43)
+**Tokens:** 20
+
+```text
+ASSUMPTION: named reference could not be resolved on disk; contract unverified
+```
+
+## flagged · named_reference
+
+**Subject:** App\Http\Resources\Timeline\TimelineResource::collection
+**Reason:** the region depends on App\Http\Resources\Timeline\TimelineResource::collection, whose contract is defined in another file
+**Source:** `app/Http/Controllers/TimelineController.php` :: `App\Http\Resources\Timeline\TimelineResource::collection` (lines 15-41)
+**Tokens:** 20
+
+```text
+ASSUMPTION: named reference could not be resolved on disk; contract unverified
+```
+
+## flagged · named_reference
+
+**Subject:** App\Http\Resources\User\UserResource::collection
+**Reason:** the region depends on App\Http\Resources\User\UserResource::collection, whose contract is defined in another file
+**Source:** `app/Http/Controllers/UserController.php` :: `App\Http\Resources\User\UserResource::collection` (lines 20-51)
+**Tokens:** 20
+
+```text
+ASSUMPTION: named reference could not be resolved on disk; contract unverified
+```
+
+## fetched · named_reference
+
+**Subject:** App\Http\Resources\Auth\AuthResource
+**Reason:** the region depends on App\Http\Resources\Auth\AuthResource, whose contract is defined in another file
+**Source:** `app/Http/Resources/Auth/AuthResource.php` :: `toArray` (lines 10-21)
+**Tokens:** 102
 
 ```php
-            fn () => $this->repository->getByPage($page, $section)
+    public function toArray(Request $request): array
+    {
+        return [
+            'token' => $this->resource['token'],
+            'user' => [
+                'id' => $this->resource['user']->id,
+                'name' => $this->resource['user']->name,
+                'email' => $this->resource['user']->email,
+                'role' => $this->resource['user']->role,
+            ],
+        ];
+    }
 ```
 
-## fetched · changed_signature
+## fetched · named_reference
 
-**Subject:** scopeForPage
-**Reason:** the signature of scopeForPage changed; its call sites are not shown by the diff
-**Source:** `app/Models/MediaItem.php` (lines 24-24)
+**Subject:** App\Http\Resources\Branch\BranchResource
+**Reason:** the region depends on App\Http\Resources\Branch\BranchResource, whose contract is defined in another file
+**Source:** `app/Http/Resources/Branch/BranchResource.php` :: `toArray` (lines 13-32)
+**Tokens:** 206
+
+```php
+    public function toArray(Request $request): array
+    {
+        return [
+            'id' => $this->id,
+            'name' => $this->resolveLocale($this->name_ar, $this->name_en),
+            'name_ar' => $this->name_ar,
+            'name_en' => $this->name_en,
+            'location' => $this->resolveLocale($this->location_ar, $this->location_en),
+            'location_ar' => $this->location_ar,
+            'location_en' => $this->location_en,
+            'city' => $this->city,
+            'phone' => $this->phone,
+            'opening_time' => $this->opening_time,
+            'closing_time' => $this->closing_time,
+            'google_maps_url' => $this->google_maps_url,
+            'image_url' => $this->image_url,
+            'order' => $this->order,
+            'locale' => app()->getLocale(),
+        ];
+    }
+```
+
+## fetched · named_reference
+
+**Subject:** App\Http\Resources\Category\CategoryResource
+**Reason:** the region depends on App\Http\Resources\Category\CategoryResource, whose contract is defined in another file
+**Source:** `app/Http/Resources/Category/CategoryResource.php` :: `toArray` (lines 13-24)
+**Tokens:** 100
+
+```php
+    public function toArray(Request $request): array
+    {
+        return [
+            'id' => $this->id,
+            'name' => $this->resolveLocale($this->name_ar, $this->name_en),
+            'name_ar' => $this->name_ar,
+            'name_en' => $this->name_en,
+            'slug' => $this->slug,
+            'order' => $this->order,
+            'locale' => app()->getLocale(),
+        ];
+    }
+```
+
+## fetched · named_reference
+
+**Subject:** App\Http\Resources\Catering\PackageResource
+**Reason:** the region depends on App\Http\Resources\Catering\PackageResource, whose contract is defined in another file
+**Source:** `app/Http/Resources/Catering/PackageResource.php` :: `toArray` (lines 13-35)
+**Tokens:** 261
+
+```php
+    public function toArray(Request $request): array
+    {
+        return [
+            'id' => $this->id,
+            'name' => $this->resolveLocale($this->name_ar, $this->name_en),
+            'name_ar' => $this->name_ar,
+            'name_en' => $this->name_en,
+            'description' => $this->resolveLocale($this->description_ar, $this->description_en),
+            'description_ar' => $this->description_ar,
+            'description_en' => $this->description_en,
+            'tag_en' => $this->tag_en,
+            'price_starting_from' => $this->price_starting_from,
+            'is_featured' => $this->is_featured,
+            'features' => $this->whenLoaded('features', fn () => $this->features->map(fn ($feature) => [
+                'feature_ar' => $feature->feature_ar,
+                'feature_en' => $feature->feature_en,
+                'order' => $feature->order,
+            ])),
+            'image_url' => $this->image_url,
+            'order' => $this->order,
+            'locale' => app()->getLocale(),
+        ];
+    }
+```
+
+## fetched · named_reference
+
+**Subject:** App\Http\Resources\Catering\QuoteRequestResource
+**Reason:** the region depends on App\Http\Resources\Catering\QuoteRequestResource, whose contract is defined in another file
+**Source:** `app/Http/Resources/Catering/QuoteRequestResource.php` :: `toArray` (lines 10-29)
+**Tokens:** 186
+
+```php
+    public function toArray(Request $request): array
+    {
+        return [
+            'id' => $this->id,
+            'name' => $this->name,
+            'phone' => $this->phone,
+            'email' => $this->email,
+            'event_date' => $this->event_date?->toDateString(),
+            'guests_count' => $this->guests_count,
+            'branch' => $this->branch,
+            'event_type' => $this->event_type->value,
+            'budget_range' => $this->budget_range?->value,
+            'notes' => $this->notes,
+            'status' => [
+                'value' => $this->status->value,
+                'label' => $this->status->label(),
+            ],
+            'created_at' => $this->created_at?->toIso8601String(),
+        ];
+    }
+```
+
+## fetched · named_reference
+
+**Subject:** App\Http\Resources\Catering\SampleMenuResource
+**Reason:** the region depends on App\Http\Resources\Catering\SampleMenuResource, whose contract is defined in another file
+**Source:** `app/Http/Resources/Catering/SampleMenuResource.php` :: `toArray` (lines 13-31)
+**Tokens:** 190
+
+```php
+    public function toArray(Request $request): array
+    {
+        return [
+            'id' => $this->id,
+            'name' => $this->resolveLocale($this->name_ar, $this->name_en),
+            'name_ar' => $this->name_ar,
+            'name_en' => $this->name_en,
+            'tag_en' => $this->tag_en,
+            'is_featured' => $this->is_featured,
+            'dishes' => $this->whenLoaded('dishes', fn () => $this->dishes->map(fn ($dish) => [
+                'dish_name_ar' => $dish->dish_name_ar,
+                'dish_name_en' => $dish->dish_name_en,
+                'order' => $dish->order,
+            ])),
+            'image_url' => $this->image_url,
+            'order' => $this->order,
+            'locale' => app()->getLocale(),
+        ];
+    }
+```
+
+## fetched · named_reference
+
+**Subject:** App\Http\Resources\DeliveryApp\DeliveryAppResource
+**Reason:** the region depends on App\Http\Resources\DeliveryApp\DeliveryAppResource, whose contract is defined in another file
+**Source:** `app/Http/Resources/DeliveryApp/DeliveryAppResource.php` :: `toArray` (lines 13-26)
+**Tokens:** 124
+
+```php
+    public function toArray(Request $request): array
+    {
+        return [
+            'id' => $this->id,
+            'name' => $this->resolveLocale($this->name_ar, $this->name_en),
+            'name_ar' => $this->name_ar,
+            'name_en' => $this->name_en,
+            'order_url' => $this->order_url,
+            'logo_url' => $this->logo_url,
+            'is_active' => $this->is_active,
+            'order' => $this->order,
+            'locale' => app()->getLocale(),
+        ];
+    }
+```
+
+## fetched · named_reference
+
+**Subject:** App\Http\Resources\Dish\DishCollection
+**Reason:** the region depends on App\Http\Resources\Dish\DishCollection, whose contract is defined in another file
+**Source:** `app/Http/Resources/Dish/DishCollection.php` :: `collects` (lines 10-10)
+**Tokens:** 11
+
+```php
+    public $collects = DishResource::class;
+```
+
+## fetched · named_reference
+
+**Subject:** App\Http\Resources\Dish\DishCollection
+**Reason:** the region depends on App\Http\Resources\Dish\DishCollection, whose contract is defined in another file
+**Source:** `app/Http/Resources/Dish/DishCollection.php` :: `toArray` (lines 12-23)
+**Tokens:** 93
+
+```php
+    public function toArray(Request $request): array
+    {
+        return [
+            'items' => $this->collection,
+            'meta' => [
+                'current_page' => $this->currentPage(),
+                'last_page' => $this->lastPage(),
+                'per_page' => $this->perPage(),
+                'total' => $this->total(),
+            ],
+        ];
+    }
+```
+
+## fetched · named_reference
+
+**Subject:** App\Http\Resources\Dish\DishResource
+**Reason:** the region depends on App\Http\Resources\Dish\DishResource, whose contract is defined in another file
+**Source:** `app/Http/Resources/Dish/DishResource.php` :: `toArray` (lines 14-32)
+**Tokens:** 208
+
+```php
+    public function toArray(Request $request): array
+    {
+        return [
+            'id' => $this->id,
+            'name' => $this->resolveLocale($this->name_ar, $this->name_en),
+            'name_ar' => $this->name_ar,
+            'name_en' => $this->name_en,
+            'description' => $this->resolveLocale($this->description_ar, $this->description_en),
+            'description_ar' => $this->description_ar,
+            'description_en' => $this->description_en,
+            'price' => $this->price,
+            'category' => new CategoryResource($this->whenLoaded('category')),
+            'is_featured' => $this->is_featured,
+            'is_signature' => $this->is_signature,
+            'image_url' => $this->image_url,
+            'order' => $this->order,
+            'locale' => app()->getLocale(),
+        ];
+    }
+```
+
+## fetched · named_reference
+
+**Subject:** App\Http\Resources\MediaItem\MediaItemResource
+**Reason:** the region depends on App\Http\Resources\MediaItem\MediaItemResource, whose contract is defined in another file
+**Source:** `app/Http/Resources/MediaItem/MediaItemResource.php` :: `toArray` (lines 13-26)
+**Tokens:** 115
+
+```php
+    public function toArray(Request $request): array
+    {
+        return [
+            'id' => $this->id,
+            'page' => $this->page,
+            'section' => $this->section,
+            'key' => $this->key,
+            'url' => $this->url,
+            'alt' => $this->resolveLocale($this->alt_ar, $this->alt_en),
+            'alt_ar' => $this->alt_ar,
+            'alt_en' => $this->alt_en,
+            'locale' => app()->getLocale(),
+        ];
+    }
+```
+
+## fetched · named_reference
+
+**Subject:** App\Http\Resources\PageContent\PageContentResource
+**Reason:** the region depends on App\Http\Resources\PageContent\PageContentResource, whose contract is defined in another file
+**Source:** `app/Http/Resources/PageContent/PageContentResource.php` :: `toArray` (lines 13-27)
+**Tokens:** 129
+
+```php
+    public function toArray(Request $request): array
+    {
+        return [
+            'id' => $this->id,
+            'page' => $this->page,
+            'section' => $this->section,
+            'key' => $this->key,
+            'value' => $this->resolveLocale($this->value_ar, $this->value_en),
+            'value_ar' => $this->value_ar,
+            'value_en' => $this->value_en,
+            'type' => $this->type,
+            'order' => $this->order,
+            'locale' => app()->getLocale(),
+        ];
+    }
+```
+
+## fetched · named_reference
+
+**Subject:** App\Http\Resources\Setting\SettingResource
+**Reason:** the region depends on App\Http\Resources\Setting\SettingResource, whose contract is defined in another file
+**Source:** `app/Http/Resources/Setting/SettingResource.php` :: `toArray` (lines 13-26)
+**Tokens:** 119
+
+```php
+    public function toArray(Request $request): array
+    {
+        return [
+            'id' => $this->id,
+            'key' => $this->key,
+            'value' => $this->value,
+            'type' => $this->type,
+            'group' => $this->group,
+            'label' => $this->resolveLocale($this->label_ar, $this->label_en),
+            'label_ar' => $this->label_ar,
+            'label_en' => $this->label_en,
+            'locale' => app()->getLocale(),
+        ];
+    }
+```
+
+## fetched · named_reference
+
+**Subject:** App\Http\Resources\Testimonial\TestimonialResource
+**Reason:** the region depends on App\Http\Resources\Testimonial\TestimonialResource, whose contract is defined in another file
+**Source:** `app/Http/Resources/Testimonial/TestimonialResource.php` :: `toArray` (lines 13-25)
+**Tokens:** 113
+
+```php
+    public function toArray(Request $request): array
+    {
+        return [
+            'id' => $this->id,
+            'name' => $this->name,
+            'quote' => $this->resolveLocale($this->quote_ar, $this->quote_en),
+            'quote_ar' => $this->quote_ar,
+            'quote_en' => $this->quote_en,
+            'is_active' => $this->is_active,
+            'order' => $this->order,
+            'locale' => app()->getLocale(),
+        ];
+    }
+```
+
+## fetched · named_reference
+
+**Subject:** App\Http\Resources\Timeline\TimelineResource
+**Reason:** the region depends on App\Http\Resources\Timeline\TimelineResource, whose contract is defined in another file
+**Source:** `app/Http/Resources/Timeline/TimelineResource.php` :: `toArray` (lines 13-28)
+**Tokens:** 165
+
+```php
+    public function toArray(Request $request): array
+    {
+        return [
+            'id' => $this->id,
+            'year' => $this->year,
+            'location_en' => $this->location_en,
+            'title' => $this->resolveLocale($this->title_ar, $this->title_en),
+            'title_ar' => $this->title_ar,
+            'title_en' => $this->title_en,
+            'description' => $this->resolveLocale($this->description_ar, $this->description_en),
+            'description_ar' => $this->description_ar,
+            'description_en' => $this->description_en,
+            'order' => $this->order,
+            'locale' => app()->getLocale(),
+        ];
+    }
+```
+
+## fetched · named_reference
+
+**Subject:** App\Http\Resources\User\UserResource
+**Reason:** the region depends on App\Http\Resources\User\UserResource, whose contract is defined in another file
+**Source:** `app/Http/Resources/User/UserResource.php` :: `toArray` (lines 10-19)
+**Tokens:** 75
+
+```php
+    public function toArray(Request $request): array
+    {
+        return [
+            'id' => $this->id,
+            'name' => $this->name,
+            'email' => $this->email,
+            'role' => $this->role,
+            'created_at' => $this->created_at?->toIso8601String(),
+        ];
+    }
+```
+
+## fetched · named_reference
+
+**Subject:** App\Repositories\CategoryRepository::getAll
+**Reason:** the region depends on App\Repositories\CategoryRepository::getAll, whose contract is defined in another file
+**Source:** `app/Repositories/CategoryRepository.php` :: `getAll` (lines 10-13)
 **Tokens:** 26
 
 ```php
-    public function scopeForPage(Builder $query, ?string $page = null, ?string $section = null): Builder
-```
-
-## fetched · changed_signature
-
-**Subject:** scopeForPage
-**Reason:** the signature of scopeForPage changed; its call sites are not shown by the diff
-**Source:** `app/Models/PageContent.php` (lines 20-20)
-**Tokens:** 24
-
-```php
-    public function scopeForPage(Builder $query, string $page, ?string $section = null): Builder
-```
-
-## fetched · changed_signature
-
-**Subject:** getByPage
-**Reason:** the signature of getByPage changed; its call sites are not shown by the diff
-**Source:** `app/Repositories/MediaItemRepository.php` (lines 10-10)
-**Tokens:** 22
-
-```php
-    public function getByPage(?string $page = null, ?string $section = null): Collection
-```
-
-## fetched · changed_signature
-
-**Subject:** getByPage
-**Reason:** the signature of getByPage changed; its call sites are not shown by the diff
-**Source:** `app/Repositories/PageContentRepository.php` (lines 12-12)
-**Tokens:** 20
-
-```php
-    public function getByPage(string $page, ?string $section = null): Collection
+    public function getAll(): Collection
+    {
+        return Category::orderBy('order')->get();
+    }
 ```
 
 ## Dropped
@@ -417,8 +1382,16 @@ Nothing was dropped.
 ===== END context-bundle.md =====
 
 ===== BEGIN context-diagnostics.txt =====
-dependency class: Illuminate\Support\Collection provided by vendor/laravel/framework/src/Illuminate/Collections/Collection.php; surface not fetched
-call sites truncated at 20 for execute under app/
-dependency class: Illuminate\Database\Eloquent\Builder provided by vendor/laravel/framework/src/Illuminate/Database/Eloquent/Builder.php; surface not fetched
-dependency class: Illuminate\Support\Collection provided by vendor/laravel/framework/src/Illuminate/Collections/Collection.php; surface not fetched
+new file: lang/ar/messages.php — own-file context is in the diff, not fetched
+new file: lang/en/messages.php — own-file context is in the diff, not fetched
+new file: lang/en/validation.php — own-file context is in the diff, not fetched
+unresolved named_reference: App\Http\Resources\Branch\BranchResource::collection in app/Http/Controllers/BranchController.php
+unresolved named_reference: App\Http\Resources\Category\CategoryResource::collection in app/Http/Controllers/CategoryController.php
+unresolved named_reference: App\Http\Resources\Catering\PackageResource::collection in app/Http/Controllers/Catering/CateringPackageController.php
+unresolved named_reference: App\Http\Resources\Catering\QuoteRequestResource::collection in app/Http/Controllers/Catering/QuoteRequestController.php
+unresolved named_reference: App\Http\Resources\Catering\SampleMenuResource::collection in app/Http/Controllers/Catering/SampleMenuController.php
+unresolved named_reference: App\Http\Resources\DeliveryApp\DeliveryAppResource::collection in app/Http/Controllers/DeliveryAppController.php
+unresolved named_reference: App\Http\Resources\Testimonial\TestimonialResource::collection in app/Http/Controllers/TestimonialController.php
+unresolved named_reference: App\Http\Resources\Timeline\TimelineResource::collection in app/Http/Controllers/TimelineController.php
+unresolved named_reference: App\Http\Resources\User\UserResource::collection in app/Http/Controllers/UserController.php
 ===== END context-diagnostics.txt =====

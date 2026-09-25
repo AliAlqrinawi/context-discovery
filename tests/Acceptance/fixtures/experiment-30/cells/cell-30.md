@@ -47,451 +47,368 @@ Q5: "<exact quotation>" | NONE_VISIBLE
 ---
 
 ===== BEGIN change.diff =====
-diff --git a/app/Http/Controllers/Admin/ProfileController.php b/app/Http/Controllers/Admin/ProfileController.php
-new file mode 100644
-index 0000000..8b39355
---- /dev/null
-+++ b/app/Http/Controllers/Admin/ProfileController.php
-@@ -0,0 +1,55 @@
-+<?php
-+
-+namespace App\Http\Controllers\Admin;
-+
-+use App\Http\Controllers\Controller;
-+use App\Http\Requests\Profile\UpdatePasswordRequest;
-+use App\Http\Requests\Profile\UpdateProfileRequest;
-+use App\Http\Resources\User\UserResource;
-+use Illuminate\Http\JsonResponse;
-+use Illuminate\Http\Request;
-+use Illuminate\Support\Facades\Hash;
-+
-+class ProfileController extends Controller
-+{
-+    public function show(Request $request): JsonResponse
-+    {
-+        return $this->success(
-+            new UserResource($request->user()),
-+            __('messages.fetched')
-+        );
-+    }
-+
-+    public function update(UpdateProfileRequest $request): JsonResponse
-+    {
-+        $user = $request->user();
-+        $user->update([
-+            'name' => $request->name,
-+            'email' => $request->email,
-+        ]);
-+
-+        return $this->success(
-+            new UserResource($user->fresh()),
-+            __('messages.profile_updated')
-+        );
-+    }
-+
-+    public function updatePassword(UpdatePasswordRequest $request): JsonResponse
-+    {
-+        $user = $request->user();
-+
-+        if (! Hash::check($request->current_password, $user->password)) {
-+            return $this->error(
-+                __('messages.invalid_current_password'),
-+                422,
-+                ['current_password' => [__('messages.invalid_current_password')]]
-+            );
-+        }
-+
-+        $user->update([
-+            'password' => Hash::make($request->password),
-+        ]);
-+
-+        return $this->success(null, __('messages.password_updated'));
-+    }
-+}
-diff --git a/app/Http/Requests/Profile/UpdatePasswordRequest.php b/app/Http/Requests/Profile/UpdatePasswordRequest.php
-new file mode 100644
-index 0000000..99a364f
---- /dev/null
-+++ b/app/Http/Requests/Profile/UpdatePasswordRequest.php
-@@ -0,0 +1,22 @@
-+<?php
-+
-+namespace App\Http\Requests\Profile;
-+
-+use App\Http\Requests\BaseFormRequest;
-+
-+class UpdatePasswordRequest extends BaseFormRequest
-+{
-+    public function authorize(): bool
-+    {
-+        return true;
-+    }
-+
-+    public function rules(): array
-+    {
-+        return [
-+            'current_password' => ['required', 'string'],
-+            'password' => ['required', 'string', 'min:8', 'confirmed'],
-+            'password_confirmation' => ['required', 'string'],
-+        ];
-+    }
-+}
-diff --git a/app/Http/Requests/Profile/UpdateProfileRequest.php b/app/Http/Requests/Profile/UpdateProfileRequest.php
-new file mode 100644
-index 0000000..ada08fd
---- /dev/null
-+++ b/app/Http/Requests/Profile/UpdateProfileRequest.php
-@@ -0,0 +1,22 @@
-+<?php
-+
-+namespace App\Http\Requests\Profile;
-+
-+use App\Http\Requests\BaseFormRequest;
-+use Illuminate\Validation\Rule;
-+
-+class UpdateProfileRequest extends BaseFormRequest
-+{
-+    public function authorize(): bool
-+    {
-+        return true;
-+    }
-+
-+    public function rules(): array
-+    {
-+        return [
-+            'name' => ['required', 'string', 'max:200'],
-+            'email' => ['required', 'email', Rule::unique('users', 'email')->ignore($this->user()->id)],
-+        ];
-+    }
-+}
-diff --git a/lang/ar/messages.php b/lang/ar/messages.php
-index cbdaefa..7f3a08a 100644
---- a/lang/ar/messages.php
-+++ b/lang/ar/messages.php
-@@ -14,4 +14,7 @@
-     'something_wrong'   => 'حدث خطأ ما، يرجى المحاولة لاحقاً.',
-     'uploaded'          => 'تم رفع الملف بنجاح.',
-     'quote_submitted'   => 'تم استلام طلبكم، سنتواصل معكم قريباً.',
-+    'invalid_current_password' => 'كلمة المرور الحالية غير صحيحة.',
-+    'password_updated'         => 'تم تحديث كلمة المرور بنجاح.',
-+    'profile_updated'          => 'تم تحديث الملف الشخصي بنجاح.',
- ];
-diff --git a/lang/en/messages.php b/lang/en/messages.php
-index bdd55f2..903d8fa 100644
---- a/lang/en/messages.php
-+++ b/lang/en/messages.php
-@@ -14,4 +14,7 @@
-     'something_wrong'   => 'Something went wrong. Please try again.',
-     'uploaded'          => 'File uploaded successfully.',
-     'quote_submitted'   => 'Your request has been received. We will contact you soon.',
-+    'invalid_current_password' => 'The current password is incorrect.',
-+    'password_updated'         => 'Password updated successfully.',
-+    'profile_updated'          => 'Profile updated successfully.',
- ];
-diff --git a/routes/admin.php b/routes/admin.php
-index 728f0e8..ba67cc1 100644
---- a/routes/admin.php
-+++ b/routes/admin.php
-@@ -10,6 +10,7 @@
- use App\Http\Controllers\Admin\DishController;
- use App\Http\Controllers\Admin\MediaItemController;
- use App\Http\Controllers\Admin\PageContentController;
-+use App\Http\Controllers\Admin\ProfileController;
- use App\Http\Controllers\Admin\SettingController;
- use App\Http\Controllers\Admin\TestimonialController;
- use App\Http\Controllers\Admin\TimelineController;
-@@ -31,6 +32,13 @@
-             Route::get('/me',      'me');
-         });
+diff --git a/app/Actions/MediaItem/GetMediaItemsAction.php b/app/Actions/MediaItem/GetMediaItemsAction.php
+index 513c779..edf298f 100644
+--- a/app/Actions/MediaItem/GetMediaItemsAction.php
++++ b/app/Actions/MediaItem/GetMediaItemsAction.php
+@@ -12,9 +12,9 @@ public function __construct(
+         private readonly MediaItemRepository $repository,
+     ) {}
  
-+        // ── Profile ───────────────────────────────────────
-+        Route::prefix('profile')->controller(ProfileController::class)->group(function () {
-+            Route::get('/', 'show');
-+            Route::put('/', 'update');
-+            Route::put('/password', 'updatePassword');
-+        });
-+
-         // ── Page Contents ─────────────────────────────────
-         Route::prefix('page-contents')->controller(PageContentController::class)->group(function () {
-             Route::get('/',       'index');
-diff --git a/tests/Feature/ProfileTest.php b/tests/Feature/ProfileTest.php
-new file mode 100644
-index 0000000..16a2470
---- /dev/null
-+++ b/tests/Feature/ProfileTest.php
-@@ -0,0 +1,130 @@
-+<?php
-+
-+namespace Tests\Feature;
-+
-+use App\Models\User;
-+use Illuminate\Foundation\Testing\RefreshDatabase;
-+use Illuminate\Support\Facades\Hash;
-+use Tests\TestCase;
-+
-+class ProfileTest extends TestCase
-+{
-+    use RefreshDatabase;
-+
-+    protected function setUp(): void
-+    {
-+        parent::setUp();
-+
-+        $this->seed();
-+    }
-+
-+    private function token(): string
-+    {
-+        $user = User::where('email', 'admin@abouelsid.com')->first();
-+
-+        return $user->createToken('test-token')->plainTextToken;
-+    }
-+
-+    public function test_get_profile_authenticated_returns_200_with_user_data(): void
-+    {
-+        $response = $this->getJson('/api/v1/admin/profile', [
-+            'Authorization' => "Bearer {$this->token()}",
-+        ]);
-+
-+        $response->assertStatus(200)
-+            ->assertJson(['success' => true])
-+            ->assertJsonStructure(['data' => ['id', 'name', 'email', 'role']])
-+            ->assertJsonPath('data.email', 'admin@abouelsid.com');
-+    }
-+
-+    public function test_get_profile_unauthenticated_returns_401(): void
-+    {
-+        $response = $this->getJson('/api/v1/admin/profile');
-+
-+        $response->assertStatus(401)
-+            ->assertJson(['success' => false]);
-+    }
-+
-+    public function test_update_profile_with_valid_data_updates_name_and_email(): void
-+    {
-+        $response = $this->putJson('/api/v1/admin/profile', [
-+            'name' => 'Updated Name',
-+            'email' => 'updated@abouelsid.com',
-+        ], [
-+            'Authorization' => "Bearer {$this->token()}",
-+        ]);
-+
-+        $response->assertStatus(200)
-+            ->assertJson(['success' => true])
-+            ->assertJsonPath('data.name', 'Updated Name')
-+            ->assertJsonPath('data.email', 'updated@abouelsid.com');
-+
-+        $this->assertDatabaseHas('users', [
-+            'email' => 'updated@abouelsid.com',
-+            'name' => 'Updated Name',
-+        ]);
-+    }
-+
-+    public function test_update_profile_with_duplicate_email_returns_422(): void
-+    {
-+        User::factory()->create(['email' => 'taken@abouelsid.com']);
-+
-+        $response = $this->putJson('/api/v1/admin/profile', [
-+            'name' => 'Admin',
-+            'email' => 'taken@abouelsid.com',
-+        ], [
-+            'Authorization' => "Bearer {$this->token()}",
-+        ]);
-+
-+        $response->assertStatus(422)
-+            ->assertJson(['success' => false])
-+            ->assertJsonValidationErrors(['email']);
-+    }
-+
-+    public function test_update_password_with_correct_current_password_returns_200(): void
-+    {
-+        $response = $this->putJson('/api/v1/admin/profile/password', [
-+            'current_password' => 'password',
-+            'password' => 'newpassword123',
-+            'password_confirmation' => 'newpassword123',
-+        ], [
-+            'Authorization' => "Bearer {$this->token()}",
-+        ]);
-+
-+        $response->assertStatus(200)
-+            ->assertJson(['success' => true]);
-+
-+        $user = User::where('email', 'admin@abouelsid.com')->first();
-+        $this->assertTrue(Hash::check('newpassword123', $user->password));
-+    }
-+
-+    public function test_update_password_with_wrong_current_password_returns_422(): void
-+    {
-+        $response = $this->putJson('/api/v1/admin/profile/password', [
-+            'current_password' => 'wrong-password',
-+            'password' => 'newpassword123',
-+            'password_confirmation' => 'newpassword123',
-+        ], [
-+            'Authorization' => "Bearer {$this->token()}",
-+        ]);
-+
-+        $response->assertStatus(422)
-+            ->assertJson(['success' => false])
-+            ->assertJsonValidationErrors(['current_password']);
-+    }
-+
-+    public function test_update_password_with_mismatched_confirmation_returns_422(): void
-+    {
-+        $response = $this->putJson('/api/v1/admin/profile/password', [
-+            'current_password' => 'password',
-+            'password' => 'newpassword123',
-+            'password_confirmation' => 'does-not-match',
-+        ], [
-+            'Authorization' => "Bearer {$this->token()}",
-+        ]);
-+
-+        $response->assertStatus(422)
-+            ->assertJson(['success' => false])
-+            ->assertJsonValidationErrors(['password']);
-+    }
-+}
+-    public function execute(string $page, ?string $section = null): Collection
++    public function execute(?string $page = null, ?string $section = null): Collection
+     {
+-        $key = "media_items_{$page}_{$section}";
++        $key = 'media_items_' . ($page ?? 'all') . '_' . ($section ?? 'all');
+ 
+         return Cache::tags(['media_items'])->remember(
+             $key,
+diff --git a/app/Http/Controllers/Admin/MediaItemController.php b/app/Http/Controllers/Admin/MediaItemController.php
+index 87a24a5..b2b4574 100644
+--- a/app/Http/Controllers/Admin/MediaItemController.php
++++ b/app/Http/Controllers/Admin/MediaItemController.php
+@@ -18,7 +18,7 @@ class MediaItemController extends Controller
+     public function index(Request $request, GetMediaItemsAction $action): JsonResponse
+     {
+         $result = $action->execute(
+-            $request->string('page')->toString(),
++            $request->filled('page') ? $request->string('page')->toString() : null,
+             $request->filled('section') ? $request->string('section')->toString() : null,
+         );
+ 
+diff --git a/app/Models/MediaItem.php b/app/Models/MediaItem.php
+index 1877fbf..8d78596 100644
+--- a/app/Models/MediaItem.php
++++ b/app/Models/MediaItem.php
+@@ -21,9 +21,11 @@ class MediaItem extends Model
+         'height',
+     ];
+ 
+-    public function scopeForPage(Builder $query, string $page, ?string $section = null): Builder
++    public function scopeForPage(Builder $query, ?string $page = null, ?string $section = null): Builder
+     {
+-        $query->where('page', $page);
++        if ($page !== null) {
++            $query->where('page', $page);
++        }
+ 
+         if ($section !== null) {
+             $query->where('section', $section);
+diff --git a/app/Repositories/MediaItemRepository.php b/app/Repositories/MediaItemRepository.php
+index e52abd0..7dbbde9 100644
+--- a/app/Repositories/MediaItemRepository.php
++++ b/app/Repositories/MediaItemRepository.php
+@@ -7,7 +7,7 @@
+ 
+ class MediaItemRepository
+ {
+-    public function getByPage(string $page, ?string $section = null): Collection
++    public function getByPage(?string $page = null, ?string $section = null): Collection
+     {
+         return MediaItem::forPage($page, $section)
+             ->get()
 ===== END change.diff =====
 
 ===== BEGIN context-bundle.md =====
 # Context bundle
 
-bundle_version 2 · budget 8000 / used 423 tokens
+bundle_version 2 · budget 8000 / used 444 tokens
 
-## flagged · named_reference
+## fetched · changed_signature
 
-**Subject:** App\Http\Controllers\Admin\ProfileController::error
-**Reason:** the region calls App\Http\Controllers\Admin\ProfileController::error, which this file does not declare; its contract is defined in another file
-**Source:** `app/Http/Controllers/Admin/ProfileController.php` :: `App\Http\Controllers\Admin\ProfileController::error` (lines 1-55)
-**Tokens:** 62
-
-```text
-ASSUMPTION: error() is not declared in ProfileController or in its parent App\Http\Controllers\Controller; it is declared in trait App\Traits\ApiResponse at app/Traits/ApiResponse.php:58, used by that parent; body not fetched, contract unverified
-```
-
-## flagged · named_reference
-
-**Subject:** App\Http\Controllers\Admin\ProfileController::success
-**Reason:** the region calls App\Http\Controllers\Admin\ProfileController::success, which this file does not declare; its contract is defined in another file
-**Source:** `app/Http/Controllers/Admin/ProfileController.php` :: `App\Http\Controllers\Admin\ProfileController::success` (lines 1-55)
-**Tokens:** 62
-
-```text
-ASSUMPTION: success() is not declared in ProfileController or in its parent App\Http\Controllers\Controller; it is declared in trait App\Traits\ApiResponse at app/Traits/ApiResponse.php:9, used by that parent; body not fetched, contract unverified
-```
-
-## fetched · named_reference
-
-**Subject:** App\Http\Resources\User\UserResource
-**Reason:** the region depends on App\Http\Resources\User\UserResource, whose contract is defined in another file
-**Source:** `app/Http/Resources/User/UserResource.php` :: `toArray` (lines 10-19)
-**Tokens:** 75
+**Subject:** execute
+**Reason:** the signature of execute changed; its call sites are not shown by the diff
+**Source:** `app/Actions/Auth/LoginAction.php` (lines 12-12)
+**Tokens:** 13
 
 ```php
-    public function toArray(Request $request): array
-    {
-        return [
-            'id' => $this->id,
-            'name' => $this->name,
-            'email' => $this->email,
-            'role' => $this->role,
-            'created_at' => $this->created_at?->toIso8601String(),
-        ];
-    }
+    public function execute(LoginDTO $dto): array
 ```
 
-## fetched · named_reference
+## fetched · changed_signature
 
-**Subject:** App\Models\User::where
-**Reason:** the region depends on App\Models\User::where, whose contract is defined in another file
-**Source:** `app/Models/User.php` :: `casts` (lines 40-51)
-**Tokens:** 67
+**Subject:** execute
+**Reason:** the signature of execute changed; its call sites are not shown by the diff
+**Source:** `app/Actions/Auth/LogoutAction.php` (lines 9-9)
+**Tokens:** 12
 
 ```php
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
-    {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
-    }
+    public function execute(User $user): void
 ```
 
-## fetched · named_reference
+## fetched · changed_signature
 
-**Subject:** App\Models\User::where
-**Reason:** the region depends on App\Models\User::where, whose contract is defined in another file
-**Source:** `app/Models/User.php` :: `fillable` (lines 18-28)
-**Tokens:** 50
+**Subject:** execute
+**Reason:** the signature of execute changed; its call sites are not shown by the diff
+**Source:** `app/Actions/Branch/CreateBranchAction.php` (lines 18-18)
+**Tokens:** 15
 
 ```php
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var list<string>
-     */
-    protected $fillable = [
-        'name',
-        'email',
-        'password',
-        'role',
-    ];
+    public function execute(CreateBranchDTO $dto): Branch
 ```
 
-## fetched · named_reference
+## fetched · changed_signature
 
-**Subject:** App\Models\User::where
-**Reason:** the region depends on App\Models\User::where, whose contract is defined in another file
-**Source:** `app/Models/User.php` :: `hidden` (lines 30-38)
-**Tokens:** 48
+**Subject:** execute
+**Reason:** the signature of execute changed; its call sites are not shown by the diff
+**Source:** `app/Actions/Branch/DeleteBranchAction.php` (lines 16-16)
+**Tokens:** 11
 
 ```php
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var list<string>
-     */
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
+    public function execute(int $id): void
 ```
 
-## flagged · named_reference
+## fetched · changed_signature
 
-**Subject:** App\Models\User::factory
-**Reason:** the region depends on App\Models\User::factory, whose contract is defined in another file
-**Source:** `tests/Feature/ProfileTest.php` :: `App\Models\User::factory` (lines 1-130)
-**Tokens:** 20
+**Subject:** execute
+**Reason:** the signature of execute changed; its call sites are not shown by the diff
+**Source:** `app/Actions/Branch/GetBranchesAction.php` (lines 15-15)
+**Tokens:** 11
 
-```text
-ASSUMPTION: named reference could not be resolved on disk; contract unverified
+```php
+    public function execute(): Collection
 ```
 
-## flagged · named_reference
+## fetched · changed_signature
 
-**Subject:** App\Models\User::where
-**Reason:** the region depends on App\Models\User::where, whose contract is defined in another file
-**Source:** `tests/Feature/ProfileTest.php` :: `App\Models\User::where` (lines 1-130)
-**Tokens:** 20
+**Subject:** execute
+**Reason:** the signature of execute changed; its call sites are not shown by the diff
+**Source:** `app/Actions/Branch/UpdateBranchAction.php` (lines 19-19)
+**Tokens:** 17
 
-```text
-ASSUMPTION: named reference could not be resolved on disk; contract unverified
+```php
+    public function execute(int $id, UpdateBranchDTO $dto): Branch
 ```
 
-## flagged · unverifiable_premise
+## fetched · changed_signature
 
-**Subject:** surrounding-transaction
-**Reason:** the region performs several persistence writes; whether a transaction wraps them is decided by the caller, which the diff does not show
-**Source:** `app/Http/Controllers/Admin/ProfileController.php` (lines 1-55)
+**Subject:** execute
+**Reason:** the signature of execute changed; its call sites are not shown by the diff
+**Source:** `app/Actions/Catering/CreatePackageAction.php` (lines 18-18)
+**Tokens:** 17
+
+```php
+    public function execute(CreatePackageDTO $dto): CateringPackage
+```
+
+## fetched · changed_signature
+
+**Subject:** execute
+**Reason:** the signature of execute changed; its call sites are not shown by the diff
+**Source:** `app/Actions/Catering/CreateSampleMenuAction.php` (lines 18-18)
+**Tokens:** 17
+
+```php
+    public function execute(CreateSampleMenuDTO $dto): SampleMenu
+```
+
+## fetched · changed_signature
+
+**Subject:** execute
+**Reason:** the signature of execute changed; its call sites are not shown by the diff
+**Source:** `app/Actions/Catering/DeletePackageAction.php` (lines 16-16)
+**Tokens:** 11
+
+```php
+    public function execute(int $id): void
+```
+
+## fetched · changed_signature
+
+**Subject:** execute
+**Reason:** the signature of execute changed; its call sites are not shown by the diff
+**Source:** `app/Actions/Catering/DeleteSampleMenuAction.php` (lines 16-16)
+**Tokens:** 11
+
+```php
+    public function execute(int $id): void
+```
+
+## fetched · changed_signature
+
+**Subject:** execute
+**Reason:** the signature of execute changed; its call sites are not shown by the diff
+**Source:** `app/Actions/Catering/GetPackagesAction.php` (lines 15-15)
+**Tokens:** 11
+
+```php
+    public function execute(): Collection
+```
+
+## fetched · changed_signature
+
+**Subject:** execute
+**Reason:** the signature of execute changed; its call sites are not shown by the diff
+**Source:** `app/Actions/Catering/GetSampleMenusAction.php` (lines 15-15)
+**Tokens:** 11
+
+```php
+    public function execute(): Collection
+```
+
+## fetched · changed_signature
+
+**Subject:** execute
+**Reason:** the signature of execute changed; its call sites are not shown by the diff
+**Source:** `app/Actions/Catering/SubmitQuoteRequestAction.php` (lines 16-16)
+**Tokens:** 18
+
+```php
+    public function execute(SubmitQuoteRequestDTO $dto): QuoteRequest
+```
+
+## fetched · changed_signature
+
+**Subject:** execute
+**Reason:** the signature of execute changed; its call sites are not shown by the diff
+**Source:** `app/Actions/Catering/UpdatePackageAction.php` (lines 19-19)
 **Tokens:** 19
 
+```php
+    public function execute(int $id, UpdatePackageDTO $dto): CateringPackage
+```
+
+## fetched · changed_signature
+
+**Subject:** execute
+**Reason:** the signature of execute changed; its call sites are not shown by the diff
+**Source:** `app/Actions/Catering/UpdateQuoteRequestStatusAction.php` (lines 16-16)
+**Tokens:** 21
+
+```php
+    public function execute(int $id, UpdateQuoteRequestStatusDTO $dto): QuoteRequest
+```
+
+## fetched · changed_signature
+
+**Subject:** execute
+**Reason:** the signature of execute changed; its call sites are not shown by the diff
+**Source:** `app/Actions/Catering/UpdateSampleMenuAction.php` (lines 18-18)
+**Tokens:** 19
+
+```php
+    public function execute(int $id, CreateSampleMenuDTO $dto): SampleMenu
+```
+
+## fetched · changed_signature
+
+**Subject:** execute
+**Reason:** the signature of execute changed; its call sites are not shown by the diff
+**Source:** `app/Actions/DeliveryApp/CreateDeliveryAppAction.php` (lines 18-18)
+**Tokens:** 17
+
+```php
+    public function execute(CreateDeliveryAppDTO $dto): DeliveryApp
+```
+
+## fetched · changed_signature
+
+**Subject:** execute
+**Reason:** the signature of execute changed; its call sites are not shown by the diff
+**Source:** `app/Actions/DeliveryApp/DeleteDeliveryAppAction.php` (lines 16-16)
+**Tokens:** 11
+
+```php
+    public function execute(int $id): void
+```
+
+## fetched · changed_signature
+
+**Subject:** execute
+**Reason:** the signature of execute changed; its call sites are not shown by the diff
+**Source:** `app/Actions/DeliveryApp/GetDeliveryAppsAction.php` (lines 15-15)
+**Tokens:** 16
+
+```php
+    public function execute(bool $activeOnly = true): Collection
+```
+
+## fetched · changed_signature
+
+**Subject:** execute
+**Reason:** the signature of execute changed; its call sites are not shown by the diff
+**Source:** `app/Actions/DeliveryApp/UpdateDeliveryAppAction.php` (lines 18-18)
+**Tokens:** 19
+
+```php
+    public function execute(int $id, CreateDeliveryAppDTO $dto): DeliveryApp
+```
+
+## fetched · changed_signature
+
+**Subject:** getByPage
+**Reason:** the signature of getByPage changed; its call sites are not shown by the diff
+**Source:** `app/Actions/MediaItem/GetMediaItemsAction.php` (lines 22-22)
+**Tokens:** 17
+
+```php
+            fn () => $this->repository->getByPage($page, $section)
+```
+
+## flagged · changed_signature
+
+**Subject:** execute
+**Reason:** the signature of execute changed; its call sites are not shown by the diff
+**Source:** `app/Actions/MediaItem/GetMediaItemsAction.php` :: `execute` (lines 12-20)
+**Tokens:** 21
+
 ```text
-ASSUMPTION: this code assumes a surrounding transaction; caller not checked
+ASSUMPTION: additional call sites exist beyond the search bound; not all verified
+```
+
+## fetched · changed_signature
+
+**Subject:** getByPage
+**Reason:** the signature of getByPage changed; its call sites are not shown by the diff
+**Source:** `app/Actions/PageContent/GetPageContentAction.php` (lines 23-23)
+**Tokens:** 17
+
+```php
+            fn () => $this->repository->getByPage($page, $section)
+```
+
+## fetched · changed_signature
+
+**Subject:** scopeForPage
+**Reason:** the signature of scopeForPage changed; its call sites are not shown by the diff
+**Source:** `app/Models/MediaItem.php` (lines 24-24)
+**Tokens:** 26
+
+```php
+    public function scopeForPage(Builder $query, ?string $page = null, ?string $section = null): Builder
+```
+
+## fetched · changed_signature
+
+**Subject:** scopeForPage
+**Reason:** the signature of scopeForPage changed; its call sites are not shown by the diff
+**Source:** `app/Models/PageContent.php` (lines 20-20)
+**Tokens:** 24
+
+```php
+    public function scopeForPage(Builder $query, string $page, ?string $section = null): Builder
+```
+
+## fetched · changed_signature
+
+**Subject:** getByPage
+**Reason:** the signature of getByPage changed; its call sites are not shown by the diff
+**Source:** `app/Repositories/MediaItemRepository.php` (lines 10-10)
+**Tokens:** 22
+
+```php
+    public function getByPage(?string $page = null, ?string $section = null): Collection
+```
+
+## fetched · changed_signature
+
+**Subject:** getByPage
+**Reason:** the signature of getByPage changed; its call sites are not shown by the diff
+**Source:** `app/Repositories/PageContentRepository.php` (lines 12-12)
+**Tokens:** 20
+
+```php
+    public function getByPage(string $page, ?string $section = null): Collection
 ```
 
 ## Dropped
@@ -500,29 +417,8 @@ Nothing was dropped.
 ===== END context-bundle.md =====
 
 ===== BEGIN context-diagnostics.txt =====
-new file: app/Http/Controllers/Admin/ProfileController.php — own-file context is in the diff, not fetched
-new file: app/Http/Requests/Profile/UpdatePasswordRequest.php — own-file context is in the diff, not fetched
-new file: app/Http/Requests/Profile/UpdateProfileRequest.php — own-file context is in the diff, not fetched
-new file: tests/Feature/ProfileTest.php — own-file context is in the diff, not fetched
-inherited member: App\Http\Controllers\Admin\ProfileController::success declared at app/Traits/ApiResponse.php:9 in trait App\Traits\ApiResponse; body not fetched
-inherited member: App\Http\Controllers\Admin\ProfileController::error declared at app/Traits/ApiResponse.php:58 in trait App\Traits\ApiResponse; body not fetched
-framework reference: Illuminate\Support\Facades\Hash::check declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Hash.php:11 (@method static bool check(string $value, string $hashedValue, array $options = []))
-framework reference: Illuminate\Support\Facades\Hash::make declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Hash.php:10 (@method static string make(string $value, array $options = []))
-dependency class: Illuminate\Http\Request provided by vendor/laravel/framework/src/Illuminate/Http/Request.php; surface not fetched
-dependency class: Illuminate\Http\JsonResponse provided by vendor/laravel/framework/src/Illuminate/Http/JsonResponse.php; surface not fetched
-already in the diff: App\Http\Requests\Profile\UpdateProfileRequest declared in app/Http/Requests/Profile/UpdateProfileRequest.php; not fetched again
-already in the diff: App\Http\Requests\Profile\UpdatePasswordRequest declared in app/Http/Requests/Profile/UpdatePasswordRequest.php; not fetched again
-inherited member unresolved: App\Http\Requests\Profile\UpdateProfileRequest::user; walked App\Http\Requests\BaseFormRequest; continues into a dependency, which was not walked (Illuminate\Foundation\Http\FormRequest)
-dependency member: Illuminate\Validation\Rule::unique declared at vendor/laravel/framework/src/Illuminate/Validation/Rule.php:94; source not fetched
-framework reference: Illuminate\Support\Facades\Route::prefix declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Route.php:100 (@method static \Illuminate\Routing\RouteRegistrar prefix(string $prefix))
-framework reference: Illuminate\Support\Facades\Route::get declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Route.php:6 (@method static \Illuminate\Routing\Route get(string $uri, array|string|callable|null $action = null))
-framework reference: Illuminate\Support\Facades\Route::put declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Route.php:8 (@method static \Illuminate\Routing\Route put(string $uri, array|string|callable|null $action = null))
-inherited member unresolved: Tests\Feature\ProfileTest::seed; walked nothing; continues into a dependency, which was not walked (Illuminate\Foundation\Testing\RefreshDatabase)
-inherited member unresolved: Tests\Feature\ProfileTest::getJson; walked nothing; continues into a dependency, which was not walked (Illuminate\Foundation\Testing\RefreshDatabase)
-inherited member unresolved: Tests\Feature\ProfileTest::putJson; walked nothing; continues into a dependency, which was not walked (Illuminate\Foundation\Testing\RefreshDatabase)
-inherited member unresolved: Tests\Feature\ProfileTest::assertDatabaseHas; walked nothing; continues into a dependency, which was not walked (Illuminate\Foundation\Testing\RefreshDatabase)
-inherited member unresolved: Tests\Feature\ProfileTest::assertTrue; walked nothing; continues into a dependency, which was not walked (Illuminate\Foundation\Testing\RefreshDatabase)
-unresolved named_reference: App\Models\User::where in tests/Feature/ProfileTest.php
-unresolved named_reference: App\Models\User::factory in tests/Feature/ProfileTest.php
-framework reference: Illuminate\Support\Facades\Hash::check declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Hash.php:11 (@method static bool check(string $value, string $hashedValue, array $options = []))
+dependency class: Illuminate\Support\Collection provided by vendor/laravel/framework/src/Illuminate/Collections/Collection.php; surface not fetched
+call sites truncated at 20 for execute under app/
+dependency class: Illuminate\Database\Eloquent\Builder provided by vendor/laravel/framework/src/Illuminate/Database/Eloquent/Builder.php; surface not fetched
+dependency class: Illuminate\Support\Collection provided by vendor/laravel/framework/src/Illuminate/Collections/Collection.php; surface not fetched
 ===== END context-diagnostics.txt =====

@@ -47,1097 +47,1401 @@ Q5: "<exact quotation>" | NONE_VISIBLE
 ---
 
 ===== BEGIN change.diff =====
-diff --git a/app/Http/Controllers/Auth/AuthController.php b/app/Http/Controllers/Auth/AuthController.php
-index 028d0a0..563551d 100644
---- a/app/Http/Controllers/Auth/AuthController.php
-+++ b/app/Http/Controllers/Auth/AuthController.php
-@@ -18,18 +18,18 @@ public function login(LoginRequest $request, LoginAction $action): JsonResponse
-     {
-         $result = $action->execute(LoginDTO::fromRequest($request));
- 
--        return $this->success(new AuthResource($result), 'Login successful');
-+        return $this->success(new AuthResource($result), __('messages.login_success'));
-     }
- 
-     public function logout(Request $request, LogoutAction $action): JsonResponse
-     {
-         $action->execute($request->user());
- 
--        return $this->success(null, 'Logout successful');
-+        return $this->success(null, __('messages.logout_success'));
-     }
- 
-     public function me(Request $request): JsonResponse
-     {
--        return $this->success(new UserResource($request->user()), 'Authenticated user');
-+        return $this->success(new UserResource($request->user()), __('messages.fetched'));
-     }
- }
+diff --git a/app/Http/Controllers/Admin/Auth/AuthController.php b/app/Http/Controllers/Admin/Auth/AuthController.php
+new file mode 100644
+index 0000000..e536c5f
+--- /dev/null
++++ b/app/Http/Controllers/Admin/Auth/AuthController.php
+@@ -0,0 +1,5 @@
++<?php
++
++namespace App\Http\Controllers\Admin\Auth;
++
++class AuthController extends \App\Http\Controllers\Auth\AuthController {}
+diff --git a/app/Http/Controllers/Admin/BranchController.php b/app/Http/Controllers/Admin/BranchController.php
+new file mode 100644
+index 0000000..7aa58ff
+--- /dev/null
++++ b/app/Http/Controllers/Admin/BranchController.php
+@@ -0,0 +1,5 @@
++<?php
++
++namespace App\Http\Controllers\Admin;
++
++class BranchController extends \App\Http\Controllers\BranchController {}
+diff --git a/app/Http/Controllers/Admin/CategoryController.php b/app/Http/Controllers/Admin/CategoryController.php
+new file mode 100644
+index 0000000..dca0eb7
+--- /dev/null
++++ b/app/Http/Controllers/Admin/CategoryController.php
+@@ -0,0 +1,5 @@
++<?php
++
++namespace App\Http\Controllers\Admin;
++
++class CategoryController extends \App\Http\Controllers\CategoryController {}
+diff --git a/app/Http/Controllers/Admin/Catering/CateringPackageController.php b/app/Http/Controllers/Admin/Catering/CateringPackageController.php
+new file mode 100644
+index 0000000..c1d7485
+--- /dev/null
++++ b/app/Http/Controllers/Admin/Catering/CateringPackageController.php
+@@ -0,0 +1,5 @@
++<?php
++
++namespace App\Http\Controllers\Admin\Catering;
++
++class CateringPackageController extends \App\Http\Controllers\Catering\CateringPackageController {}
+diff --git a/app/Http/Controllers/Admin/Catering/QuoteRequestController.php b/app/Http/Controllers/Admin/Catering/QuoteRequestController.php
+new file mode 100644
+index 0000000..6912f5f
+--- /dev/null
++++ b/app/Http/Controllers/Admin/Catering/QuoteRequestController.php
+@@ -0,0 +1,5 @@
++<?php
++
++namespace App\Http\Controllers\Admin\Catering;
++
++class QuoteRequestController extends \App\Http\Controllers\Catering\QuoteRequestController {}
+diff --git a/app/Http/Controllers/Admin/Catering/SampleMenuController.php b/app/Http/Controllers/Admin/Catering/SampleMenuController.php
+new file mode 100644
+index 0000000..16c3a27
+--- /dev/null
++++ b/app/Http/Controllers/Admin/Catering/SampleMenuController.php
+@@ -0,0 +1,5 @@
++<?php
++
++namespace App\Http\Controllers\Admin\Catering;
++
++class SampleMenuController extends \App\Http\Controllers\Catering\SampleMenuController {}
+diff --git a/app/Http/Controllers/Admin/DeliveryAppController.php b/app/Http/Controllers/Admin/DeliveryAppController.php
+new file mode 100644
+index 0000000..bbfd30f
+--- /dev/null
++++ b/app/Http/Controllers/Admin/DeliveryAppController.php
+@@ -0,0 +1,5 @@
++<?php
++
++namespace App\Http\Controllers\Admin;
++
++class DeliveryAppController extends \App\Http\Controllers\DeliveryAppController {}
+diff --git a/app/Http/Controllers/Admin/DishController.php b/app/Http/Controllers/Admin/DishController.php
+new file mode 100644
+index 0000000..5fb0394
+--- /dev/null
++++ b/app/Http/Controllers/Admin/DishController.php
+@@ -0,0 +1,5 @@
++<?php
++
++namespace App\Http\Controllers\Admin;
++
++class DishController extends \App\Http\Controllers\DishController {}
+diff --git a/app/Http/Controllers/Admin/MediaItemController.php b/app/Http/Controllers/Admin/MediaItemController.php
+new file mode 100644
+index 0000000..b965e63
+--- /dev/null
++++ b/app/Http/Controllers/Admin/MediaItemController.php
+@@ -0,0 +1,5 @@
++<?php
++
++namespace App\Http\Controllers\Admin;
++
++class MediaItemController extends \App\Http\Controllers\MediaItemController {}
+diff --git a/app/Http/Controllers/Admin/PageContentController.php b/app/Http/Controllers/Admin/PageContentController.php
+new file mode 100644
+index 0000000..6db51e9
+--- /dev/null
++++ b/app/Http/Controllers/Admin/PageContentController.php
+@@ -0,0 +1,5 @@
++<?php
++
++namespace App\Http\Controllers\Admin;
++
++class PageContentController extends \App\Http\Controllers\PageContentController {}
+diff --git a/app/Http/Controllers/Admin/SettingController.php b/app/Http/Controllers/Admin/SettingController.php
+new file mode 100644
+index 0000000..d5c9e79
+--- /dev/null
++++ b/app/Http/Controllers/Admin/SettingController.php
+@@ -0,0 +1,5 @@
++<?php
++
++namespace App\Http\Controllers\Admin;
++
++class SettingController extends \App\Http\Controllers\SettingController {}
+diff --git a/app/Http/Controllers/Admin/TestimonialController.php b/app/Http/Controllers/Admin/TestimonialController.php
+new file mode 100644
+index 0000000..3b6066d
+--- /dev/null
++++ b/app/Http/Controllers/Admin/TestimonialController.php
+@@ -0,0 +1,5 @@
++<?php
++
++namespace App\Http\Controllers\Admin;
++
++class TestimonialController extends \App\Http\Controllers\TestimonialController {}
+diff --git a/app/Http/Controllers/Admin/TimelineController.php b/app/Http/Controllers/Admin/TimelineController.php
+new file mode 100644
+index 0000000..2ab8f09
+--- /dev/null
++++ b/app/Http/Controllers/Admin/TimelineController.php
+@@ -0,0 +1,5 @@
++<?php
++
++namespace App\Http\Controllers\Admin;
++
++class TimelineController extends \App\Http\Controllers\TimelineController {}
+diff --git a/app/Http/Controllers/Admin/UserController.php b/app/Http/Controllers/Admin/UserController.php
+new file mode 100644
+index 0000000..8ab19a7
+--- /dev/null
++++ b/app/Http/Controllers/Admin/UserController.php
+@@ -0,0 +1,5 @@
++<?php
++
++namespace App\Http\Controllers\Admin;
++
++class UserController extends \App\Http\Controllers\UserController {}
 diff --git a/app/Http/Controllers/BranchController.php b/app/Http/Controllers/BranchController.php
-index a9cb02f..3961a3e 100644
+index 3961a3e..985e499 100644
 --- a/app/Http/Controllers/BranchController.php
 +++ b/app/Http/Controllers/BranchController.php
-@@ -17,27 +17,27 @@ class BranchController extends Controller
- {
-     public function index(GetBranchesAction $action): JsonResponse
-     {
--        return $this->success(BranchResource::collection($action->execute()), 'Branches retrieved');
-+        return $this->success(BranchResource::collection($action->execute()), __('messages.fetched'));
+@@ -11,6 +11,7 @@
+ use App\Http\Requests\Branch\StoreBranchRequest;
+ use App\Http\Requests\Branch\UpdateBranchRequest;
+ use App\Http\Resources\Branch\BranchResource;
++use App\Repositories\BranchRepository;
+ use Illuminate\Http\JsonResponse;
+ 
+ class BranchController extends Controller
+@@ -20,6 +21,11 @@ public function index(GetBranchesAction $action): JsonResponse
+         return $this->success(BranchResource::collection($action->execute()), __('messages.fetched'));
      }
  
++    public function show(int $id, BranchRepository $repository): JsonResponse
++    {
++        return $this->success(new BranchResource($repository->getById($id)), __('messages.fetched'));
++    }
++
      public function store(StoreBranchRequest $request, CreateBranchAction $action): JsonResponse
      {
          $branch = $action->execute(CreateBranchDTO::fromRequest($request));
- 
--        return $this->created(new BranchResource($branch), 'Branch created');
-+        return $this->created(new BranchResource($branch), __('messages.created'));
-     }
- 
-     public function update(UpdateBranchRequest $request, int $id, UpdateBranchAction $action): JsonResponse
-     {
-         $branch = $action->execute($id, UpdateBranchDTO::fromRequest($request));
- 
--        return $this->success(new BranchResource($branch), 'Branch updated');
-+        return $this->success(new BranchResource($branch), __('messages.updated'));
-     }
- 
-     public function destroy(int $id, DeleteBranchAction $action): JsonResponse
-     {
-         $action->execute($id);
- 
--        return $this->deleted('Branch deleted');
-+        return $this->deleted(__('messages.deleted'));
-     }
- }
-diff --git a/app/Http/Controllers/CategoryController.php b/app/Http/Controllers/CategoryController.php
-index 2a886d6..bf1c2f7 100644
---- a/app/Http/Controllers/CategoryController.php
-+++ b/app/Http/Controllers/CategoryController.php
-@@ -15,27 +15,27 @@ public function __construct(
- 
-     public function index(): JsonResponse
-     {
--        return $this->success(CategoryResource::collection($this->repository->getAll()), 'Categories retrieved');
-+        return $this->success(CategoryResource::collection($this->repository->getAll()), __('messages.fetched'));
-     }
- 
-     public function store(Request $request): JsonResponse
-     {
-         $category = $this->repository->create($request->only(['name_ar', 'name_en', 'slug', 'order']));
- 
--        return $this->created(new CategoryResource($category), 'Category created');
-+        return $this->created(new CategoryResource($category), __('messages.created'));
-     }
- 
-     public function update(Request $request, int $id): JsonResponse
-     {
-         $category = $this->repository->update($id, $request->only(['name_ar', 'name_en', 'slug', 'order']));
- 
--        return $this->success(new CategoryResource($category), 'Category updated');
-+        return $this->success(new CategoryResource($category), __('messages.updated'));
-     }
- 
-     public function destroy(int $id): JsonResponse
-     {
-         $this->repository->delete($id);
- 
--        return $this->deleted('Category deleted');
-+        return $this->deleted(__('messages.deleted'));
-     }
- }
-diff --git a/app/Http/Controllers/Catering/CateringPackageController.php b/app/Http/Controllers/Catering/CateringPackageController.php
-index 4fdd1b8..83dfaca 100644
---- a/app/Http/Controllers/Catering/CateringPackageController.php
-+++ b/app/Http/Controllers/Catering/CateringPackageController.php
-@@ -18,27 +18,27 @@ class CateringPackageController extends Controller
- {
-     public function index(GetPackagesAction $action): JsonResponse
-     {
--        return $this->success(PackageResource::collection($action->execute()), 'Catering packages retrieved');
-+        return $this->success(PackageResource::collection($action->execute()), __('messages.fetched'));
-     }
- 
-     public function store(StorePackageRequest $request, CreatePackageAction $action): JsonResponse
-     {
-         $package = $action->execute(CreatePackageDTO::fromRequest($request));
- 
--        return $this->created(new PackageResource($package), 'Catering package created');
-+        return $this->created(new PackageResource($package), __('messages.created'));
-     }
- 
-     public function update(UpdatePackageRequest $request, int $id, UpdatePackageAction $action): JsonResponse
-     {
-         $package = $action->execute($id, UpdatePackageDTO::fromRequest($request));
- 
--        return $this->success(new PackageResource($package), 'Catering package updated');
-+        return $this->success(new PackageResource($package), __('messages.updated'));
-     }
- 
-     public function destroy(int $id, DeletePackageAction $action): JsonResponse
-     {
-         $action->execute($id);
- 
--        return $this->deleted('Catering package deleted');
-+        return $this->deleted(__('messages.deleted'));
-     }
- }
-diff --git a/app/Http/Controllers/Catering/QuoteRequestController.php b/app/Http/Controllers/Catering/QuoteRequestController.php
-index 63ea6c1..e9aa8e2 100644
---- a/app/Http/Controllers/Catering/QuoteRequestController.php
-+++ b/app/Http/Controllers/Catering/QuoteRequestController.php
-@@ -20,7 +20,7 @@ public function store(StoreQuoteRequestRequest $request, SubmitQuoteRequestActio
-     {
-         $quoteRequest = $action->execute(SubmitQuoteRequestDTO::fromRequest($request));
- 
--        return $this->created(new QuoteRequestResource($quoteRequest), 'Quote request submitted');
-+        return $this->created(new QuoteRequestResource($quoteRequest), __('messages.quote_submitted'));
-     }
- 
-     public function index(Request $request, QuoteRequestRepository $repository): JsonResponse
-@@ -33,18 +33,18 @@ public function index(Request $request, QuoteRequestRepository $repository): Jso
- 
-         $result = $repository->getAll($filters);
- 
--        return $this->paginated(QuoteRequestResource::collection($result), $result, 'Quote requests retrieved');
-+        return $this->paginated(QuoteRequestResource::collection($result), $result, __('messages.fetched'));
-     }
- 
-     public function show(int $id, QuoteRequestRepository $repository): JsonResponse
-     {
--        return $this->success(new QuoteRequestResource($repository->getById($id)), 'Quote request retrieved');
-+        return $this->success(new QuoteRequestResource($repository->getById($id)), __('messages.fetched'));
-     }
- 
-     public function updateStatus(UpdateQuoteRequestStatusRequest $request, int $id, UpdateQuoteRequestStatusAction $action): JsonResponse
-     {
-         $quoteRequest = $action->execute($id, UpdateQuoteRequestStatusDTO::fromRequest($request));
- 
--        return $this->success(new QuoteRequestResource($quoteRequest), 'Quote request status updated');
-+        return $this->success(new QuoteRequestResource($quoteRequest), __('messages.updated'));
-     }
- }
-diff --git a/app/Http/Controllers/Catering/SampleMenuController.php b/app/Http/Controllers/Catering/SampleMenuController.php
-index 4919e73..f5b1fb0 100644
---- a/app/Http/Controllers/Catering/SampleMenuController.php
-+++ b/app/Http/Controllers/Catering/SampleMenuController.php
-@@ -16,27 +16,27 @@ class SampleMenuController extends Controller
- {
-     public function index(GetSampleMenusAction $action): JsonResponse
-     {
--        return $this->success(SampleMenuResource::collection($action->execute()), 'Sample menus retrieved');
-+        return $this->success(SampleMenuResource::collection($action->execute()), __('messages.fetched'));
-     }
- 
-     public function store(StoreSampleMenuRequest $request, CreateSampleMenuAction $action): JsonResponse
-     {
-         $menu = $action->execute(CreateSampleMenuDTO::fromRequest($request));
- 
--        return $this->created(new SampleMenuResource($menu), 'Sample menu created');
-+        return $this->created(new SampleMenuResource($menu), __('messages.created'));
-     }
- 
-     public function update(StoreSampleMenuRequest $request, int $id, UpdateSampleMenuAction $action): JsonResponse
-     {
-         $menu = $action->execute($id, CreateSampleMenuDTO::fromRequest($request));
- 
--        return $this->success(new SampleMenuResource($menu), 'Sample menu updated');
-+        return $this->success(new SampleMenuResource($menu), __('messages.updated'));
-     }
- 
-     public function destroy(int $id, DeleteSampleMenuAction $action): JsonResponse
-     {
-         $action->execute($id);
- 
--        return $this->deleted('Sample menu deleted');
-+        return $this->deleted(__('messages.deleted'));
-     }
- }
-diff --git a/app/Http/Controllers/DeliveryAppController.php b/app/Http/Controllers/DeliveryAppController.php
-index 331269c..c2fca72 100644
---- a/app/Http/Controllers/DeliveryAppController.php
-+++ b/app/Http/Controllers/DeliveryAppController.php
-@@ -17,27 +17,27 @@ public function index(GetDeliveryAppsAction $action): JsonResponse
-     {
-         $activeOnly = ! auth('sanctum')->check();
- 
--        return $this->success(DeliveryAppResource::collection($action->execute($activeOnly)), 'Delivery apps retrieved');
-+        return $this->success(DeliveryAppResource::collection($action->execute($activeOnly)), __('messages.fetched'));
-     }
- 
-     public function store(StoreDeliveryAppRequest $request, CreateDeliveryAppAction $action): JsonResponse
-     {
-         $deliveryApp = $action->execute(CreateDeliveryAppDTO::fromRequest($request));
- 
--        return $this->created(new DeliveryAppResource($deliveryApp), 'Delivery app created');
-+        return $this->created(new DeliveryAppResource($deliveryApp), __('messages.created'));
-     }
- 
-     public function update(StoreDeliveryAppRequest $request, int $id, UpdateDeliveryAppAction $action): JsonResponse
-     {
-         $deliveryApp = $action->execute($id, CreateDeliveryAppDTO::fromRequest($request));
- 
--        return $this->success(new DeliveryAppResource($deliveryApp), 'Delivery app updated');
-+        return $this->success(new DeliveryAppResource($deliveryApp), __('messages.updated'));
-     }
- 
-     public function destroy(int $id, DeleteDeliveryAppAction $action): JsonResponse
-     {
-         $action->execute($id);
- 
--        return $this->deleted('Delivery app deleted');
-+        return $this->deleted(__('messages.deleted'));
-     }
- }
-diff --git a/app/Http/Controllers/DishController.php b/app/Http/Controllers/DishController.php
-index 3a2c214..c497398 100644
---- a/app/Http/Controllers/DishController.php
-+++ b/app/Http/Controllers/DishController.php
-@@ -29,32 +29,32 @@ public function index(Request $request, GetDishesAction $action): JsonResponse
- 
-         $result = $action->execute($filters);
- 
--        return $this->success(new DishCollection($result), 'Dishes retrieved');
-+        return $this->success(new DishCollection($result), __('messages.fetched'));
-     }
- 
-     public function show(int $id, GetDishAction $action): JsonResponse
-     {
--        return $this->success(new DishResource($action->execute($id)), 'Dish retrieved');
-+        return $this->success(new DishResource($action->execute($id)), __('messages.fetched'));
-     }
- 
-     public function store(StoreDishRequest $request, CreateDishAction $action): JsonResponse
-     {
-         $dish = $action->execute(CreateDishDTO::fromRequest($request));
- 
--        return $this->created(new DishResource($dish), 'Dish created');
-+        return $this->created(new DishResource($dish), __('messages.created'));
-     }
- 
-     public function update(UpdateDishRequest $request, int $id, UpdateDishAction $action): JsonResponse
-     {
-         $dish = $action->execute($id, UpdateDishDTO::fromRequest($request));
- 
--        return $this->success(new DishResource($dish), 'Dish updated');
-+        return $this->success(new DishResource($dish), __('messages.updated'));
-     }
- 
-     public function destroy(int $id, DeleteDishAction $action): JsonResponse
-     {
-         $action->execute($id);
- 
--        return $this->deleted('Dish deleted');
-+        return $this->deleted(__('messages.deleted'));
-     }
- }
-diff --git a/app/Http/Controllers/MediaItemController.php b/app/Http/Controllers/MediaItemController.php
-index 6707b12..cf6933f 100644
---- a/app/Http/Controllers/MediaItemController.php
-+++ b/app/Http/Controllers/MediaItemController.php
-@@ -25,32 +25,32 @@ public function index(Request $request, GetMediaItemsAction $action): JsonRespon
-             fn ($section) => $section->map(fn ($item) => new MediaItemResource($item))
-         );
- 
--        return $this->success($resourced, 'Media items retrieved');
-+        return $this->success($resourced, __('messages.fetched'));
-     }
- 
-     public function store(UploadMediaRequest $request, UploadMediaAction $action): JsonResponse
-     {
-         $mediaItem = $action->execute(UploadMediaDTO::fromRequest($request));
- 
--        return $this->created(new MediaItemResource($mediaItem), 'Media item uploaded');
-+        return $this->created(new MediaItemResource($mediaItem), __('messages.uploaded'));
-     }
- 
-     public function show(int $id, MediaItemRepository $repository): JsonResponse
-     {
--        return $this->success(new MediaItemResource($repository->getById($id)), 'Media item retrieved');
-+        return $this->success(new MediaItemResource($repository->getById($id)), __('messages.fetched'));
-     }
- 
-     public function update(UploadMediaRequest $request, int $id, UploadMediaAction $action): JsonResponse
-     {
-         $mediaItem = $action->execute(UploadMediaDTO::fromRequest($request));
- 
--        return $this->success(new MediaItemResource($mediaItem), 'Media item updated');
-+        return $this->success(new MediaItemResource($mediaItem), __('messages.updated'));
-     }
- 
-     public function destroy(int $id, DeleteMediaAction $action): JsonResponse
-     {
-         $action->execute($id);
- 
--        return $this->deleted('Media item deleted');
-+        return $this->deleted(__('messages.deleted'));
-     }
- }
-diff --git a/app/Http/Controllers/PageContentController.php b/app/Http/Controllers/PageContentController.php
-index ff4f0ad..d0fdfc3 100644
---- a/app/Http/Controllers/PageContentController.php
-+++ b/app/Http/Controllers/PageContentController.php
-@@ -27,25 +27,25 @@ public function index(Request $request, GetPageContentAction $action): JsonRespo
-             fn ($section) => $section->map(fn ($item) => new PageContentResource($item))
-         );
- 
--        return $this->success($resourced, 'Page contents retrieved');
-+        return $this->success($resourced, __('messages.fetched'));
-     }
- 
-     public function show(int $id, PageContentRepository $repository): JsonResponse
-     {
--        return $this->success(new PageContentResource($repository->getById($id)), 'Page content retrieved');
-+        return $this->success(new PageContentResource($repository->getById($id)), __('messages.fetched'));
-     }
- 
-     public function update(UpdatePageContentRequest $request, int $id, UpdatePageContentAction $action): JsonResponse
-     {
-         $pageContent = $action->execute($id, UpdatePageContentDTO::fromRequest($request));
- 
--        return $this->success(new PageContentResource($pageContent), 'Page content updated');
-+        return $this->success(new PageContentResource($pageContent), __('messages.updated'));
-     }
- 
-     public function bulkUpdate(BulkUpdatePageContentRequest $request, BulkUpdatePageContentAction $action): JsonResponse
-     {
-         $action->execute(BulkUpdatePageContentDTO::fromRequest($request));
- 
--        return $this->success(null, 'Page contents updated');
-+        return $this->success(null, __('messages.updated'));
-     }
- }
-diff --git a/app/Http/Controllers/SettingController.php b/app/Http/Controllers/SettingController.php
-index 25a4fd8..76677c5 100644
---- a/app/Http/Controllers/SettingController.php
-+++ b/app/Http/Controllers/SettingController.php
-@@ -18,13 +18,13 @@ public function index(Request $request, GetSettingsAction $action): JsonResponse
-             $request->filled('group') ? $request->string('group')->toString() : null,
-         );
- 
--        return $this->success($result->map(fn ($setting) => new SettingResource($setting)), 'Settings retrieved');
-+        return $this->success($result->map(fn ($setting) => new SettingResource($setting)), __('messages.fetched'));
-     }
- 
-     public function bulkUpdate(UpdateSettingRequest $request, UpdateSettingsAction $action): JsonResponse
-     {
-         $action->execute(UpdateSettingDTO::fromRequest($request));
- 
--        return $this->success(null, 'Settings updated');
-+        return $this->success(null, __('messages.updated'));
-     }
- }
-diff --git a/app/Http/Controllers/TestimonialController.php b/app/Http/Controllers/TestimonialController.php
-index 0a99885..9eed09a 100644
---- a/app/Http/Controllers/TestimonialController.php
-+++ b/app/Http/Controllers/TestimonialController.php
-@@ -17,27 +17,27 @@ public function index(GetTestimonialsAction $action): JsonResponse
-     {
-         $activeOnly = ! auth('sanctum')->check();
- 
--        return $this->success(TestimonialResource::collection($action->execute($activeOnly)), 'Testimonials retrieved');
-+        return $this->success(TestimonialResource::collection($action->execute($activeOnly)), __('messages.fetched'));
-     }
- 
-     public function store(StoreTestimonialRequest $request, CreateTestimonialAction $action): JsonResponse
-     {
-         $testimonial = $action->execute(CreateTestimonialDTO::fromRequest($request));
- 
--        return $this->created(new TestimonialResource($testimonial), 'Testimonial created');
-+        return $this->created(new TestimonialResource($testimonial), __('messages.created'));
-     }
- 
-     public function update(StoreTestimonialRequest $request, int $id, UpdateTestimonialAction $action): JsonResponse
-     {
-         $testimonial = $action->execute($id, CreateTestimonialDTO::fromRequest($request));
- 
--        return $this->success(new TestimonialResource($testimonial), 'Testimonial updated');
-+        return $this->success(new TestimonialResource($testimonial), __('messages.updated'));
-     }
- 
-     public function destroy(int $id, DeleteTestimonialAction $action): JsonResponse
-     {
-         $action->execute($id);
- 
--        return $this->deleted('Testimonial deleted');
-+        return $this->deleted(__('messages.deleted'));
-     }
- }
-diff --git a/app/Http/Controllers/TimelineController.php b/app/Http/Controllers/TimelineController.php
-index a686e45..69cede4 100644
---- a/app/Http/Controllers/TimelineController.php
-+++ b/app/Http/Controllers/TimelineController.php
-@@ -15,27 +15,27 @@ class TimelineController extends Controller
- {
-     public function index(GetTimelineAction $action): JsonResponse
-     {
--        return $this->success(TimelineResource::collection($action->execute()), 'Timeline retrieved');
-+        return $this->success(TimelineResource::collection($action->execute()), __('messages.fetched'));
-     }
- 
-     public function store(StoreTimelineRequest $request, CreateTimelineAction $action): JsonResponse
-     {
-         $timeline = $action->execute(CreateTimelineDTO::fromRequest($request));
- 
--        return $this->created(new TimelineResource($timeline), 'Timeline entry created');
-+        return $this->created(new TimelineResource($timeline), __('messages.created'));
-     }
- 
-     public function update(StoreTimelineRequest $request, int $id, UpdateTimelineAction $action): JsonResponse
-     {
-         $timeline = $action->execute($id, CreateTimelineDTO::fromRequest($request));
- 
--        return $this->success(new TimelineResource($timeline), 'Timeline entry updated');
-+        return $this->success(new TimelineResource($timeline), __('messages.updated'));
-     }
- 
-     public function destroy(int $id, DeleteTimelineAction $action): JsonResponse
-     {
-         $action->execute($id);
- 
--        return $this->deleted('Timeline entry deleted');
-+        return $this->deleted(__('messages.deleted'));
-     }
- }
-diff --git a/app/Http/Controllers/UserController.php b/app/Http/Controllers/UserController.php
-index 6261341..bd04933 100644
---- a/app/Http/Controllers/UserController.php
-+++ b/app/Http/Controllers/UserController.php
-@@ -20,32 +20,32 @@ public function index(GetUsersAction $action): JsonResponse
-     {
-         $result = $action->execute();
- 
--        return $this->paginated(UserResource::collection($result), $result, 'Users retrieved');
-+        return $this->paginated(UserResource::collection($result), $result, __('messages.fetched'));
-     }
- 
-     public function store(StoreUserRequest $request, CreateUserAction $action): JsonResponse
-     {
-         $user = $action->execute(CreateUserDTO::fromRequest($request));
- 
--        return $this->created(new UserResource($user), 'User created');
-+        return $this->created(new UserResource($user), __('messages.created'));
-     }
- 
-     public function show(int $id, UserRepository $repository): JsonResponse
-     {
--        return $this->success(new UserResource($repository->getById($id)), 'User retrieved');
-+        return $this->success(new UserResource($repository->getById($id)), __('messages.fetched'));
-     }
- 
-     public function update(UpdateUserRequest $request, int $id, UpdateUserAction $action): JsonResponse
-     {
-         $user = $action->execute($id, UpdateUserDTO::fromRequest($request));
- 
--        return $this->success(new UserResource($user), 'User updated');
-+        return $this->success(new UserResource($user), __('messages.updated'));
-     }
- 
-     public function destroy(int $id, DeleteUserAction $action): JsonResponse
-     {
-         $action->execute($id);
- 
--        return $this->deleted('User deleted');
-+        return $this->deleted(__('messages.deleted'));
-     }
- }
-diff --git a/config/app.php b/config/app.php
-index 423eed5..e045a58 100644
---- a/config/app.php
-+++ b/config/app.php
-@@ -78,11 +78,11 @@
-     |
-     */
- 
--    'locale' => env('APP_LOCALE', 'en'),
-+    'locale' => env('APP_LOCALE', 'ar'),
- 
-     'fallback_locale' => env('APP_FALLBACK_LOCALE', 'en'),
- 
--    'faker_locale' => env('APP_FAKER_LOCALE', 'en_US'),
-+    'faker_locale' => env('APP_FAKER_LOCALE', 'ar_SA'),
- 
-     /*
-     |--------------------------------------------------------------------------
-diff --git a/lang/ar/messages.php b/lang/ar/messages.php
+diff --git a/app/Http/Controllers/Public/BranchController.php b/app/Http/Controllers/Public/BranchController.php
 new file mode 100644
-index 0000000..cbdaefa
+index 0000000..e516400
 --- /dev/null
-+++ b/lang/ar/messages.php
-@@ -0,0 +1,17 @@
++++ b/app/Http/Controllers/Public/BranchController.php
+@@ -0,0 +1,18 @@
 +<?php
 +
-+return [
-+    'created'           => 'تم الإنشاء بنجاح.',
-+    'updated'           => 'تم التحديث بنجاح.',
-+    'deleted'           => 'تم الحذف بنجاح.',
-+    'fetched'           => 'تم جلب البيانات بنجاح.',
-+    'login_success'     => 'تم تسجيل الدخول بنجاح.',
-+    'logout_success'    => 'تم تسجيل الخروج بنجاح.',
-+    'unauthorized'      => 'غير مصرح لك بهذا الإجراء.',
-+    'invalid_api_key'   => 'مفتاح API غير صحيح.',
-+    'not_found'         => 'العنصر غير موجود.',
-+    'validation_failed' => 'فشل التحقق من البيانات.',
-+    'something_wrong'   => 'حدث خطأ ما، يرجى المحاولة لاحقاً.',
-+    'uploaded'          => 'تم رفع الملف بنجاح.',
-+    'quote_submitted'   => 'تم استلام طلبكم، سنتواصل معكم قريباً.',
-+];
-diff --git a/lang/ar/validation.php b/lang/ar/validation.php
-index bc54b7f..0cb1356 100644
---- a/lang/ar/validation.php
-+++ b/lang/ar/validation.php
-@@ -1,91 +1,83 @@
++namespace App\Http\Controllers\Public;
++
++use App\Actions\Branch\GetBranchesAction;
++use App\Http\Controllers\Controller;
++use App\Http\Resources\Branch\BranchResource;
++use Illuminate\Http\JsonResponse;
++
++class BranchController extends Controller
++{
++    public function index(GetBranchesAction $action): JsonResponse
++    {
++        $branches = $action->execute();
++
++        return $this->success(BranchResource::collection($branches), __('messages.fetched'));
++    }
++}
+diff --git a/app/Http/Controllers/Public/CategoryController.php b/app/Http/Controllers/Public/CategoryController.php
+new file mode 100644
+index 0000000..5e16c70
+--- /dev/null
++++ b/app/Http/Controllers/Public/CategoryController.php
+@@ -0,0 +1,18 @@
++<?php
++
++namespace App\Http\Controllers\Public;
++
++use App\Http\Controllers\Controller;
++use App\Http\Resources\Category\CategoryResource;
++use App\Repositories\CategoryRepository;
++use Illuminate\Http\JsonResponse;
++
++class CategoryController extends Controller
++{
++    public function index(CategoryRepository $repository): JsonResponse
++    {
++        $categories = $repository->getAll();
++
++        return $this->success(CategoryResource::collection($categories), __('messages.fetched'));
++    }
++}
+diff --git a/app/Http/Controllers/Public/Catering/CateringPackageController.php b/app/Http/Controllers/Public/Catering/CateringPackageController.php
+new file mode 100644
+index 0000000..c5e0601
+--- /dev/null
++++ b/app/Http/Controllers/Public/Catering/CateringPackageController.php
+@@ -0,0 +1,18 @@
++<?php
++
++namespace App\Http\Controllers\Public\Catering;
++
++use App\Actions\Catering\GetPackagesAction;
++use App\Http\Controllers\Controller;
++use App\Http\Resources\Catering\PackageResource;
++use Illuminate\Http\JsonResponse;
++
++class CateringPackageController extends Controller
++{
++    public function index(GetPackagesAction $action): JsonResponse
++    {
++        $packages = $action->execute();
++
++        return $this->success(PackageResource::collection($packages), __('messages.fetched'));
++    }
++}
+diff --git a/app/Http/Controllers/Public/Catering/QuoteRequestController.php b/app/Http/Controllers/Public/Catering/QuoteRequestController.php
+new file mode 100644
+index 0000000..20c27ba
+--- /dev/null
++++ b/app/Http/Controllers/Public/Catering/QuoteRequestController.php
+@@ -0,0 +1,21 @@
++<?php
++
++namespace App\Http\Controllers\Public\Catering;
++
++use App\Actions\Catering\SubmitQuoteRequestAction;
++use App\DTOs\Catering\SubmitQuoteRequestDTO;
++use App\Http\Controllers\Controller;
++use App\Http\Requests\Catering\StoreQuoteRequestRequest;
++use App\Http\Resources\Catering\QuoteRequestResource;
++use Illuminate\Http\JsonResponse;
++
++class QuoteRequestController extends Controller
++{
++    public function store(StoreQuoteRequestRequest $request, SubmitQuoteRequestAction $action): JsonResponse
++    {
++        $dto = SubmitQuoteRequestDTO::fromRequest($request);
++        $quoteRequest = $action->execute($dto);
++
++        return $this->created(new QuoteRequestResource($quoteRequest), __('messages.quote_submitted'));
++    }
++}
+diff --git a/app/Http/Controllers/Public/Catering/SampleMenuController.php b/app/Http/Controllers/Public/Catering/SampleMenuController.php
+new file mode 100644
+index 0000000..8bdb79f
+--- /dev/null
++++ b/app/Http/Controllers/Public/Catering/SampleMenuController.php
+@@ -0,0 +1,18 @@
++<?php
++
++namespace App\Http\Controllers\Public\Catering;
++
++use App\Actions\Catering\GetSampleMenusAction;
++use App\Http\Controllers\Controller;
++use App\Http\Resources\Catering\SampleMenuResource;
++use Illuminate\Http\JsonResponse;
++
++class SampleMenuController extends Controller
++{
++    public function index(GetSampleMenusAction $action): JsonResponse
++    {
++        $menus = $action->execute();
++
++        return $this->success(SampleMenuResource::collection($menus), __('messages.fetched'));
++    }
++}
+diff --git a/app/Http/Controllers/Public/DeliveryAppController.php b/app/Http/Controllers/Public/DeliveryAppController.php
+new file mode 100644
+index 0000000..847d5c1
+--- /dev/null
++++ b/app/Http/Controllers/Public/DeliveryAppController.php
+@@ -0,0 +1,18 @@
++<?php
++
++namespace App\Http\Controllers\Public;
++
++use App\Actions\DeliveryApp\GetDeliveryAppsAction;
++use App\Http\Controllers\Controller;
++use App\Http\Resources\DeliveryApp\DeliveryAppResource;
++use Illuminate\Http\JsonResponse;
++
++class DeliveryAppController extends Controller
++{
++    public function index(GetDeliveryAppsAction $action): JsonResponse
++    {
++        $apps = $action->execute(activeOnly: true);
++
++        return $this->success(DeliveryAppResource::collection($apps), __('messages.fetched'));
++    }
++}
+diff --git a/app/Http/Controllers/Public/DishController.php b/app/Http/Controllers/Public/DishController.php
+new file mode 100644
+index 0000000..33b644e
+--- /dev/null
++++ b/app/Http/Controllers/Public/DishController.php
+@@ -0,0 +1,32 @@
++<?php
++
++namespace App\Http\Controllers\Public;
++
++use App\Actions\Dish\GetDishAction;
++use App\Actions\Dish\GetDishesAction;
++use App\Http\Controllers\Controller;
++use App\Http\Resources\Dish\DishResource;
++use Illuminate\Http\JsonResponse;
++use Illuminate\Http\Request;
++
++class DishController extends Controller
++{
++    public function index(Request $request, GetDishesAction $action): JsonResponse
++    {
++        $filters = $request->only(['category_id', 'featured', 'signature', 'per_page', 'page']);
++        $dishes = $action->execute($filters);
++
++        return $this->paginated(
++            DishResource::collection($dishes),
++            $dishes,
++            __('messages.fetched')
++        );
++    }
++
++    public function show(int $id, GetDishAction $action): JsonResponse
++    {
++        $dish = $action->execute($id);
++
++        return $this->success(new DishResource($dish), __('messages.fetched'));
++    }
++}
+diff --git a/app/Http/Controllers/Public/MediaItemController.php b/app/Http/Controllers/Public/MediaItemController.php
+new file mode 100644
+index 0000000..16a6ea7
+--- /dev/null
++++ b/app/Http/Controllers/Public/MediaItemController.php
+@@ -0,0 +1,25 @@
++<?php
++
++namespace App\Http\Controllers\Public;
++
++use App\Actions\MediaItem\GetMediaItemsAction;
++use App\Http\Controllers\Controller;
++use App\Http\Resources\MediaItem\MediaItemResource;
++use Illuminate\Http\JsonResponse;
++use Illuminate\Http\Request;
++
++class MediaItemController extends Controller
++{
++    public function index(Request $request, GetMediaItemsAction $action): JsonResponse
++    {
++        $page = $request->query('page', 'home');
++        $section = $request->query('section');
++
++        $result = $action->execute($page, $section);
++        $resourced = $result->map(
++            fn ($section) => $section->map(fn ($item) => new MediaItemResource($item))
++        );
++
++        return $this->success($resourced, __('messages.fetched'));
++    }
++}
+diff --git a/app/Http/Controllers/Public/PageContentController.php b/app/Http/Controllers/Public/PageContentController.php
+new file mode 100644
+index 0000000..5883f6c
+--- /dev/null
++++ b/app/Http/Controllers/Public/PageContentController.php
+@@ -0,0 +1,25 @@
++<?php
++
++namespace App\Http\Controllers\Public;
++
++use App\Actions\PageContent\GetPageContentAction;
++use App\Http\Controllers\Controller;
++use App\Http\Resources\PageContent\PageContentResource;
++use Illuminate\Http\JsonResponse;
++use Illuminate\Http\Request;
++
++class PageContentController extends Controller
++{
++    public function index(Request $request, GetPageContentAction $action): JsonResponse
++    {
++        $page = $request->query('page', 'home');
++        $section = $request->query('section');
++
++        $result = $action->execute($page, $section);
++        $resourced = $result->map(
++            fn ($section) => $section->map(fn ($item) => new PageContentResource($item))
++        );
++
++        return $this->success($resourced, __('messages.fetched'));
++    }
++}
+diff --git a/app/Http/Controllers/Public/SettingController.php b/app/Http/Controllers/Public/SettingController.php
+new file mode 100644
+index 0000000..b3f8b7e
+--- /dev/null
++++ b/app/Http/Controllers/Public/SettingController.php
+@@ -0,0 +1,21 @@
++<?php
++
++namespace App\Http\Controllers\Public;
++
++use App\Actions\Setting\GetSettingsAction;
++use App\Http\Controllers\Controller;
++use App\Http\Resources\Setting\SettingResource;
++use Illuminate\Http\JsonResponse;
++use Illuminate\Http\Request;
++
++class SettingController extends Controller
++{
++    public function index(Request $request, GetSettingsAction $action): JsonResponse
++    {
++        $group = $request->query('group');
++
++        $result = $action->execute($group);
++
++        return $this->success($result->map(fn ($setting) => new SettingResource($setting)), __('messages.fetched'));
++    }
++}
+diff --git a/app/Http/Controllers/Public/TestimonialController.php b/app/Http/Controllers/Public/TestimonialController.php
+new file mode 100644
+index 0000000..e23e22c
+--- /dev/null
++++ b/app/Http/Controllers/Public/TestimonialController.php
+@@ -0,0 +1,18 @@
++<?php
++
++namespace App\Http\Controllers\Public;
++
++use App\Actions\Testimonial\GetTestimonialsAction;
++use App\Http\Controllers\Controller;
++use App\Http\Resources\Testimonial\TestimonialResource;
++use Illuminate\Http\JsonResponse;
++
++class TestimonialController extends Controller
++{
++    public function index(GetTestimonialsAction $action): JsonResponse
++    {
++        $testimonials = $action->execute(activeOnly: true);
++
++        return $this->success(TestimonialResource::collection($testimonials), __('messages.fetched'));
++    }
++}
+diff --git a/app/Http/Controllers/Public/TimelineController.php b/app/Http/Controllers/Public/TimelineController.php
+new file mode 100644
+index 0000000..ff869a2
+--- /dev/null
++++ b/app/Http/Controllers/Public/TimelineController.php
+@@ -0,0 +1,18 @@
++<?php
++
++namespace App\Http\Controllers\Public;
++
++use App\Actions\Timeline\GetTimelineAction;
++use App\Http\Controllers\Controller;
++use App\Http\Resources\Timeline\TimelineResource;
++use Illuminate\Http\JsonResponse;
++
++class TimelineController extends Controller
++{
++    public function index(GetTimelineAction $action): JsonResponse
++    {
++        $timeline = $action->execute();
++
++        return $this->success(TimelineResource::collection($timeline), __('messages.fetched'));
++    }
++}
+diff --git a/bootstrap/app.php b/bootstrap/app.php
+index 6f0ca4b..1a41b17 100644
+--- a/bootstrap/app.php
++++ b/bootstrap/app.php
+@@ -8,12 +8,18 @@
+ use Illuminate\Foundation\Configuration\Exceptions;
+ use Illuminate\Foundation\Configuration\Middleware;
+ use Illuminate\Http\Request;
++use Illuminate\Support\Facades\Route;
+ use Illuminate\Validation\ValidationException;
+ 
+ return Application::configure(basePath: dirname(__DIR__))
+     ->withRouting(
+         web: __DIR__.'/../routes/web.php',
+         api: __DIR__.'/../routes/api.php',
++        then: function () {
++            Route::middleware('api')
++                ->prefix('api')
++                ->group(base_path('routes/admin.php'));
++        },
+         commands: __DIR__.'/../routes/console.php',
+         health: '/up',
+     )
+@@ -29,6 +35,7 @@
+ 
+         $middleware->alias([
+             'check.api.key' => CheckApiKey::class,
++            'set.locale' => SetLocale::class,
+         ]);
+ 
+         // This is an API-only application with no web login route, so guests
+diff --git a/routes/admin.php b/routes/admin.php
+new file mode 100644
+index 0000000..2ca5c4b
+--- /dev/null
++++ b/routes/admin.php
+@@ -0,0 +1,132 @@
++<?php
++
++use App\Http\Controllers\Admin;
++use Illuminate\Support\Facades\Route;
++
++Route::prefix('v1/admin')->middleware(['set.locale'])->group(function () {
++
++    // ── Auth ──────────────────────────────────────────────
++    Route::prefix('auth')->controller(Admin\Auth\AuthController::class)->group(function () {
++        Route::post('/login', 'login');
++    });
++
++    Route::middleware('auth:sanctum')->group(function () {
++
++        // ── Auth (protected) ──────────────────────────────
++        Route::prefix('auth')->controller(Admin\Auth\AuthController::class)->group(function () {
++            Route::post('/logout', 'logout');
++            Route::get('/me',      'me');
++        });
++
++        // ── Page Contents ─────────────────────────────────
++        Route::prefix('page-contents')->controller(Admin\PageContentController::class)->group(function () {
++            Route::get('/',       'index');
++            Route::get('/{id}',   'show');
++            Route::put('/{id}',   'update');
++            Route::post('/bulk',  'bulkUpdate');
++        });
++
++        // ── Media Items ───────────────────────────────────
++        Route::prefix('media-items')->controller(Admin\MediaItemController::class)->group(function () {
++            Route::get('/',        'index');
++            Route::get('/{id}',    'show');
++            Route::post('/',       'store');
++            Route::put('/{id}',    'update');
++            Route::delete('/{id}', 'destroy');
++        });
++
++        // ── Settings ──────────────────────────────────────
++        Route::prefix('settings')->controller(Admin\SettingController::class)->group(function () {
++            Route::get('/',  'index');
++            Route::put('/',  'bulkUpdate');
++        });
++
++        // ── Dishes ────────────────────────────────────────
++        Route::prefix('dishes')->controller(Admin\DishController::class)->group(function () {
++            Route::get('/',        'index');
++            Route::post('/',       'store');
++            Route::get('/{id}',    'show');
++            Route::post('/{id}',   'update');
++            Route::delete('/{id}', 'destroy');
++        });
++
++        // ── Categories ────────────────────────────────────
++        Route::prefix('categories')->controller(Admin\CategoryController::class)->group(function () {
++            Route::get('/',        'index');
++            Route::post('/',       'store');
++            Route::put('/{id}',    'update');
++            Route::delete('/{id}', 'destroy');
++        });
++
++        // ── Branches ──────────────────────────────────────
++        Route::prefix('branches')->controller(Admin\BranchController::class)->group(function () {
++            Route::get('/',        'index');
++            Route::post('/',       'store');
++            Route::get('/{id}',    'show');
++            Route::post('/{id}',   'update');
++            Route::delete('/{id}', 'destroy');
++        });
++
++        // ── Catering Packages ─────────────────────────────
++        Route::prefix('catering/packages')
++            ->controller(Admin\Catering\CateringPackageController::class)
++            ->group(function () {
++                Route::get('/',        'index');
++                Route::post('/',       'store');
++                Route::post('/{id}',   'update');
++                Route::delete('/{id}', 'destroy');
++            });
++
++        // ── Sample Menus ──────────────────────────────────
++        Route::prefix('catering/sample-menus')
++            ->controller(Admin\Catering\SampleMenuController::class)
++            ->group(function () {
++                Route::get('/',        'index');
++                Route::post('/',       'store');
++                Route::post('/{id}',   'update');
++                Route::delete('/{id}', 'destroy');
++            });
++
++        // ── Quote Requests ────────────────────────────────
++        Route::prefix('catering/quote-requests')
++            ->controller(Admin\Catering\QuoteRequestController::class)
++            ->group(function () {
++                Route::get('/',              'index');
++                Route::get('/{id}',          'show');
++                Route::patch('/{id}/status', 'updateStatus');
++            });
++
++        // ── Testimonials ──────────────────────────────────
++        Route::prefix('testimonials')->controller(Admin\TestimonialController::class)->group(function () {
++            Route::get('/',        'index');
++            Route::post('/',       'store');
++            Route::put('/{id}',    'update');
++            Route::delete('/{id}', 'destroy');
++        });
++
++        // ── Timeline ──────────────────────────────────────
++        Route::prefix('timeline')->controller(Admin\TimelineController::class)->group(function () {
++            Route::get('/',        'index');
++            Route::post('/',       'store');
++            Route::put('/{id}',    'update');
++            Route::delete('/{id}', 'destroy');
++        });
++
++        // ── Delivery Apps ─────────────────────────────────
++        Route::prefix('delivery-apps')->controller(Admin\DeliveryAppController::class)->group(function () {
++            Route::get('/',        'index');
++            Route::post('/',       'store');
++            Route::put('/{id}',    'update');
++            Route::delete('/{id}', 'destroy');
++        });
++
++        // ── Users ─────────────────────────────────────────
++        Route::prefix('users')->controller(Admin\UserController::class)->group(function () {
++            Route::get('/',        'index');
++            Route::post('/',       'store');
++            Route::get('/{id}',    'show');
++            Route::put('/{id}',    'update');
++            Route::delete('/{id}', 'destroy');
++        });
++    });
++});
+diff --git a/routes/api.php b/routes/api.php
+index 719c6e7..6dbba22 100644
+--- a/routes/api.php
++++ b/routes/api.php
+@@ -1,117 +1,87 @@
  <?php
  
- return [
--    'required' => 'حقل :attribute مطلوب.',
--    'email' => 'حقل :attribute يجب أن يكون بريدًا إلكترونيًا صالحًا.',
--    'string' => 'حقل :attribute يجب أن يكون نصًا.',
--    'numeric' => 'حقل :attribute يجب أن يكون رقمًا.',
--    'integer' => 'حقل :attribute يجب أن يكون عددًا صحيحًا.',
--    'boolean' => 'حقل :attribute يجب أن يكون صحيحًا أو خاطئًا.',
--    'array' => 'حقل :attribute يجب أن يكون مصفوفة.',
--    'url' => 'حقل :attribute يجب أن يكون رابطًا صالحًا.',
--    'date' => 'حقل :attribute يجب أن يكون تاريخًا صالحًا.',
--    'confirmed' => 'تأكيد حقل :attribute غير مطابق.',
--    'file' => 'حقل :attribute يجب أن يكون ملفًا.',
--
--    'min' => [
--        'numeric' => 'يجب ألا تقل قيمة :attribute عن :min.',
--        'file' => 'يجب ألا يقل حجم :attribute عن :min كيلوبايت.',
--        'string' => 'يجب ألا يقل عدد أحرف :attribute عن :min.',
--        'array' => 'يجب أن يحتوي :attribute على :min عناصر على الأقل.',
-+    'required'  => 'حقل :attribute مطلوب.',
-+    'string'    => 'حقل :attribute يجب أن يكون نصاً.',
-+    'email'     => 'حقل :attribute يجب أن يكون بريداً إلكترونياً صحيحاً.',
-+    'min'       => [
-+        'string'  => 'حقل :attribute يجب أن لا يقل عن :min حروف.',
-+        'numeric' => 'حقل :attribute يجب أن لا يقل عن :min.',
-+        'file'    => 'حجم :attribute يجب أن لا يقل عن :min كيلوبايت.',
-     ],
--
--    'max' => [
--        'numeric' => 'يجب ألا تزيد قيمة :attribute عن :max.',
--        'file' => 'يجب ألا يزيد حجم :attribute عن :max كيلوبايت.',
--        'string' => 'يجب ألا يزيد عدد أحرف :attribute عن :max.',
--        'array' => 'يجب ألا يحتوي :attribute على أكثر من :max عناصر.',
-+    'max'       => [
-+        'string'  => 'حقل :attribute يجب أن لا يتجاوز :max حروف.',
-+        'numeric' => 'حقل :attribute يجب أن لا يتجاوز :max.',
-+        'file'    => 'حجم :attribute يجب أن لا يتجاوز :max كيلوبايت.',
-+    ],
-+    'unique'    => 'قيمة :attribute مستخدمة مسبقاً.',
-+    'exists'    => 'قيمة :attribute غير صحيحة.',
-+    'boolean'   => 'حقل :attribute يجب أن يكون صح أو خطأ.',
-+    'integer'   => 'حقل :attribute يجب أن يكون رقماً صحيحاً.',
-+    'numeric'   => 'حقل :attribute يجب أن يكون رقماً.',
-+    'in'        => 'قيمة :attribute غير مقبولة.',
-+    'url'       => 'حقل :attribute يجب أن يكون رابطاً صحيحاً.',
-+    'date'      => 'حقل :attribute يجب أن يكون تاريخاً صحيحاً.',
-+    'after'     => 'حقل :attribute يجب أن يكون تاريخاً بعد :date.',
-+    'confirmed' => 'حقل :attribute غير متطابق.',
-+    'mimes'     => 'حقل :attribute يجب أن يكون ملفاً من نوع: :values.',
-+    'file'      => 'حقل :attribute يجب أن يكون ملفاً.',
-+    'nullable'  => '',
-+    'array'     => 'حقل :attribute يجب أن يكون قائمة.',
-+    'between'   => [
-+        'numeric' => 'حقل :attribute يجب أن يكون بين :min و :max.',
-+        'file'    => 'حجم :attribute يجب أن يكون بين :min و :max كيلوبايت.',
-+        'string'  => 'حقل :attribute يجب أن يكون بين :min و :max حرف.',
-     ],
--
--    'exists' => 'القيمة المحددة لحقل :attribute غير موجودة.',
--    'unique' => 'قيمة حقل :attribute مُستخدمة من قبل.',
--    'in' => 'القيمة المحددة لحقل :attribute غير صالحة.',
--    'mimes' => 'يجب أن يكون :attribute ملفًا من نوع: :values.',
--    'after' => 'يجب أن يكون :attribute تاريخًا بعد :date.',
--
-     'attributes' => [
--        'email' => 'البريد الإلكتروني',
--        'password' => 'كلمة المرور',
--        'name' => 'الاسم',
--        'name_ar' => 'الاسم بالعربي',
--        'name_en' => 'الاسم بالإنجليزي',
--        'description_ar' => 'الوصف بالعربي',
--        'description_en' => 'الوصف بالإنجليزي',
--        'value_ar' => 'القيمة بالعربي',
--        'value_en' => 'القيمة بالإنجليزي',
--        'quote_ar' => 'الاقتباس بالعربي',
--        'quote_en' => 'الاقتباس بالإنجليزي',
--        'title_ar' => 'العنوان بالعربي',
--        'title_en' => 'العنوان بالإنجليزي',
--        'location_ar' => 'الموقع بالعربي',
--        'location_en' => 'الموقع بالإنجليزي',
--        'label_ar' => 'التسمية بالعربي',
--        'label_en' => 'التسمية بالإنجليزي',
--        'alt_ar' => 'النص البديل بالعربي',
--        'alt_en' => 'النص البديل بالإنجليزي',
--        'feature_ar' => 'الميزة بالعربي',
--        'feature_en' => 'الميزة بالإنجليزي',
--        'price' => 'السعر',
--        'price_starting_from' => 'السعر ابتداءً من',
--        'category_id' => 'التصنيف',
--        'image' => 'الصورة',
--        'logo' => 'الشعار',
--        'order' => 'الترتيب',
--        'city' => 'المدينة',
--        'phone' => 'رقم الهاتف',
--        'opening_time' => 'وقت الفتح',
--        'closing_time' => 'وقت الإغلاق',
--        'google_maps_url' => 'رابط خرائط جوجل',
--        'order_url' => 'رابط الطلب',
--        'status' => 'الحالة',
--        'role' => 'الصلاحية',
--        'event_date' => 'تاريخ المناسبة',
--        'guests_count' => 'عدد الضيوف',
--        'branch' => 'الفرع',
--        'event_type' => 'نوع المناسبة',
--        'budget_range' => 'نطاق الميزانية',
--        'notes' => 'ملاحظات',
--        'is_active' => 'الحالة',
--        'is_featured' => 'مميز',
--        'is_signature' => 'طبق مميز',
--        'settings' => 'الإعدادات',
--        'items' => 'العناصر',
--        'features' => 'الميزات',
--        'dishes' => 'الأطباق',
--        'page' => 'الصفحة',
--        'section' => 'القسم',
--        'key' => 'المفتاح',
--        'slug' => 'المعرّف',
--        'year' => 'السنة',
-+        'name'              => 'الاسم',
-+        'name_ar'           => 'الاسم بالعربية',
-+        'name_en'           => 'الاسم بالإنجليزية',
-+        'email'             => 'البريد الإلكتروني',
-+        'password'          => 'كلمة المرور',
-+        'phone'             => 'رقم الجوال',
-+        'price'             => 'السعر',
-+        'description_ar'    => 'الوصف بالعربية',
-+        'description_en'    => 'الوصف بالإنجليزية',
-+        'category_id'       => 'التصنيف',
-+        'image'             => 'الصورة',
-+        'event_date'        => 'تاريخ المناسبة',
-+        'guests_count'      => 'عدد الضيوف',
-+        'branch'            => 'الفرع',
-+        'event_type'        => 'نوع المناسبة',
-+        'budget_range'      => 'الميزانية التقريبية',
-+        'notes'             => 'ملاحظات',
-+        'value_ar'          => 'القيمة بالعربية',
-+        'value_en'          => 'القيمة بالإنجليزية',
-+        'title_ar'          => 'العنوان بالعربية',
-+        'title_en'          => 'العنوان بالإنجليزية',
-+        'description'       => 'الوصف',
-+        'location_ar'       => 'الموقع بالعربية',
-+        'location_en'       => 'الموقع بالإنجليزية',
-+        'opening_time'      => 'وقت الفتح',
-+        'closing_time'      => 'وقت الإغلاق',
-+        'google_maps_url'   => 'رابط الخريطة',
-+        'order_url'         => 'رابط الطلب',
-+        'quote_ar'          => 'الرأي بالعربية',
-+        'quote_en'          => 'الرأي بالإنجليزية',
-+        'year'              => 'السنة',
-+        'order'             => 'الترتيب',
-+        'role'              => 'الدور',
-+        'status'            => 'الحالة',
-+        'slug'              => 'المعرّف',
-+        'tag_en'            => 'التصنيف',
-+        'city'              => 'المدينة',
-+        'alt_ar'            => 'النص البديل بالعربية',
-+        'alt_en'            => 'النص البديل بالإنجليزية',
-+        'page'              => 'الصفحة',
-+        'section'           => 'القسم',
-+        'key'               => 'المفتاح',
-+        'features'          => 'المميزات',
-+        'dishes'            => 'الأطباق',
-+        'items'             => 'العناصر',
-     ],
- ];
-diff --git a/lang/en/messages.php b/lang/en/messages.php
-new file mode 100644
-index 0000000..bdd55f2
---- /dev/null
-+++ b/lang/en/messages.php
-@@ -0,0 +1,17 @@
-+<?php
+-use App\Http\Controllers\Auth\AuthController;
+-use App\Http\Controllers\BranchController;
+-use App\Http\Controllers\Catering\CateringPackageController;
+-use App\Http\Controllers\Catering\QuoteRequestController;
+-use App\Http\Controllers\Catering\SampleMenuController;
+-use App\Http\Controllers\CategoryController;
+-use App\Http\Controllers\DeliveryAppController;
+-use App\Http\Controllers\DishController;
+-use App\Http\Controllers\MediaItemController;
+-use App\Http\Controllers\PageContentController;
+-use App\Http\Controllers\SettingController;
+-use App\Http\Controllers\TestimonialController;
+-use App\Http\Controllers\TimelineController;
+-use App\Http\Controllers\UserController;
++use App\Http\Controllers\Public\BranchController;
++use App\Http\Controllers\Public\CategoryController;
++use App\Http\Controllers\Public\DeliveryAppController;
++use App\Http\Controllers\Public\DishController;
++use App\Http\Controllers\Public\MediaItemController;
++use App\Http\Controllers\Public\PageContentController;
++use App\Http\Controllers\Public\SettingController;
++use App\Http\Controllers\Public\TestimonialController;
++use App\Http\Controllers\Public\TimelineController;
++use App\Http\Controllers\Public\Catering\CateringPackageController;
++use App\Http\Controllers\Public\Catering\QuoteRequestController;
++use App\Http\Controllers\Public\Catering\SampleMenuController;
+ use Illuminate\Support\Facades\Route;
+ 
+-Route::prefix('v1')->group(function () {
++Route::prefix('v1')->middleware(['check.api.key', 'set.locale'])->group(function () {
+ 
+-    // ── PUBLIC (X-API-Key) ──────────────────────────────────
+-    Route::middleware('check.api.key')->group(function () {
++    // ── Ping (test) ───────────────────────────────────────
++    Route::get('/ping', fn() => response()->json([
++        'success' => true,
++        'message' => 'pong',
++        'locale'  => app()->getLocale(),
++    ]));
+ 
+-        Route::get('/ping', function () {
+-            return response()->json([
+-                'success' => true,
+-                'message' => 'pong',
+-                'locale' => app()->getLocale(),
+-            ]);
++    // ── Page Contents ─────────────────────────────────────
++    Route::prefix('page-contents')->controller(PageContentController::class)->group(function () {
++        Route::get('/', 'index');
++    });
 +
-+return [
-+    'created'           => 'Created successfully.',
-+    'updated'           => 'Updated successfully.',
-+    'deleted'           => 'Deleted successfully.',
-+    'fetched'           => 'Data fetched successfully.',
-+    'login_success'     => 'Login successful.',
-+    'logout_success'    => 'Logged out successfully.',
-+    'unauthorized'      => 'Unauthorized.',
-+    'invalid_api_key'   => 'Invalid API key.',
-+    'not_found'         => 'Resource not found.',
-+    'validation_failed' => 'Validation failed.',
-+    'something_wrong'   => 'Something went wrong. Please try again.',
-+    'uploaded'          => 'File uploaded successfully.',
-+    'quote_submitted'   => 'Your request has been received. We will contact you soon.',
-+];
-diff --git a/lang/en/validation.php b/lang/en/validation.php
-new file mode 100644
-index 0000000..01acf9e
---- /dev/null
-+++ b/lang/en/validation.php
-@@ -0,0 +1,81 @@
-+<?php
++    // ── Media Items ───────────────────────────────────────
++    Route::prefix('media-items')->controller(MediaItemController::class)->group(function () {
++        Route::get('/', 'index');
++    });
 +
-+return [
-+    'required'  => 'The :attribute field is required.',
-+    'string'    => 'The :attribute field must be a string.',
-+    'email'     => 'The :attribute field must be a valid email address.',
-+    'min'       => [
-+        'string'  => 'The :attribute field must be at least :min characters.',
-+        'numeric' => 'The :attribute field must be at least :min.',
-+        'file'    => 'The :attribute file must be at least :min kilobytes.',
-+    ],
-+    'max'       => [
-+        'string'  => 'The :attribute field must not exceed :max characters.',
-+        'numeric' => 'The :attribute field must not exceed :max.',
-+        'file'    => 'The :attribute file must not exceed :max kilobytes.',
-+    ],
-+    'unique'    => 'The :attribute has already been taken.',
-+    'exists'    => 'The selected :attribute is invalid.',
-+    'boolean'   => 'The :attribute field must be true or false.',
-+    'integer'   => 'The :attribute field must be an integer.',
-+    'numeric'   => 'The :attribute field must be a number.',
-+    'in'        => 'The selected :attribute is invalid.',
-+    'url'       => 'The :attribute field must be a valid URL.',
-+    'date'      => 'The :attribute field must be a valid date.',
-+    'after'     => 'The :attribute field must be a date after :date.',
-+    'confirmed' => 'The :attribute confirmation does not match.',
-+    'mimes'     => 'The :attribute must be a file of type: :values.',
-+    'file'      => 'The :attribute must be a file.',
-+    'array'     => 'The :attribute must be an array.',
-+    'between'   => [
-+        'numeric' => 'The :attribute must be between :min and :max.',
-+        'file'    => 'The :attribute must be between :min and :max kilobytes.',
-+        'string'  => 'The :attribute must be between :min and :max characters.',
-+    ],
-+    'attributes' => [
-+        'name'              => 'name',
-+        'name_ar'           => 'Arabic name',
-+        'name_en'           => 'English name',
-+        'email'             => 'email',
-+        'password'          => 'password',
-+        'phone'             => 'phone number',
-+        'price'             => 'price',
-+        'description_ar'    => 'Arabic description',
-+        'description_en'    => 'English description',
-+        'category_id'       => 'category',
-+        'image'             => 'image',
-+        'event_date'        => 'event date',
-+        'guests_count'      => 'number of guests',
-+        'branch'            => 'branch',
-+        'event_type'        => 'event type',
-+        'budget_range'      => 'budget range',
-+        'notes'             => 'notes',
-+        'value_ar'          => 'Arabic value',
-+        'value_en'          => 'English value',
-+        'title_ar'          => 'Arabic title',
-+        'title_en'          => 'English title',
-+        'location_ar'       => 'Arabic location',
-+        'location_en'       => 'English location',
-+        'opening_time'      => 'opening time',
-+        'closing_time'      => 'closing time',
-+        'google_maps_url'   => 'Google Maps URL',
-+        'order_url'         => 'order URL',
-+        'quote_ar'          => 'Arabic quote',
-+        'quote_en'          => 'English quote',
-+        'year'              => 'year',
-+        'order'             => 'order',
-+        'role'              => 'role',
-+        'status'            => 'status',
-+        'slug'              => 'slug',
-+        'tag_en'            => 'tag',
-+        'city'              => 'city',
-+        'alt_ar'            => 'Arabic alt text',
-+        'alt_en'            => 'English alt text',
-+        'page'              => 'page',
-+        'section'           => 'section',
-+        'key'               => 'key',
-+        'features'          => 'features',
-+        'dishes'            => 'dishes',
-+        'items'             => 'items',
-+    ],
-+];
++    // ── Settings ──────────────────────────────────────────
++    Route::prefix('settings')->controller(SettingController::class)->group(function () {
++        Route::get('/', 'index');
++    });
++
++    // ── Categories ────────────────────────────────────────
++    Route::prefix('categories')->controller(CategoryController::class)->group(function () {
++        Route::get('/', 'index');
++    });
++
++    // ── Dishes ────────────────────────────────────────────
++    Route::prefix('dishes')->controller(DishController::class)->group(function () {
++        Route::get('/',     'index');
++        Route::get('/{id}', 'show');
++    });
++
++    // ── Branches ──────────────────────────────────────────
++    Route::prefix('branches')->controller(BranchController::class)->group(function () {
++        Route::get('/', 'index');
++    });
++
++    // ── Catering ──────────────────────────────────────────
++    Route::prefix('catering')->group(function () {
++
++        Route::prefix('packages')->controller(CateringPackageController::class)->group(function () {
++            Route::get('/', 'index');
++        });
++
++        Route::prefix('sample-menus')->controller(SampleMenuController::class)->group(function () {
++            Route::get('/', 'index');
+         });
+ 
+-        // Content & Media (full CMS)
+-        Route::get('page-contents', [PageContentController::class, 'index']);
+-        Route::get('media-items', [MediaItemController::class, 'index']);
+-        Route::get('settings', [SettingController::class, 'index']);
+-
+-        // Core data
+-        Route::get('categories', [CategoryController::class, 'index']);
+-        Route::get('dishes', [DishController::class, 'index']);
+-        Route::get('dishes/{id}', [DishController::class, 'show']);
+-        Route::get('branches', [BranchController::class, 'index']);
+-        Route::get('catering/packages', [CateringPackageController::class, 'index']);
+-        Route::get('catering/sample-menus', [SampleMenuController::class, 'index']);
+-        Route::get('testimonials', [TestimonialController::class, 'index']);
+-        Route::get('timeline', [TimelineController::class, 'index']);
+-        Route::get('delivery-apps', [DeliveryAppController::class, 'index']);
+-
+-        // Public form submission
+-        Route::post('catering/quote-requests', [QuoteRequestController::class, 'store']);
++        Route::prefix('quote-requests')->controller(QuoteRequestController::class)->group(function () {
++            Route::post('/', 'store');
++        });
++    });
++
++    // ── Testimonials ──────────────────────────────────────
++    Route::prefix('testimonials')->controller(TestimonialController::class)->group(function () {
++        Route::get('/', 'index');
++    });
++
++    // ── Timeline ──────────────────────────────────────────
++    Route::prefix('timeline')->controller(TimelineController::class)->group(function () {
++        Route::get('/', 'index');
+     });
+ 
+-    // ── AUTH ────────────────────────────────────────────────
+-    Route::post('auth/login', [AuthController::class, 'login']);
+-
+-    Route::middleware('auth:sanctum')->group(function () {
+-        Route::post('auth/logout', [AuthController::class, 'logout']);
+-        Route::get('auth/me', [AuthController::class, 'me']);
+-
+-        // ── CMS (Page Content & Media) ───────────────────────
+-        Route::get('page-contents/{id}', [PageContentController::class, 'show']);
+-        Route::put('page-contents/{id}', [PageContentController::class, 'update']);
+-        Route::post('page-contents/bulk', [PageContentController::class, 'bulkUpdate']);
+-
+-        Route::get('media-items/{id}', [MediaItemController::class, 'show']);
+-        Route::post('media-items', [MediaItemController::class, 'store']);
+-        Route::put('media-items/{id}', [MediaItemController::class, 'update']);
+-        Route::delete('media-items/{id}', [MediaItemController::class, 'destroy']);
+-
+-        // ── Settings ─────────────────────────────────────────
+-        Route::put('settings', [SettingController::class, 'bulkUpdate']);
+-
+-        // ── Core CRUD ────────────────────────────────────────
+-        Route::post('categories', [CategoryController::class, 'store']);
+-        Route::put('categories/{id}', [CategoryController::class, 'update']);
+-        Route::delete('categories/{id}', [CategoryController::class, 'destroy']);
+-
+-        Route::post('dishes', [DishController::class, 'store']);
+-        Route::put('dishes/{id}', [DishController::class, 'update']);
+-        Route::delete('dishes/{id}', [DishController::class, 'destroy']);
+-
+-        Route::post('branches', [BranchController::class, 'store']);
+-        Route::put('branches/{id}', [BranchController::class, 'update']);
+-        Route::delete('branches/{id}', [BranchController::class, 'destroy']);
+-
+-        Route::post('catering/packages', [CateringPackageController::class, 'store']);
+-        Route::put('catering/packages/{id}', [CateringPackageController::class, 'update']);
+-        Route::delete('catering/packages/{id}', [CateringPackageController::class, 'destroy']);
+-
+-        Route::post('catering/sample-menus', [SampleMenuController::class, 'store']);
+-        Route::put('catering/sample-menus/{id}', [SampleMenuController::class, 'update']);
+-        Route::delete('catering/sample-menus/{id}', [SampleMenuController::class, 'destroy']);
+-
+-        // ── Quote Requests ───────────────────────────────────
+-        Route::get('catering/quote-requests', [QuoteRequestController::class, 'index']);
+-        Route::get('catering/quote-requests/{id}', [QuoteRequestController::class, 'show']);
+-        Route::patch('catering/quote-requests/{id}/status', [QuoteRequestController::class, 'updateStatus']);
+-
+-        Route::post('testimonials', [TestimonialController::class, 'store']);
+-        Route::put('testimonials/{id}', [TestimonialController::class, 'update']);
+-        Route::delete('testimonials/{id}', [TestimonialController::class, 'destroy']);
+-
+-        Route::post('timeline', [TimelineController::class, 'store']);
+-        Route::put('timeline/{id}', [TimelineController::class, 'update']);
+-        Route::delete('timeline/{id}', [TimelineController::class, 'destroy']);
+-
+-        Route::post('delivery-apps', [DeliveryAppController::class, 'store']);
+-        Route::put('delivery-apps/{id}', [DeliveryAppController::class, 'update']);
+-        Route::delete('delivery-apps/{id}', [DeliveryAppController::class, 'destroy']);
+-
+-        // ── Users ────────────────────────────────────────────
+-        Route::get('users', [UserController::class, 'index']);
+-        Route::post('users', [UserController::class, 'store']);
+-        Route::get('users/{id}', [UserController::class, 'show']);
+-        Route::put('users/{id}', [UserController::class, 'update']);
+-        Route::delete('users/{id}', [UserController::class, 'destroy']);
++    // ── Delivery Apps ─────────────────────────────────────
++    Route::prefix('delivery-apps')->controller(DeliveryAppController::class)->group(function () {
++        Route::get('/', 'index');
+     });
+ });
+diff --git a/tests/Feature/AdminApiTest.php b/tests/Feature/AdminApiTest.php
+index c2f485c..8100e00 100644
+--- a/tests/Feature/AdminApiTest.php
++++ b/tests/Feature/AdminApiTest.php
+@@ -19,7 +19,7 @@ protected function setUp(): void
+ 
+     public function test_login_with_correct_credentials_returns_200_with_token(): void
+     {
+-        $response = $this->postJson('/api/v1/auth/login', [
++        $response = $this->postJson('/api/v1/admin/auth/login', [
+             'email' => 'admin@abouelsid.com',
+             'password' => 'password',
+         ]);
+@@ -31,7 +31,7 @@ public function test_login_with_correct_credentials_returns_200_with_token(): vo
+ 
+     public function test_login_with_wrong_password_returns_401(): void
+     {
+-        $response = $this->postJson('/api/v1/auth/login', [
++        $response = $this->postJson('/api/v1/admin/auth/login', [
+             'email' => 'admin@abouelsid.com',
+             'password' => 'wrong-password',
+         ]);
+@@ -42,7 +42,7 @@ public function test_login_with_wrong_password_returns_401(): void
+ 
+     public function test_get_quote_requests_without_token_returns_401(): void
+     {
+-        $response = $this->getJson('/api/v1/catering/quote-requests');
++        $response = $this->getJson('/api/v1/admin/catering/quote-requests');
+ 
+         $response->assertStatus(401)
+             ->assertJson(['success' => false]);
+@@ -53,7 +53,7 @@ public function test_get_quote_requests_with_token_returns_200(): void
+         $user = User::where('email', 'admin@abouelsid.com')->first();
+         $token = $user->createToken('test-token')->plainTextToken;
+ 
+-        $response = $this->getJson('/api/v1/catering/quote-requests', [
++        $response = $this->getJson('/api/v1/admin/catering/quote-requests', [
+             'Authorization' => "Bearer {$token}",
+         ]);
+ 
 ===== END change.diff =====
 
 ===== BEGIN context-bundle.md =====
 # Context bundle
 
-bundle_version 2 · budget 8000 / used 4722 tokens
+bundle_version 2 · budget 8000 / used 4134 tokens
 
-## flagged · named_reference
+## fetched · named_reference
 
-**Subject:** App\Http\Controllers\Auth\AuthController::success
-**Reason:** the region calls App\Http\Controllers\Auth\AuthController::success, which this file does not declare; its contract is defined in another file
-**Source:** `app/Http/Controllers/Auth/AuthController.php` :: `App\Http\Controllers\Auth\AuthController::success` (lines 18-35)
-**Tokens:** 61
+**Subject:** App\Actions\Branch\GetBranchesAction
+**Reason:** the region depends on App\Actions\Branch\GetBranchesAction, whose contract is defined in another file
+**Source:** `app/Actions/Branch/GetBranchesAction.php` :: `__construct` (lines 11-13)
+**Tokens:** 24
 
-```text
-ASSUMPTION: success() is not declared in AuthController or in its parent App\Http\Controllers\Controller; it is declared in trait App\Traits\ApiResponse at app/Traits/ApiResponse.php:9, used by that parent; body not fetched, contract unverified
+```php
+    public function __construct(
+        private readonly BranchRepository $repository,
+    ) {}
 ```
 
-## flagged · named_reference
+## fetched · named_reference
 
-**Subject:** App\Http\Controllers\BranchController::created
-**Reason:** the region calls App\Http\Controllers\BranchController::created, which this file does not declare; its contract is defined in another file
-**Source:** `app/Http/Controllers/BranchController.php` :: `App\Http\Controllers\BranchController::created` (lines 17-43)
-**Tokens:** 62
+**Subject:** App\Actions\Branch\GetBranchesAction
+**Reason:** the region depends on App\Actions\Branch\GetBranchesAction, whose contract is defined in another file
+**Source:** `app/Actions/Branch/GetBranchesAction.php` :: `execute` (lines 15-25)
+**Tokens:** 73
 
-```text
-ASSUMPTION: created() is not declared in BranchController or in its parent App\Http\Controllers\Controller; it is declared in trait App\Traits\ApiResponse at app/Traits/ApiResponse.php:21, used by that parent; body not fetched, contract unverified
+```php
+    public function execute(): Collection
+    {
+        $locale = app()->getLocale();
+        $key = "branches_{$locale}";
+
+        return Cache::tags(['branches'])->remember(
+            $key,
+            now()->addHour(),
+            fn () => $this->repository->getAll()
+        );
+    }
 ```
 
-## flagged · named_reference
+## fetched · named_reference
 
-**Subject:** App\Http\Controllers\BranchController::deleted
-**Reason:** the region calls App\Http\Controllers\BranchController::deleted, which this file does not declare; its contract is defined in another file
-**Source:** `app/Http/Controllers/BranchController.php` :: `App\Http\Controllers\BranchController::deleted` (lines 17-43)
-**Tokens:** 62
+**Subject:** App\Actions\Catering\GetPackagesAction
+**Reason:** the region depends on App\Actions\Catering\GetPackagesAction, whose contract is defined in another file
+**Source:** `app/Actions/Catering/GetPackagesAction.php` :: `__construct` (lines 11-13)
+**Tokens:** 27
 
-```text
-ASSUMPTION: deleted() is not declared in BranchController or in its parent App\Http\Controllers\Controller; it is declared in trait App\Traits\ApiResponse at app/Traits/ApiResponse.php:28, used by that parent; body not fetched, contract unverified
+```php
+    public function __construct(
+        private readonly CateringPackageRepository $repository,
+    ) {}
 ```
 
-## flagged · named_reference
+## fetched · named_reference
 
-**Subject:** App\Http\Controllers\BranchController::success
-**Reason:** the region calls App\Http\Controllers\BranchController::success, which this file does not declare; its contract is defined in another file
-**Source:** `app/Http/Controllers/BranchController.php` :: `App\Http\Controllers\BranchController::success` (lines 17-43)
-**Tokens:** 62
+**Subject:** App\Actions\Catering\GetPackagesAction
+**Reason:** the region depends on App\Actions\Catering\GetPackagesAction, whose contract is defined in another file
+**Source:** `app/Actions/Catering/GetPackagesAction.php` :: `execute` (lines 15-25)
+**Tokens:** 77
 
-```text
-ASSUMPTION: success() is not declared in BranchController or in its parent App\Http\Controllers\Controller; it is declared in trait App\Traits\ApiResponse at app/Traits/ApiResponse.php:9, used by that parent; body not fetched, contract unverified
+```php
+    public function execute(): Collection
+    {
+        $locale = app()->getLocale();
+        $key = "catering_packages_{$locale}";
+
+        return Cache::tags(['catering_packages'])->remember(
+            $key,
+            now()->addHour(),
+            fn () => $this->repository->getAll()
+        );
+    }
+```
+
+## fetched · named_reference
+
+**Subject:** App\Actions\Catering\GetSampleMenusAction
+**Reason:** the region depends on App\Actions\Catering\GetSampleMenusAction, whose contract is defined in another file
+**Source:** `app/Actions/Catering/GetSampleMenusAction.php` :: `__construct` (lines 11-13)
+**Tokens:** 25
+
+```php
+    public function __construct(
+        private readonly SampleMenuRepository $repository,
+    ) {}
+```
+
+## fetched · named_reference
+
+**Subject:** App\Actions\Catering\GetSampleMenusAction
+**Reason:** the region depends on App\Actions\Catering\GetSampleMenusAction, whose contract is defined in another file
+**Source:** `app/Actions/Catering/GetSampleMenusAction.php` :: `execute` (lines 15-25)
+**Tokens:** 75
+
+```php
+    public function execute(): Collection
+    {
+        $locale = app()->getLocale();
+        $key = "sample_menus_{$locale}";
+
+        return Cache::tags(['sample_menus'])->remember(
+            $key,
+            now()->addHour(),
+            fn () => $this->repository->getAll()
+        );
+    }
+```
+
+## fetched · named_reference
+
+**Subject:** App\Actions\Catering\SubmitQuoteRequestAction
+**Reason:** the region depends on App\Actions\Catering\SubmitQuoteRequestAction, whose contract is defined in another file
+**Source:** `app/Actions/Catering/SubmitQuoteRequestAction.php` :: `__construct` (lines 11-13)
+**Tokens:** 26
+
+```php
+    public function __construct(
+        private readonly QuoteRequestRepository $repository,
+    ) {}
+```
+
+## fetched · named_reference
+
+**Subject:** App\Actions\Catering\SubmitQuoteRequestAction
+**Reason:** the region depends on App\Actions\Catering\SubmitQuoteRequestAction, whose contract is defined in another file
+**Source:** `app/Actions/Catering/SubmitQuoteRequestAction.php` :: `execute` (lines 15-29)
+**Tokens:** 136
+
+```php
+    public function execute(SubmitQuoteRequestDTO $dto): QuoteRequest
+    {
+        return $this->repository->create([
+            'name' => $dto->name,
+            'phone' => $dto->phone,
+            'email' => $dto->email,
+            'event_date' => $dto->event_date,
+            'guests_count' => $dto->guests_count,
+            'branch' => $dto->branch,
+            'event_type' => $dto->event_type,
+            'budget_range' => $dto->budget_range,
+            'notes' => $dto->notes,
+            'status' => 'pending',
+        ]);
+    }
+```
+
+## fetched · named_reference
+
+**Subject:** App\Actions\DeliveryApp\GetDeliveryAppsAction
+**Reason:** the region depends on App\Actions\DeliveryApp\GetDeliveryAppsAction, whose contract is defined in another file
+**Source:** `app/Actions/DeliveryApp/GetDeliveryAppsAction.php` :: `__construct` (lines 11-13)
+**Tokens:** 26
+
+```php
+    public function __construct(
+        private readonly DeliveryAppRepository $repository,
+    ) {}
+```
+
+## fetched · named_reference
+
+**Subject:** App\Actions\DeliveryApp\GetDeliveryAppsAction
+**Reason:** the region depends on App\Actions\DeliveryApp\GetDeliveryAppsAction, whose contract is defined in another file
+**Source:** `app/Actions/DeliveryApp/GetDeliveryAppsAction.php` :: `execute` (lines 15-25)
+**Tokens:** 92
+
+```php
+    public function execute(bool $activeOnly = true): Collection
+    {
+        $locale = app()->getLocale();
+        $key = "delivery_apps_{$locale}_".($activeOnly ? 'active' : 'all');
+
+        return Cache::tags(['delivery_apps'])->remember(
+            $key,
+            now()->addHour(),
+            fn () => $this->repository->getAll($activeOnly)
+        );
+    }
+```
+
+## fetched · named_reference
+
+**Subject:** App\Actions\Dish\GetDishAction
+**Reason:** the region depends on App\Actions\Dish\GetDishAction, whose contract is defined in another file
+**Source:** `app/Actions/Dish/GetDishAction.php` :: `__construct` (lines 10-12)
+**Tokens:** 24
+
+```php
+    public function __construct(
+        private readonly DishRepository $repository,
+    ) {}
+```
+
+## fetched · named_reference
+
+**Subject:** App\Actions\Dish\GetDishAction
+**Reason:** the region depends on App\Actions\Dish\GetDishAction, whose contract is defined in another file
+**Source:** `app/Actions/Dish/GetDishAction.php` :: `execute` (lines 14-17)
+**Tokens:** 26
+
+```php
+    public function execute(int $id): Dish
+    {
+        return $this->repository->getById($id);
+    }
+```
+
+## fetched · named_reference
+
+**Subject:** App\Actions\Dish\GetDishesAction
+**Reason:** the region depends on App\Actions\Dish\GetDishesAction, whose contract is defined in another file
+**Source:** `app/Actions/Dish/GetDishesAction.php` :: `__construct` (lines 11-13)
+**Tokens:** 24
+
+```php
+    public function __construct(
+        private readonly DishRepository $repository,
+    ) {}
+```
+
+## fetched · named_reference
+
+**Subject:** App\Actions\Dish\GetDishesAction
+**Reason:** the region depends on App\Actions\Dish\GetDishesAction, whose contract is defined in another file
+**Source:** `app/Actions/Dish/GetDishesAction.php` :: `execute` (lines 15-31)
+**Tokens:** 190
+
+```php
+    public function execute(array $filters = []): LengthAwarePaginator
+    {
+        $locale = app()->getLocale();
+        $categoryId = $filters['category_id'] ?? 'all';
+        $featured = array_key_exists('featured', $filters) ? var_export($filters['featured'], true) : 'all';
+        $signature = array_key_exists('signature', $filters) ? var_export($filters['signature'], true) : 'all';
+        $perPage = $filters['per_page'] ?? 'default';
+        $page = request()->integer('page', 1);
+
+        $key = "dishes_{$locale}_{$categoryId}_{$featured}_{$signature}_{$perPage}_{$page}";
+
+        return Cache::tags(['dishes'])->remember(
+            $key,
+            now()->addHour(),
+            fn () => $this->repository->getAll($filters)
+        );
+    }
+```
+
+## fetched · named_reference
+
+**Subject:** App\Actions\MediaItem\GetMediaItemsAction
+**Reason:** the region depends on App\Actions\MediaItem\GetMediaItemsAction, whose contract is defined in another file
+**Source:** `app/Actions/MediaItem/GetMediaItemsAction.php` :: `__construct` (lines 11-13)
+**Tokens:** 25
+
+```php
+    public function __construct(
+        private readonly MediaItemRepository $repository,
+    ) {}
+```
+
+## fetched · named_reference
+
+**Subject:** App\Actions\MediaItem\GetMediaItemsAction
+**Reason:** the region depends on App\Actions\MediaItem\GetMediaItemsAction, whose contract is defined in another file
+**Source:** `app/Actions/MediaItem/GetMediaItemsAction.php` :: `execute` (lines 15-24)
+**Tokens:** 80
+
+```php
+    public function execute(string $page, ?string $section = null): Collection
+    {
+        $key = "media_items_{$page}_{$section}";
+
+        return Cache::tags(['media_items'])->remember(
+            $key,
+            now()->addDay(),
+            fn () => $this->repository->getByPage($page, $section)
+        );
+    }
+```
+
+## fetched · named_reference
+
+**Subject:** App\Actions\PageContent\GetPageContentAction
+**Reason:** the region depends on App\Actions\PageContent\GetPageContentAction, whose contract is defined in another file
+**Source:** `app/Actions/PageContent/GetPageContentAction.php` :: `__construct` (lines 11-13)
+**Tokens:** 26
+
+```php
+    public function __construct(
+        private readonly PageContentRepository $repository,
+    ) {}
+```
+
+## fetched · named_reference
+
+**Subject:** App\Actions\PageContent\GetPageContentAction
+**Reason:** the region depends on App\Actions\PageContent\GetPageContentAction, whose contract is defined in another file
+**Source:** `app/Actions/PageContent/GetPageContentAction.php` :: `execute` (lines 15-25)
+**Tokens:** 93
+
+```php
+    public function execute(string $page, ?string $section = null): Collection
+    {
+        $locale = app()->getLocale();
+        $key = "page_contents_{$page}_{$section}_{$locale}";
+
+        return Cache::tags(['page_contents'])->remember(
+            $key,
+            now()->addDay(),
+            fn () => $this->repository->getByPage($page, $section)
+        );
+    }
+```
+
+## fetched · named_reference
+
+**Subject:** App\Actions\Setting\GetSettingsAction
+**Reason:** the region depends on App\Actions\Setting\GetSettingsAction, whose contract is defined in another file
+**Source:** `app/Actions/Setting/GetSettingsAction.php` :: `__construct` (lines 11-13)
+**Tokens:** 25
+
+```php
+    public function __construct(
+        private readonly SettingRepository $repository,
+    ) {}
+```
+
+## fetched · named_reference
+
+**Subject:** App\Actions\Setting\GetSettingsAction
+**Reason:** the region depends on App\Actions\Setting\GetSettingsAction, whose contract is defined in another file
+**Source:** `app/Actions/Setting/GetSettingsAction.php` :: `execute` (lines 15-24)
+**Tokens:** 69
+
+```php
+    public function execute(?string $group = null): Collection
+    {
+        $key = "settings_{$group}";
+
+        return Cache::tags(['settings'])->remember(
+            $key,
+            now()->addDay(),
+            fn () => $this->repository->getAll($group)
+        );
+    }
+```
+
+## fetched · named_reference
+
+**Subject:** App\Actions\Testimonial\GetTestimonialsAction
+**Reason:** the region depends on App\Actions\Testimonial\GetTestimonialsAction, whose contract is defined in another file
+**Source:** `app/Actions/Testimonial/GetTestimonialsAction.php` :: `__construct` (lines 11-13)
+**Tokens:** 26
+
+```php
+    public function __construct(
+        private readonly TestimonialRepository $repository,
+    ) {}
+```
+
+## fetched · named_reference
+
+**Subject:** App\Actions\Testimonial\GetTestimonialsAction
+**Reason:** the region depends on App\Actions\Testimonial\GetTestimonialsAction, whose contract is defined in another file
+**Source:** `app/Actions/Testimonial/GetTestimonialsAction.php` :: `execute` (lines 15-25)
+**Tokens:** 92
+
+```php
+    public function execute(bool $activeOnly = true): Collection
+    {
+        $locale = app()->getLocale();
+        $key = "testimonials_{$locale}_".($activeOnly ? 'active' : 'all');
+
+        return Cache::tags(['testimonials'])->remember(
+            $key,
+            now()->addHour(),
+            fn () => $this->repository->getAll($activeOnly)
+        );
+    }
+```
+
+## fetched · named_reference
+
+**Subject:** App\Actions\Timeline\GetTimelineAction
+**Reason:** the region depends on App\Actions\Timeline\GetTimelineAction, whose contract is defined in another file
+**Source:** `app/Actions/Timeline/GetTimelineAction.php` :: `__construct` (lines 11-13)
+**Tokens:** 25
+
+```php
+    public function __construct(
+        private readonly TimelineRepository $repository,
+    ) {}
+```
+
+## fetched · named_reference
+
+**Subject:** App\Actions\Timeline\GetTimelineAction
+**Reason:** the region depends on App\Actions\Timeline\GetTimelineAction, whose contract is defined in another file
+**Source:** `app/Actions/Timeline/GetTimelineAction.php` :: `execute` (lines 15-25)
+**Tokens:** 72
+
+```php
+    public function execute(): Collection
+    {
+        $locale = app()->getLocale();
+        $key = "timeline_{$locale}";
+
+        return Cache::tags(['timeline'])->remember(
+            $key,
+            now()->addDay(),
+            fn () => $this->repository->getAll()
+        );
+    }
+```
+
+## fetched · named_reference
+
+**Subject:** App\DTOs\Catering\SubmitQuoteRequestDTO::fromRequest
+**Reason:** the region depends on App\DTOs\Catering\SubmitQuoteRequestDTO::fromRequest, whose contract is defined in another file
+**Source:** `app/DTOs/Catering/SubmitQuoteRequestDTO.php` :: `fromRequest` (lines 21-34)
+**Tokens:** 197
+
+```php
+    public static function fromRequest(Request $request): self
+    {
+        return new self(
+            name: $request->string('name')->toString(),
+            phone: $request->string('phone')->toString(),
+            email: $request->filled('email') ? $request->string('email')->toString() : null,
+            event_date: $request->string('event_date')->toString(),
+            guests_count: (int) $request->input('guests_count'),
+            branch: $request->string('branch')->toString(),
+            event_type: $request->string('event_type')->toString(),
+            budget_range: $request->filled('budget_range') ? $request->string('budget_range')->toString() : null,
+            notes: $request->filled('notes') ? $request->string('notes')->toString() : null,
+        );
+    }
 ```
 
 ## flagged · named_reference
 
 **Subject:** App\Http\Resources\Branch\BranchResource::collection
 **Reason:** the region depends on App\Http\Resources\Branch\BranchResource::collection, whose contract is defined in another file
-**Source:** `app/Http/Controllers/BranchController.php` :: `App\Http\Resources\Branch\BranchResource::collection` (lines 17-43)
+**Source:** `app/Http/Controllers/Public/BranchController.php` :: `App\Http\Resources\Branch\BranchResource::collection` (lines 1-18)
 **Tokens:** 20
 
 ```text
 ASSUMPTION: named reference could not be resolved on disk; contract unverified
-```
-
-## flagged · named_reference
-
-**Subject:** App\Http\Controllers\CategoryController::created
-**Reason:** the region calls App\Http\Controllers\CategoryController::created, which this file does not declare; its contract is defined in another file
-**Source:** `app/Http/Controllers/CategoryController.php` :: `App\Http\Controllers\CategoryController::created` (lines 15-41)
-**Tokens:** 63
-
-```text
-ASSUMPTION: created() is not declared in CategoryController or in its parent App\Http\Controllers\Controller; it is declared in trait App\Traits\ApiResponse at app/Traits/ApiResponse.php:21, used by that parent; body not fetched, contract unverified
-```
-
-## flagged · named_reference
-
-**Subject:** App\Http\Controllers\CategoryController::deleted
-**Reason:** the region calls App\Http\Controllers\CategoryController::deleted, which this file does not declare; its contract is defined in another file
-**Source:** `app/Http/Controllers/CategoryController.php` :: `App\Http\Controllers\CategoryController::deleted` (lines 15-41)
-**Tokens:** 63
-
-```text
-ASSUMPTION: deleted() is not declared in CategoryController or in its parent App\Http\Controllers\Controller; it is declared in trait App\Traits\ApiResponse at app/Traits/ApiResponse.php:28, used by that parent; body not fetched, contract unverified
-```
-
-## flagged · named_reference
-
-**Subject:** App\Http\Controllers\CategoryController::success
-**Reason:** the region calls App\Http\Controllers\CategoryController::success, which this file does not declare; its contract is defined in another file
-**Source:** `app/Http/Controllers/CategoryController.php` :: `App\Http\Controllers\CategoryController::success` (lines 15-41)
-**Tokens:** 62
-
-```text
-ASSUMPTION: success() is not declared in CategoryController or in its parent App\Http\Controllers\Controller; it is declared in trait App\Traits\ApiResponse at app/Traits/ApiResponse.php:9, used by that parent; body not fetched, contract unverified
 ```
 
 ## flagged · named_reference
 
 **Subject:** App\Http\Resources\Category\CategoryResource::collection
 **Reason:** the region depends on App\Http\Resources\Category\CategoryResource::collection, whose contract is defined in another file
-**Source:** `app/Http/Controllers/CategoryController.php` :: `App\Http\Resources\Category\CategoryResource::collection` (lines 15-41)
+**Source:** `app/Http/Controllers/Public/CategoryController.php` :: `App\Http\Resources\Category\CategoryResource::collection` (lines 1-18)
 **Tokens:** 20
 
 ```text
 ASSUMPTION: named reference could not be resolved on disk; contract unverified
-```
-
-## flagged · named_reference
-
-**Subject:** App\Http\Controllers\Catering\CateringPackageController::created
-**Reason:** the region calls App\Http\Controllers\Catering\CateringPackageController::created, which this file does not declare; its contract is defined in another file
-**Source:** `app/Http/Controllers/Catering/CateringPackageController.php` :: `App\Http\Controllers\Catering\CateringPackageController::created` (lines 18-44)
-**Tokens:** 64
-
-```text
-ASSUMPTION: created() is not declared in CateringPackageController or in its parent App\Http\Controllers\Controller; it is declared in trait App\Traits\ApiResponse at app/Traits/ApiResponse.php:21, used by that parent; body not fetched, contract unverified
-```
-
-## flagged · named_reference
-
-**Subject:** App\Http\Controllers\Catering\CateringPackageController::deleted
-**Reason:** the region calls App\Http\Controllers\Catering\CateringPackageController::deleted, which this file does not declare; its contract is defined in another file
-**Source:** `app/Http/Controllers/Catering/CateringPackageController.php` :: `App\Http\Controllers\Catering\CateringPackageController::deleted` (lines 18-44)
-**Tokens:** 64
-
-```text
-ASSUMPTION: deleted() is not declared in CateringPackageController or in its parent App\Http\Controllers\Controller; it is declared in trait App\Traits\ApiResponse at app/Traits/ApiResponse.php:28, used by that parent; body not fetched, contract unverified
-```
-
-## flagged · named_reference
-
-**Subject:** App\Http\Controllers\Catering\CateringPackageController::success
-**Reason:** the region calls App\Http\Controllers\Catering\CateringPackageController::success, which this file does not declare; its contract is defined in another file
-**Source:** `app/Http/Controllers/Catering/CateringPackageController.php` :: `App\Http\Controllers\Catering\CateringPackageController::success` (lines 18-44)
-**Tokens:** 64
-
-```text
-ASSUMPTION: success() is not declared in CateringPackageController or in its parent App\Http\Controllers\Controller; it is declared in trait App\Traits\ApiResponse at app/Traits/ApiResponse.php:9, used by that parent; body not fetched, contract unverified
 ```
 
 ## flagged · named_reference
 
 **Subject:** App\Http\Resources\Catering\PackageResource::collection
 **Reason:** the region depends on App\Http\Resources\Catering\PackageResource::collection, whose contract is defined in another file
-**Source:** `app/Http/Controllers/Catering/CateringPackageController.php` :: `App\Http\Resources\Catering\PackageResource::collection` (lines 18-44)
+**Source:** `app/Http/Controllers/Public/Catering/CateringPackageController.php` :: `App\Http\Resources\Catering\PackageResource::collection` (lines 1-18)
 **Tokens:** 20
 
 ```text
 ASSUMPTION: named reference could not be resolved on disk; contract unverified
-```
-
-## flagged · named_reference
-
-**Subject:** App\Http\Controllers\Catering\QuoteRequestController::created
-**Reason:** the region calls App\Http\Controllers\Catering\QuoteRequestController::created, which this file does not declare; its contract is defined in another file
-**Source:** `app/Http/Controllers/Catering/QuoteRequestController.php` :: `App\Http\Controllers\Catering\QuoteRequestController::created` (lines 20-26)
-**Tokens:** 64
-
-```text
-ASSUMPTION: created() is not declared in QuoteRequestController or in its parent App\Http\Controllers\Controller; it is declared in trait App\Traits\ApiResponse at app/Traits/ApiResponse.php:21, used by that parent; body not fetched, contract unverified
-```
-
-## flagged · named_reference
-
-**Subject:** App\Http\Controllers\Catering\QuoteRequestController::paginated
-**Reason:** the region calls App\Http\Controllers\Catering\QuoteRequestController::paginated, which this file does not declare; its contract is defined in another file
-**Source:** `app/Http/Controllers/Catering/QuoteRequestController.php` :: `App\Http\Controllers\Catering\QuoteRequestController::paginated` (lines 33-50)
-**Tokens:** 64
-
-```text
-ASSUMPTION: paginated() is not declared in QuoteRequestController or in its parent App\Http\Controllers\Controller; it is declared in trait App\Traits\ApiResponse at app/Traits/ApiResponse.php:38, used by that parent; body not fetched, contract unverified
-```
-
-## flagged · named_reference
-
-**Subject:** App\Http\Controllers\Catering\QuoteRequestController::success
-**Reason:** the region calls App\Http\Controllers\Catering\QuoteRequestController::success, which this file does not declare; its contract is defined in another file
-**Source:** `app/Http/Controllers/Catering/QuoteRequestController.php` :: `App\Http\Controllers\Catering\QuoteRequestController::success` (lines 33-50)
-**Tokens:** 63
-
-```text
-ASSUMPTION: success() is not declared in QuoteRequestController or in its parent App\Http\Controllers\Controller; it is declared in trait App\Traits\ApiResponse at app/Traits/ApiResponse.php:9, used by that parent; body not fetched, contract unverified
-```
-
-## flagged · named_reference
-
-**Subject:** App\Http\Resources\Catering\QuoteRequestResource::collection
-**Reason:** the region depends on App\Http\Resources\Catering\QuoteRequestResource::collection, whose contract is defined in another file
-**Source:** `app/Http/Controllers/Catering/QuoteRequestController.php` :: `App\Http\Resources\Catering\QuoteRequestResource::collection` (lines 33-50)
-**Tokens:** 20
-
-```text
-ASSUMPTION: named reference could not be resolved on disk; contract unverified
-```
-
-## flagged · named_reference
-
-**Subject:** App\Http\Controllers\Catering\SampleMenuController::created
-**Reason:** the region calls App\Http\Controllers\Catering\SampleMenuController::created, which this file does not declare; its contract is defined in another file
-**Source:** `app/Http/Controllers/Catering/SampleMenuController.php` :: `App\Http\Controllers\Catering\SampleMenuController::created` (lines 16-42)
-**Tokens:** 63
-
-```text
-ASSUMPTION: created() is not declared in SampleMenuController or in its parent App\Http\Controllers\Controller; it is declared in trait App\Traits\ApiResponse at app/Traits/ApiResponse.php:21, used by that parent; body not fetched, contract unverified
-```
-
-## flagged · named_reference
-
-**Subject:** App\Http\Controllers\Catering\SampleMenuController::deleted
-**Reason:** the region calls App\Http\Controllers\Catering\SampleMenuController::deleted, which this file does not declare; its contract is defined in another file
-**Source:** `app/Http/Controllers/Catering/SampleMenuController.php` :: `App\Http\Controllers\Catering\SampleMenuController::deleted` (lines 16-42)
-**Tokens:** 63
-
-```text
-ASSUMPTION: deleted() is not declared in SampleMenuController or in its parent App\Http\Controllers\Controller; it is declared in trait App\Traits\ApiResponse at app/Traits/ApiResponse.php:28, used by that parent; body not fetched, contract unverified
-```
-
-## flagged · named_reference
-
-**Subject:** App\Http\Controllers\Catering\SampleMenuController::success
-**Reason:** the region calls App\Http\Controllers\Catering\SampleMenuController::success, which this file does not declare; its contract is defined in another file
-**Source:** `app/Http/Controllers/Catering/SampleMenuController.php` :: `App\Http\Controllers\Catering\SampleMenuController::success` (lines 16-42)
-**Tokens:** 63
-
-```text
-ASSUMPTION: success() is not declared in SampleMenuController or in its parent App\Http\Controllers\Controller; it is declared in trait App\Traits\ApiResponse at app/Traits/ApiResponse.php:9, used by that parent; body not fetched, contract unverified
 ```
 
 ## flagged · named_reference
 
 **Subject:** App\Http\Resources\Catering\SampleMenuResource::collection
 **Reason:** the region depends on App\Http\Resources\Catering\SampleMenuResource::collection, whose contract is defined in another file
-**Source:** `app/Http/Controllers/Catering/SampleMenuController.php` :: `App\Http\Resources\Catering\SampleMenuResource::collection` (lines 16-42)
+**Source:** `app/Http/Controllers/Public/Catering/SampleMenuController.php` :: `App\Http\Resources\Catering\SampleMenuResource::collection` (lines 1-18)
 **Tokens:** 20
 
 ```text
 ASSUMPTION: named reference could not be resolved on disk; contract unverified
-```
-
-## flagged · named_reference
-
-**Subject:** App\Http\Controllers\DeliveryAppController::created
-**Reason:** the region calls App\Http\Controllers\DeliveryAppController::created, which this file does not declare; its contract is defined in another file
-**Source:** `app/Http/Controllers/DeliveryAppController.php` :: `App\Http\Controllers\DeliveryAppController::created` (lines 17-43)
-**Tokens:** 63
-
-```text
-ASSUMPTION: created() is not declared in DeliveryAppController or in its parent App\Http\Controllers\Controller; it is declared in trait App\Traits\ApiResponse at app/Traits/ApiResponse.php:21, used by that parent; body not fetched, contract unverified
-```
-
-## flagged · named_reference
-
-**Subject:** App\Http\Controllers\DeliveryAppController::deleted
-**Reason:** the region calls App\Http\Controllers\DeliveryAppController::deleted, which this file does not declare; its contract is defined in another file
-**Source:** `app/Http/Controllers/DeliveryAppController.php` :: `App\Http\Controllers\DeliveryAppController::deleted` (lines 17-43)
-**Tokens:** 63
-
-```text
-ASSUMPTION: deleted() is not declared in DeliveryAppController or in its parent App\Http\Controllers\Controller; it is declared in trait App\Traits\ApiResponse at app/Traits/ApiResponse.php:28, used by that parent; body not fetched, contract unverified
-```
-
-## flagged · named_reference
-
-**Subject:** App\Http\Controllers\DeliveryAppController::success
-**Reason:** the region calls App\Http\Controllers\DeliveryAppController::success, which this file does not declare; its contract is defined in another file
-**Source:** `app/Http/Controllers/DeliveryAppController.php` :: `App\Http\Controllers\DeliveryAppController::success` (lines 17-43)
-**Tokens:** 63
-
-```text
-ASSUMPTION: success() is not declared in DeliveryAppController or in its parent App\Http\Controllers\Controller; it is declared in trait App\Traits\ApiResponse at app/Traits/ApiResponse.php:9, used by that parent; body not fetched, contract unverified
 ```
 
 ## flagged · named_reference
 
 **Subject:** App\Http\Resources\DeliveryApp\DeliveryAppResource::collection
 **Reason:** the region depends on App\Http\Resources\DeliveryApp\DeliveryAppResource::collection, whose contract is defined in another file
-**Source:** `app/Http/Controllers/DeliveryAppController.php` :: `App\Http\Resources\DeliveryApp\DeliveryAppResource::collection` (lines 17-43)
+**Source:** `app/Http/Controllers/Public/DeliveryAppController.php` :: `App\Http\Resources\DeliveryApp\DeliveryAppResource::collection` (lines 1-18)
 **Tokens:** 20
 
 ```text
@@ -1146,229 +1450,31 @@ ASSUMPTION: named reference could not be resolved on disk; contract unverified
 
 ## flagged · named_reference
 
-**Subject:** App\Http\Controllers\DishController::created
-**Reason:** the region calls App\Http\Controllers\DishController::created, which this file does not declare; its contract is defined in another file
-**Source:** `app/Http/Controllers/DishController.php` :: `App\Http\Controllers\DishController::created` (lines 29-60)
-**Tokens:** 62
+**Subject:** App\Http\Resources\Dish\DishResource::collection
+**Reason:** the region depends on App\Http\Resources\Dish\DishResource::collection, whose contract is defined in another file
+**Source:** `app/Http/Controllers/Public/DishController.php` :: `App\Http\Resources\Dish\DishResource::collection` (lines 1-32)
+**Tokens:** 20
 
 ```text
-ASSUMPTION: created() is not declared in DishController or in its parent App\Http\Controllers\Controller; it is declared in trait App\Traits\ApiResponse at app/Traits/ApiResponse.php:21, used by that parent; body not fetched, contract unverified
-```
-
-## flagged · named_reference
-
-**Subject:** App\Http\Controllers\DishController::deleted
-**Reason:** the region calls App\Http\Controllers\DishController::deleted, which this file does not declare; its contract is defined in another file
-**Source:** `app/Http/Controllers/DishController.php` :: `App\Http\Controllers\DishController::deleted` (lines 29-60)
-**Tokens:** 62
-
-```text
-ASSUMPTION: deleted() is not declared in DishController or in its parent App\Http\Controllers\Controller; it is declared in trait App\Traits\ApiResponse at app/Traits/ApiResponse.php:28, used by that parent; body not fetched, contract unverified
-```
-
-## flagged · named_reference
-
-**Subject:** App\Http\Controllers\DishController::success
-**Reason:** the region calls App\Http\Controllers\DishController::success, which this file does not declare; its contract is defined in another file
-**Source:** `app/Http/Controllers/DishController.php` :: `App\Http\Controllers\DishController::success` (lines 29-60)
-**Tokens:** 61
-
-```text
-ASSUMPTION: success() is not declared in DishController or in its parent App\Http\Controllers\Controller; it is declared in trait App\Traits\ApiResponse at app/Traits/ApiResponse.php:9, used by that parent; body not fetched, contract unverified
-```
-
-## flagged · named_reference
-
-**Subject:** App\Http\Controllers\MediaItemController::created
-**Reason:** the region calls App\Http\Controllers\MediaItemController::created, which this file does not declare; its contract is defined in another file
-**Source:** `app/Http/Controllers/MediaItemController.php` :: `App\Http\Controllers\MediaItemController::created` (lines 25-56)
-**Tokens:** 63
-
-```text
-ASSUMPTION: created() is not declared in MediaItemController or in its parent App\Http\Controllers\Controller; it is declared in trait App\Traits\ApiResponse at app/Traits/ApiResponse.php:21, used by that parent; body not fetched, contract unverified
-```
-
-## flagged · named_reference
-
-**Subject:** App\Http\Controllers\MediaItemController::deleted
-**Reason:** the region calls App\Http\Controllers\MediaItemController::deleted, which this file does not declare; its contract is defined in another file
-**Source:** `app/Http/Controllers/MediaItemController.php` :: `App\Http\Controllers\MediaItemController::deleted` (lines 25-56)
-**Tokens:** 63
-
-```text
-ASSUMPTION: deleted() is not declared in MediaItemController or in its parent App\Http\Controllers\Controller; it is declared in trait App\Traits\ApiResponse at app/Traits/ApiResponse.php:28, used by that parent; body not fetched, contract unverified
-```
-
-## flagged · named_reference
-
-**Subject:** App\Http\Controllers\MediaItemController::success
-**Reason:** the region calls App\Http\Controllers\MediaItemController::success, which this file does not declare; its contract is defined in another file
-**Source:** `app/Http/Controllers/MediaItemController.php` :: `App\Http\Controllers\MediaItemController::success` (lines 25-56)
-**Tokens:** 63
-
-```text
-ASSUMPTION: success() is not declared in MediaItemController or in its parent App\Http\Controllers\Controller; it is declared in trait App\Traits\ApiResponse at app/Traits/ApiResponse.php:9, used by that parent; body not fetched, contract unverified
-```
-
-## flagged · named_reference
-
-**Subject:** App\Http\Controllers\PageContentController::success
-**Reason:** the region calls App\Http\Controllers\PageContentController::success, which this file does not declare; its contract is defined in another file
-**Source:** `app/Http/Controllers/PageContentController.php` :: `App\Http\Controllers\PageContentController::success` (lines 27-51)
-**Tokens:** 63
-
-```text
-ASSUMPTION: success() is not declared in PageContentController or in its parent App\Http\Controllers\Controller; it is declared in trait App\Traits\ApiResponse at app/Traits/ApiResponse.php:9, used by that parent; body not fetched, contract unverified
-```
-
-## flagged · named_reference
-
-**Subject:** App\Http\Controllers\SettingController::success
-**Reason:** the region calls App\Http\Controllers\SettingController::success, which this file does not declare; its contract is defined in another file
-**Source:** `app/Http/Controllers/SettingController.php` :: `App\Http\Controllers\SettingController::success` (lines 18-30)
-**Tokens:** 62
-
-```text
-ASSUMPTION: success() is not declared in SettingController or in its parent App\Http\Controllers\Controller; it is declared in trait App\Traits\ApiResponse at app/Traits/ApiResponse.php:9, used by that parent; body not fetched, contract unverified
-```
-
-## flagged · named_reference
-
-**Subject:** App\Http\Controllers\TestimonialController::created
-**Reason:** the region calls App\Http\Controllers\TestimonialController::created, which this file does not declare; its contract is defined in another file
-**Source:** `app/Http/Controllers/TestimonialController.php` :: `App\Http\Controllers\TestimonialController::created` (lines 17-43)
-**Tokens:** 63
-
-```text
-ASSUMPTION: created() is not declared in TestimonialController or in its parent App\Http\Controllers\Controller; it is declared in trait App\Traits\ApiResponse at app/Traits/ApiResponse.php:21, used by that parent; body not fetched, contract unverified
-```
-
-## flagged · named_reference
-
-**Subject:** App\Http\Controllers\TestimonialController::deleted
-**Reason:** the region calls App\Http\Controllers\TestimonialController::deleted, which this file does not declare; its contract is defined in another file
-**Source:** `app/Http/Controllers/TestimonialController.php` :: `App\Http\Controllers\TestimonialController::deleted` (lines 17-43)
-**Tokens:** 63
-
-```text
-ASSUMPTION: deleted() is not declared in TestimonialController or in its parent App\Http\Controllers\Controller; it is declared in trait App\Traits\ApiResponse at app/Traits/ApiResponse.php:28, used by that parent; body not fetched, contract unverified
-```
-
-## flagged · named_reference
-
-**Subject:** App\Http\Controllers\TestimonialController::success
-**Reason:** the region calls App\Http\Controllers\TestimonialController::success, which this file does not declare; its contract is defined in another file
-**Source:** `app/Http/Controllers/TestimonialController.php` :: `App\Http\Controllers\TestimonialController::success` (lines 17-43)
-**Tokens:** 63
-
-```text
-ASSUMPTION: success() is not declared in TestimonialController or in its parent App\Http\Controllers\Controller; it is declared in trait App\Traits\ApiResponse at app/Traits/ApiResponse.php:9, used by that parent; body not fetched, contract unverified
+ASSUMPTION: named reference could not be resolved on disk; contract unverified
 ```
 
 ## flagged · named_reference
 
 **Subject:** App\Http\Resources\Testimonial\TestimonialResource::collection
 **Reason:** the region depends on App\Http\Resources\Testimonial\TestimonialResource::collection, whose contract is defined in another file
-**Source:** `app/Http/Controllers/TestimonialController.php` :: `App\Http\Resources\Testimonial\TestimonialResource::collection` (lines 17-43)
+**Source:** `app/Http/Controllers/Public/TestimonialController.php` :: `App\Http\Resources\Testimonial\TestimonialResource::collection` (lines 1-18)
 **Tokens:** 20
 
 ```text
 ASSUMPTION: named reference could not be resolved on disk; contract unverified
-```
-
-## flagged · named_reference
-
-**Subject:** App\Http\Controllers\TimelineController::created
-**Reason:** the region calls App\Http\Controllers\TimelineController::created, which this file does not declare; its contract is defined in another file
-**Source:** `app/Http/Controllers/TimelineController.php` :: `App\Http\Controllers\TimelineController::created` (lines 15-41)
-**Tokens:** 63
-
-```text
-ASSUMPTION: created() is not declared in TimelineController or in its parent App\Http\Controllers\Controller; it is declared in trait App\Traits\ApiResponse at app/Traits/ApiResponse.php:21, used by that parent; body not fetched, contract unverified
-```
-
-## flagged · named_reference
-
-**Subject:** App\Http\Controllers\TimelineController::deleted
-**Reason:** the region calls App\Http\Controllers\TimelineController::deleted, which this file does not declare; its contract is defined in another file
-**Source:** `app/Http/Controllers/TimelineController.php` :: `App\Http\Controllers\TimelineController::deleted` (lines 15-41)
-**Tokens:** 63
-
-```text
-ASSUMPTION: deleted() is not declared in TimelineController or in its parent App\Http\Controllers\Controller; it is declared in trait App\Traits\ApiResponse at app/Traits/ApiResponse.php:28, used by that parent; body not fetched, contract unverified
-```
-
-## flagged · named_reference
-
-**Subject:** App\Http\Controllers\TimelineController::success
-**Reason:** the region calls App\Http\Controllers\TimelineController::success, which this file does not declare; its contract is defined in another file
-**Source:** `app/Http/Controllers/TimelineController.php` :: `App\Http\Controllers\TimelineController::success` (lines 15-41)
-**Tokens:** 62
-
-```text
-ASSUMPTION: success() is not declared in TimelineController or in its parent App\Http\Controllers\Controller; it is declared in trait App\Traits\ApiResponse at app/Traits/ApiResponse.php:9, used by that parent; body not fetched, contract unverified
 ```
 
 ## flagged · named_reference
 
 **Subject:** App\Http\Resources\Timeline\TimelineResource::collection
 **Reason:** the region depends on App\Http\Resources\Timeline\TimelineResource::collection, whose contract is defined in another file
-**Source:** `app/Http/Controllers/TimelineController.php` :: `App\Http\Resources\Timeline\TimelineResource::collection` (lines 15-41)
-**Tokens:** 20
-
-```text
-ASSUMPTION: named reference could not be resolved on disk; contract unverified
-```
-
-## flagged · named_reference
-
-**Subject:** App\Http\Controllers\UserController::created
-**Reason:** the region calls App\Http\Controllers\UserController::created, which this file does not declare; its contract is defined in another file
-**Source:** `app/Http/Controllers/UserController.php` :: `App\Http\Controllers\UserController::created` (lines 20-51)
-**Tokens:** 62
-
-```text
-ASSUMPTION: created() is not declared in UserController or in its parent App\Http\Controllers\Controller; it is declared in trait App\Traits\ApiResponse at app/Traits/ApiResponse.php:21, used by that parent; body not fetched, contract unverified
-```
-
-## flagged · named_reference
-
-**Subject:** App\Http\Controllers\UserController::deleted
-**Reason:** the region calls App\Http\Controllers\UserController::deleted, which this file does not declare; its contract is defined in another file
-**Source:** `app/Http/Controllers/UserController.php` :: `App\Http\Controllers\UserController::deleted` (lines 20-51)
-**Tokens:** 62
-
-```text
-ASSUMPTION: deleted() is not declared in UserController or in its parent App\Http\Controllers\Controller; it is declared in trait App\Traits\ApiResponse at app/Traits/ApiResponse.php:28, used by that parent; body not fetched, contract unverified
-```
-
-## flagged · named_reference
-
-**Subject:** App\Http\Controllers\UserController::paginated
-**Reason:** the region calls App\Http\Controllers\UserController::paginated, which this file does not declare; its contract is defined in another file
-**Source:** `app/Http/Controllers/UserController.php` :: `App\Http\Controllers\UserController::paginated` (lines 20-51)
-**Tokens:** 62
-
-```text
-ASSUMPTION: paginated() is not declared in UserController or in its parent App\Http\Controllers\Controller; it is declared in trait App\Traits\ApiResponse at app/Traits/ApiResponse.php:38, used by that parent; body not fetched, contract unverified
-```
-
-## flagged · named_reference
-
-**Subject:** App\Http\Controllers\UserController::success
-**Reason:** the region calls App\Http\Controllers\UserController::success, which this file does not declare; its contract is defined in another file
-**Source:** `app/Http/Controllers/UserController.php` :: `App\Http\Controllers\UserController::success` (lines 20-51)
-**Tokens:** 61
-
-```text
-ASSUMPTION: success() is not declared in UserController or in its parent App\Http\Controllers\Controller; it is declared in trait App\Traits\ApiResponse at app/Traits/ApiResponse.php:9, used by that parent; body not fetched, contract unverified
-```
-
-## flagged · named_reference
-
-**Subject:** App\Http\Resources\User\UserResource::collection
-**Reason:** the region depends on App\Http\Resources\User\UserResource::collection, whose contract is defined in another file
-**Source:** `app/Http/Controllers/UserController.php` :: `App\Http\Resources\User\UserResource::collection` (lines 20-51)
+**Source:** `app/Http/Controllers/Public/TimelineController.php` :: `App\Http\Resources\Timeline\TimelineResource::collection` (lines 1-18)
 **Tokens:** 20
 
 ```text
@@ -1377,22 +1483,38 @@ ASSUMPTION: named reference could not be resolved on disk; contract unverified
 
 ## fetched · named_reference
 
-**Subject:** App\Http\Resources\Auth\AuthResource
-**Reason:** the region depends on App\Http\Resources\Auth\AuthResource, whose contract is defined in another file
-**Source:** `app/Http/Resources/Auth/AuthResource.php` :: `toArray` (lines 10-21)
-**Tokens:** 102
+**Subject:** App\Http\Requests\Catering\StoreQuoteRequestRequest
+**Reason:** the region depends on App\Http\Requests\Catering\StoreQuoteRequestRequest, whose contract is defined in another file
+**Source:** `app/Http/Requests/Catering/StoreQuoteRequestRequest.php` :: `authorize` (lines 13-16)
+**Tokens:** 18
 
 ```php
-    public function toArray(Request $request): array
+    public function authorize(): bool
+    {
+        return true;
+    }
+```
+
+## fetched · named_reference
+
+**Subject:** App\Http\Requests\Catering\StoreQuoteRequestRequest
+**Reason:** the region depends on App\Http\Requests\Catering\StoreQuoteRequestRequest, whose contract is defined in another file
+**Source:** `app/Http/Requests/Catering/StoreQuoteRequestRequest.php` :: `rules` (lines 18-31)
+**Tokens:** 178
+
+```php
+    public function rules(): array
     {
         return [
-            'token' => $this->resource['token'],
-            'user' => [
-                'id' => $this->resource['user']->id,
-                'name' => $this->resource['user']->name,
-                'email' => $this->resource['user']->email,
-                'role' => $this->resource['user']->role,
-            ],
+            'name' => ['required', 'string', 'max:200'],
+            'phone' => ['required', 'string', 'max:20'],
+            'email' => ['nullable', 'email', 'max:255'],
+            'event_date' => ['required', 'date', 'after:today'],
+            'guests_count' => ['required', 'integer', 'min:1', 'max:10000'],
+            'branch' => ['required', 'string', Rule::in(BranchLocationEnum::values())],
+            'event_type' => ['required', 'string', Rule::in(EventTypeEnum::values())],
+            'budget_range' => ['nullable', 'string', Rule::in(BudgetRangeEnum::values())],
+            'notes' => ['nullable', 'string', 'max:1000'],
         ];
     }
 ```
@@ -1429,8 +1551,8 @@ ASSUMPTION: named reference could not be resolved on disk; contract unverified
 
 ## fetched · named_reference
 
-**Subject:** App\Http\Resources\Category\CategoryResource
-**Reason:** the region depends on App\Http\Resources\Category\CategoryResource, whose contract is defined in another file
+**Subject:** App\Http\Resources\Category\CategoryResource::collection
+**Reason:** the region depends on App\Http\Resources\Category\CategoryResource::collection, whose contract is defined in another file
 **Source:** `app/Http/Resources/Category/CategoryResource.php` :: `toArray` (lines 13-24)
 **Tokens:** 100
 
@@ -1451,8 +1573,8 @@ ASSUMPTION: named reference could not be resolved on disk; contract unverified
 
 ## fetched · named_reference
 
-**Subject:** App\Http\Resources\Catering\PackageResource
-**Reason:** the region depends on App\Http\Resources\Catering\PackageResource, whose contract is defined in another file
+**Subject:** App\Http\Resources\Catering\PackageResource::collection
+**Reason:** the region depends on App\Http\Resources\Catering\PackageResource::collection, whose contract is defined in another file
 **Source:** `app/Http/Resources/Catering/PackageResource.php` :: `toArray` (lines 13-35)
 **Tokens:** 261
 
@@ -1514,8 +1636,8 @@ ASSUMPTION: named reference could not be resolved on disk; contract unverified
 
 ## fetched · named_reference
 
-**Subject:** App\Http\Resources\Catering\SampleMenuResource
-**Reason:** the region depends on App\Http\Resources\Catering\SampleMenuResource, whose contract is defined in another file
+**Subject:** App\Http\Resources\Catering\SampleMenuResource::collection
+**Reason:** the region depends on App\Http\Resources\Catering\SampleMenuResource::collection, whose contract is defined in another file
 **Source:** `app/Http/Resources/Catering/SampleMenuResource.php` :: `toArray` (lines 13-31)
 **Tokens:** 190
 
@@ -1543,8 +1665,8 @@ ASSUMPTION: named reference could not be resolved on disk; contract unverified
 
 ## fetched · named_reference
 
-**Subject:** App\Http\Resources\DeliveryApp\DeliveryAppResource
-**Reason:** the region depends on App\Http\Resources\DeliveryApp\DeliveryAppResource, whose contract is defined in another file
+**Subject:** App\Http\Resources\DeliveryApp\DeliveryAppResource::collection
+**Reason:** the region depends on App\Http\Resources\DeliveryApp\DeliveryAppResource::collection, whose contract is defined in another file
 **Source:** `app/Http/Resources/DeliveryApp/DeliveryAppResource.php` :: `toArray` (lines 13-26)
 **Tokens:** 124
 
@@ -1561,39 +1683,6 @@ ASSUMPTION: named reference could not be resolved on disk; contract unverified
             'is_active' => $this->is_active,
             'order' => $this->order,
             'locale' => app()->getLocale(),
-        ];
-    }
-```
-
-## fetched · named_reference
-
-**Subject:** App\Http\Resources\Dish\DishCollection
-**Reason:** the region depends on App\Http\Resources\Dish\DishCollection, whose contract is defined in another file
-**Source:** `app/Http/Resources/Dish/DishCollection.php` :: `collects` (lines 10-10)
-**Tokens:** 11
-
-```php
-    public $collects = DishResource::class;
-```
-
-## fetched · named_reference
-
-**Subject:** App\Http\Resources\Dish\DishCollection
-**Reason:** the region depends on App\Http\Resources\Dish\DishCollection, whose contract is defined in another file
-**Source:** `app/Http/Resources/Dish/DishCollection.php` :: `toArray` (lines 12-23)
-**Tokens:** 93
-
-```php
-    public function toArray(Request $request): array
-    {
-        return [
-            'items' => $this->collection,
-            'meta' => [
-                'current_page' => $this->currentPage(),
-                'last_page' => $this->lastPage(),
-                'per_page' => $this->perPage(),
-                'total' => $this->total(),
-            ],
         ];
     }
 ```
@@ -1702,8 +1791,8 @@ ASSUMPTION: named reference could not be resolved on disk; contract unverified
 
 ## fetched · named_reference
 
-**Subject:** App\Http\Resources\Testimonial\TestimonialResource
-**Reason:** the region depends on App\Http\Resources\Testimonial\TestimonialResource, whose contract is defined in another file
+**Subject:** App\Http\Resources\Testimonial\TestimonialResource::collection
+**Reason:** the region depends on App\Http\Resources\Testimonial\TestimonialResource::collection, whose contract is defined in another file
 **Source:** `app/Http/Resources/Testimonial/TestimonialResource.php` :: `toArray` (lines 13-25)
 **Tokens:** 113
 
@@ -1725,8 +1814,8 @@ ASSUMPTION: named reference could not be resolved on disk; contract unverified
 
 ## fetched · named_reference
 
-**Subject:** App\Http\Resources\Timeline\TimelineResource
-**Reason:** the region depends on App\Http\Resources\Timeline\TimelineResource, whose contract is defined in another file
+**Subject:** App\Http\Resources\Timeline\TimelineResource::collection
+**Reason:** the region depends on App\Http\Resources\Timeline\TimelineResource::collection, whose contract is defined in another file
 **Source:** `app/Http/Resources/Timeline/TimelineResource.php` :: `toArray` (lines 13-28)
 **Tokens:** 165
 
@@ -1751,28 +1840,109 @@ ASSUMPTION: named reference could not be resolved on disk; contract unverified
 
 ## fetched · named_reference
 
-**Subject:** App\Http\Resources\User\UserResource
-**Reason:** the region depends on App\Http\Resources\User\UserResource, whose contract is defined in another file
-**Source:** `app/Http/Resources/User/UserResource.php` :: `toArray` (lines 10-19)
-**Tokens:** 75
+**Subject:** App\Repositories\BranchRepository
+**Reason:** the region depends on App\Repositories\BranchRepository, whose contract is defined in another file
+**Source:** `app/Repositories/BranchRepository.php` :: `create` (lines 20-23)
+**Tokens:** 25
 
 ```php
-    public function toArray(Request $request): array
+    public function create(array $data): Branch
     {
-        return [
-            'id' => $this->id,
-            'name' => $this->name,
-            'email' => $this->email,
-            'role' => $this->role,
-            'created_at' => $this->created_at?->toIso8601String(),
-        ];
+        return Branch::create($data);
     }
 ```
 
 ## fetched · named_reference
 
-**Subject:** App\Repositories\CategoryRepository::getAll
-**Reason:** the region depends on App\Repositories\CategoryRepository::getAll, whose contract is defined in another file
+**Subject:** App\Repositories\BranchRepository
+**Reason:** the region depends on App\Repositories\BranchRepository, whose contract is defined in another file
+**Source:** `app/Repositories/BranchRepository.php` :: `delete` (lines 33-36)
+**Tokens:** 24
+
+```php
+    public function delete(int $id): void
+    {
+        Branch::findOrFail($id)->delete();
+    }
+```
+
+## fetched · named_reference
+
+**Subject:** App\Repositories\BranchRepository
+**Reason:** the region depends on App\Repositories\BranchRepository, whose contract is defined in another file
+**Source:** `app/Repositories/BranchRepository.php` :: `getAll` (lines 10-13)
+**Tokens:** 25
+
+```php
+    public function getAll(): Collection
+    {
+        return Branch::orderBy('order')->get();
+    }
+```
+
+## fetched · named_reference
+
+**Subject:** App\Repositories\BranchRepository
+**Reason:** the region depends on App\Repositories\BranchRepository, whose contract is defined in another file
+**Source:** `app/Repositories/BranchRepository.php` :: `getById` (lines 15-18)
+**Tokens:** 24
+
+```php
+    public function getById(int $id): Branch
+    {
+        return Branch::findOrFail($id);
+    }
+```
+
+## fetched · named_reference
+
+**Subject:** App\Repositories\BranchRepository
+**Reason:** the region depends on App\Repositories\BranchRepository, whose contract is defined in another file
+**Source:** `app/Repositories/BranchRepository.php` :: `update` (lines 25-31)
+**Tokens:** 42
+
+```php
+    public function update(int $id, array $data): Branch
+    {
+        $branch = Branch::findOrFail($id);
+        $branch->update($data);
+
+        return $branch;
+    }
+```
+
+## fetched · named_reference
+
+**Subject:** App\Repositories\CategoryRepository
+**Reason:** the region depends on App\Repositories\CategoryRepository, whose contract is defined in another file
+**Source:** `app/Repositories/CategoryRepository.php` :: `create` (lines 20-23)
+**Tokens:** 26
+
+```php
+    public function create(array $data): Category
+    {
+        return Category::create($data);
+    }
+```
+
+## fetched · named_reference
+
+**Subject:** App\Repositories\CategoryRepository
+**Reason:** the region depends on App\Repositories\CategoryRepository, whose contract is defined in another file
+**Source:** `app/Repositories/CategoryRepository.php` :: `delete` (lines 33-36)
+**Tokens:** 25
+
+```php
+    public function delete(int $id): void
+    {
+        Category::findOrFail($id)->delete();
+    }
+```
+
+## fetched · named_reference
+
+**Subject:** App\Repositories\CategoryRepository
+**Reason:** the region depends on App\Repositories\CategoryRepository, whose contract is defined in another file
 **Source:** `app/Repositories/CategoryRepository.php` :: `getAll` (lines 10-13)
 **Tokens:** 26
 
@@ -1783,59 +1953,104 @@ ASSUMPTION: named reference could not be resolved on disk; contract unverified
     }
 ```
 
+## fetched · named_reference
+
+**Subject:** App\Repositories\CategoryRepository
+**Reason:** the region depends on App\Repositories\CategoryRepository, whose contract is defined in another file
+**Source:** `app/Repositories/CategoryRepository.php` :: `getById` (lines 15-18)
+**Tokens:** 25
+
+```php
+    public function getById(int $id): Category
+    {
+        return Category::findOrFail($id);
+    }
+```
+
+## fetched · named_reference
+
+**Subject:** App\Repositories\CategoryRepository
+**Reason:** the region depends on App\Repositories\CategoryRepository, whose contract is defined in another file
+**Source:** `app/Repositories/CategoryRepository.php` :: `update` (lines 25-31)
+**Tokens:** 45
+
+```php
+    public function update(int $id, array $data): Category
+    {
+        $category = Category::findOrFail($id);
+        $category->update($data);
+
+        return $category;
+    }
+```
+
 ## Dropped
 
 Nothing was dropped.
 ===== END context-bundle.md =====
 
 ===== BEGIN context-diagnostics.txt =====
-new file: lang/ar/messages.php — own-file context is in the diff, not fetched
-new file: lang/en/messages.php — own-file context is in the diff, not fetched
-new file: lang/en/validation.php — own-file context is in the diff, not fetched
-inherited member: App\Http\Controllers\Auth\AuthController::success declared at app/Traits/ApiResponse.php:9 in trait App\Traits\ApiResponse; body not fetched
-inherited member: App\Http\Controllers\BranchController::success declared at app/Traits/ApiResponse.php:9 in trait App\Traits\ApiResponse; body not fetched
-inherited member: App\Http\Controllers\BranchController::created declared at app/Traits/ApiResponse.php:21 in trait App\Traits\ApiResponse; body not fetched
-inherited member: App\Http\Controllers\BranchController::deleted declared at app/Traits/ApiResponse.php:28 in trait App\Traits\ApiResponse; body not fetched
-unresolved named_reference: App\Http\Resources\Branch\BranchResource::collection in app/Http/Controllers/BranchController.php
-inherited member: App\Http\Controllers\CategoryController::success declared at app/Traits/ApiResponse.php:9 in trait App\Traits\ApiResponse; body not fetched
-inherited member: App\Http\Controllers\CategoryController::created declared at app/Traits/ApiResponse.php:21 in trait App\Traits\ApiResponse; body not fetched
-inherited member: App\Http\Controllers\CategoryController::deleted declared at app/Traits/ApiResponse.php:28 in trait App\Traits\ApiResponse; body not fetched
-unresolved named_reference: App\Http\Resources\Category\CategoryResource::collection in app/Http/Controllers/CategoryController.php
-inherited member: App\Http\Controllers\Catering\CateringPackageController::success declared at app/Traits/ApiResponse.php:9 in trait App\Traits\ApiResponse; body not fetched
-inherited member: App\Http\Controllers\Catering\CateringPackageController::created declared at app/Traits/ApiResponse.php:21 in trait App\Traits\ApiResponse; body not fetched
-inherited member: App\Http\Controllers\Catering\CateringPackageController::deleted declared at app/Traits/ApiResponse.php:28 in trait App\Traits\ApiResponse; body not fetched
-unresolved named_reference: App\Http\Resources\Catering\PackageResource::collection in app/Http/Controllers/Catering/CateringPackageController.php
-inherited member: App\Http\Controllers\Catering\QuoteRequestController::created declared at app/Traits/ApiResponse.php:21 in trait App\Traits\ApiResponse; body not fetched
-inherited member: App\Http\Controllers\Catering\QuoteRequestController::paginated declared at app/Traits/ApiResponse.php:38 in trait App\Traits\ApiResponse; body not fetched
-inherited member: App\Http\Controllers\Catering\QuoteRequestController::success declared at app/Traits/ApiResponse.php:9 in trait App\Traits\ApiResponse; body not fetched
-unresolved named_reference: App\Http\Resources\Catering\QuoteRequestResource::collection in app/Http/Controllers/Catering/QuoteRequestController.php
-inherited member: App\Http\Controllers\Catering\SampleMenuController::success declared at app/Traits/ApiResponse.php:9 in trait App\Traits\ApiResponse; body not fetched
-inherited member: App\Http\Controllers\Catering\SampleMenuController::created declared at app/Traits/ApiResponse.php:21 in trait App\Traits\ApiResponse; body not fetched
-inherited member: App\Http\Controllers\Catering\SampleMenuController::deleted declared at app/Traits/ApiResponse.php:28 in trait App\Traits\ApiResponse; body not fetched
-unresolved named_reference: App\Http\Resources\Catering\SampleMenuResource::collection in app/Http/Controllers/Catering/SampleMenuController.php
-inherited member: App\Http\Controllers\DeliveryAppController::success declared at app/Traits/ApiResponse.php:9 in trait App\Traits\ApiResponse; body not fetched
-inherited member: App\Http\Controllers\DeliveryAppController::created declared at app/Traits/ApiResponse.php:21 in trait App\Traits\ApiResponse; body not fetched
-inherited member: App\Http\Controllers\DeliveryAppController::deleted declared at app/Traits/ApiResponse.php:28 in trait App\Traits\ApiResponse; body not fetched
-unresolved named_reference: App\Http\Resources\DeliveryApp\DeliveryAppResource::collection in app/Http/Controllers/DeliveryAppController.php
-inherited member: App\Http\Controllers\DishController::success declared at app/Traits/ApiResponse.php:9 in trait App\Traits\ApiResponse; body not fetched
-inherited member: App\Http\Controllers\DishController::created declared at app/Traits/ApiResponse.php:21 in trait App\Traits\ApiResponse; body not fetched
-inherited member: App\Http\Controllers\DishController::deleted declared at app/Traits/ApiResponse.php:28 in trait App\Traits\ApiResponse; body not fetched
-inherited member: App\Http\Controllers\MediaItemController::success declared at app/Traits/ApiResponse.php:9 in trait App\Traits\ApiResponse; body not fetched
-inherited member: App\Http\Controllers\MediaItemController::created declared at app/Traits/ApiResponse.php:21 in trait App\Traits\ApiResponse; body not fetched
-inherited member: App\Http\Controllers\MediaItemController::deleted declared at app/Traits/ApiResponse.php:28 in trait App\Traits\ApiResponse; body not fetched
-inherited member: App\Http\Controllers\PageContentController::success declared at app/Traits/ApiResponse.php:9 in trait App\Traits\ApiResponse; body not fetched
-inherited member: App\Http\Controllers\SettingController::success declared at app/Traits/ApiResponse.php:9 in trait App\Traits\ApiResponse; body not fetched
-inherited member: App\Http\Controllers\TestimonialController::success declared at app/Traits/ApiResponse.php:9 in trait App\Traits\ApiResponse; body not fetched
-inherited member: App\Http\Controllers\TestimonialController::created declared at app/Traits/ApiResponse.php:21 in trait App\Traits\ApiResponse; body not fetched
-inherited member: App\Http\Controllers\TestimonialController::deleted declared at app/Traits/ApiResponse.php:28 in trait App\Traits\ApiResponse; body not fetched
-unresolved named_reference: App\Http\Resources\Testimonial\TestimonialResource::collection in app/Http/Controllers/TestimonialController.php
-inherited member: App\Http\Controllers\TimelineController::success declared at app/Traits/ApiResponse.php:9 in trait App\Traits\ApiResponse; body not fetched
-inherited member: App\Http\Controllers\TimelineController::created declared at app/Traits/ApiResponse.php:21 in trait App\Traits\ApiResponse; body not fetched
-inherited member: App\Http\Controllers\TimelineController::deleted declared at app/Traits/ApiResponse.php:28 in trait App\Traits\ApiResponse; body not fetched
-unresolved named_reference: App\Http\Resources\Timeline\TimelineResource::collection in app/Http/Controllers/TimelineController.php
-inherited member: App\Http\Controllers\UserController::paginated declared at app/Traits/ApiResponse.php:38 in trait App\Traits\ApiResponse; body not fetched
-inherited member: App\Http\Controllers\UserController::created declared at app/Traits/ApiResponse.php:21 in trait App\Traits\ApiResponse; body not fetched
-inherited member: App\Http\Controllers\UserController::success declared at app/Traits/ApiResponse.php:9 in trait App\Traits\ApiResponse; body not fetched
-inherited member: App\Http\Controllers\UserController::deleted declared at app/Traits/ApiResponse.php:28 in trait App\Traits\ApiResponse; body not fetched
-unresolved named_reference: App\Http\Resources\User\UserResource::collection in app/Http/Controllers/UserController.php
+new file: app/Http/Controllers/Admin/Auth/AuthController.php — own-file context is in the diff, not fetched
+new file: app/Http/Controllers/Admin/BranchController.php — own-file context is in the diff, not fetched
+new file: app/Http/Controllers/Admin/CategoryController.php — own-file context is in the diff, not fetched
+new file: app/Http/Controllers/Admin/Catering/CateringPackageController.php — own-file context is in the diff, not fetched
+new file: app/Http/Controllers/Admin/Catering/QuoteRequestController.php — own-file context is in the diff, not fetched
+new file: app/Http/Controllers/Admin/Catering/SampleMenuController.php — own-file context is in the diff, not fetched
+new file: app/Http/Controllers/Admin/DeliveryAppController.php — own-file context is in the diff, not fetched
+new file: app/Http/Controllers/Admin/DishController.php — own-file context is in the diff, not fetched
+new file: app/Http/Controllers/Admin/MediaItemController.php — own-file context is in the diff, not fetched
+new file: app/Http/Controllers/Admin/PageContentController.php — own-file context is in the diff, not fetched
+new file: app/Http/Controllers/Admin/SettingController.php — own-file context is in the diff, not fetched
+new file: app/Http/Controllers/Admin/TestimonialController.php — own-file context is in the diff, not fetched
+new file: app/Http/Controllers/Admin/TimelineController.php — own-file context is in the diff, not fetched
+new file: app/Http/Controllers/Admin/UserController.php — own-file context is in the diff, not fetched
+new file: app/Http/Controllers/Public/BranchController.php — own-file context is in the diff, not fetched
+new file: app/Http/Controllers/Public/CategoryController.php — own-file context is in the diff, not fetched
+new file: app/Http/Controllers/Public/Catering/CateringPackageController.php — own-file context is in the diff, not fetched
+new file: app/Http/Controllers/Public/Catering/QuoteRequestController.php — own-file context is in the diff, not fetched
+new file: app/Http/Controllers/Public/Catering/SampleMenuController.php — own-file context is in the diff, not fetched
+new file: app/Http/Controllers/Public/DeliveryAppController.php — own-file context is in the diff, not fetched
+new file: app/Http/Controllers/Public/DishController.php — own-file context is in the diff, not fetched
+new file: app/Http/Controllers/Public/MediaItemController.php — own-file context is in the diff, not fetched
+new file: app/Http/Controllers/Public/PageContentController.php — own-file context is in the diff, not fetched
+new file: app/Http/Controllers/Public/SettingController.php — own-file context is in the diff, not fetched
+new file: app/Http/Controllers/Public/TestimonialController.php — own-file context is in the diff, not fetched
+new file: app/Http/Controllers/Public/TimelineController.php — own-file context is in the diff, not fetched
+new file: routes/admin.php — own-file context is in the diff, not fetched
+dependency class: Illuminate\Http\JsonResponse provided by vendor/laravel/framework/src/Illuminate/Http/JsonResponse.php; surface not fetched
+unresolved named_reference: App\Http\Resources\Branch\BranchResource::collection in app/Http/Controllers/Public/BranchController.php
+dependency class: Illuminate\Http\JsonResponse provided by vendor/laravel/framework/src/Illuminate/Http/JsonResponse.php; surface not fetched
+unresolved named_reference: App\Http\Resources\Category\CategoryResource::collection in app/Http/Controllers/Public/CategoryController.php
+dependency class: Illuminate\Http\JsonResponse provided by vendor/laravel/framework/src/Illuminate/Http/JsonResponse.php; surface not fetched
+unresolved named_reference: App\Http\Resources\Catering\PackageResource::collection in app/Http/Controllers/Public/Catering/CateringPackageController.php
+dependency class: Illuminate\Http\JsonResponse provided by vendor/laravel/framework/src/Illuminate/Http/JsonResponse.php; surface not fetched
+dependency class: Illuminate\Http\JsonResponse provided by vendor/laravel/framework/src/Illuminate/Http/JsonResponse.php; surface not fetched
+unresolved named_reference: App\Http\Resources\Catering\SampleMenuResource::collection in app/Http/Controllers/Public/Catering/SampleMenuController.php
+dependency class: Illuminate\Http\JsonResponse provided by vendor/laravel/framework/src/Illuminate/Http/JsonResponse.php; surface not fetched
+unresolved named_reference: App\Http\Resources\DeliveryApp\DeliveryAppResource::collection in app/Http/Controllers/Public/DeliveryAppController.php
+dependency class: Illuminate\Http\JsonResponse provided by vendor/laravel/framework/src/Illuminate/Http/JsonResponse.php; surface not fetched
+unresolved named_reference: App\Http\Resources\Dish\DishResource::collection in app/Http/Controllers/Public/DishController.php
+dependency class: Illuminate\Http\Request provided by vendor/laravel/framework/src/Illuminate/Http/Request.php; surface not fetched
+dependency class: Illuminate\Http\JsonResponse provided by vendor/laravel/framework/src/Illuminate/Http/JsonResponse.php; surface not fetched
+dependency class: Illuminate\Http\Request provided by vendor/laravel/framework/src/Illuminate/Http/Request.php; surface not fetched
+dependency class: Illuminate\Http\JsonResponse provided by vendor/laravel/framework/src/Illuminate/Http/JsonResponse.php; surface not fetched
+dependency class: Illuminate\Http\Request provided by vendor/laravel/framework/src/Illuminate/Http/Request.php; surface not fetched
+dependency class: Illuminate\Http\JsonResponse provided by vendor/laravel/framework/src/Illuminate/Http/JsonResponse.php; surface not fetched
+dependency class: Illuminate\Http\Request provided by vendor/laravel/framework/src/Illuminate/Http/Request.php; surface not fetched
+dependency class: Illuminate\Http\JsonResponse provided by vendor/laravel/framework/src/Illuminate/Http/JsonResponse.php; surface not fetched
+unresolved named_reference: App\Http\Resources\Testimonial\TestimonialResource::collection in app/Http/Controllers/Public/TestimonialController.php
+dependency class: Illuminate\Http\JsonResponse provided by vendor/laravel/framework/src/Illuminate/Http/JsonResponse.php; surface not fetched
+unresolved named_reference: App\Http\Resources\Timeline\TimelineResource::collection in app/Http/Controllers/Public/TimelineController.php
+dependency class: Illuminate\Http\JsonResponse provided by vendor/laravel/framework/src/Illuminate/Http/JsonResponse.php; surface not fetched
+framework reference: Illuminate\Support\Facades\Route::middleware declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Route.php:96 (@method static \Illuminate\Routing\RouteRegistrar middleware(array|string|null $middleware))
+framework reference: Illuminate\Support\Facades\Route::prefix declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Route.php:100 (@method static \Illuminate\Routing\RouteRegistrar prefix(string $prefix))
+framework reference: Illuminate\Support\Facades\Route::post declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Route.php:7 (@method static \Illuminate\Routing\Route post(string $uri, array|string|callable|null $action = null))
+framework reference: Illuminate\Support\Facades\Route::middleware declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Route.php:96 (@method static \Illuminate\Routing\RouteRegistrar middleware(array|string|null $middleware))
+framework reference: Illuminate\Support\Facades\Route::get declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Route.php:6 (@method static \Illuminate\Routing\Route get(string $uri, array|string|callable|null $action = null))
+framework reference: Illuminate\Support\Facades\Route::put declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Route.php:8 (@method static \Illuminate\Routing\Route put(string $uri, array|string|callable|null $action = null))
+framework reference: Illuminate\Support\Facades\Route::delete declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Route.php:10 (@method static \Illuminate\Routing\Route delete(string $uri, array|string|callable|null $action = null))
+framework reference: Illuminate\Support\Facades\Route::patch declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Route.php:9 (@method static \Illuminate\Routing\Route patch(string $uri, array|string|callable|null $action = null))
+framework reference: Illuminate\Support\Facades\Route::prefix declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Route.php:100 (@method static \Illuminate\Routing\RouteRegistrar prefix(string $prefix))
+framework reference: Illuminate\Support\Facades\Route::get declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Route.php:6 (@method static \Illuminate\Routing\Route get(string $uri, array|string|callable|null $action = null))
+framework reference: Illuminate\Support\Facades\Route::post declared at vendor/laravel/framework/src/Illuminate/Support/Facades/Route.php:7 (@method static \Illuminate\Routing\Route post(string $uri, array|string|callable|null $action = null))
 ===== END context-diagnostics.txt =====
