@@ -197,3 +197,22 @@ that uses the arm is mechanical and reproducible from the committed TSV.
 names the tool, the arms, or what is being compared. The second author's material was checked
 to contain nothing from the context keys `held-out-9b8f9c6` and `held-out-ee5a2e6`.
 
+---
+
+## Note · 2026-09-26 · Q-evict (T5), and the S2 lines
+
+Appended, not edited; both by the user's ruling recorded in ADR-E001 the same day.
+
+**Q-evict.** T5 `2996b89` reaches the budget in both arms; option B's 37 citations evicted
+twenty arm-A items. T5 is **outside §6.1 and §6.2** and is scored on one question only: *does the
+arm-B reviewer miss something the arm-A reviewer used?* - EVICTED-USED (an arm-A replicate's Q5
+lies inside an evicted item's payload, list in `t5-evicted.txt`) and MISSED-AFTER-EVICTION (arm
+B worse on `correct_decision` / `defect_identified`, or an arm-B Q3 naming the evicted subject or
+file). n = 1 task. Q-evict does not enter §8. The blind classifier needs no new column: Q5 and
+Q3 are recorded verbatim, and the evicted-payload check is mechanical after the mapping opens.
+
+**S2 lines.** Arm B's `context-diagnostics.txt` carries `inherited member unresolved: …` lines
+arm A's does not (T2, T3, T4, T6, T8). They are part of arm B as built. §6.1's SATISFIED and
+§8's reading are therefore **confounded by S2**: a positive Q-ask result is a result of S1 *and*
+S2 together, and the write-up must say so and name the tasks.
+

@@ -320,3 +320,58 @@ Per CONTINUE.md step (4) and this ADR's stop conditions, nothing further was don
 sealed, no cell material written. What (1) and (2) mean for the corpus and for §3's premise is a
 decision this ADR does not record, and it is put to the user.
 
+---
+
+## Rulings · 2026-09-26 · T5 kept as Q-evict; S2 stderr lines are part of arm B; the spread's weaknesses
+
+Two rulings by the user on the note above, recorded before any cell runs.
+
+### (1) T5 is kept, outside Q-ask and Q-harm, as **Q-evict** - a third pre-registered question
+
+T5 is not dropped and its budget is not raised. The twenty arm-A items evicted under option B are
+**a finding, not noise**: under budget pressure option B does not merely add, it **displaces**
+real evidence - the fetched surfaces of `LoginAction`, `CreateTestimonialAction` and
+`UpdateTestimonialAction` among the twenty. It never surfaced before because D1 and `ee5a2e6`
+never reached the ceiling.
+
+**Q-evict · does the arm-B reviewer miss something the arm-A reviewer used?** Its comparison,
+fixed now:
+
+- **EVICTED-USED**: an arm-A replicate whose Q5 quotation lies inside the payload of one of the
+  twenty evicted items (the list is `experiment-30/t5-evicted.txt`, written from the two stored
+  bundles before any cell). Count over three replicates.
+- **MISSED-AFTER-EVICTION**: for each EVICTED-USED replicate, whether arm B's majority is worse
+  on `correct_decision` or `defect_identified`, or any arm-B replicate's Q3 names the evicted
+  item's subject or file. Reported per replicate, with the Q5 and Q3 text.
+- **n = 1 task.** T5 is Q-evict's only task. Whatever it shows is one commit's worth of
+  evidence and is reported as such.
+
+**Q-evict does not feed §8.** The three revert conditions were pre-registered and stay exactly
+as written. If Q-evict shows displacement harming a review, that is a **new finding for its own
+gate** - a budget-interaction question about what an added item is allowed to push out - not a
+retroactive fourth condition.
+
+### (2) The S2 stderr lines are **accepted as part of arm B**
+
+They are what option B emits, and the packet is the engine's output; excluding the diagnostics
+file from both arms would measure something other than what was built.
+
+**Clarification to §3, appended, dated:** "the S1 items and their stderr lines" **includes the S2
+lines** (`inherited member unresolved: …`), as M33 §4's table already listed them. §3's wording
+was loose; its source was not.
+
+**Consequence, stated plainly:** arm B carries extra information at zero tokens - on T2 (3
+lines), T3 (8), T4 (1), T6 (2 distinct), T8 (6) - so a positive Q-ask result **cannot be
+attributed to S1 alone**. S2 is a confound. Any Q-ask improvement reported from this
+measurement must say so, and must say on which tasks the S2 lines were present.
+
+### The spread's weaknesses, recorded before any cell
+
+- **T7 duplicates T1's 37.** `b2eebe7` introduced the trait and emits the same 37
+  (controller, member) pairs; the 37-citation end of the spread is **three tasks** (T1, T5, T7),
+  not four, and two of the three carry the same four sentences 37 times. T5 is outside Q-ask and
+  Q-harm by ruling (1), so for those two questions the top end is T1 and T7.
+- **T4 is a second control, not a spread point.** Its one fourth-form call is a test helper
+  (S2); both arms are empty bundles, differing only by one S2 stderr line. It contributes to the
+  noise floor's reading (an almost-identical pair) and to nothing else.
+

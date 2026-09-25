@@ -1,0 +1,23 @@
+# T5 · the twenty arm-A items absent from arm B (evicted under option B's budget pressure)
+# Written from packets/T5-A and packets/T5-B before any cell ran. Each entry: heading | subject | source | tokens.
+
+fetched · named_reference | App\Actions\Auth\LoginAction | `app/Actions/Auth/LoginAction.php` :: `execute` (lines 12-26) | 112
+fetched · named_reference | App\Actions\Testimonial\CreateTestimonialAction | `app/Actions/Testimonial/CreateTestimonialAction.php` :: `execute` (lines 16-29) | 105
+fetched · named_reference | App\Actions\Testimonial\UpdateTestimonialAction | `app/Actions/Testimonial/UpdateTestimonialAction.php` :: `execute` (lines 16-29) | 109
+fetched · named_reference | App\Actions\Timeline\CreateTimelineAction | `app/Actions/Timeline/CreateTimelineAction.php` :: `execute` (lines 16-31) | 129
+fetched · named_reference | App\Actions\Timeline\UpdateTimelineAction | `app/Actions/Timeline/UpdateTimelineAction.php` :: `execute` (lines 16-31) | 133
+fetched · named_reference | App\Actions\User\UpdateUserAction | `app/Actions/User/UpdateUserAction.php` :: `execute` (lines 17-33) | 116
+fetched · named_reference | App\DTOs\DeliveryApp\CreateDeliveryAppDTO::fromRequest | `app/DTOs/DeliveryApp/CreateDeliveryAppDTO.php` :: `fromRequest` (lines 19-29) | 115
+fetched · named_reference | App\DTOs\MediaItem\UploadMediaDTO::fromRequest | `app/DTOs/MediaItem/UploadMediaDTO.php` :: `fromRequest` (lines 19-29) | 112
+fetched · named_reference | App\DTOs\Testimonial\CreateTestimonialDTO::fromRequest | `app/DTOs/Testimonial/CreateTestimonialDTO.php` :: `fromRequest` (lines 17-26) | 103
+fetched · named_reference | App\DTOs\User\UpdateUserDTO::fromRequest | `app/DTOs/User/UpdateUserDTO.php` :: `fromRequest` (lines 16-24) | 122
+fetched · named_reference | App\Http\Requests\DeliveryApp\StoreDeliveryAppRequest | `app/Http/Requests/DeliveryApp/StoreDeliveryAppRequest.php` :: `rules` (lines 14-24) | 104
+fetched · named_reference | App\Http\Requests\MediaItem\UploadMediaRequest | `app/Http/Requests/MediaItem/UploadMediaRequest.php` :: `rules` (lines 14-24) | 104
+fetched · named_reference | App\Http\Requests\Timeline\StoreTimelineRequest | `app/Http/Requests/Timeline/StoreTimelineRequest.php` :: `rules` (lines 14-25) | 119
+fetched · named_reference | App\Http\Resources\Auth\AuthResource | `app/Http/Resources/Auth/AuthResource.php` :: `toArray` (lines 10-21) | 102
+fetched · named_reference | App\Http\Resources\DeliveryApp\DeliveryAppResource | `app/Http/Resources/DeliveryApp/DeliveryAppResource.php` :: `toArray` (lines 13-26) | 124
+fetched · named_reference | App\Http\Resources\MediaItem\MediaItemResource | `app/Http/Resources/MediaItem/MediaItemResource.php` :: `toArray` (lines 13-26) | 115
+fetched · named_reference | App\Http\Resources\PageContent\PageContentResource | `app/Http/Resources/PageContent/PageContentResource.php` :: `toArray` (lines 13-27) | 129
+fetched · named_reference | App\Http\Resources\Setting\SettingResource | `app/Http/Resources/Setting/SettingResource.php` :: `toArray` (lines 13-26) | 119
+fetched · named_reference | App\Http\Resources\Testimonial\TestimonialResource | `app/Http/Resources/Testimonial/TestimonialResource.php` :: `toArray` (lines 13-25) | 113
+fetched · named_reference | App\Repositories\QuoteRequestRepository | `app/Repositories/QuoteRequestRepository.php` :: `getAll` (lines 10-27) | 131
