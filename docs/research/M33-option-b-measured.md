@@ -203,3 +203,20 @@ any bundle. `407c110` is byte-identical in score.
   `01m3a6v47zs30sht9zzsbzkjzq`, `01m3a6v87bkk99rpqc07n050qs` (407c110).
   `01m3a6vcypp1q2q838328c9dcq` is a byte-identical duplicate of the first, from a second
   invocation; it is not scored.
+
+---
+
+## Addendum · 2026-09-26 · §5.2 re-read against a key that could name the shape
+
+**Source:** [M34](M34-the-first-fair-key.md). The text above is unaltered.
+
+A fourth held-out key, `held-out-9b8f9c6`, written knowing the fourth form exists and carrying
+37 predicted `calling_subjects`, scored option B on the same engine, the same change and the
+same trait: **0.0% → 57.8%**, 37 of 37 spellings matched, zero unkeyed, H.11's prefix rule never
+reached. §5.2's 50.0% → 36.8% therefore stands as measured and is now read correctly: it was the
+key's shape, not option B's cost - **without M34 it would have been read as option B's cost.**
+§5's invariant holds on both: key recall does not move, because an S1 citation satisfies no
+FETCH row while ADR-A010 §4 stands, and the K.1 row is the first that measures that bound on its
+own. New at M34: the citation repeats - 2,319 tokens for four facts across 37 sites - which §4's
+two- and five-site commits could not show. Recorded there as an open question.
+
