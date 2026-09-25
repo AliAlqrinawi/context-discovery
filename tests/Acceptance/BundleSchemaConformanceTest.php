@@ -140,6 +140,37 @@ final class BundleSchemaConformanceTest extends TestCase
         }
     }
 
+    /**
+     * The Markdown golden is the same run under `--format markdown` (ADR-B003 in the backend
+     * checks the two renderings of every run against each other). Here: same items, same order,
+     * same subjects, same payload bytes - read from the two committed files.
+     */
+    public function testTheGoldenMarkdownCarriesTheSameItemsInTheSameOrder(): void
+    {
+        $golden = json_decode((string) file_get_contents(__DIR__ . '/fixtures/golden/m26-bundle.v2.json'), true);
+        $markdown = (string) file_get_contents(__DIR__ . '/fixtures/golden/m26-bundle.v2.md');
+
+        $byId = [];
+
+        foreach ($golden['assertions'] as $assertion) {
+            $byId[$assertion['id']] = $assertion;
+        }
+
+        preg_match_all('/^## (\S+) · (\S+)\n\n\*\*Subject:\*\* (.*)$/m', $markdown, $blocks, PREG_SET_ORDER);
+
+        self::assertCount(count($golden['items']), $blocks);
+
+        foreach ($golden['items'] as $index => $item) {
+            self::assertSame($item['lever'], $blocks[$index][1]);
+            self::assertSame($byId[$item['assertion_id']]['kind'], $blocks[$index][2]);
+            self::assertSame($byId[$item['assertion_id']]['subject'], $blocks[$index][3]);
+            self::assertStringContainsString("\n" . $item['payload'] . "\n", $markdown, 'payload ' . $index . ' is in the Markdown byte for byte');
+        }
+
+        self::assertStringContainsString(sprintf('budget 8000 / used %d tokens', $golden['used_tokens']), $markdown);
+        self::assertStringEndsWith("## Dropped\n\nNothing was dropped.\n", $markdown);
+    }
+
     public function testTheGoldenM26BundleSatisfiesTheSchema(): void
     {
         $golden = json_decode((string) file_get_contents(

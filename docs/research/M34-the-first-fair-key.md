@@ -210,3 +210,16 @@ Option B: the same 26 items byte for byte plus 37 S1, nothing removed, `fetched`
   (`01m3dbx0hn8e9vwpf437q2rd0s`, locked 2026-09-25 22:45:13 UTC, `runs_existing_at_write = []`).
 - Runs (backend): option B `01m3dbx8pd0ab4h1s0ez2mxzvf` (installed), `01m3dbxczw4gw75qjtq7wsvzxm`
   (none); v0.2.0 `01m3dbzhxfnj8mpvckncga4t2d` (installed), `01m3dbzp9mjvggc7hwe559y4xm` (none).
+
+---
+
+## Erratum · 2026-09-26 · the ADR-A027 §7 citation
+
+**What was wrong, and where.** §4.4's second response, §6's first bullet and §8's first row cite
+*"the reviewer measurement of ADR-A027 §7"*. ADR-A027 §7 is the two-author **key** experiment;
+it contains no reviewer measurement. The reviewer measurement is the one §6 of that ADR's
+pre-check calls for, and it is designed in [ADR-E001](../decisions/ADR-E001-reviewer-measurement-of-the-citation.md)
+(this repository, `docs/decisions/`, 2026-09-26). The
+open question in §4.4 stands exactly as written - aggregation, or the reviewer measurement, and
+neither chosen - with the corrected reference. The text above is unaltered.
+

@@ -48,7 +48,7 @@ composer test
 |---|---|
 | [context-discovery-research](https://github.com/AliAlqrinawi/context-discovery-research) | Source of truth. The Phase 0 validation, the discovery moves, the Phase 1 spec |
 | [context-discovery-architecture](https://github.com/AliAlqrinawi/context-discovery-architecture) | The frozen implementation contract |
-| this repository | The implementation |
+| this repository | The implementation, and the research programme's measurements: `docs/research/` (M0–M34), `docs/decisions/` (ADR-E, how a measurement is run and read - pre-registered) |
 
 The frozen contract is read in the
 [architecture repository](https://github.com/AliAlqrinawi/context-discovery-architecture), which is

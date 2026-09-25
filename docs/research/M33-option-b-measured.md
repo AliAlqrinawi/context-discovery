@@ -220,3 +220,16 @@ FETCH row while ADR-A010 §4 stands, and the K.1 row is the first that measures 
 own. New at M34: the citation repeats - 2,319 tokens for four facts across 37 sites - which §4's
 two- and five-site commits could not show. Recorded there as an open question.
 
+---
+
+## Erratum · 2026-09-26 · "ADR-A027 §7's experiment" is the two-author key experiment, not a reviewer measurement
+
+**What was wrong, and where.** §6 item 1, §7 first bullet and §9 first row cite *"ADR-A027 §7's
+experiment, a reviewer with the bundle"*. ADR-A027 §7 as written designs a **two-author key
+experiment** - two keys per commit, two authors, scored by the existing scorer. It does not
+design a reviewer-facing measurement; that measurement was implied by §6's pre-check (seven of
+forty-five diff-only reviewer cells) and designed nowhere until [ADR-E001](../decisions/ADR-E001-reviewer-measurement-of-the-citation.md)
+(this repository, `docs/decisions/`, 2026-09-26). The citations above should be read as *"the reviewer
+measurement ADR-A027 §6's pre-check calls for, designed in ADR-E001"*. The claim they support -
+that no reviewer evidence exists - is unchanged. The text above is unaltered.
+
