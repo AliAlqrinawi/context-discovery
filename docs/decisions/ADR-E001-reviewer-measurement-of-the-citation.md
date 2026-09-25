@@ -375,3 +375,33 @@ measurement must say so, and must say on which tasks the S2 lines were present.
   (S2); both arms are empty bundles, differing only by one S2 stderr line. It contributes to the
   noise floor's reading (an almost-identical pair) and to nothing else.
 
+---
+
+## Note · 2026-09-26 · models pinned (§10); the cells begin
+
+By the user, before the first cell:
+
+| Role | Model | Session | Sampling |
+|---|---|---|---|
+| Reviewer (54 cells) | **Claude Sonnet** | fresh per cell, no history, no files, no web | default, identical for all 54 |
+| Blind classifier | **Claude Opus** | fresh, sees answer text and the keys only, never the arm | default |
+| Key author of the context keys; builder of option B | a Claude session (this programme's) | — | **excluded** from every cell and from classification |
+| Second author of the defect keys | a fresh Claude session | given the handoff only | — |
+
+The exact model id and version strings are recorded by the user from each session in the
+header of `observations/cell-NN.md`, as §5 and the protocol §4 require; this note records the
+pinning, the observation files record the strings.
+
+**Limitation, restated at the moment it becomes operative.** All three roles - the key author,
+the reviewers, the classifier - and the second author are **one model family**. The independence
+this design buys is **of context**: no role has seen what another role knows, and the reviewers
+and classifier are not the model that wrote the context keys or built option B. It is **not
+independence of model**: the family's shared training and reasoning style run through every
+answer, every key and every classification, so a defect the family does not see is absent from
+all of them at once and reads as agreement, and a citation the family finds persuasive by style
+reads as SATISFIED. **A negative result under §8 is therefore stronger than a positive one**, and
+a positive one is evidence about this family given a packet, not about reviewers.
+
+Nothing else changes. The cells are running from this point; no material, criterion, key or
+mapping may move until all fifty-four observations are in.
+
