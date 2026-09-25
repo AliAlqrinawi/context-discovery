@@ -1,0 +1,5 @@
+packet /Users/alialqrinqwi/Projects laravel/For Me/context-discovery/tests/Acceptance/fixtures/experiment-30/packets/T4-A · run 01m3desf17abqzd3ysb8szner1 · engine v0.2.0 (e7c919d3328f) · head f3a7fcddedea · vendor installed · budget 8000
+ change.diff 1736 bytes sha256 92b9ca8caf8e7bd92dc37a70be6d7bdefad0713fea314741b3c4597e142caa15
+ context-bundle.md 100 bytes sha256 b8cc2f122861d7e4abcccc055ddc83e4d708c21719bbef2c81876c54a63b190f
+ context-diagnostics.txt 0 bytes sha256 e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+ stdout_sha256 (the JSON this Markdown was checked against) e3275b9fcc2c3ef2ffaa78459425fd8f5305c6b9cb7dcbc513ea927bc4c8fcb3
