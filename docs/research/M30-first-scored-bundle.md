@@ -198,3 +198,18 @@ without, key recall 3/7. §5.2's E5.4 (`ApiResponse::success`) is missed there t
 capability gap is confirmed on an independent commit. §5.1's `Route` gap is closed by that
 key's H.15: eleven assertions, all caught. No direction is claimed between the two numbers;
 they are different keys by different rows.
+
+---
+
+## Addendum · 2026-09-26 · §5.2's gap, closed at the engine and measured
+
+**Source:** [M33](M33-option-b-measured.md). The text above is unaltered.
+
+E5.4 became the first finding to run the whole loop: gate (ADR-A027), a decision of "no
+change" reversed by a reviewer pre-check, three gates (ADR-A028, A029, A020), and option B built
+(engine `6a77cdb`, `policy_version` 3). Re-run on D1 with the same inputs: 606 → 730 tokens, two
+S1 flags citing `app/Traits/ApiResponse.php:9` and `:28`. Re-scored against this key: **E5.4
+stays MISSED** - the row asks for the trait's member fetched, and what arrives is a flag under
+the calling class's subject, which no row names; the two claims and their 124 tokens score
+unkeyed. Assertion precision 18.2% and key recall 3/4 unchanged. The eight test-helper
+references this key's E5.12 covers settle as S2 on stderr at zero tokens.

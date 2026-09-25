@@ -173,3 +173,14 @@ commit `8a020f5`; both runs and scores are in the backend's tables.
    referencing a same-namespace sibling by `::class`.
 3. **A commit that mixes migrations with code** - the shape a key like this one and a key like
    M31's would both have rows for - is the natural third held-out commit.
+
+---
+
+## Addendum · 2026-09-26 · unchanged under option B
+
+**Source:** [M33](M33-option-b-measured.md). The text above is unaltered.
+
+Option B (engine `6a77cdb`) re-run on `407c110`, both vendor modes: byte-identical bundles to
+§4 (0 items / 0 tokens; 42 flags / 840 tokens) and byte-identical scores. The diff's regions
+contain no `$this->m(` to an undeclared member, so the fourth form does not fire. The control
+the change should not have touched, and did not.

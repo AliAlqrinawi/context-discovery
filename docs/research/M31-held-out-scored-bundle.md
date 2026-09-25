@@ -189,3 +189,20 @@ question in that diff - `data-state-after-behaviour-change` on an edited CREATE 
 not raised. §5.2's `PersonalitySeeder` false positive did not recur on fourteen anonymous
 migration classes; the shapes differ, and it stays a one-off pending a look on its own shape.
 §4.1's E5.4/H.3 gap is not exercised there: the diff references no project class at all.
+
+---
+
+## Addendum · 2026-09-26 · §4.1's headline, answered at the engine; a scorer finding
+
+**Source:** [M33](M33-option-b-measured.md). The text above is unaltered.
+
+Option B (engine `6a77cdb`) re-run on `ee5a2e6`: 1078 → 1393 tokens with `vendor/`, five S1
+flags - `ApiResponse::success/created/deleted` through `Controller`, `ResolvesLocale::
+resolveLocale` on the resource itself - each citing the declaring file and line. Re-scored
+against this key: **H.3 and H.4 stay MISSED**, and the five S1 claims score **FP**, not unkeyed
+as ADR-B002 predicted: §3's H.11 lists the two `PersonalityController`s and `PersonalityResource`
+bare as OMIT, and the scorer's bare-class rule claims a member-level assertion of those classes.
+Assertion precision **50.0% → 36.8%**; item precision by tokens 72.7% → 45.6%; key recall 3/7
+unchanged. The key is locked and unedited; the number stands as measured, and the question it
+raises - whether a bare-class OMIT row should claim a form the author could not foresee - is
+recorded in backend ADR-B002 for the next key's transcription note.
