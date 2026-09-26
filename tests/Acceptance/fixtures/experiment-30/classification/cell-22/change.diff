@@ -1,0 +1,1573 @@
+diff --git a/app/Http/Controllers/Admin/Auth/AuthController.php b/app/Http/Controllers/Admin/Auth/AuthController.php
+index e536c5f..a7f1bd0 100644
+--- a/app/Http/Controllers/Admin/Auth/AuthController.php
++++ b/app/Http/Controllers/Admin/Auth/AuthController.php
+@@ -2,4 +2,34 @@
+ 
+ namespace App\Http\Controllers\Admin\Auth;
+ 
+-class AuthController extends \App\Http\Controllers\Auth\AuthController {}
++use App\Actions\Auth\LoginAction;
++use App\Actions\Auth\LogoutAction;
++use App\DTOs\Auth\LoginDTO;
++use App\Http\Controllers\Controller;
++use App\Http\Requests\Auth\LoginRequest;
++use App\Http\Resources\Auth\AuthResource;
++use App\Http\Resources\User\UserResource;
++use Illuminate\Http\JsonResponse;
++use Illuminate\Http\Request;
++
++class AuthController extends Controller
++{
++    public function login(LoginRequest $request, LoginAction $action): JsonResponse
++    {
++        $result = $action->execute(LoginDTO::fromRequest($request));
++
++        return $this->success(new AuthResource($result), __('messages.login_success'));
++    }
++
++    public function logout(Request $request, LogoutAction $action): JsonResponse
++    {
++        $action->execute($request->user());
++
++        return $this->success(null, __('messages.logout_success'));
++    }
++
++    public function me(Request $request): JsonResponse
++    {
++        return $this->success(new UserResource($request->user()), __('messages.fetched'));
++    }
++}
+diff --git a/app/Http/Controllers/Admin/BranchController.php b/app/Http/Controllers/Admin/BranchController.php
+index 7aa58ff..7a18f7a 100644
+--- a/app/Http/Controllers/Admin/BranchController.php
++++ b/app/Http/Controllers/Admin/BranchController.php
+@@ -2,4 +2,49 @@
+ 
+ namespace App\Http\Controllers\Admin;
+ 
+-class BranchController extends \App\Http\Controllers\BranchController {}
++use App\Actions\Branch\CreateBranchAction;
++use App\Actions\Branch\DeleteBranchAction;
++use App\Actions\Branch\GetBranchesAction;
++use App\Actions\Branch\UpdateBranchAction;
++use App\DTOs\Branch\CreateBranchDTO;
++use App\DTOs\Branch\UpdateBranchDTO;
++use App\Http\Controllers\Controller;
++use App\Http\Requests\Branch\StoreBranchRequest;
++use App\Http\Requests\Branch\UpdateBranchRequest;
++use App\Http\Resources\Branch\BranchResource;
++use App\Repositories\BranchRepository;
++use Illuminate\Http\JsonResponse;
++
++class BranchController extends Controller
++{
++    public function index(GetBranchesAction $action): JsonResponse
++    {
++        return $this->success(BranchResource::collection($action->execute()), __('messages.fetched'));
++    }
++
++    public function show(int $id, BranchRepository $repository): JsonResponse
++    {
++        return $this->success(new BranchResource($repository->getById($id)), __('messages.fetched'));
++    }
++
++    public function store(StoreBranchRequest $request, CreateBranchAction $action): JsonResponse
++    {
++        $branch = $action->execute(CreateBranchDTO::fromRequest($request));
++
++        return $this->created(new BranchResource($branch), __('messages.created'));
++    }
++
++    public function update(UpdateBranchRequest $request, int $id, UpdateBranchAction $action): JsonResponse
++    {
++        $branch = $action->execute($id, UpdateBranchDTO::fromRequest($request));
++
++        return $this->success(new BranchResource($branch), __('messages.updated'));
++    }
++
++    public function destroy(int $id, DeleteBranchAction $action): JsonResponse
++    {
++        $action->execute($id);
++
++        return $this->deleted(__('messages.deleted'));
++    }
++}
+diff --git a/app/Http/Controllers/Admin/CategoryController.php b/app/Http/Controllers/Admin/CategoryController.php
+index dca0eb7..4e0ca40 100644
+--- a/app/Http/Controllers/Admin/CategoryController.php
++++ b/app/Http/Controllers/Admin/CategoryController.php
+@@ -2,4 +2,41 @@
+ 
+ namespace App\Http\Controllers\Admin;
+ 
+-class CategoryController extends \App\Http\Controllers\CategoryController {}
++use App\Http\Controllers\Controller;
++use App\Http\Resources\Category\CategoryResource;
++use App\Repositories\CategoryRepository;
++use Illuminate\Http\JsonResponse;
++use Illuminate\Http\Request;
++
++class CategoryController extends Controller
++{
++    public function __construct(
++        private readonly CategoryRepository $repository,
++    ) {}
++
++    public function index(): JsonResponse
++    {
++        return $this->success(CategoryResource::collection($this->repository->getAll()), __('messages.fetched'));
++    }
++
++    public function store(Request $request): JsonResponse
++    {
++        $category = $this->repository->create($request->only(['name_ar', 'name_en', 'slug', 'order']));
++
++        return $this->created(new CategoryResource($category), __('messages.created'));
++    }
++
++    public function update(Request $request, int $id): JsonResponse
++    {
++        $category = $this->repository->update($id, $request->only(['name_ar', 'name_en', 'slug', 'order']));
++
++        return $this->success(new CategoryResource($category), __('messages.updated'));
++    }
++
++    public function destroy(int $id): JsonResponse
++    {
++        $this->repository->delete($id);
++
++        return $this->deleted(__('messages.deleted'));
++    }
++}
+diff --git a/app/Http/Controllers/Admin/Catering/CateringPackageController.php b/app/Http/Controllers/Admin/Catering/CateringPackageController.php
+index c1d7485..78a9df5 100644
+--- a/app/Http/Controllers/Admin/Catering/CateringPackageController.php
++++ b/app/Http/Controllers/Admin/Catering/CateringPackageController.php
+@@ -2,4 +2,43 @@
+ 
+ namespace App\Http\Controllers\Admin\Catering;
+ 
+-class CateringPackageController extends \App\Http\Controllers\Catering\CateringPackageController {}
++use App\Actions\Catering\CreatePackageAction;
++use App\Actions\Catering\DeletePackageAction;
++use App\Actions\Catering\GetPackagesAction;
++use App\Actions\Catering\UpdatePackageAction;
++use App\DTOs\Catering\CreatePackageDTO;
++use App\DTOs\Catering\UpdatePackageDTO;
++use App\Http\Controllers\Controller;
++use App\Http\Requests\Catering\StorePackageRequest;
++use App\Http\Requests\Catering\UpdatePackageRequest;
++use App\Http\Resources\Catering\PackageResource;
++use Illuminate\Http\JsonResponse;
++
++class CateringPackageController extends Controller
++{
++    public function index(GetPackagesAction $action): JsonResponse
++    {
++        return $this->success(PackageResource::collection($action->execute()), __('messages.fetched'));
++    }
++
++    public function store(StorePackageRequest $request, CreatePackageAction $action): JsonResponse
++    {
++        $package = $action->execute(CreatePackageDTO::fromRequest($request));
++
++        return $this->created(new PackageResource($package), __('messages.created'));
++    }
++
++    public function update(UpdatePackageRequest $request, int $id, UpdatePackageAction $action): JsonResponse
++    {
++        $package = $action->execute($id, UpdatePackageDTO::fromRequest($request));
++
++        return $this->success(new PackageResource($package), __('messages.updated'));
++    }
++
++    public function destroy(int $id, DeletePackageAction $action): JsonResponse
++    {
++        $action->execute($id);
++
++        return $this->deleted(__('messages.deleted'));
++    }
++}
+diff --git a/app/Http/Controllers/Admin/Catering/QuoteRequestController.php b/app/Http/Controllers/Admin/Catering/QuoteRequestController.php
+index 6912f5f..e1da7ca 100644
+--- a/app/Http/Controllers/Admin/Catering/QuoteRequestController.php
++++ b/app/Http/Controllers/Admin/Catering/QuoteRequestController.php
+@@ -2,4 +2,39 @@
+ 
+ namespace App\Http\Controllers\Admin\Catering;
+ 
+-class QuoteRequestController extends \App\Http\Controllers\Catering\QuoteRequestController {}
++use App\Actions\Catering\UpdateQuoteRequestStatusAction;
++use App\DTOs\Catering\UpdateQuoteRequestStatusDTO;
++use App\Http\Controllers\Controller;
++use App\Http\Requests\Catering\UpdateQuoteRequestStatusRequest;
++use App\Http\Resources\Catering\QuoteRequestResource;
++use App\Repositories\QuoteRequestRepository;
++use Illuminate\Http\JsonResponse;
++use Illuminate\Http\Request;
++
++class QuoteRequestController extends Controller
++{
++    public function index(Request $request, QuoteRequestRepository $repository): JsonResponse
++    {
++        $filters = array_filter([
++            'status' => $request->filled('status') ? $request->string('status')->toString() : null,
++            'event_type' => $request->filled('event_type') ? $request->string('event_type')->toString() : null,
++            'branch' => $request->filled('branch') ? $request->string('branch')->toString() : null,
++        ]);
++
++        $result = $repository->getAll($filters);
++
++        return $this->paginated(QuoteRequestResource::collection($result), $result, __('messages.fetched'));
++    }
++
++    public function show(int $id, QuoteRequestRepository $repository): JsonResponse
++    {
++        return $this->success(new QuoteRequestResource($repository->getById($id)), __('messages.fetched'));
++    }
++
++    public function updateStatus(UpdateQuoteRequestStatusRequest $request, int $id, UpdateQuoteRequestStatusAction $action): JsonResponse
++    {
++        $quoteRequest = $action->execute($id, UpdateQuoteRequestStatusDTO::fromRequest($request));
++
++        return $this->success(new QuoteRequestResource($quoteRequest), __('messages.updated'));
++    }
++}
+diff --git a/app/Http/Controllers/Admin/Catering/SampleMenuController.php b/app/Http/Controllers/Admin/Catering/SampleMenuController.php
+index 16c3a27..441b77a 100644
+--- a/app/Http/Controllers/Admin/Catering/SampleMenuController.php
++++ b/app/Http/Controllers/Admin/Catering/SampleMenuController.php
+@@ -2,4 +2,41 @@
+ 
+ namespace App\Http\Controllers\Admin\Catering;
+ 
+-class SampleMenuController extends \App\Http\Controllers\Catering\SampleMenuController {}
++use App\Actions\Catering\CreateSampleMenuAction;
++use App\Actions\Catering\DeleteSampleMenuAction;
++use App\Actions\Catering\GetSampleMenusAction;
++use App\Actions\Catering\UpdateSampleMenuAction;
++use App\DTOs\Catering\CreateSampleMenuDTO;
++use App\Http\Controllers\Controller;
++use App\Http\Requests\Catering\StoreSampleMenuRequest;
++use App\Http\Resources\Catering\SampleMenuResource;
++use Illuminate\Http\JsonResponse;
++
++class SampleMenuController extends Controller
++{
++    public function index(GetSampleMenusAction $action): JsonResponse
++    {
++        return $this->success(SampleMenuResource::collection($action->execute()), __('messages.fetched'));
++    }
++
++    public function store(StoreSampleMenuRequest $request, CreateSampleMenuAction $action): JsonResponse
++    {
++        $menu = $action->execute(CreateSampleMenuDTO::fromRequest($request));
++
++        return $this->created(new SampleMenuResource($menu), __('messages.created'));
++    }
++
++    public function update(StoreSampleMenuRequest $request, int $id, UpdateSampleMenuAction $action): JsonResponse
++    {
++        $menu = $action->execute($id, CreateSampleMenuDTO::fromRequest($request));
++
++        return $this->success(new SampleMenuResource($menu), __('messages.updated'));
++    }
++
++    public function destroy(int $id, DeleteSampleMenuAction $action): JsonResponse
++    {
++        $action->execute($id);
++
++        return $this->deleted(__('messages.deleted'));
++    }
++}
+diff --git a/app/Http/Controllers/Admin/DeliveryAppController.php b/app/Http/Controllers/Admin/DeliveryAppController.php
+index bbfd30f..cf9230d 100644
+--- a/app/Http/Controllers/Admin/DeliveryAppController.php
++++ b/app/Http/Controllers/Admin/DeliveryAppController.php
+@@ -2,4 +2,41 @@
+ 
+ namespace App\Http\Controllers\Admin;
+ 
+-class DeliveryAppController extends \App\Http\Controllers\DeliveryAppController {}
++use App\Actions\DeliveryApp\CreateDeliveryAppAction;
++use App\Actions\DeliveryApp\DeleteDeliveryAppAction;
++use App\Actions\DeliveryApp\GetDeliveryAppsAction;
++use App\Actions\DeliveryApp\UpdateDeliveryAppAction;
++use App\DTOs\DeliveryApp\CreateDeliveryAppDTO;
++use App\Http\Controllers\Controller;
++use App\Http\Requests\DeliveryApp\StoreDeliveryAppRequest;
++use App\Http\Resources\DeliveryApp\DeliveryAppResource;
++use Illuminate\Http\JsonResponse;
++
++class DeliveryAppController extends Controller
++{
++    public function index(GetDeliveryAppsAction $action): JsonResponse
++    {
++        return $this->success(DeliveryAppResource::collection($action->execute(activeOnly: false)), __('messages.fetched'));
++    }
++
++    public function store(StoreDeliveryAppRequest $request, CreateDeliveryAppAction $action): JsonResponse
++    {
++        $deliveryApp = $action->execute(CreateDeliveryAppDTO::fromRequest($request));
++
++        return $this->created(new DeliveryAppResource($deliveryApp), __('messages.created'));
++    }
++
++    public function update(StoreDeliveryAppRequest $request, int $id, UpdateDeliveryAppAction $action): JsonResponse
++    {
++        $deliveryApp = $action->execute($id, CreateDeliveryAppDTO::fromRequest($request));
++
++        return $this->success(new DeliveryAppResource($deliveryApp), __('messages.updated'));
++    }
++
++    public function destroy(int $id, DeleteDeliveryAppAction $action): JsonResponse
++    {
++        $action->execute($id);
++
++        return $this->deleted(__('messages.deleted'));
++    }
++}
+diff --git a/app/Http/Controllers/Admin/DishController.php b/app/Http/Controllers/Admin/DishController.php
+index 5fb0394..0999745 100644
+--- a/app/Http/Controllers/Admin/DishController.php
++++ b/app/Http/Controllers/Admin/DishController.php
+@@ -2,4 +2,59 @@
+ 
+ namespace App\Http\Controllers\Admin;
+ 
+-class DishController extends \App\Http\Controllers\DishController {}
++use App\Actions\Dish\CreateDishAction;
++use App\Actions\Dish\DeleteDishAction;
++use App\Actions\Dish\GetDishAction;
++use App\Actions\Dish\GetDishesAction;
++use App\Actions\Dish\UpdateDishAction;
++use App\DTOs\Dish\CreateDishDTO;
++use App\DTOs\Dish\UpdateDishDTO;
++use App\Http\Controllers\Controller;
++use App\Http\Requests\Dish\StoreDishRequest;
++use App\Http\Requests\Dish\UpdateDishRequest;
++use App\Http\Resources\Dish\DishResource;
++use Illuminate\Http\JsonResponse;
++use Illuminate\Http\Request;
++
++class DishController extends Controller
++{
++    public function index(Request $request, GetDishesAction $action): JsonResponse
++    {
++        $filters = array_filter([
++            'category_id' => $request->integer('category_id') ?: null,
++            'featured' => $request->has('featured') ? $request->boolean('featured') : null,
++            'signature' => $request->has('signature') ? $request->boolean('signature') : null,
++            'per_page' => $request->integer('per_page') ?: null,
++        ], fn ($value) => $value !== null);
++
++        $result = $action->execute($filters);
++
++        return $this->paginated(DishResource::collection($result), $result, __('messages.fetched'));
++    }
++
++    public function show(int $id, GetDishAction $action): JsonResponse
++    {
++        return $this->success(new DishResource($action->execute($id)), __('messages.fetched'));
++    }
++
++    public function store(StoreDishRequest $request, CreateDishAction $action): JsonResponse
++    {
++        $dish = $action->execute(CreateDishDTO::fromRequest($request));
++
++        return $this->created(new DishResource($dish), __('messages.created'));
++    }
++
++    public function update(UpdateDishRequest $request, int $id, UpdateDishAction $action): JsonResponse
++    {
++        $dish = $action->execute($id, UpdateDishDTO::fromRequest($request));
++
++        return $this->success(new DishResource($dish), __('messages.updated'));
++    }
++
++    public function destroy(int $id, DeleteDishAction $action): JsonResponse
++    {
++        $action->execute($id);
++
++        return $this->deleted(__('messages.deleted'));
++    }
++}
+diff --git a/app/Http/Controllers/Admin/MediaItemController.php b/app/Http/Controllers/Admin/MediaItemController.php
+index b965e63..87a24a5 100644
+--- a/app/Http/Controllers/Admin/MediaItemController.php
++++ b/app/Http/Controllers/Admin/MediaItemController.php
+@@ -2,4 +2,56 @@
+ 
+ namespace App\Http\Controllers\Admin;
+ 
+-class MediaItemController extends \App\Http\Controllers\MediaItemController {}
++use App\Actions\MediaItem\DeleteMediaAction;
++use App\Actions\MediaItem\GetMediaItemsAction;
++use App\Actions\MediaItem\UploadMediaAction;
++use App\DTOs\MediaItem\UploadMediaDTO;
++use App\Http\Controllers\Controller;
++use App\Http\Requests\MediaItem\UploadMediaRequest;
++use App\Http\Resources\MediaItem\MediaItemResource;
++use App\Repositories\MediaItemRepository;
++use Illuminate\Http\JsonResponse;
++use Illuminate\Http\Request;
++
++class MediaItemController extends Controller
++{
++    public function index(Request $request, GetMediaItemsAction $action): JsonResponse
++    {
++        $result = $action->execute(
++            $request->string('page')->toString(),
++            $request->filled('section') ? $request->string('section')->toString() : null,
++        );
++
++        $resourced = $result->map(
++            fn ($section) => $section->map(fn ($item) => new MediaItemResource($item))
++        );
++
++        return $this->success($resourced, __('messages.fetched'));
++    }
++
++    public function store(UploadMediaRequest $request, UploadMediaAction $action): JsonResponse
++    {
++        $mediaItem = $action->execute(UploadMediaDTO::fromRequest($request));
++
++        return $this->created(new MediaItemResource($mediaItem), __('messages.uploaded'));
++    }
++
++    public function show(int $id, MediaItemRepository $repository): JsonResponse
++    {
++        return $this->success(new MediaItemResource($repository->getById($id)), __('messages.fetched'));
++    }
++
++    public function update(UploadMediaRequest $request, int $id, UploadMediaAction $action): JsonResponse
++    {
++        $mediaItem = $action->execute(UploadMediaDTO::fromRequest($request));
++
++        return $this->success(new MediaItemResource($mediaItem), __('messages.updated'));
++    }
++
++    public function destroy(int $id, DeleteMediaAction $action): JsonResponse
++    {
++        $action->execute($id);
++
++        return $this->deleted(__('messages.deleted'));
++    }
++}
+diff --git a/app/Http/Controllers/Admin/PageContentController.php b/app/Http/Controllers/Admin/PageContentController.php
+index 6db51e9..a78f9b3 100644
+--- a/app/Http/Controllers/Admin/PageContentController.php
++++ b/app/Http/Controllers/Admin/PageContentController.php
+@@ -2,4 +2,51 @@
+ 
+ namespace App\Http\Controllers\Admin;
+ 
+-class PageContentController extends \App\Http\Controllers\PageContentController {}
++use App\Actions\PageContent\BulkUpdatePageContentAction;
++use App\Actions\PageContent\GetPageContentAction;
++use App\Actions\PageContent\UpdatePageContentAction;
++use App\DTOs\PageContent\BulkUpdatePageContentDTO;
++use App\DTOs\PageContent\UpdatePageContentDTO;
++use App\Http\Controllers\Controller;
++use App\Http\Requests\PageContent\BulkUpdatePageContentRequest;
++use App\Http\Requests\PageContent\UpdatePageContentRequest;
++use App\Http\Resources\PageContent\PageContentResource;
++use App\Repositories\PageContentRepository;
++use Illuminate\Http\JsonResponse;
++use Illuminate\Http\Request;
++
++class PageContentController extends Controller
++{
++    public function index(Request $request, GetPageContentAction $action): JsonResponse
++    {
++        $result = $action->execute(
++            $request->string('page')->toString(),
++            $request->filled('section') ? $request->string('section')->toString() : null,
++        );
++
++        $resourced = $result->map(
++            fn ($section) => $section->map(fn ($item) => new PageContentResource($item))
++        );
++
++        return $this->success($resourced, __('messages.fetched'));
++    }
++
++    public function show(int $id, PageContentRepository $repository): JsonResponse
++    {
++        return $this->success(new PageContentResource($repository->getById($id)), __('messages.fetched'));
++    }
++
++    public function update(UpdatePageContentRequest $request, int $id, UpdatePageContentAction $action): JsonResponse
++    {
++        $pageContent = $action->execute($id, UpdatePageContentDTO::fromRequest($request));
++
++        return $this->success(new PageContentResource($pageContent), __('messages.updated'));
++    }
++
++    public function bulkUpdate(BulkUpdatePageContentRequest $request, BulkUpdatePageContentAction $action): JsonResponse
++    {
++        $action->execute(BulkUpdatePageContentDTO::fromRequest($request));
++
++        return $this->success(null, __('messages.updated'));
++    }
++}
+diff --git a/app/Http/Controllers/Admin/SettingController.php b/app/Http/Controllers/Admin/SettingController.php
+index d5c9e79..bd10977 100644
+--- a/app/Http/Controllers/Admin/SettingController.php
++++ b/app/Http/Controllers/Admin/SettingController.php
+@@ -2,4 +2,30 @@
+ 
+ namespace App\Http\Controllers\Admin;
+ 
+-class SettingController extends \App\Http\Controllers\SettingController {}
++use App\Actions\Setting\GetSettingsAction;
++use App\Actions\Setting\UpdateSettingsAction;
++use App\DTOs\Setting\UpdateSettingDTO;
++use App\Http\Controllers\Controller;
++use App\Http\Requests\Setting\UpdateSettingRequest;
++use App\Http\Resources\Setting\SettingResource;
++use Illuminate\Http\JsonResponse;
++use Illuminate\Http\Request;
++
++class SettingController extends Controller
++{
++    public function index(Request $request, GetSettingsAction $action): JsonResponse
++    {
++        $result = $action->execute(
++            $request->filled('group') ? $request->string('group')->toString() : null,
++        );
++
++        return $this->success($result->map(fn ($setting) => new SettingResource($setting)), __('messages.fetched'));
++    }
++
++    public function bulkUpdate(UpdateSettingRequest $request, UpdateSettingsAction $action): JsonResponse
++    {
++        $action->execute(UpdateSettingDTO::fromRequest($request));
++
++        return $this->success(null, __('messages.updated'));
++    }
++}
+diff --git a/app/Http/Controllers/Admin/TestimonialController.php b/app/Http/Controllers/Admin/TestimonialController.php
+index 3b6066d..71629f3 100644
+--- a/app/Http/Controllers/Admin/TestimonialController.php
++++ b/app/Http/Controllers/Admin/TestimonialController.php
+@@ -2,4 +2,41 @@
+ 
+ namespace App\Http\Controllers\Admin;
+ 
+-class TestimonialController extends \App\Http\Controllers\TestimonialController {}
++use App\Actions\Testimonial\CreateTestimonialAction;
++use App\Actions\Testimonial\DeleteTestimonialAction;
++use App\Actions\Testimonial\GetTestimonialsAction;
++use App\Actions\Testimonial\UpdateTestimonialAction;
++use App\DTOs\Testimonial\CreateTestimonialDTO;
++use App\Http\Controllers\Controller;
++use App\Http\Requests\Testimonial\StoreTestimonialRequest;
++use App\Http\Resources\Testimonial\TestimonialResource;
++use Illuminate\Http\JsonResponse;
++
++class TestimonialController extends Controller
++{
++    public function index(GetTestimonialsAction $action): JsonResponse
++    {
++        return $this->success(TestimonialResource::collection($action->execute(activeOnly: false)), __('messages.fetched'));
++    }
++
++    public function store(StoreTestimonialRequest $request, CreateTestimonialAction $action): JsonResponse
++    {
++        $testimonial = $action->execute(CreateTestimonialDTO::fromRequest($request));
++
++        return $this->created(new TestimonialResource($testimonial), __('messages.created'));
++    }
++
++    public function update(StoreTestimonialRequest $request, int $id, UpdateTestimonialAction $action): JsonResponse
++    {
++        $testimonial = $action->execute($id, CreateTestimonialDTO::fromRequest($request));
++
++        return $this->success(new TestimonialResource($testimonial), __('messages.updated'));
++    }
++
++    public function destroy(int $id, DeleteTestimonialAction $action): JsonResponse
++    {
++        $action->execute($id);
++
++        return $this->deleted(__('messages.deleted'));
++    }
++}
+diff --git a/app/Http/Controllers/Admin/TimelineController.php b/app/Http/Controllers/Admin/TimelineController.php
+index 2ab8f09..1388d35 100644
+--- a/app/Http/Controllers/Admin/TimelineController.php
++++ b/app/Http/Controllers/Admin/TimelineController.php
+@@ -2,4 +2,41 @@
+ 
+ namespace App\Http\Controllers\Admin;
+ 
+-class TimelineController extends \App\Http\Controllers\TimelineController {}
++use App\Actions\Timeline\CreateTimelineAction;
++use App\Actions\Timeline\DeleteTimelineAction;
++use App\Actions\Timeline\GetTimelineAction;
++use App\Actions\Timeline\UpdateTimelineAction;
++use App\DTOs\Timeline\CreateTimelineDTO;
++use App\Http\Controllers\Controller;
++use App\Http\Requests\Timeline\StoreTimelineRequest;
++use App\Http\Resources\Timeline\TimelineResource;
++use Illuminate\Http\JsonResponse;
++
++class TimelineController extends Controller
++{
++    public function index(GetTimelineAction $action): JsonResponse
++    {
++        return $this->success(TimelineResource::collection($action->execute()), __('messages.fetched'));
++    }
++
++    public function store(StoreTimelineRequest $request, CreateTimelineAction $action): JsonResponse
++    {
++        $timeline = $action->execute(CreateTimelineDTO::fromRequest($request));
++
++        return $this->created(new TimelineResource($timeline), __('messages.created'));
++    }
++
++    public function update(StoreTimelineRequest $request, int $id, UpdateTimelineAction $action): JsonResponse
++    {
++        $timeline = $action->execute($id, CreateTimelineDTO::fromRequest($request));
++
++        return $this->success(new TimelineResource($timeline), __('messages.updated'));
++    }
++
++    public function destroy(int $id, DeleteTimelineAction $action): JsonResponse
++    {
++        $action->execute($id);
++
++        return $this->deleted(__('messages.deleted'));
++    }
++}
+diff --git a/app/Http/Controllers/Admin/UserController.php b/app/Http/Controllers/Admin/UserController.php
+index 8ab19a7..78523b8 100644
+--- a/app/Http/Controllers/Admin/UserController.php
++++ b/app/Http/Controllers/Admin/UserController.php
+@@ -2,4 +2,51 @@
+ 
+ namespace App\Http\Controllers\Admin;
+ 
+-class UserController extends \App\Http\Controllers\UserController {}
++use App\Actions\User\CreateUserAction;
++use App\Actions\User\DeleteUserAction;
++use App\Actions\User\GetUsersAction;
++use App\Actions\User\UpdateUserAction;
++use App\DTOs\User\CreateUserDTO;
++use App\DTOs\User\UpdateUserDTO;
++use App\Http\Controllers\Controller;
++use App\Http\Requests\User\StoreUserRequest;
++use App\Http\Requests\User\UpdateUserRequest;
++use App\Http\Resources\User\UserResource;
++use App\Repositories\UserRepository;
++use Illuminate\Http\JsonResponse;
++
++class UserController extends Controller
++{
++    public function index(GetUsersAction $action): JsonResponse
++    {
++        $result = $action->execute();
++
++        return $this->paginated(UserResource::collection($result), $result, __('messages.fetched'));
++    }
++
++    public function store(StoreUserRequest $request, CreateUserAction $action): JsonResponse
++    {
++        $user = $action->execute(CreateUserDTO::fromRequest($request));
++
++        return $this->created(new UserResource($user), __('messages.created'));
++    }
++
++    public function show(int $id, UserRepository $repository): JsonResponse
++    {
++        return $this->success(new UserResource($repository->getById($id)), __('messages.fetched'));
++    }
++
++    public function update(UpdateUserRequest $request, int $id, UpdateUserAction $action): JsonResponse
++    {
++        $user = $action->execute($id, UpdateUserDTO::fromRequest($request));
++
++        return $this->success(new UserResource($user), __('messages.updated'));
++    }
++
++    public function destroy(int $id, DeleteUserAction $action): JsonResponse
++    {
++        $action->execute($id);
++
++        return $this->deleted(__('messages.deleted'));
++    }
++}
+diff --git a/app/Http/Controllers/Auth/AuthController.php b/app/Http/Controllers/Auth/AuthController.php
+deleted file mode 100644
+index 563551d..0000000
+--- a/app/Http/Controllers/Auth/AuthController.php
++++ /dev/null
+@@ -1,35 +0,0 @@
+-<?php
+-
+-namespace App\Http\Controllers\Auth;
+-
+-use App\Actions\Auth\LoginAction;
+-use App\Actions\Auth\LogoutAction;
+-use App\DTOs\Auth\LoginDTO;
+-use App\Http\Controllers\Controller;
+-use App\Http\Requests\Auth\LoginRequest;
+-use App\Http\Resources\Auth\AuthResource;
+-use App\Http\Resources\User\UserResource;
+-use Illuminate\Http\JsonResponse;
+-use Illuminate\Http\Request;
+-
+-class AuthController extends Controller
+-{
+-    public function login(LoginRequest $request, LoginAction $action): JsonResponse
+-    {
+-        $result = $action->execute(LoginDTO::fromRequest($request));
+-
+-        return $this->success(new AuthResource($result), __('messages.login_success'));
+-    }
+-
+-    public function logout(Request $request, LogoutAction $action): JsonResponse
+-    {
+-        $action->execute($request->user());
+-
+-        return $this->success(null, __('messages.logout_success'));
+-    }
+-
+-    public function me(Request $request): JsonResponse
+-    {
+-        return $this->success(new UserResource($request->user()), __('messages.fetched'));
+-    }
+-}
+diff --git a/app/Http/Controllers/BranchController.php b/app/Http/Controllers/BranchController.php
+deleted file mode 100644
+index 985e499..0000000
+--- a/app/Http/Controllers/BranchController.php
++++ /dev/null
+@@ -1,49 +0,0 @@
+-<?php
+-
+-namespace App\Http\Controllers;
+-
+-use App\Actions\Branch\CreateBranchAction;
+-use App\Actions\Branch\DeleteBranchAction;
+-use App\Actions\Branch\GetBranchesAction;
+-use App\Actions\Branch\UpdateBranchAction;
+-use App\DTOs\Branch\CreateBranchDTO;
+-use App\DTOs\Branch\UpdateBranchDTO;
+-use App\Http\Requests\Branch\StoreBranchRequest;
+-use App\Http\Requests\Branch\UpdateBranchRequest;
+-use App\Http\Resources\Branch\BranchResource;
+-use App\Repositories\BranchRepository;
+-use Illuminate\Http\JsonResponse;
+-
+-class BranchController extends Controller
+-{
+-    public function index(GetBranchesAction $action): JsonResponse
+-    {
+-        return $this->success(BranchResource::collection($action->execute()), __('messages.fetched'));
+-    }
+-
+-    public function show(int $id, BranchRepository $repository): JsonResponse
+-    {
+-        return $this->success(new BranchResource($repository->getById($id)), __('messages.fetched'));
+-    }
+-
+-    public function store(StoreBranchRequest $request, CreateBranchAction $action): JsonResponse
+-    {
+-        $branch = $action->execute(CreateBranchDTO::fromRequest($request));
+-
+-        return $this->created(new BranchResource($branch), __('messages.created'));
+-    }
+-
+-    public function update(UpdateBranchRequest $request, int $id, UpdateBranchAction $action): JsonResponse
+-    {
+-        $branch = $action->execute($id, UpdateBranchDTO::fromRequest($request));
+-
+-        return $this->success(new BranchResource($branch), __('messages.updated'));
+-    }
+-
+-    public function destroy(int $id, DeleteBranchAction $action): JsonResponse
+-    {
+-        $action->execute($id);
+-
+-        return $this->deleted(__('messages.deleted'));
+-    }
+-}
+diff --git a/app/Http/Controllers/CategoryController.php b/app/Http/Controllers/CategoryController.php
+deleted file mode 100644
+index bf1c2f7..0000000
+--- a/app/Http/Controllers/CategoryController.php
++++ /dev/null
+@@ -1,41 +0,0 @@
+-<?php
+-
+-namespace App\Http\Controllers;
+-
+-use App\Http\Resources\Category\CategoryResource;
+-use App\Repositories\CategoryRepository;
+-use Illuminate\Http\JsonResponse;
+-use Illuminate\Http\Request;
+-
+-class CategoryController extends Controller
+-{
+-    public function __construct(
+-        private readonly CategoryRepository $repository,
+-    ) {}
+-
+-    public function index(): JsonResponse
+-    {
+-        return $this->success(CategoryResource::collection($this->repository->getAll()), __('messages.fetched'));
+-    }
+-
+-    public function store(Request $request): JsonResponse
+-    {
+-        $category = $this->repository->create($request->only(['name_ar', 'name_en', 'slug', 'order']));
+-
+-        return $this->created(new CategoryResource($category), __('messages.created'));
+-    }
+-
+-    public function update(Request $request, int $id): JsonResponse
+-    {
+-        $category = $this->repository->update($id, $request->only(['name_ar', 'name_en', 'slug', 'order']));
+-
+-        return $this->success(new CategoryResource($category), __('messages.updated'));
+-    }
+-
+-    public function destroy(int $id): JsonResponse
+-    {
+-        $this->repository->delete($id);
+-
+-        return $this->deleted(__('messages.deleted'));
+-    }
+-}
+diff --git a/app/Http/Controllers/Catering/CateringPackageController.php b/app/Http/Controllers/Catering/CateringPackageController.php
+deleted file mode 100644
+index 83dfaca..0000000
+--- a/app/Http/Controllers/Catering/CateringPackageController.php
++++ /dev/null
+@@ -1,44 +0,0 @@
+-<?php
+-
+-namespace App\Http\Controllers\Catering;
+-
+-use App\Actions\Catering\CreatePackageAction;
+-use App\Actions\Catering\DeletePackageAction;
+-use App\Actions\Catering\GetPackagesAction;
+-use App\Actions\Catering\UpdatePackageAction;
+-use App\DTOs\Catering\CreatePackageDTO;
+-use App\DTOs\Catering\UpdatePackageDTO;
+-use App\Http\Controllers\Controller;
+-use App\Http\Requests\Catering\StorePackageRequest;
+-use App\Http\Requests\Catering\UpdatePackageRequest;
+-use App\Http\Resources\Catering\PackageResource;
+-use Illuminate\Http\JsonResponse;
+-
+-class CateringPackageController extends Controller
+-{
+-    public function index(GetPackagesAction $action): JsonResponse
+-    {
+-        return $this->success(PackageResource::collection($action->execute()), __('messages.fetched'));
+-    }
+-
+-    public function store(StorePackageRequest $request, CreatePackageAction $action): JsonResponse
+-    {
+-        $package = $action->execute(CreatePackageDTO::fromRequest($request));
+-
+-        return $this->created(new PackageResource($package), __('messages.created'));
+-    }
+-
+-    public function update(UpdatePackageRequest $request, int $id, UpdatePackageAction $action): JsonResponse
+-    {
+-        $package = $action->execute($id, UpdatePackageDTO::fromRequest($request));
+-
+-        return $this->success(new PackageResource($package), __('messages.updated'));
+-    }
+-
+-    public function destroy(int $id, DeletePackageAction $action): JsonResponse
+-    {
+-        $action->execute($id);
+-
+-        return $this->deleted(__('messages.deleted'));
+-    }
+-}
+diff --git a/app/Http/Controllers/Catering/QuoteRequestController.php b/app/Http/Controllers/Catering/QuoteRequestController.php
+deleted file mode 100644
+index e9aa8e2..0000000
+--- a/app/Http/Controllers/Catering/QuoteRequestController.php
++++ /dev/null
+@@ -1,50 +0,0 @@
+-<?php
+-
+-namespace App\Http\Controllers\Catering;
+-
+-use App\Actions\Catering\SubmitQuoteRequestAction;
+-use App\Actions\Catering\UpdateQuoteRequestStatusAction;
+-use App\DTOs\Catering\SubmitQuoteRequestDTO;
+-use App\DTOs\Catering\UpdateQuoteRequestStatusDTO;
+-use App\Http\Controllers\Controller;
+-use App\Http\Requests\Catering\StoreQuoteRequestRequest;
+-use App\Http\Requests\Catering\UpdateQuoteRequestStatusRequest;
+-use App\Http\Resources\Catering\QuoteRequestResource;
+-use App\Repositories\QuoteRequestRepository;
+-use Illuminate\Http\JsonResponse;
+-use Illuminate\Http\Request;
+-
+-class QuoteRequestController extends Controller
+-{
+-    public function store(StoreQuoteRequestRequest $request, SubmitQuoteRequestAction $action): JsonResponse
+-    {
+-        $quoteRequest = $action->execute(SubmitQuoteRequestDTO::fromRequest($request));
+-
+-        return $this->created(new QuoteRequestResource($quoteRequest), __('messages.quote_submitted'));
+-    }
+-
+-    public function index(Request $request, QuoteRequestRepository $repository): JsonResponse
+-    {
+-        $filters = array_filter([
+-            'status' => $request->filled('status') ? $request->string('status')->toString() : null,
+-            'event_type' => $request->filled('event_type') ? $request->string('event_type')->toString() : null,
+-            'branch' => $request->filled('branch') ? $request->string('branch')->toString() : null,
+-        ]);
+-
+-        $result = $repository->getAll($filters);
+-
+-        return $this->paginated(QuoteRequestResource::collection($result), $result, __('messages.fetched'));
+-    }
+-
+-    public function show(int $id, QuoteRequestRepository $repository): JsonResponse
+-    {
+-        return $this->success(new QuoteRequestResource($repository->getById($id)), __('messages.fetched'));
+-    }
+-
+-    public function updateStatus(UpdateQuoteRequestStatusRequest $request, int $id, UpdateQuoteRequestStatusAction $action): JsonResponse
+-    {
+-        $quoteRequest = $action->execute($id, UpdateQuoteRequestStatusDTO::fromRequest($request));
+-
+-        return $this->success(new QuoteRequestResource($quoteRequest), __('messages.updated'));
+-    }
+-}
+diff --git a/app/Http/Controllers/Catering/SampleMenuController.php b/app/Http/Controllers/Catering/SampleMenuController.php
+deleted file mode 100644
+index f5b1fb0..0000000
+--- a/app/Http/Controllers/Catering/SampleMenuController.php
++++ /dev/null
+@@ -1,42 +0,0 @@
+-<?php
+-
+-namespace App\Http\Controllers\Catering;
+-
+-use App\Actions\Catering\CreateSampleMenuAction;
+-use App\Actions\Catering\DeleteSampleMenuAction;
+-use App\Actions\Catering\GetSampleMenusAction;
+-use App\Actions\Catering\UpdateSampleMenuAction;
+-use App\DTOs\Catering\CreateSampleMenuDTO;
+-use App\Http\Controllers\Controller;
+-use App\Http\Requests\Catering\StoreSampleMenuRequest;
+-use App\Http\Resources\Catering\SampleMenuResource;
+-use Illuminate\Http\JsonResponse;
+-
+-class SampleMenuController extends Controller
+-{
+-    public function index(GetSampleMenusAction $action): JsonResponse
+-    {
+-        return $this->success(SampleMenuResource::collection($action->execute()), __('messages.fetched'));
+-    }
+-
+-    public function store(StoreSampleMenuRequest $request, CreateSampleMenuAction $action): JsonResponse
+-    {
+-        $menu = $action->execute(CreateSampleMenuDTO::fromRequest($request));
+-
+-        return $this->created(new SampleMenuResource($menu), __('messages.created'));
+-    }
+-
+-    public function update(StoreSampleMenuRequest $request, int $id, UpdateSampleMenuAction $action): JsonResponse
+-    {
+-        $menu = $action->execute($id, CreateSampleMenuDTO::fromRequest($request));
+-
+-        return $this->success(new SampleMenuResource($menu), __('messages.updated'));
+-    }
+-
+-    public function destroy(int $id, DeleteSampleMenuAction $action): JsonResponse
+-    {
+-        $action->execute($id);
+-
+-        return $this->deleted(__('messages.deleted'));
+-    }
+-}
+diff --git a/app/Http/Controllers/DeliveryAppController.php b/app/Http/Controllers/DeliveryAppController.php
+deleted file mode 100644
+index c2fca72..0000000
+--- a/app/Http/Controllers/DeliveryAppController.php
++++ /dev/null
+@@ -1,43 +0,0 @@
+-<?php
+-
+-namespace App\Http\Controllers;
+-
+-use App\Actions\DeliveryApp\CreateDeliveryAppAction;
+-use App\Actions\DeliveryApp\DeleteDeliveryAppAction;
+-use App\Actions\DeliveryApp\GetDeliveryAppsAction;
+-use App\Actions\DeliveryApp\UpdateDeliveryAppAction;
+-use App\DTOs\DeliveryApp\CreateDeliveryAppDTO;
+-use App\Http\Requests\DeliveryApp\StoreDeliveryAppRequest;
+-use App\Http\Resources\DeliveryApp\DeliveryAppResource;
+-use Illuminate\Http\JsonResponse;
+-
+-class DeliveryAppController extends Controller
+-{
+-    public function index(GetDeliveryAppsAction $action): JsonResponse
+-    {
+-        $activeOnly = ! auth('sanctum')->check();
+-
+-        return $this->success(DeliveryAppResource::collection($action->execute($activeOnly)), __('messages.fetched'));
+-    }
+-
+-    public function store(StoreDeliveryAppRequest $request, CreateDeliveryAppAction $action): JsonResponse
+-    {
+-        $deliveryApp = $action->execute(CreateDeliveryAppDTO::fromRequest($request));
+-
+-        return $this->created(new DeliveryAppResource($deliveryApp), __('messages.created'));
+-    }
+-
+-    public function update(StoreDeliveryAppRequest $request, int $id, UpdateDeliveryAppAction $action): JsonResponse
+-    {
+-        $deliveryApp = $action->execute($id, CreateDeliveryAppDTO::fromRequest($request));
+-
+-        return $this->success(new DeliveryAppResource($deliveryApp), __('messages.updated'));
+-    }
+-
+-    public function destroy(int $id, DeleteDeliveryAppAction $action): JsonResponse
+-    {
+-        $action->execute($id);
+-
+-        return $this->deleted(__('messages.deleted'));
+-    }
+-}
+diff --git a/app/Http/Controllers/DishController.php b/app/Http/Controllers/DishController.php
+deleted file mode 100644
+index b615bf0..0000000
+--- a/app/Http/Controllers/DishController.php
++++ /dev/null
+@@ -1,59 +0,0 @@
+-<?php
+-
+-namespace App\Http\Controllers;
+-
+-use App\Actions\Dish\CreateDishAction;
+-use App\Actions\Dish\DeleteDishAction;
+-use App\Actions\Dish\GetDishAction;
+-use App\Actions\Dish\GetDishesAction;
+-use App\Actions\Dish\UpdateDishAction;
+-use App\DTOs\Dish\CreateDishDTO;
+-use App\DTOs\Dish\UpdateDishDTO;
+-use App\Http\Requests\Dish\StoreDishRequest;
+-use App\Http\Requests\Dish\UpdateDishRequest;
+-use App\Http\Resources\Dish\DishResource;
+-use Illuminate\Http\JsonResponse;
+-use Illuminate\Http\Request;
+-
+-class DishController extends Controller
+-{
+-    public function index(Request $request, GetDishesAction $action): JsonResponse
+-    {
+-        $filters = array_filter([
+-            'category_id' => $request->integer('category_id') ?: null,
+-            'featured' => $request->has('featured') ? $request->boolean('featured') : null,
+-            'signature' => $request->has('signature') ? $request->boolean('signature') : null,
+-            'per_page' => $request->integer('per_page') ?: null,
+-        ], fn ($value) => $value !== null);
+-
+-        $result = $action->execute($filters);
+-
+-        return $this->paginated(DishResource::collection($result), $result, __('messages.fetched'));
+-    }
+-
+-    public function show(int $id, GetDishAction $action): JsonResponse
+-    {
+-        return $this->success(new DishResource($action->execute($id)), __('messages.fetched'));
+-    }
+-
+-    public function store(StoreDishRequest $request, CreateDishAction $action): JsonResponse
+-    {
+-        $dish = $action->execute(CreateDishDTO::fromRequest($request));
+-
+-        return $this->created(new DishResource($dish), __('messages.created'));
+-    }
+-
+-    public function update(UpdateDishRequest $request, int $id, UpdateDishAction $action): JsonResponse
+-    {
+-        $dish = $action->execute($id, UpdateDishDTO::fromRequest($request));
+-
+-        return $this->success(new DishResource($dish), __('messages.updated'));
+-    }
+-
+-    public function destroy(int $id, DeleteDishAction $action): JsonResponse
+-    {
+-        $action->execute($id);
+-
+-        return $this->deleted(__('messages.deleted'));
+-    }
+-}
+diff --git a/app/Http/Controllers/MediaItemController.php b/app/Http/Controllers/MediaItemController.php
+deleted file mode 100644
+index cf6933f..0000000
+--- a/app/Http/Controllers/MediaItemController.php
++++ /dev/null
+@@ -1,56 +0,0 @@
+-<?php
+-
+-namespace App\Http\Controllers;
+-
+-use App\Actions\MediaItem\DeleteMediaAction;
+-use App\Actions\MediaItem\GetMediaItemsAction;
+-use App\Actions\MediaItem\UploadMediaAction;
+-use App\DTOs\MediaItem\UploadMediaDTO;
+-use App\Http\Requests\MediaItem\UploadMediaRequest;
+-use App\Http\Resources\MediaItem\MediaItemResource;
+-use App\Repositories\MediaItemRepository;
+-use Illuminate\Http\JsonResponse;
+-use Illuminate\Http\Request;
+-
+-class MediaItemController extends Controller
+-{
+-    public function index(Request $request, GetMediaItemsAction $action): JsonResponse
+-    {
+-        $result = $action->execute(
+-            $request->string('page')->toString(),
+-            $request->filled('section') ? $request->string('section')->toString() : null,
+-        );
+-
+-        $resourced = $result->map(
+-            fn ($section) => $section->map(fn ($item) => new MediaItemResource($item))
+-        );
+-
+-        return $this->success($resourced, __('messages.fetched'));
+-    }
+-
+-    public function store(UploadMediaRequest $request, UploadMediaAction $action): JsonResponse
+-    {
+-        $mediaItem = $action->execute(UploadMediaDTO::fromRequest($request));
+-
+-        return $this->created(new MediaItemResource($mediaItem), __('messages.uploaded'));
+-    }
+-
+-    public function show(int $id, MediaItemRepository $repository): JsonResponse
+-    {
+-        return $this->success(new MediaItemResource($repository->getById($id)), __('messages.fetched'));
+-    }
+-
+-    public function update(UploadMediaRequest $request, int $id, UploadMediaAction $action): JsonResponse
+-    {
+-        $mediaItem = $action->execute(UploadMediaDTO::fromRequest($request));
+-
+-        return $this->success(new MediaItemResource($mediaItem), __('messages.updated'));
+-    }
+-
+-    public function destroy(int $id, DeleteMediaAction $action): JsonResponse
+-    {
+-        $action->execute($id);
+-
+-        return $this->deleted(__('messages.deleted'));
+-    }
+-}
+diff --git a/app/Http/Controllers/PageContentController.php b/app/Http/Controllers/PageContentController.php
+deleted file mode 100644
+index d0fdfc3..0000000
+--- a/app/Http/Controllers/PageContentController.php
++++ /dev/null
+@@ -1,51 +0,0 @@
+-<?php
+-
+-namespace App\Http\Controllers;
+-
+-use App\Actions\PageContent\BulkUpdatePageContentAction;
+-use App\Actions\PageContent\GetPageContentAction;
+-use App\Actions\PageContent\UpdatePageContentAction;
+-use App\DTOs\PageContent\BulkUpdatePageContentDTO;
+-use App\DTOs\PageContent\UpdatePageContentDTO;
+-use App\Http\Requests\PageContent\BulkUpdatePageContentRequest;
+-use App\Http\Requests\PageContent\UpdatePageContentRequest;
+-use App\Http\Resources\PageContent\PageContentResource;
+-use App\Repositories\PageContentRepository;
+-use Illuminate\Http\JsonResponse;
+-use Illuminate\Http\Request;
+-
+-class PageContentController extends Controller
+-{
+-    public function index(Request $request, GetPageContentAction $action): JsonResponse
+-    {
+-        $result = $action->execute(
+-            $request->string('page')->toString(),
+-            $request->filled('section') ? $request->string('section')->toString() : null,
+-        );
+-
+-        $resourced = $result->map(
+-            fn ($section) => $section->map(fn ($item) => new PageContentResource($item))
+-        );
+-
+-        return $this->success($resourced, __('messages.fetched'));
+-    }
+-
+-    public function show(int $id, PageContentRepository $repository): JsonResponse
+-    {
+-        return $this->success(new PageContentResource($repository->getById($id)), __('messages.fetched'));
+-    }
+-
+-    public function update(UpdatePageContentRequest $request, int $id, UpdatePageContentAction $action): JsonResponse
+-    {
+-        $pageContent = $action->execute($id, UpdatePageContentDTO::fromRequest($request));
+-
+-        return $this->success(new PageContentResource($pageContent), __('messages.updated'));
+-    }
+-
+-    public function bulkUpdate(BulkUpdatePageContentRequest $request, BulkUpdatePageContentAction $action): JsonResponse
+-    {
+-        $action->execute(BulkUpdatePageContentDTO::fromRequest($request));
+-
+-        return $this->success(null, __('messages.updated'));
+-    }
+-}
+diff --git a/app/Http/Controllers/SettingController.php b/app/Http/Controllers/SettingController.php
+deleted file mode 100644
+index 76677c5..0000000
+--- a/app/Http/Controllers/SettingController.php
++++ /dev/null
+@@ -1,30 +0,0 @@
+-<?php
+-
+-namespace App\Http\Controllers;
+-
+-use App\Actions\Setting\GetSettingsAction;
+-use App\Actions\Setting\UpdateSettingsAction;
+-use App\DTOs\Setting\UpdateSettingDTO;
+-use App\Http\Requests\Setting\UpdateSettingRequest;
+-use App\Http\Resources\Setting\SettingResource;
+-use Illuminate\Http\JsonResponse;
+-use Illuminate\Http\Request;
+-
+-class SettingController extends Controller
+-{
+-    public function index(Request $request, GetSettingsAction $action): JsonResponse
+-    {
+-        $result = $action->execute(
+-            $request->filled('group') ? $request->string('group')->toString() : null,
+-        );
+-
+-        return $this->success($result->map(fn ($setting) => new SettingResource($setting)), __('messages.fetched'));
+-    }
+-
+-    public function bulkUpdate(UpdateSettingRequest $request, UpdateSettingsAction $action): JsonResponse
+-    {
+-        $action->execute(UpdateSettingDTO::fromRequest($request));
+-
+-        return $this->success(null, __('messages.updated'));
+-    }
+-}
+diff --git a/app/Http/Controllers/TestimonialController.php b/app/Http/Controllers/TestimonialController.php
+deleted file mode 100644
+index 9eed09a..0000000
+--- a/app/Http/Controllers/TestimonialController.php
++++ /dev/null
+@@ -1,43 +0,0 @@
+-<?php
+-
+-namespace App\Http\Controllers;
+-
+-use App\Actions\Testimonial\CreateTestimonialAction;
+-use App\Actions\Testimonial\DeleteTestimonialAction;
+-use App\Actions\Testimonial\GetTestimonialsAction;
+-use App\Actions\Testimonial\UpdateTestimonialAction;
+-use App\DTOs\Testimonial\CreateTestimonialDTO;
+-use App\Http\Requests\Testimonial\StoreTestimonialRequest;
+-use App\Http\Resources\Testimonial\TestimonialResource;
+-use Illuminate\Http\JsonResponse;
+-
+-class TestimonialController extends Controller
+-{
+-    public function index(GetTestimonialsAction $action): JsonResponse
+-    {
+-        $activeOnly = ! auth('sanctum')->check();
+-
+-        return $this->success(TestimonialResource::collection($action->execute($activeOnly)), __('messages.fetched'));
+-    }
+-
+-    public function store(StoreTestimonialRequest $request, CreateTestimonialAction $action): JsonResponse
+-    {
+-        $testimonial = $action->execute(CreateTestimonialDTO::fromRequest($request));
+-
+-        return $this->created(new TestimonialResource($testimonial), __('messages.created'));
+-    }
+-
+-    public function update(StoreTestimonialRequest $request, int $id, UpdateTestimonialAction $action): JsonResponse
+-    {
+-        $testimonial = $action->execute($id, CreateTestimonialDTO::fromRequest($request));
+-
+-        return $this->success(new TestimonialResource($testimonial), __('messages.updated'));
+-    }
+-
+-    public function destroy(int $id, DeleteTestimonialAction $action): JsonResponse
+-    {
+-        $action->execute($id);
+-
+-        return $this->deleted(__('messages.deleted'));
+-    }
+-}
+diff --git a/app/Http/Controllers/TimelineController.php b/app/Http/Controllers/TimelineController.php
+deleted file mode 100644
+index 69cede4..0000000
+--- a/app/Http/Controllers/TimelineController.php
++++ /dev/null
+@@ -1,41 +0,0 @@
+-<?php
+-
+-namespace App\Http\Controllers;
+-
+-use App\Actions\Timeline\CreateTimelineAction;
+-use App\Actions\Timeline\DeleteTimelineAction;
+-use App\Actions\Timeline\GetTimelineAction;
+-use App\Actions\Timeline\UpdateTimelineAction;
+-use App\DTOs\Timeline\CreateTimelineDTO;
+-use App\Http\Requests\Timeline\StoreTimelineRequest;
+-use App\Http\Resources\Timeline\TimelineResource;
+-use Illuminate\Http\JsonResponse;
+-
+-class TimelineController extends Controller
+-{
+-    public function index(GetTimelineAction $action): JsonResponse
+-    {
+-        return $this->success(TimelineResource::collection($action->execute()), __('messages.fetched'));
+-    }
+-
+-    public function store(StoreTimelineRequest $request, CreateTimelineAction $action): JsonResponse
+-    {
+-        $timeline = $action->execute(CreateTimelineDTO::fromRequest($request));
+-
+-        return $this->created(new TimelineResource($timeline), __('messages.created'));
+-    }
+-
+-    public function update(StoreTimelineRequest $request, int $id, UpdateTimelineAction $action): JsonResponse
+-    {
+-        $timeline = $action->execute($id, CreateTimelineDTO::fromRequest($request));
+-
+-        return $this->success(new TimelineResource($timeline), __('messages.updated'));
+-    }
+-
+-    public function destroy(int $id, DeleteTimelineAction $action): JsonResponse
+-    {
+-        $action->execute($id);
+-
+-        return $this->deleted(__('messages.deleted'));
+-    }
+-}
+diff --git a/app/Http/Controllers/UserController.php b/app/Http/Controllers/UserController.php
+deleted file mode 100644
+index bd04933..0000000
+--- a/app/Http/Controllers/UserController.php
++++ /dev/null
+@@ -1,51 +0,0 @@
+-<?php
+-
+-namespace App\Http\Controllers;
+-
+-use App\Actions\User\CreateUserAction;
+-use App\Actions\User\DeleteUserAction;
+-use App\Actions\User\GetUsersAction;
+-use App\Actions\User\UpdateUserAction;
+-use App\DTOs\User\CreateUserDTO;
+-use App\DTOs\User\UpdateUserDTO;
+-use App\Http\Requests\User\StoreUserRequest;
+-use App\Http\Requests\User\UpdateUserRequest;
+-use App\Http\Resources\User\UserResource;
+-use App\Repositories\UserRepository;
+-use Illuminate\Http\JsonResponse;
+-
+-class UserController extends Controller
+-{
+-    public function index(GetUsersAction $action): JsonResponse
+-    {
+-        $result = $action->execute();
+-
+-        return $this->paginated(UserResource::collection($result), $result, __('messages.fetched'));
+-    }
+-
+-    public function store(StoreUserRequest $request, CreateUserAction $action): JsonResponse
+-    {
+-        $user = $action->execute(CreateUserDTO::fromRequest($request));
+-
+-        return $this->created(new UserResource($user), __('messages.created'));
+-    }
+-
+-    public function show(int $id, UserRepository $repository): JsonResponse
+-    {
+-        return $this->success(new UserResource($repository->getById($id)), __('messages.fetched'));
+-    }
+-
+-    public function update(UpdateUserRequest $request, int $id, UpdateUserAction $action): JsonResponse
+-    {
+-        $user = $action->execute($id, UpdateUserDTO::fromRequest($request));
+-
+-        return $this->success(new UserResource($user), __('messages.updated'));
+-    }
+-
+-    public function destroy(int $id, DeleteUserAction $action): JsonResponse
+-    {
+-        $action->execute($id);
+-
+-        return $this->deleted(__('messages.deleted'));
+-    }
+-}
+diff --git a/routes/admin.php b/routes/admin.php
+index 2ca5c4b..728f0e8 100644
+--- a/routes/admin.php
++++ b/routes/admin.php
+@@ -1,25 +1,38 @@
+ <?php
+ 
+-use App\Http\Controllers\Admin;
++use App\Http\Controllers\Admin\Auth\AuthController;
++use App\Http\Controllers\Admin\BranchController;
++use App\Http\Controllers\Admin\Catering\CateringPackageController;
++use App\Http\Controllers\Admin\Catering\QuoteRequestController;
++use App\Http\Controllers\Admin\Catering\SampleMenuController;
++use App\Http\Controllers\Admin\CategoryController;
++use App\Http\Controllers\Admin\DeliveryAppController;
++use App\Http\Controllers\Admin\DishController;
++use App\Http\Controllers\Admin\MediaItemController;
++use App\Http\Controllers\Admin\PageContentController;
++use App\Http\Controllers\Admin\SettingController;
++use App\Http\Controllers\Admin\TestimonialController;
++use App\Http\Controllers\Admin\TimelineController;
++use App\Http\Controllers\Admin\UserController;
+ use Illuminate\Support\Facades\Route;
+ 
+ Route::prefix('v1/admin')->middleware(['set.locale'])->group(function () {
+ 
+     // ── Auth ──────────────────────────────────────────────
+-    Route::prefix('auth')->controller(Admin\Auth\AuthController::class)->group(function () {
++    Route::prefix('auth')->controller(AuthController::class)->group(function () {
+         Route::post('/login', 'login');
+     });
+ 
+     Route::middleware('auth:sanctum')->group(function () {
+ 
+         // ── Auth (protected) ──────────────────────────────
+-        Route::prefix('auth')->controller(Admin\Auth\AuthController::class)->group(function () {
++        Route::prefix('auth')->controller(AuthController::class)->group(function () {
+             Route::post('/logout', 'logout');
+             Route::get('/me',      'me');
+         });
+ 
+         // ── Page Contents ─────────────────────────────────
+-        Route::prefix('page-contents')->controller(Admin\PageContentController::class)->group(function () {
++        Route::prefix('page-contents')->controller(PageContentController::class)->group(function () {
+             Route::get('/',       'index');
+             Route::get('/{id}',   'show');
+             Route::put('/{id}',   'update');
+@@ -27,7 +40,7 @@
+         });
+ 
+         // ── Media Items ───────────────────────────────────
+-        Route::prefix('media-items')->controller(Admin\MediaItemController::class)->group(function () {
++        Route::prefix('media-items')->controller(MediaItemController::class)->group(function () {
+             Route::get('/',        'index');
+             Route::get('/{id}',    'show');
+             Route::post('/',       'store');
+@@ -36,13 +49,13 @@
+         });
+ 
+         // ── Settings ──────────────────────────────────────
+-        Route::prefix('settings')->controller(Admin\SettingController::class)->group(function () {
++        Route::prefix('settings')->controller(SettingController::class)->group(function () {
+             Route::get('/',  'index');
+             Route::put('/',  'bulkUpdate');
+         });
+ 
+         // ── Dishes ────────────────────────────────────────
+-        Route::prefix('dishes')->controller(Admin\DishController::class)->group(function () {
++        Route::prefix('dishes')->controller(DishController::class)->group(function () {
+             Route::get('/',        'index');
+             Route::post('/',       'store');
+             Route::get('/{id}',    'show');
+@@ -51,7 +64,7 @@
+         });
+ 
+         // ── Categories ────────────────────────────────────
+-        Route::prefix('categories')->controller(Admin\CategoryController::class)->group(function () {
++        Route::prefix('categories')->controller(CategoryController::class)->group(function () {
+             Route::get('/',        'index');
+             Route::post('/',       'store');
+             Route::put('/{id}',    'update');
+@@ -59,7 +72,7 @@
+         });
+ 
+         // ── Branches ──────────────────────────────────────
+-        Route::prefix('branches')->controller(Admin\BranchController::class)->group(function () {
++        Route::prefix('branches')->controller(BranchController::class)->group(function () {
+             Route::get('/',        'index');
+             Route::post('/',       'store');
+             Route::get('/{id}',    'show');
+@@ -69,7 +82,7 @@
+ 
+         // ── Catering Packages ─────────────────────────────
+         Route::prefix('catering/packages')
+-            ->controller(Admin\Catering\CateringPackageController::class)
++            ->controller(CateringPackageController::class)
+             ->group(function () {
+                 Route::get('/',        'index');
+                 Route::post('/',       'store');
+@@ -79,7 +92,7 @@
+ 
+         // ── Sample Menus ──────────────────────────────────
+         Route::prefix('catering/sample-menus')
+-            ->controller(Admin\Catering\SampleMenuController::class)
++            ->controller(SampleMenuController::class)
+             ->group(function () {
+                 Route::get('/',        'index');
+                 Route::post('/',       'store');
+@@ -89,7 +102,7 @@
+ 
+         // ── Quote Requests ────────────────────────────────
+         Route::prefix('catering/quote-requests')
+-            ->controller(Admin\Catering\QuoteRequestController::class)
++            ->controller(QuoteRequestController::class)
+             ->group(function () {
+                 Route::get('/',              'index');
+                 Route::get('/{id}',          'show');
+@@ -97,7 +110,7 @@
+             });
+ 
+         // ── Testimonials ──────────────────────────────────
+-        Route::prefix('testimonials')->controller(Admin\TestimonialController::class)->group(function () {
++        Route::prefix('testimonials')->controller(TestimonialController::class)->group(function () {
+             Route::get('/',        'index');
+             Route::post('/',       'store');
+             Route::put('/{id}',    'update');
+@@ -105,7 +118,7 @@
+         });
+ 
+         // ── Timeline ──────────────────────────────────────
+-        Route::prefix('timeline')->controller(Admin\TimelineController::class)->group(function () {
++        Route::prefix('timeline')->controller(TimelineController::class)->group(function () {
+             Route::get('/',        'index');
+             Route::post('/',       'store');
+             Route::put('/{id}',    'update');
+@@ -113,7 +126,7 @@
+         });
+ 
+         // ── Delivery Apps ─────────────────────────────────
+-        Route::prefix('delivery-apps')->controller(Admin\DeliveryAppController::class)->group(function () {
++        Route::prefix('delivery-apps')->controller(DeliveryAppController::class)->group(function () {
+             Route::get('/',        'index');
+             Route::post('/',       'store');
+             Route::put('/{id}',    'update');
+@@ -121,7 +134,7 @@
+         });
+ 
+         // ── Users ─────────────────────────────────────────
+-        Route::prefix('users')->controller(Admin\UserController::class)->group(function () {
++        Route::prefix('users')->controller(UserController::class)->group(function () {
+             Route::get('/',        'index');
+             Route::post('/',       'store');
+             Route::get('/{id}',    'show');

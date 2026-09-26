@@ -1,0 +1,13 @@
+{
+  "defect_present": "YES",
+  "defect": "The rewrite of lang/ar/validation.php deletes translations that existed before and does not restore them in either new file. These are 'min.array', 'max.array' and the attribute names is_active, is_featured, is_signature, label_ar, label_en, feature_ar, feature_en, price_starting_from, logo and settings. The translator falls back per key, from ar to fallback_locale en, where the app file also lacks them and only the framework's English file answers. So for an Arabic request, any failing rule on those fields, or any array min/max failure, now returns an English sentence, or an Arabic sentence with the raw attribute name ('حقل is active ...'). Before this commit these came back as proper Arabic. The same commit flips the default config('app.locale') from 'en' to 'ar'. That makes Arabic the path most clients hit, and it silently changes every response message and every locale-resolved resource field to Arabic for any client that sends no locale. Either counts. The translation loss is the one clearly not intended by a commit that says it adds files.",
+  "required_context": [
+    "app/Http/Requests/**/*Request.php::rules (which FormRequests validate is_active, is_featured, is_signature, label_*, feature_*, price_starting_from, logo, settings, or apply min/max to arrays; e.g. app/Http/Requests/Catering/StorePackageRequest.php::rules, app/Http/Requests/Dish/StoreDishRequest.php::rules, app/Http/Requests/DeliveryApp/StoreDeliveryAppRequest.php::rules, app/Http/Requests/Setting/UpdateSettingRequest.php::rules)",
+    "app/Http/Middleware/SetLocale.php::handle (what locale it picks when the client sends none, and whether it defers to config('app.locale'))",
+    "bootstrap/app.php (the set.locale alias and which route groups carry it)",
+    ".env / deployment APP_LOCALE (whether it is set explicitly, which would neutralise the default flip)",
+    "tests/Feature/* (assertions on English message strings or on English validation text)",
+    "app/Http/Controllers/Controller.php and its response trait::success/created/deleted/paginated (to confirm the message argument is passed through untransformed)",
+    "database/factories/* (any factory output that assumes en_US Faker data, now ar_SA)"
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "defect_present": "YES",
+  "defect": "TWO defects, either of which counts as detected. (a) upload() deletes the previously stored file and writes the new one to disk BEFORE the database write, with no transaction and no cleanup, so a failed Setting write leaves an orphaned file and the old file already gone. (b) payload() returns 'permanent_url' => route('menu.pdf'), the API domain, when the URL handed to users must be the frontend domain.",
+  "required_context": [
+    "the caller of upload(), to know whether a transaction surrounds it",
+    "app/Models/Setting.php fillable",
+    "config/app.php frontend_url"
+  ]
+}

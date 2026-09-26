@@ -1,0 +1,60 @@
+diff --git a/app/Actions/MediaItem/GetMediaItemsAction.php b/app/Actions/MediaItem/GetMediaItemsAction.php
+index 513c779..edf298f 100644
+--- a/app/Actions/MediaItem/GetMediaItemsAction.php
++++ b/app/Actions/MediaItem/GetMediaItemsAction.php
+@@ -12,9 +12,9 @@ public function __construct(
+         private readonly MediaItemRepository $repository,
+     ) {}
+ 
+-    public function execute(string $page, ?string $section = null): Collection
++    public function execute(?string $page = null, ?string $section = null): Collection
+     {
+-        $key = "media_items_{$page}_{$section}";
++        $key = 'media_items_' . ($page ?? 'all') . '_' . ($section ?? 'all');
+ 
+         return Cache::tags(['media_items'])->remember(
+             $key,
+diff --git a/app/Http/Controllers/Admin/MediaItemController.php b/app/Http/Controllers/Admin/MediaItemController.php
+index 87a24a5..b2b4574 100644
+--- a/app/Http/Controllers/Admin/MediaItemController.php
++++ b/app/Http/Controllers/Admin/MediaItemController.php
+@@ -18,7 +18,7 @@ class MediaItemController extends Controller
+     public function index(Request $request, GetMediaItemsAction $action): JsonResponse
+     {
+         $result = $action->execute(
+-            $request->string('page')->toString(),
++            $request->filled('page') ? $request->string('page')->toString() : null,
+             $request->filled('section') ? $request->string('section')->toString() : null,
+         );
+ 
+diff --git a/app/Models/MediaItem.php b/app/Models/MediaItem.php
+index 1877fbf..8d78596 100644
+--- a/app/Models/MediaItem.php
++++ b/app/Models/MediaItem.php
+@@ -21,9 +21,11 @@ class MediaItem extends Model
+         'height',
+     ];
+ 
+-    public function scopeForPage(Builder $query, string $page, ?string $section = null): Builder
++    public function scopeForPage(Builder $query, ?string $page = null, ?string $section = null): Builder
+     {
+-        $query->where('page', $page);
++        if ($page !== null) {
++            $query->where('page', $page);
++        }
+ 
+         if ($section !== null) {
+             $query->where('section', $section);
+diff --git a/app/Repositories/MediaItemRepository.php b/app/Repositories/MediaItemRepository.php
+index e52abd0..7dbbde9 100644
+--- a/app/Repositories/MediaItemRepository.php
++++ b/app/Repositories/MediaItemRepository.php
+@@ -7,7 +7,7 @@
+ 
+ class MediaItemRepository
+ {
+-    public function getByPage(string $page, ?string $section = null): Collection
++    public function getByPage(?string $page = null, ?string $section = null): Collection
+     {
+         return MediaItem::forPage($page, $section)
+             ->get()

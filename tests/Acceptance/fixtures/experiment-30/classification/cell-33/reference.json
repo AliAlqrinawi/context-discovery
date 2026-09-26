@@ -1,0 +1,13 @@
+{
+  "defect_present": "NO",
+  "defect": "-",
+  "required_context": [
+    "routes/api.php (whether any public route still references a deleted class: App\\Http\\Controllers\\{Branch,Category,DeliveryApp,Dish,MediaItem,PageContent,Setting,Testimonial,Timeline,User}Controller, App\\Http\\Controllers\\Catering\\*, App\\Http\\Controllers\\Auth\\AuthController)",
+    "app/Actions/DeliveryApp/GetDeliveryAppsAction.php::execute (parameter must be named $activeOnly for the new named-argument call)",
+    "app/Actions/Testimonial/GetTestimonialsAction.php::execute (same named-argument dependency)",
+    "app/Http/Controllers/Public/Catering/QuoteRequestController.php::store, or wherever the public quote submission now lives (the deleted base controller carried store; the new Admin copy does not)",
+    "routes/web.php, routes/console.php and any other route files",
+    "tests/** and app/** for references to the deleted classes",
+    "app/Http/Controllers/Controller.php (the helpers the copies now reach directly instead of through the old parent)"
+  ]
+}

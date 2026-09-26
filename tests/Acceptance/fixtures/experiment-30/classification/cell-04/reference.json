@@ -1,0 +1,7 @@
+{
+  "defect_present": "YES",
+  "defect": "Public DishController::index passes the raw 'featured' and 'signature' query parameters straight through $request->only([...]). Query parameters arrive as strings, so 'false' and '0' are truthy when the repository uses them in a where clause — ?featured=false returns featured dishes.",
+  "required_context": [
+    "app/Repositories/DishRepository.php::getAll — how the filter values are used in the query"
+  ]
+}

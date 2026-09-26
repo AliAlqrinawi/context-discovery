@@ -1,0 +1,15 @@
+{
+  "defect_present": "YES",
+  "defect": "routes/admin.php changes four existing update routes (the groups at the hunks near lines 72, 89, 99 and 109) from Route::post('/{id}', 'update') to Route::put('/{id}', 'update'). It also registers the new personalities update as PUT, although UpdatePersonalityRequest/UpdatePersonalityAction accept an 'image' file upload. Two things follow. First, any existing client that updates those four resources with POST /{id} now gets 405 Method Not Allowed; the commit is about adding personalities and does not mention this. Second, PHP does not parse multipart/form-data bodies on PUT, so a genuine multipart PUT reaches Laravel with an empty input bag and no files. Because every update rule is nullable, the request passes validation, the DTO is all nulls, Arr::whereNotNull empties $data, and the endpoint returns 200 having changed nothing: the uploaded image and fields are silently dropped. Only clients that POST with _method=PUT (method spoofing) keep working. The POST /{id} routes were very likely that workaround, which this change removes.",
+  "required_context": [
+    "routes/admin.php (full file, to identify which four resource groups were switched and whether their update requests take files)",
+    "app/Http/Requests/*/Update*Request.php::rules for those four resources (file/image fields)",
+    "the admin frontend's update calls for those resources (POST with or without _method, multipart or JSON); outside this repository",
+    "tests/Feature/* admin tests that postJson/post to /api/v1/admin/<resource>/{id}",
+    "config/cache.php 'default' and .env CACHE_STORE (Cache::tags throws on file/database stores)",
+    "database/seeders/PageContentSeeder.php::run (bulk insert vs per-row updateOrCreate) and the page_contents migration (whether a 'type' column exists)",
+    "app/Services/ImageService.php::store and ::delete (return shape ['path','url'] and failure behaviour)",
+    "app/Http/Requests/BaseFormRequest.php",
+    "app/Http/Resources/Concerns/ResolvesLocale.php::resolveLocale"
+  ]
+}

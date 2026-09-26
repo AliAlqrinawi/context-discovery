@@ -231,3 +231,16 @@ files before and after). This is **weaker than per-session capture**: it records
 attests the settings were, not what each session reported. A later reader should weigh the
 model attribution for cells 02–36 accordingly.
 
+---
+
+## Note · 2026-09-26 · `classification/` built; the reference travels per cell
+
+Appended, not edited. `classification/cell-NN/` was built from the committed observations and
+packets after all thirty-six were in. The classifier handoff had described a single `keys.json`
+keyed by task id and a `task.txt` per cell; both would have named the task, so instead each cell
+carries `reference.json` with only `defect_present`, `defect` and `required_context` from the
+locked key, and no task id, arm, commit, subject or count. The classifier's `classes.tsv` has
+no `task` column; the task and arm are joined from the mapping after it is opened. The
+`inherited_member_dependence` field is not given to the classifier - it is used only after
+unsealing, to fix Q-harm's population (T1, T2), and the classifier has no use for it.
+
