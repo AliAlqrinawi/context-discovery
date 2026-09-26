@@ -216,3 +216,18 @@ arm A's does not (T2, T3, T4, T6, T8). They are part of arm B as built. §6.1's 
 §8's reading are therefore **confounded by S2**: a positive Q-ask result is a result of S1 *and*
 S2 together, and the write-up must say so and name the tasks.
 
+---
+
+## Note · 2026-09-26 · the model headers on cells 02–36 were added after the fact
+
+Appended, not edited. §4 asks that every observation file record the reviewer model's id,
+version and sampling settings. As returned, only `cell-01.md` carried that line; cells 02–36
+began at `Q1:`. On the author's attestation that all thirty-six cells ran under identical
+settings - a fresh Claude Sonnet 4.5 session per cell on claude.ai, default sampling, no model
+change at any point - the line `model: Claude Sonnet 4.5 · version: claude.ai UI 2026-09-26 ·
+sampling: default`, identical to cell-01's, was **prepended to cells 02–36 by the author after
+the sessions had run**, leaving every answer line byte-untouched (verified by comparing the
+files before and after). This is **weaker than per-session capture**: it records what the author
+attests the settings were, not what each session reported. A later reader should weigh the
+model attribution for cells 02–36 accordingly.
+
