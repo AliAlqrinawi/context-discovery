@@ -1,90 +1,75 @@
-# CONTINUE.md — the reviewer measurement (ADR-E001)
+# CONTINUE.md — the dashboard
 
 Work through this in order without asking, until a STOP.
 At a STOP: write what you have, push, and wait.
 
 ## Where things stand
-Option B is built, measured by the scorer, and recorded (M33, M34).
-The scorer has reached its limit: it can say recognition is complete
-(37/37) and cannot say whether a citation helps a reviewer.
-The second author's four defect keys are in hand.
+The engine is closed. The contract is frozen at v2. The backend,
+its API and the scorer work. Five measurements exist (M30-M35) and
+the reviewer experiment is resolved and recorded (ADR-A030).
 
-## This is a measurement, not a delivery
-The outcome is not known. ADR-E001 §8 names three conditions under
-which option B is REVERTED. A negative result is a successful
-milestone, not a failure to fix. Do not adjust the design, the keys,
-or the protocol to make option B look better.
+Everything this project has built has only ever been looked at
+through raw JSON. This builds the thing that makes it visible.
 
-Specifically forbidden:
-- Editing any locked key.
-- Changing classification criteria after seeing answers.
-- Building the aggregation arm as a response to a negative Q-ask or
-  to condition (3).
-- Re-running a cell because its answer was unexpected.
-- Reporting a ratio without the rows behind it.
+## Part 1 — ADR-B004: scope and stack
 
-## Work, in order
+Pick the stack yourself and justify it. Constraints:
+- internal research tool, one user, local only
+- runs with one command
+- no build step the project cannot reproduce
+- served by the existing API; the backend is the only source of
+  truth
 
-### 1. Lock the defect keys
-Place the second author's four objects in
-experiment-30/answer-key.json with the reused M20/M22 keys for
-T3, T6, T7, T8, T0. Commit as locked.
+Record what you rejected and why.
 
-### 2. Record three observations in ADR-E001 (dated note)
-- Independent convergence on T1: the second author named the same
-  defect as my context key K.4 (dropped min.array/max.array and
-  attribute labels) with a fuller mechanism, without having seen it.
-  Strongest evidence the context isolation held.
-- Independent divergence on T2: their primary defect is the POST→PUT
-  switch (405 for existing clients; PHP does not parse multipart on
-  PUT, so a real update validates, empties through
-  Arr::whereNotNull, and returns 200 having changed nothing). My key
-  did not see it; they list Cache::tags only as a hedge.
-- inherited_member_dependence is NO on all four tasks. Q-ask's
-  population may be thin or empty on this corpus, and Q-harm becomes
-  load-bearing. Do NOT compensate. If Q-ask has no population, that
-  is a result about the corpus and is reported as one.
+## Part 2 — what it must show, in this order
 
-### 3. Fix the spread
-Run option B on T4-T8 and T0. Report the S1 count per task.
-If the spread is too narrow to separate 37 from 2, say so plainly —
-that weakens Q-harm and must be stated before any cell runs.
+**Runs list.** Repository, commit, engine, vendor mode, budget,
+status, item count, token count, when. Filter by repository,
+engine, status, input_key.
 
-### 4. Cut the packets
-cd:packet:export for every (task, arm). Packets derive from stored
-bytes only. Verify each arm pair differs ONLY by S1 items and their
-stderr lines; if anything else differs, STOP and report.
+**Run detail.**
+- the run block: engine / policy / framework-table versions,
+  diff sha, repo sha
+- assertions as entities, each with kind, subject, reason, origin,
+  and its items nested under it. This is the structure v2 exists
+  for — do not flatten it back
+- each item: lever, provenance, payload, tokens
+- diagnostics, dropped
+- raw bundle, stderr and diff, each one click away
 
-### 5. STOP
-The cells need fresh sessions I cannot open. Write the cell list and
-the exact material to paste, one file per cell, and tell me what to
-run. Seal the arm mapping before I start.
+**Diff view.** The stored diff with discovered context beside the
+region that caused it. An assertion's origin points at a place in
+the diff; make that visible.
 
-### 6. After the answers come back
-Record them verbatim. Run the blind classifier material. Derive the
-four classes mechanically once the mapping opens. Report:
-- Q-ask per cell, with the Q3/Q5 text behind each class
-- Q-harm: keyed-defect identification per arm per task, against the
-  control's noise floor
-- Which of ADR-E001 §8's three conditions hold, if any
+**Score view.** For a scored run: assertion precision, key recall,
+unkeyed count, the four item verdicts, count- and token-weighted.
+Every ratio expands to the rows behind it. A bare number with no
+rows is what this project has spent its whole history avoiding.
 
-### 7. Write it up and STOP
-docs/research/, sibling conventions. State the result as measured.
-If option B should be reverted, say so and stop — do not revert in
-the same step.
+**Key view.** A locked key's rows, with each row's verdict on each
+scored run: satisfied, missed, violated, vacuous.
+
+## Part 3 — what it must NOT do
+- No editing. Read-only, entirely.
+- No number computed in the browser. Everything from the API.
+- No comparison view — that is Phase 6 and needs its own design.
+- No auth beyond what the API has.
+- No charts implying a trend across three data points.
+
+## Part 4 — tests, push, STOP
+Report: the stack and why, how to run it, and what you would
+build next.
 
 ## Stop conditions
-- Any decision not already recorded in ADR-E001, A027, A028, A029,
-  B002, B003.
-- Any arm pair differing by more than the S1 items.
-- Any measurement contradicting a recorded estimate.
-- Any key edit, or any temptation to write one.
-- Anything that would rewrite history rather than append.
-- Q-ask turning out to have no population — report, do not redesign.
+- Any change to the engine. It is finished; this is a viewer.
+- Any number computed in the frontend rather than read from the API.
+- Any API change beyond a read endpoint the dashboard needs — and
+  if you add one, record it in an ADR first.
+- Any edit to a locked key, a golden, or a recorded measurement.
 
 ## Standing rules
 - Append, never rewrite. Errata are dated.
-- Verify by running. Establish the reference first.
+- Verify by running, not by argument.
 - Report numbers as measured; if one looks wrong, say so.
 - When you correct yourself, say what was wrong and where.
-- Never tune anything against its own test set.
