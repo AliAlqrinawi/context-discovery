@@ -454,3 +454,13 @@ variance and the design's noise floor was zero by absence of response, not by ab
 This negative is bounded by that. **Option B is not reverted by this note**; §8's consequence is
 a decision taken after M35 is read, and this ADR records only that condition (3) held.
 
+---
+
+## Consequence · 2026-09-27 · decided in architecture ADR-A030
+
+Condition (3) held and stands as pre-registered - not waived, not reinterpreted, not weakened.
+Option B is **kept**, on the single ground that this instrument showed no resolution (M35 §7),
+and is marked **EVIDENCE-UNSUPPORTED**. What would settle the question - a reviewer measurement
+with demonstrated resolution on the identical-packet control - and the examined precedent are
+recorded there. Nothing in this ADR's §§2–8 changes.
+
