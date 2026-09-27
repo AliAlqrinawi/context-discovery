@@ -310,3 +310,18 @@ cell    q1    q4    correct_decision    defect_identified    q5_verbatim    q3_t
 Superseded by the cell-01 row produced from `classification/paste/cell-01.md` as rebuilt
 (engine `3fabae1`). The reviewer observation behind it is unchanged.
 
+---
+
+## Note · 2026-09-27 · cell-02's first classification was lost unsaved and re-run
+
+Appended, not edited. cell-02's classifier session was run on the corrected paste, but its
+two-line output was lost on the author's side before it was saved, and the session was run
+again. This differs from cell-01's superseded run: there the cause was the classification
+material's build error and the first output exists, recorded above; **here the cause is a
+handling loss on the author's side, and the first output does not exist to be recorded.**
+
+A lost-and-re-run cell is **weaker than one captured on first pass**: nothing can show that the
+second output equals what the first would have said. It is the only such cell among the
+thirty-six. The reviewer observation behind cell-02 is unchanged; only the classifier's
+reading of it was re-taken.
+
