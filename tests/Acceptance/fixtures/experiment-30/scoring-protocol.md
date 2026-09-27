@@ -294,3 +294,19 @@ the classifier is not the authority on which cell it saw. The classifier's own v
 against the source; where they disagree, the source file wins and the disagreement goes in
 `notes`.
 
+---
+
+## Note · 2026-09-27 · cell-01's first classifier output, verbatim - SUPERSEDED
+
+Produced on corrupted input (the stray `t` line, no identifier), before the corrected re-run.
+Recorded as received from the author, both lines, field separators as pasted; it is not a row
+of `classes.tsv` and is not counted.
+
+```
+cell    q1    q4    correct_decision    defect_identified    q5_verbatim    q3_text    q3_names_path    q3_path_term    q5_quotes_assumption    q3_names_cited_member    notes
+-    YES    MEDIUM    YES    NO    YES    composer.json::config.platform.php    NO    -    NO    NO    No cell identifier was given (answers.md opens with a stray line "t"). The Q5 string occurs in the composer.lock hunk of change.diff. Q2 names a PHP-version/lockfile mismatch, which is neither reference defect (a) nor (b).
+```
+
+Superseded by the cell-01 row produced from `classification/paste/cell-01.md` as rebuilt
+(engine `3fabae1`). The reviewer observation behind it is unchanged.
+
