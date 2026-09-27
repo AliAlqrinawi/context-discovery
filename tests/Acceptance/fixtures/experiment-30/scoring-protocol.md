@@ -257,3 +257,40 @@ not reading other cells become moot and are dropped) with that cell's five files
 session returns the header and one row; the rows are appended in numeric order - the sealed
 order - as `classification/classes.tsv`. Criteria unchanged.
 
+---
+
+## Note · 2026-09-27 · a build error in the classification material, corrected; cell-01's first classifier output superseded
+
+Appended, not edited.
+
+**The error.** Building `classification/cell-NN/answers.md`, the model header was removed by
+slicing the observation's bytes at the header's *character* length; the header holds two `·`
+characters of two bytes each, so the slice left the header's last two bytes, `t` + newline, as a
+stray first line before `Q1:`. **All thirty-six** `answers.md` files and all thirty-six
+`classification/paste/cell-NN.md` files carried it. Separately, the paste files identified their
+cell only in an HTML comment, which the classifier did not read, so cell-01's row came back
+with an empty `cell` field.
+
+**No cell ran on clean input.** Only cell-01's classifier session had been run when the error
+was found; every other paste was equally affected and had not been used. So exactly one
+classifier output is superseded and nothing else is.
+
+**cell-01's first classifier output** is to be recorded here verbatim, both lines, on receipt
+from the author, labelled: *produced on corrupted input (stray `t` line, no identifier);
+superseded by the re-run on corrected input.* Re-running cell-01's **classifier** session here
+corrects the author's build error - the input the classifier read was not the observation - and
+is **not** a re-run for an unexpected result. The no-re-run rule stands for everything else: no
+reviewer cell is touched, and no classifier cell is re-run for any other reason.
+
+**The committed observations were untouched**, verified two ways: `git diff c5c1ab5 --
+observations/` is empty, and each of the thirty-six files begins with the bytes `model: C…`
+(checked byte-wise, all 36 identical in their first eight bytes).
+
+**The correction.** `answers.md` is now the observation with its first *line* removed, and each
+was verified byte-identical to `observations/cell-NN.md` minus that line. The paste files
+carry a plain-text line *"This cell's identifier is `cell-NN`"* and ask for it in the `cell`
+column. **The `cell` field is assembled by the author from the paste file the row came from**;
+the classifier is not the authority on which cell it saw. The classifier's own value is checked
+against the source; where they disagree, the source file wins and the disagreement goes in
+`notes`.
+

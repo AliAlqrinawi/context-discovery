@@ -1,4 +1,5 @@
-<!-- cell-32 -->
+# cell-32
+
 # Classification · reviewer answers against a reference
 
 You are classifying the answers that code reviewers gave about commits from one Laravel
@@ -17,6 +18,8 @@ and a `===== END <name> =====` line:
   `path::member` strings);
 - `change.diff`, `context-bundle.md`, `context-diagnostics.txt` — the exact three files that
   reviewer was given.
+
+**This cell's identifier is `cell-32`. Write exactly that in the `cell` column.**
 
 You will not be told anything else about this cell, and you must not try to infer anything about
 it beyond what the rules ask.
@@ -58,7 +61,6 @@ Fill each column by these rules and no others:
 ---
 
 ===== BEGIN answers.md =====
-t
 Q1: YES
 Q2: The commit deletes the non-admin controllers, including `App\Http\Controllers\Catering\QuoteRequestController::store` (public quote submission via `SubmitQuoteRequestAction`, which the new Admin class does not carry over) and the `DeliveryAppController`/`TestimonialController` whose `auth('sanctum')->check()` branch shows they served guests, without touching any public route file, so any public route still pointing at these classes fails with a missing-class error and guest quote submission disappears.
 Q3: routes/api.php

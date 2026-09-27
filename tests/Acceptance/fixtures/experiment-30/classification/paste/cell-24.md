@@ -1,4 +1,5 @@
-<!-- cell-24 -->
+# cell-24
+
 # Classification · reviewer answers against a reference
 
 You are classifying the answers that code reviewers gave about commits from one Laravel
@@ -17,6 +18,8 @@ and a `===== END <name> =====` line:
   `path::member` strings);
 - `change.diff`, `context-bundle.md`, `context-diagnostics.txt` — the exact three files that
   reviewer was given.
+
+**This cell's identifier is `cell-24`. Write exactly that in the `cell` column.**
 
 You will not be told anything else about this cell, and you must not try to infer anything about
 it beyond what the rules ask.
@@ -58,7 +61,6 @@ Fill each column by these rules and no others:
 ---
 
 ===== BEGIN answers.md =====
-t
 Q1: YES
 Q2: The new `Public\DishController::index` passes raw query-string values from `$request->only([...])` into `GetDishesAction`, where the replaced code first coerced them with `boolean()`/`integer()`; so `?featured=false` or `?signature=0` reach the repository filter as the non-empty strings "false"/"0", and `category_id`/`per_page` arrive uncast, which can apply the wrong featured/signature filter on the public dish list.
 Q3: app/Repositories/DishRepository.php::getAll

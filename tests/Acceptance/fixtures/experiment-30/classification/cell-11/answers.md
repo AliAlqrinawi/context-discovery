@@ -1,4 +1,3 @@
-t
 Q1: NO
 Q2: -
 Q3: app/Http/Middleware/SetLocale.php::handle

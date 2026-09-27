@@ -1,4 +1,5 @@
-<!-- cell-17 -->
+# cell-17
+
 # Classification · reviewer answers against a reference
 
 You are classifying the answers that code reviewers gave about commits from one Laravel
@@ -17,6 +18,8 @@ and a `===== END <name> =====` line:
   `path::member` strings);
 - `change.diff`, `context-bundle.md`, `context-diagnostics.txt` — the exact three files that
   reviewer was given.
+
+**This cell's identifier is `cell-17`. Write exactly that in the `cell` column.**
 
 You will not be told anything else about this cell, and you must not try to infer anything about
 it beyond what the rules ask.
@@ -58,7 +61,6 @@ Fill each column by these rules and no others:
 ---
 
 ===== BEGIN answers.md =====
-t
 Q1: YES
 Q2: The commit switches the admin `update` routes for dishes, branches, catering packages and sample menus from `POST /{id}` to `PUT /{id}` (and adds `PUT` for personalities), but these endpoints take `multipart/form-data` image uploads, and PHP does not parse multipart bodies on a real PUT, so `$request->file('image')` and the other fields arrive empty; existing clients that POST now get 405, and genuine PUT uploads are silently dropped or validation-failed.
 Q3: app/DTOs/Dish/UpdateDishDTO.php::fromRequest

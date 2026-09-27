@@ -1,4 +1,5 @@
-<!-- cell-35 -->
+# cell-35
+
 # Classification · reviewer answers against a reference
 
 You are classifying the answers that code reviewers gave about commits from one Laravel
@@ -17,6 +18,8 @@ and a `===== END <name> =====` line:
   `path::member` strings);
 - `change.diff`, `context-bundle.md`, `context-diagnostics.txt` — the exact three files that
   reviewer was given.
+
+**This cell's identifier is `cell-35`. Write exactly that in the `cell` column.**
 
 You will not be told anything else about this cell, and you must not try to infer anything about
 it beyond what the rules ask.
@@ -58,7 +61,6 @@ Fill each column by these rules and no others:
 ---
 
 ===== BEGIN answers.md =====
-t
 Q1: CANNOT_TELL
 Q2: -
 Q3: app/Repositories/MediaItemRepository.php::getByPage

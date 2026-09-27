@@ -1,4 +1,5 @@
-<!-- cell-13 -->
+# cell-13
+
 # Classification · reviewer answers against a reference
 
 You are classifying the answers that code reviewers gave about commits from one Laravel
@@ -17,6 +18,8 @@ and a `===== END <name> =====` line:
   `path::member` strings);
 - `change.diff`, `context-bundle.md`, `context-diagnostics.txt` — the exact three files that
   reviewer was given.
+
+**This cell's identifier is `cell-13`. Write exactly that in the `cell` column.**
 
 You will not be told anything else about this cell, and you must not try to infer anything about
 it beyond what the rules ask.
@@ -58,7 +61,6 @@ Fill each column by these rules and no others:
 ---
 
 ===== BEGIN answers.md =====
-t
 Q1: YES
 Q2: The lockfile pins endroid/qr-code 6.1.3, which requires PHP ^8.4, while composer.json still declares "php": "^8.2", so on any PHP 8.2/8.3 host `composer install` refuses the lock (or Composer's platform check fatals on boot), which breaks the whole application and not only the new menu/QR routes.
 Q3: composer.json::config.platform.php
