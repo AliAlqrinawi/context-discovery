@@ -244,3 +244,16 @@ no `task` column; the task and arm are joined from the mapping after it is opene
 `inherited_member_dependence` field is not given to the classifier - it is used only after
 unsealing, to fix Q-harm's population (T1, T2), and the classifier has no use for it.
 
+---
+
+## Note · 2026-09-27 · the classifier runs one fresh session per cell
+
+Appended, not edited. The classification material is ~3.3 MB with the packets the Q5 check
+needs, so one session cannot hold thirty-six cells, and one session holding several would let
+the classifier compare packets across cells, which the handoff forbids. The classifier therefore
+runs as **one fresh Claude Opus session per cell**, given `classification/paste/cell-NN.md` - the
+single-cell variant of the handoff (same columns, same rules; the rules about cell order and
+not reading other cells become moot and are dropped) with that cell's five files inline. Each
+session returns the header and one row; the rows are appended in numeric order - the sealed
+order - as `classification/classes.tsv`. Criteria unchanged.
+
