@@ -223,3 +223,15 @@ pre-check calls for, and it is designed in [ADR-E001](../decisions/ADR-E001-revi
 open question in §4.4 stands exactly as written - aggregation, or the reviewer measurement, and
 neither chosen - with the corrected reference. The text above is unaltered.
 
+---
+
+## Addendum · 2026-09-27 · the reviewer measurement ran
+
+**Source:** [M35](M35-the-citation-in-front-of-a-reviewer.md). The text above is unaltered.
+
+§6's first bullet - *still no reviewer evidence that the citation helps* - now has a measured
+answer within its limits: on six tasks, thirty-six cells, the citation left no trace in any
+reviewer answer (ADR-E001 §8 condition (3) holds), and the instrument showed no resolution -
+identical answers across arms and replicates on every task, including the control. §4.4's
+repetition question was not reached: T1's 37 citations and 24 KB moved nothing, and neither did
+T3's two. The decision on option B follows M35.

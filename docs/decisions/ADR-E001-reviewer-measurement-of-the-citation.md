@@ -438,3 +438,19 @@ The cell files were regenerated for the six tasks under a **new seal** (`classif
 mapping.sha256`, plaintext still ignored); the packets for T4, T7 and T8 remain in `packets/` as
 cut evidence with their provenance, marked out of the corpus in `corpus.tsv`, and are not cells.
 
+---
+
+## Result · 2026-09-27 · measured; see M35
+
+The measurement ran to completion and is written up in
+[M35](../research/M35-the-citation-in-front-of-a-reviewer.md). As measured: **§8 condition (3)
+holds** (18 arm-B cells, none quoting an S1 sentence, none naming the ancestor path); **§2.1's
+Q-ask has an empty population** (the gate met on 0 of 6 tasks - the possibility the note of
+2026-09-26 foreshadowed); **§2.2's Q-harm measured nothing** rather than no harm (zero floor,
+zero between-arm difference on every task, T1's arms 24 KB apart); **Q-evict** 0 of 3
+EVICTED-USED, n = 1. The instrument - Claude Sonnet 4.5 at default sampling - returned
+byte-identical Q1–Q4 across both arms and all replicates on every task, so r = 3 measured no
+variance and the design's noise floor was zero by absence of response, not by absence of noise.
+This negative is bounded by that. **Option B is not reverted by this note**; §8's consequence is
+a decision taken after M35 is read, and this ADR records only that condition (3) held.
+

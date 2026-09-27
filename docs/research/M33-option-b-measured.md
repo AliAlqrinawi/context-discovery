@@ -233,3 +233,15 @@ forty-five diff-only reviewer cells) and designed nowhere until [ADR-E001](../de
 measurement ADR-A027 §6's pre-check calls for, designed in ADR-E001"*. The claim they support -
 that no reviewer evidence exists - is unchanged. The text above is unaltered.
 
+---
+
+## Addendum · 2026-09-27 · the reviewer measurement ran
+
+**Source:** [M35](M35-the-citation-in-front-of-a-reviewer.md). The text above is unaltered.
+
+§6's first point - *whether a reviewer with that sentence in front of them does better is not
+measured here* - is now measured, as far as the instrument allowed. ADR-E001 §8 condition (3)
+holds: across eighteen arm-B cells no reviewer quoted an S1 sentence or asked for the ancestor
+path. Q-ask had no population; Q-harm measured nothing, because the reviewer returned
+byte-identical answers in both arms on every task and on the control. The decision on option B
+follows M35, not this addendum.
