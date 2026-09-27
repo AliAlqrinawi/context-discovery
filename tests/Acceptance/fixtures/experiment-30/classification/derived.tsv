@@ -1,0 +1,37 @@
+cell	task	arm	replicate	q1	correct_decision	defect_identified	q3_names_path	q5_quotes_assumption	q3_names_cited_member	qask_gate_met	qask_class	q3_text
+cell-35	T0	A	1	CANNOT_TELL	ABSTAIN	NA	NO	NO	NO	NO	-	app/Repositories/MediaItemRepository.php::getByPage
+cell-02	T0	A	2	CANNOT_TELL	ABSTAIN	NA	NO	NO	NO	NO	-	app/Repositories/MediaItemRepository.php::getByPage
+cell-08	T0	A	3	CANNOT_TELL	ABSTAIN	NA	NO	NO	NO	NO	-	app/Repositories/MediaItemRepository.php::getByPage
+cell-29	T0	B	1	CANNOT_TELL	ABSTAIN	NA	NO	NO	NO	NO	UNCLASSIFIABLE (gate not met)	app/Repositories/MediaItemRepository.php::getByPage
+cell-30	T0	B	2	CANNOT_TELL	ABSTAIN	NA	NO	NO	NO	NO	UNCLASSIFIABLE (gate not met)	app/Repositories/MediaItemRepository.php::getByPage
+cell-05	T0	B	3	CANNOT_TELL	ABSTAIN	NA	NO	NO	NO	NO	UNCLASSIFIABLE (gate not met)	app/Repositories/MediaItemRepository.php::getByPage
+cell-07	T1	A	1	NO	NO	NO	NO	NO	NO	NO	-	app/Http/Middleware/SetLocale.php::handle
+cell-11	T1	A	2	NO	NO	NO	NO	NO	NO	NO	-	app/Http/Middleware/SetLocale.php::handle
+cell-36	T1	A	3	NO	NO	NO	NO	NO	NO	NO	-	app/Http/Middleware/SetLocale.php::handle
+cell-12	T1	B	1	NO	NO	NO	NO	NO	NO	NO	UNCLASSIFIABLE (gate not met)	app/Http/Middleware/SetLocale.php::handle
+cell-19	T1	B	2	NO	NO	NO	NO	NO	NO	NO	UNCLASSIFIABLE (gate not met)	app/Http/Middleware/SetLocale.php::handle
+cell-34	T1	B	3	NO	NO	NO	NO	NO	NO	NO	UNCLASSIFIABLE (gate not met)	app/Http/Middleware/SetLocale.php::handle
+cell-23	T2	A	1	YES	YES	YES	NO	NO	NO	NO	-	app/DTOs/Dish/UpdateDishDTO.php::fromRequest
+cell-06	T2	A	2	YES	YES	YES	NO	NO	NO	NO	-	app/DTOs/Dish/UpdateDishDTO.php::fromRequest
+cell-15	T2	A	3	YES	YES	YES	NO	NO	NO	NO	-	app/DTOs/Dish/UpdateDishDTO.php::fromRequest
+cell-17	T2	B	1	YES	YES	YES	NO	NO	NO	NO	UNCLASSIFIABLE (gate not met)	app/DTOs/Dish/UpdateDishDTO.php::fromRequest
+cell-18	T2	B	2	YES	YES	YES	NO	NO	NO	NO	UNCLASSIFIABLE (gate not met)	app/DTOs/Dish/UpdateDishDTO.php::fromRequest
+cell-26	T2	B	3	YES	YES	YES	NO	NO	NO	NO	UNCLASSIFIABLE (gate not met)	app/DTOs/Dish/UpdateDishDTO.php::fromRequest
+cell-14	T3	A	1	YES	YES	NO	NO	NO	NO	NO	-	composer.json::config.platform.php
+cell-01	T3	A	2	YES	YES	NO	NO	NO	NO	NO	-	composer.json::config.platform.php
+cell-21	T3	A	3	YES	YES	NO	NO	NO	NO	NO	-	composer.json::config.platform.php
+cell-13	T3	B	1	YES	YES	NO	NO	NO	NO	NO	UNCLASSIFIABLE (gate not met)	composer.json::config.platform.php
+cell-28	T3	B	2	YES	YES	NO	NO	NO	NO	NO	UNCLASSIFIABLE (gate not met)	composer.json::config.platform.php
+cell-20	T3	B	3	YES	YES	NO	NO	NO	NO	NO	UNCLASSIFIABLE (gate not met)	composer.json::config.platform.php
+cell-03	T5	A	1	YES	NO	NA	NO	NO	NO	NO	-	routes/api.php
+cell-32	T5	A	2	YES	NO	NA	NO	NO	NO	NO	-	routes/api.php
+cell-16	T5	A	3	YES	NO	NA	NO	NO	NO	NO	-	routes/api.php
+cell-33	T5	B	1	YES	NO	NA	NO	NO	NO	NO	UNCLASSIFIABLE (gate not met)	routes/api.php
+cell-10	T5	B	2	YES	NO	NA	NO	NO	NO	NO	UNCLASSIFIABLE (gate not met)	routes/api.php
+cell-22	T5	B	3	YES	NO	NA	NO	NO	NO	NO	UNCLASSIFIABLE (gate not met)	routes/api.php
+cell-31	T6	A	1	YES	YES	YES	NO	NO	NO	NO	-	app/Repositories/DishRepository.php::getAll
+cell-09	T6	A	2	YES	YES	YES	NO	NO	NO	NO	-	app/Repositories/DishRepository.php::getAll
+cell-27	T6	A	3	YES	YES	YES	NO	NO	NO	NO	-	app/Repositories/DishRepository.php::getAll
+cell-04	T6	B	1	YES	YES	YES	NO	NO	NO	NO	UNCLASSIFIABLE (gate not met)	app/Repositories/DishRepository.php::getAll
+cell-25	T6	B	2	YES	YES	YES	NO	NO	NO	NO	UNCLASSIFIABLE (gate not met)	app/Repositories/DishRepository.php::getAll
+cell-24	T6	B	3	YES	YES	YES	NO	NO	NO	NO	UNCLASSIFIABLE (gate not met)	app/Repositories/DishRepository.php::getAll
