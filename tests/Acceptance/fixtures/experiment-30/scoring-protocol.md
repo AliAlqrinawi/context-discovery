@@ -325,3 +325,28 @@ second output equals what the first would have said. It is the only such cell am
 thirty-six. The reviewer observation behind cell-02 is unchanged; only the classifier's
 reading of it was re-taken.
 
+---
+
+## Note · 2026-09-27 · `classes.tsv` assembled and committed
+
+Appended, not edited. Thirty-six rows, one header, ordered by cell number. Recorded:
+
+- **cell-10 was pasted twice** by the author - one copy with the tabs collapsed to space runs,
+  one tab-separated - identical field for field. A duplicate paste, not two runs; one kept.
+- **Tabs collapsed in transit.** Most rows arrived with their tab separators collapsed to spaces.
+  Fields 1–11 contain no spaces in any row and `notes` is the last field, so each row was split
+  unambiguously on whitespace with an eleven-way split and re-emitted tab-separated. No field
+  value was altered.
+- **cell-02** is the lost-and-re-run cell (note above); its row is the re-run's.
+- **Validation** against each cell's `answers.md` and `reference.json`, mapping still sealed: all
+  36 rows pass - enumerated fields within their sets; `q1`/`q4`/`q3_text` equal to the answer
+  lines; `correct_decision` consistent with Q1 and the reference; `defect_identified = NA`
+  exactly where the reference says NO; `q5_verbatim = NONE` exactly where Q5 is `NONE_VISIBLE`;
+  `q3_path_term = -` wherever `q3_names_path = NO`.
+- **The `cell` field**: rows reached the author's transcript as pasted text, one session at a
+  time, so "assembled from the source file" reduces to the identifier each classifier wrote from
+  its paste's plain-text line, checked for uniqueness and range: 36 distinct, `cell-01`…`cell-36`.
+  No disagreement arose.
+
+`classes.tsv` is committed first; `mapping.txt` follows in the next commit, as §7 requires.
+

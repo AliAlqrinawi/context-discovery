@@ -1,0 +1,37 @@
+cell	q1	q4	correct_decision	defect_identified	q5_verbatim	q3_text	q3_names_path	q3_path_term	q5_quotes_assumption	q3_names_cited_member	notes
+cell-01	YES	MEDIUM	YES	NO	YES	composer.json::config.platform.php	NO	-	NO	NO	Q2 names a PHP platform-constraint mismatch (lockfile endroid/qr-code 6.1.3 requires php ^8.4 vs composer.json ^8.2), which is neither reference defect (a) nor (b); context-bundle.md has no ASSUMPTION line containing "it is declared in"
+cell-02	CANNOT_TELL	LOW	ABSTAIN	NA	NO	app/Repositories/MediaItemRepository.php::getByPage	NO	-	NO	NO	Q5 is a two-line quote; its first line occurs in change.diff, but its second line has 12 leading spaces where the diff has 13 (the diff's context-line prefix plus 12), so it is not character for character. No bundle ASSUMPTION line contains "it is declared in".
+cell-03	YES	MEDIUM	NO	NA	YES	routes/api.php	NO	-	NO	NO	Q5 string matches only a removed (-) line of change.diff in the deleted app/Http/Controllers/Catering/QuoteRequestController.php; context-bundle.md has no ASSUMPTION line containing "is not declared in" or "it is declared in"
+cell-04	YES	MEDIUM	YES	YES	YES	app/Repositories/DishRepository.php::getAll	NO	-	NO	NO	-
+cell-05	CANNOT_TELL	LOW	ABSTAIN	NA	NO	app/Repositories/MediaItemRepository.php::getByPage	NO	-	NO	NO	Q5 two-line quote matches change.diff context lines except whitespace: the diff line before ->get() has 13 leading spaces (1 diff-prefix + 12 indent) vs 12 in Q5, so no exact character-for-character match
+cell-06	YES	MEDIUM	YES	YES	YES	app/DTOs/Dish/UpdateDishDTO.php::fromRequest	NO	-	NO	NO	-
+cell-07	NO	MEDIUM	NO	NO	YES	app/Http/Middleware/SetLocale.php::handle	NO	-	NO	NO	Q3 names an entry in reference required_context (SetLocale::handle); context-bundle.md has no ASSUMPTION line containing "it is declared in"
+cell-08	CANNOT_TELL	LOW	ABSTAIN	NA	NO	app/Repositories/MediaItemRepository.php::getByPage	NO	-	NO	NO	Q5 quote spans two lines; in change.diff the second line carries the diff context-prefix space (13 leading spaces vs 12 in the quote), so no character-for-character match, though it matches the underlying source text; context-bundle.md has no ASSUMPTION line containing "it is declared in"
+cell-09	YES	MEDIUM	YES	YES	YES	app/Repositories/DishRepository.php::getAll	NO	-	NO	NO	-
+cell-10	YES	MEDIUM	NO	NA	YES	routes/api.php	NO	-	NO	NO	-
+cell-11	NO	MEDIUM	NO	NO	YES	app/Http/Middleware/SetLocale.php::handle	NO	-	NO	NO	Q2 is '-' (no defect named); context-bundle.md has no ASSUMPTION line containing 'it is declared in'; Q3 matches a reference required_context entry (SetLocale.php::handle) which the closed q3_names_path list does not cover
+cell-12	NO	MEDIUM	NO	NO	YES	app/Http/Middleware/SetLocale.php::handle	NO	-	NO	NO	-
+cell-13	YES	MEDIUM	YES	NO	YES	composer.json::config.platform.php	NO	-	NO	NO	Q5 has doubled outer quotes; with one outer pair removed the string "php": "^8.4" occurs verbatim in change.diff (composer.lock endroid/qr-code require block)
+cell-14	YES	MEDIUM	YES	NO	YES	composer.json::config.platform.php	NO	-	NO	NO	Q5 has doubled outer quotes; after removing the outer pair the string "php": "^8.4" occurs in the composer.lock hunk of change.diff
+cell-15	YES	MEDIUM	YES	YES	YES	app/DTOs/Dish/UpdateDishDTO.php::fromRequest	NO	-	NO	NO	-
+cell-16	YES	MEDIUM	NO	NA	YES	routes/api.php	NO	-	NO	NO	context-bundle.md contains no ASSUMPTION: line with "is not declared in" or "it is declared in"
+cell-17	YES	MEDIUM	YES	YES	YES	app/DTOs/Dish/UpdateDishDTO.php::fromRequest	NO	-	NO	NO	-
+cell-18	YES	MEDIUM	YES	YES	YES	app/DTOs/Dish/UpdateDishDTO.php::fromRequest	NO	-	NO	NO	-
+cell-19	NO	MEDIUM	NO	NO	YES	app/Http/Middleware/SetLocale.php::handle	NO	-	NO	NO	Q2 is '-' (no mechanism named) so defect_identified is NO; Q3 matches the reference required_context entry app/Http/Middleware/SetLocale.php::handle but is not on the closed q3_names_path list
+cell-20	YES	MEDIUM	YES	NO	YES	composer.json::config.platform.php	NO	-	NO	NO	-
+cell-21	YES	MEDIUM	YES	NO	YES	composer.json::config.platform.php	NO	-	NO	NO	Q5 is wrapped in an extra pair of quotes; with the outer pair removed, "php": "^8.4" occurs in change.diff (composer.lock endroid/qr-code require block)
+cell-22	YES	MEDIUM	NO	NA	YES	routes/api.php	NO	-	NO	NO	Q5 string occurs in change.diff as part of a deleted line (prefixed by - and indentation); Q3 routes/api.php appears in reference required_context but is not on the closed q3_names_path list
+cell-23	YES	MEDIUM	YES	YES	YES	app/DTOs/Dish/UpdateDishDTO.php::fromRequest	NO	-	NO	NO	-
+cell-24	YES	MEDIUM	YES	YES	YES	app/Repositories/DishRepository.php::getAll	NO	-	NO	NO	Q2's claim that the replaced code coerced values with boolean()/integer() is not visible in the three given files; the mechanism still matches the reference, and Q3 matches reference required_context
+cell-25	YES	MEDIUM	YES	YES	YES	app/Repositories/DishRepository.php::getAll	NO	-	NO	NO	-
+cell-26	YES	MEDIUM	YES	YES	YES	app/DTOs/Dish/UpdateDishDTO.php::fromRequest	NO	-	NO	NO	-
+cell-27	YES	MEDIUM	YES	YES	YES	app/Repositories/DishRepository.php::getAll	NO	-	NO	NO	Q2 says the replaced code coerced values with boolean()/integer(), but no removed boolean()/integer() lines appear in change.diff; this was not scored. context-bundle.md has no ASSUMPTION line containing "it is declared in".
+cell-28	YES	MEDIUM	YES	NO	YES	composer.json::config.platform.php	NO	-	NO	NO	Q2 names a PHP ^8.4 lockfile vs ^8.2 platform mismatch, which matches neither reference defect (a) nor (b); q5_verbatim is YES after removing only the outermost quote pair, since "php": "^8.4" occurs in the endroid/qr-code require block of composer.lock in change.diff
+cell-29	CANNOT_TELL	LOW	ABSTAIN	NA	NO	app/Repositories/MediaItemRepository.php::getByPage	NO	-	NO	NO	Q5 two-line quote matches change.diff text except the second line has 12 leading spaces where the diff context line has 13 (1 diff prefix + 12), so no exact match; the bundle has no ASSUMPTION line containing "it is declared in"
+cell-30	CANNOT_TELL	LOW	ABSTAIN	NA	YES	app/Repositories/MediaItemRepository.php::getByPage	NO	-	NO	NO	-
+cell-31	YES	MEDIUM	YES	YES	YES	app/Repositories/DishRepository.php::getAll	NO	-	NO	NO	-
+cell-32	YES	MEDIUM	NO	NA	YES	routes/api.php	NO	-	NO	NO	Q3 routes/api.php matches the first required_context entry in reference.json but is not on the closed q3_names_path list; context-bundle.md has no ASSUMPTION line containing "it is declared in"
+cell-33	YES	MEDIUM	NO	NA	YES	routes/api.php	NO	-	NO	NO	-
+cell-34	NO	MEDIUM	NO	NO	YES	app/Http/Middleware/SetLocale.php::handle	NO	-	NO	NO	-
+cell-35	CANNOT_TELL	LOW	ABSTAIN	NA	YES	app/Repositories/MediaItemRepository.php::getByPage	NO	-	NO	NO	-
+cell-36	NO	MEDIUM	NO	NO	YES	app/Http/Middleware/SetLocale.php::handle	NO	-	NO	NO	-
