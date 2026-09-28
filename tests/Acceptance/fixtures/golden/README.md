@@ -25,3 +25,13 @@ in the commit message which contract change made it necessary.
 **v1 bundles are not kept here.** The ~90 recorded under `../experiment-*/` are frozen research
 artefacts and are never regenerated — see ADR-A024 on why comparing across the version boundary
 means re-running, never translating.
+
+---
+
+**Reproduced in the backend (2026-09-28).** The M26 diff was never a commit; it is now
+`AliAlqrinawi/abouelsid-fixtures` branch `m26`, commit `584e01100b0e31ceb05b3ac0a26b0f7d41ef8dfa`
+off `450d91f` (backend ADR-B005). Runs `01m3jpv426ttd8m2vr2s0rabp5` (installed) and
+`01m3jpv84a1tvbbrarwtjm4p1p` (none) on engine `6a77cdb` reproduce `m26-bundle.v2.json` byte for
+byte apart from `run.repo_sha` (`null` here; the head SHA there, by the backend's design), and
+`m26-bundle.v2.md` byte for byte.
+
