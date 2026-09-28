@@ -1,72 +1,74 @@
-# CONTINUE.md — the dashboard
+# CONTINUE.md — Phase 8: the review layer
 
 Work through this in order without asking, until a STOP.
 At a STOP: write what you have, push, and wait.
 
-## Where things stand
-The engine is closed. The contract is frozen at v2. The backend,
-its API and the scorer work. Five measurements exist (M30-M35) and
-the reviewer experiment is resolved and recorded (ADR-A030).
+## What M36 established
+The bundle's value is scoped: it decides rules about contracts and
+callers, where the evidence is outside the diff by definition, and
+adds nothing to structural rules, where the violation is in the
+added line. Trial 2 was done by hand. This automates it.
 
-Everything this project has built has only ever been looked at
-through raw JSON. This builds the thing that makes it visible.
+## Part 1 — close the M36 gap
 
-## Part 1 — ADR-B004: scope and stack
+No backend run carries the M26 diff, so the trial that proved the
+bundle's value cannot be reproduced from the system.
 
-Pick the stack yourself and justify it. Constraints:
-- internal research tool, one user, local only
-- runs with one command
-- no build step the project cannot reproduce
-- served by the existing API; the backend is the only source of
-  truth
+Create one: register the M26 commit pair as a run in the backend
+on engine 6a77cdb, both vendor modes, and verify its stdout is
+byte-identical to the golden fixture. If it is not, STOP and
+report the difference before anything else.
 
-Record what you rejected and why.
+## Part 2 — ADR-B005: the review layer
 
-## Part 2 — what it must show, in this order
+Design before building. Record:
 
-**Runs list.** Repository, commit, engine, vendor mode, budget,
-status, item count, token count, when. Filter by repository,
-engine, status, input_key.
+- The rules file: where it lives in the reviewed repository, its
+  format, and how the backend reads it. Keep it plain — a markdown
+  or text file of numbered rules, not a schema. M36 showed the
+  rules that matter are prose a reviewer reads, not patterns a
+  parser matches.
+- What is sent to Claude: the diff, the bundle, the rules. Say
+  exactly how each is rendered, and what is left out.
+- Which model, pinned and recorded per review, as ADR-E001 pins
+  reviewers.
+- What is stored: the prompt as sent, the response as returned,
+  the model and settings — bytes, not summaries, the same
+  discipline as run_artifacts.
+- The boundary: Claude judges the code. It does not judge the
+  bundle, score a run, or write to any repository. ADR-E001's
+  "no LLM judges a bundle" is not violated by this — say why, so a
+  later reader does not read a contradiction.
+- What this cannot do, from M36: structural rules gain nothing;
+  a rule's verdict is only as good as the bundle beneath it; at 5%
+  caller precision the reviewer must be able to name noise as
+  noise, so the noise is NOT filtered before sending.
 
-**Run detail.**
-- the run block: engine / policy / framework-table versions,
-  diff sha, repo sha
-- assertions as entities, each with kind, subject, reason, origin,
-  and its items nested under it. This is the structure v2 exists
-  for — do not flatten it back
-- each item: lever, provenance, payload, tokens
-- diagnostics, dropped
-- raw bundle, stderr and diff, each one click away
+## Part 3 — build it
 
-**Diff view.** The stored diff with discovered context beside the
-region that caused it. An assertion's origin points at a place in
-the diff; make that visible.
+- A reviews table and a review job, following the run pipeline's
+  shape: queued, immutable once terminal, artifacts as bytes.
+- POST /runs/{run}/reviews — creates a review for that run against
+  the repository's rules file at that commit.
+- GET /reviews/{review} — the report, the model, the rules as read.
+- In the dashboard: a Review tab on a run. It shows the report and,
+  behind a click, the exact prompt that produced it. A report whose
+  prompt cannot be inspected is not evidence.
 
-**Score view.** For a scored run: assertion precision, key recall,
-unkeyed count, the four item verdicts, count- and token-weighted.
-Every ratio expands to the rows behind it. A bare number with no
-rows is what this project has spent its whole history avoiding.
+## Part 4 — prove it end to end
+Run a review on the M26 run and on ec92403. Report both reports in
+full. Compare them against M36's two trials: same findings, better,
+or worse? Report the difference as measured, not as expected.
 
-**Key view.** A locked key's rows, with each row's verdict on each
-scored run: satisfied, missed, violated, vacuous.
-
-## Part 3 — what it must NOT do
-- No editing. Read-only, entirely.
-- No number computed in the browser. Everything from the API.
-- No comparison view — that is Phase 6 and needs its own design.
-- No auth beyond what the API has.
-- No charts implying a trend across three data points.
-
-## Part 4 — tests, push, STOP
-Report: the stack and why, how to run it, and what you would
-build next.
+Push, then STOP.
 
 ## Stop conditions
-- Any change to the engine. It is finished; this is a viewer.
-- Any number computed in the frontend rather than read from the API.
-- Any API change beyond a read endpoint the dashboard needs — and
-  if you add one, record it in an ADR first.
-- Any edit to a locked key, a golden, or a recorded measurement.
+- Any change to the engine.
+- Any filtering, reranking, or summarising of the bundle before it
+  is sent. M36 showed the reviewer handles noise; do not pre-empt it.
+- Any review that writes anywhere except its own row.
+- Any number computed outside the backend.
+- Claude being asked to judge the bundle rather than the code.
 
 ## Standing rules
 - Append, never rewrite. Errata are dated.
