@@ -138,3 +138,20 @@ kinds of evidence, and neither one is the other.
   flag's standing there.
 - ADR-A006 (grep, not graph; the caller bound), ADR-A009 (premises are questions, not findings),
   ADR-A023 (`ChangedReturnContract`).
+
+---
+
+## Erratum · 2026-09-28 · who the reviewer was, and who wrote the keys
+
+**What was wrong, and where.** §1 says the trials were *"the author using the bundle to do a
+task"*, §5's last paragraph says *"the reviewer here was a person doing a task"*, and §5's second
+bullet calls the reviewer *"the author of the context keys"*. None of that was reported. The
+author's account names *a reviewer* whose verdicts and reasoning are quoted; whether that
+reviewer was the author, another person, or a model session was **not stated**, and this
+write-up should not have decided it. And the context keys (`held-out-*`) were written by the
+programme's Claude session, not by the author; the author wrote the *rules* for these trials.
+
+Read §1, §5 and the closing paragraph with those two corrections: the reviewer's identity is
+unrecorded, which is a further limit, not a smaller one; and the one-reviewer limitation stands
+regardless of who it was. The text above is unaltered.
+
